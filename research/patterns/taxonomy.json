@@ -1,0 +1,474 @@
+{
+ "main_patterns": [
+  {
+   "id": "abstract_experience_into_guidance",
+   "name": "Abstract Experience into Reusable Guidance",
+   "definition": "Convert the agent's own task outcomes into compact natural-language guidance (lessons, principles, curated notes, skill documents) that persists outside the weights and conditions later episodes. The improvement lives in an editable textual state, and the load-bearing choice is the abstraction level: specific enough to act on, general enough to transfer.",
+   "operational_signature": "act and observe outcome → reflect or contrast to abstract guidance → write/curate the guidance store → retrieve and inject into later tasks",
+   "when_to_apply": "When the model is frozen or costly to train but tasks recur enough that distilled lessons transfer.",
+   "cognitive_barrier": "That learning requires parameter updates — editable text in context can itself be the learned state.",
+   "n_papers": 82,
+   "sub_patterns": [
+    "H00",
+    "H01",
+    "H02"
+   ]
+  },
+  {
+   "id": "attribute_and_patch_incumbent",
+   "name": "Attribute Failures and Patch the Incumbent",
+   "definition": "Maintain one deployed artifact (prompt, rule document, skill file, harness code) and improve it by tracing failures to the responsible component and applying localized edits, re-validated before they replace the incumbent. The load-bearing step is credit assignment from rich traces rather than from a scalar score.",
+   "operational_signature": "execute and collect traces → diagnose and attribute failures to a component → propose a localized edit → re-validate → replace the incumbent",
+   "when_to_apply": "When execution traces are rich and the artifact decomposes so that failures can be localized.",
+   "cognitive_barrier": "That a black-box score is the only usable optimization signal for non-differentiable artifacts.",
+   "n_papers": 82,
+   "sub_patterns": [
+    "H09",
+    "H10",
+    "H11",
+    "H12"
+   ]
+  },
+  {
+   "id": "index_experience_for_reuse",
+   "name": "Index Raw Experience for Reuse",
+   "definition": "Keep experience close to its raw form (trajectories, workflows, cases, facts) and invest in how it is organized and when it is retrieved, so the right precedent is found and adapted as the store grows. Gains come from recall and adaptation of precedent rather than from abstraction.",
+   "operational_signature": "record episodes/cases → structure the store (index, hierarchy, graph, tiers) → retrieve relevant precedent when needed → adapt it and append the new outcome",
+   "when_to_apply": "When tasks recur with concrete details that abstraction would lose and retrieval quality, not storage, limits gains.",
+   "cognitive_barrier": "That storing more history or widening context automatically helps — retrieval organization and timing are the bottleneck.",
+   "n_papers": 70,
+   "sub_patterns": [
+    "H03",
+    "H04",
+    "H05"
+   ]
+  },
+  {
+   "id": "population_search_executable_fitness",
+   "name": "Search a Population Against an Executable Fitness",
+   "definition": "Treat the artifact (prompt, program, heuristic, configuration) as a genome and use an LLM as the variation operator inside a generate–evaluate–select loop driven by an automated fitness function. The retained population or archive is the persistent improvement; variants differ in how they exploit search history and preserve diversity.",
+   "operational_signature": "sample parents from the population → LLM mutates/recombines → evaluate with executable fitness → select (elite, Pareto, QD) and archive",
+   "when_to_apply": "When a cheap, trustworthy automated evaluator exists and the search space is too irregular for gradients.",
+   "cognitive_barrier": "That the LLM is the solver rather than a mutation operator inside a search algorithm.",
+   "n_papers": 61,
+   "sub_patterns": [
+    "H13",
+    "H14",
+    "H15",
+    "H16"
+   ]
+  },
+  {
+   "id": "self_generate_the_curriculum",
+   "name": "Self-Generate the Curriculum",
+   "definition": "Let the system produce its own training tasks or environments, targeted at its current competence frontier or diagnosed weaknesses, and train on them so the data distribution evolves with the learner. Validity and difficulty are controlled by verification, solver success rates, or failure analysis.",
+   "operational_signature": "estimate the learner's frontier or weaknesses → generate tasks/environments → verify solvability and difficulty → train the learner → regenerate",
+   "when_to_apply": "When curated data saturates or is unavailable but solutions can be verified.",
+   "cognitive_barrier": "That the training distribution is a fixed external input.",
+   "n_papers": 46,
+   "sub_patterns": [
+    "H22",
+    "H23"
+   ]
+  },
+  {
+   "id": "diagnose_self_improvement",
+   "name": "Diagnose Whether Self-Improvement Is Real",
+   "definition": "Construct controlled interventions, benchmarks, or attacks that isolate whether persistent self-modification causally produces transferable and safe improvement, separating update quality, uptake, search compute, leakage, and contamination.",
+   "operational_signature": "identify a confound in end-to-end evolution scores → design matched/frozen/held-out conditions or an attack → measure the isolated effect → report the failure mode",
+   "when_to_apply": "When reported gains could be explained by extra compute, leakage, or memorization, or persistence opens new attack surfaces.",
+   "cognitive_barrier": "That a rising score curve over evolution steps is evidence of genuine self-improvement.",
+   "n_papers": 46,
+   "sub_patterns": [
+    "H32",
+    "H33",
+    "H34",
+    "H35"
+   ]
+  },
+  {
+   "id": "evidence_gated_retention",
+   "name": "Gate Retention on Measured Evidence",
+   "definition": "Decide what persists — a memory entry, a library skill, or a new incumbent — by measured counterfactual utility or a statistically sound comparison rather than by plausibility or a raw score delta. The move separates proposing a change from authorizing it.",
+   "operational_signature": "propose a candidate entry or change → measure its marginal effect (paired, held-out, utility credit) → admit, demote, or roll back → keep provenance",
+   "when_to_apply": "When evaluation is noisy, regressions are costly, or accumulated state degrades over time.",
+   "cognitive_barrier": "That more retained experience, or a higher development score, means improvement.",
+   "n_papers": 41,
+   "sub_patterns": [
+    "H29",
+    "H30",
+    "H31"
+   ]
+  },
+  {
+   "id": "crystallize_executable_capability",
+   "name": "Crystallize Solutions into Executable Capabilities",
+   "definition": "Turn successful solutions into verified executable artifacts (functions, tools, servers, programmatic skills) that enter the agent's action space, so future tasks invoke rather than re-derive them. Execution-based verification gates admission and composition lets the capability set grow cumulatively.",
+   "operational_signature": "solve or practice a task → abstract the solution into parameterized code → execute/test to verify → register in the action space → compose on later tasks",
+   "when_to_apply": "When recurring subproblems are procedural and an execution environment can verify candidate code.",
+   "cognitive_barrier": "That the agent's action space is fixed by the designer rather than grown by the agent.",
+   "n_papers": 36,
+   "sub_patterns": [
+    "H06",
+    "H07",
+    "H08"
+   ]
+  },
+  {
+   "id": "make_the_improver_editable",
+   "name": "Make the Improver Editable",
+   "definition": "Place the improvement procedure itself (optimizer prompt, meta-agent code, mutation operators, memory or context design) inside the space being modified, so task gains can compound into better future improvement. Progress is justified empirically by evaluating descendants rather than by proofs.",
+   "operational_signature": "improver proposes a change → apply it to the task agent and/or the improver → evaluate descendants → retain (incumbent or archive) → recurse",
+   "when_to_apply": "When the design of the improvement loop itself is the bottleneck and its products are evaluable.",
+   "cognitive_barrier": "That the meta-level optimizer must stay fixed and human-designed.",
+   "n_papers": 29,
+   "sub_patterns": [
+    "H19",
+    "H20",
+    "H21"
+   ]
+  },
+  {
+   "id": "amortize_improver_into_trained_policy",
+   "name": "Amortize the Improver into a Trained Policy",
+   "definition": "Instead of prompting a frozen model to curate memory, write skills, edit prompts, or design workflows, train that improver with RL or preference learning on the downstream improvement it causes, turning repeated per-task search into a learned policy.",
+   "operational_signature": "improver acts (write memory, edit artifact, design workflow) → measure downstream task outcome → credit the improver's action → update improver weights",
+   "when_to_apply": "When the improvement operation recurs often and its downstream effect is measurable.",
+   "cognitive_barrier": "That curation and editing are fixed heuristics or zero-shot abilities rather than trainable skills.",
+   "n_papers": 28,
+   "sub_patterns": [
+    "H26",
+    "H27"
+   ]
+  },
+  {
+   "id": "search_agent_architecture",
+   "name": "Search the Agent's Architecture",
+   "definition": "Lift the agent's structure — roles, communication topology, workflow code, module composition — into the optimization space and improve it from execution feedback, either offline over a design space or online for a specific team and task.",
+   "operational_signature": "define a design space of modules/topologies/workflow code → propose designs → execute and score → retain or adapt the structure",
+   "when_to_apply": "When hand-designed orchestration, not individual prompts, caps performance.",
+   "cognitive_barrier": "That orchestration is fixed scaffolding around tunable prompts.",
+   "n_papers": 26,
+   "sub_patterns": [
+    "H17",
+    "H18"
+   ]
+  },
+  {
+   "id": "couple_context_and_weight_updates",
+   "name": "Couple Context-Level and Weight-Level Learning",
+   "definition": "Run fast, editable context adaptation (memory, skills, harness, prompts) and slow parameter updates as one system — internalizing validated experience into weights, or choosing which lever to pull when one plateaus.",
+   "operational_signature": "adapt in context → collect experience-shaped rollouts → train weights on them → re-adapt context for the updated model",
+   "when_to_apply": "When context adaptation plateaus or bloats while pure RL is sample-inefficient.",
+   "cognitive_barrier": "That in-context adaptation and weight training are alternative, separately optimized pathways.",
+   "n_papers": 20,
+   "sub_patterns": [
+    "H28"
+   ]
+  },
+  {
+   "id": "coevolve_the_evaluator",
+   "name": "Co-Evolve the Evaluator",
+   "definition": "Treat the grader (rubric, verifier, reward criteria, test suite) as an artifact that evolves alongside the policy, anchored to a small trusted signal so that it tracks new failure modes without drifting into a hackable target.",
+   "operational_signature": "observe policy outputs → expose evaluator blind spots → revise criteria/tests → validate against a trusted anchor → use as reward or acceptance gate",
+   "when_to_apply": "When fixed rewards are stale, hackable, or absent, as with open-ended outputs.",
+   "cognitive_barrier": "That the objective must stay fixed while the policy improves.",
+   "n_papers": 18,
+   "sub_patterns": [
+    "H24",
+    "H25"
+   ]
+  }
+ ],
+ "sub_patterns": [
+  {
+   "id": "H00",
+   "parent": "abstract_experience_into_guidance",
+   "name": "Reflect on Outcomes into Transferable Lessons",
+   "tactical_pattern": "After each attempt the agent reflects on the outcome — often contrasting successful and failed trajectories, or rollouts within a group — and writes an abstracted lesson, principle, or strategy (frequently with a trigger condition) into a persistent store that is retrieved into the context of later tasks. The model stays frozen; the improvement is the accumulated lesson set. The decisive choice is abstraction level and grounding: lessons are tied to observed outcomes (ground truth, execution, or self-judgment) rather than generic advice, and contrast between outcomes isolates what actually mattered.",
+   "differentiation_within_parent": "Unlike the curated-memory sibling, the store mainly grows by appending reflections; unlike skill-package mining, the input is the agent's own trajectories rather than heterogeneous sessions or external resources.",
+   "n_papers": 45
+  },
+  {
+   "id": "H01",
+   "parent": "abstract_experience_into_guidance",
+   "name": "Curate a Living Memory with Edit Operations",
+   "tactical_pattern": "The guidance store is treated as a living document maintained by explicit edit operations — add, update, merge, delete, no-op, or localized deltas — chosen by an LLM curator after each interaction. Consolidation, conflict resolution, and forgetting are first-class steps, so the store stays compact and consistent instead of growing monotonically, and incremental delta updates avoid the collapse that comes from rewriting the whole context.",
+   "differentiation_within_parent": "The distinguishing move is the editing policy over existing entries, not how a new lesson is extracted (H00) or how a reusable package is formatted (H02).",
+   "n_papers": 22
+  },
+  {
+   "id": "H02",
+   "parent": "abstract_experience_into_guidance",
+   "name": "Mine Interaction Streams into Skill Packages",
+   "tactical_pattern": "Recurring procedures are mined from interaction histories, pooled user sessions, guides, or scientific resources and compiled into structured, versioned skill packages (instructions, scripts, metadata, hierarchy) that are portable across agents and models. Extraction is followed by deduplication, merging with neighboring skills, and quality filtering before the package is published to a shared library.",
+   "differentiation_within_parent": "Targets portable, structured skill artifacts built from many sources, whereas H00 distills the agent's own outcomes into free-form lessons and H01 edits a single memory.",
+   "n_papers": 15
+  },
+  {
+   "id": "H03",
+   "parent": "index_experience_for_reuse",
+   "name": "Retrieve and Adapt Precedent Cases",
+   "tactical_pattern": "Successful (and corrected failed) trajectories, workflows, subtasks, or repair records are stored as cases, possibly with instance-specific values removed, and retrieved by similarity or distribution matching to serve as demonstrations or plans for new tasks, then adapted to the new arguments. New outcomes are appended so the case base grows with use.",
+   "differentiation_within_parent": "Retains near-raw precedent and relies on matching and adaptation; ABS-family patterns instead compress experience into lessons, and H04 changes the store's structure rather than the retrieve-adapt loop.",
+   "n_papers": 36
+  },
+  {
+   "id": "H04",
+   "parent": "index_experience_for_reuse",
+   "name": "Restructure the Memory Substrate",
+   "tactical_pattern": "The persistent store is reorganized into a structure suited to long-horizon recall — hierarchical tiers, temporal knowledge graphs, entity or sentence graphs, clusters, or paged OS-like tiers — with promotion, linking, and decay rules so retrieval stays precise and cheap as history grows. The improvement claim rests on representation and index design rather than on what lessons are written.",
+   "differentiation_within_parent": "Concerns the shape of the store and its index; H03 concerns case reuse and H05 concerns when retrieval is invoked.",
+   "n_papers": 25
+  },
+  {
+   "id": "H05",
+   "parent": "index_experience_for_reuse",
+   "name": "Retrieve Only When Needed",
+   "tactical_pattern": "Retrieval becomes a decision taken by the agent or a controller — triggered by uncertainty, confusion, memory pressure, or an explicit reasoning-time request — instead of a fixed pre-task injection. Experience is consulted at the step where it is needed, and irrelevant or weakly matched memories are suppressed, which keeps context small and avoids distraction.",
+   "differentiation_within_parent": "Changes the timing and gating of memory use rather than its content (ABS) or structure (H04).",
+   "n_papers": 9
+  },
+  {
+   "id": "H06",
+   "parent": "crystallize_executable_capability",
+   "name": "Discover Skills Through Self-Directed Practice",
+   "tactical_pattern": "The agent proposes its own practice tasks (or works through training problems), writes code to solve them, verifies the code by execution, and abstracts verified solutions into reusable functions or APIs that join a skill library. A self-generated curriculum drives exploration, and the library compounds as new skills call older ones.",
+   "differentiation_within_parent": "Library growth is driven by an exploration curriculum before deployment demand, unlike H07 where a capability gap in a live task triggers synthesis.",
+   "n_papers": 12
+  },
+  {
+   "id": "H07",
+   "parent": "crystallize_executable_capability",
+   "name": "Forge Tools When a Capability Gap Appears",
+   "tactical_pattern": "While solving a task, the agent detects that no available tool covers a need, then searches for, generates, installs, or wraps code (including external repositories) into a tool, debugs it against execution feedback, and registers it for reuse. Tool creation becomes an inline decision during problem solving rather than an offline engineering step.",
+   "differentiation_within_parent": "Triggered by live demand within a task; H06 practices proactively and H08 reorganizes an existing library.",
+   "n_papers": 15
+  },
+  {
+   "id": "H08",
+   "parent": "crystallize_executable_capability",
+   "name": "Maintain a Compositional Skill Graph",
+   "tactical_pattern": "Executable skills are organized as a typed graph or DAG of compositions; traces assign responsibility to individual skills for localized repair, refactoring, and promotion of recurring text plans or tool sequences into new callable primitives, with rollback protecting mature skills. The library is treated as a structured program that is maintained, not just appended to.",
+   "differentiation_within_parent": "Operates on relations among existing executable skills (composition, promotion, repair) rather than on acquiring new ones (H06, H07).",
+   "n_papers": 9
+  },
+  {
+   "id": "H09",
+   "parent": "attribute_and_patch_incumbent",
+   "name": "Propagate Feedback Through a Compound System",
+   "tactical_pattern": "The system is modeled as a computation graph of prompts, tools, and code; natural-language feedback on the final output is propagated backward so each upstream component receives a component-specific critique, conditioned on its neighbors, and is updated jointly. This is the 'textual backpropagation' move that solves credit assignment across multiple interacting components.",
+   "differentiation_within_parent": "Distributes credit across several components of a graph; H10 rewrites a single document from a critique, and H12 patches harness code from trace diagnosis.",
+   "n_papers": 8
+  },
+  {
+   "id": "H10",
+   "parent": "attribute_and_patch_incumbent",
+   "name": "Rewrite a Document from Diagnosed Errors",
+   "tactical_pattern": "A single prompt, instruction set, rule document, or tool description is iteratively rewritten from error analysis: failures (and often successes) are collected, a critic verbalizes what went wrong as a 'textual gradient' or strategy, and candidate rewrites are scored and the best retained, sometimes with momentum, beam, or tree search over rewrites. Atomic or localized edits and regression checks keep earlier wins.",
+   "differentiation_within_parent": "One textual artifact and a critique-driven rewrite; H09 handles multi-component credit, H11 targets skill files with attribution to sections, and H13 relies on undirected mutation.",
+   "n_papers": 28
+  },
+  {
+   "id": "H11",
+   "parent": "attribute_and_patch_incumbent",
+   "name": "Revise Skills by Failure Attribution",
+   "tactical_pattern": "Execution failures are attributed to specific skill files or skill sections — distinguishing genuine skill defects from execution lapses — and the skill is rewritten with bounded edits, then re-run on the attributed cases and retained only if utility improves. Edit budgets and diagnosis-bound repair principles prevent rewrites from erasing working guidance.",
+   "differentiation_within_parent": "Specialized to reusable skill documents with per-section attribution; H10 rewrites prompts or rules and H30 decides admission and retirement rather than content edits.",
+   "n_papers": 14
+  },
+  {
+   "id": "H12",
+   "parent": "attribute_and_patch_incumbent",
+   "name": "Patch the Harness from Trace Diagnosis",
+   "tactical_pattern": "A coding agent inspects execution traces and harness source (tools, middleware, memory, control flow), localizes recurring failure mechanisms to editable code, writes scoped patches with falsifiable predictions, and promotes them after replay or regression checks, rolling back on failure. The harness becomes a versioned codebase improved by release-engineering discipline.",
+   "differentiation_within_parent": "Edits executable scaffolding with code-level diagnosis; H10 and H11 edit textual guidance, and H19 additionally edits the improver itself.",
+   "n_papers": 32
+  },
+  {
+   "id": "H13",
+   "parent": "population_search_executable_fitness",
+   "name": "Search a Population of Prompts",
+   "tactical_pattern": "Candidate prompts or instructions are generated by LLM paraphrase, phrase edits, or genetic operators, scored on a small evaluation set, and the fittest are retained and reproduced; bandits, Bayesian surrogates, or tournaments allocate evaluation budget. Direction comes from selection pressure rather than from error diagnosis.",
+   "differentiation_within_parent": "Undirected variation plus selection over prompts; H10 uses critique-directed rewrites, and H14 evolves executable programs.",
+   "n_papers": 18
+  },
+  {
+   "id": "H14",
+   "parent": "population_search_executable_fitness",
+   "name": "Evolve Programs with LLM Mutation",
+   "tactical_pattern": "Executable programs (algorithms, heuristics, reward functions, policies, kernels) are evolved by having an LLM propose code edits to sampled parents, running them against an automated evaluator, and keeping winners in a population or archive. Efficiency tricks include novelty rejection, bandit choice of mutation models, and budget allocation across lineages.",
+   "differentiation_within_parent": "Executable artifacts with an automated evaluator and no explicit knowledge store; H15 adds distilled search memory and H16 is defined by its diversity-preserving selection.",
+   "n_papers": 18
+  },
+  {
+   "id": "H15",
+   "parent": "population_search_executable_fitness",
+   "name": "Guide Evolution with Distilled Search Memory",
+   "tactical_pattern": "The search history is distilled into reusable knowledge — transformation rules, edit residuals, idea hierarchies, design principles, credited code snippets — that conditions future proposals and is updated as results arrive, sometimes shared across agents or campaigns. The search learns how to search in addition to finding better candidates.",
+   "differentiation_within_parent": "Adds an explicit, evolving knowledge layer over the search; H14 relies on the raw parent pool, and REF patterns edit the search procedure itself.",
+   "n_papers": 14
+  },
+  {
+   "id": "H16",
+   "parent": "population_search_executable_fitness",
+   "name": "Preserve a Frontier of Complementary Candidates",
+   "tactical_pattern": "Instead of keeping one winner, selection retains a Pareto frontier (per-instance, cost-utility, or multi-objective), niches, or quality-diversity cells, so globally weaker candidates that win on some cases survive and can later be recombined. This counters premature convergence and lets complementary strategies merge.",
+   "differentiation_within_parent": "Defined by the selection and retention rule (frontier/QD), applicable to prompts, workflows, skills, or harnesses; siblings are defined by proposal mechanism.",
+   "n_papers": 11
+  },
+  {
+   "id": "H17",
+   "parent": "search_agent_architecture",
+   "name": "Search an Offline Agent Design Space",
+   "tactical_pattern": "Agent designs — modules, graph topologies, workflow code — are represented in a searchable space (code, typed graphs, supernets, standardized modules) and optimized offline on a task set with execution scores, often via MCTS, evolution, or REINFORCE over connections, before a fixed design is deployed.",
+   "differentiation_within_parent": "Produces one design per task distribution before deployment; H18 adapts the team per instance at test time, and H27 trains a generator that outputs designs.",
+   "n_papers": 14
+  },
+  {
+   "id": "H18",
+   "parent": "search_agent_architecture",
+   "name": "Co-Evolve Roles and Topology at Test Time",
+   "tactical_pattern": "During inference, a multi-agent team rewires itself: roles are generated or rewritten, edges added or pruned, and routers or profiles updated from task feedback, often at two rates (fast local capability, slower structural edits) with caching of verified specialists for later instances.",
+   "differentiation_within_parent": "Online, per-instance or per-stream structural adaptation; H17 searches offline, and H09 propagates textual feedback without necessarily changing structure.",
+   "n_papers": 12
+  },
+  {
+   "id": "H19",
+   "parent": "make_the_improver_editable",
+   "name": "Apply the Improver to Itself",
+   "tactical_pattern": "A single lineage whose optimizer — a prompt, meta-agent program, or loop configuration — is submitted to its own improvement procedure, or improved by an outer loop using the downstream performance of what it produces, so stronger improvers are reused for later improvement. Promotion authority or review logic is often kept fixed as an anchor.",
+   "differentiation_within_parent": "Single-lineage self-application; H20 branches from an archive of agents, and H21 redesigns a separate learning mechanism such as memory.",
+   "n_papers": 13
+  },
+  {
+   "id": "H20",
+   "parent": "make_the_improver_editable",
+   "name": "Branch Self-Modifying Agents from an Archive",
+   "tactical_pattern": "Self-modifying coding agents are kept in an open-ended archive; parents are sampled by performance, novelty, or estimated descendant productivity, edit their own code, and offspring are evaluated and archived even if not immediately better, so suboptimal agents can serve as stepping stones.",
+   "differentiation_within_parent": "Archive and parent selection are the load-bearing elements, unlike H19's single lineage; distinct from H14 because the evolved artifact is the self-modifying agent itself.",
+   "n_papers": 8
+  },
+  {
+   "id": "H21",
+   "parent": "make_the_improver_editable",
+   "name": "Redesign the Inner Learning Mechanism",
+   "tactical_pattern": "An outer loop searches over the design of the inner loop's learning mechanism — memory schema, update and retrieval code, context-engineering skills, or retrieval-policy pools — evaluating each design by how well the agent learns with it across tasks.",
+   "differentiation_within_parent": "The target is the experience-learning mechanism (memory or context design), not the task policy or the improver's own code (H19, H20).",
+   "n_papers": 8
+  },
+  {
+   "id": "H22",
+   "parent": "self_generate_the_curriculum",
+   "name": "Co-Train a Proposer Against a Solver",
+   "tactical_pattern": "A proposer (often sharing the solver's weights) is trained to generate tasks at the solver's frontier — rewarded for intermediate difficulty, uncertainty, regret, or learning progress — while the solver is trained on those tasks with verifiable or consensus rewards. The curriculum co-evolves without external data.",
+   "differentiation_within_parent": "Both roles are learned and coupled by a difficulty reward; H23 synthesizes tasks from diagnosed weaknesses without co-training an adversarial proposer.",
+   "n_papers": 25
+  },
+  {
+   "id": "H23",
+   "parent": "self_generate_the_curriculum",
+   "name": "Synthesize Tasks from Diagnosed Weaknesses",
+   "tactical_pattern": "The learner's current failures, uncertainty, or forgetting signals are diagnosed and used to generate, simplify, re-difficulty, or wrap tasks and environments (including procedural difficulty windows and simulated experience), which are verified and fed back into training.",
+   "differentiation_within_parent": "Generation is steered by diagnostics or schedules rather than by a co-trained adversary as in H22.",
+   "n_papers": 21
+  },
+  {
+   "id": "H24",
+   "parent": "coevolve_the_evaluator",
+   "name": "Evolve Rubrics as Training Rewards",
+   "tactical_pattern": "Query- or task-specific rubrics are generated, filtered for discriminativeness and correlation with correctness, and refreshed as the policy changes, then converted into dense rewards or step-level credit for RL; rubric generation may be trained jointly with the policy.",
+   "differentiation_within_parent": "The evolving evaluator serves as an RL reward signal; H25 revises evaluators that act as acceptance gates or measurement instruments.",
+   "n_papers": 8
+  },
+  {
+   "id": "H25",
+   "parent": "coevolve_the_evaluator",
+   "name": "Revise the Evaluator Against a Trusted Anchor",
+   "tactical_pattern": "Verifiers, test suites, detectors, or rubrics used to judge candidates are repaired or replaced when they disagree with a small trusted anchor (oracle bits, sparse labels, ground-truth checks), with selective score erasure or validity tests so that the evaluator can co-evolve with the artifacts without becoming gameable.",
+   "differentiation_within_parent": "Centered on anchoring evaluator validity for selection and measurement, unlike H24's reward shaping for weight updates.",
+   "n_papers": 10
+  },
+  {
+   "id": "H26",
+   "parent": "amortize_improver_into_trained_policy",
+   "name": "Train the Curator on Downstream Utility",
+   "tactical_pattern": "Memory-write, memory-management, skill-extraction, or skill-curation actions are produced by a trainable policy whose reward comes from later task success when the written memory or skill is used, often across grouped task streams, so curation is learned instead of prompted.",
+   "differentiation_within_parent": "Trains the component that maintains persistent state; H27 trains the proposer of edits or designs.",
+   "n_papers": 17
+  },
+  {
+   "id": "H27",
+   "parent": "amortize_improver_into_trained_policy",
+   "name": "Train the Proposer to Amortize Search",
+   "tactical_pattern": "An editor, reflector, algorithm generator, or workflow generator is trained by RL or preference optimization on the measured improvement its proposals cause (score deltas, next-episode return), replacing repeated per-task search with a single learned proposer that conditions on the query.",
+   "differentiation_within_parent": "Trains the proposer of artifact changes or designs; H26 trains memory and skill curation.",
+   "n_papers": 11
+  },
+  {
+   "id": "H28",
+   "parent": "couple_context_and_weight_updates",
+   "name": "Couple In-Context Adaptation with Weight Training",
+   "tactical_pattern": "Context-level assets (memories, skills, harness, system prompts) and model weights are updated in one loop: experience-shaped rollouts become training data, validated context is internalized into parameters or latent tokens, or a controller chooses between scaffold edits and RL when progress stalls, at different timescales.",
+   "differentiation_within_parent": "The only sub-pattern of its parent; defined by the explicit coupling of the two learning pathways.",
+   "n_papers": 20
+  },
+  {
+   "id": "H29",
+   "parent": "evidence_gated_retention",
+   "name": "Value Memory Entries by Measured Utility",
+   "tactical_pattern": "Each stored experience receives a utility estimate learned from outcomes — Q-values, bandit statistics, citation rewards, with/without-memory contrasts, provenance-propagated credit — and retrieval ranking, admission, or suppression uses that value instead of semantic similarity alone.",
+   "differentiation_within_parent": "Entry-level credit assignment for memories; H30 governs library membership and H31 governs incumbent commits.",
+   "n_papers": 14
+  },
+  {
+   "id": "H30",
+   "parent": "evidence_gated_retention",
+   "name": "Govern Library Admission and Retirement",
+   "tactical_pattern": "Additions to a skill or experience library pass attribution and admissibility checks, marginal-gain or counterfactual tests, and regression budgets, and existing entries are retired or quarantined when evidence of harm accumulates, under bounded library size and versioned provenance.",
+   "differentiation_within_parent": "Manages membership of a shared library; H29 ranks entries and H31 decides whether to replace a single incumbent.",
+   "n_papers": 12
+  },
+  {
+   "id": "H31",
+   "parent": "evidence_gated_retention",
+   "name": "Use a Statistically Sound Commit Rule",
+   "tactical_pattern": "A candidate change replaces the incumbent only after passing a disjoint held-out or regression gate, a paired statistical test, an anytime-valid e-process, a drift index, or a sealed external audit — or, in theoretical work, only under conditions proven to preserve goals or bound value loss.",
+   "differentiation_within_parent": "Concerns the acceptance rule for whole-system updates, including formal analyses of when self-modification is safe; the GAT siblings manage individual entries and library membership.",
+   "n_papers": 15
+  },
+  {
+   "id": "H32",
+   "parent": "diagnose_self_improvement",
+   "name": "Isolate Effects with Controlled Interventions",
+   "tactical_pattern": "Matched or frozen conditions — perturbing memory content, crossing evolver and executor models, freezing state while injecting feedback subsets, compute-matched baselines — separate whether gains come from the evolved artifact, extra search, or superficial prompt effects; negative results are reported as findings.",
+   "differentiation_within_parent": "An analysis protocol on existing systems; H33 builds reusable benchmarks and H35 targets adversarial persistence.",
+   "n_papers": 12
+  },
+  {
+   "id": "H33",
+   "parent": "diagnose_self_improvement",
+   "name": "Benchmark Persistent Improvement over Streams",
+   "tactical_pattern": "Benchmarks present ordered task streams with frozen validation, held-out or shifted test views, replay, and cost accounting to measure whether retained experience transfers, persists, and avoids forgetting, rather than single-episode success.",
+   "differentiation_within_parent": "Measures the persistence and transfer of improvement; H34 measures the capability to run the improvement loop.",
+   "n_papers": 15
+  },
+  {
+   "id": "H34",
+   "parent": "diagnose_self_improvement",
+   "name": "Benchmark Agents Doing AI R&D",
+   "tactical_pattern": "Isolated, budgeted workspaces ask agents to build training pipelines, harnesses, data strategies, or learning algorithms, with frozen post-submission evaluators that rerun from scratch to verify that the artifact itself improves learning.",
+   "differentiation_within_parent": "Evaluates the capability to perform the self-improvement work, not the persistence of improvements (H33).",
+   "n_papers": 9
+  },
+  {
+   "id": "H35",
+   "parent": "diagnose_self_improvement",
+   "name": "Audit Persistence as an Attack Surface",
+   "tactical_pattern": "Poisoning, injection, tampering, or benign misevolution is introduced into evolving memory, skills, or harnesses, and its persistence, propagation, and evasion of defenses are traced across sessions and generations.",
+   "differentiation_within_parent": "Safety and adversarial focus on persistent state, unlike the capability-focused DIA siblings.",
+   "n_papers": 10
+  }
+ ],
+ "notes": "Revision pass: (1) split 'textual gradient' into H09 (multi-component credit propagation) vs H10 (single-document critique rewrite); single-prompt TG papers moved to H10.\n(2) merged 'amortized workflow generator' (formerly under ARC) into H27: training a workflow generator and training a prompt/harness editor are the same move (amortize search into a learned proposer).\n(3) merged 'certify the commit rule' (theory/statistical) into H31; merged two INT subclusters (internalize vs lever-choice) because several papers do both.\n(4) reassigned 4 boundary papers to bring H24, H20 and H05 to at least 8 (co-trained reward model -> H24; descendant-productivity meta-skills -> H20; on-demand and RL-iterative retrieval -> H05).\nResidual: no residual bucket (0%); weak fits are flagged fit=low instead (see counts). Largest sub: H00; H03 and H12 carry the most low-fit domain-application papers.\nRS counterparts: diagnose_self_improvement ~ controlled_diagnostic_design; self_generate_the_curriculum / coevolve_the_evaluator ~ self_supervised_signal_engineering;\nabstract_experience_into_guidance / index_experience_for_reuse ~ adapt_via_conditioning; make_the_improver_editable ~ generative_process_redesign (liberate a fixed component); evidence_gated_retention ~ assumption_audit_and_pivot (drop 'score delta = improvement')."
+}
