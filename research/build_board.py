@@ -1,7 +1,7 @@
 """Render the paper board from research/scores.jsonl (format inspired by Aerial-VLN-Arxiv-Daily, plus scores).
 
 Writes papers/README.md (every scored paper, grouped by main pattern, best first) and rewrites the block between
-<!-- BOARD:START --> and <!-- BOARD:END --> in README.md with the ★★★ papers. Deterministic; rerun after scoring.
+<!-- BOARD:START --> and <!-- BOARD:END --> in README.md with the top-N papers by score. Deterministic; rerun after scoring.
 """
 
 import json
@@ -55,7 +55,7 @@ def main() -> None:
     block.append("<!-- BOARD:END -->")
     readme = Path("README.md").read_text(encoding="utf-8")
     if "<!-- BOARD:START -->" in readme:
-        readme = re.sub(r"<!-- BOARD:START -->.*?<!-- BOARD:END -->", "\n".join(block), readme, flags=re.S)
+        readme = re.sub(r"<!-- BOARD:START -->.*?<!-- BOARD:END -->", lambda _: "\n".join(block), readme, flags=re.S)  # lambda: titles may contain backslashes
     else:
         readme = readme.replace("## What is here", "\n".join(block) + "\n\n## What is here", 1)
     Path("README.md").write_text(readme, encoding="utf-8")
