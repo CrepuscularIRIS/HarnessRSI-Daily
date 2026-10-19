@@ -134,6 +134,11 @@ def main(argv: list[str]) -> int:
         if age >= 2 and n:
             problems.append(f"queue {q.name} unprocessed for {age} days")
 
+    scored = sum(1 for _ in Path("research/scores.jsonl").open()) if Path("research/scores.jsonl").exists() else 0
+    cand = [json.loads(l) for l in Path("reel/candidates.jsonl").open()] if Path("reel/candidates.jsonl").exists() else []
+    done = sum(c.get("status") == "done" for c in cand)
+    queued = sum(len(q.read_text().split()) for q in Path("research/queue").glob("*.txt"))
+    report.append(f"progress: {scored} papers on the board · {queued} ids waiting in queue · posters {done}/{len(cand)}")
     STATE.write_text(head)
     print("\n".join(report))
     print("\n".join(f"! {p}" for p in problems))
