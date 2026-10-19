@@ -1,5 +1,11 @@
 # HarnessRSI Daily
 
+<p>
+<a href="papers/README.md"><img src="https://img.shields.io/badge/papers-scored%20daily-blue" alt="papers"></a>
+<a href="patterns/overview.md"><img src="https://img.shields.io/badge/patterns-13%20main%20%2B%2036%20sub-purple" alt="patterns"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
+</p>
+
 A research radar for **harness-level recursive self-improvement (RSI)**: systems that improve their own
 *non-weight* components — prompts, skills, tools, workflows, memory, agent code, evaluators — from their own
 execution feedback, and keep those changes for later tasks.
@@ -11,6 +17,9 @@ patterns, learned from the corpus itself.
 
 > 中文简介：专门追踪「非权重层面的递归自我改进」（Harness RSI）。不做又一个论文列表，而是对每篇论文判定
 > 它改了什么、怎么决定保留、证据是否真的支持"留存下来的提升"；并从语料中逆向归纳出 Harness 版的研究模式卡。
+
+**Keywords:** recursive self-improvement (RSI) · self-improving agents · self-evolving agents · LLM agents · agent harness / scaffold optimization · harness engineering · prompt optimization (GEPA, DSPy, TextGrad) · agent memory & experience replay · skill library learning · agentic workflow search · automated design of agentic systems (ADAS) · Darwin Gödel Machine · open-ended evolution · tool creation · evaluator co-evolution · AI research agents · arXiv daily · awesome list · 递归自我改进 · 自我进化智能体 · 智能体框架优化 · 论文日报
+
 
 <!-- REEL:START -->
 <!-- REEL:END -->
