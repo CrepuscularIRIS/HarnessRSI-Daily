@@ -33,4 +33,4 @@
 - **卡片里的每个数字都要能追溯到读过的具体版本。** 作者报告的结果和我们的判定要分开写。查不到就填 `unclear` 或 `null`，不要猜。
 - **不在外部仓库发 Issue、评论、PR，也不 star 或 fork。** 对外动作一律由人来做。
 - **密钥只放在 Actions secrets 或环境变量里**，包括 OpenReview 账号、各种 API key。不写进任何文件、日志或 commit 正文。
-- **不要改动以下文件：** `docs/EVIDENCE.md`、`cards/_TEMPLATE.md`、`check_cards.py`、`.github/`、`research/*_SPEC.md`、`research/*_SCHEMA.md`、`research/SCREEN_RUBRIC.md`、`research/score.py`、`research/check_*.py`、`research/calibrate.py`、`research/patterns/taxonomy*.json`、`research/patterns/conditions.json`、`patterns/`。这些是评判标准和护栏，维护 Agent 改它们等于自己改自己的考卷。如果确实需要修改，在 commit 正文里提出建议，由人来改。
+- **不要改动以下文件：** `docs/EVIDENCE.md`、`cards/_TEMPLATE.md`、`check_cards.py`、`.github/`、`research/*_SPEC.md`、`research/*_SCHEMA.md`、`research/SCREEN_RUBRIC.md`、`research/score.py`、`research/check_*.py`、`research/calibrate.py`、`research/setup_reel.sh`、`research/patterns/taxonomy*.json`、`research/patterns/conditions.json`、`patterns/`。这些是评判标准和护栏，维护 Agent 改它们等于自己改自己的考卷。如果确实需要修改，在 commit 正文里提出建议，由人来改。

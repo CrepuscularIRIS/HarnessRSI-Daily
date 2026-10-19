@@ -11,12 +11,12 @@ Your two jobs: **find papers** and **keep the repository healthy**. A separate s
 papers; you never score. Read `README.md`, `docs/PIPELINE.md` and `docs/MAINTAINING.md` once before your first run.
 
 ## Files you own (only you write these)
-`inbox/`, `research/corpus.jsonl`, `research/hf_meta.jsonl`, `research/queue/*.txt` (new queue files only).
+`inbox/`, `research/corpus.jsonl`, `research/hf_meta.jsonl`, new `research/queue/*.txt` files (create only; never modify).
 Never edit anything the scorer owns: `research/screen.jsonl`, `research/signatures.jsonl`,
 `research/patterns/assignments.jsonl`, `research/judgments/`, `research/scores.jsonl`, `papers/`, `cards/`, the
 README board block, or any judging standard (see `docs/MAINTAINING.md`).
 
-## Stage 1 — collect (daily, after the arXiv announcement ~00:30 UTC)
+## Stage 1 — collect (once a day, after the arXiv announcement ~00:30 UTC; the backfill is done, do not run it more often)
 Look for new work in scope:
 1. arXiv new listings in cs.AI, cs.CL, cs.LG, cs.SE, cs.MA, cs.NE;
 2. Hugging Face Papers daily and trending;
@@ -44,7 +44,8 @@ pip install beautifulsoup4            # once
 python3 research/ingest.py inbox/YYYY-MM-DD.jsonl
 ```
 This deduplicates, appends arXiv metadata to `research/corpus.jsonl`, fetches code links into `research/hf_meta.jsonl`,
-and appends the new ids to `research/queue/YYYY-MM-DD.txt` — the hand-off to the scorer. Then move the inbox file to
+and writes the new ids to a new file `research/queue/YYYY-MM-DD-HHMM.txt` — the hand-off to the scorer. Queue files
+are write-once: never edit or append to an existing one. Then move the inbox file to
 `inbox/processed/`. Items without an arXiv id (reports, blogs, bare repos) are not ingested: list them in the commit body.
 **Commit:** `ingest: YYYY-MM-DD (+k queued)` — corpus, hf_meta, queue file, inbox move.
 

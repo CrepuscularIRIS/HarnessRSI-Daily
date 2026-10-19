@@ -1,10 +1,15 @@
 """Validate judgment records (research/SCORE_SPEC.md) and compute HarnessRSI scores.
 
+Quote verification needs research/fulltext/ (local only). Once a batch file has passed it, `build` records the file's
+sha256 in research/judgments/VERIFIED.json; later builds re-check only structure for unchanged batches, so a fresh
+clone without full texts can still publish. A changed or new batch is always quote-verified again.
+
 Usage:
   python research/score.py check <judgments.jsonl> [<ids.txt>]   # validate only, exit 1 on problems
   python research/score.py build                                  # all research/judgments/*.jsonl → research/scores.jsonl
 """
 
+import hashlib
 import json
 import re
 import sys
@@ -35,14 +40,14 @@ def context() -> tuple[dict, dict]:
     return main_of, json.loads((R / "patterns/conditions.json").read_text())
 
 
-def check(rec: dict, main_of: dict, cond: dict) -> list[str]:
+def check(rec: dict, main_of: dict, cond: dict, verify_quotes: bool = True) -> list[str]:
     aid = rec.get("arxiv")
     if aid not in main_of:
         return [f"{aid}: not in assignments.jsonl"]
     path = FULLTEXT / f"{aid.replace(':', '_')}.txt"
-    if not path.exists():
+    if verify_quotes and not path.exists():
         return [f"{aid}: no fulltext file"]
-    hay = squash(path.read_text(encoding="utf-8"))
+    hay = squash(path.read_text(encoding="utf-8")) if verify_quotes else None
     sub, main = main_of[aid]
     errs = []
 
@@ -53,7 +58,7 @@ def check(rec: dict, main_of: dict, cond: dict) -> list[str]:
         elif v in needs_quote:
             if not q or len(q.split()) > 45:
                 errs.append(f"{label}: needs a quote ≤45 words")
-            elif squash(q) not in hay:
+            elif hay is not None and squash(q) not in hay:
                 errs.append(f"{label}: quote not in file: {q[:50]!r}")
 
     for k in ("title_zh", "one_line", "one_line_zh"):
@@ -132,26 +137,31 @@ def main(argv: list[str]) -> int:
         print("\n".join(errs) + ("\n" if errs else "") + f"{len(recs)} records, {len(errs)} problems")
         return 1 if errs else 0
     if argv[:1] == ["build"]:
-        out, bad, srcs = [], 0, code_sources()
-        for p in sorted((R / "judgments").glob("*.jsonl")):
+        out, bad, srcs = {}, 0, code_sources()
+        ledger_path = R / "judgments/VERIFIED.json"
+        ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
+        # legacy batches (pilot, bNN) first, then dated batches in date order: a later re-judgment of a paper wins
+        for p in sorted((R / "judgments").glob("*.jsonl"), key=lambda p: (p.stem[:1].isdigit(), p.name)):
             recs, ids_file = jl(p), p.with_name(f"ids_{p.stem}.txt")
+            digest = hashlib.sha256(p.read_bytes()).hexdigest()
+            verified = ledger.get(p.name) == digest
             want = set(ids_file.read_text().split()) if ids_file.exists() else {r["arxiv"] for r in recs}
-            if {r["arxiv"] for r in recs} != want or any(check(r, main_of, cond) for r in recs):
+            if {r["arxiv"] for r in recs} != want or any(check(r, main_of, cond, verify_quotes=not verified) for r in recs):
                 print(f"skip {p.name}: incomplete or invalid batch ({len(recs)}/{len(want)})")  # still being written
+                bad += 1
                 continue
+            ledger[p.name] = digest
             for r in recs:
-                if check(r, main_of, cond):
-                    bad += 1
-                    continue
                 sub, main = main_of[r["arxiv"]]
                 url = code_url(r["evidence"]["code"].get("quote") or "") or srcs.get(r["arxiv"], {}).get("url")
-                out.append({"arxiv": r["arxiv"], "sub_pattern": sub, "main_pattern": main,
+                out[r["arxiv"]] = ({"arxiv": r["arxiv"], "sub_pattern": sub, "main_pattern": main,
                             **{k: r[k] for k in ("title_zh", "one_line", "one_line_zh")},
                             "evidence_level": r["evidence_level"]["value"], "code": r["evidence"]["code"]["value"],
                             "code_url": url, "stars": srcs.get(r["arxiv"], {}).get("stars"),
                             **score(r, main, cond, code_found=bool(url))})
-        (R / "scores.jsonl").write_text("".join(json.dumps(o, ensure_ascii=False) + "\n" for o in out))
-        print(f"scored {len(out)} papers ({bad} invalid records skipped) → research/scores.jsonl")
+        (R / "scores.jsonl").write_text("".join(json.dumps(o, ensure_ascii=False) + "\n" for o in out.values()))
+        ledger_path.write_text(json.dumps(dict(sorted(ledger.items())), indent=1) + "\n")
+        print(f"scored {len(out)} papers ({bad} batches skipped) → research/scores.jsonl")
         return 1 if bad else 0
     print(__doc__)
     return 2

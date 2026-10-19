@@ -33,7 +33,8 @@ OWN = {
 ROLE = {"collect": "grok", "ingest": "grok", "maintenance": "grok", "triage": "dots", "score": "dots", "cards": "dots", "reel": "dots"}
 PROTECTED = ["docs/EVIDENCE.md", "cards/_TEMPLATE.md", "check_cards.py", ".github/*", "research/*_SPEC.md",
              "research/*_SCHEMA.md", "research/SCREEN_RUBRIC.md", "research/score.py", "research/check_*.py",
-             "research/calibrate.py", "research/patterns/taxonomy*.json", "research/patterns/conditions.json", "patterns/*"]
+             "research/calibrate.py", "research/patterns/taxonomy*.json", "research/patterns/conditions.json", "patterns/*",
+             "research/setup_reel.sh"]
 FORBIDDEN = ["research/fulltext/*", "research/reviews/*", "research/patterns/bundles/*", "research/paper_text/*", "*.env", ".env",
              "*.pptx", "*.mp3", "*.docx", "*/poster.html"]
 BOARD = re.compile(r"<!-- (BOARD|REEL):START -->.*?<!-- \1:END -->", re.S)
@@ -77,6 +78,12 @@ def main(argv: list[str]) -> int:
     report.append(f"new commits: {len(commits)}" + "".join(f"\n  {c[:7]} {s}" for c, s in commits))
     for c, s in commits:
         problems += commit_issues(c, s)
+        for f in sh("git", "show", "--name-status", "--format=", c).splitlines():  # queue files are immutable once written
+            st, *paths = f.split("\t")
+            if st == "M" and fnmatch.fnmatch(paths[0], "research/queue/*.txt"):
+                problems.append(f"{c[:7]} modifies existing queue file {paths[0]} (queue files are write-once)")
+            if st == "M" and re.fullmatch(r"research/judgments/[^/]+\.jsonl", paths[0]) and ROLE.get(s.split(":", 1)[0].strip()):
+                problems.append(f"{c[:7]} rewrites published judgment batch {paths[0]} (re-judgments go in a new batch)")
 
     sh("git", "merge", "--ff-only", "-q", "origin/main", check=False)
     if sh("git", "rev-parse", "HEAD").strip() != head:
@@ -122,7 +129,7 @@ def main(argv: list[str]) -> int:
     today = dt.date.today()
     for q in sorted(Path("research/queue").glob("*.txt")):
         n = len(q.read_text().split())
-        age = (today - dt.date.fromisoformat(q.stem)).days if re.fullmatch(r"\d{4}-\d{2}-\d{2}", q.stem) else 0
+        age = (today - dt.date.fromisoformat(q.stem[:10])).days if re.match(r"\d{4}-\d{2}-\d{2}", q.stem) else 0
         report.append(f"queue {q.name}: {n} ids, {age} days old")
         if age >= 2 and n:
             problems.append(f"queue {q.name} unprocessed for {age} days")
