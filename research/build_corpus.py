@@ -17,7 +17,7 @@ from pathlib import Path
 
 ARXIV_ID = re.compile(r"arxiv\.org/(?:abs|pdf|html)/(\d{4}\.\d{4,5})")
 HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
-API = "http://export.arxiv.org/api/query?max_results={n}&id_list={ids}"
+API = "https://export.arxiv.org/api/query?max_results={n}&id_list={ids}"
 NS = {"a": "http://www.w3.org/2005/Atom", "x": "http://arxiv.org/schemas/atom"}
 BATCH = 100
 
@@ -41,7 +41,8 @@ def harvest(lists_dir: Path) -> dict[str, list[dict]]:
 
 def fetch_metadata(ids: list[str]) -> dict[str, dict]:
     url = API.format(n=len(ids), ids=",".join(ids))
-    with urllib.request.urlopen(url, timeout=60) as r:
+    req = urllib.request.Request(url, headers={"User-Agent": "harnessrsi-daily/0.1"})  # plain http times out from cloud boxes
+    with urllib.request.urlopen(req, timeout=60) as r:
         root = ET.fromstring(r.read())
     out = {}
     for e in root.findall("a:entry", NS):

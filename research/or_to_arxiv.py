@@ -20,7 +20,7 @@ norm = lambda t: re.sub(r"[^a-z0-9]+", " ", t.lower()).strip()
 def search(title: str) -> tuple[str | None, float]:
     words = [w for w in norm(title).split() if len(w) > 2][:12]
     q = urllib.parse.quote(" AND ".join(f"ti:{w}" for w in words))
-    with urllib.request.urlopen(f"http://export.arxiv.org/api/query?search_query={q}&max_results=5", timeout=60) as r:
+    with urllib.request.urlopen(f"https://export.arxiv.org/api/query?search_query={q}&max_results=5", timeout=60) as r:
         root = ET.fromstring(r.read())
     best, score = None, 0.0
     for e in root.findall("a:entry", NS):
