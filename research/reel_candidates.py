@@ -3,7 +3,7 @@
 A Reel poster/video reuses the paper's figures. Only CC BY / CC BY-SA / CC0 allow that on a public repo; arXiv's default
 license (no <license> tag) and NC/ND licenses mean: redraw figures or link instead of embedding.
 
-Usage: python research/reel_candidates.py [--min-score 59]
+Usage: python research/reel_candidates.py [--min-score 60]
 """
 
 import argparse
@@ -26,7 +26,7 @@ def license_of(aid: str) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--min-score", type=int, default=59)
+    ap.add_argument("--min-score", type=int, default=60)
     args = ap.parse_args()
     meta = {r["arxiv"]: r for r in map(json.loads, Path("research/corpus.jsonl").read_text().splitlines())}
     scores = [json.loads(l) for l in Path("research/scores.jsonl").read_text().splitlines()]
