@@ -134,7 +134,12 @@ def main(argv: list[str]) -> int:
     if argv[:1] == ["build"]:
         out, bad, srcs = [], 0, code_sources()
         for p in sorted((R / "judgments").glob("*.jsonl")):
-            for r in jl(p):
+            recs, ids_file = jl(p), p.with_name(f"ids_{p.stem}.txt")
+            want = set(ids_file.read_text().split()) if ids_file.exists() else {r["arxiv"] for r in recs}
+            if {r["arxiv"] for r in recs} != want or any(check(r, main_of, cond) for r in recs):
+                print(f"skip {p.name}: incomplete or invalid batch ({len(recs)}/{len(want)})")  # still being written
+                continue
+            for r in recs:
                 if check(r, main_of, cond):
                     bad += 1
                     continue

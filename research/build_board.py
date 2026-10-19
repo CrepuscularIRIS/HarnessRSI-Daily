@@ -9,6 +9,7 @@ import re
 from pathlib import Path
 
 R = Path("research")
+TOP_N = 30
 BOUNDARY = {"self_generate_the_curriculum", "couple_context_and_weight_updates", "amortize_improver_into_trained_policy"}
 
 
@@ -45,9 +46,10 @@ def main() -> None:
     Path("papers").mkdir(exist_ok=True)
     Path("papers/README.md").write_text("\n".join(md) + "\n", encoding="utf-8")
 
-    top = [s for s in scores if s["band"] == "★★★"]
-    block = ["<!-- BOARD:START -->", "## Top papers (★★★, score ≥ 70)", "",
-             f"{len(top)} of {len(scores)} scored papers. Full board, grouped by pattern: [papers/](papers/README.md).", "",
+    top = scores[:TOP_N]
+    block = ["<!-- BOARD:START -->", f"## Top {len(top)} papers by HarnessRSI score", "",
+             f"Out of {len(scores)} scored so far ({sum(s['band'] == '★★★' for s in scores)} at ★★★ ≥ 70). "
+             f"Full board, grouped by pattern: [papers/](papers/README.md). {legend.replace('../', '')}", "",
              head.replace("Sub-pattern", "Pattern")]
     block += [row(s, meta).replace("](../", "](") for s in top]
     block.append("<!-- BOARD:END -->")
