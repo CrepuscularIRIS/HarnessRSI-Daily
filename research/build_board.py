@@ -25,6 +25,23 @@ def row(s: dict, meta: dict) -> str:
             f"| [{s['sub_pattern']}](../patterns/sub/{s['sub_pattern']}.md) | **{s['total']}** {s['band']}<br><sub>E{s['evidence']} X{s['execution']:.0f} L{s['level']} C{s['code']}</sub> | {code} |")
 
 
+def gallery(readme: str, by_id: dict, meta: dict, per_row: int = 3) -> str:
+    """README block <!-- REEL:START/END -->: poster thumbnails for every reel/<id>/ with a poster, best score first."""
+    ids = sorted((p.parent.name for p in Path("reel").glob("*/poster.png") if p.parent.name in by_id),
+                 key=lambda i: (-by_id[i]["total"], i))
+    cells = [f'<td align="center" width="33%"><a href="reel/{i}/poster.pdf"><img src="reel/{i}/poster.png" width="100%"></a><br>'
+             f'<sub><b>{meta[i]["title"].split(":")[0][:40]}</b> · {by_id[i]["total"]} {by_id[i]["band"]}<br>'
+             f'<a href="reel/{i}/blog_zh.md">中文解读</a> · <a href="reel/{i}/blog_en.md">English</a> · '
+             f'<a href="https://arxiv.org/abs/{meta[i]["latest_version"]}">paper</a></sub></td>' for i in ids]
+    rows = ["<tr>" + "".join(cells[k:k + per_row]) + "</tr>" for k in range(0, len(cells), per_row)]
+    block = "\n".join(["<!-- REEL:START -->", f"## Poster gallery ({len(ids)})", "",
+                        "Posters and interpretations of top-scoring papers ([how they are made](reel/README.md)).", "",
+                        "<table>", *rows, "</table>", "<!-- REEL:END -->"]) if ids else "<!-- REEL:START -->\n<!-- REEL:END -->"
+    if "<!-- REEL:START -->" in readme:
+        return re.sub(r"<!-- REEL:START -->.*?<!-- REEL:END -->", lambda _: block, readme, flags=re.S)
+    return readme.replace("<!-- BOARD:START -->", block + "\n\n<!-- BOARD:START -->", 1)
+
+
 def main() -> None:
     scores = sorted(jl(R / "scores.jsonl"), key=lambda s: (-s["total"], s["arxiv"]))
     meta = {r["arxiv"]: r for r in jl(R / "corpus.jsonl")}
@@ -54,6 +71,7 @@ def main() -> None:
     block += [row(s, meta).replace("](../", "](") for s in top]
     block.append("<!-- BOARD:END -->")
     readme = Path("README.md").read_text(encoding="utf-8")
+    readme = gallery(readme, {s["arxiv"]: s for s in scores}, meta)
     if "<!-- BOARD:START -->" in readme:
         readme = re.sub(r"<!-- BOARD:START -->.*?<!-- BOARD:END -->", lambda _: "\n".join(block), readme, flags=re.S)  # lambda: titles may contain backslashes
     else:

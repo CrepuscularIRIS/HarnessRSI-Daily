@@ -12,6 +12,9 @@ patterns, learned from the corpus itself.
 > 中文简介：专门追踪「非权重层面的递归自我改进」（Harness RSI）。不做又一个论文列表，而是对每篇论文判定
 > 它改了什么、怎么决定保留、证据是否真的支持"留存下来的提升"；并从语料中逆向归纳出 Harness 版的研究模式卡。
 
+<!-- REEL:START -->
+<!-- REEL:END -->
+
 <!-- BOARD:START -->
 ## Top 30 papers by HarnessRSI score
 

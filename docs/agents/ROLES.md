@@ -3,9 +3,8 @@
 | 角色 | 做什么 | 不做什么 | 交付物 | 提示词 |
 |---|---|---|---|---|
 | **Grok bot（找论文 + 仓库维护）** | 每天扫 arXiv、HF Daily/Trending、GitHub、X，召回候选；运行入库脚本，把待打分的 id 写进 `research/queue/`；每周跑例行检查、补代码链接、刷新对照统计、发现异常开 Issue | 不判断质量、不打分、不改 Dots 的文件和评判标准 | `inbox/`、`research/corpus.jsonl`、`research/hf_meta.jsonl`、`research/queue/*.txt`；commit：`collect:` / `ingest:` / `maintenance:` | [GROK_PROMPT.md](GROK_PROMPT.md) |
-| **Dots（打分）** | 消化 `research/queue/`：分档 → 签名 → 归模式 → 按卡片逐项判断 → 算分 → 生成榜单 → 自检；每周写诊断卡；每月校准 | 不收集、不改 Grok 的文件、不改评判标准、不跑被收录仓库的代码 | `research/screen.jsonl` 等判断数据、`research/judgments/`、`scores.jsonl`、`papers/`、README 榜单、`cards/`；commit：`triage:` / `score:` / `cards:` | [DOTS_PROMPT.md](DOTS_PROMPT.md) |
+| **Dots（打分 + Reel 海报）** | 消化 `research/queue/`：分档 → 签名 → 归模式 → 按卡片逐项判断 → 算分 → 生成榜单 → 自检；打分完成后，给 ≥60 分的论文做海报与中英文解读（每次最多 3 篇，过 `check_reel.py`），更新 README 海报墙；每周写诊断卡；每月校准 | 不收集、不改 Grok 的文件、不改评判标准、不跑被收录仓库的代码 | `research/screen.jsonl` 等判断数据、`research/judgments/`、`scores.jsonl`、`papers/`、README 榜单与海报墙、`cards/`、`reel/`；commit：`triage:` / `score:` / `reel:` / `cards:` | [DOTS_PROMPT.md](DOTS_PROMPT.md) |
 | **人** | 每周抽查；审批分类体系修订；处理校准 FLAG；对外沟通 | — | — | — |
-| **Reel（我们自己 + Claude 云端 agent）** | 从 [reel/candidates.md](../../reel/candidates.md)（≥60 分的 76 篇，第一轮先做许可证允许复用图的 33 篇）按分数挑论文，用 ResearchStudio-Reel 生成海报与中英文解读 | Grok 与 Dots 不碰 `reel/` | `reel/<arxiv_id>/`；commit：`reel:` | [reel/README.md](../../reel/README.md) |
 
 ## 为什么这样分
 
