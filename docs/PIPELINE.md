@@ -5,10 +5,10 @@ output, who does it, and the check that must pass. Deterministic steps are scrip
 output is validated by a script before anything is published.
 
 ```
-collector ──▶ inbox/YYYY-MM-DD.jsonl
+Grok bot ──▶ inbox/YYYY-MM-DD.jsonl
                  │
-                 ▼  (D) research/ingest.py            dedup, arXiv metadata → corpus.jsonl, full text, HF code links
-            new papers
+                 ▼  (D) research/ingest.py            dedup, arXiv metadata → corpus.jsonl, HF code links (Grok)
+            research/queue/YYYY-MM-DD.txt  ──▶ Dots
                  │
                  ▼  (L) 1 screen      research/SCREEN_RUBRIC.md      → research/screen.jsonl        tier A/B/C
                  ▼  (L) 2 signature   research/SIGNATURE_SCHEMA.md   → research/signatures.jsonl    (A/B only)
@@ -24,15 +24,15 @@ collector ──▶ inbox/YYYY-MM-DD.jsonl
 
 | # | Step | Who | Input → output | Validation (must pass) |
 |---|---|---|---|---|
-| 0 | Collect candidates | collector | web/arXiv/HF/GitHub/X → `inbox/YYYY-MM-DD.jsonl` | `inbox/README.md` format |
-| 1 | Ingest | script | inbox → `corpus.jsonl`, `fulltext/<id>.txt`, `hf_meta.jsonl` | prints remaining LLM steps |
-| 2 | Screen | maintainer | title+abstract → `screen.jsonl` row (tier, level, kind, evolved) | enums per `SCREEN_RUBRIC.md` |
-| 3 | Signature (A/B) | maintainer | full text → `signatures.jsonl` row | `python3 research/check_signatures.py <file> <ids>` |
-| 4 | Assign pattern | maintainer | signature + `taxonomy_view.json` → `assignments.jsonl` row (sub, secondary_main, fit) | sub id exists; no outcome labels used |
-| 5 | Judge | maintainer | full text + `conditions.json[main]` + main/sub cards → judgment row | `PYTHONPATH=research python3 research/score.py check <file> <ids>` (quotes verified against the full text) |
-| 6 | Score | script | judgments → `scores.jsonl` | `score.py build` reports 0 skipped |
-| 7 | Board | script | scores → `papers/README.md`, README block | — |
-| 8 | Diagnosis card (optional, top new A papers) | maintainer | `cards/_TEMPLATE.md` | `python3 check_cards.py` |
+| 0 | Collect candidates | Grok bot | web/arXiv/HF/GitHub/X → `inbox/YYYY-MM-DD.jsonl` | `inbox/README.md` format |
+| 1 | Ingest + queue | Grok bot (script) | inbox → `corpus.jsonl`, `fulltext/<id>.txt`, `hf_meta.jsonl` | prints remaining LLM steps |
+| 2 | Screen | Dots | title+abstract → `screen.jsonl` row (tier, level, kind, evolved) | enums per `SCREEN_RUBRIC.md` |
+| 3 | Signature (A/B) | Dots | full text → `signatures.jsonl` row | `python3 research/check_signatures.py <file> <ids>` |
+| 4 | Assign pattern | Dots | signature + `taxonomy_view.json` → `assignments.jsonl` row (sub, secondary_main, fit) | sub id exists; no outcome labels used |
+| 5 | Judge | Dots | full text + `conditions.json[main]` + main/sub cards → judgment row | `PYTHONPATH=research python3 research/score.py check <file> <ids>` (quotes verified against the full text) |
+| 6 | Score | Dots (script) | judgments → `scores.jsonl` | `score.py build` reports 0 skipped |
+| 7 | Board | Dots (script) | scores → `papers/README.md`, README block | — |
+| 8 | Diagnosis card (optional, top new A papers) | Dots | `cards/_TEMPLATE.md` | `python3 check_cards.py` |
 
 ## Check suite (run before every commit)
 
