@@ -22,6 +22,14 @@ patterns, learned from the corpus itself.
 
 
 <!-- REEL:START -->
+## Poster gallery (5)
+
+Posters and interpretations of top-scoring papers ([how they are made](reel/README.md)).
+
+<table>
+<tr><td align="center" width="33%"><a href="reel/2604.11811/poster.pdf"><img src="reel/2604.11811/poster.png" width="100%"></a><br><sub><b>M$^\star$</b> · 90 ★★★<br><a href="reel/2604.11811/blog_zh.md">中文解读</a> · <a href="reel/2604.11811/blog_en.md">English</a> · <a href="https://arxiv.org/abs/2604.11811v2">paper</a></sub></td><td align="center" width="33%"><a href="reel/2605.29668/poster.pdf"><img src="reel/2605.29668/poster.png" width="100%"></a><br><sub><b>GRASP</b> · 84 ★★★<br><a href="reel/2605.29668/blog_zh.md">中文解读</a> · <a href="reel/2605.29668/blog_en.md">English</a> · <a href="https://arxiv.org/abs/2605.29668v3">paper</a></sub></td><td align="center" width="33%"><a href="reel/2604.17708/poster.pdf"><img src="reel/2604.17708/poster.png" width="100%"></a><br><sub><b>Co-evolving Agent Architectures and Inte</b> · 81 ★★★<br><a href="reel/2604.17708/blog_zh.md">中文解读</a> · <a href="reel/2604.17708/blog_en.md">English</a> · <a href="https://arxiv.org/abs/2604.17708v2">paper</a></sub></td></tr>
+<tr><td align="center" width="33%"><a href="reel/2608.23041/poster.pdf"><img src="reel/2608.23041/poster.png" width="100%"></a><br><sub><b>AutoSaddler</b> · 79 ★★★<br><a href="reel/2608.23041/blog_zh.md">中文解读</a> · <a href="reel/2608.23041/blog_en.md">English</a> · <a href="https://arxiv.org/abs/2608.23041v1">paper</a></sub></td><td align="center" width="33%"><a href="reel/2610.18792/poster.pdf"><img src="reel/2610.18792/poster.png" width="100%"></a><br><sub><b>SEAR</b> · 79 ★★★<br><a href="reel/2610.18792/blog_zh.md">中文解读</a> · <a href="reel/2610.18792/blog_en.md">English</a> · <a href="https://arxiv.org/abs/2610.18792v1">paper</a></sub></td></tr>
+</table>
 <!-- REEL:END -->
 
 <!-- BOARD:START -->
