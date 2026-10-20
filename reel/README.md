@@ -2,7 +2,8 @@
 
 Made locally by the maintainers (not by the agents), with the
 [ResearchStudio-Reel](https://github.com/microsoft/ResearchStudio) skills. Shown in the README poster gallery.
-Setup: `bash research/setup_reel.sh`. Gate: `python3 research/check_reel.py`.
+Setup: `bash research/setup_reel.sh`. Gate: `python3 research/check_reel.py`. Agent prompt for local runs:
+[docs/agents/REEL_PROMPT.md](../docs/agents/REEL_PROMPT.md).
 
 - **Candidates:** [candidates.md](candidates.md) — every board paper scoring ≥ 60, with its arXiv license.
   Refresh after the board changes: `python3 research/reel_candidates.py` (keeps `status`).

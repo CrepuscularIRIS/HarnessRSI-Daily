@@ -4,7 +4,7 @@
 |---|---|---|---|---|
 | **Grok bot（找论文 + 仓库维护）** | 每天扫 arXiv、HF Daily/Trending、GitHub、X，召回候选；运行入库脚本，把待打分的 id 写进 `research/queue/`；每周跑例行检查、补代码链接、刷新对照统计、发现异常开 Issue | 不判断质量、不打分、不改 Dots 的文件和评判标准 | `inbox/`、`research/corpus.jsonl`、`research/hf_meta.jsonl`、`research/queue/*.txt`；commit：`collect:` / `ingest:` / `maintenance:` | [GROK_PROMPT.md](GROK_PROMPT.md) |
 | **Dots（打分）** | 消化 `research/queue/`：分档 → 签名 → 归模式 → 按卡片逐项判断 → 算分 → 生成榜单 → 自检；每周写诊断卡；每月校准 | 不收集、不做海报、不改 Grok 和 `reel/` 的文件、不改评判标准、不跑被收录仓库的代码 | `research/screen.jsonl` 等判断数据、`research/judgments/`、`scores.jsonl`、`papers/`、README 榜单、`cards/`；commit：`triage:` / `score:` / `cards:` | [DOTS_PROMPT.md](DOTS_PROMPT.md) |
-| **人（本地）** | Reel 海报：给 ≥60 分的论文做海报与中英文解读（过 `check_reel.py`），更新 README 海报墙；每周抽查；审批分类体系修订；处理校准 FLAG；对外沟通 | — | `reel/`；commit：`reel:` | [reel/README.md](../../reel/README.md) |
+| **人（本地，Opus 执行）** | Reel 海报：给 ≥60 分的论文做海报与中英文解读（过 `check_reel.py`），更新 README 海报墙；每周抽查；审批分类体系修订；处理校准 FLAG；对外沟通 | — | `reel/`；commit：`reel:` | [REEL_PROMPT.md](REEL_PROMPT.md)、[reel/README.md](../../reel/README.md) |
 
 ## 节奏
 
