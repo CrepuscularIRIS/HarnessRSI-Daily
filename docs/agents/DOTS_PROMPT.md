@@ -32,20 +32,18 @@ records; run `PYTHONPATH=research python3 research/calibrate.py /tmp/cal.jsonl`.
 nothing; open an issue `calibration FLAG <date>` with the output and stop.
 
 ## Two phases
-- **Catch-up** (now, until the backlog is gone): run several times a day. Every run does stages A–B on the queue (as
-  many papers as you can verify, oldest queue file first) **and** stage C with up to **5** posters. Catch-up ends when
-  `research/queue/` has no files and `reel/candidates.jsonl` has no `status: todo`.
+- **Catch-up** (now, until the backlog is gone): run several times a day. Every run does, in this order:
+  1. **stage C first: up to 5 posters.** Posters do not wait for the queue — the candidates are already scored. Skip a
+     candidate only if its PDF cannot be read; if the Reel setup itself fails, say why in the report and go on.
+  2. **then stages A–B on one chunk of at most 50 ids** (oldest queue file first), committed before the run ends.
+  A run that ends with nothing committed is wasted: commit each stage as soon as it passes its checks.
+  Catch-up ends when `research/queue/` has no files and `reel/candidates.jsonl` has no `status: todo`.
 - **Steady** (after that): run once a day after the collector's ingest. Stages A–B for the day's queue file(s); stage C
   only for papers that newly reach ≥ 60 (up to 3 per run).
 
-## One-time: integrate the pending checkpoint
-`research/judgments/pending/2026-10-19-batch1/` holds 104 verified judgments from before `score.py build` could run on a
-fresh clone. Since commit-time verification is now recorded in `research/judgments/VERIFIED.json`, unchanged published
-batches no longer need their full texts — only new batches do. Re-check the pending records against the current
-standards, apply them as the first official batch of `research/queue/2026-10-19.txt` (stage A files + a dated judgment
-file below), then delete the `pending/` directory in the same commit.
-
 ## Each run
+Your environment may be reset between runs: start from a fresh `git pull` and treat the repository as the only state.
+Never spend a run restoring files from an earlier session — anything not pushed is redone.
 `git pull`, then `pip install beautifulsoup4` (once). Queue files (`research/queue/*.txt`, not `done/`) are written once
 by the collector and never change; take them oldest first. A large file may be processed over several runs in chunks:
 name each chunk's files `<queue-stem>-a`, `-b`, … and move the queue file to `research/queue/done/` only when every id
