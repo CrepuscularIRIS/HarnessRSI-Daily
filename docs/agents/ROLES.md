@@ -3,15 +3,15 @@
 | 角色 | 做什么 | 不做什么 | 交付物 | 提示词 |
 |---|---|---|---|---|
 | **Grok bot（找论文 + 仓库维护）** | 每天扫 arXiv、HF Daily/Trending、GitHub、X，召回候选；运行入库脚本，把待打分的 id 写进 `research/queue/`；每周跑例行检查、补代码链接、刷新对照统计、发现异常开 Issue | 不判断质量、不打分、不改 Dots 的文件和评判标准 | `inbox/`、`research/corpus.jsonl`、`research/hf_meta.jsonl`、`research/queue/*.txt`；commit：`collect:` / `ingest:` / `maintenance:` | [GROK_PROMPT.md](GROK_PROMPT.md) |
-| **Dots（打分 + Reel 海报）** | 消化 `research/queue/`：分档 → 签名 → 归模式 → 按卡片逐项判断 → 算分 → 生成榜单 → 自检；给 ≥60 分的论文做海报与中英文解读（追赶期每次 5 篇、与打分并行；稳定期每天最多 3 篇，只做新进 ≥60 的论文；过 `check_reel.py`），更新 README 海报墙；每周写诊断卡；每月校准 | 不收集、不改 Grok 的文件、不改评判标准、不跑被收录仓库的代码 | `research/screen.jsonl` 等判断数据、`research/judgments/`、`scores.jsonl`、`papers/`、README 榜单与海报墙、`cards/`、`reel/`；commit：`triage:` / `score:` / `reel:` / `cards:` | [DOTS_PROMPT.md](DOTS_PROMPT.md) |
-| **人** | 每周抽查；审批分类体系修订；处理校准 FLAG；对外沟通 | — | — | — |
+| **Dots（打分）** | 消化 `research/queue/`：分档 → 签名 → 归模式 → 按卡片逐项判断 → 算分 → 生成榜单 → 自检；每周写诊断卡；每月校准 | 不收集、不做海报、不改 Grok 和 `reel/` 的文件、不改评判标准、不跑被收录仓库的代码 | `research/screen.jsonl` 等判断数据、`research/judgments/`、`scores.jsonl`、`papers/`、README 榜单、`cards/`；commit：`triage:` / `score:` / `cards:` | [DOTS_PROMPT.md](DOTS_PROMPT.md) |
+| **人（本地）** | Reel 海报：给 ≥60 分的论文做海报与中英文解读（过 `check_reel.py`），更新 README 海报墙；每周抽查；审批分类体系修订；处理校准 FLAG；对外沟通 | — | `reel/`；commit：`reel:` | [reel/README.md](../../reel/README.md) |
 
 ## 节奏
 
 | 阶段 | Grok | Dots |
 |---|---|---|
-| 追赶期（现在） | 每天 1 次收集 + 入库（回填已完成） | 每天多次：清 `research/queue/` 积压 + 每次 5 张海报，直到 76 篇高分论文都有海报 |
-| 稳定期 | 每天 1 次；每周 1 次维护 | 每天 1 次：当天队列 + 新进 ≥60 分论文的海报 |
+| 追赶期（现在） | 每天 1 次收集 + 入库（回填已完成） | 每天多次，每次一块 ≤50 个 id，直到 `research/queue/` 清空 |
+| 稳定期 | 每天 1 次；每周 1 次维护 | 每天 1 次：当天队列 |
 
 ## 为什么这样分
 

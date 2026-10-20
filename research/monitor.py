@@ -1,7 +1,8 @@
 """Hourly health check of the agent-maintained repo. Read-only: reports, never commits.
 
 Checks every commit since the last run (state in .git/monitor_last):
-  - file ownership by commit prefix (collect/ingest/maintenance = Grok, triage/score/cards = Dots, reel = Reel);
+  - file ownership by commit prefix (collect/ingest/maintenance = Grok, triage/score/cards = Dots;
+    reel: commits are the maintainers' own, checked by check_reel.py);
   - no agent touches the judging standards; nobody commits full texts, reviews, bundles or .env;
   - Dots edits README.md only inside the board and poster-gallery blocks;
   - new reel/<id>/ directories pass research/check_reel.py;
@@ -27,10 +28,10 @@ OWN = {
              "research/patterns/contrast.json", "research/patterns/contrast.md"],
     "dots": ["research/screen.jsonl", "research/signatures.jsonl", "research/patterns/assignments.jsonl",
              "research/judgments/*", "research/scores.jsonl", "papers/README.md", "README.md", "cards/*",
-             "research/queue/*.txt", "research/queue/done/*", "reel/*"],
+             "research/queue/*.txt", "research/queue/done/*"],
 }
 # Human commits must not use these prefixes (use feat:/fix:/docs:/chore:), or they are checked as agent commits.
-ROLE = {"collect": "grok", "ingest": "grok", "maintenance": "grok", "triage": "dots", "score": "dots", "cards": "dots", "reel": "dots"}
+ROLE = {"collect": "grok", "ingest": "grok", "maintenance": "grok", "triage": "dots", "score": "dots", "cards": "dots"}
 PROTECTED = ["docs/EVIDENCE.md", "cards/_TEMPLATE.md", "check_cards.py", ".github/*", "research/*_SPEC.md",
              "research/*_SCHEMA.md", "research/SCREEN_RUBRIC.md", "research/score.py", "research/check_*.py",
              "research/calibrate.py", "research/patterns/taxonomy*.json", "research/patterns/conditions.json", "patterns/*",
