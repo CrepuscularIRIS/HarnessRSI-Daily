@@ -1,0 +1,542 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r04a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2503.22678",
+    "paper_id": "2503.22678",
+    "title": "Self-Evolving Multi-Agent Simulations for Realistic Clinical Interactions",
+    "version": "2503.22678v2",
+    "claim_type": "system_method",
+    "central_claim": "多轮主动诊断模拟中，通过经验记忆检索、CoT和集成，使医生随病例积累渐进提升诊断能力。",
+    "scope": "A类非权重案例/反思存储；固定材料标题为MedAgentSim前缀，与manifest简标题差异已核对ID/version。"
+  },
+  "provenance": {
+    "input_hash": "a0dc10b4895b761f3c64d7b3a8c0055cd00d1ecbae6e28a9c5bb5f23f627d263",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按派发配置sonnet→gpt-6.1-sol执行；没有可独立核验的模型回执、session ID或receipt，按模板置null。未运行论文代码，无外部检索，无其他席/批次输出访问。",
+    "timestamp": "2026-10-21T20:44:18.401972+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2503.22678.txt",
+      "url": "https://arxiv.org/html/2503.22678v2",
+      "sha256": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "sections_read": [
+        "全文Abstract、§1–4、Tables1–4、Figures1–4图注；末尾HTML辅助文本；无附录段落"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E01",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§2 Records Buffer",
+      "quote": "During a new consultation, the system uses k-nearest neighbors (KNN) to retrieve relevant past cases. The Medical Records Buffer provides full conversations and diagnoses, while the Experience Records Buffer extracts key insights from the reflection process.",
+      "support_explanation": "两个非权重缓冲区在后续咨询检索使用。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E02",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§2 Records Storage",
+      "quote": "If the revised diagnosis is correct, only the CLIP-embedded reflection insights are stored in the Experience Records Buffer; otherwise, the case is discarded to ensure learning is based on meaningful examples.",
+      "support_explanation": "正确性门控及失败丢弃；不等于正确性判断无误。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E03",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§3 Experimental Details",
+      "quote": "Model accuracy is evaluated using a\nbinary true/false metric\nfor the final diagnosis, with an LLM serving as the evaluator to account for variability in generated responses. Both the dataset conversion process and accuracy logs were manually reviewed to ensure reliability.",
+      "support_explanation": "诊断指标和人工复核，但无评估器错误率。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E04",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§3 Experimental Details",
+      "quote": "For VLM tasks, we utilized the NEJM dataset, which includes 15 complex real-world cases along with an extended set, NEJM Extended, of 120 additional cases. MedQA comprises 106 simulated diagnostic scenarios, while its extended variant, MedQA Extended, contains 214 distinct cases. Additionally, MIMIC-IV features 288 clinical cases, providing a diverse set of real-world medical interactions.",
+      "support_explanation": "五组样本规模已给出；未给记忆构建/测试隔离。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E05",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§3 Table 1/analysis",
+      "quote": "In MedQA, it achieves 70.8% with LLaMA 3.3, while the best-performing baseline model records 62.3%. Similarly, in MedQA Extended, MedAgentSim attains 72.0%, a notable increase over the 63.6% baseline.",
+      "support_explanation": "作者跨基座最优比较不是同模型记忆贡献；Table1同基座54.7→70.8。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E06",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§3.1 Table2",
+      "quote": "+ Measurement\n\n59.4%\n\n+ Memory\n\n51.9%\n\n+ Memory\n\n65.1%",
+      "support_explanation": "增量记忆对照LLaMA59.4→65.1；51.9属另一列，按表头核对。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E07",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§1 prior work",
+      "quote": "incorporated memory-replay techniques to enhance agent performance. However, these approaches deviate from real-world clinical practice, as doctor agents are provided with\na pre-compiled, complete medical report of the patient",
+      "support_explanation": "作者将前沿残余定位为主动信息获取而不是首次使用记忆。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E08",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§3 hardware",
+      "quote": "on a 4×48 GB NVIDIA RTX A6000 setup.",
+      "support_explanation": "给硬件，未给累计调用、检索/反思开销。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E09",
+      "material_id": "2503.22678.txt",
+      "material_hash": "fd45477f2c90ac892be14686ae8aca3b63b7e5f30b9a9ee753f67fbdeb716f23",
+      "locator": "§3 Table3",
+      "quote": "Combined Accuracy\n\n3 / 8 (37.5%)\n\nCombined Failure Rate\n\n5 / 8 (62.5%)",
+      "support_explanation": "仅两医生四视频的行为现实性探查，不是临床有效性。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "Medical Records Buffer / Experience Records Buffer",
+      "information": "当前问诊、请求后可见检验/图像；病例正确性供写入/反思，答案权限和给反思的具体提示未列",
+      "operation": "正确案例CLIP编码入库；错误病例反思重诊，仅重诊正确则存反思；新病例KNN检索",
+      "output": "案例/反思提示给后续医生",
+      "conditions": "相似临床病例且判诊信号可靠",
+      "feedback": "诊断正确性，评估器为LLM并人工复核日志",
+      "selection_rule": "正确原诊或正确重诊才写；否则丢弃",
+      "selection_data": "当前模拟病例，未固定与后续评测的隔离",
+      "persistence": "两个持续扩展缓冲区；未报版本、退休/冲突策略",
+      "later_use": "后续咨询检索后CoT和多数表决",
+      "claimed_effect": "后续诊断准确率上升",
+      "failure_boundary": "错误判诊可写入、相似并不等于可迁移；无流顺序/记忆规模检验",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "完整报告/静态问答未反映主动多轮诊断和逐步经验学习。",
+    "checked_gap": "正文明确了信息主动获取差异；未证明KNN/反思不同于同类临床经验回放。",
+    "lineage": [
+      {
+        "name": "Generative Agents",
+        "source_version": "本文参考[21]，邻文原件不在输入包"
+      },
+      {
+        "name": "AI Hospital",
+        "source_version": "本文参考[6]"
+      },
+      {
+        "name": "Multi-Agent Clinic",
+        "source_version": "本文参考[24]"
+      }
+    ],
+    "closest_adjacent": "Multi-Agent Clinic及记忆回放临床模拟；只能核本篇对其描述。",
+    "residue": "主动检验/图像请求与回放共同设计；临床安全及独立迁移未解决。",
+    "stakes": "被动提供完整病历可高估真实诊断能力。",
+    "method_response": "按请求开放检验、案例和纠错反思缓冲区、推理与集成。",
+    "remaining_gap": "无独立记忆测试、判诊门控误差率、临床部署验证。",
+    "evidence_ids": [
+      "E01",
+      "E02",
+      "E03",
+      "E07"
+    ],
+    "unresolved": [
+      "请补固定版本Multi-Agent Clinic/AI Hospital及引用的记忆回放邻文全文，两席一致材料；未用缺失邻文推断新颖。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "C03步骤2检索参考底座、3共享嵌入KNN条件化已执行",
+          "步骤1统一异构任务格式弱；4整类留出未示；5预算匹配朴素替代不足"
+        ],
+        "success_failure_checks": [
+          "病例检索确实改变后续输入；未示范诊断类别隔离",
+          "复杂CoT/集成管线只做增量消融"
+        ],
+        "evidence_ids": [
+          "E01",
+          "E06"
+        ],
+        "reason": "非参数条件化与参考底座为真实操作；不是完整C03跨类别泛化方案。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "非参数条件化与参考底座为真实操作；不是完整C03跨类别泛化方案。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "index_experience_for_reuse",
+        "sub": "H03",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S2",
+            "status": "partial",
+            "reason": "正确性门控有定义但由LLM判定，未报校验错误率",
+            "evidence_ids": [
+              "E02",
+              "E03"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "KNN选择但未给k及弱匹配回退",
+            "evidence_ids": [
+              "E01"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "增量memory对照有，未保持同预算及独立流",
+            "evidence_ids": [
+              "E06"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E01",
+          "E02"
+        ]
+      },
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00",
+        "version": "manifest-bound",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "重诊正确才写反思，评估器可靠性未知",
+            "evidence_ids": [
+              "E02",
+              "E03"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "unmet",
+            "reason": "全文未报告合并/退休，仅动态扩展",
+            "evidence_ids": [
+              "E01"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E01",
+          "E02"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "index_experience_for_reuse",
+        "sub": "H03"
+      },
+      "operation_correspondence": "保存的案例/反思在下一次咨询中作为检索条件，不更新模型权重。",
+      "necessary_conditions_and_differences": "H03近原始病例、H00抽象反思并行；C03整类泛化测试未执行。",
+      "evidence_ids": [
+        "E01",
+        "E02"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00"
+      },
+      "operation_correspondence": "保存的案例/反思在下一次咨询中作为检索条件，不更新模型权重。",
+      "necessary_conditions_and_differences": "H03近原始病例、H00抽象反思并行；C03整类泛化测试未执行。",
+      "evidence_ids": [
+        "E01",
+        "E02"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:adapt_via_conditioning/RE-1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "ideation-patterns/adapt_via_conditioning.md reviewer expectations bullet 1"
+      ],
+      "applies_when": "收益归因于检索条件",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有逐步加memory对照，但没有同调用预算和两缓冲区分别关闭。",
+      "evidence_ids": [
+        "E06"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "ideation-patterns/adapt_via_conditioning.md reviewer expectations bullet 2"
+      ],
+      "applies_when": "主张经验迁移到后续病例",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "全文未定义记忆构建/选择/测试隔离，不能把滚动评测当独立留出。",
+      "evidence_ids": [
+        "E01",
+        "E04"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:index_experience_for_reuse/S2",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/index_experience_for_reuse.md success condition 2"
+      ],
+      "applies_when": "案例写入",
+      "applicable": true,
+      "status": "partial",
+      "reason": "正确性门控明确但LLM评估器未校准。",
+      "evidence_ids": [
+        "E02",
+        "E03"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md success condition 4"
+      ],
+      "applies_when": "动态累积反思",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "无遗忘/冲突/版本报告，不把未观察到故障当维护成功。",
+      "evidence_ids": [
+        "E01"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2503.22678-1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2503.22678v2 §3"
+      ],
+      "applies_when": "以LLM诊断判断作终点评价",
+      "applicable": true,
+      "status": "partial",
+      "reason": "人工检查日志但没有医师真值一致性和错误率。",
+      "evidence_ids": [
+        "E03"
+      ],
+      "score_item": "E.measurement"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "记忆、CoT、集成带来诊断提升",
+      "setting": "LLaMA3.3 70B等，MedQA等五组模拟病例",
+      "baseline_control": "Multi-Agent Clinic；Table2逐步加measurement/memory/CoT/ensemble",
+      "selection_vs_test": "未声明病例记忆构建与测试隔离",
+      "result_denominator": "Table2 LLaMA measurement59.4%→memory65.1%→full70.8%，MedQA n106；全系统MIMIC79.5%，n288；不是独立检索收益",
+      "evidence_ids": [
+        "E04",
+        "E05",
+        "E06"
+      ],
+      "counterevidence": [
+        "无等预算memory-off、两buffer隔离或顺序方差"
+      ],
+      "allowed_conclusion": "模拟任务上系统/增量memory与较高准确率相关，未证独立retained迁移。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "临床互动具有较高行为现实性",
+      "setting": "两名医生判断四视频",
+      "baseline_control": "人/AI角色判别",
+      "selection_vs_test": "独立性/选片规则未说明",
+      "result_denominator": "识别3/8，误识别5/8",
+      "evidence_ids": [
+        "E09"
+      ],
+      "counterevidence": [
+        "小样本不代表真实临床诊断安全有效"
+      ],
+      "allowed_conclusion": "仅初步人类角色识别探查。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告模拟基准诊断改善及memory增量对照；持久存储机制存在，但没有独立后续任务证据支持retained或improver。",
+    "unresolved": [
+      "记忆初始化/流顺序与选择/测试划分",
+      "检索/反思/集成成本和裁判可靠性"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "主动信息获取与既有完整报告模拟差异明确；记忆部分主要组合已有机制，最近邻原文未固定。",
+      "evidence_ids": [
+        "E07"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "存取/反思流程对准后续问诊，但CLIP相似性与临床推理适用性、判诊/反思信息权限欠明。",
+      "evidence_ids": [
+        "E01",
+        "E02"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "写入/丢弃和下一次读取可追踪；k、反思提示、回退及维护缺失。",
+      "evidence_ids": [
+        "E01",
+        "E02"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "诊断二值指标相关且日志人工复核；LLM裁判校准/临床验证不足。",
+      "evidence_ids": [
+        "E03",
+        "E09"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "同基座增量memory贡献可见，但多模块增量不隔离两种记忆和额外调用。",
+      "evidence_ids": [
+        "E06"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "not_reported",
+      "rating": 0,
+      "reason": "完整正文无记忆构建、选择、测试隔离及冻结流报告；不能认定retained。",
+      "evidence_ids": [
+        "E01",
+        "E04"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–4、Tables1–4、Figures1–4；无附录段落；检索split/held-out/memory initialization/order、calls/tokens/cost/budget/latency均未给相关协议"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告病例数和微型人评失败分母；主诊断结果没有不确定性或独立运行方差。",
+      "evidence_ids": [
+        "E04",
+        "E09"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "not_reported",
+      "rating": 0,
+      "reason": "只给硬件，未报告累计检索/反思/集成调用或公平预算。",
+      "evidence_ids": [
+        "E08"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–4、Tables1–4、Figures1–4；无附录段落；检索split/held-out/memory initialization/order、calls/tokens/cost/budget/latency均未给相关协议"
+      ]
+    }
+  },
+  "score": {
+    "raw": 41.25,
+    "display": 41.2,
+    "lower": 41.25,
+    "upper": 41.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "已读完整固定材料；证据缺点属于论文报告不足而非材料缺失，按冻结锚点评价。",
+  "rationale": "病例与纠错反思确有存取门控，增量memory有收益；但缺独立流和预算对照，模拟结果不能外推临床有效或留存迁移。"
+}

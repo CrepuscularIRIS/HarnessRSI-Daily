@@ -1,0 +1,568 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r01a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "status": "out_of_scope",
+ "reason": "Frozen A3 bullet 1: the improver (environment-generating adversary) and the evaluated product (protagonist policy) are both RL-updated weights. Generated environments are transient per-episode samples of the adversary policy; nothing non-weight is retained, gated or re-read (no environment population/archive). Distinguished from POET (cal-h1-v2, in scope) whose retained, feedback-gated environment population is itself evaluated; the paper itself names that population as the distinction (opus/O01).",
+ "paper": {
+  "paper_key": "2012.02096",
+  "paper_id": "2012.02096",
+  "title": "Emergent Complexity and Zero-shot Transfer via Unsupervised Environment Design",
+  "version": "2012.02096v2",
+  "claim_type": "system_method",
+  "central_claim": "PAIRED (adversary trained on protagonist-vs-antagonist regret) produces a curriculum of increasingly complex solvable environments and yields RL policies with higher zero-shot transfer than domain randomization or minimax adversarial training.",
+  "scope_class": "out_of_scope (weight-level UED; L1)"
+ },
+ "provenance": {
+  "input_hash": "32d41775e894e896adc8fa9d4cb0f5e2c94c40a763bbc3e94364255f8729709e",
+  "input_package": "batches/r01a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker. Seat attempts used: sol a1, son55 a1 (same input_hash, same material sha256).",
+  "timestamp": "2026-10-21T20:03:03Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2012.02096",
+   "version": "2012.02096v2",
+   "url": "https://arxiv.org/html/2012.02096v2",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2012.02096.txt",
+   "extraction_method": "html",
+   "sections_read": [
+    "sol: 全文 §1–6",
+    "sol: Broader Impact",
+    "sol: Appendices A–F（证明、额外实验、超参数）",
+    "son55: Abstract",
+    "son55: Sec 1-6",
+    "son55: Appendix A-F (theory, extra experiments, hyperparameters)",
+    "opus55: claim/method/result sections re-read directly for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "note": "Single pinned text shared by both seats (sha256 verified against manifest); seat material_ids normalised to this id, original kept in seat_material_id. Missing items are figure renderings only; numbers used only where restated in text/tables."
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Environment-parameter policy (adversary) generating maze layouts / MuJoCo disturbance forces; protagonist and antagonist navigation policies",
+   "information": "Adversary sees fully observed grid state, timestep and a noise vector; reward = antagonist best return minus protagonist mean return (regret). Protagonist/antagonist see partial 5x5 views.",
+   "operation": "Three-player RL game: adversary proposes environment, antagonist (allied) and protagonist play it, all updated by PPO",
+   "output": "Updated adversary/antagonist/protagonist weights; protagonist policy evaluated zero-shot on hand-designed mazes",
+   "conditions": "Underspecified environment with free parameters; solvable-by-construction via antagonist; Theorem 2 needs adversary-antagonist coordination",
+   "feedback": "Return difference between two learning agents in same generated environment",
+   "selection_rule": "None beyond RL objective; no archive or acceptance gate for generated environments",
+   "persistence": "Policy weights only; generated environments are not stored or reused",
+   "later_use": "Protagonist deployed zero-shot; not applicable to a harness-component retention loop",
+   "claimed_effect": "Higher path length solved and 40%/18% Labyrinth/Maze success vs 10%/0% (minimax) and 0% (DR), author-reported",
+   "failure_boundary": "Non-coordinating antagonist variants degrade (App E.1); regret signal noisy",
+   "evidence_ids": [
+    "son55/E001",
+    "son55/E002",
+    "son55/E003",
+    "son55/E005"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Domain randomization cannot tailor difficulty to the learner and minimax adversaries generate unsolvable environments.",
+  "checked_gap": "Real limitation of prior environment-design methods within RL (cited: POET, asymmetric self-play, Campero et al.); not a harness-level gap.",
+  "lineage": "domain randomization / minimax adversarial RL -> POET and teacher-student curricula -> PAIRED (minimax regret via antagonist)",
+  "closest_adjacent": "POET (population minimax), asymmetric self-play, Campero et al. teacher; compared experimentally only to DR, minimax and PBT-minimax baselines",
+  "residue": "Unsolvable or trivial environments; no learning-progress-adaptive difficulty",
+  "stakes": "Zero-shot transfer and emergent complexity of RL policies",
+  "method_response": "Regret objective via allied antagonist keeps environments difficult but feasible",
+  "remaining_gap": "Equilibrium guarantee needs coordination; noisy regret; small navigation and hopper domains",
+  "evidence_ids": [
+   "son55/E001",
+   "son55/E004"
+  ],
+  "unresolved": [
+   "Gap analysis not completed beyond scope check because paper is excluded"
+  ]
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "PAIRED (adversary trained on protagonist-vs-antagonist regret) produces a curriculum of increasingly complex solvable environments and yields RL policies with higher zero-shot transfer than domain randomization or minimax adversarial training.",
+   "setting": "RL navigation (15x15 MiniGrid-like) and MuJoCo hopper, PPO, 5 seeds",
+   "baseline_control": "Domain randomization, minimax adversary, PBT minimax",
+   "selection_vs_test": "Hyperparameters chosen on validation environments for transfer; test mazes held out (App F.1.2)",
+   "result_denominator": "10 trials x 5 seeds per transfer env (Fig 3 caption)",
+   "evidence_ids": [
+    "son55/E004",
+    "son55/E005"
+   ],
+   "counterevidence": "none examined (scope exclusion)",
+   "allowed_conclusion": "Author-reported RL-policy transfer; no harness-component conclusion"
+  }
+ ],
+ "base_seat_for_signatures_gap_claims": "son55",
+ "evidence": [
+  {
+   "evidence_id": "sol/E001",
+   "material_id": "M-2012.02096",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "§3",
+   "quote": "We train policies by starting with an initially random policy, generating environments based on that policy to best suit its continued learning, train that policy in the generated environments, and repeat until the policy converges or we run out of resources.",
+   "support_explanation": "被改进/评测的主产物为训练后的策略权重，而非留存 harness。",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E002",
+   "material_id": "M-2012.02096",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "§4",
+   "quote": "The adversary and antagonist are trained to maximize the regret as computed in Eq.",
+   "support_explanation": "课程产生器及求解器通过学习参数更新。",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E003",
+   "material_id": "M-2012.02096",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "§5.1.3",
+   "quote": "In the Labyrinth (Maze) environment, PAIRED agents are able to solve the task in 40% (18%) of trials.",
+   "support_explanation": "作者报告训练策略的零样本迁移；不是非权重留存收益。",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E004",
+   "material_id": "M-2012.02096",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Appendix F.1.2",
+   "quote": "We tested a limited number of hyperparameter settings on a set of validation environments, consisting of a different maze and labyrinth, mazes with 5 blocks and 40 blocks, and a nine rooms environment.",
+   "support_explanation": "调参/测试分开，但不足以改变评测对象的范围。",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E005",
+   "material_id": "M-2012.02096",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "§4",
+   "quote": "Though multi-agent learning may not always converge",
+   "support_explanation": "明示对抗训练不保证收敛。",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "son55/E001",
+   "material_id": "M-2012.02096",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Abstract",
+   "quote": "To generate structured, solvable environments for our protagonist agent, we introduce a second, antagonist agent that is allied with the environment-generating adversary",
+   "support_explanation": "Three learned agents (protagonist, antagonist, environment adversary) make up the method.",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096-fulltext",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E002",
+   "material_id": "M-2012.02096",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Sec 5.1 Partially Observable Navigation Tasks",
+   "quote": "All agents are trained with PPO",
+   "support_explanation": "Every learned component (protagonist, antagonist, adversary) is updated by PPO gradient updates, i.e. weights.",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096-fulltext",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E003",
+   "material_id": "M-2012.02096",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Sec 3 Unsupervised Environment Design",
+   "quote": "We then test the trained policies in a set of challenging transfer tasks not provided during training.",
+   "support_explanation": "The evaluated product is the trained RL policy; generated environments are transient training distributions, not retained artifacts.",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096-fulltext",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E004",
+   "material_id": "M-2012.02096",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Abstract",
+   "quote": "PAIRED agents achieve higher zero-shot transfer performance when tested in highly novel environments.",
+   "support_explanation": "The central claim is about policy (weight) transfer, not a non-weight harness component.",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096-fulltext",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E005",
+   "material_id": "M-2012.02096",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Sec 5.1.3 Zero-Shot Transfer",
+   "quote": "In the Labyrinth (Maze) environment, PAIRED agents are able to solve the task in 40% (18%) of trials.",
+   "support_explanation": "Author-reported transfer result of the trained policy (5 seeds, 10 trials each per Fig 3 caption); context only, not scored.",
+   "kind": "author_report",
+   "seat_material_id": "2012.02096-fulltext",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "opus/O01",
+   "material_id": "M-2012.02096",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Appendix (POET comparison baseline)",
+   "quote": "the main algorithmic distinction between POET and minimax environment design is maintaining a population of environment adversaries and agents that are periodically swapped with each other",
+   "support_explanation": "Authors: POET's retained population is what PAIRED lacks; PAIRED keeps no non-weight environment store, which is the A3 distinction from the in-scope POET ruling.",
+   "kind": "author_report",
+   "source_seat": "opus55"
+  }
+ ],
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": "C27",
+    "role": "primary",
+    "fit": "good",
+    "tactic_steps_checked": "C27 steps 1-4 present (named players, utilities, Nash-equilibrium => minimax-regret policy proof in Thm 2, best-response RL as solver); step 5 faithfulness validated only empirically",
+    "success_checks": "Correspondence theorem present (Thm 2, assumes coordination); solver is PPO training",
+    "failure_checks": "Coordination assumption breaks in practice (App E.1 alternatives are worse)",
+    "evidence_ids": [
+     "son55/E001",
+     "son55/E002"
+    ],
+    "reason": "Environment design is recast as a three-player game whose equilibrium coincides with minimax regret, then solved by multi-agent RL.",
+    "taken_from_seat": "son55",
+    "aggregate_note": "Verified: three named players, regret payoffs, Theorem 2 (equilibrium => minimax-regret policy, assumes coordination), PPO best-response solver = C27 signature. Informational for an out_of_scope record."
+   }
+  ],
+  "reason": "Environment design recast as a three-player game whose equilibrium is the minimax-regret policy (C27). Pattern match carries no score.",
+  "executes_pattern": true,
+  "resolves_problem": "not_assessed (out_of_scope)"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H22",
+    "version": "taxonomy.json b115a69b; conditions.json 8704c7da; patterns/ 52ff9657",
+    "fit": "edge (documents the out-of-scope boundary)",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "partial",
+      "reason": "可执行环境及对手回报是可解性锚，但弱对手与均衡条件限制保证。",
+      "evidence_ids": [
+       "sol/E002",
+       "sol/E005"
+      ]
+     },
+     {
+      "id": "A3-retained-nonweight-artifact",
+      "status": "absent",
+      "reason": "No retained environment population, buffer or archive; the only persistent products are adversary/antagonist/protagonist weights.",
+      "evidence_ids": [
+       "opus/O01",
+       "sol/E001",
+       "son55/E002"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol/E001",
+     "sol/E002"
+    ],
+    "taken_from_seat": "sol"
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   "self_generate_the_curriculum/H22: state explicitly that a co-trained proposer whose only retained product is weights (no retained, gated and evaluated task/environment population, unlike POET) is a boundary contrast outside radar scope under A3 bullet 1."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": "C27",
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H22",
+   "operation_correspondence": "Regret-paid adversary co-trained against protagonist/antagonist <-> H22 proposer rewarded by a regret frontier signal against a solver.",
+   "necessary_conditions_and_differences": "H22 is a weight-touching boundary card; here no non-weight artifact is retained, hence documentation only.",
+   "evidence_ids": [
+    "sol/E002",
+    "son55/E001",
+    "opus/O01"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:self_generate_the_curriculum/S1",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md success conditions; 本篇 §4/Appendix E"
+   ],
+   "applies_when": "以对手回报认定生成环境可解时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "[informational, out_of_scope — not scored] 实测回报提供锚；对手能力/收敛仍限制。仅描述，不对范围外项计分。",
+   "evidence_ids": [
+    "sol/E002",
+    "sol/E005"
+   ],
+   "score_item": "X",
+   "taken_from_seat": "sol",
+   "aggregate_note": "Verified: solvability anchored by the antagonist's achieved return; weak adversary/non-convergence limit the guarantee."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "evidence_level_note": "Harness evidence labels are not assigned to out-of-scope weight-level work (run convention: cal-dev 1605.03142/2410.15639, cal-h2-v2 2003.03384).",
+  "claim_support": null,
+  "claim_support_note": "not assessed: out_of_scope",
+  "strongest_supported_claim": "Informational only: author-reported higher zero-shot transfer of PAIRED-trained navigation policies on hard human-designed mazes (e.g. Labyrinth/Maze 40%/18%) than DR and minimax, five seeds with 95% CIs.",
+  "unresolved": [
+   "If a phase-end scope decision admits weight-level UED curricula without a retained non-weight artifact, re-review under a separate class is required."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored under the Harness RSI rubric (frozen A3 bullet 1).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "complete pinned text v2 (§1–§6, Appendices incl. E/F)"
+   ],
+   "decision_source": "both"
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "weights": {
+   "G": 15,
+   "M": 20,
+   "X": 20,
+   "E.measurement": 10,
+   "E.causality": 15,
+   "E.holdout": 10,
+   "E.statistics": 5,
+   "E.cost": 5
+  },
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4; unknown items bound at 0/4 for L/U; raw=null while any unknown remains",
+  "note": "out_of_scope: not scored; L/U shown per contract for all-unknown records."
+ },
+ "resolutions": [
+  {
+   "field_path": "assessment.evidence_level",
+   "sol_value": "task",
+   "son55_value": "not_assessed",
+   "decision": "revised",
+   "final_value": null,
+   "reason": "Out-of-scope records carry no harness evidence label (run convention). sol's \"task\" would imply a harness-level assessment; son55's \"not_assessed\" is not a valid enum value.",
+   "evidence_ids": [
+    "opus/O01"
+   ],
+   "score_impact": "none (not scored)"
+  },
+  {
+   "field_path": "assessment.claim_support",
+   "sol_value": "scoped",
+   "son55_value": "not_assessed",
+   "decision": "revised",
+   "final_value": null,
+   "reason": "Not assessed for out-of-scope work; null with note instead of sol's \"scoped\" or the non-enum \"not_assessed\".",
+   "evidence_ids": [
+    "opus/O01"
+   ],
+   "score_impact": "none (not scored)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "reframe_as_solvable_object",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "reframe_as_solvable_object",
+     "C27"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "reframe_as_solvable_object",
+     "C27"
+    ]
+   ],
+   "reason": "C27 is the game/equilibrium branch of the parent: named players, regret utilities, a proved equilibrium-to-target correspondence (Theorem 2) and a best-response RL solver; sol's parent-only match under-specifies.",
+   "evidence_ids": [
+    "son55/E001",
+    "sol/E002",
+    "sol/E005"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "self_generate_the_curriculum",
+     "H22"
+    ]
+   ],
+   "son55_value": [],
+   "decision": "sol",
+   "final_value": [
+    [
+     "self_generate_the_curriculum",
+     "H22"
+    ]
+   ],
+   "reason": "Kept with fit=edge to document why the paper is outside scope (precedent cal-dev 2410.15639 kept its edge card); H22 names \"regret against a reference agent\" as a frontier signal. Revision proposal filed for H22.",
+   "evidence_ids": [
+    "sol/E002",
+    "opus/O01"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "expectations[rsi:self_generate_the_curriculum/S1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Informational check verified (antagonist return anchors solvability; App. E.1 shows coordination assumption matters). No score effect.",
+   "evidence_ids": [
+    "sol/E002",
+    "sol/E005"
+   ],
+   "score_impact": "none (not scored)"
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read abstract, §3–§5 and appendices first: PAIRED trains an adversary policy (PPO) to generate environment parameters that maximise protagonist-vs-antagonist regret; protagonist is evaluated zero-shot on held-out mazes. Every updated object is a network; environments are sampled per episode and discarded.",
+  "integrity_checks": "Both seats on 2012.02096v2, material sha256 23167f4d matches manifest; input_hash 32d41775 and rubric hash b44708af identical; seat hashes recomputed (canonical JSON) and equal conflicts.json; all seat quotes found in the pinned text; RS sub C27 has parent reframe_as_solvable_object (PARENTS.tsv); domain namespace rsi.",
+  "scope_check": "Shared out_of_scope independently confirmed: A3 bullet 1 applies (improver update and product are weights). Contrast with POET (cal-h1-v2 1901.01753, in scope) checked: the paper itself names POET's retained population as the algorithmic difference and treats it only as a PBT baseline.",
+  "core_claim_check": "Not scored. Informational facts re-checked: five seeds, 95% CIs, hyper-parameters for transfer chosen on separate validation environments (App. F.1.2).",
+  "retention_check": "No retained non-weight change exists, so the \"retained vs retained-improvement\" question does not arise."
+ },
+ "input_seat_hashes": {
+  "sol": "25a20b6de67cf90438d79f700b65f8c1259968eda3f07a9c6d39a7834a12b88f",
+  "son55": "de591a9909709130c59ad5a1e52064b560d34c8fc66850252780363555bc4aeb"
+ },
+ "final_record_hash": "980a3d923e56beca02d84f9f0f16ea8086727bc16b2d0217155c1081dfb2971f"
+}

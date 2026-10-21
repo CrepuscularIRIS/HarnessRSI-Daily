@@ -1,0 +1,290 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r03b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "被评价的留存对象是经 GRPO 微调后的模型权重；课程策略(各类别 Q 值的 bandit 状态)只在训练过程中调度题库采样，不作为 prompt/skill/tool/workflow/memory/评测器被留存并在后续任务中复用，亦不生成新任务。依冻结 rubric A3 与 EVIDENCE.md 判范围外。",
+ "rationale": "bandit 课程仅在训练期调度固定题库；被评价与留存的是 GRPO 微调后的权重，课程策略不被留存复用。依 A3 与 EVIDENCE.md 判范围外，不评分。",
+ "paper": {
+  "paper_key": "2505.14970",
+  "paper_id": "arXiv:2505.14970",
+  "title": "Self-Evolving Curriculum for LLM Reasoning",
+  "version": "2505.14970v4",
+  "claim_type": "component_training",
+  "central_claim": "Self-Evolving Curriculum：把课程选择表述为非平稳 bandit，用绝对优势作即时学习收益并以 TD(0) 更新，从而在 RL 微调中自动调度题目类别，提升推理与 OOD 泛化。"
+ },
+ "provenance": {
+  "input_hash": "70591124dc64444e349eeeb77baf29cbbf06e003dd6cf227ed2657adf3667500",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the subagent; model_type from dispatch config",
+  "timestamp": "2026-10-21T20:29:46Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2505.14970",
+   "url": "https://arxiv.org/html/2505.14970v4",
+   "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-5",
+    "Tables 1-4",
+    "App A-D"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "图像内容未进文本材料：Fig 1-4"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2505.14970",
+   "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+   "locator": "Abstract; 2505.14970.txt line 106",
+   "quote": "an automatic curriculum learning method that learns a curriculum policy concurrently with the RL fine-tuning process.",
+   "support_explanation": "课程策略与 RL 微调同时学习",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2505.14970",
+   "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+   "locator": "Sec 2.3; 2505.14970.txt line 256",
+   "quote": "The training batch is then constructed by first sampling categories according to the curriculum policy, followed by sampling problems uniformly within the categories.",
+   "support_explanation": "课程策略仅决定从固定题库中各类别的采样比例",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2505.14970",
+   "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+   "locator": "App C; 2505.14970.txt line 2052",
+   "quote": "All models are fine-tuned with the GRPO algorithms",
+   "support_explanation": "被改进并评价的对象是 GRPO 微调后的模型权重",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2505.14970",
+   "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+   "locator": "Sec 5; 2505.14970.txt line 1672",
+   "quote": "SEC employs absolute advantage as the curriculum reward, a Boltzmann distribution for sampling, and a TD(0) update method.",
+   "support_explanation": "课程组件=绝对优势奖励+Boltzmann 采样+TD(0)，训练期内的瞬时控制器",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "训练期课程采样分布(各类别 Q_t(c))，用于调度固定题库",
+   "information": "每步 GRPO 回合的绝对优势均值作类别奖励；类别来自难度/题型元数据或离散化成功率",
+   "operation": "Boltzmann 采样类别→批次→GRPO 更新模型→按类别平均 |A| 用 TD(0) 更新 Q",
+   "output": "微调后的模型权重(及训练期 Q 表)",
+   "conditions": "题库可分类别",
+   "feedback": "优势绝对值",
+   "selection_rule_data": "Q 值软最大",
+   "persistence": "训练内 Q 表；最终产物是权重",
+   "later_use": "无(训练结束后不复用课程策略)",
+   "claimed_effect": "相对随机课程在 OOD 难题上更好(Countdown/Zebra/ARC-1D/AIME)",
+   "failure_boundary": "7B 在简单任务上与随机接近",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "手工课程依赖启发式，在线过滤算力昂贵",
+  "checked_gap": "out_of_scope，未评估",
+  "lineage_closest_adjacent": [],
+  "residue": "",
+  "stakes": "",
+  "method_response": "",
+  "remaining_gap": "",
+  "evidence_ids": [
+   "E001"
+  ],
+  "unresolved": []
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "moderate",
+    "tactic_steps_checked": "把课程选择重述为非平稳多臂老虎机并用 TD(0) 求解(主卡签名)；子卡 C00/C21/C27 针对可解释性度量/RL 转监督/博弈均不对应",
+    "success_checks": "范围外，未评分",
+    "failure_checks": "范围外，未评分",
+    "evidence_ids": [
+     "E002",
+     "E004"
+    ],
+    "reason": "课程选择被重述为已有成熟解法的 bandit 对象，属主卡定义；子卡无适配"
+   }
+  ],
+  "sub_pattern_note": "C00/C21/C27 均不对应，null",
+  "outside_taxonomy": false,
+  "reason": "主卡识别；范围判定先于评分",
+  "executes_pattern": "not_assessed",
+  "resolves_problem": "not_assessed"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H23",
+    "version": "assets@52ff9657",
+    "fit": "low(边界卡：触及权重；从固定题库选择而非生成任务)",
+    "condition_checks": "范围外未逐条检查",
+    "evidence_ids": [
+     "E002",
+     "E004"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H23",
+   "operation_correspondence": "按学习者前沿信号选下一批任务 ↔ 以绝对优势选类别",
+   "necessary_conditions_differences": "H23 要求生成并验证任务；SEC 只从固定题库调度，且产物为权重",
+   "evidence_ids": [
+    "E002"
+   ]
+  }
+ ],
+ "expectations": [],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "SEC 相对随机课程提升 RL 微调后的推理并更好泛化到 OOD 难题",
+   "setting": "Qwen2.5 3B/7B，GRPO，Countdown/Zebra/ARC-1D/MATH",
+   "baseline_control": "—",
+   "selection_vs_test": "—",
+   "result_denominator": "—",
+   "evidence_ids": [
+    "E001"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "范围外，未评估结论"
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": null,
+  "strongest_supported_claim": null,
+  "unresolved": [
+   "范围外未评估"
+  ],
+  "level_note": "out_of_scope，不判证据等级"
+ },
+ "scope_decision": {
+  "in_scope": false,
+  "rule": "EVIDENCE.md 不收录 + rubric_frozen A3",
+  "reason": "被评价的留存对象是经 GRPO 微调后的模型权重；课程策略(各类别 Q 值的 bandit 状态)只在训练过程中调度题库采样，不作为 prompt/skill/tool/workflow/memory/评测器被留存并在后续任务中复用，亦不生成新任务。依冻结 rubric A3 与 EVIDENCE.md 判范围外。",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E003",
+   "E004"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope：评价对象为权重，不适用 G/M/X/E 评分",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": null,
+  "upper": null,
+  "coverage": 0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "notes": "课程 Q 表是训练期状态，不作为后续任务复用的非权重组件；如总控将'训练期课程组件'纳入 B 类，应另行裁定。"
+}

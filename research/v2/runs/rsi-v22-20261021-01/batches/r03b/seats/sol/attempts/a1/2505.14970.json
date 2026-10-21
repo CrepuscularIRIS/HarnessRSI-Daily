@@ -1,0 +1,291 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r03b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2505.14970",
+    "paper_id": "2505.14970",
+    "title": "Self-Evolving Curriculum for LLM Reasoning",
+    "version": "2505.14970v4",
+    "claim_type": "component_training",
+    "central_claim": "按绝对advantage更新bandit课程采样策略，改善并行RL微调后LLM的推理与OOD表现。"
+  },
+  "provenance": {
+    "input_hash": "70591124dc64444e349eeeb77baf29cbbf06e003dd6cf227ed2657adf3667500",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按派发会话 gpt-6.1-sol 执行；没有可独立绑定的实际模型回执/session记录，依模板置null，不额外探测。",
+    "timestamp": "2026-10-21T20:28:45.427088+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2505.14970.txt",
+      "url": "https://arxiv.org/html/2505.14970v4",
+      "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+      "sections_read": [
+        "完整正文§1–5、Algorithm1、Tables1–4",
+        "完整Appendix A–D，含推导、跨基座实验、训练超参数及全部提示词",
+        "图注与表格文本；manifest无页图，未推断未呈现的图内数值"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2505.14970.txt",
+      "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+      "locator": "Abstract",
+      "quote": "learns a curriculum policy concurrently with the RL fine-tuning process.",
+      "support_explanation": "课程用于权重训练过程，而非冻结后部署的harness。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2505.14970.txt",
+      "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+      "locator": "§2.3",
+      "quote": "The resulting batch is then used to update the LLM policy.",
+      "support_explanation": "bandit反馈改变训练数据抽样并更新LLM。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2505.14970.txt",
+      "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+      "locator": "Algorithm1",
+      "quote": "Fine-tuned LLM",
+      "support_explanation": "算法返回对象是训练后的LLM。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2505.14970.txt",
+      "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+      "locator": "§3.1",
+      "quote": "accuracy from the best checkpoint, calculated over 8 independent generations per problem.",
+      "support_explanation": "最终评价模型checkpoint。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2505.14970.txt",
+      "sha256": "ca2feb88b0ba00695a35f2d8366dc24660d8515cbb29a3b019b264e83853eeee",
+      "locator": "Appendix C",
+      "quote": "The model parameters are optimized using Adam",
+      "support_explanation": "明确使用梯度优化权重。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "RL训练数据类别的Q值及LLM参数θ",
+      "information": "当前rollout绝对advantage",
+      "operation": "Boltzmann采样类别→均匀抽题→RL更新θ→TD(0)/EMA更新类别Q",
+      "output": "fine-tuned LLM checkpoint",
+      "conditions": "训练类别划分；可验证reward；并行RL微调",
+      "feedback": "类别内平均绝对advantage",
+      "selection_rule": "softmax(Q/τ)",
+      "selection_data": "训练rollout；数学与难度OOD测试测量训练后权重",
+      "persistence": "训练过程Q表和模型权重；未评价跨训练运行迁移Q表",
+      "later_use": "训练后的模型推理，不是将学习后的课程部署为留存agent组件",
+      "claimed_effect": "3B难度OOD与部分数学测试改善；7B部分任务不优于随机",
+      "failure_boundary": "Q是训练采样状态；无独立冻结/复用非权重harness的评测",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E005"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "随机或人工课程低效；在线过滤额外采样昂贵",
+    "checked_gap": "非平稳bandit复用RL advantage做数据调度，但实验终点为训练后模型",
+    "lineage": [
+      {
+        "name": "TSCL/PAPRIKA/AdaRFT/DUMP",
+        "source": "本文§4；未提供邻居固定原文",
+        "relation": "课程学习与bandit训练数据采样"
+      }
+    ],
+    "closest_adjacent": "自动课程RL微调",
+    "residue": "未独立评测学习后Q表作为部署或跨运行复用harness组件",
+    "stakes": "训练样本效率和泛化",
+    "method_response": "绝对advantage代理学习增益",
+    "remaining_gap": "属于权重训练流程，不进入本项目质量评分",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004",
+      "E005"
+    ],
+    "unresolved": []
+  },
+  "rs_pattern": {
+    "primary": null,
+    "supporting": [],
+    "matches": [],
+    "outside_taxonomy": false,
+    "reason": "范围外停止质量/模式评分；不是断言原15+31无适配。",
+    "executes_pattern": null,
+    "resolves_problem": null
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [],
+    "unassigned": [
+      "课程Q表是在线RL训练状态；未独立评测其作为留存非权重harness的效果。"
+    ],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [],
+  "expectations": [
+    {
+      "id": "local:2505.14970-1",
+      "version": "frozen-A3",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "rubric_frozen.md A3; SCORE_SPEC 比较对象"
+      ],
+      "applies_when": "课程或训练调度存在非权重状态时，应检查被评价对象是否为独立留存harness",
+      "applicable": true,
+      "status": "met",
+      "reason": "Q值确为非权重训练状态，但Algorithm1返回fine-tuned LLM，所有实验评价权重checkpoint；没有独立保留/复用课程策略的测试。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "score_item": null
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "SEC使RL微调后LLM更好地泛化至困难推理问题",
+      "setting": "Qwen2.5 3B/7B与Llama1B；Countdown/Zebra/ARC/math",
+      "baseline_control": "随机、难度顺序课程；PPO/RLOO和自动类别实验",
+      "selection_vs_test": "训练类别与ID/OOD题分离，但评价对象是微调checkpoint",
+      "result": "3B OOD有收益；7B Countdown/ARC等并非普遍改善",
+      "denominator": "每题8次生成；puzzle每难度200测试题；数学标准测试集",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "counterevidence": [
+        "无学习后课程策略的独立冻结、跨运行复用或部署效果评价"
+      ],
+      "allowed_conclusion": "训练课程方法效果，不等同于留存非权重harness自改进。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "not_applicable",
+    "claim_support": "unresolved",
+    "strongest_supported_claim": "绝对advantage驱动课程调度，并以RL更新后的模型为实验产物；排除不评价其训练研究质量。",
+    "unresolved": []
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不用质量低分代替A3排除。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整正文§1–5与Appendix A–D"
+      ]
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "冻结A3按被评价对象：SEC虽更新非权重课程Q值，但其用于同一次RL训练；算法返回与实验评价均为微调后模型权重，没有独立评价留存复用的非权重harness。",
+  "rationale": "课程Q表属于RL训练状态；完整实验与附录均评价微调checkpoint，未展示学习后课程作为留存harness独立复用的增益，按A3范围外处理。"
+}

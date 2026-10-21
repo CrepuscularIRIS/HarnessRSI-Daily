@@ -1,0 +1,528 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r01b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2402.11359",
+    "paper_id": "2402.11359",
+    "title": "Offline Training of Language Model Agents with Functions as Learnable Weights",
+    "version": "2402.11359v4",
+    "claim_type": "system_method",
+    "central_claim": "Treat an LLM agent’s functions as learnable parameters: AgentOptimizer progressively adds/revises/removes functions from execution histories, with rollback and early stopping, improving unseen downstream task performance without modifying LLM weights."
+  },
+  "provenance": {
+    "input_hash": "21ce283d3602be51034bcd86001b44462c349504987dd6597fc5d54af9161062",
+    "rubric_version": "v2.2/frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": "gpt-6.1-sol",
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T19:28:16.062284+00:00",
+    "notes": [
+      "actual_model supplied by invocation environment; no independent routing probe performed.",
+      "No seat-specific session identifier or receipt exposed to this worker. Historical outcome sections of required pattern assets are not used as evidence or scoring inputs."
+    ]
+  },
+  "materials": [
+    {
+      "material_id": "fulltext",
+      "url": "https://arxiv.org/html/2402.11359v4",
+      "version": "2402.11359v4",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "sections_read": [
+        "Abstract; §§1–5; Tables 1–8 and figure captions 1–8",
+        "Appendix A assumptions, Lemma A.3, Theorem A.4 and proofs",
+        "Appendices B–H including prompts, action schemas, generated function examples, case captions, hyperparameters and limitations; complete supplied text lines 1–6567"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§2.1, lines 439–448",
+      "quote": "1) The execution history of the agents in solving each problem of the training set, including the details of how the agent uses current functions and\n2) the final performance over the training data.",
+      "support_explanation": "The optimizer sees training traces and scores, rather than only a scalar loss.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§2.1, lines 589–598",
+      "quote": "In particular, we adopt four actions:\n1)\nadd_function\n: add one new function that may be useful; 2)\nrevise_function\n: revise one existing function; 3)\nremove_function\n: remove one existing function; and 4)\nTERMINATE\n: terminate the function update process.",
+      "support_explanation": "Editable non-weight artifacts and action interface are explicit.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§2.2 rollback",
+      "quote": "Specifically, at each optimization step, if the latest function update leads to a performance drop on the training set, the AgentOptimizer will withdraw this update.",
+      "support_explanation": "Training-set regression gate and rollback; not an independent statistical commit rule.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.1 MATH sampling",
+      "quote": "For each data type (7 in total), we randomly choose 20 training examples and 80 test examples, and report the accuracy of each data type respectively.",
+      "support_explanation": "Explicit independent instance split and denominator for MATH.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.2 MATH",
+      "quote": "Across seven data types, we observed that agent training led to better performance on the test set in most cases (11 out of 14).",
+      "support_explanation": "Reported held-out effects include exceptions, not universal improvement.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.3.1",
+      "quote": "Specifically, to investigate (1), we removed roll-back and early-stop and trained the agent until reaching the maximum epoch number.",
+      "support_explanation": "Gate-off comparison bundles rollback and stopping; matched optimizer budget is not established.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.3.2",
+      "quote": "To some extent, it represents GPT-4+ agents overfitting to the training set and suffering from a test performance drop while the training performance remains the same.",
+      "support_explanation": "Author-observed generalization failure limits safety and transfer claims.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§4 related work",
+      "quote": "Different from prior works, our AgentOptimizer updates the function set based on the LLM agent’s execution history of the whole training set, rather than making functions according to individual query-answer pair(s)",
+      "support_explanation": "Author-side differentiation from Tool-maker, CREATOR and CRAFT; not independent verification of neighbors.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "Appendix G",
+      "quote": "Specifically:\n(1) We set the training epoch to 10 for all experiments.\n(2) An early stopping criterion was established with a threshold of 10 epochs.",
+      "support_explanation": "Concrete horizon; stopping threshold equals maximum epochs, weakening separate attribution to early stopping.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.3.4",
+      "quote": "Even when the batch size is set to 20, which is the same as the training data size in Figure",
+      "support_explanation": "Batch-scaling negative result discussed in §3.3.4; no number extracted from inaccessible plot.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.1 TabMWP",
+      "quote": "We randomly sampled 100 test examples and 10 training examples. We measured the model performance using accuracy based on the exact match.",
+      "support_explanation": "Checkable task metric and sampling denominator. Table 2 train percentages are not all multiples of 10%, an internal reporting inconsistency.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "§3.5",
+      "quote": "We observed that the created functions for the three tasks exhibit relatively low complexity, indicating that the functions are reliable.",
+      "support_explanation": "Low cyclomatic complexity is not semantic correctness; reliability inference is stronger than this proxy warrants.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "fulltext",
+      "sha256": "8bcba377589923b7da8444315c83bc3e24452bdb156fb0c8bf14263fc883172a",
+      "locator": "Appendix A",
+      "quote": "the proposed agent training method could identify the function set",
+      "support_explanation": "Assumption A.2 assumes empirical global minimization; theorem does not establish that the practical optimizer achieves it.",
+      "kind": "author_report"
+    }
+  ],
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Concrete fixed-tool bottleneck and explicit prior-tool distinctions; independent nearest-neighbor originals unavailable.",
+      "evidence_ids": [
+        "E008"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Reconstructable feedback→progressive edit→reuse mechanism; assumptions about generic tool synthesis and attribution remain.",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Actions, persistence, rollback and hyperparameters specified; equal-score prose/algorithm mismatch and lack of per-case protection prevent 4.",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Known-answer task accuracy is relevant; TabMWP train-denominator inconsistency and complexity≠correctness weaken full credibility.",
+      "evidence_ids": [
+        "E004",
+        "E011",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Store-off and tool-creation comparisons plus targeted ablations exist, but gate and stopping bundled and optimizer compute not matched.",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Explicit training/test split and domain transfer analysis; no tested overlap guard and authors report overfit.",
+      "evidence_ids": [
+        "E004",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "Sample counts and negative outcomes given; main results lack repeated-search variance or confidence intervals (A2).",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "not_reported",
+      "rating": 0,
+      "reason": "No complete construction/validation/token or monetary cost ledger; horizon is not actual cost accounting.",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full text §§1–5, Appendices A–H, all tables and captions; searched cost/budget/token/time/price."
+      ]
+    }
+  },
+  "score": {
+    "raw": 65.0,
+    "display": 65.0,
+    "lower": 65.0,
+    "upper": 65.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "Persistent callable function set for GPT-4+ / ReAct, not backbone weights",
+      "information": "Training questions, generated/ground-truth answers, task success and full execution histories; held-out test tasks are for evaluation.",
+      "operation": "Repeated add/revise/remove/terminate actions, up to 3 per update",
+      "output": "Named Python functions with description, argument schema, packages and code",
+      "conditions": "API LLM supports functions; traces and ground-truth task scoring are available within context.",
+      "feedback": "Execution histories and failed-task accuracy",
+      "selection_rule": "Rollback on training regression; Algorithm 2 strict-improvement update; prose and equal-score semantics are not entirely aligned.",
+      "selection_data": "20 MATH examples/category or small GAIA/TabMWP training subsets",
+      "persistence": "Current accepted function set and failed-update list; failed list reset after improvement",
+      "later_use": "Subsequent epochs and unseen test tasks invoke learned functions",
+      "claimed_effect": "Held-out accuracy improvements on most agent/task pairs",
+      "failure_boundary": "Overfit, stochastic aggregate regression, large-batch instability, context length; no per-case safety guarantee",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E007",
+        "E009"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "Manual fixed tool curation is slow and weight finetuning unavailable for proprietary LLMs.",
+    "checked_gap": "Operationally concrete residual: existing query-level tool generation does not iteratively revise a shared function set from whole-agent histories.",
+    "lineage": [
+      {
+        "method": "Tool-maker / CREATOR / CRAFT; LLM-as-optimizer OPRO",
+        "source": "This fixed paper v4 §4 and §3.4 only; neighbor originals not in manifest",
+        "version": "cited versions as bibliographic references, not independently fixed"
+      }
+    ],
+    "closest_adjacent": "CREATOR and CRAFT comparisons in Table 4; GPT-4+ trained agent is worse than CRAFT on MATH (66.25 vs 73.8), so not uniform dominance.",
+    "residue": "Function suitability for a given consumer, regression and overfitting remain.",
+    "stakes": "Reusable functions may reduce repeated code generation and improve closed-API agents.",
+    "method_response": "Progressive function edits and rollback based on task-level executions.",
+    "remaining_gap": "Independent commit validation, scalable batching, matched total optimizer cost and uncertainty remain open; theoretical proof treats data-dependent empirical minimizer as fixed without a uniform-control argument.",
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E007",
+      "E008",
+      "E009",
+      "E013"
+    ],
+    "unresolved": [
+      "Need same shared input package with fixed CREATOR/CRAFT originals to independently audit nearest-neighbor novelty; not a missing section of this paper."
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "Name fixed function inventory",
+          "Make inventory a design variable",
+          "Progressively optimize against executions"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E008"
+        ],
+        "reason": "The conventionally fixed tool set of a staged language-agent generation pipeline becomes editable while the backbone is fixed. C24 was checked but requires conditioning/latent redesign of iterative refinement; tool code optimization is not that tactic. C15/C23 overview signatures also do not fit.",
+        "success/failure_checks": [
+          "Mechanism ablation partial: rollback and early-stop bundled",
+          "Strong tool-generation alternatives present but not uniformly beaten",
+          "No unsupported transfer or convergence guarantee"
+        ]
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "The conventionally fixed tool set of a staged language-agent generation pipeline becomes editable while the backbone is fixed. C24 was checked but requires conditioning/latent redesign of iterative refinement; tool code optimization is not that tactic. C15/C23 overview signatures also do not fit.",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H12",
+        "version": "manifest-fixed-2026-10-21",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "Rollback protects aggregate training score, not individual or held-out regressions."
+          },
+          {
+            "id": "S5",
+            "status": "met",
+            "reason": "Optimizer sees current functions and execution history."
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H12"
+      },
+      "operation_correspondence": "Free tool-inventory design realized as trace-driven code patches and accepted incumbent functions.",
+      "necessary_conditions": "Executable function schema and task scorer; independent promotion data would strengthen the H12 conditions.",
+      "differences": "Offline whole-training-set optimization rather than source-repository diagnosis; H07 demand-time forging and H31 statistically independent commit rules do not fully fit.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md#Success conditions"
+      ],
+      "applies_when": "Incumbent edits may erase earlier gains",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Aggregate training rollback exists; no per-example or independent commit guarantee.",
+      "evidence_ids": [
+        "E003",
+        "E007"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md#Success conditions"
+      ],
+      "applies_when": "Trace-based attribution is claimed",
+      "applicable": true,
+      "status": "met",
+      "reason": "Execution histories and current functions are supplied.",
+      "evidence_ids": [
+        "E001"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "local:2402.11359-1",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2402.11359v4 §3.3.1 / Appendix G"
+      ],
+      "applies_when": "Claims for rollback and early stopping",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Joint removal is tested; threshold 10 with horizon 10 does not separately demonstrate early-stop utility.",
+      "evidence_ids": [
+        "E006",
+        "E009"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2402.11359-2",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2402.11359v4 §3.1, §3.3.2"
+      ],
+      "applies_when": "Claim of unseen-task improvement",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Instance holdout exists; explicit overfit and unexplored pretrained contamination limit broader generalization.",
+      "evidence_ids": [
+        "E004",
+        "E007"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2402.11359-3",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2402.11359v4 §3.5"
+      ],
+      "applies_when": "Semantic reliability of generated functions",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Task accuracy supports some correctness; cyclomatic complexity alone does not certify function correctness.",
+      "evidence_ids": [
+        "E005",
+        "E012"
+      ],
+      "score_item": "E.measurement"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "Function optimization improves unseen agent tasks",
+      "setting": "GPT-4-1106-preview on MATH/GAIA; GPT-3.5-turbo-1106 consumer with GPT-4 optimizer on TabMWP",
+      "baseline_control": "Same GPT-4+/ReAct without agent training; CREATOR and CRAFT tool-creation comparisons",
+      "selection_vs_test": "Train used for proposals and rollback; held-out instances scored separately",
+      "result_denominator": "MATH 7×80 tests per agent; improvements in 11/14 pairs; Table 2 GAIA 16→23 and 12→18; TabMWP 51→56 and 59→70, each 100 tests",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E011"
+      ],
+      "counterevidence": "Some MATH regressions and CRAFT outperforms trained GPT-4+ on mixed MATH; Table 2 train percentages inconsistent with reported TabMWP n=10.",
+      "allowed_conclusion": "Author-reported instance-level retained gains in these settings, not universal improvement."
+    },
+    {
+      "claim_id": "C2",
+      "text": "Progressive updates and rollback/early-stop are useful",
+      "setting": "Three selected MATH categories with largest gains",
+      "baseline_control": "Without rollback+early-stop; one-shot full function generation",
+      "selection_vs_test": "Ablation categories selected after observing improvement; same held-out instance suite",
+      "result_denominator": "Table 3 full 67.5/38.8/76.3 versus no rollback+stop 63.8/36.3/72.5 and one-shot 60/28.8/70",
+      "evidence_ids": [
+        "E006",
+        "E009"
+      ],
+      "counterevidence": "No independent attribution to early-stop; no matched search-cost or repeated-search variance.",
+      "allowed_conclusion": "Joint recipe has favorable point estimates on selected categories."
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "Author-reported function sets learned offline improve subsequent held-out instance performance for multiple tasks and consumers; neither improver self-improvement nor robust non-regression is established.",
+    "unresolved": [
+      "Complete run cost and cross-search uncertainty not reported; no external neighbor original comparison verified."
+    ]
+  },
+  "reason": "Full fixed text supports an in-scope offline non-weight tool-update loop and held-out reuse; central benefits are scoped by regressions, incomplete causal isolation and absent full costs.",
+  "rationale": "工具集按执行反馈更新并在留出任务复用；回滚与逐步编辑可重建，但早停贡献未独立验证，统计和完整成本证据弱。"
+}

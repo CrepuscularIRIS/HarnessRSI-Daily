@@ -1,0 +1,1054 @@
+{
+ "paper": {
+  "paper_key": "2501.06590",
+  "claim_type": "system_method",
+  "central_claim": "ChemAgent 把化学题分解为原子子任务，构建并在运行时自更新由规划记忆、执行记忆、知识记忆组成的库（含评估-精修模块），使 LLM 的化学推理随经验提升；SciBench 四个化学数据集上 GPT-4 相对直接推理最高 +46%，较 StructChem 平均 +10%。",
+  "paper_id": "2501.06590",
+  "title": "ChemAgent: Self-updating Library in Large Language Models Improves Chemical Reasoning",
+  "version": "2501.06590v1"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "§1 para 4",
+   "quote": "these methods often rely heavily on human-curated knowledge ( Chan et al., 2023 ) , or fixed workflows",
+   "support_explanation": "作者 gap：现有化学推理依赖人工知识或固定流程。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "§1 para 4",
+   "quote": "these methods lack the ability to remember and learn from past analogous problems.",
+   "support_explanation": "作者 gap：不能记忆并从相似题学习。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "§1 para 6",
+   "quote": "facilitates iterative problem-solving by continuously updating and refining its content based on task decomposition.",
+   "support_explanation": "核心主张：基于任务分解持续更新库。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "§2.4",
+   "quote": "Specifically, our approach leverages the development set to build a library, which is designed to dynamically self-improve during runtime.",
+   "support_explanation": "库先由开发集构建，再运行时自更新。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "App G.1",
+   "quote": "As a collection of problems and solutions already exists in the dataset",
+   "support_explanation": "初始库用开发集的人写标准解答分解而成（金标）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "§2.4",
+   "quote": "In addition to ranking, we discard any memory units that do not meet a predefined confidence threshold, as evaluated by the LLMs.",
+   "support_explanation": "库构建期的 LLM 置信度过滤；阈值数值未给出。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "§2.5",
+   "quote": "Memory units with similarity above a predefined threshold",
+   "support_explanation": "检索按嵌入相似度阈值；阈值未给数值，另限制 Mp 2 条/Me 4 条。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "§2.5",
+   "quote": "Moreover, the memory is continuously updated with newly solved sub-tasks and their solutions during runtime.",
+   "support_explanation": "运行时写入新解决子任务，未描述正确性门控。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "§2.9",
+   "quote": "all related responses and knowledge from that process are added to the library if the solution is correct.",
+   "support_explanation": "自进化分析中仅正确解写入，但「correct」判据来源未说明（可能是真值）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "§2.9",
+   "quote": "To ensure accuracy and prevent target leakage, the memory derived from problem",
+   "support_explanation": "自进化迭代中对同题记忆做排除，防止目标泄漏。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "§2.9",
+   "quote": "ChemAgent can enhance its performance through a simple correct-or-not evaluation of past solutions instead of human-written high-quality trajectories.",
+   "support_explanation": "作者把自进化收益归因于对过往解的正误评价。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Fig. 5 caption",
+   "quote": "We test ChemAgent twice for each iteration, and the difference between the two results serves as the error margin.",
+   "support_explanation": "自进化曲线仅两次运行，误差=两次之差。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "§2.5",
+   "quote": "we enrich the memory with the required information by leveraging the internal parametric knowledge of LLMs.",
+   "support_explanation": "无相似子任务时由 LLM 自造「合成执行记忆」，未经外部验证。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Table 1",
+   "quote": "Few-shot + Direct reasoning 28.21 14.29 20.69 14.71 19.48 Few-shot + Python 38.46 34.69 57.01 44.12 43.57 StructChem 58.97 30.67 59.81 41.18 47.66",
+   "support_explanation": "GPT-4 基线：直接推理 19.48，StructChem 47.66。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Table 1",
+   "quote": "ChemAgent 74.36 48.98 61.18 44.12 57.16 w/o Evaluation & Refinement 61.54 44.89 57.94 44.12 52.12 w/o Memory , Evaluation & Refinement 58.97 38.78 57.94 41.18 49.22",
+   "support_explanation": "ChemAgent 57.16；去 E&R 52.12；再去记忆 49.22。ATKINS 61.18 对 n=107 非整数比例（our_inference，疑为 61.68）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "§2.7",
+   "quote": "The results are from the original benchmark, SciBench ( Wang et al., 2024a ) .",
+   "support_explanation": "Few-shot+Python 结果取自原基准，非同条件复跑。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "§2.7",
+   "quote": "the source of the data is StructChem ( Ouyang et al., 2024 ) .",
+   "support_explanation": "直接推理基线数据来自 StructChem 论文。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Table 2",
+   "quote": "None 58.97 38.78 57.94 41.18 51.53",
+   "support_explanation": "无记忆组件时加权均值 51.53（无 E&R）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Table 2",
+   "quote": "66.66 44.89 52.34 41.18 51.53",
+   "support_explanation": "仅 Mp+Me（无知识记忆）加权均值 51.53，与 None 相同；完整三记忆 53.71。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "§3.1",
+   "quote": "Firstly, removing any memory component results in an overall performance drop.",
+   "support_explanation": "作者结论为任一记忆去掉都下降，Mk 贡献最大（后文）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Table 3",
+   "quote": "GPT-3.5 Memory 11.22 36.73 GPT-4 Memory 13.26 44.89 Hybrid Memory 10.20 28.57",
+   "support_explanation": "记忆质量影响显著；混合记忆最差。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "§2.10",
+   "quote": "On average, each problem requires 0.012 million tokens without the Evaluation & Refinement module, equivalent to around $0.09 per example.",
+   "support_explanation": "报告了每题 token 与美元成本。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "§2.10",
+   "quote": "Note that the initial library construction is not included in these calculations as it is a one-time setup.",
+   "support_explanation": "库构建成本被排除。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "§2.10",
+   "quote": "While the cost and resource consumption are slightly higher than StructChem, the improvements justify the additional expense.",
+   "support_explanation": "成本高于 StructChem，但无预算匹配对照。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "§2.11",
+   "quote": "it sometimes invokes misleading information, even when the similarity between the invoked memory and the problem is high.",
+   "support_explanation": "作者承认误检索。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Table 6",
+   "quote": "CHEMMC Quantum mechanics 39 (9) 0.231 MATTER Chemistry kinetics 49 (10) 0.204 ATKINS Physical chemistry 107 (16) 0.150 QUAN Quantum",
+   "support_explanation": "测试集 34–107 题，开发集 8–16 题。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "§2.7",
+   "quote": "We evaluate the accuracy by comparing their outputs with the correct answers, using a relative tolerance of 0.01.",
+   "support_explanation": "数值答案对照真值，相对容差 0.01。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "App C",
+   "quote": "We also conducted a Chi-Square Test of Independence to assess the relationship between a similarity threshold",
+   "support_explanation": "相似度与正确性的事后卡方检验，相关而非因果，阈值 0.805 来源不明。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "App B",
+   "quote": "Each experiment is repeated at least 3 times, and the results are averaged.",
+   "support_explanation": "开源模型实验重复≥3 次取均值，未报告方差。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E030",
+   "locator": "App B Table 4",
+   "quote": "ChemAgent w/o memory 38.46 16.33 23.36 20.59 24.69 ChemAgent w/ memory 56.41 18.37 28.97 23.53 31.82",
+   "support_explanation": "GPT-3.5：记忆使均值 24.69→31.82，与 StructChem 31.65 相当。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E031",
+   "locator": "App B Table 5",
+   "quote": "Llama 3.1-7b Direct reasoning 28.20 10.20 22.43 8.82 17.41 ChemAgent 56.41 12.24 19.63 14.71 25.75",
+   "support_explanation": "Llama3.1-7b 在 ATKINS 上低于直接推理（19.63 vs 22.43）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E032",
+   "locator": "§2.8",
+   "quote": "ChemAgent improves by 9.50% (47.66 vs. 57.16) over StructChem, which is a 2.93 times increase",
+   "support_explanation": "文中算术/表述错误：57.16/47.66≈1.2 倍而非 2.93 倍，摘要 46% 与结论 36% 亦不一致。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E033",
+   "locator": "App E",
+   "quote": "due to limitations in budget and computational resources, we demonstrate our approach solely in the context of chemistry",
+   "support_explanation": "仅化学域验证。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E034",
+   "locator": "§2.6",
+   "quote": "The evaluation & refinement module can use a different LLM than the one used for the base reasoning process.",
+   "support_explanation": "E&R 可由更强 LLM 担任，使对弱模型的比较不再同模型。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E035",
+   "locator": "§3.2",
+   "quote": "Interestingly, hybrid memory performs the worst among the three settings.",
+   "support_explanation": "混合不同来源记忆会损害性能，提示记忆合并/冲突问题。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E036",
+   "locator": "§2.9",
+   "quote": "the agent’s performance gradually improves and converges to a",
+   "support_explanation": "自进化曲线随迭代上升并收敛到高于基线（44.89%）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E037",
+   "locator": "§4",
+   "quote": "achieving up to a 36% improvement",
+   "support_explanation": "结论中为 36%，与摘要 46% 不一致。",
+   "kind": "author_report",
+   "material_id": "M1"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "分层记忆库：规划记忆 Mp、执行记忆 Me（子任务三元组）及临时知识记忆 Mk（外部文本，非权重）",
+   "information": "开发集题目+金标解答；测试时子任务、LLM 解答及评估；§2.9 运行中还有「解是否正确」标记",
+   "operation": "分解为原子子任务→按难度排序+LLM 置信度过滤→入库；测试时检索（嵌入相似度阈值，Mp≤2、Me≤4 条）→求解→评估-精修→把新解决的子任务/策略写回库",
+   "output": "更新后的 Me/Mp",
+   "conditions": "无相似记忆时 LLM 自造合成记忆",
+   "feedback": "LLM 置信度评估；§2.9 为正误判断",
+   "selection_rule/data": "初始：LLM 置信度阈值；运行时：§2.5 未说明门控，§2.9 仅正确解入库",
+   "persistence": "库在运行期间累积；Mk 不保留",
+   "later_use": "后续子任务检索注入 prompt",
+   "claimed_effect": "GPT-4 平均 57.16（无记忆无 E&R 49.22）",
+   "failure_boundary": "误检索、混合记忆更差、开发集小导致记忆薄弱（ATKINS）",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E009",
+    "E013",
+    "E025",
+    "E035"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "评估-精修模块（运行时对子解和计划的修正）",
+   "information": "子解、Mk 知识、主任务",
+   "operation": "检查冲突与常见错误，重写子解或重构后续子任务",
+   "output": "修正后的解/计划",
+   "conditions": "最多若干次试验；可由更强 LLM 担任",
+   "feedback": "LLM 自评",
+   "selection_rule/data": "LLM 判定",
+   "persistence": "无（单次）",
+   "later_use": "本题内",
+   "claimed_effect": "GPT-4 +5.04 绝对点，GPT-3.5 无益",
+   "failure_boundary": "弱模型自纠错失败",
+   "evidence_ids": [
+    "E015",
+    "E034",
+    "E030"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "化学多步推理易级联出错；现有方法靠人工知识或固定流程，不能从过往相似题记忆并学习。",
+  "checked_gap": "领域缺陷（公式/单位/代码错误）有案例（Fig 1）支持，但「缺记忆」作为瓶颈未经诊断实验证明；对外部记忆系统近邻仅一句话区分（「整合全部组件并动态更新」），没有与 ExpeL/AWM/Voyager 类留存方法的对比。",
+  "lineage/closest_adjacent": "StructChem（结构化推理+置信审查）、few-shot+Python（SciBench）、外部记忆（Huang 2024a, Zhong 2024a 等），自演化框架（Qian 2024 等）。本地无这些全文，依赖本文描述。",
+  "residue": "留存库本身的边际收益小且混杂（见 E019 与 Mk 优势）；运行时写入门控不清；开发集极小。",
+  "stakes": "化学计算题错误级联，GPT-4 直接推理仅 19.48%。",
+  "method_response": "分解+三类记忆+评估精修，直接回应公式、步骤与代码错误。",
+  "remaining_gap": "记忆是否是增益来源、写入质量、泛化到其他领域、与其他记忆方法的对比。",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E003",
+   "E019"
+  ],
+  "unresolved": [
+   "外部记忆/自演化近邻全文不在包内；缺少与同类留存方法的实验对比"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C25 步骤1（找出模型不可靠子问题与精确求解器）：把数值计算交给 Python，对应；步骤2（机器可检的中间产物）：子解含公式+推理+可执行代码（met）；步骤3（用求解器可验证输出闭环）：E&R 主要由 LLM 评判而非求解器结果（partial）；步骤4（隔离验证步骤的消融）：有 w/o E&R（met）；步骤5（成本）：报告 token/$（partial）。子卡其余「求解器」选择（规划器/约束求解器）不适用。",
+    "success_failure_checks": "成功条件：产物可检查（部分）；失败：自评信号不可靠（GPT-3.5 的 E&R 无益，E030）；只有一个域，未跨域。",
+    "evidence_ids": [
+     "E004",
+     "E015",
+     "E030",
+     "E034"
+    ],
+    "reason": "分解+代码执行的结构与 C25 相近，但本文的主要新意（记忆库）不在该卡内，故部分适配。"
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "记忆单元检索后作为 few-shot 条件注入冻结 LLM，无参数更新；C03 的统一 schema/上游训练/类别留出不适用。",
+    "success_failure_checks": "对条件源质量/覆盖有分析（Table 3、App D）；无污染分析。",
+    "evidence_ids": [
+     "E007",
+     "E021"
+    ],
+    "reason": "仅检索式条件化一步对应，弱匹配。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "原卡部分适配，已记录差异。",
+  "executes_pattern": "partial: 分解与代码执行有，验证闭环依赖 LLM 自评。",
+  "resolves_problem": "partial: 整体系统明显优于直接推理，但记忆库的边际贡献小（平均 +2.9），瓶颈归因不清。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "taxonomy.json:b115a69b",
+    "fit": "high",
+    "condition_checks": "H03 步骤1 案例单元为可重绑定子任务（met）；步骤2 写入门控：初始库由金标+LLM 置信度，运行时写入未见外部校验（partial）；步骤3 选择性检索：相似度阈值+条数上限（met，但仍误检）；步骤4 适配并追加带来源（partial，无来源追踪）；步骤5 构建流与评测流分离：开发集构建（met）但运行时从测试流追加且 §2.9 用正确性标记（partial/unmet）；留存库消融（partial：w/o Memory 与 Table 2）。",
+    "evidence_ids": [
+     "E004",
+     "E005",
+     "E006",
+     "E007",
+     "E008",
+     "E009",
+     "E018",
+     "E019"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": null,
+    "version": "taxonomy.json:b115a69b",
+    "fit": "weak",
+    "condition_checks": "Plan Memory 存策略摘要（公式、概念、解题顺序）对应经验抽象；无对比反思、无显式编辑/合并/遗忘（H01 条件不满足）；子卡留空。",
+    "evidence_ids": [
+     "E003",
+     "E008"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain_namespace": "rsi",
+   "domain_main": "index_experience_for_reuse",
+   "domain_sub": "H03",
+   "operation_correspondence": "RS：分解为子问题并交给求解器；RSI H03：子任务作为可复用案例，检索后适配并追加。对应点：原子子任务既是分解单元也是记忆单元。",
+   "conditions_or_differences": "RS 要求求解器可验证闭环，本文闭环为 LLM 自评；RSI 要求写入门控与构建/评测流分离，本文部分满足。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E007",
+    "E015"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations:1"
+   ],
+   "applies_when": "增加结构带来额外调用",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告每题 token/美元并与 StructChem 比较（图），但库构建成本排除，E&R 与无记忆成本对照未给数值。",
+   "evidence_ids": [
+    "E022",
+    "E023",
+    "E024"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#2"
+   ],
+   "applies_when": "声称某承重步骤驱动增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有记忆/E&R/各记忆组件消融；但 Mp+Me 去掉 Mk 后等于无记忆（E019），说明被宣称的存储库并非主要增益来源，且无等计算对照。",
+   "evidence_ids": [
+    "E015",
+    "E018",
+    "E019",
+    "E020"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#3"
+   ],
+   "applies_when": "管线可复现",
+   "applicable": true,
+   "status": "met",
+   "reason": "附录 G 给出全部分解、执行、评估、精修、总结与构建 prompt。",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#4"
+   ],
+   "applies_when": "声称可泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "仅化学，SciBench 四个教科书数据集；ChemBench 仅为定性案例。",
+   "evidence_ids": [
+    "E033"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#5"
+   ],
+   "applies_when": "与端到端/并行分解方法公平比较",
+   "applicable": true,
+   "status": "partial",
+   "reason": "对 StructChem、few-shot+Python 比较，但基线数字取自文献、模型版本/提示与本文不同；没有与其他记忆/自演化方法比较。",
+   "evidence_ids": [
+    "E014",
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#6"
+   ],
+   "applies_when": "分解应针对真实瓶颈",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有 Fig 1 案例与事后错误分析，但没有事前诊断证明「缺少记忆」是瓶颈；Mk（LLM 自带知识）贡献最大。",
+   "evidence_ids": [
+    "E020",
+    "E025"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations:1"
+   ],
+   "applies_when": "声称条件化信号带来增益",
+   "applicable": true,
+   "status": "met",
+   "reason": "同一分解管线下有无记忆开关（49.22→52.12；GPT-3.5 24.69→31.82）。",
+   "evidence_ids": [
+    "E015",
+    "E030"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#2"
+   ],
+   "applies_when": "声称泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无对 SciBench 教科书题的污染分析；GPT-4 预训练可能见过这些题。",
+   "evidence_ids": [
+    "E026"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#3"
+   ],
+   "applies_when": "与更简单条件化比较",
+   "applicable": true,
+   "status": "met",
+   "reason": "Few-shot+Python 使用开发集 6 例；Table 2 在去掉 Me 时换入固定两条专家示例。",
+   "evidence_ids": [
+    "E014",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#6"
+   ],
+   "applies_when": "条件源质量/覆盖影响",
+   "applicable": true,
+   "status": "met",
+   "reason": "Table 3（记忆质量）、App D（记忆条数）、Fig 8（相似度）与 ATKINS 开发/测试比讨论。",
+   "evidence_ids": [
+    "E021",
+    "E025",
+    "E028",
+    "E026"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#index_experience_for_reuse.S1"
+   ],
+   "applies_when": "案例单元可重绑定",
+   "applicable": true,
+   "status": "met",
+   "reason": "原子子任务以 (条件, 子任务, 子解) 存储，按功能切分。",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S2"
+   ],
+   "applies_when": "写入前有外部检查",
+   "applicable": true,
+   "status": "partial",
+   "reason": "初始库由金标解答+LLM 置信度阈值；运行时写入（§2.5）无外部检查，§2.9 仅正确解。",
+   "evidence_ids": [
+    "E006",
+    "E008",
+    "E009"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S4"
+   ],
+   "applies_when": "检索选择性",
+   "applicable": true,
+   "status": "met",
+   "reason": "相似度阈值+Mp≤2/Me≤4 上限；仍有误检（E025），Fig/附录 D 显示条数增加时方差增大。",
+   "evidence_ids": [
+    "E007",
+    "E025"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S5"
+   ],
+   "applies_when": "以移除存储证明增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有记忆关闭对照（均值 +2.9，GPT-3.5 +7.1），但去掉 Mk 后 Mp+Me 等于无记忆，且无冻结库对照。",
+   "evidence_ids": [
+    "E015",
+    "E019",
+    "E030"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.F3"
+   ],
+   "applies_when": "知识库由测试流持续更新（失败模式；status 表示「避免该失败」是否满足）",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "§2.5 运行时从测试题写入、§2.9 迭代用正确性标记在测试流上累积，使增益与评测流难分；仅有同题排除的泄漏防护。",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E010"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.F4"
+   ],
+   "applies_when": "模型输出入库无外部门（失败模式；status 同上）",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "LLM 自造合成记忆与运行时写入（§2.5）无外部校验；混合记忆更差（E035）。",
+   "evidence_ids": [
+    "E013",
+    "E008",
+    "E035"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "local:2501.06590-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#Reviewer expectations (pending): construction vs evaluation streams（同属记忆类）"
+   ],
+   "applies_when": "记忆更新发生在评测流",
+   "applicable": true,
+   "status": "partial",
+   "reason": "库由独立开发集构建（met），但运行时更新与自进化实验在测试流上进行。",
+   "evidence_ids": [
+    "E004",
+    "E008",
+    "E009"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2501.06590-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "same card: budget-matched baselines"
+   ],
+   "applies_when": "额外调用/不同 LLM 评估",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "E&R 可由 GPT-4 担任，基线 StructChem 等取自文献，无预算匹配。",
+   "evidence_ids": [
+    "E034",
+    "E024",
+    "E016"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2501.06590-3",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "same card: variance across runs or orderings"
+   ],
+   "applies_when": "累积型存储",
+   "applicable": true,
+   "status": "partial",
+   "reason": "自进化曲线两次运行取误差，开源模型 ≥3 次均值；表 1 主结果无方差，无顺序方差。",
+   "evidence_ids": [
+    "E012",
+    "E029"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "GPT-4 下平均 57.16，较 StructChem +9.5 点，较直接推理最高 +46%",
+   "setting": "SciBench 4 个化学集，测试 229 题",
+   "baseline/control": "Few-shot+Direct、Few-shot+Python、StructChem（文献取值）",
+   "selection_vs_test": "库由 43 道开发题构建；运行时仍有测试流更新",
+   "result/denominator": "57.16 vs 47.66 vs 19.48；各数据集 34–107 题",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E016",
+    "E017",
+    "E026"
+   ],
+   "counterevidence": "基线非同条件复跑；增益大头来自分解/Mk/E&R；ATKINS/QUAN 差异为 1–2 题",
+   "allowed_conclusion": "整个 ChemAgent 管线在作者设定下优于所列提示方法；增益不归因于留存库"
+  },
+  {
+   "claim_id": "C2",
+   "text": "记忆提升性能（平均 +2.9）",
+   "setting": "w/o Memory vs w/ Memory（无 E&R）",
+   "baseline/control": "同管线无记忆",
+   "selection_vs_test": "同 C1",
+   "result/denominator": "49.22→52.12（GPT-4）；24.69→31.82（GPT-3.5）",
+   "evidence_ids": [
+    "E015",
+    "E030",
+    "E019"
+   ],
+   "counterevidence": "Table 2 中 Mp+Me 等于 None（E019）；单次运行",
+   "allowed_conclusion": "含 Mk 的记忆开关带来小幅提升；留存库（Mp+Me）自身贡献未被证明"
+  },
+  {
+   "claim_id": "C3",
+   "text": "库在运行时随经验增长而提升",
+   "setting": "MATTER，迭代自进化，两次运行误差",
+   "baseline/control": "基线 44.89%",
+   "selection_vs_test": "测试流，用正误标记，同题记忆排除",
+   "result/denominator": "收敛到高于基线（具体数值见图）",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E012",
+    "E036"
+   ],
+   "counterevidence": "单一数据集（49 题）；正误来源不明",
+   "allowed_conclusion": "有迹象表明随迭代上升，受限于单数据集、小样本、标记来源不明"
+  },
+  {
+   "claim_id": "C4",
+   "text": "框架对不同 LLM 有效，越强模型增益越大",
+   "setting": "GPT-3.5/4、Llama3.1-7b/70b、Qwen2.5-72b",
+   "baseline/control": "直接推理",
+   "selection_vs_test": "同上",
+   "result/denominator": "Llama-7b 均值 17.41→25.75，但 ATKINS 下降",
+   "evidence_ids": [
+    "E030",
+    "E031"
+   ],
+   "counterevidence": "Llama-7b ATKINS 下降；GPT-3.5 的 E&R 无益",
+   "allowed_conclusion": "多数模型均值提升，但依赖基模型能力与开发集质量"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "分解+记忆+评估精修的整体管线在 SciBench 化学集上优于文献提示基线；由开发集构建的记忆在同管线下平均带来 +2.9（GPT-4）/+7.1（GPT-3.5）的小幅提升。",
+  "unresolved": [
+   "作者主张：自更新库是增益来源（最高 +46%）；46% 是相对直接推理，主要来自分解、知识记忆与 E&R；留存库本身（Mp+Me）无单独收益证据",
+   "自进化运行期更新的正误来源未说明，可能使用真值",
+   "无 improver 级证据"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "化学推理的错误类型有例证，但「缺记忆」瓶颈未被诊断，外部记忆/自演化近邻只一句话区分，且无对同类方法的对比；残余问题边界不清。",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "分解+三类记忆+E&R 的机制具体，并提出可检验预测（记忆质量、模型越强增益越大）；但关键假设薄：Mk 贡献最大、Mp+Me 无独立增益、运行时写入的质量门不明、合成记忆未经验证。",
+   "evidence_ids": [
+    "E004",
+    "E013",
+    "E019",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "prompt、Algorithm 1、检索条数与流程可重建；但相似度/置信度阈值数值缺失，运行时写入门控在 §2.5 与 §2.9 描述不一致，无遗忘/冲突/版本，混合记忆更差而无处理。",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E008",
+    "E009",
+    "E035"
+   ],
+   "counterevidence_ids": [
+    "E035"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "数值答案对照真值，容差 0.01，指标可信；但基线数字取自文献、模型版本不同，部分表内数值与样本量不匹配，测试集很小。",
+   "evidence_ids": [
+    "E027",
+    "E016",
+    "E017",
+    "E015"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有同管线记忆开关、E&R 开关、各记忆组件消融、记忆质量实验，但结果显示 Mp+Me 去掉 Mk 后等于无记忆，留存库的因果份额未被证明；无预算匹配，E&R 用不同 LLM；基线非复跑。",
+   "evidence_ids": [
+    "E015",
+    "E018",
+    "E019",
+    "E021",
+    "E034"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E034"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "开发/测试分离（43 vs 229）且自进化实验有同题泄漏防护；但运行时从测试流写入、§2.9 正确性标记来源不明（可能为真值）、无污染分析、仅化学域。",
+   "evidence_ids": [
+    "E004",
+    "E008",
+    "E009",
+    "E010",
+    "E033"
+   ],
+   "counterevidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有测试集规模、自进化两次运行误差、开源模型≥3 次均值与相似度显著性检验，也报告若干负结果（Llama ATKINS 下降、GPT-3.5 的 E&R 无益）；但表 1 主结果无区间/方差，差异多为 1–6 题，显著性检验为事后相关。",
+   "evidence_ids": [
+    "E012",
+    "E026",
+    "E028",
+    "E029",
+    "E031"
+   ],
+   "counterevidence_ids": [
+    "E028"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "报告每题 token 与美元（0.012M/$0.09；含 E&R 0.023M/$0.1725）并承认高于 StructChem；但库构建成本排除，无预算匹配，E&R 可用更强 LLM。",
+   "evidence_ids": [
+    "E022",
+    "E023",
+    "E024",
+    "E034"
+   ],
+   "counterevidence_ids": [
+    "E023"
+   ],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "status_reason": "全文含附录完整，八项均可判定。",
+ "rationale": "分解+三类记忆+E&R 的管线在 GPT-4 上均值 57.16（无记忆 49.22）；留存库的边际贡献小且混杂（Mp+Me=None），运行期写入门控不清，基线取自文献；retained/scoped。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "6ad95c219ff9f9b0982545d5b79a2ccd51c93c663f2db81a404d986afe074fbc",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref: 子代理环境未暴露运行记录，按契约填 null",
+  "timestamp": "2026-10-21T20:08:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2501.06590v1",
+   "sha256": "2bee4ef5fc1224430840521b059c66bc1eb479fde7eb3e9f8389b53e11470b7c",
+   "sections_read": [
+    "abstract",
+    "§1 intro",
+    "§2 method (2.1-2.11) incl. Algorithm 1",
+    "§3 ablations",
+    "§4 conclusion",
+    "App A related work",
+    "App B other models",
+    "App C similarity analysis",
+    "App D number of memories",
+    "App E limitations",
+    "App F datasets/Table 6",
+    "App G prompts",
+    "App H case trajectories"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "score": {
+  "raw": 52.5,
+  "display": 52.5,
+  "lower": 52.5,
+  "upper": 52.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

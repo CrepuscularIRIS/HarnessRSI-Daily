@@ -1,0 +1,807 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r05b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "full v1 HTML text (workshop paper) read incl. Tables 1-5, appendix configs; appendix code listings skimmed by headings",
+ "paper": {
+  "paper_key": "2508.19506",
+  "paper_id": "2508.19506",
+  "title": "Learning Game-Playing Agents with Generative Code Optimization",
+  "version": "2508.19506v1",
+  "claim_type": "system_method",
+  "central_claim": "Policies written as modular Python programs and refined by an LLM generative optimizer (Trace/OptoPrime) from execution traces and tiered natural-language feedback reach performance competitive with DQN/PPO on Pong, Breakout and Space Invaders with far less wall-clock training time and fewer environment interactions."
+ },
+ "provenance": {
+  "input_hash": "aca43df1f248c81a509e7311aa80cb7b60ac026f0b14c44a235984f59500f1e3",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref unavailable to worker in this runtime; model_type is the controller-configured slot (haiku agent type -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-21T21:15:59Z"
+ },
+ "rationale": "策略代码经Trace/OptoPrime迭代改写，机制主要沿用Trace；评测环境=反馈环境且取最佳迭代，无种子/方差/留出，RL对比信息不对等，仅一项消融。",
+ "materials": [
+  {
+   "material_id": "2508.19506",
+   "url": "https://arxiv.org/html/2508.19506v1",
+   "sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "chars": 52107,
+   "sections_read": [
+    "abstract",
+    "1 Intro",
+    "2 Related work",
+    "3 Approach 3.1-3.2",
+    "4 Evaluation 4.1-4.4 + Tables 1-5",
+    "5 Limitations",
+    "Appendix A-E (configs, feedback tables, anecdote, RL baselines)",
+    "Appendix F code listings (skimmed)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Appendix F full code listings read only by figure headings"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Abstract",
+   "quote": "We present a generative optimization approach for learning game-playing agents, where policies are represented as Python programs and refined using large language models (LLMs).",
+   "support_explanation": "Central claim: policy code is the optimized object.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Abstract",
+   "quote": "Applied to Atari games, our game-playing Python program achieves performance competitive with deep reinforcement learning (RL) baselines while using significantly less training time and much fewer environment interactions.",
+   "support_explanation": "Headline efficiency/competitiveness claim.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§1 Intro",
+   "quote": "Our approach departs from prior work by: (i) treating the policy code itself as the object of optimization, (ii) extracting rich execution traces to localize failure points, and (iii) prompting an LLM iteratively with graph-based backtracing to propose meaningful code updates.",
+   "support_explanation": "Authors' differentiation; (ii)-(iii) are inherited from Trace.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§1 Intro",
+   "quote": "A key difference from prior work is the complexity of our domain: while Trace focuses on short-horizon tasks (e.g. Meta-World environments with at most 10 decision steps), Atari games require hundreds and thousands of steps per episode with sparse rewards, introducing longer temporal dependencies and credit assignment challenges.",
+   "support_explanation": "The residual claimed: Trace was only shown on short-horizon tasks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.2 Agent/Learning Design",
+   "quote": "We train agents in an episodic reinforcement learning setup, where each iteration consists of a single rollout.",
+   "support_explanation": "One short rollout per optimisation iteration.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.2 Learning Design",
+   "quote": "This rollout trajectory is traced end-to-end and is provided as execution traces to an LLM-based optimizer along with natural language feedback derived from a full-length evaluation episode (e.g.",
+   "support_explanation": "The full-length evaluation episode (also the reported metric) feeds back into the optimizer.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.2 Learning Design",
+   "quote": "To fit within this token budget, we cap rollouts at 400 steps for Pong, 300 for Breakout, and 15 for Space Invaders.",
+   "support_explanation": "Rollout horizon is capped by context; Space Invaders optimisation sees 15 steps.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.2 Learning Design",
+   "quote": "Our design requires minimal human intervention: the user defines the high-level function interfaces, writes docstrings and starter code, and configures automatic feedback.",
+   "support_explanation": "Human-specified scaffolding (functions, docstrings incl. game constants, starter code).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.2 Agent Design",
+   "quote": "component to prioritize targeting high-value bricks and forming tunnel strategies, adding a layer of strategic planning as a heuristic to guide the generative optimization.",
+   "support_explanation": "Hand-supplied Breakout strategy hint built into the policy decomposition.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.1",
+   "quote": "to convert pixel-based observation from Arcade Learning Environment (ALE)",
+   "support_explanation": "Agent receives object-level state (coordinates, sizes, velocities) rather than pixels.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§3.2 Staged Feedback Design",
+   "quote": "We observe that using only reward-based feedback from training rollouts often leads to performance plateaus–especially in games with evolving dynamics.",
+   "support_explanation": "Motivation for the staged NL feedback.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 1",
+   "quote": "Try improving paddle positioning to prevent opponent scoring.",
+   "support_explanation": "Performance-tiered feedback text contains hand-written task advice.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 2 Pong",
+   "quote": "Pong 21 (43m) 20 (10h 6m) 19 (2h 24m) 14.59",
+   "support_explanation": "Learned agent vs DQN vs PPO vs human (score and wall-clock).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 2 Breakout",
+   "quote": "Breakout 353 (1h 31m) 302 (26h 54m) 443 (3h 8m) 30.47",
+   "support_explanation": "Breakout: above DQN, below PPO.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 2 Space Invaders",
+   "quote": "Space Invaders 1200 (36m) 1383 (26h 52m) 939 (5h 39m) 1668.67",
+   "support_explanation": "Space Invaders: between DQN and PPO, below human.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 2 caption",
+   "quote": "RL algorithms are trained with 8 parallel environment instances, while our agent uses only 1.",
+   "support_explanation": "Wall-clock comparison is not like-for-like; authors concede a faster RL reference.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 2 caption",
+   "quote": "Due to high variations in reported results across papers, we compare against standardized baselines from open-source RL implementations",
+   "support_explanation": "Baselines are CleanRL runs, not rerun under the paper's observation interface.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 4",
+   "quote": "Best (It. 10)",
+   "support_explanation": "Reported policies are 'Best' iterations (It. 10/11/20): selection of the best iterate.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table A.1",
+   "quote": "Sticky Action Probability 0.0",
+   "support_explanation": "Deterministic dynamics setting; no evaluation-seed or no-op randomisation is described.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table A.1",
+   "quote": "Optimization Iterations 20",
+   "support_explanation": "Only 20 optimisation iterations (single run).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§4.4 / Table 5",
+   "quote": "Since training rollouts are short (e.g. 400 steps) and limited by the context window of the LLM, they often capture only fragments of a full game.",
+   "support_explanation": "Rationale for adding full-game feedback.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Table 5",
+   "quote": "Rollout-Only Feedback 7 Rollout + Full-Game Staged Feedback 21",
+   "support_explanation": "Only ablation: Pong max performance 7 vs 21 (single run).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§5 Limitations",
+   "quote": "However, our approach has limitations: LLMs can introduce occasional unstable edits and the performance depends on carefully crafted prompts due to the context window constraint of current models.",
+   "support_explanation": "Authors concede unstable edits and prompt dependence.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§4.2",
+   "quote": "OptoPrime is able to correctly recover the missing information by analyzing traced trajectory data.",
+   "support_explanation": "Anecdotal evidence that traces carry information (right wall x=152).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§4.3",
+   "quote": "Notably, complexity often plateaus or slightly decreases in later iterations, suggesting the model reorganizes logic for efficiency rather than continues to expand it indefinitely.",
+   "support_explanation": "Code-complexity descriptive analysis, not a performance attribution.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "§4.1",
+   "quote": "We demonstrate that our approach can match some existing deep RL baselines while requiring significantly less training time and fewer environment interactions (Table",
+   "support_explanation": "Claim of fewer environment interactions; Table 2 reports only wall-clock.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "2508.19506",
+   "material_sha256": "3d7499fb4068886da277208458e24bc63f1cba73ed397faf6213794b57bad00d",
+   "locator": "Appendix E",
+   "quote": "Runtime is computed from the Weights & Biases log.",
+   "support_explanation": "Baseline runtimes come from public W&B logs of different hardware/setups.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Trainable Python functions of a hand-structured policy (predict_ball_trajectory/select_action etc.; decide_shoot/decide_movement)",
+   "information": "Object-centric observations (OCAtari positions/velocities), reward, traced execution graph of the rollout, tiered NL feedback derived from a ~4000-step evaluation episode; docstrings with game constants",
+   "operation": "OptoPrime (LLM, Claude-3.5-Sonnet) backward pass over the traced graph with feedback, then step() rewrites the trainable code (20 iterations, optimizer memory 5)",
+   "output": "New policy code; best iterate retained for reporting",
+   "conditions": "rollout caps 400/300/15 steps by context window; user supplies interfaces, docstrings, starter code, feedback schedule",
+   "feedback": "Trace graph of the short rollout + reward level of a long evaluation episode mapped to hand-written advice",
+   "selection_rule": "Not described for acceptance of edits; best iteration reported (Table 4 'Best')",
+   "selection_data": "the same environment/evaluation episode that supplies feedback",
+   "persistence": "the Python policy file; last 5 updates in optimizer context",
+   "later_use": "next rollout/iteration; final policy evaluated",
+   "claimed_effect": "Pong 21, Breakout 353, Space Invaders 1200 in 43/91/36 min",
+   "failure_boundary": "unstable edits, context-window limited horizon, plateaus with reward-only feedback",
+   "evidence_ids": [
+    "E003",
+    "E006",
+    "E007",
+    "E008",
+    "E018",
+    "E020",
+    "E023"
+   ]
+  }
+ ],
+ "retention_trace": {
+  "before": "starter policy code with trainable functions (e.g. Pong initial policy 49 LOC)",
+  "proposed_change": "OptoPrime rewrite of trainable functions from traces + feedback",
+  "selection_rule_data": "no explicit accept/reject documented; best iteration chosen by evaluation score",
+  "persisted_change": "policy source code",
+  "later_tasks": "later iterations on the same game/environment; no distinct later tasks",
+  "measured_gain": "final scores in Table 2; no per-iteration curve reported in the text",
+  "evidence_ids": [
+   "E006",
+   "E013",
+   "E014",
+   "E015",
+   "E018"
+  ],
+  "note": "evaluation environment equals feedback/selection environment, so only task-level evidence is available."
+ },
+ "gap": {
+  "author_gap": "Deep RL needs millions of interactions and yields opaque policies; programmatic policies are hard to optimise; LLM code optimisation for agent policies in long-horizon Atari is unexplored.",
+  "checked_gap": "Sample-inefficiency/opacity is a real general limitation, but the specific gap is 'Trace has only been shown on <=10-step tasks' - largely a domain-application gap. The paper does not show a failure of prior LLM-in-the-loop code/policy evolution on Atari.",
+  "lineage": [
+   "LEAPS/VIPER/programmatic state-machine policies",
+   "LLM code optimisers (LangProp, EffiLearner, CLARIFY, AutoPatch)",
+   "Trace/OptoPrime (Cheng et al. 2024)",
+   "this work: Trace on Atari with staged feedback"
+  ],
+  "closest_adjacent": [
+   "Trace on Meta-World (same optimizer, short horizon)",
+   "LangProp (LLM policy code with execution feedback)"
+  ],
+  "residue": "Long-horizon credit assignment inside the context window.",
+  "stakes": "Context-capped rollouts mismatch full-game dynamics (Breakout brick speeds).",
+  "method_response": "Tiered NL feedback from longer evaluation episodes; hand-decomposed modular policy.",
+  "remaining_gap": "No comparison with other LLM program-evolution or reward/skill-code methods; no ablation of Trace's graph vs plain LLM rewriting.",
+  "evidence_ids": [
+   "E003",
+   "E004",
+   "E011"
+  ],
+  "unresolved": [
+   "Trace and LangProp originals not in the pinned package; neighbour comparison cannot be checked"
+  ]
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": true,
+  "reason": "The operation is LLM-driven generative optimisation of agent policy code from execution traces. Closest RS candidates were checked and rejected: decompose_and_delegate/C25 (the program is the final policy, not an intermediate artefact routed to a sound solver; the decomposition is hand-specified), architectural_operator_substitution (code-for-network substitution is not accompanied by any property-preservation argument), reframe_as_solvable_object (no correspondence to a solved object). No forced label.",
+  "executes_pattern": null,
+  "resolves_problem": null
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H09",
+    "version": "assets-2026-10-21",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "partial",
+      "note": "Trace routes feedback over the executed graph of two to three bundles; scope is the whole small program"
+     },
+     {
+      "id": "S3",
+      "status": "unknown",
+      "note": "acceptance/rollback of edits is not described; 'Best' iterate is picked afterwards"
+     },
+     {
+      "id": "S5",
+      "status": "met",
+      "note": "optimizer sees the full rollout trace"
+     },
+     {
+      "id": "S6",
+      "status": "unmet",
+      "note": "components are hand-designed per game; object is one deliverable"
+     },
+     {
+      "id": "F1",
+      "status": "unmet",
+      "note": "failure mode present: loop is the vehicle for a domain result (Atari)"
+     },
+     {
+      "id": "F3",
+      "status": "unmet",
+      "note": "failure mode present: a single executable game-player program is evolved"
+     }
+    ],
+    "evidence_ids": [
+     "E003",
+     "E006",
+     "E008",
+     "E018"
+    ]
+   }
+  ],
+  "unassigned": [
+   "performance-tiered, hand-written natural-language feedback ladder (human knowledge injection channel)"
+  ],
+  "revision_proposals": [
+   {
+    "target": "attribute_and_patch_incumbent/H09 or H10",
+    "kind": "case_only",
+    "proposal": "Single-paper case: tiered hand-authored feedback text as a distinct update-rule input; needs a second full-text member before any card change.",
+    "evidence_ids": [
+     "E011",
+     "E012"
+    ]
+   }
+  ]
+ },
+ "pattern_mapping": [],
+ "expectations": [
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "assets-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "attribution to the responsible module",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Trace attributes over a graph of two to three trainable functions; no evidence it localises better than whole-program rewriting.",
+   "evidence_ids": [
+    "E003",
+    "E024"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "assets-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "iterative edits to an incumbent",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "No acceptance/rollback rule described; only a best-iteration pick.",
+   "evidence_ids": [
+    "E018",
+    "E023"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "assets-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "proposer evidence access",
+   "applicable": true,
+   "status": "met",
+   "reason": "Optimizer receives full traced rollouts plus feedback.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S6",
+   "version": "assets-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "claim of a general improver",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Policy components and a Breakout strategy heuristic are hand-designed per game.",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F1",
+   "version": "assets-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "loop applied to a domain task",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Failure mode present: Atari result is the contribution.",
+   "evidence_ids": [
+    "E001",
+    "E002"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F3",
+   "version": "assets-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "single program evolved",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Failure mode present: one game-player program per game.",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E015"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2508.19506-1",
+   "version": "local",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "E010",
+    "E013",
+    "E016"
+   ],
+   "applies_when": "comparison with pixel-based RL baselines",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Learned agent gets object-level inputs and human-written docstrings/heuristics; baselines learn from pixels in public logs.",
+   "evidence_ids": [
+    "E008",
+    "E010",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2508.19506-2",
+   "version": "local",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "E006",
+    "E018",
+    "E019"
+   ],
+   "applies_when": "reported score on the environment that supplies feedback and picks the best iterate",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Evaluation-episode reward is optimizer feedback and best-iteration selector; no separate seeds, no-op starts or held-out variants reported.",
+   "evidence_ids": [
+    "E006",
+    "E018",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2508.19506-3",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "E002",
+    "E026"
+   ],
+   "applies_when": "claim of fewer environment interactions",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Only wall-clock is tabulated; interaction counts and LLM call/token cost are not given.",
+   "evidence_ids": [
+    "E026",
+    "E016"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2508.19506-4",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "E022"
+   ],
+   "applies_when": "claim that iterative optimisation with traces is what works",
+   "applicable": true,
+   "status": "partial",
+   "reason": "One Pong ablation on feedback type; no single-shot LLM code baseline, no graph-vs-plain rewrite or random/evolutionary code search.",
+   "evidence_ids": [
+    "E022",
+    "E024"
+   ],
+   "score_item": "E.causality"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Competitive with DQN/PPO on Pong, Breakout, Space Invaders",
+   "setting": "Claude-3.5-Sonnet OptoPrime, 20 iterations, object-centric inputs, hand-structured policies",
+   "baseline_control": "CleanRL DQN/PPO (pixels, 8 envs) and human",
+   "selection_vs_test": "same env supplies feedback and picks the best iterate",
+   "result_denominator": "one run per game; no variance",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E015",
+    "E016",
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "counterevidence": [
+    "E016",
+    "E018"
+   ],
+   "allowed_conclusion": "Scores in the same range as the cited baselines; no evidence about reliability or generalisation."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Significantly less training time (-98% to -52%) and fewer environment interactions",
+   "setting": "wall-clock from Table 2 vs W&B logs",
+   "baseline_control": "RL with 8 parallel envs; faster 32-env RL cited in caption",
+   "selection_vs_test": "n/a",
+   "result_denominator": "one run; interactions and LLM cost not tabulated",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E015",
+    "E016",
+    "E026",
+    "E027"
+   ],
+   "counterevidence": [
+    "E016",
+    "E026"
+   ],
+   "allowed_conclusion": "Wall-clock figures are as reported; the interaction claim is unsupported by shown numbers."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Staged, full-game feedback overcomes plateaus (Pong 7 -> 21)",
+   "setting": "Pong, rollout-only vs rollout + full-game staged feedback",
+   "baseline_control": "reward-only feedback",
+   "selection_vs_test": "max performance, same env",
+   "result_denominator": "single run",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Suggestive single-run ablation on the simplest game."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A Trace/OptoPrime loop with hand-specified modular Python scaffolds, object-centric inputs and tiered feedback produced policy programs scoring 21 (Pong), 353 (Breakout), 1200 (Space Invaders) in 36-91 minutes of single-environment wall-clock, evaluated on the same environment that supplies feedback and selects the best iteration; no held-out evaluation, variance, interaction count, or equal-information RL comparison is shown.",
+  "unresolved": [
+   "number of evaluation episodes/seeds",
+   "per-iteration learning curves",
+   "environment interactions and LLM cost",
+   "which edits were kept vs discarded"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Generic RL sample-inefficiency/opacity motivation plus 'Trace only on <=10-step tasks' is a domain-application gap; neighbours (LangProp, program-policy work) are cited but not compared; no failure of prior methods on Atari is shown.",
+   "evidence_ids": [
+    "E003",
+    "E004"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Operation and information are reconstructable (traced rollout + feedback -> OptoPrime rewrite of trainable functions) and the plateau-vs-staged-feedback rationale is coherent, but the optimizer is inherited from Trace, the key design choices are human-supplied structure/hints, and there is no test that trace-based credit assignment beats naive rewriting.",
+   "evidence_ids": [
+    "E003",
+    "E006",
+    "E011",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Loop, hyperparameters and scaffolds are described (20 iterations, memory 5, caps per game, config table), but acceptance/rollback of edits, versioning, and how the best iterate is chosen are unspecified; failure boundaries are only stated qualitatively.",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E018",
+    "E020",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Game score is an objective verifier, yet the protocol (episodes, seeds, no-op starts, deterministic setting) is not described, baselines are public CleanRL logs under a different input interface, and training time compares unlike hardware and parallelism.",
+   "evidence_ids": [
+    "E013",
+    "E017",
+    "E019",
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "A single Pong feedback-type ablation; no single-shot LLM code baseline, no Trace-graph vs plain-rewrite, no evolutionary/random code search, and human docstrings/heuristics and object-level inputs confound the comparison to pixel RL.",
+   "evidence_ids": [
+    "E022",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E008",
+    "E009",
+    "E010"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 0,
+   "reason": "The evaluation episode supplies the optimizer's feedback and the best iterate is selected on it; no separate seeds, unseen variants or held-out games are reported, so selection data equals reported test data.",
+   "evidence_ids": [
+    "E006",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No repeated runs, seeds, variance, intervals or failure counts for the optimisation loop are reported (authors only mention occasional unstable edits).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "abstract",
+    "§4.1-4.4 and Tables 1-5",
+    "§5 limitations",
+    "Appendix A-E tables/text"
+   ]
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Wall-clock is reported with caveats (8 vs 1 environments, faster RL cited), but LLM calls/tokens/dollars and the claimed environment-interaction savings are not tabulated.",
+   "evidence_ids": [
+    "E016",
+    "E026",
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E026"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 33.75,
+  "display": 33.8,
+  "lower": 33.75,
+  "upper": 33.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

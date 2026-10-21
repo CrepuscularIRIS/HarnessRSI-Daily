@@ -1,0 +1,373 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator. Full text including appendix read; no non-weight retained harness component is the object of the central claim.",
+ "paper": {
+  "paper_key": "2503.00735",
+  "paper_id": "2503.00735",
+  "title": "LADDER: Self-Improving LLMs Through Recursive Problem Decomposition",
+  "version": "2503.00735v3",
+  "claim_type": "component_training",
+  "central_claim": "LADDER: an LLM recursively generates easier variants of hard problems and trains itself with RL (GRPO) using a numerical verifier, improving Llama 3.2 3B from 1% to 82% on integration problems and Qwen2.5-7B-R1-distill to 73% on MIT Integration Bee 2025; TTRL (per-question RL on variants at test time) raises it to 90%."
+ },
+ "provenance": {
+  "input_hash": "a98a9774833202666e781384cad85dbf96964481e0ec4574f421ea876d5335f9",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref unavailable to worker (no run-record access); model type per claude-kimi config",
+  "timestamp": "2026-10-21T20:00:55Z"
+ },
+ "materials": [
+  {
+   "material_id": "2503.00735",
+   "url": "https://arxiv.org/html/2503.00735v3",
+   "sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3.1 Algorithm Design (Alg. 1-2, variant generation, verification, GRPO, TTRL)",
+    "3.2 Experiments (Llama 3B, MIT Integration Bee, LADDER+TTRL)",
+    "Discussion/Conclusion",
+    "Appendix: failed questions"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "figure data (captions only)"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.1.1 LADDER",
+   "quote": "LADDER is a two-step algorithm.",
+   "support_explanation": "Step 2 is RL (GRPO) on the base model over the variant trees; the output is a trained model, so the retained improvement lives in weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.1.4 RL Protocol",
+   "quote": "We decided to employ Group Relative Policy Optimization (GRPO) in both LADDER and TTRL",
+   "support_explanation": "The improver acts through weight updates with a rule-based verifiable reward.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.1.5 TTRL",
+   "quote": "The test question is then answered using the tuned model, and finally the model is rolled back to its original parameters for the next test question.",
+   "support_explanation": "TTRL also modifies and discards weights per test question; no persisted non-weight component.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.1.2 Variant Generation",
+   "quote": "approximately 8% of generated variants were effectively unsolvable",
+   "support_explanation": "Variant generation (prompted transformation library, persona/temperature cycling) is a data-synthesis step feeding RL; its library is not evaluated as a retained artifact.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.2.1 Llama 3B Experiments",
+   "quote": "We randomly split this collection into a training set of 10 problems and a test set of 100 problems.",
+   "support_explanation": "Small design: 110 problems, 10 train roots, ~500 variants each, test 100; used here only to record the claim setting.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.1.3 Solution Verification",
+   "quote": "We note, however, that the numerical verifier may not be 100% accurate.",
+   "support_explanation": "Verifier admitted to be imperfect (random five-point numerical check).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2503.00735",
+   "material_sha256": "f03a6eeebfec0ae3c2b38d84d9096677df3ed81668677b9feba993c92279815d",
+   "locator": "3.2.3 LADDER + TTRL discussion",
+   "quote": "this comparison should be taken as a general baseline rather than a strict head-to-head evaluation",
+   "support_explanation": "Authors qualify the o1 comparison (o1 has no numerical checker).",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Base LLM weights (Llama 3.2 3B; DeepSeek-R1-distilled Qwen2.5 7B)",
+   "information": "Training integrals, self-generated variant trees (depth<=3, 8% unsolvable), numerical verifier; test questions hidden except in TTRL",
+   "operation": "Generate variant tree of easier problems -> GRPO with accuracy+format reward",
+   "output": "Updated weights",
+   "conditions": "verifiable numeric domain",
+   "feedback": "numerical integration check",
+   "selection_rule": "reward 1/0; unsolvable/too-hard variants get zero reward",
+   "selection_data": "variant trees from training roots (LADDER) or from the test question itself (TTRL)",
+   "persistence": "weights (LADDER); discarded after each question (TTRL)",
+   "later_use": "weights used on test integrals",
+   "claimed_effect": "1%->82% (Llama 3B, 100 test), 50%->73%->90% (MIT Bee 2025, 20 questions)",
+   "failure_boundary": "variants harder than parents; verifier imperfection; single domain",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004",
+    "E006"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "RL needs verifiable tasks forming a difficulty gradient; hard problems yield no signal and RL collapses.",
+  "checked_gap": "Gap is real for RL-on-weights; it is not a gap about a retained non-weight harness component.",
+  "lineage": [
+   "STaR / self-play with interpreter verification (Haluptzok et al.) -> RL with verifiable rewards (DeepSeek-R1, o1) -> variant-driven curriculum (LADDER)"
+  ],
+  "closest_adjacent": "Self-play puzzle generation and STaR as described in Related Work; no source texts fetched for them.",
+  "residue": "Unsolved hard questions give no reward.",
+  "stakes": "RL without variants stays <=3% then collapses to 0% (Llama 3B).",
+  "method_response": "Recursive simpler variants create stepping stones; TTRL repeats per test question.",
+  "remaining_gap": "Dynamic difficulty calibration, domains without verifiers, comparison with matched non-variant curricula.",
+  "evidence_ids": [
+   "E001",
+   "E004"
+  ],
+  "unresolved": [
+   "Whether results extend beyond integration",
+   "Cost of 9,000 variants + per-question RL"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "",
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "C08 step1 corpus is binding constraint: few hard integrals (met)",
+     "C08 step2 controllable generator reaching under-covered region: LLM variants, 8% unsolvable (partial)",
+     "C08 step3 one load-bearing filter: numerical verifier reward (met, admitted imperfect)",
+     "iterate generate-filter-retrain: static one-shot generation (unmet)"
+    ],
+    "success_failure_checks": [
+     "failure: cost of generation/filtering unmeasured (present)",
+     "failure: single domain (present)"
+    ],
+    "evidence_ids": [
+     "E001",
+     "E004",
+     "E006"
+    ],
+    "reason": "Generated-and-verified synthetic training instances feeding RL on weights; sub-card C08 fits the generate-gate-retrain shape but the generator is not steered by learner uncertainty."
+   }
+  ]
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H23",
+    "version": "cards@domain_cards_hash:52ff9657",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "id": "rsi:self_generate_the_curriculum/S1",
+      "status": "partial",
+      "note": "numerical verifier is a validity anchor but admittedly imperfect"
+     },
+     {
+      "id": "rsi:self_generate_the_curriculum/S3",
+      "status": "unmet",
+      "note": "variants not driven by a per-instance diagnostic; fixed parameters"
+     },
+     {
+      "id": "rsi:self_generate_the_curriculum/F2",
+      "status": "partial",
+      "note": "schedule of simpler variants rather than measured weakness"
+     }
+    ],
+    "evidence_ids": [
+     "E001",
+     "E004",
+     "E006"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "self_generate_the_curriculum",
+    "sub": "H23"
+   },
+   "operation_correspondence": "Generate-verify-train on self-made variants maps to curriculum synthesis from unsolved problems.",
+   "conditions_or_differences": "Domain card is flagged as a weight-touching boundary pattern; here the retained object is weights, so it does not enter harness-level scoring.",
+   "evidence_ids": [
+    "E001",
+    "E003"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md RE #2"
+   ],
+   "applies_when": "manufactured training signal",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "Paper is out_of_scope (weights); expectations not scored.",
+   "evidence_ids": [],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S6",
+   "version": "cards@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md S6"
+   ],
+   "applies_when": "weight-touching curriculum claims",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "Boundary pattern; weights retained object, not scored.",
+   "evidence_ids": [],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "LADDER lifts Llama 3.2 3B from 1% to 82% on 100 held-out integrals and a 7B model to 73% on MIT Bee 2025; TTRL gives 90%.",
+   "setting": "110 integrals (10 train roots), MIT Bee 2025 (20 questions), numeric verifier",
+   "baseline_control": "base pass@1/pass@10, RL on 10 roots without variants",
+   "selection_vs_test": "Train roots disjoint from test; TTRL uses test questions themselves",
+   "result_denominator": "100 and 20 questions; MIT results averaged over 3 runs per text",
+   "evidence_ids": [
+    "E005",
+    "E007"
+   ],
+   "counterevidence": [
+    "E006"
+   ],
+   "allowed_conclusion": "Weights-level result; not assessed against the harness-level rubric."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "not_assessed",
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "Not assessed: out_of_scope (weight-update improver and weight artifact). Author-reported RL gains on integration are recorded only as the claim setting.",
+  "unresolved": [
+   "scope change would require explicit domain-card revision, not low scoring"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope per rubric A3: both the improver update target and the retained/evaluated artifact are model weights (GRPO on the base LLM; TTRL fine-tunes then rolls weights back); the variant trees are training data, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "范围外(A3)：自改进对象与产物均为权重(GRPO/TTRL)；变体树仅为训练数据，非留存的非权重组件。故不评分。"
+}

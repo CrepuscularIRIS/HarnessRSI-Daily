@@ -1,0 +1,992 @@
+{
+ "status": "reviewed",
+ "reason": "材料完整(v1 全文含附录 A–E；附录 E 示例在外部链接，不在材料内)；图 3–9 的数值未随文本提供。",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "SE-GPT 用任务级经验记忆与五个模块（任务归类、经验迁移、自主练习、经验归纳、带跳过判定的推理），让 LLM 在无人工标注、无环境反馈下自主学习并应用文本经验，在六个 NLP 数据集混合流上将 GPT-3.5/GPT-4 平均准确率提升 3.8/5.3 个百分点。",
+  "paper_key": "2407.08937",
+  "paper_id": "2407.08937",
+  "title": "Self-Evolving GPT: A Lifelong Autonomous Experiential Learner",
+  "version": "2407.08937v1"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "§1 Introduction",
+   "quote": "we propose a lifelong autonomous experiential learning framework called Self-Evolving GPT (SE-GPT)",
+   "support_explanation": "中心对象：任务级经验记忆+五个以经验为中心的模块（非权重状态）。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "§3.1",
+   "quote": "This memory starts empty and gradually grows as our framework runs, assisting it in task-solving and learning new experience.",
+   "support_explanation": "记忆从空开始随运行增长，是留存状态。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "§2.1",
+   "quote": "However, these methods still require human labor to obtain experience and determine which experience to employ for the current question.",
+   "support_explanation": "作者 gap：已有方法仍需人工获得/选择经验。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "§2.1",
+   "quote": "All of these studies guide LLMs to learn experience based on explicit feedback from environments, which is inaccessible for most NLP tasks.",
+   "support_explanation": "环境型经验学习需要显式环境反馈，不适用大多数 NLP 任务。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "§3.4",
+   "quote": "We repeat the above steps to obtain five examples for the current task.",
+   "support_explanation": "自主练习每次生成 5 个带正误标签的练习样例（标签由 LLM 依据检索到的 Wikipedia 文本判断，无真值）。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "§3.6",
+   "quote": "If the number of incorrect examples remains zero three times for the same task, we consider that such task has already been adequately learned, and further learning is skipped.",
+   "support_explanation": "学习/跳过规则：以练习中零错误次数判定\"学会\"，依据是自生成练习的自检，而非真实准确率提升。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "§4.5",
+   "quote": "Please note that our framework learns from the test data (only their inputs and not their labels) as it proceeds to the next instance.",
+   "support_explanation": "记忆在评测流上增长（只用输入、不用标签）——构建流与评测流同源。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "§4.1",
+   "quote": "data points from each dataset and mix them randomly as the test dataset.",
+   "support_explanation": "测试流为六数据集混合随机序，未报告顺序敏感性。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "§4.1",
+   "quote": "resulting in a final experimental data size of 6,000",
+   "support_explanation": "GPT-3.5 总评测 6000 条（每数据集 1000）；GPT-4 为 3000 条。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "§4.1",
+   "quote": "We adopt accuracy (Acc) as the evaluation metric and report the average accuracy of three rounds of predictions to reduce randomness.",
+   "support_explanation": "指标为准确率，三轮预测取均值，不给区间。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "§4.4",
+   "quote": "improves the average performance of zero-shot GPT-3.5 and GPT-4 by 3.8% and 5.3%, respectively.",
+   "support_explanation": "主结果：平均准确率 +3.8/+5.3 个百分点（相对 zero-shot）。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Table 1 (GPT-3.5)",
+   "quote": "Zero-shot 0.670 0.813 0.754 0.679 0.502 0.516 0.656",
+   "support_explanation": "GPT-3.5 zero-shot 平均 0.656。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Table 1 (GPT-3.5)",
+   "quote": "SE-GPT (Ours) 0.708 0.857 0.792 0.693 0.557 0.556 0.694",
+   "support_explanation": "GPT-3.5 SE-GPT 平均 0.694。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Table 1 (GPT-3.5)",
+   "quote": "AutoP-ICL 0.652 0.799 0.735 0.650 0.504 0.422 0.627",
+   "support_explanation": "用同一自主练习生成的演示做 ICL(不做经验归纳)的对照：0.627 < zero-shot 0.656，说明\"归纳成经验\"是承重的。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Table 1 (GPT-3.5)",
+   "quote": "Self-EXP 0.673 0.773 0.712 0.658 0.509 0.515 0.640",
+   "support_explanation": "Self-EXP（每题直接生成经验）0.640，低于 zero-shot。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Table 1 (GPT-4)",
+   "quote": "Zero-shot 0.796 0.828 0.788 0.812 0.608 0.706 0.756",
+   "support_explanation": "GPT-4 zero-shot 平均 0.756。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Table 1 (GPT-4)",
+   "quote": "Self-EXP 0.834 0.846 0.808 0.828 0.646 0.698 0.777",
+   "support_explanation": "GPT-4 Self-EXP 0.777：最强的廉价替代，仅比 SE-GPT 低 3.2pp。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Table 1 (GPT-4)",
+   "quote": "SE-GPT (Ours) 0.850 0.869 0.835 0.848 0.690 0.761 0.809",
+   "support_explanation": "GPT-4 SE-GPT 0.809。GPT-4 未做 AutoP-ICL、Modified Self-ICL 对照。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Table 2",
+   "quote": "- w/o transfer 0.697 0.843 0.771 0.689 0.535 0.541 0.679",
+   "support_explanation": "GPT-3.5 去掉经验迁移：0.679（-1.5pp）。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Table 2",
+   "quote": "- w/o induction 0.703 0.851 0.779 0.678 0.542 0.547 0.683",
+   "support_explanation": "GPT-3.5 在 1/3 数据后关掉归纳：0.683（-1.1pp）；差异量级接近抽样噪声。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "§4.4",
+   "quote": "the performance gains of our framework is not largely due to web retrieval.",
+   "support_explanation": "作者据 AutoP-ICL 论证增益不主要来自网络检索。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Appendix A.4",
+   "quote": "Overall, our main experiment using GPT-3.5 requires about five days of running, whereas GPT-4 requires three to five times longer.",
+   "support_explanation": "实际运行时间。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Appendix A.4 Table 7",
+   "quote": "Total - 11331 2202 13532",
+   "support_explanation": "每题平均 token：本框架 13532 vs Zero-shot-CoT 191（约 70 倍）。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "§4.5",
+   "quote": "In human evaluation, we randomly select the experience of 100 tasks from memory",
+   "support_explanation": "经验质量由 3 名标注者对 100 个任务的经验人工评估（>99% 准确，无一致性指标）。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Limitations",
+   "quote": "Experience Failure and Operating Error: Even with high-quality experience, LLMs may still make mistakes.",
+   "support_explanation": "作者承认的局限之一。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Limitations",
+   "quote": "Task Applicability: Experience may still be effective in tasks requiring skills such as mathematical reasoning, but it might not be as effective for tasks relying on factual knowledge such as WikiQA.",
+   "support_explanation": "适用边界：事实型任务效果可能有限。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "§5 Conclusion",
+   "quote": "At present, we run our framework completely from empty memory.",
+   "support_explanation": "实验均从空记忆起步，冷启动改进为未来工作。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "Table 6",
+   "quote": "Ours 0.877 5 0.31 0.51 20 0.12 0.25",
+   "support_explanation": "自主练习校验步骤人工评估准确率 0.877（无参考文本为 0.797）：自检标签约 12% 出错。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "§4.4",
+   "quote": "Thirdly, the performance of Self-EXP is unstable.",
+   "support_explanation": "作者承认 Self-EXP 在 GPT-3.5 上不稳定。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  },
+  {
+   "evidence_id": "E030",
+   "locator": "Appendix D Prompt 5",
+   "quote": "Prompt 5: combine and deduplicate two sets of experience for the same task.",
+   "support_explanation": "合并/去重提示：把迁移经验与已有经验合并，最多 20 条见解。",
+   "kind": "author_report",
+   "material_id": "2407.08937.txt",
+   "material_sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "任务级文本经验记忆：{任务名, 描述, Procedure, Suggestions}",
+   "information": "用户问题（无标签）、LLM 生成的任务描述、记忆内相似任务的经验、检索到的 Wikipedia 片段（≤512 token）",
+   "operation": "归类→(若新任务/未学会)选源任务并迁移改写经验→生成 5 个基于网页的新题、作答、依据网页校验正误→对比正误例归纳经验→与迁移经验合并→写回记忆",
+   "output": "该任务更新后的经验",
+   "conditions": "LLM 能稳定完成归类/校验；网页检索相关",
+   "feedback": "自生成练习的 LLM 校验标签（非真值）",
+   "selection_rule": "校验为 inconclusive 的练习丢弃；某任务练习中错误数连续三次为零则跳过学习；归纳结果覆盖旧记忆",
+   "selection_data": "评测流本身的输入（无标签）",
+   "persistence": "任务级记忆持续增长",
+   "later_use": "同类题检索该任务经验并注入最终推理提示",
+   "claimed_effect": "GPT-3.5 +3.8pp、GPT-4 +5.3pp；去迁移/去归纳分别下降约 1.1–1.5pp",
+   "failure_boundary": "经验可能错误或被 LLM 忽略；成本高；事实型任务有限；冷启动",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E006",
+    "E007",
+    "E011",
+    "E019",
+    "E020",
+    "E025",
+    "E026"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "任务归类与来源任务选择（路由）",
+   "information": "任务描述 top-5/top-10 检索 + LLM 判定",
+   "operation": "判定\"相同任务/可迁移源任务\"",
+   "output": "题-任务链接与源任务集合",
+   "conditions": "检索与 LLM 判定准确",
+   "feedback": "人工评估（仅分析用）",
+   "selection_rule": "多次运行取出现两次的选项",
+   "selection_data": "—",
+   "persistence": "新任务写入记忆",
+   "later_use": "决定读取哪份经验",
+   "claimed_effect": "归类/选源准确率高（Table 4/5）",
+   "failure_boundary": "MMLU 选源准确率较低（GPT-3.5 0.719）",
+   "evidence_ids": [
+    "E002",
+    "E024"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "经验提示要么人工撰写，要么从人工标注数据总结并需人工为每题选择经验；环境型方法依赖显式反馈；无监督 ICL 的生成演示含噪。",
+  "checked_gap": "gap 具体(经验获取与选择的人工环节)；近邻点名较全且部分有对照；但未与技能库/反思类(Voyager、Reflexion)方法实验比较，也未说明它们在本设置下为何不适用。",
+  "lineage": {
+   "ancestors": [
+    "人工经验提示",
+    "Zhao et al. 2023(经验总结)",
+    "Chen et al. 2024",
+    "Self-ICL / SG-ICL / TP-ICL"
+   ],
+   "closest_adjacent": [
+    "Self-ICL(已复现对照)",
+    "Zhao et al. 2023",
+    "Chen et al. 2024"
+   ],
+   "version_note": "本地固定 arXiv v1(2024-07-12)；邻居据本文描述"
+  },
+  "residue": "人工参与经验获取与选择，无法随用户问题类型无限增长。",
+  "stakes": "人力成本无界；多数 NLP 任务无环境反馈。",
+  "method_response": "自动归类、迁移、带网页参照的自主练习与归纳，使经验自主增长并按任务选取。",
+  "remaining_gap": "成本约 70 倍 token；校验约 12% 错误；留存收益未随流位置测量；事实型任务边界；无独立留出评测。",
+  "evidence_ids": [
+   "E003",
+   "E004",
+   "E027"
+  ],
+  "unresolved": [
+   "与技能库/Voyager、ExpeL 的同设置比较缺失；本席未取得其原文"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "outside_taxonomy": false,
+  "reason": "无真值时由模型自造练习数据并经校验过滤，作为适应信号(此处用于归纳文本经验而非训练权重)，对应\"自造监督信号\"；经验以条件形式注入推理，对应\"条件化代替再训练\"。两者拟合度均为低-中，因信号并未用于训练。",
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "low-medium",
+    "tactic_steps_checked": "C08 五步：生成器造题(是,网页驱动)、过滤标准(是,网页校验+inconclusive 丢弃)、迭代(是,至零错误)、与廉价基线比较(部分)、真实目标迁移(下游准确率,是)；但\"重训\"一步被替换为文本经验归纳，且未确认训练语料瓶颈。",
+    "success_checks": [
+     "单一过滤标准成为核心: 部分(网页校验)",
+     "过滤被消融: 部分(Table 6 有无参照)",
+     "下游目标比较: 满足"
+    ],
+    "failure_checks": [
+     "成本高于收益: 成立风险",
+     "无廉价非生成基线: 部分(缺检索/kNN)"
+    ],
+    "evidence_ids": [
+     "E005",
+     "E014",
+     "E028"
+    ],
+    "reason": "生成-过滤-自造信号的操作对应，但信号用于经验归纳而非训练。"
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "supporting",
+    "fit": "low-medium",
+    "tactic_steps_checked": "C03：以检索到的经验作为推理条件、无参数更新(是)；上游教模型读条件格式(否)；类别级留出(否)；廉价对照(部分)。",
+    "success_checks": [
+     "条件化信号被隔离: 部分(Zero-shot vs SE-GPT)"
+    ],
+    "failure_checks": [
+     "无污染审计: 成立"
+    ],
+    "evidence_ids": [
+     "E002",
+     "E013"
+    ],
+    "reason": "经验注入作为条件，描述推理阶段的动作，不构成主轴。"
+   }
+  ],
+  "executes_pattern": {
+   "value": "partial",
+   "reason": "完成自造练习+过滤+归纳+条件注入；缺留出与廉价基线。"
+  },
+  "resolves_problem": {
+   "value": "unresolved",
+   "reason": "\"无需人工\"在成本与校验可靠性上尚未关闭；留存增益未被独立测量。"
+  }
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "cards@52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "cond_id": "S1",
+      "status": "met",
+      "evidence_ids": [
+       "E003"
+      ],
+      "note": ""
+     },
+     {
+      "cond_id": "S2",
+      "status": "met",
+      "evidence_ids": [
+       "E005"
+      ],
+      "note": "正反例对比归纳"
+     },
+     {
+      "cond_id": "S3",
+      "status": "partial",
+      "evidence_ids": [
+       "E005",
+       "E028"
+      ],
+      "note": "LLM+Wikipedia 校验"
+     },
+     {
+      "cond_id": "S4",
+      "status": "partial",
+      "evidence_ids": [
+       "E030"
+      ],
+      "note": ""
+     },
+     {
+      "cond_id": "S5",
+      "status": "unmet",
+      "evidence_ids": [
+       "E002",
+       "E006"
+      ],
+      "note": "无收益门控"
+     },
+     {
+      "cond_id": "F5",
+      "status": "met",
+      "evidence_ids": [
+       "E005",
+       "E028"
+      ],
+      "note": "存储接地，失败模式避免"
+     }
+    ],
+    "evidence_ids": [
+     "E002",
+     "E005",
+     "E030"
+    ]
+   }
+  ],
+  "unassigned": [
+   "跨任务经验迁移（源任务选择+改写合并）在现有卡中无独立 sub，单篇仅作 case"
+  ],
+  "revision_proposals": [
+   "case: cross-task experience transfer (2407.08937)——待至少第二篇全文支持再议是否作为 H00/H01 的 sub-variant；本批内不改卡"
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00"
+   },
+   "operation_correspondence": "RS：生成+过滤自造样本作为适应信号；领域 H00：把自造/真实练习的成败对比抽象为任务经验并检索注入。",
+   "conditions_differences": "领域卡要求结果接地与收益门控，本文接地较弱、无门控；RS 卡要求把过滤后数据用于训练，本文转为文本经验。",
+   "evidence_ids": [
+    "E005",
+    "E028",
+    "E030"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "v2.2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原卡 Reviewer expectations 第2条"
+   ],
+   "applies_when": "声称增益来自自造信号而非额外算力时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "AutoP-ICL 与 Self-EXP 对照部分隔离；缺同算力的\"无记忆\"基线。",
+   "evidence_ids": [
+    "E014",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "version": "v2.2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原卡 Reviewer expectations 第3条"
+   ],
+   "applies_when": "声称自造信号提升下游目标时",
+   "applicable": true,
+   "status": "met",
+   "reason": "直接在六个数据集的下游准确率上比较，并有人工评估中间模块。",
+   "evidence_ids": [
+    "E011",
+    "E013"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "v2.2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原卡 Reviewer expectations 第5条"
+   ],
+   "applies_when": "生成-过滤-反馈回路成本显著时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告了成本但把它作为局限，没有收益/成本对比（70 倍 token 换 3.8pp）。",
+   "evidence_ids": [
+    "E022",
+    "E023"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "v2.2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原卡 Reviewer expectations 第6条"
+   ],
+   "applies_when": "声称部署可用时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "不用标签，贴近部署；但冷启动、事实型任务边界和流顺序假设未处理。",
+   "evidence_ids": [
+    "E026",
+    "E027"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "v2.2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原卡 Reviewer expectations 第3条"
+   ],
+   "applies_when": "存在更便宜的条件化替代时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Self-EXP/Self-ICL 是廉价替代并已比较；缺检索案例/kNN 与更长上下文基线。",
+   "evidence_ids": [
+    "E015",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S1",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "声称让某固定要素可学习时",
+   "applicable": true,
+   "status": "met",
+   "reason": "点名\"人工获得与人工选择经验\"并让记忆承担学习位置，与\"冻结模型也能进步\"的背景区分。",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "从结果归纳教训时",
+   "applicable": true,
+   "status": "met",
+   "reason": "归纳提示先总结正确例共性、错误例模式并对比二者差异。",
+   "evidence_ids": [
+    "E005"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "需要结果信号接地时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "信号来自 Wikipedia 参照下的 LLM 校验（约 12% 错误），非真值或执行。",
+   "evidence_ids": [
+    "E005",
+    "E028"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "库增长后需要维护时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有合并去重提示与 20 条上限，但无遗忘、冲突时间戳或局部增量编辑。",
+   "evidence_ids": [
+    "E030"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "保留需有门控时",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "归纳经验直接覆盖旧记忆，不以后续准确率或独立验证为准入条件。",
+   "evidence_ids": [
+    "E002",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F5",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "无结果接地存储即失败模式",
+   "applicable": true,
+   "status": "met",
+   "reason": "存储来自带校验标签的练习，不是纯元认知提示——失败模式被避免（接地较弱）。",
+   "evidence_ids": [
+    "E005",
+    "E028"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md"
+   ],
+   "applies_when": "存储由测试流构建即失败模式",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "记忆在被评测流上增长，作者明确说明（仅用输入）。",
+   "evidence_ids": [
+    "E007"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md"
+   ],
+   "applies_when": "留存需要反事实证据时",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有逐条经验的边际作用测量；仅有模块级消融。",
+   "evidence_ids": [
+    "E019",
+    "E020"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2407.08937-1",
+   "version": "v2.2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "常见做法：学习曲线/随流位置的收益"
+   ],
+   "applies_when": "声称\"终身学习、能力随运行增长\"时",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "只报告经验条数与任务数随运行增长(图)，未给准确率随流位置变化，留存收益未直接测量。",
+   "evidence_ids": [
+    "E002",
+    "E007"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2407.08937-2",
+   "version": "v2.2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "附录 A.4 与 Table 1"
+   ],
+   "applies_when": "成本远高于基线时需有预算匹配对照",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "约 70 倍 token，对 CoT/Self-EXP 等无预算匹配版本。",
+   "evidence_ids": [
+    "E022",
+    "E023"
+   ],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "SE-GPT 提升 GPT-3.5/GPT-4 在六数据集混合流上的平均准确率",
+   "setting": "gpt-3.5-turbo-1106(1000/集)、gpt-4-1106-preview(500/集)；记忆从空开始、随评测流增长；temperature=1",
+   "baseline_control": "Zero-shot、Zero-shot-CoT、Self-EXP、Self-ICL(-CoT)、Modified Self-ICL、AutoP-ICL(仅 GPT-3.5)",
+   "selection_vs_test": "无划分：记忆由评测流输入构建",
+   "result_denominator": "3 轮预测均值，无区间",
+   "evidence_ids": [
+    "E011",
+    "E013",
+    "E018",
+    "E007"
+   ],
+   "counterevidence": [
+    "E007"
+   ],
+   "allowed_conclusion": "作者在同流学习设定下报告平均提升 3.8/5.3pp；不能外推为对未见任务的留存泛化。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "经验迁移与经验归纳都对性能有贡献",
+   "setting": "GPT-3.5/GPT-4，去迁移或在 1/3 数据后去归纳",
+   "baseline_control": "完整 SE-GPT",
+   "selection_vs_test": "同上",
+   "result_denominator": "差异约 1.1–1.5pp，三轮均值",
+   "evidence_ids": [
+    "E019",
+    "E020"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "方向性支持，幅度接近噪声，需重复。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "增益不主要来自网页检索，而来自归纳出的经验",
+   "setting": "GPT-3.5",
+   "baseline_control": "AutoP-ICL",
+   "selection_vs_test": "同上",
+   "result_denominator": "0.627 vs 0.694",
+   "evidence_ids": [
+    "E014",
+    "E021"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "支持\"归纳优于直接用练习演示\"，不排除其他提示结构因素。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "框架使能力随终身运行持续增长",
+   "setting": "经验条数/任务数随运行增长(图)",
+   "baseline_control": "—",
+   "selection_vs_test": "—",
+   "result_denominator": "无随位置准确率",
+   "evidence_ids": [
+    "E002",
+    "E007"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "仅有存储量增长的叙述，准确率增长未直接测量。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在评测流同源学习、无真值标签的设定下，作者报告 SE-GPT 的平均准确率高于 Zero-shot 和廉价经验/演示基线；留存泛化、随运行增长与成本合理性未被证明。",
+  "unresolved": [
+   "随流位置的准确率与顺序方差",
+   "独立留出任务",
+   "预算匹配的无记忆对照",
+   "GPT-4 缺 AutoP-ICL/Modified Self-ICL"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "缺口具体：经验获取与选择仍靠人工、环境反馈在多数 NLP 任务不可得、无监督 ICL 演示含噪；最近邻(Zhao et al. 经验总结、Chen et al. 2024、Self-ICL/SG-ICL/TP-ICL)被点名且有 Self-ICL 实验对照；残余问题(成本、冷启动、事实型任务)被自述；未覆盖技能库/Voyager 类同域邻居的实验比较。",
+   "evidence_ids": [
+    "E003",
+    "E004"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "任务归类→来源任务迁移→带网页参照的自主练习与校验→正反例对比归纳→合并→跳过学习，链条完整并有模块级人工评估(归类、迁移选择、校验准确率、多样性)；与朴素替代(Self-EXP、Self-ICL、AutoP-ICL)能给出可区分预测，AutoP-ICL 支持\"归纳\"为承重；弱点是校验由同类 LLM+Wikipedia 片段完成，仍有约 12% 错误。",
+   "evidence_ids": [
+    "E005",
+    "E014",
+    "E028",
+    "E030"
+   ],
+   "counterevidence_ids": [
+    "E028"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "检索 top-5/10、五个练习、零错误三次跳过、合并去重上限 20 条等参数与提示齐全，经验在下一题被读取；但归纳结果直接覆盖旧记忆，不以后续准确率为准入门槛，无版本/回退/退役，冲突仅靠 LLM 合并；跳过规则依据自检。",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E006",
+    "E030"
+   ],
+   "counterevidence_ids": [
+    "E006"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "六个标准数据集、带真值标签的准确率；规模 1000/500 每集；三名标注者做模块级人工评估；评测中标签只用于打分。人工评估缺一致性指标。",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有 Zero-shot/CoT/Self-EXP/Self-ICL/Modified Self-ICL/AutoP-ICL 等对照和去迁移/去归纳消融，AutoP-ICL 区分了\"演示 vs 归纳\"；但消融差异仅 1–1.5pp，无\"关闭记忆但保留同等调用\"的预算匹配控制，GPT-4 缺 AutoP-ICL/Modified Self-ICL，无随运行时间的准确率曲线来证明留存累积。",
+   "evidence_ids": [
+    "E014",
+    "E017",
+    "E019",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E017"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "记忆在被评测的混合流上增长（仅用输入），构建流与评测流是同一批题，没有独立留出集、顺序/泄漏检查；属于测试时学习，不能证明对未见任务的留存收益。",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "样本量与三轮平均已报告，但无区间/显著性、无流顺序方差；消融 1–1.5pp 差异接近 n=1000/集的抽样噪声。",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E019",
+    "E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "如实报告每模块 token、总运行时间(GPT-3.5 约五天、GPT-4 为其 3–5 倍)和约 70 倍的 token 开销并讨论降本；基线未做预算匹配，这使\"成本换来的 3.8pp\"无法对照廉价方案。",
+   "evidence_ids": [
+    "E022",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "SE-GPT 自主闭环完整并有 AutoP-ICL 等对照与模块人评，增益约 4–5pp；但记忆在评测流上增长、无留出与区间、归纳结果直接覆盖旧记忆，成本约 70 倍。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r01b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "21ce283d3602be51034bcd86001b44462c349504987dd6597fc5d54af9161062",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "timestamp": "2026-10-21T19:44:15Z",
+  "notes": "actual_model/session_id/receipt_ref=null: worker 内无法读取运行回执；model type 由总控派发配置确定。期望 F# 条目：status=met 表示该失败模式被避免，unmet 表示失败模式成立。rs:*/RE-n 的 n 为原卡 Reviewer expectations 列表的第 n 条。"
+ },
+ "materials": [
+  {
+   "material_id": "2407.08937.txt",
+   "version_url": "https://arxiv.org/html/2407.08937v1",
+   "sha256": "c7b897958833ed05fb1ede60424d9c7fd26c8011f0f4327e5ef2fcc777911678",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Methodology(3.1–3.7)",
+    "4 Experiments(4.1–4.9,Tables 1–6,Fig 3–5)",
+    "5 Conclusion/Limitations",
+    "Appendix A(图 6–9、成本 Table 7)、B(案例)、C、D(提示 1–11)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "附录 E 的框架运行示例在外部 Google Drive 链接，不在材料内",
+    "Figure 3–9 的图中数值"
+   ]
+  }
+ ],
+ "score": {
+  "raw": 58.75,
+  "display": 58.8,
+  "lower": 58.75,
+  "upper": 58.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

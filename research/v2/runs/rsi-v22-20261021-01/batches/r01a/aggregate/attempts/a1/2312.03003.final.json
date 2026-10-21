@@ -1,0 +1,1747 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r01a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "status": "reviewed",
+ "reason": "In scope: a per-app task/sub-task/action memory (non-weight) is written after execution, persisted and replayed by a frozen LLM on later instructions. Scored on the scoped claim (efficiency on repeated tasks; accuracy gain only with human repair).",
+ "paper": {
+  "paper_key": "2312.03003",
+  "paper_id": "2312.03003",
+  "title": "MobileGPT: Augmenting LLM with Human-like App Memory for Mobile Task Automation",
+  "version": "2312.03003v3",
+  "claim_type": "system_method",
+  "central_claim": "An LLM mobile task automator with a human-like hierarchical app memory (explore-select-derive-recall) can automate and learn new tasks with 82.7% accuracy, adapt learned tasks to new parameters with near-perfect (98.75%) accuracy, and cut latency and cost by 62.5% and 68.8% versus a same-prompt GPT-4 baseline.",
+  "title_note": "The pinned v3 material carries the authors' revised title; the manifest keeps the earlier arXiv title. Same arXiv ID, version 2312.03003v3 and sha256; the material title is authoritative.",
+  "manifest_title": "Explore, Select, Derive, and Recall: Augmenting LLM with Human-like Memory for Mobile Task Automation",
+  "scope_class": "A"
+ },
+ "provenance": {
+  "input_hash": "32d41775e894e896adc8fa9d4cb0f5e2c94c40a763bbc3e94364255f8729709e",
+  "input_package": "batches/r01a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker. Seat attempts used: sol a1, son55 a1 (same input_hash, same material sha256).",
+  "timestamp": "2026-10-21T20:03:03Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2312.03003",
+   "version": "2312.03003v3",
+   "url": "https://arxiv.org/html/2312.03003v3",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2312.03003.txt",
+   "extraction_method": "html",
+   "sections_read": [
+    "sol: 全文§1–10，方法、比较/消融/用户研究、讨论；该版本无另列附录",
+    "son55: Abstract",
+    "son55: Sec 1-10 incl. Tables 1-4",
+    "opus55: claim/method/result sections re-read directly for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 1-7 (workflow, repair UI, graph, bar charts) not rendered in text extraction; numbers used from prose/tables only. Prompts are not reproduced in the material."
+   ],
+   "note": "Single pinned text shared by both seats (sha256 verified against manifest); seat material_ids normalised to this id, original kept in seat_material_id. Missing items are figure renderings only; numbers used only where restated in text/tables."
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Per-app hierarchical memory: page nodes (defined by their sub-task lists), sub-task edges (parameterised action sequences), tasks (sequences of node/sub-task pairs)",
+   "information": "Simplified HTML screen representation, user instruction, LLM outputs of Explore/Select/Derive (GPT-4-turbo) and slot-filling (GPT-3.5); offline random-explorer and trace-monitor screens; no outcome oracle",
+   "operation": "Explore->Select->Derive on a cache miss; store the completed task; Recall replays the stored sub-task sequence with slot-filling, attribute-based action adaptation, and a one-shot in-context adaptation fallback",
+   "output": "Reusable task/sub-task/action records with generalised UI attributes and parameter placeholders",
+   "conditions": "Android apps with text-extractable layouts; repeated tasks and overlapping sub-tasks",
+   "feedback": "Execution errors (invalid index, no screen change, loops) and optional human repair",
+   "selection_rule": "Store when Select returns Finish; node dedup by sub-task requirements plus cosine similarity; no measured admission test",
+   "persistence": "Server-side per-app graph reused across sessions",
+   "later_use": "Instruction -> high-level task match -> memory replay, sub-task reuse in other tasks, few-shot example on fallback",
+   "claimed_effect": "Warm-start latency -62.5%, cost -68.8% vs same-prompt Derive-only baseline; cold-start success 82.7% vs AutoDroid 74.7 / AppAgent 67.4",
+   "failure_boundary": "UI changes, ambiguous attributes, image-only screens (Flutter/web/maps), crucial irreversible actions during repair",
+   "evidence_ids": [
+    "son55/E002",
+    "son55/E003",
+    "son55/E004",
+    "son55/E005",
+    "son55/E014",
+    "son55/E027",
+    "son55/E032"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Executed path corrected by rule-based self-feedback or a human, then written to memory",
+   "information": "Rule-detected error messages appended to next prompt; human edits sub-task list, selected sub-task/parameters, or demonstrated actions",
+   "operation": "Within-episode self-correction (not retained) and human repair (retained in the stored path / example)",
+   "output": "Repaired task path stored for recall",
+   "conditions": "Human available; non-destructive actions",
+   "feedback": "Rule-based self-feedback and human judgement",
+   "selection_rule": "Human decides what is correct",
+   "persistence": "Same graph as S1",
+   "later_use": "Warm-start replay and few-shot example",
+   "claimed_effect": "Warm-start accuracy 98.75% (ablation, with repair)",
+   "failure_boundary": "Library growth depends on supervision",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E007",
+    "son55/E011",
+    "son55/E012",
+    "son55/E031"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "LLM task automators are unreliable (non-deterministic) and costly in time and money on repeated tasks; demonstration/macro approaches need human demos or fail to generalise actions.",
+  "checked_gap": "Real and measurable for repetitive mobile tasks (cost/latency, repeat-run variability); the paper's own accuracy results show memory lowers cost rather than improving autonomous accuracy.",
+  "lineage": "API assistants / programming-by-demonstration -> LLM agents without memory (AutoDroid, AppAgent) -> LLM agent with sub-task-level reusable memory; macro mining (Li & Riva, Toyama random explorer, Huang et al.)",
+  "closest_adjacent": "AutoDroid and AppAgent (empirical baselines), macro-mining work (discussed), LLM response caching; agent-memory work such as ExpeL/Voyager-style stores is not discussed",
+  "residue": "Repeated-task cost and latency; error repetition across overlapping sub-tasks",
+  "stakes": "Over two minutes and about one dollar per task as stated anecdotally",
+  "method_response": "Sub-task-level memory with parameter generalisation, adaptive recall and human repair",
+  "remaining_gap": "No autonomous accuracy gain from memory, no invalidation under UI change, generalisation to unseen task types untested, Android text-layout only",
+  "evidence_ids": [
+   "son55/E033",
+   "son55/E035",
+   "son55/E010",
+   "son55/E012"
+  ],
+  "unresolved": [
+   "AutoDroid's exploration-derived app knowledge and generic agent-memory neighbours are not available in the pinned materials; novelty of 'first caching' is taken from the authors."
+  ]
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Cold-start learning of new tasks reaches 82.7% success, above AutoDroid (74.7%) and AppAgent (67.4%)",
+   "setting": "185 tasks, 18 apps, Pixel 6, GPT-4-turbo",
+   "baseline_control": "AutoDroid, AppAgent open-source versions",
+   "selection_vs_test": "Union of three datasets (one authors'); no HITL in this comparison",
+   "result_denominator": "185 tasks, single run",
+   "evidence_ids": [
+    "son55/E008",
+    "son55/E009",
+    "son55/E028",
+    "son55/E029"
+   ],
+   "counterevidence": "Baselines use different prompts/representations; success judged manually with three extra self-correction attempts",
+   "allowed_conclusion": "Cold-start agent is competitive with or above two baselines on this mixed task set"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Memory does not by itself raise autonomous accuracy",
+   "setting": "Warm vs cold, no HITL",
+   "baseline_control": "Cold start of the same system",
+   "selection_vs_test": "Sibling instruction of the same task",
+   "result_denominator": "82.7% vs 82.16% overall",
+   "evidence_ids": [
+    "son55/E010",
+    "son55/E029"
+   ],
+   "counterevidence": "n/a",
+   "allowed_conclusion": "Autonomous recall preserves cold-start accuracy"
+  },
+  {
+   "claim_id": "C3",
+   "text": "Learned tasks adapt to new parameters with 98.75% accuracy",
+   "setting": "80 tasks of the authors' dataset, warm start after HITL repair of cold-start failures",
+   "baseline_control": "Same-prompt Derive-only baseline",
+   "selection_vs_test": "Repair done on the building instruction of the same task; second instruction tested",
+   "result_denominator": "80 warm instructions, 1 failure (Uber Eats)",
+   "evidence_ids": [
+    "son55/E011",
+    "son55/E012",
+    "son55/E016",
+    "son55/E017"
+   ],
+   "counterevidence": "Authors attribute the rise to human correction",
+   "allowed_conclusion": "Human-repaired memories replay reliably on sibling instructions"
+  },
+  {
+   "claim_id": "C4",
+   "text": "Warm start cuts latency 62.5% and cost 68.8% versus the baseline",
+   "setting": "80-task MobileGPT dataset, warm start",
+   "baseline_control": "Same-prompt Derive-only baseline",
+   "selection_vs_test": "Sibling instruction; failures repaired and continued",
+   "result_denominator": "Averages over tasks; Sec 7.2 comparison only over 77 jointly successful tasks",
+   "evidence_ids": [
+    "son55/E013",
+    "son55/E014",
+    "son55/E024",
+    "son55/E025"
+   ],
+   "counterevidence": "Benefit varies with sub-task overlap (Gmail hit rate 6.7% cold)",
+   "allowed_conclusion": "Retained memory reduces LLM queries on repeated tasks"
+  },
+  {
+   "claim_id": "C5",
+   "text": "Sub-task sharing avoids repeating errors across tasks",
+   "setting": "Telegram example and per-app memory hit rates",
+   "baseline_control": "Baseline repeats scrolling error",
+   "selection_vs_test": "Same apps",
+   "result_denominator": "Qualitative example plus Table 3",
+   "evidence_ids": [
+    "son55/E018",
+    "son55/E019"
+   ],
+   "counterevidence": "Gmail low overlap",
+   "allowed_conclusion": "Cross-task sub-task reuse occurs where overlap exists"
+  },
+  {
+   "claim_id": "C6",
+   "text": "Sub-task-based screen classification beats text- and vision-based classifiers",
+   "setting": "269 screens",
+   "baseline_control": "Two published classifiers",
+   "selection_vs_test": "Authors' screens",
+   "result_denominator": "3 FP / 0 FN vs 38/14 and 57/28",
+   "evidence_ids": [
+    "son55/E030"
+   ],
+   "counterevidence": "Evaluation labels by authors",
+   "allowed_conclusion": "Better node assignment on this set"
+  }
+ ],
+ "base_seat_for_signatures_gap_claims": "son55",
+ "evidence": [
+  {
+   "evidence_id": "sol/E001",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§4.1",
+   "quote": "successfully completes the user instruction, it stores the task as a collection of node and sub-task pairs.",
+   "support_explanation": "完成后任务/子任务图被保存，支持非权重留存。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E002",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§3.3",
+   "quote": "These errors can be detected by monitoring the screen changes and tracking the visited app screens.",
+   "support_explanation": "UI执行/循环反馈能纠错，但不验证语义目标完成。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E003",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§5.1",
+   "quote": "If the value of the attribute matches that of the subtask parameter, the attribute’s value is replaced with the corresponding parameter name.",
+   "support_explanation": "去实例化动作支持新参数复用。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E004",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§5.2",
+   "quote": "In any case, the provided example always demonstrates a correct answer.",
+   "support_explanation": "作者假定供fewshot的轨迹正确；独立自动验证未证明。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E005",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.2.1",
+   "quote": "When an error occurred, we allowed the system three additional attempts for self-correction.",
+   "support_explanation": "主结果含人工错误识别与额外重试，须限制自主单次结论。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E006",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.2.1",
+   "quote": "To ensure a fair evaluation in the comparison study, we did not utilize",
+   "support_explanation": "比较研究未用HITL修复；与消融研究的修复不同。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E007",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.3.1",
+   "quote": "If it fails to correct itself, we mark the task as a failure and manually repair the error using the HITL task repair.",
+   "support_explanation": "冷启动失败后人工修复被存入记忆，98.75%不是全自主学习收益。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E008",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.3.2",
+   "quote": "achieves near-perfect accuracy (98.75%) during the warm-start phase, with a single exception observed in Uber Eats.",
+   "support_explanation": "80任务变参回放79成功，作者报告。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E009",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.3.1",
+   "quote": "The total cost for this random exploration was $10.78",
+   "support_explanation": "披露预探索成本；需与冷/暖启动及人工修复一起摊销。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E010",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.3.5",
+   "quote": "dramatically reduces latency and cost, achieving improvements of 62.5% and 68.8% over the baseline, respectively.",
+   "support_explanation": "同题变参条件下时延/成本收益。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E011",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.2.2",
+   "quote": "due to an error while recalling a task from memory.",
+   "support_explanation": "无HITL比较中暖启动多一次失败；不是普遍准确率提升。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E012",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.5",
+   "quote": "We recruited 23 participants (16 male, 7 female, mean age 23.2, SD=3.5, range=19-32)",
+   "support_explanation": "用户研究分母，与主任务评测统计分开。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E013",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§9",
+   "quote": "does not support mobile apps that lack text representation of their screen layouts",
+   "support_explanation": "文本可访问性限定支持范围。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E014",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.3.1",
+   "quote": "This baseline is designed to share the same prompts as",
+   "support_explanation": "有提示对齐的Derive-only控制，但分解与记忆效果仍捆绑。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E015",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.2.3",
+   "quote": "Comparisons were made only for tasks successfully completed by all three systems (77 tasks).",
+   "support_explanation": "成本比较条件选择，仅共同成功任务，不含失败总成本。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E016",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§5.2",
+   "quote": "Therefore, when the attribute-based adaptation fails, we resort to LLM to re-derive the action once again.",
+   "support_explanation": "匹配失败fallback路径明确。",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "son55/E001",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Abstract",
+   "quote": "The results indicate that MobileGPT can automate and learn new tasks with 82.7% accuracy, and is able to adapt them to different contexts with near perfect (98.75%) accuracy while reducing both latency and cost by 62.5% and 68.8%, respectively, compared to the GPT-4 powered baseline.",
+   "support_explanation": "Headline claims; note 98.75% and the 62.5/68.8% figures come from the ablation setting (Sec 7.3), not from the comparative Table 1.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E002",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 4.1 Memory Structure",
+   "quote": "MobileGPT organizes its memory in the form of a transition graph that encapsulates the following key information:",
+   "support_explanation": "Per-app graph of page nodes, sub-task edges (action sequences) and tasks as sequences of (node, sub-task).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E003",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 4.1 Task",
+   "quote": "After MobileGPT successfully completes the user instruction, it stores the task as a collection of node and sub-task pairs.",
+   "support_explanation": "Write rule: store on (LLM-declared) completion; no separate executable or outcome gate.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E004",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 5.1 Generalizing Actions",
+   "quote": "When learning a new sub-task, MobileGPT stores actions in a generalized format to ensure that they are reusable across different contexts.",
+   "support_explanation": "Stored actions are de-instantiated (UI attributes and task parameters replaced by placeholders).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E005",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 5.2 In-context Action Adaptation",
+   "quote": "Specifically, the example includes a prior user instruction, an abbreviated version of the past screen representation, and its correct output.",
+   "support_explanation": "When attribute-based adaptation fails, a stored correct example is used as a one-shot conditioning prompt.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E006",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 3.3 Human-in-the-loop task repair",
+   "quote": "In case self-correction falls short, MobileGPT provides mechanisms for users to correct the LLM’s mistakes themselves.",
+   "support_explanation": "Human repairs are written into the stored path.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E007",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 3.3 Dual Strategy Failure Handling",
+   "quote": "we have heuristically identified two main types of commonly occurring errors and developed a rule-based self-feedback generation module.",
+   "support_explanation": "Rule-based, within-episode feedback (invalid UI index, no screen change, loops); not itself retained.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E008",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.2.1 Procedure",
+   "quote": "A task was considered successful if the system navigated to the final screen within these three attempts.",
+   "support_explanation": "Success = reaching the final screen with up to three extra self-correction attempts (lenient, arrival-based).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E009",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.2.1 Procedure",
+   "quote": "To ensure a fair evaluation in the comparison study, we did not utilize",
+   "support_explanation": "Table 1 comparison excludes the HITL repair feature (sentence continues: MobileGPT's HITL task repair feature).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E010",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.2.2 Accuracy",
+   "quote": "had one additional failure than its cold-start due to an error while recalling a task from memory.",
+   "support_explanation": "Autonomous warm-start (82.16%) is not better than cold-start (82.7%): memory does not raise accuracy without human repair.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E011",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.1 Procedure",
+   "quote": "If it fails to correct itself, we mark the task as a failure and manually repair the error using the HITL task repair.",
+   "support_explanation": "Ablation study (source of 98.75%) lets the authors repair failures and store the repaired path.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E012",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.2 Task Success Rate",
+   "quote": "This improvement over the cold-start accuracy is due to the user’s ability to correct task executions before saving them to memory",
+   "support_explanation": "Authors attribute the cold-to-warm accuracy rise to human correction before saving, not autonomous learning.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E013",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.1 Baseline",
+   "quote": "This baseline is designed to share the same prompts as MobileGPT while following the traditional Derive-only structure employed in prior approaches",
+   "support_explanation": "Same-prompt, Derive-only baseline isolates structure+memory from prompt wording.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E014",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.5 Warm start latency & cost",
+   "quote": "dramatically reduces latency and cost, achieving improvements of 62.5% and 68.8% over the baseline, respectively.",
+   "support_explanation": "Warm-start (same high-level task, new parameters) efficiency gain; author report on 80 tasks of the authors' dataset.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E015",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.1 MobileGPT Dataset",
+   "quote": "The main contribution of MobileGPT lies in improving performance for repeated tasks and sub-tasks.",
+   "support_explanation": "Evaluation set was built by the authors to exhibit repetition; the claimed benefit is efficiency on repeated tasks.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E016",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.1",
+   "quote": "Each task is accompanied by two user instructions with different task parameters—totaling 160 user instructions",
+   "support_explanation": "Warm-start test instance is a sibling instruction of the cold-start instance used to build the memory.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E017",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.1 Procedure",
+   "quote": "The cold-start executes the first instruction set from each high-level task, and the warm-start executes the second instruction set.",
+   "support_explanation": "Construction (cold) and test (warm) streams share the high-level task; reuse is by design, cross-task transfer is not tested for accuracy.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E018",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.2",
+   "quote": "Notably, when MobileGPT makes an error during a subtask and receives a correction, either through self-feedback generation or HTIL task repair, it avoids repeating the same mistake in other tasks involving overlapping subtasks.",
+   "support_explanation": "Evidence of sub-task-level reuse across tasks (qualitative example: Telegram contact search).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E019",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.4 Cold-start latency & cost",
+   "quote": "Conversely, Gmail shows a low memory hit rate (6.7%), as its tasks have few overlapping sub-tasks.",
+   "support_explanation": "Memory benefit depends on overlap; memory hit rates reported per app (Table 3).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E020",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.3 Step Accuracy",
+   "quote": "In our evaluation, out of 327 primitive actions, 53 actions (16.2%) were not adaptable through attribute-based adaptation and therefore required in-context adaptation via LLM.",
+   "support_explanation": "Fallback path frequency; all 53 adapted correctly according to authors.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E021",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.5 User Study",
+   "quote": "with Mann-Whitney U Test results of",
+   "support_explanation": "Only statistical tests in the paper are for the 23-participant usability study, not for task success.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E022",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.1 Offline exploration",
+   "quote": "These app pages accounted for 89.65% (104 out of 116) of the total app pages required during the evaluation.",
+   "support_explanation": "Memory is pre-populated by random exploration of the evaluation apps; page coverage of the test apps is high.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E023",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.1 Offline exploration",
+   "quote": "The total cost for this random exploration was $10.78, which is deemed reasonable considering that this preparation is a one-time process.",
+   "support_explanation": "Construction cost for offline exploration is reported.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E024",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.2.3 footnote",
+   "quote": "At the time of evaluation, the LLM costs (per 1K tokens) were: GPT-4-Turbo $0.01, GPT-3.5 Turbo $0.003",
+   "support_explanation": "Cost computed from token prices.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E025",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.2.3 footnote",
+   "quote": "Comparisons were made only for tasks successfully completed by all three systems (77 tasks).",
+   "support_explanation": "Cost/latency comparison in Sec 7.2 uses 77 of 185 tasks (successes only).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E026",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.3.3",
+   "quote": "The step accuracy of the baseline is 92.4%",
+   "support_explanation": "Baseline step accuracy; MobileGPT cold 95.5%, warm 99.8% (Table 2).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E027",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 9 Discussion",
+   "quote": "The current implementation of MobileGPT does not support mobile apps that lack text representation of their screen layouts",
+   "support_explanation": "Stated applicability boundary.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E028",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 7.2.1 Procedure",
+   "quote": "We manually monitored each step to identify errors during task execution.",
+   "support_explanation": "Success labelling is manual by the authors; annotator count and agreement not reported.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E029",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Table 1",
+   "quote": "Overall 74.7% 67.4% 82.7% 82.16%",
+   "support_explanation": "Overall success: AutoDroid 74.7%, AppAgent 67.4%, MobileGPT cold 82.7%, warm 82.16% (185 tasks, 18 apps, no HITL).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E030",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 4.2",
+   "quote": "In our evaluation, where MobileGPT encountered and classified 269 app screens, this method showed only 3 false positives (misclassifying different app pages as the same node) and no false negatives",
+   "support_explanation": "Screen classification by sub-task requirements vs two baseline classifiers (38/57 false positives).",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E031",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 5.2",
+   "quote": "The output in the example could either be an action originally generated by the LLM during the Derive phase or one that has been modified by the user through the HITL task repair.",
+   "support_explanation": "Stored examples can be human-written, so the library partly grows through supervision.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E032",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 5.2",
+   "quote": "Third, UIs may change unexpectedly with app updates.",
+   "support_explanation": "Staleness is handled by LLM re-derivation fallback; no versioning or invalidation described.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E033",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 8 Related Work",
+   "quote": "To the best of our knowledge, MobileGPT is the first to explore caching within the context of an LLM-based task automator.",
+   "support_explanation": "Author novelty claim; AutoDroid's exploration-built app knowledge is described but not compared as memory.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E034",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 5.2",
+   "quote": "However, LLMs are inherently non-deterministic.",
+   "support_explanation": "Nondeterminism acknowledged; no repeated runs or variance reported for success rates.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E035",
+   "material_id": "M-2312.03003",
+   "material_sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "Sec 1 Introduction",
+   "quote": "We observed that tasks that would take just over 30 seconds for a human could take more than two minutes for an LLM, and cost over a dollar each time they are performed.",
+   "support_explanation": "Anecdotal motivation for the cost/latency gap.",
+   "kind": "author_report",
+   "seat_material_id": "2312.03003-fulltext",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "opus/O01",
+   "material_id": "M-2312.03003",
+   "sha256": "82268715ed2782dcc079cea2f5f22200acecf66c1cc34e27cae71042fe881791",
+   "locator": "§7.2.1 Procedure",
+   "quote": "it utilizes the memory to execute the same task again",
+   "support_explanation": "In the comparative study the warm start re-runs the same task, so Table 1 warm (82.16%) vs cold (82.7%) tests recall of an identical task, not transfer.",
+   "kind": "author_report",
+   "source_seat": "opus55"
+  }
+ ],
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "Step 1 boundary: LLM handles Explore/Select/Derive while attribute-pattern matching replays known actions (partial seam); step 2 typed artifact: function-call format sub-tasks and parameterised actions (met); step 3 loop closed by obtainable signals: rule-based screen/index feedback and human repair, no solver verdict (partial); step 4 ablation of the verification step: absent; step 5 cost accounting: met (latency, $ and exploration cost) but cost comparison restricted to jointly successful tasks",
+    "success_checks": "Typed handoffs and reusable by-products (sub-task library) present; per-component collapse-on-ablation absent",
+    "failure_checks": "Built mostly from off-the-shelf prompts and tools, human repair supplies the verification",
+    "evidence_ids": [
+     "son55/E002",
+     "son55/E004",
+     "son55/E007",
+     "son55/E014",
+     "son55/E025"
+    ],
+    "reason": "Task is decomposed into function-call sub-tasks routed to LLM phases or deterministic replay, and by-products are accumulated as reusable capital.",
+    "taken_from_seat": "son55"
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "Only the retrieved-reference-instance variant: a stored correct example is injected as a one-shot prompt when rule-based adaptation fails; no schema learning or category holdout",
+    "success_checks": "n/a",
+    "failure_checks": "No equal-budget nearest-neighbour or longer-context comparison",
+    "evidence_ids": [
+     "son55/E005",
+     "son55/E020"
+    ],
+    "reason": "Distinct recall operation (conditioning on a stored example) needed beyond decomposition; weak because it is a fallback covering 16.2% of actions.",
+    "taken_from_seat": "son55"
+   }
+  ],
+  "reason": "Both seats agree (C25 primary, C03 supporting as recall fallback); verified against §3–§5.",
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "taxonomy.json b115a69b; conditions.json 8704c7da; patterns/ 52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:index_experience_for_reuse/H03.1",
+      "status": "met",
+      "reason": "Case unit is a parameterised sub-task with attribute/parameter placeholders (re-bindable)",
+      "evidence_ids": [
+       "son55/E004"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/H03.2",
+      "status": "partial",
+      "reason": "Write on LLM-declared completion plus optional human repair; no executable/outcome gate, and human-verified cases weaken the improves-with-use claim",
+      "evidence_ids": [
+       "son55/E003",
+       "son55/E011",
+       "son55/E031"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/H03.3",
+      "status": "partial",
+      "reason": "Recall by high-level-task match then node/sub-task match with LLM fallback; no study of irrelevant-injection harm",
+      "evidence_ids": [
+       "son55/E005",
+       "son55/E020"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/H03.5",
+      "status": "partial",
+      "reason": "Cold/warm split exists but warm task is a sibling of the building task; memory built on repaired test tasks in the ablation; no memory-off with structure kept",
+      "evidence_ids": [
+       "son55/E016",
+       "son55/E017",
+       "son55/E011"
+      ]
+     },
+     {
+      "id": "H04-structure-note:rsi:index_experience_for_reuse/H04.2",
+      "status": "partial",
+      "reason": "Folded from son55's duplicate H04 entry: Pages (nodes) indexed by required UI elements for sub-tasks, with content kept in edges; no separate index structure study",
+      "evidence_ids": [
+       "son55/E002",
+       "son55/E030"
+      ]
+     },
+     {
+      "id": "H04-structure-note:rsi:index_experience_for_reuse/H04.5",
+      "status": "partial",
+      "reason": "Folded from son55's duplicate H04 entry: Screen-classification ablation against two classifiers and cost reported, but no flat-retrieval baseline or scaling curve",
+      "evidence_ids": [
+       "son55/E030",
+       "son55/E023"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/F5",
+      "status": "applies",
+      "reason": "Headline warm accuracy (98.75%) rests on human-repaired paths stored before recall: library growth through supervision.",
+      "evidence_ids": [
+       "son55/E011",
+       "son55/E012",
+       "son55/E031"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/F4",
+      "status": "applies",
+      "reason": "Autonomous path stores on LLM-declared completion without an external outcome gate.",
+      "evidence_ids": [
+       "son55/E003"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/F3",
+      "status": "partial",
+      "reason": "Memory is not built from the scored instruction itself, but from the sibling instruction of the same task (ablation) or the identical task (comparison), and the evaluation apps are pre-explored (89.65% page coverage).",
+      "evidence_ids": [
+       "son55/E016",
+       "son55/E017",
+       "son55/E022",
+       "opus/O01"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "son55/E002",
+     "son55/E004",
+     "son55/E005",
+     "son55/E014"
+    ],
+    "reason": "De-instantiated near-raw cases are stored, retrieved by task/sub-task and re-bound to new arguments.",
+    "taken_from_seat": "son55"
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   "H03: add attribute-based parameter generalisation of UI actions as a concrete re-bindable-unit variant, and flag human-repair as a write-gate variant overlapping index_experience_for_reuse/F5 (proposal only, unchecked)."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H03"
+   },
+   "operation_correspondence": "Typed sub-task artifacts and reusable by-products -> domain: de-instantiated precedent cases that are retrieved and re-bound",
+   "conditions_and_differences": "RS card requires a verifiable solver loop; here recall replays unverified LLM/human-produced actions, so the domain H03 write-gate condition is only partially met",
+   "evidence_ids": [
+    "son55/E002",
+    "son55/E004",
+    "son55/E007"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H03"
+   },
+   "operation_correspondence": "Stored example conditions the LLM on adaptation failure -> domain: adapt retrieved precedent",
+   "conditions_and_differences": "Fallback only; no holdout of categories",
+   "evidence_ids": [
+    "son55/E005",
+    "son55/E020"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "local:2312.03003-1",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H03.md step5"
+   ],
+   "applies_when": "分别报告自主构建与人工修复后回放、区分重试/构造任务与真正留出",
+   "applicable": true,
+   "status": "partial",
+   "reason": "比较研究不人工修复但人工监测/最多三次重试；98.75%来自修复后同任务变参而非独立新族。",
+   "evidence_ids": [
+    "sol/E005",
+    "sol/E006",
+    "sol/E007",
+    "sol/E008"
+   ],
+   "score_item": "E.holdout",
+   "taken_from_seat": "sol"
+  },
+  {
+   "id": "local:2312.03003-2",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "C25 steps4–5; H03 step5"
+   ],
+   "applies_when": "保持相同提示/底模、移除记忆或分解进行独立控制",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Derive-only同提示对照有用；记忆/分解及人工修复收益仍未全部因子化。",
+   "evidence_ids": [
+    "sol/E014",
+    "sol/E007"
+   ],
+   "score_item": "E.causality",
+   "taken_from_seat": "sol"
+  },
+  {
+   "id": "local:2312.03003-3",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H03.md steps1–4"
+   ],
+   "applies_when": "经验应去实例化、验证并能失败回退",
+   "applicable": true,
+   "status": "partial",
+   "reason": "属性参数化及LLM fallback明确；独立语义成功验证、版本回滚不完整。",
+   "evidence_ids": [
+    "sol/E001",
+    "sol/E003",
+    "sol/E004",
+    "sol/E016"
+   ],
+   "score_item": "X",
+   "taken_from_seat": "sol"
+  },
+  {
+   "id": "local:2312.03003-4",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md evidence expectations"
+   ],
+   "applies_when": "披露学习/探索、失败与人工修复全成本并报告摊销",
+   "applicable": true,
+   "status": "partial",
+   "reason": "预探索$10.78与冷暖成本披露；共同成功子集、人工耗时/失败和长期摊销不足。",
+   "evidence_ids": [
+    "sol/E009",
+    "sol/E010",
+    "sol/E015"
+   ],
+   "score_item": "E.cost",
+   "taken_from_seat": "sol"
+  },
+  {
+   "id": "local:2312.03003-5",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md evidence expectations"
+   ],
+   "applies_when": "给主任务置信区间/多流顺序方差而非只用户研究显著性",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "80变参任务及185比较有失败分母；主结果无多次运行/流顺序区间，用户研究显著性不替代。",
+   "evidence_ids": [
+    "sol/E008",
+    "sol/E011",
+    "sol/E012"
+   ],
+   "score_item": "E.statistics",
+   "taken_from_seat": "sol",
+   "aggregate_note": "Same check as son55 local-2 (unmet).",
+   "merged_seat_ids": [
+    "son55:local:2312.03003-2"
+   ]
+  },
+  {
+   "id": "local:2312.03003-6",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper-internal: Table 1 (no HITL) vs Sec 7.3.2 (with HITL)"
+   ],
+   "question": "Is the accuracy claimed for learned/recalled tasks free of human repair?",
+   "applies_when": "A learning claim is made about autonomous agent memory",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Both numbers are reported (82.16% without, 98.75% with repair) but the abstract headline uses the repaired one.",
+   "evidence_ids": [
+    "son55/E001",
+    "son55/E010",
+    "son55/E012",
+    "son55/E029"
+   ],
+   "score_item": "E.measurement",
+   "taken_from_seat": "son55",
+   "seat_original_id": "local:2312.03003-1",
+   "aggregate_note": "Re-identified from son55 local-1 (ID collision with sol local-1, a different check)."
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (1)"
+   ],
+   "question": "Is the cost of the added structure reported?",
+   "applies_when": "Decomposition adds calls or phases",
+   "applicable": true,
+   "status": "met",
+   "reason": "Latency and $ per task for cold and warm, exploration cost $10.78, device power and memory are reported; only jointly successful tasks (77/185) enter the cost comparison.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E023",
+    "son55/E024",
+    "son55/E025"
+   ],
+   "score_item": "E.cost",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Verified against the pinned text."
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (2)"
+   ],
+   "question": "Per-component ablation isolating the load-bearing step?",
+   "applies_when": "Multi-phase pipeline with several mechanisms",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Same-prompt Derive-only baseline isolates structure+memory jointly; no ablation of self-feedback, attribute adaptation, in-context adaptation, or HITL separately.",
+   "evidence_ids": [
+    "son55/E013",
+    "son55/E020"
+   ],
+   "score_item": "E.causality",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Verified against the pinned text."
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (3)"
+   ],
+   "question": "Prompts and implementation disclosed?",
+   "applies_when": "Results could be prompt artifacts",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Prompts are not reproduced in the pinned material; the paper links a project page and dataset (not inspected).",
+   "evidence_ids": [],
+   "score_item": "E.causality",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Verified against the pinned text."
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (5)"
+   ],
+   "question": "Fair comparison against unified end-to-end baselines?",
+   "applies_when": "Pipeline claimed better than monolithic agent",
+   "applicable": true,
+   "status": "met",
+   "reason": "AutoDroid, AppAgent and a same-prompt Derive-only custom baseline are all run on the same devices and tasks.",
+   "evidence_ids": [
+    "son55/E013",
+    "son55/E029"
+   ],
+   "score_item": "E.causality",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Verified against the pinned text."
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/H03.2",
+   "version": "domain-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H03.md#Step-by-Step 2",
+    "conditions.json index_experience_for_reuse S2/F5"
+   ],
+   "question": "Are writes gated by an external check rather than the model's own word or manual curation?",
+   "applies_when": "Cases are admitted to a store reused later",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Autonomous path stores on LLM-judged completion; headline accuracy uses human-verified repairs.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E011",
+    "son55/E012"
+   ],
+   "score_item": "X",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Verified against the pinned text."
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/H03.5",
+   "version": "domain-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H03.md#Step-by-Step 5",
+    "patterns/main/index_experience_for_reuse.md#Outcome contrast evidence counts (construction/evaluation separation)"
+   ],
+   "question": "Is store construction separated from evaluation, with a retained-store ablation?",
+   "applies_when": "Reuse gain is claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Cold vs warm streams differ by instruction, but reuse of the same task type is built in, repaired in the ablation, and cross-task generalisation is only supported by cost examples.",
+   "evidence_ids": [
+    "son55/E016",
+    "son55/E017",
+    "son55/E011"
+   ],
+   "score_item": "E.holdout",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Verified against the pinned text."
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/H04.5",
+   "version": "domain-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H04.md#Step-by-Step 5"
+   ],
+   "question": "Structure ablation vs flat retrieval and maintenance cost at scale?",
+   "applies_when": "Store shape is argued to matter",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "H04 is not a final match (single entry per main card); the screen-classifier comparison is kept as evidence under H03 conditions. Not used for scoring.",
+   "evidence_ids": [
+    "son55/E030",
+    "son55/E023",
+    "son55/E019"
+   ],
+   "score_item": "E.causality",
+   "taken_from_seat": "son55",
+   "aggregate_note": "Dropped with the duplicate H04 entry."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "The retained memory measurably improves later runs in latency/cost on sibling instructions of the same task (and anecdotally across tasks sharing sub-tasks). It does not improve autonomous accuracy (Table 1 warm 82.16% vs cold 82.7%); the 98.75% warm accuracy includes stored human repairs. Retained improvement is therefore efficiency, not autonomous capability.",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "On the authors' repeated-task set, a stored per-app sub-task memory lets sibling instructions run with far fewer LLM calls (latency -62.5%, cost -68.8% vs a same-prompt Derive-only baseline) while autonomous success stays at cold-start level (~82%); near-perfect recall (98.75%) holds only after human repair is stored (author-reported, single runs).",
+  "unresolved": [
+   "Autonomous accuracy gain from memory not shown.",
+   "Generalisation to unseen task types and under app updates untested.",
+   "Prompts not in pinned text.",
+   "No run variance."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Repeated-task cost/latency and run-to-run inconsistency are concrete (motivation anecdotal: >2 min, >$1 per task), and AutoDroid/AppAgent are run as baselines. But the novelty claim (\"first to explore caching\" in LLM task automators) is not differentiated from AutoDroid's exploration-built app memory, agent-memory/workflow-reuse neighbours are absent, and the reliability half of the stated gap is not what the memory addresses (warm 82.16% vs cold 82.7%). Neighbour comparison and residue incomplete: anchor 2.",
+   "evidence_ids": [
+    "son55/E033",
+    "son55/E035",
+    "son55/E010",
+    "son55/E029",
+    "sol/E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "sol"
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Sub-task decomposition, de-instantiated parameterised actions, attribute-based re-binding and one-shot in-context fallback are reconstructable and give a testable prediction (benefit tracks memory hit rate; Gmail 6.7%). The write-gate assumption (LLM-declared completion) is thin.",
+   "evidence_ids": [
+    "son55/E002",
+    "son55/E004",
+    "son55/E005",
+    "son55/E019",
+    "sol/E003",
+    "sol/E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "both"
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Memory structure, store-on-completion rule, recall path, node classification and fallback are reconstructable; boundaries (no text layout, app updates, irreversible actions) stated. No outcome gate, versioning or invalidation; prompts not in the pinned text.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E027",
+    "son55/E032",
+    "sol/E001",
+    "sol/E004"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "both"
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Success = reaching the final screen, judged step by step by the authors; phase/step accuracies (Table 2), token-priced cost, latency and memory hit rates are objective. Weakness: unblinded author labelling without agreement. Per A2, the success-only 77/185 cost subset is charged to E.cost and the human repair inside 98.75% to E.holdout/claim_support; the abstract's mixing of settings is recorded as expectation local-6. Borderline 2/3; 3 avoids double deduction.",
+   "evidence_ids": [
+    "sol/E005",
+    "sol/E008",
+    "son55/E008",
+    "son55/E028",
+    "son55/E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "sol"
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Same-prompt Derive-only baseline isolates structure+memory jointly from prompt wording; no memory-off-with-decomposition arm and no separate ablation of self-feedback, attribute/in-context adaptation or HITL; AutoDroid/AppAgent differ in representation and prompts.",
+   "evidence_ids": [
+    "son55/E013",
+    "sol/E014",
+    "son55/E019",
+    "son55/E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "both"
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Headline numbers rest on privileged signals: Table 1 successes allow up to three extra attempts after evaluator-identified errors (A2: oracle retry -> E.holdout), and the 98.75% warm accuracy uses cold-start failures repaired by the authors and stored. Warm tests are the identical task (comparison, opus/O01) or a sibling instruction of the same task (ablation); evaluation apps were pre-explored (89.65% of pages). Cross-task reuse is anecdotal. Not 0: construction and scored instructions differ and the efficiency claim matches its stated repeated-task scope.",
+   "evidence_ids": [
+    "sol/E005",
+    "son55/E028",
+    "sol/E007",
+    "son55/E011",
+    "son55/E012",
+    "son55/E016",
+    "son55/E017",
+    "son55/E022",
+    "opus/O01"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "sol"
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Denominators (185 tasks, 80 tasks, 327 actions) and failures given; one run per task, no intervals or seeds; nondeterminism acknowledged; tests only in the user study (A2 ladder level 1).",
+   "evidence_ids": [
+    "son55/E034",
+    "son55/E021",
+    "sol/E008",
+    "sol/E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "both"
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Per-task latency and $ (token prices given) for cold and warm starts, one-time exploration cost ($10.78) and on-device power/memory are reported; cost is the paper's main outcome and is measured, not estimated. Not 4: the §7.2 comparison is conditioned on 77 jointly successful tasks; human-repair effort and retries are not costed; long-run amortisation is projected.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E023",
+    "son55/E024",
+    "son55/E025",
+    "sol/E009",
+    "sol/E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "son55"
+  }
+ },
+ "score": {
+  "raw": 60.0,
+  "display": 60.0,
+  "lower": 60.0,
+  "upper": 60.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "weights": {
+   "G": 15,
+   "M": 20,
+   "X": 20,
+   "E.measurement": 10,
+   "E.causality": 15,
+   "E.holdout": 10,
+   "E.statistics": 5,
+   "E.cost": 5
+  },
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4; unknown items bound at 0/4 for L/U; raw=null while any unknown remains"
+ },
+ "resolutions": [
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "son55_value": [
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ]
+   ],
+   "decision": "sol",
+   "final_value": [
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "reason": "BATCH_CONTRACT: one match entry per main card with its best sub; son55 listed index_experience_for_reuse twice (H03, H04). The load-bearing move is re-bindable precedent cases (H03); the graph/node-index aspects are kept as H04-structure notes inside the H03 entry.",
+   "evidence_ids": [
+    "son55/E002",
+    "son55/E004",
+    "sol/E003"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "expectations[local:2312.03003-1]",
+   "sol_value": "partial (E.holdout)",
+   "son55_value": "partial (E.measurement: headline mixes settings)",
+   "decision": "sol",
+   "final_value": "partial (E.holdout)",
+   "reason": "Not flagged mechanically (same status) but the same local ID names different checks. sol's check kept; son55's re-identified as local-6 (partial, verified: abstract pairs the repaired 98.75% with no-HITL 82.7%).",
+   "evidence_ids": [
+    "sol/E005",
+    "son55/E001"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "expectations[local:2312.03003-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "ID collision: sol local-2 = causal isolation (partial; Derive-only same-prompt baseline exists, components not factorised); son55 local-2 = statistics (unmet), merged into local-5.",
+   "evidence_ids": [
+    "sol/E014",
+    "son55/E013"
+   ],
+   "score_impact": "consistent with E.causality=2"
+  },
+  {
+   "field_path": "expectations[local:2312.03003-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: parameterisation and fallback explicit; no independent semantic success gate or rollback (son55 H03.2 partial: same fact).",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E016",
+    "son55/E003"
+   ],
+   "score_impact": "consistent with X=3"
+  },
+  {
+   "field_path": "expectations[local:2312.03003-4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: exploration $10.78 and cold/warm cost disclosed; success-only subset and human/failed-run costs missing.",
+   "evidence_ids": [
+    "sol/E009",
+    "sol/E015"
+   ],
+   "score_impact": "consistent with E.cost=3"
+  },
+  {
+   "field_path": "expectations[local:2312.03003-5].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "same_supported_fact",
+   "final_value": "unmet",
+   "reason": "son55 recorded the same check under its local-2 (unmet): single runs, no intervals.",
+   "evidence_ids": [
+    "son55/E034",
+    "son55/E021"
+   ],
+   "score_impact": "consistent with E.statistics=1"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "sol did not record this canonical check; son55's status verified: latency, $ per task, exploration cost and device power reported.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E023",
+    "son55/E024"
+   ],
+   "score_impact": "consistent with E.cost=3"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "sol did not record this canonical check; son55's status verified: Derive-only baseline isolates structure+memory jointly only.",
+   "evidence_ids": [
+    "son55/E013"
+   ],
+   "score_impact": "consistent with E.causality=2"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-3].status",
+   "sol_value": null,
+   "son55_value": "unknown",
+   "decision": "son55",
+   "final_value": "unknown",
+   "reason": "sol did not record this canonical check; son55's status verified: prompts are not reproduced in the pinned text (project page not inspected), so unknown rather than unmet.",
+   "evidence_ids": [
+    "son55/E001"
+   ],
+   "score_impact": "none (expectation status, not a rating)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "sol did not record this canonical check; son55's status verified: AutoDroid, AppAgent and a same-prompt Derive-only baseline are run on the same tasks.",
+   "evidence_ids": [
+    "son55/E013",
+    "son55/E029"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/H03.2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "sol did not record this canonical check; son55's status verified: writes on LLM-declared completion; headline accuracy uses human-verified repairs.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E031"
+   ],
+   "score_impact": "consistent with X=3"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/H03.5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "sol did not record this canonical check; son55's status verified: cold/warm streams differ by instruction only; repaired construction; no accuracy holdout across task types.",
+   "evidence_ids": [
+    "son55/E016",
+    "son55/E017"
+   ],
+   "score_impact": "consistent with E.holdout=1"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/H04.5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "not_applicable",
+   "reason": "Follows the domain resolution: H04 is not a final match, so its step-5 check is not applicable; the facts (screen-classifier comparison, no scaling curve) are retained under H03.",
+   "evidence_ids": [
+    "son55/E030"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "Re-read §1, §8: \"first to explore caching\" is asserted without differentiating AutoDroid's exploration-built app memory, and agent-memory neighbours are absent; the gap's reliability half is not addressed by memory per the paper's own Table 1. son55's own G reason concedes both points; they fit anchor 2 (neighbour comparison/residue incomplete) rather than 3.",
+   "evidence_ids": [
+    "son55/E033",
+    "son55/E010",
+    "son55/E029"
+   ],
+   "score_impact": "-15/4 = -3.75 vs son55"
+  },
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "son55's three deductions: manual unblinded success labelling (valid, kept: not 4), the 77/185 success-only cost subset (a cost-comparison selection, charged to E.cost under A2) and human repair inside 98.75% (privileged information, charged to E.holdout and claim_support). Charging them again here would double count.",
+   "evidence_ids": [
+    "son55/E028",
+    "son55/E025",
+    "son55/E011"
+   ],
+   "score_impact": "+10/4 = +2.5 vs son55"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "Verified §7.2.1 and §7.3.1: evaluator-identified errors gate three extra attempts for all systems (A2: oracle retry -> E.holdout), the adaptation headline uses author-repaired stored paths, warm tests are the identical task or a sibling instruction, and evaluation apps are pre-explored. son55 lists the same facts but does not apply A2 to the evaluator-gated retries. Privileged signals behind two of three headline numbers place this at 1.",
+   "evidence_ids": [
+    "sol/E005",
+    "son55/E028",
+    "sol/E007",
+    "son55/E012",
+    "opus/O01"
+   ],
+   "score_impact": "-10/4 = -2.5 vs son55"
+  },
+  {
+   "field_path": "ratings.E.cost",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "Cost/latency is the central measured outcome: per-task $ from token prices, latency, cold vs warm, exploration $10.78 and device power. sol's gaps (success-only subset, uncosted human repair, amortisation) are real and keep it below 4, but the reporting exceeds anchor 2.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E023",
+    "son55/E024",
+    "sol/E009"
+   ],
+   "score_impact": "+5/4 = +1.25 vs sol"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "paper.title",
+   "seat_values": {
+    "sol": "Explore, Select, Derive, and Recall: Augmenting LLM with Human-like Memory for Mobile Task Automation",
+    "son55": "Explore, Select, Derive, and Recall: Augmenting LLM with Human-like Memory for Mobile Task Automation"
+   },
+   "final_value": "MobileGPT: Augmenting LLM with Human-like App Memory for Mobile Task Automation",
+   "reason": "Both seats kept the manifest's pre-v3 title in paper.title (each noted the discrepancy). The pinned v3 material is authoritative for the title; the manifest title is preserved as paper.manifest_title. Identity (ID, version, sha256) unchanged.",
+   "evidence_ids": [
+    "son55/E001"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read abstract, §3–§5, §7 (Tables 1–2) first. Memory of page nodes/sub-tasks/parameterised actions is stored after a run and replayed. Table 1 (no HITL): cold 82.7% vs warm 82.16% on the same task, so memory does not raise autonomous accuracy. Ablation: 98.75% warm on sibling instructions after authors repaired cold-start failures (§7.3.2 attributes the rise to user correction). Real gain = latency -62.5% / cost -68.8% on repeated tasks.",
+  "integrity_checks": "Both seats on 2312.03003v3, material sha256 82268715 matches manifest; input_hash/rubric hash identical; seat hashes equal conflicts.json; all quotes verified; C25/C03 parents valid; son55 duplicated a main card (resolved). Title discrepancy handled as a shared correction.",
+  "core_claim_check": "son55 hint confirmed in the original: warm 82.16% is not above cold 82.7% (Table 1; one extra recall failure) and the abstract's 98.75% includes stored human repair (§7.3.1 procedure, §7.3.2 explanation). Claim scoped to efficiency on repeated tasks.",
+  "retention_check": "Failure denominators: 185 tasks (Table 1) and 80 tasks (ablation), single runs. Selection vs test: memory built on the identical task or its sibling instruction; apps pre-explored. Budget/privileged: evaluator-gated retries (all systems), human repair (ablation, MobileGPT only benefits via memory), cost comparison on 77 jointly successful tasks. \"Retained\" holds for efficiency, not for an autonomous accuracy improvement."
+ },
+ "input_seat_hashes": {
+  "sol": "cfa77ddd4169711f1a1aef658de113d873af8c98964c3748ce0d9f43220f7fe2",
+  "son55": "834e2ebec78a607129eed7722ef72e4b49eeed5c5939f95d3f90869dc764fef6"
+ },
+ "final_record_hash": "4fc02839ba55473d9ec07404794f5f228091a4b3a140e3134e9d15a119a051bd"
+}

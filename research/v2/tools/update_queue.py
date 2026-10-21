@@ -23,13 +23,15 @@ def main() -> int:
     bdir = run_dir / "batches" / args.batch
     mani = json.load(open(bdir / "manifest.json"))
     att = mani["aggregate"]["attempt"]
+    ovr = json.load(open(bdir / "overrides.json")) if (bdir / "overrides.json").exists() else {}
     val = json.load(open(bdir / "aggregate" / "attempts" / att / "validation.json"))
     rows = [json.loads(l) for l in open(run_dir / "queue.jsonl")]
     by_key = {r["paper_key"]: r for r in rows}
     changed = 0
     for pid, info in val["papers"].items():
         r = by_key[pid]
-        final_rel = f"batches/{args.batch}/aggregate/attempts/{att}/{pid}.final.json"
+        final_att = ovr.get(pid, {}).get("aggregate_attempt") or att
+        final_rel = f"batches/{args.batch}/aggregate/attempts/{final_att}/{pid}.final.json"
         if info.get("errors"):
             continue  # only accepted results advance the shared queue
         st = info.get("record_status")

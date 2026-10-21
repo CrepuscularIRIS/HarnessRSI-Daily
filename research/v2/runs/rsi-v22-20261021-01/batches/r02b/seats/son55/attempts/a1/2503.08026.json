@@ -1,0 +1,738 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full HTML text including appendices read. In scope via the retained non-weight memory bank (topic summaries, LLM add/merge); the reranker (small trained retrieval module) is a weight-updated component, noted but not the sole retained object.",
+ "paper": {
+  "paper_key": "2503.08026",
+  "paper_id": "2503.08026",
+  "title": "In Prospect and Retrospect: Reflective Memory Management for Long-term Personalized Dialogue Agents",
+  "version": "2503.08026v2",
+  "claim_type": "system_method",
+  "central_claim": "Reflective Memory Management (RMM): Prospective Reflection (topic-based summarization into a memory bank with LLM add/merge) plus Retrospective Reflection (online REINFORCE update of a lightweight reranker from LLM citation rewards) improves long-term personalized dialogue, e.g. >5% over the strongest baseline on MSC and LongMemEval."
+ },
+ "provenance": {
+  "input_hash": "a98a9774833202666e781384cad85dbf96964481e0ec4574f421ea876d5335f9",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref unavailable to worker (no run-record access); model type per claude-kimi config",
+  "timestamp": "2026-10-21T20:02:44Z"
+ },
+ "materials": [
+  {
+   "material_id": "2503.08026",
+   "url": "https://arxiv.org/html/2503.08026v2",
+   "sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Problem Formulation",
+    "4 Framework (Alg. 1, Prospective/Retrospective Reflection)",
+    "5-6 Experimental setup/datasets/metrics",
+    "7-8 Results, ablation, citation validation, granularity, offline pretraining, Top-K, LLM-as-judge, human eval",
+    "Limitations, Appendix A-D (hyperparameters, baselines, datasets, case studies, prompts)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure data (granularity bars, RL curve) available only via captions/prose"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "1 Introduction",
+   "quote": "existing systems digest information at a pre-defined granularity",
+   "support_explanation": "Author gap 1: fixed memory granularity (turn/session/time interval) fragments topics.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "1 Introduction",
+   "quote": "addresses the challenge of fixed retrievers by leveraging unsupervised attribution signals generated during the",
+   "support_explanation": "Author gap 2 and method response: online retriever refinement from the generator's own attribution, no labels.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "4.1 Prospective Reflection",
+   "quote": "determines whether the extracted memory should be directly",
+   "support_explanation": "Memory write path: LLM extracts topic memories at session end; top-K similar entries retrieved; LLM decides add vs merge. No external verifier, deletion or forgetting step.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "4.2 Reward design",
+   "quote": "if the generator cites the memory in the final response, and",
+   "support_explanation": "Reward +1 for cited memories, -1 otherwise (cited != correct/necessary); REINFORCE updates the reranker on these rewards.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "8.2 Ablation (Table 2)",
+   "quote": "+ RR (W/O reranker)",
+   "support_explanation": "Table 2 (Contriever, Flash): RAG 24.8/50.8/54.3/58.8; +PR 28.6/53.3/57.4/59.6; +RR(no reranker, retriever fine-tuned) 20.3/31.8/34.2/31.0; +RR 27.5/52.2/58.8/60.2; RMM 30.8/55.4/60.4/61.2 (METEOR/BERT/Recall@5/Acc).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "8.2 Ablation text",
+   "quote": "Retrospective Reflection alone without a reranker misaligns retrieved content, leading to suboptimal results.",
+   "support_explanation": "Authors attribute the collapse of direct retriever RL to data scarcity/forgetting; alternative (no-RL reranker or random-reward reranker) is not run.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Table 1 caption",
+   "quote": "Scores are averaged over 3 runs",
+   "support_explanation": "Headline table is a 3-run average with no variance/CI; RMM(Contriever) Acc 61.2 vs RAG 58.8 and Long Context 57.4; RMM(GTE) Acc 70.4 vs RAG(GTE) 63.6.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "8.3 Validation of Citation Scores",
+   "quote": "Our framework leverages LLM-generated citations to determine reward scores, guiding the retrieval refinement process.",
+   "support_explanation": "Citation scoring validated against a Gemini-1.5-Pro judge (useful F1 90.2, not-useful 85.9, overall 86.7) on LongMemEval, not against human labels; generator is Gemini-1.5-Flash.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "8.5 Granularity (prose)",
+   "quote": "The best configuration, which selects the optimal granularity per instance, achieves the highest scores",
+   "support_explanation": "Fixed turn/session/mixed granularities underperform an per-instance-optimal oracle; PR 'approaches' it on a 100-instance GTE sample.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Appendix: Dataset Description",
+   "quote": "we use the first 1000 sessions as chat history and the rest for evaluation.",
+   "support_explanation": "MSC protocol follows LD-Agent: earlier sessions are history, later ones evaluated; whether RR updates run on the evaluation stream is not stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Appendix: Dataset Description",
+   "quote": "we randomly sample 100 test instances and use the remaining data for training and validation.",
+   "support_explanation": "LongMemEval split is used for the offline-pretraining analysis only; main Table 1 protocol for RL updates is unspecified.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Limitations",
+   "quote": "First, RMM relies on reinforcement learning for memory reranking, which can be computationally expensive",
+   "support_explanation": "Cost acknowledged qualitatively; no calls/tokens/latency numbers anywhere in text.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Appendix: Baselines",
+   "quote": "We integrate MemoryBank and LD-Agent as baselines, with key features implemented using the LongMemEval codebase",
+   "support_explanation": "Agent baselines are re-implementations; compute/call budget parity with RMM's extra extraction/merge/citation calls is not shown.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Appendix: RL convergence",
+   "quote": "converging to approximately 0.4 by step 1000",
+   "support_explanation": "Fraction of retrieved memories cited rises from about 0.2 to 0.4 during RL: shows the reranker learns to select what the generator cites, not that cited memories are necessary or correct.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2503.08026",
+   "material_sha256": "6f8f921d7c796208254cd629beb0d9a91b0b0d8f901dc8835420f366f4c8540b",
+   "locator": "Appendix D prompts",
+   "quote": "merged_summary is the merged summary of the new summary and the relevant history summary.",
+   "support_explanation": "Prompts for extraction (D.1.1) and merge (D.1.2) are provided, improving reconstructability.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Memory bank B of (topic summary, raw dialogue segment) entries; baseline = turn- or session-level raw RAG store",
+   "information": "Completed session dialogue only; no ground-truth answers",
+   "operation": "At session end LLM extracts topic-wise summaries with turn references, retrieves top-K similar entries, LLM chooses add or merge",
+   "output": "Updated B with topic-granularity entries",
+   "conditions": "session boundary trigger; Gemini-1.5-Flash",
+   "feedback": "none (not outcome-driven)",
+   "selection_rule": "LLM add/merge judgement",
+   "selection_data": "the dialogue itself",
+   "persistence": "Memory bank carried across sessions",
+   "later_use": "Retriever+reranker query the topic summaries as keys",
+   "claimed_effect": "+PR over RAG: METEOR 24.8->28.6, Recall@5 54.3->57.4, Acc 58.8->59.6 (Contriever)",
+   "failure_boundary": "No forgetting/conflict policy; merge errors may propagate; cost of extraction not reported",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E005",
+    "E009",
+    "E015"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Reranker weights g_phi (small learned module on frozen retriever embeddings; weights, not the LLM)",
+   "information": "Query, top-K retrieved memories, the generator's self-produced citations (+1/-1)",
+   "operation": "REINFORCE update of g_phi with Gumbel sampling of top-M after each response",
+   "output": "Updated reranker, re-ranking later queries",
+   "conditions": "online during conversation; lr 1e-3, batch 4, baseline b",
+   "feedback": "LLM citation attribution (validated vs LLM judge F1 86.7)",
+   "selection_rule": "policy gradient (no accept/reject gate, no rollback)",
+   "selection_data": "online dialogue stream",
+   "persistence": "reranker parameters",
+   "later_use": "applied to subsequent queries",
+   "claimed_effect": "+RR(reranker) over RAG: Recall@5 54.3->58.8, Acc 58.8->60.2; direct retriever RL collapses to Acc 31.0",
+   "failure_boundary": "Reward conflates 'cited' with 'useful'; unclear whether updates happen on evaluation queries; RL cost",
+   "evidence_ids": [
+    "E002",
+    "E004",
+    "E005",
+    "E008",
+    "E014"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Rigid memory granularity fragments semantic structure; fixed retrievers cannot adapt to domains/users; labeled data for personalized retrievers is expensive.",
+  "checked_gap": "Both limits are concretely tested: granularity comparison shows fixed units underperform an adaptive-granularity oracle (E009), and direct retriever RL fails without a reranker (E005); but neighbors beyond MemoryBank/LD-Agent are only cited.",
+  "lineage": [
+   "MemoryBank (forgetting-curve memory) / LD-Agent (long/short banks, keyword retrieval) / Theanine (timeline retrieval) -> RMM (topic memory + citation-driven reranker)"
+  ],
+  "closest_adjacent": "MemoryBank and LD-Agent (run as baselines per the paper); Theanine, MemGPT, Mem0, A-Mem are named in Related Work but not compared; original texts not in pinned input package",
+  "residue": "Fragmented topics across turns/sessions; retriever mismatch with how the generator uses evidence.",
+  "stakes": "RAG Acc 58.8 vs RMM 61.2 (Contriever); Recall@5 54.3 vs 60.4.",
+  "method_response": "Topic-level summarization with merge; online reranker adapting to generator citations.",
+  "remaining_gap": "Scaling of memory (no forgetting/pruning), multi-modal, cost, privacy; no comparison with newer memory managers.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E009",
+   "E012"
+  ],
+  "unresolved": [
+   "Whether gains persist against budget-matched memory managers",
+   "Whether reranker is updated on test queries"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "generative_process_redesign"
+  ],
+  "outside_taxonomy": false,
+  "reason": "",
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C26",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "C26 step1 comparative vs categorical: binary cite/not-cite per memory (partial, absolute not pairwise)",
+     "C26 step2 non-human source in-distribution: generator's own citations (met)",
+     "C26 step3 granularity matched to credit assignment: per-memory reward (met)",
+     "pairwise/preference optimization (unmet; REINFORCE with scalar rewards)"
+    ],
+    "success_failure_checks": [
+     "success: signal validated against independent judge (partial, LLM judge only)",
+     "failure: thin wrapper over RL-on-retriever with extra reranker (partial)",
+     "failure: gain small vs cost (unknown: cost unreported)"
+    ],
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E005",
+     "E008"
+    ],
+    "reason": "Retrospective Reflection manufactures a reward from the generator's attribution and trains a reranker; the C26 tactic fits partially (scalar rewards rather than preference pairs)."
+   },
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": [
+     "conventionally fixed component: memory granularity treated as a design variable (met)",
+     "redesign gains quality (met on 100-instance granularity analysis)"
+    ],
+    "success_failure_checks": [
+     "failure: no mechanistic account beyond empirical comparison (present)"
+    ],
+    "evidence_ids": [
+     "E001",
+     "E009"
+    ],
+    "reason": "Prospective Reflection frees the fixed turn/session granularity of the conditioning memory; the card is aimed at generative procedures so no C15/C23/C24 sub-card is assigned."
+   }
+  ]
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "version": "cards@52ff9657",
+    "fit": "good",
+    "condition_checks": [
+     {
+      "id": "rsi:index_experience_for_reuse/S3",
+      "status": "met",
+      "note": "topic summary acts as key, raw dialogue as content (content/index decoupled)"
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/S5",
+      "status": "met",
+      "note": "compared with flat RAG on same raw material and ablated components"
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/S6",
+      "status": "partial",
+      "note": "local add/merge against top-K neighbors; cost not reported"
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/F4",
+      "status": "unmet",
+      "note": "LLM-generated/merged summaries enter memory with no external gate (failure mode present)"
+     }
+    ],
+    "evidence_ids": [
+     "E001",
+     "E003",
+     "E005",
+     "E009"
+    ]
+   }
+  ],
+  "unassigned": [
+   "Retrospective Reflection: online RL of a retrieval reranker from consumer-citation credit; nearest cards H26/abstract_experience F4 do not fit exactly"
+  ],
+  "revision_proposals": [
+   "Consider a sub-condition for 'consumer-credited retrieval selector' distinguishing it from H26 (curator/writer training); single_source, needs a second full-text member."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C26",
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H04"
+   },
+   "operation_correspondence": "Reward manufacturing (RS) optimizes the retrieval selector over the structured store (H04); the store shape and the credit signal are separate operations.",
+   "conditions_or_differences": "H04 asks for structure ablation at scale and cost; RS C26 asks for independent validation of the signal; both only partly satisfied.",
+   "evidence_ids": [
+    "E002",
+    "E004",
+    "E005"
+   ]
+  },
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H04"
+   },
+   "operation_correspondence": "Freeing fixed granularity corresponds to restructuring the memory substrate.",
+   "conditions_or_differences": "RS card concerns generative procedures; fit weak.",
+   "evidence_ids": [
+    "E001",
+    "E009"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md RE #1"
+   ],
+   "applies_when": "manufactured signal claimed general",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Two benchmarks, three retrievers, two Gemini sizes; one model family and no non-Gemini generator.",
+   "evidence_ids": [
+    "E007"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md RE #2"
+   ],
+   "applies_when": "gain attributed to the manufactured signal",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Direct retriever RL and +PR/+RR ablations exist; no reranker trained without the citation reward, nor compute-matched extra-training control.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md RE #3"
+   ],
+   "applies_when": "intermediate property vs downstream objective",
+   "applicable": true,
+   "status": "met",
+   "reason": "Downstream QA accuracy, METEOR/BERT, Recall@5 and human/LLM judge reported, not only citation statistics.",
+   "evidence_ids": [
+    "E005",
+    "E007"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md RE #5"
+   ],
+   "applies_when": "generation/feedback loop adds compute",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Cost named as a limitation but never measured (calls, tokens, latency, RL steps).",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md RE #6"
+   ],
+   "applies_when": "label-free signal deployed online",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Label-free reward fits deployment; whether the reranker updates on evaluation queries and is reset per user is unstated.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "cards@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md S5"
+   ],
+   "applies_when": "claim that restructured store helps",
+   "applicable": true,
+   "status": "met",
+   "reason": "Flat RAG over the same raw dialogue vs +PR vs full is reported on two benchmarks.",
+   "evidence_ids": [
+    "E005"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "cards@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md F3"
+   ],
+   "applies_when": "store or selector updated during evaluation",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "MSC uses earlier sessions as history; LongMemEval questions bring their own histories; RR update timing relative to evaluation not stated.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F4",
+   "version": "cards@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md F4"
+   ],
+   "applies_when": "model-generated memories enter the store",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Failure mode present: extracted/merged summaries admitted on LLM judgement without external gate or error-propagation analysis.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F4",
+   "version": "cards@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md F4"
+   ],
+   "applies_when": "retrieval improvement presented as learning",
+   "applicable": true,
+   "status": "met",
+   "reason": "Authors frame RR as retrieval refinement, not as the LLM learning; failure mode avoided.",
+   "evidence_ids": [
+    "E002"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2503.08026-1",
+   "version": "v2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "paper practice: LLM self-citation used as reward"
+   ],
+   "applies_when": "rewards derived from the generator's own attribution",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Validated against a Gemini-1.5-Pro judge (F1 86.7), not against human labels or counterfactual removal of cited memories.",
+   "evidence_ids": [
+    "E008",
+    "E014"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2503.08026-2",
+   "version": "v2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper practice: online RL during evaluation"
+   ],
+   "applies_when": "main-table gains may include online adaptation on the evaluation stream",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No frozen-reranker evaluation or learning-curve-by-position reported for the main results.",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "RMM beats strongest baselines on MSC and LongMemEval (>5% over strongest baseline).",
+   "setting": "MSC (METEOR/BERT), LongMemEval (Recall@5, Acc); Contriever/Stella/GTE; Gemini-1.5-Flash",
+   "baseline_control": "No History, Long Context, RAG, MemoryBank, LD-Agent (re-implemented)",
+   "selection_vs_test": "MSC: first 1000 sessions as history; main RL protocol unspecified",
+   "result_denominator": "3-run averages; no variance; Contriever Acc +2.4 over RAG, GTE Acc +6.8",
+   "evidence_ids": [
+    "E007",
+    "E010",
+    "E013"
+   ],
+   "counterevidence": [
+    "E012"
+   ],
+   "allowed_conclusion": "With GTE the margin over RAG exceeds 5 points; with the default Contriever retriever the Acc margin is about 2.4 points."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Prospective Reflection (topic memory) improves retrieval and responses.",
+   "setting": "Table 2 and granularity analysis",
+   "baseline_control": "flat RAG on the same raw dialogue",
+   "selection_vs_test": "n/a",
+   "result_denominator": "+3.8 METEOR, +3.1 Recall@5, +0.8 Acc (Contriever)",
+   "evidence_ids": [
+    "E005",
+    "E009"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Topic-level store helps recall and METEOR modestly, QA accuracy marginally; compute-matched memory-manager alternatives untested."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Retrospective Reflection adapts retrieval from LLM citations without labels.",
+   "setting": "reranker + REINFORCE",
+   "baseline_control": "RAG; direct retriever RL",
+   "selection_vs_test": "unspecified",
+   "result_denominator": "+4.5 Recall@5, +1.4 Acc over RAG; direct RL Acc 31.0",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E008",
+    "E014"
+   ],
+   "counterevidence": [
+    "E006"
+   ],
+   "allowed_conclusion": "A reranker trained on citation rewards improves recall; its causal advantage over an untrained/random reranker is not shown."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Topic-level memory plus a citation-rewarded reranker improves retrieval recall (3-run mean) and modestly QA accuracy over flat RAG with Gemini-1.5-Flash on MSC and LongMemEval; author-reported, store-versus-evaluation separation of the RL part unstated.",
+  "unresolved": [
+   "RR update timing vs evaluation",
+   "variance",
+   "cost",
+   "alternative memory managers at matched budget"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Two concrete bottlenecks (fixed granularity, fixed retriever) with named neighbors run as baselines and own analyses that test both (granularity oracle, direct retriever RL failure); neighbors beyond MemoryBank/LD-Agent are only cited.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Why topic memory and citation-reward reranking should help is explainable and yields distinguishing predictions (reranker needed, granularity oracle gap); weak point: citation reward conflates cited with useful and is validated only by an LLM judge.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Algorithm 1, hyperparameters and extraction/merge prompts make the chain reconstructable; no gate, forgetting, rollback or version handling, RR update timing relative to evaluation unspecified, reranker described as linear layer in text vs MLP in appendix.",
+   "evidence_ids": [
+    "E003",
+    "E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "LongMemEval Recall@5 against annotated evidence and judge accuracy, MSC METEOR/BERT plus LLM judge and 100-instance human check (kappa 0.69-0.82); judge and generator are same vendor, lexical metrics weak.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Flat-RAG vs +PR vs +RR vs full on two datasets with an alternative (direct retriever RL) tried; missing no-reward/random-reward reranker, compute-matched memory manager, and per-run variance.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "MSC history/eval split and LongMemEval per-question histories give some separation, but whether the reranker is updated on evaluation queries, reset per user, or evaluated frozen is not reported; single model family.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "3-run averages and a 100-instance human study are reported but no std/CI/significance; Acc margins of 0.8-2.4 points are within plausible run noise.",
+   "evidence_ids": [
+    "E007"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "Full text and appendices contain no counts of LLM calls, tokens, latency or RL steps for extraction, merging, citation, or the 1000-step RL; only a qualitative limitation.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Sections 5-8 tables and prose",
+    "Limitations",
+    "Appendix hyperparameters/hardware (only '16 A100 GPUs')",
+    "Appendix baselines"
+   ]
+  }
+ },
+ "score": {
+  "raw": 58.75,
+  "display": 58.8,
+  "lower": 58.75,
+  "upper": 58.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "话题级记忆+引用奖励重排，消融与基线较扎实；但Contriever下准确率仅+2.4、RL更新与评测流分离未说明、无方差、无成本数字。"
+}

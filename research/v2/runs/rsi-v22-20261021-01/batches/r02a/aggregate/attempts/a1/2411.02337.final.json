@@ -1,0 +1,779 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "status": "out_of_scope",
+ "reason": "out_of_scope confirmed (A3 bullet 1), independently from the text: the improver is RL training and both its update target and evaluated product are actor/critic weights (§2.2, App. B.1, Algorithm 1). Failure-seeded generated tasks, the critic-filtered instruction pool and the success replay buffer persist across phases only as training data for weights; no prompt/skill/tool/workflow/memory/evaluator artifact is retained and evaluated at deployment. The ORM is trained once and fixed. Scope exclusion is not a quality verdict.",
+ "paper": {
+  "paper_key": "2411.02337",
+  "paper_id": "2411.02337",
+  "title": "WebRL: Training LLM Web Agents via Self-Evolving Online Curriculum Reinforcement Learning",
+  "version": "2411.02337v3",
+  "claim_type": "system_method",
+  "central_claim": "WebRL trains open-LLM web agents via a failure-seeded self-evolving curriculum, an outcome reward model, KL-constrained policy updates and confidence-filtered replay, raising WebArena-Lite success (Llama-3.1-8B 4.8%→42.4%, GLM-4-9B 6.1%→43%).",
+  "scope_class": "out_of_scope: evaluated improvement resides in trained policy/critic weights"
+ },
+ "provenance": {
+  "input_hash": "6ad95c219ff9f9b0982545d5b79a2ccd51c93c663f2db81a404d986afe074fbc",
+  "input_package": "batches/r02a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker. Seat attempts used: sol a1, son55 a1 (same input_hash, same material sha256).",
+  "timestamp": "2026-10-21T20:33:59Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2411.02337",
+   "version": "2411.02337v3",
+   "url": "https://arxiv.org/html/2411.02337v3",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2411.02337.txt",
+   "extraction_method": "html",
+   "sections_read": [
+    "sol: Complete fixed HTML text lines 1–5187: abstract, §§1–5, all Tables 1–7, Appendix A derivation/proof/comparison, B training details and complete Algorithm 1, C additional experiments, D prompt descriptions, E qualitative-example captions. Several figures/prompts are image-only in HTML; no page_images supplied. No unrendered figure numbers/contents invented; central update-object determination is explicit in text and Algorithm 1.",
+    "son55: abstract",
+    "son55: §1 intro",
+    "son55: §2 method (ORM, curriculum, KL-constrained update, replay)",
+    "son55: §3 experiments incl. ablations/ORM eval",
+    "son55: §4-5",
+    "son55: App A derivation/proof",
+    "son55: App B training details + Algorithm 1",
+    "son55: App C extra experiments",
+    "son55: App D prompts (captions only)",
+    "son55: App E (captions only)",
+    "opus55: full pinned text re-read (claims, method, all result tables, appendices) before opening seat totals"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "note": "Single pinned text; seats' material_id aliases preserved as seat_material_id on evidence."
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Generated curriculum instruction sets I_n, failed-task set F, actor/critic weights",
+   "information": "Previous failed rollouts as judged by ORM; critic initial-state scores; GPT-4o feasibility filtering",
+   "operation": "Generate new instructions from failures; filter difficulty 0.05–0.75 and feasibility; rollout current policy; train actor and critic; repeat eight phases.",
+   "output": "New training tasks and improved web-policy model checkpoints",
+   "conditions": "Valid generated tasks, calibrated critic/reward, controlled policy drift",
+   "feedback": "Trained binary ORM, initially anchored with WebArena-Lite reward functions",
+   "selection_rule": "Critic difficulty band and GPT-4o feasibility screen, 500 instructions per phase",
+   "selection_data": "Training-set failures and generated-task rollouts; test is 165 WebArena-Lite cases",
+   "persistence": "Failure archive and training curricula across phases; actor/critic parameter updates",
+   "later_use": "Updated policy executes later web tasks; tasks supply training, not inference-time conditioning/reusable harness routines",
+   "claimed_effect": "Llama3.1-8B success 4.8→42.4%; SFT 20.6→WebRL 42.4 on Lite; GLM9B 43.0, Llama70B49.1",
+   "failure_boundary": "Proxy reward errors, generated-task feasibility, site-level forgetting; importantly improved retained evaluated agent is weight-trained",
+   "evidence_ids": [
+    "sol/E001",
+    "sol/E002",
+    "sol/E003",
+    "sol/E004",
+    "sol/E008",
+    "sol/E009"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Successful-trajectory replay buffer",
+   "information": "ORM success and last actor action perplexity",
+   "operation": "Store successes; choose moderate-perplexity actions; mix with current rollouts at historical-data cap twice interaction size; train actor/critic with KL-constrained policy loss",
+   "output": "Replay-derived training batches and new weights",
+   "conditions": "Reward label reliability and value estimation; neither trivial nor excessively hard past samples",
+   "feedback": "Binary task outcomes and policy likelihood",
+   "selection_rule": "PPL [1/.95,1/.5], successes only",
+   "selection_data": "Prior training episodes",
+   "persistence": "Buffer across training phases",
+   "later_use": "Gradient training, not deployment memory retrieval",
+   "claimed_effect": "Avoid catastrophic forgetting and improve multi-phase weight learning",
+   "failure_boundary": "Performance drops on Map; failed replay can hurt intermediate-action estimates",
+   "evidence_ids": [
+    "sol/E005",
+    "sol/E006",
+    "sol/E009",
+    "sol/E012"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Open web agents lack tasks and decision capability; sparse long-horizon reward and policy distribution drift limit online RL.",
+  "checked_gap": "Concrete training limitations and a failure-steered curriculum are specified, with SFT, Filtered BC, AWR and DigiRL comparisons; these concern weight-level agent training, not the current collection’s non-weight harness object.",
+  "lineage": [
+   {
+    "method": "DigiRL; AWR; Filtered BC; WebArena-Lite",
+    "source_version": "As described/cited in fixed 2411.02337v3; independent neighbor sources not supplied",
+    "role": "Static-task online RL, policy update and data-source antecedents"
+   }
+  ],
+  "closest_adjacent": "DigiRL static-task online RL; learned ORM web-agent feedback.",
+  "residue": "Generate adaptive tasks while stabilizing online weight updates.",
+  "stakes": "Accessible open web-agent performance.",
+  "method_response": "Failure-seeded synthesis, critic/feasibility filtering, KL-constrained gradient updates and successful replay.",
+  "remaining_gap": "No evaluated feedback-driven retained prompt/tool/workflow/harness code/evaluator configuration change is established; fixed prompts and implementations organize RL rather than being its evolved output.",
+  "evidence_ids": [
+   "sol/E001",
+   "sol/E003",
+   "sol/E006",
+   "sol/E009"
+  ],
+  "unresolved": [
+   "Fixed primary DigiRL and curriculum antecedent texts would be needed for independent lineage audit if reviewing weight-training literature; not required to determine current scope."
+  ]
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Self-evolving curriculum RL improves trained open web agents.",
+   "setting": "165-case WebArena-Lite, five websites, Llama3.1 8B/70B and GLM4 9B.",
+   "baseline/control": "SFT, Filtered BC, AWR, DigiRL; curriculum/replay/KL ablations; prompt-only proprietary baselines and some full-WebArena literature numbers.",
+   "selection_vs_test": "Training tasks are seed-derived/generated; success measured on Lite test. Independent detailed overlap not audited here; some figure-only prompts unavailable.",
+   "result/denominator": "Llama8B WebRL42.4 vs SFT20.6/DigiRL30.3; GLM9B43.0 vs SFT22.4/DigiRL31.5; Llama70B49.1 vs SFT23.0. Paper reports four seeds and some site-level regression.",
+   "evidence_ids": [
+    "sol/E008",
+    "sol/E009",
+    "sol/E010",
+    "sol/E011",
+    "sol/E012"
+   ],
+   "counterevidence": [
+    "Map site can decline",
+    "Cross-benchmark full versus Lite literature comparisons are not strictly matched",
+    "Only weight training evaluated"
+   ],
+   "allowed_conclusion": "Author-reported improvement of trained web-policy weights with adaptive curriculum; not evidence of retained non-weight harness self-improvement."
+  }
+ ],
+ "base_seat_for_signatures_gap_claims": "sol",
+ "evidence": [
+  {
+   "evidence_id": "sol/E001",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§1 framework",
+   "quote": "In each training phase, novel tasks are autonomously generated from unsuccessful attempts in the preceding phase, facilitating a progressive learning trajectory.",
+   "support_explanation": "Failure feedback changes training-task distribution; does not by itself establish persistent harness improvement.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E002",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§2 ORM training",
+   "quote": "is utilized to assess whether the agent’s rollout trajectory accomplishes a given task, providing a binary reward signal (0 for failure and 1 for success).",
+   "support_explanation": "Learned ORM supplies training feedback, not a self-revised non-weight evaluator.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E003",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§2.1 curriculum",
+   "quote": "We select instructions the model failed to complete in previous interaction phases as seeds for generating new instructions.",
+   "support_explanation": "Real measured failures steer GPT-4o task generation.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E004",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§2.1 filtering",
+   "quote": "We select instructions with critic scores between 0.05 and 0.75, ensuring that only tasks meeting our difficulty criteria are retained.",
+   "support_explanation": "Retention is of training instructions selected by critic difficulty, not admission of a harness component for future task execution.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E005",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§2.2 replay",
+   "quote": "Specifically, we only store those successful trajectories (which can be sparse) from each phase in the replay buffer.",
+   "support_explanation": "Non-weight persistent buffer exists, but its consumer is actor/critic parameter training rather than inference retrieval.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E006",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§2.2 replay consumer",
+   "quote": "Actions with a perplexity within the range of 1/0.95 to 1/0.5, along with their corresponding states, are added to the training data for the current phase.",
+   "support_explanation": "Explicitly identifies historical experience as training data; prevents conflating replay with deployed agent memory.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E008",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§3.2 main result",
+   "quote": "achieves an average accuracy of 42.4%, surpassing all baselines, including prompting and training alternatives.",
+   "support_explanation": "Author reports trained-policy result, not retained tool/prompt/workflow effect.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E009",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "Appendix B.1 training implementation",
+   "quote": "Both newly generated interaction data on these instructions and historical data with perplexity between 1/0.95 and 1/0.5 from the replay buffer are used to train the actor and critic.",
+   "support_explanation": "Decisive evaluated-update-object evidence: actor and critic trained from generated and replayed data.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E010",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "§3.7 no curriculum control",
+   "quote": "utilizing only the instructions generated in the first phase.",
+   "support_explanation": "Curriculum ablation still measures weight-training outcomes, not utility of a modified deployed harness.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E011",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "Appendix C repeated experiments",
+   "quote": "We conduct four sets of experiments, each utilizing a distinct random seed.",
+   "support_explanation": "Paper does report multi-seed evidence; scope exclusion must not be mistaken for a criticism that experiments are wholly absent.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E012",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "Appendix C forgetting",
+   "quote": "However, in the case of Map, there is an initial upward trend followed by a decline.",
+   "support_explanation": "Continual improvement is not monotonic on each website; outside-scope disposition does not erase author negative outcomes.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E013",
+   "material_id": "M-2411.02337",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "locator": "Appendix B.3 ORM dataset",
+   "quote": "with a total of 12,200 samples.",
+   "support_explanation": "ORM is trained on labeled trajectories with reward-function anchors; this is trained reward modeling, not a retained textual evaluator revision.",
+   "kind": "author_report",
+   "seat_material_id": "2411.02337.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "son55/E001",
+   "locator": "abstract",
+   "quote": "a self-evolving online curriculum reinforcement learning framework designed to train high-performance web agents using open LLMs",
+   "support_explanation": "中心主张是训练开源 LLM 的 RL 框架。",
+   "kind": "author_report",
+   "material_id": "M-2411.02337",
+   "seat_material_id": "M1",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E002",
+   "locator": "App B.1",
+   "quote": "Both newly generated interaction data on these instructions and historical data with perplexity between 1/0.95 and 1/0.5 from the replay buffer are used to train the actor and critic.",
+   "support_explanation": "每阶段的更新对象是 actor/critic 权重。",
+   "kind": "author_report",
+   "material_id": "M-2411.02337",
+   "seat_material_id": "M1",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E003",
+   "locator": "§2.1",
+   "quote": "We select instructions the model failed to complete in previous interaction phases as seeds for generating new instructions.",
+   "support_explanation": "课程由 GPT-4o 提示按失败种子生成，属非权重产物，但仅作为训练数据。",
+   "kind": "author_report",
+   "material_id": "M-2411.02337",
+   "seat_material_id": "M1",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E004",
+   "locator": "abstract",
+   "quote": "improves the success rate of Llama-3.1-8B from 4.8% to 42.4%, and from 6.1% to 43% for GLM-4-9B",
+   "support_explanation": "被评价结果是训练后模型（权重）的成功率。",
+   "kind": "author_report",
+   "material_id": "M-2411.02337",
+   "seat_material_id": "M1",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E005",
+   "locator": "§3.7",
+   "quote": "WebRL w/o CL progresses more slowly and reaches a lower performance ceiling because it operates within a fixed task framework",
+   "support_explanation": "对课程组件只有「去课程」消融，仍以权重 SR 衡量。",
+   "kind": "author_report",
+   "material_id": "M-2411.02337",
+   "seat_material_id": "M1",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E006",
+   "locator": "App B.1",
+   "quote": "First, we perform supervised fine-tuning using the WebArena-Lite training dataset.",
+   "support_explanation": "流程以 SFT 初始化权重，之后 RL 更新权重。",
+   "kind": "author_report",
+   "material_id": "M-2411.02337",
+   "seat_material_id": "M1",
+   "sha256": "1a7455e827deb47a9f7ce55c2896762456fc427497f9f1c84704e88b1271fdb0",
+   "source_seat": "son55"
+  }
+ ],
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": "Missing training tasks → failure-seeded GPT-4o task synthesis → critic difficulty/feasibility gate → retained tasks and successful replay retrain actor/critic, iterated by phase.",
+    "success_checks": "Curriculum-off and replay ablations reported.",
+    "failure_checks": "Generated tasks lack executable rewards; ORM proxy.",
+    "evidence_ids": [
+     "sol/E003",
+     "sol/E004",
+     "sol/E009",
+     "sol/E010"
+    ],
+    "reason": "Descriptive identification only (documentation for an out-of-scope row, as in r01a 2308.14034); not scored.",
+    "taken_from_seat": "sol"
+   }
+  ],
+  "reason": "Descriptive RS identification retained for traceability; no score.",
+  "executes_pattern": true,
+  "resolves_problem": "not_assessed"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "unassigned": [],
+  "revision_proposals": [],
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H23",
+    "version": "taxonomy.json b115a69b",
+    "fit": "high mechanism / excluded by A3 evaluated-object boundary",
+    "condition_checks": [
+     {
+      "id": "rsi:self_generate_the_curriculum/S3",
+      "status": "met",
+      "reason": "Failed instructions seed new tasks.",
+      "evidence_ids": [
+       "sol/E003"
+      ]
+     },
+     {
+      "id": "rsi:self_generate_the_curriculum/S1",
+      "status": "partial",
+      "reason": "Critic score window and GPT-4o filter; ORM proxy reward.",
+      "evidence_ids": [
+       "sol/E002",
+       "sol/E004"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol/E001",
+     "sol/E003",
+     "sol/E004",
+     "sol/E009"
+    ],
+    "reason": "Boundary-card mechanism match is descriptive; does not override A3."
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "self_generate_the_curriculum",
+    "sub": "H23"
+   },
+   "operation_correspondence": "Generated-and-filtered training tasks steered by learner failures.",
+   "necessary_conditions_and_differences": "Both describe training-data generation for weights; outside HarnessRSI scope.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "local:2411.02337-1",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "frozen rubric A3 and 2411.02337v3 Appendix B.1/Algorithm 1"
+   ],
+   "applies_when": "retained non-weight artifact would need a deployment-effect test",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Successful replay and task archive persist for training; actor/critic parameters are the evaluated improved product. No controlled retained harness deployment effect.",
+   "evidence_ids": [
+    "sol/E005",
+    "sol/E006",
+    "sol/E009"
+   ],
+   "score_item": "X",
+   "decision_source": "sol",
+   "aggregate_note": "Descriptive only; not used for scoring (out_of_scope)."
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S1",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md S1"
+   ],
+   "applies_when": "Generated tasks should have independent validity anchor.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Trained ORM and GPT-4o feasibility screen, versus independently executable reward only for seed tasks.",
+   "evidence_ids": [
+    "sol/E002",
+    "sol/E004"
+   ],
+   "score_item": "E.measurement",
+   "decision_source": "sol",
+   "aggregate_note": "Descriptive only; not scored."
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "original card reviewer expectation 2"
+   ],
+   "applies_when": "Curriculum improvement separated from ordinary training.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Fixed-first-phase curriculum ablation and RL controls exist; evaluated effect remains weight training.",
+   "evidence_ids": [
+    "sol/E009",
+    "sol/E010"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "sol",
+   "aggregate_note": "Descriptive only; not scored."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "not_assessed",
+  "claim_support": "not_assessed",
+  "strongest_supported_claim": "Out of scope; weight-trained policy results not evaluated here.",
+  "unresolved": [
+   "If the controller later widens scope to curriculum-generation methods, a new seat attempt is needed (domain card self_generate_the_curriculum is a boundary card)."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [
+    "sol/E006",
+    "sol/E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope under frozen A3: not numerically assessed.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text incl. App. A–E; update consumers in §2.2, App. B.1, Algorithm 1"
+   ],
+   "decision_source": "same_supported_fact"
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "weights": {
+   "G": 15,
+   "M": 20,
+   "X": 20,
+   "E.measurement": 10,
+   "E.causality": 15,
+   "E.holdout": 10,
+   "E.statistics": 5,
+   "E.cost": 5
+  },
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4; unknown items bound at 0/4 for L/U; raw=null while any unknown remains"
+ },
+ "resolutions": [
+  {
+   "field_path": "paper.claim_type",
+   "sol_value": "system_method",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "system_method",
+   "reason": "Descriptive frame of the paper's own claim (a training framework); carries no score for an out_of_scope row, consistent with prior out_of_scope aggregates.",
+   "evidence_ids": [
+    "sol/E001"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "assessment.evidence_level",
+   "sol_value": "task",
+   "son55_value": "not_assessed",
+   "decision": "son55",
+   "final_value": "not_assessed",
+   "reason": "Out-of-scope rows carry no quality assessment; sol's 'task' is a quality judgment outside the review's remit.",
+   "evidence_ids": [
+    "sol/E006"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "assessment.claim_support",
+   "sol_value": "scoped",
+   "son55_value": "not_assessed",
+   "decision": "son55",
+   "final_value": "not_assessed",
+   "reason": "Same as evidence_level.",
+   "evidence_ids": [
+    "sol/E006"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "self_supervised_signal_engineering",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "self_supervised_signal_engineering",
+   "reason": "Identification is optional for out_of_scope rows; sol's C08 identification is accurate and kept as documentation (son55 named the same parent in its reason).",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "self_supervised_signal_engineering",
+     "C08"
+    ]
+   ],
+   "son55_value": [],
+   "decision": "sol",
+   "final_value": [
+    [
+     "self_supervised_signal_engineering",
+     "C08"
+    ]
+   ],
+   "reason": "As above; descriptive only.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004",
+    "sol/E009"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "self_generate_the_curriculum",
+     "H23"
+    ]
+   ],
+   "son55_value": [],
+   "decision": "sol",
+   "final_value": [
+    [
+     "self_generate_the_curriculum",
+     "H23"
+    ]
+   ],
+   "reason": "Descriptive boundary match (son55 listed the same as an unassigned boundary candidate); no score.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2411.02337-1].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "Descriptive; no retained harness deployment effect exists to test.",
+   "evidence_ids": [
+    "sol/E005",
+    "sol/E006",
+    "sol/E009"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-2].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Descriptive; curriculum-off ablation exists.",
+   "evidence_ids": [
+    "sol/E009",
+    "sol/E010"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:self_generate_the_curriculum/S1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Descriptive; critic/GPT-4o filters, ORM proxy.",
+   "evidence_ids": [
+    "sol/E002",
+    "sol/E004"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read abstract, §1–2 (curriculum, ORM, KL update, replay), §3.7 ablations, App. B.1 before seat records: improvement target and evaluated product are weights → out_of_scope.",
+  "integrity_checks": "Both seats on 2411.02337v3, sha256 1a7455e8 = manifest; hashes equal conflicts.json; quotes verified. Blind-review disclosure (son55): it saw card-induction lines (H23/target=weights) in assignments.jsonl, not seat judgments; its scope reasoning cites the text (App. B.1, §2.1, §3.7) and matches this independent reading, so no contamination of the disposition.",
+  "core_claim_check": "Not assessed (out_of_scope).",
+  "retention_check": "Retained items (task pool, replay buffer) are training data for weights; no deployment-time non-weight artifact evaluated."
+ },
+ "input_seat_hashes": {
+  "sol": "0be44e0a1cbd7f77522c9045087a4e1e9d2ed1ee764df7edb05b3c70767397cb",
+  "son55": "2a1b9463262f0dde6554e033475cf823b178d4256ff7815f91656b404e7f3b9d"
+ },
+ "final_record_hash": "5d5c45d21e3c9544fe3d940ae4a0ba20f229bbf540ad397e9ba2ecab1f5be1b1"
+}

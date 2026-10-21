@@ -1,0 +1,364 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r03a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "status": "out_of_scope",
+  "reason": "A3：被评价的改进是在线 MBRL 世界模型参数更新与 planner LoRA 微调。MEP 是收集并筛选训练轨迹的 replay pool；Eq.13 把 MEP 列为 planner 输入，但 IV-A 的具体复用操作是构造 fine-tuning pairs，未建立可独立执行/评测的非权重 prompt、skill、workflow 或 context 编辑闭环。不能因存在持久 replay 就把纯训练贡献当 harness RSI。",
+  "paper": {
+    "paper_key": "2502.05907",
+    "paper_id": "2502.05907",
+    "title": "EvolvingAgent: Curriculum Self-evolving Agent with Continual World Model for Long-Horizon Tasks",
+    "version": "2502.05907v3",
+    "claim_type": "system_method",
+    "central_claim": "Curriculum self-evolving planner-controller-reflector with a continual world model autonomously updates multimodal experience/world knowledge and improves long-horizon Minecraft execution and Atari generalization."
+  },
+  "provenance": {
+    "input_hash": "c654201f872a11fa052124b7631c538d56907432df40b1ad87fcb8c3865abfc6",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "Runtime identifies this seat as gpt-6.1-sol; no independently obtainable provider receipt, session ID or actual-model attestation exposed, hence null rather than inferred provenance.",
+    "timestamp": "2026-10-21T20:18:37.969350+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2502.05907.txt",
+      "url": "https://arxiv.org/html/2502.05907v3",
+      "version": "2502.05907v3",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "sections_read": [
+        "Abstract",
+        "I Introduction",
+        "II Related Works",
+        "III-A/B Preliminaries",
+        "IV-A/B/C Methods and Algorithm 1",
+        "V-A/B/C/D/E Experiments Tables I-V",
+        "VI Conclusion",
+        "Appendix hyperparameters Table VI",
+        "HTML end matter"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "IV-A Self-planning, lines 1457-1462",
+      "quote": "The LLM-based planner undergoes lightweight fine-tuning using Low-Rank Adaptation (LoRA)",
+      "support_explanation": "Planner improvement is explicitly weight adaptation, not retained prompt editing.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "IV-A Self-planning, line 1512",
+      "quote": "We only use input-output pairs for model fine-tuning.",
+      "support_explanation": "The extracted failed-subtask cases feed fine-tuning rather than an explicit later inference-time experience injection protocol.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "IV-C Eq.25-26, lines 2890-2901",
+      "quote": "to penalize shifts in parameters critical for past tasks.",
+      "support_explanation": "Reflector changes world-model weights, including Fisher-weighted regularization.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "IV-B Eq.19, lines 1902-1977",
+      "quote": "is added to the multimodal experience pool",
+      "support_explanation": "Success and timeout trajectories both enter replay; existence of replay is not proof of harness adaptation.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "V-C, line 3572",
+      "quote": "We selected 10 random seeds for testing.",
+      "support_explanation": "Experiments exist and include repeated seeds; exclusion is scope, not absent evaluation.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "V-A Hyperparameters, line 3254",
+      "quote": "The planner of EvolvingAgent uses the VQ-GAN",
+      "support_explanation": "Planner combines learned visual representation and GPT-4o; this does not itself establish a text-state improvement loop.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2502.05907.txt",
+      "sha256": "d97d9a03301e9c4430ff654d1dc136a48202436856239953ff1aa63b777dac61",
+      "locator": "VI Conclusion, line 3984",
+      "quote": "This paper presents EvolvingAgent, an embodied agent that improves long-horizon task execution through curriculum self-evolution.",
+      "support_explanation": "Keep author central claim rather than silently translating to harness-level RSI.",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "planner LoRA weights",
+      "information": "current state, goal, collected subtask-labelled experience; prior GPT-4o when replay empty",
+      "operation": "extract relevant trajectories after subtask failure; form input/success-label pairs; fine-tune planner",
+      "output": "updated planner parameters",
+      "conditions": "matching task labels and online fine-tuning available",
+      "feedback": "controller subtask success/failure",
+      "selection_rule": "label matching, not validated prompt edit acceptance",
+      "selection_data": "MEP online trajectories",
+      "persistence": "LoRA parameter state; agent reinitializes on death",
+      "later_use": "subsequent task planning",
+      "claimed_effect": "fewer repeated invalid subtasks",
+      "failure_boundary": "weight-based, no independent persistent inference-time prompt edit established",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "world-model parameters and replay sampling",
+      "information": "transitions, subtask completion, TD errors, gradients and old/new world-model predictions",
+      "operation": "append completed/timeout episodes; two-stage curriculum selects subtasks and experiences; gradient update plus Fisher regularization",
+      "output": "updated RSSM world-model weights",
+      "conditions": "online RL environment and trainable model",
+      "feedback": "environment transition/reward and model prediction mismatch",
+      "selection_rule": "thresholded curriculum priorities, not harness artifact promotion",
+      "selection_data": "online replay",
+      "persistence": "world-model weights and raw training buffer",
+      "later_use": "predict state and select low-level actions",
+      "claimed_effect": "efficient exploration and reduced forgetting",
+      "failure_boundary": "no retained non-weight editing mechanism isolated",
+      "evidence_ids": [
+        "E003",
+        "E004"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "Human-created curricula and static experience/world knowledge impede autonomous LH task learning and cause forgetting.",
+    "checked_gap": "A concrete online-RL replay-selection/continual-model-learning problem; not demonstrated as a non-weight harness bottleneck.",
+    "lineage": [
+      "DreamerV3 RSSM → goal-conditioned controller and curriculum-weighted replay",
+      "Voyager/Jarvis-1/Optimus-1 discussed as planning/memory comparators in I/II; their independently fixed full texts are not supplied"
+    ],
+    "closest_adjacent": [
+      "DreamerV3",
+      "Optimus-1",
+      "Jarvis-1"
+    ],
+    "residue": "Forgetting and inefficient exploration under sparse long-horizon rewards.",
+    "stakes": "Training interaction and compute costs.",
+    "method_response": "Two-level sample prioritization, world-model regularization and planner fine-tuning.",
+    "remaining_gap": "No context-only retained-harness contribution certified; cross-domain transfer attribution remains separate.",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E007"
+    ],
+    "unresolved": [
+      "Independent version-pinned comparator full texts are absent; request only if scope adjudication needs expanded neighbor check."
+    ]
+  },
+  "rs_pattern": {
+    "primary": null,
+    "supporting": [],
+    "matches": [],
+    "outside_taxonomy": true,
+    "reason": "Read generative_process_redesign/C24 and adapt_via_conditioning/C03 candidate cards. Curriculum replay selection is not redesign of a fixed generative conditioning interface under C24, and explicit LoRA/WM retraining violates the inference-only adaptation signature of C03. Do not equate generic feedback/RL with a mandatory RS card.",
+    "executes_pattern": false,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [],
+    "unassigned": true,
+    "revision_proposals": [],
+    "reason": "H03 and H28 considered after full-card reading: MEP is principally training replay, not re-bound precedent injected at inference; H28 requires an exercised editable-context lever in addition to weights, not merely experience-to-training. No forced domain mapping."
+  },
+  "pattern_mapping": [],
+  "expectations": [
+    {
+      "id": "local:2502.05907-1",
+      "version": "v1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "https://arxiv.org/html/2502.05907v3#S4.SS1",
+        "https://arxiv.org/html/2502.05907v3#S4.SS3"
+      ],
+      "applies_when": "A paper claims autonomous experience-based self-evolution relevant to retained non-weight RSI.",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "Detailed self-planning and reflection operations update parameters; a replay pool alone is not a retained harness component.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "score_item": "X"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "Autonomous curriculum self-evolution improves LH task execution.",
+      "setting": "MineRL 0.4.4 / Minecraft, 67-task benchmark; Atari transfer",
+      "baseline_control": "PPO, GPT-4V, Jarvis-1, DreamerV3, LS-Imagine, Optimus-1; module ablations",
+      "selection_vs_test": "online replay used for training; not a sealed retained-harness test",
+      "result_denominator": "Table I overall SR 30.29 averaged across Iron/Gold/Diamond; Table III 10-seed ablations",
+      "evidence_ids": [
+        "E005",
+        "E007"
+      ],
+      "counterevidence": [
+        "These task improvements do not establish non-weight harness improvement."
+      ],
+      "allowed_conclusion": "Author reports online training-system results; out-of-scope does not deny those numerical results."
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "Author-reported curriculum-guided world-model/planner training improves measured task performance; no harness retained/improver conclusion.",
+    "unresolved": [
+      "No independent reproduction; no external neighbor full texts read."
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "Not scored: out_of_scope under frozen A3; not a missing-material penalty.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full pinned v3 text including Algorithm 1 and Appendix Table VI"
+      ]
+    }
+  },
+  "score": null,
+  "rationale": "完整读 v3 含附录。实际改进是 planner LoRA 与世界模型梯度更新，MEP 是训练回放池；未证成独立非权重留存操作，按冻结 A3 排除，不以低分替代范围判断。"
+}

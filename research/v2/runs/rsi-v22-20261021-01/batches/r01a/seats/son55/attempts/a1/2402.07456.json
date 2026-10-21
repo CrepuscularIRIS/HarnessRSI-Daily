@@ -1,0 +1,936 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r01a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full material read; in scope as A-type tool/skill library growth (agent-generated Python tools retained and reused) with a frozen GPT-4-turbo.",
+ "paper": {
+  "paper_key": "2402.07456",
+  "paper_id": "2402.07456",
+  "title": "OS-Copilot: Towards Generalist Computer Agents with Self-Improvement",
+  "version": "2402.07456v2",
+  "claim_type": "system_method",
+  "central_claim": "OS-Copilot provides a unified OS-level agent framework (planner, configurator memory, actor with critic/refiner); FRIDAY built on it self-improves through self-directed learning that accumulates agent-generated tools, outperforming prior GAIA systems by 35% on level 1 and mastering unfamiliar applications (Excel 0%->60% on SheetCopilot-20, PowerPoint qualitatively) with minimal supervision."
+ },
+ "provenance": {
+  "input_hash": "32d41775e894e896adc8fa9d4cb0f5e2c94c40a763bbc3e94364255f8729709e",
+  "rubric_version": "frozen-v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref are not exposed to the worker agent; model_type follows the claude-kimi type overlay (haiku slot -> claude-sonnet-5-5[1m]) as dispatched by the controller.",
+  "timestamp": "2026-10-21T19:38:58Z"
+ },
+ "rationale": "agent生成并经LLM评分(>8)留存的Python工具库，GAIA测试集上学习消融仅约+4题(L1/L2)，SheetCopilot-20 0→60%；无统计/预算匹配/工具级验证，主增益多来自框架本身。",
+ "materials": [
+  {
+   "material_id": "2402.07456-fulltext",
+   "url": "https://arxiv.org/html/2402.07456v2",
+   "sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "version": "2402.07456v2",
+   "path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2402.07456.txt",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-6",
+    "Appendix A-G incl. Tables 1-14"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 1-5 (case studies, architecture, capability breakdown) not rendered in text extraction; Table 13 tool code body not rendered"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Abstract",
+   "quote": "We use OS-Copilot to create FRIDAY, a self-improving embodied agent for automating general computer tasks.",
+   "support_explanation": "Central framing: framework plus a self-improving agent.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Abstract",
+   "quote": "On GAIA, a general AI assistants benchmark, FRIDAY outperforms previous methods by 35%, showcasing strong generalization to unseen applications via accumulated skills from previous tasks.",
+   "support_explanation": "Headline claim; the 35% is relative to GPT-4 Plugins (human-selected plugins) on level 1.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 3.1 Running example",
+   "quote": "In the current implementation, tools scoring above 8 are preserved by updating the tool repository in procedural memory (step ⑦).",
+   "support_explanation": "Admission rule: LLM critic generality score > 8 after a judged-successful execution.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 3.1",
+   "quote": "In this example, no suitable tools are identified (similarities below a specified threshold), prompting activation of the Tool Generator to devise an application-tailored tool for the current subtask (step ③).",
+   "support_explanation": "Tool generation is triggered by retrieval miss (threshold unspecified).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 3.1",
+   "quote": "The FRIDAY will iterate through steps ④ to ⑥ until the subtask is considered completed or a maximum of three attempts is reached.",
+   "support_explanation": "Refiner repairs action/tool/subtask from execution errors and critic feedback, up to three attempts.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 3.2 Self-directed Learning",
+   "quote": "With a pre-defined learning objective, such as mastering spreadsheet manipulation, FRIDAY is prompted to propose a continuous stream of tasks related to the objective, spanning from easy to challenging.",
+   "support_explanation": "Practice curriculum is self-proposed but conditioned on a human-set objective.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4 Settings",
+   "quote": "We initialize FRIDAY with four basic tools and facilitate its exploration of the dev set of GAIA to accumulate more tools (result in 9 more tools).",
+   "support_explanation": "GAIA tools are harvested from the dev set; the test set is separate.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4 Settings",
+   "quote": "Subsequently, we evaluated FRIDAY’s performance on the test set by submitting our results to the official evaluation server",
+   "support_explanation": "Held-out private test scored by the benchmark's server.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 1 Introduction",
+   "quote": "significantly outperforming the popular AutoGPT-4 system (14.4%)",
+   "support_explanation": "Text reports AutoGPT-4 L1 14.4% while Table 1 lists 15.05%: reporting inconsistency.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Table 1",
+   "quote": "FRIDAY w/o learning 36.56 17.61 6.12 FRIDAY 40.86 20.13 6.12",
+   "support_explanation": "Learning ablation on GAIA test: L1 36.56->40.86, L2 17.61->20.13, L3 6.12->6.12.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.2 Quantitative Analysis",
+   "quote": "Initially, FRIDAY, without self-directed learning, is unable to complete any tasks and tends to use the pandas and matplotlib packages for spreadsheet control, resulting in failures.",
+   "support_explanation": "The 0% baseline fails because of library choice; a knowledge-injection explanation is not ruled out.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.2",
+   "quote": "to generate 10 tasks about manipulating Excel using the propenyxl package",
+   "support_explanation": "Self-generated practice tasks name the openpyxl package (spelled 'propenyxl' in the paper), i.e. the key hint is in the practice prompt.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.2",
+   "quote": "FRIDAY then solves these 10 tasks and autonomously accumulates 8 tools",
+   "support_explanation": "Practice yields 8 tools; evaluation on the 20-task SheetCopilot-20 subset.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Table 2",
+   "quote": "SheetCopilot † GPT-3.5-Turbo 40% Claude 45% GPT-4 55% FRIDAY (w/o learning) GPT-4 0% FRIDAY GPT-4 60%",
+   "support_explanation": "Pass@1 on SheetCopilot-20: FRIDAY 60% (12/20) vs w/o learning 0% vs SheetCopilot-GPT-4 55%.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Table 2 caption",
+   "quote": "denotes the results reported in",
+   "support_explanation": "SheetCopilot rows are copied from Li et al. 2023, not re-run under matched conditions.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.2",
+   "quote": "Also worth noting that FRIDAY achieves such a level of proficiency by solving and learning on just 10 tasks.",
+   "support_explanation": "Small practice set; no repeated practice runs reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.2 Qualitative Analysis",
+   "quote": "In our qualitative analysis, we design a task to create a PowerPoint slide to introduce OS-Copilot.",
+   "support_explanation": "PowerPoint evidence is a single qualitative task (Fig 4).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 2.3 Critic",
+   "quote": "Assessing the successful completion of a given subtask is challenging due to the absence of ground truth.",
+   "support_explanation": "Admission signal is an LLM judgement acknowledged to lack ground truth.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Appendix B",
+   "quote": "we manually verified the correctness of all 93 level-1 tasks and assigned capability labels.",
+   "support_explanation": "Level-1 test set has 93 tasks, so 36.56% = 34/93 and 40.86% = 38/93.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4 Baselines",
+   "quote": "GPT-4 Plugins rely on humans to browse and select proper plugins based on the task question.",
+   "support_explanation": "Baselines are not budget- or information-matched to FRIDAY.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.1 Root of improvement",
+   "quote": "The discrepancy between FRIDAY and AutoGPT-4 underscores the importance of self-criticism and refinement.",
+   "support_explanation": "Component attributions are inferred from cross-system comparison, not ablated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.1",
+   "quote": "Although none of these components are first innovated in this paper, OS-Copilot organically combines them into a cohesive whole",
+   "support_explanation": "Authors state the components (planner, critic, refiner, memory) are not new.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Appendix B",
+   "quote": "executing in 105 seconds compared to more than 500 seconds in the case of AutoGPT-4",
+   "support_explanation": "Text says 105 s; Table 3 lists FRIDAY L1 as 118 s: second reporting inconsistency. Cost is reported as time only.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4 Settings",
+   "quote": "Due to the limited budget, we use GPT4-turbo-1106 in FRIDAY.",
+   "support_explanation": "Single backbone; no token or dollar accounting.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.2",
+   "quote": "Notably, all the atomic operations and tools in SheetCopilot are manually crafted and verified, whereas FRIDAY autonomously generates all tools used.",
+   "support_explanation": "The library source is the agent, not a human (domain failure F3 absent).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Appendix D Discussion",
+   "quote": "particularly their reliance on prompt engineering and their incapacity when confronted with closed-source applications",
+   "support_explanation": "Authors' stated limitation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Appendix D",
+   "quote": "However, assessing the successful execution of these subtasks poses significant difficulties due to the absence of ground truth.",
+   "support_explanation": "Sub-task evaluation relies on rules or LLMs, potentially inaccurate (authors).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Appendix F.1",
+   "quote": "Additionally, while executing tasks in the GAIA development set, FRIDAY generates a set of tools that exhibit a degree of atomicity and universality.",
+   "support_explanation": "Tool lists (Tables 10-12) show generic file/CSV/JSON readers and Excel/PPT helpers; tool invocation counts on test tasks are not reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 2.2.2 Tool Repository",
+   "quote": "We seed OS-Copilot with 4 manually created tools for basic computer functionalities, such as web browsing and speech-to-text translation",
+   "support_explanation": "Seed library is manual; growth is agent-generated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Sec 4.1",
+   "quote": "By comparing FRIDAY against FRIDAY (w/o learning), we aim to isolate the contribution of self-directed learning to the final performance.",
+   "support_explanation": "The authors' own isolating control, run once on the GAIA test set.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "2402.07456-fulltext",
+   "material_sha256": "c813e38c5206a88144892491cd37263a14d79addaad81d353fee320a36718e5b",
+   "locator": "Derived from Table 1 and E019 (our inference)",
+   "quote": null,
+   "support_explanation": "Level-2/3 denominators are not stated in the text; percentages 17.61/20.13/6.12 are consistent with 28/32 of 159 and 3 of 49, so GAIA deltas amount to about four tasks at L1 and L2 and zero at L3.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Tool repository in procedural memory: agent-written Python tool classes (plus API services) retrieved by dense similarity",
+   "information": "Subtask from the DAG planner, OS/system info, working directory, retrieved tool docs, execution outputs, critic judgement; no ground-truth labels",
+   "operation": "On retrieval miss the Tool Generator writes a tool class and invocation; Executor runs it; Critic judges completion and scores generality 1-10; Refiner repairs the action/tool/subtask up to 3 times",
+   "output": "New or revised tool code; stored if critic score > 8",
+   "conditions": "Executable OS environment; tasks that need app-specific scripting (openpyxl, python-pptx)",
+   "feedback": "Execution errors plus LLM critic analysis",
+   "selection_rule": "LLM critic completion=true and generality score > 8 (threshold ad hoc); no replay, dedup or increment test described",
+   "persistence": "Tool files in the repository; later self-correction updates tool code",
+   "later_use": "Dense retrieval of tools into the configuration prompt for later subtasks",
+   "claimed_effect": "GAIA test L1 36.56->40.86, L2 17.61->20.13 with learning; SheetCopilot-20 0%->60%",
+   "failure_boundary": "Weak web/multimodal tools, closed-source GUI apps, prompt-reliance; backbone changes cause large swings",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E010",
+    "E014",
+    "E026"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Self-directed learning curriculum: tasks proposed by the agent for a human-set objective, solved by trial and error",
+   "information": "Pre-defined learning objective (e.g. spreadsheet manipulation); GAIA dev questions for the GAIA run",
+   "operation": "Propose easy-to-hard tasks, solve them with the S1 loop, accumulate tools and semantic knowledge",
+   "output": "8 Excel tools from 10 self-generated tasks; 9 tools from GAIA dev; PowerPoint tools from further practice",
+   "conditions": "Practice tasks disjoint from the evaluation tasks (dev vs private test; self-generated vs SheetCopilot-20)",
+   "feedback": "Same critic signal",
+   "selection_rule": "Same score > 8 gate",
+   "persistence": "Same repository",
+   "later_use": "Evaluation on GAIA test / SheetCopilot-20",
+   "claimed_effect": "Mastering unfamiliar applications with minimal supervision",
+   "failure_boundary": "Learning objective and key library hint come from the human prompt (E012)",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E012",
+    "E013",
+    "E016"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Existing language agents target a single app or terminal, and hand-crafting tools and prompts for the many OS applications is impractical; AutoGPT lacks self-directed learning of unfamiliar applications.",
+  "checked_gap": "Real limitation (fixed, human-designed tool set per application) but the specific change here, agent-generated tool library via practice, is the Voyager-style move ported to OS/Python tools; the paper states novelty mainly as integration.",
+  "lineage": "AutoGPT/OpenAgents multi-scenario agents -> Voyager-style self-directed skill learning (Minecraft) -> OS-level agent with generated Python tools; SheetCopilot as manually tooled spreadsheet specialist",
+  "closest_adjacent": "Voyager (named, not compared), AutoGPT, GPT-4 plugins, SheetCopilot; other tool-making agents are not discussed",
+  "residue": "Generalising to unfamiliar apps without per-app engineering",
+  "stakes": "Hundreds of OS applications cannot each get bespoke tools",
+  "method_response": "Retrieval-miss tool generation plus practice-time library growth with critic gating",
+  "remaining_gap": "Admission is judgment-based; no tool-level validation; benefit on GAIA is small and unreplicated; web/GUI apps unsupported",
+  "evidence_ids": [
+   "E001",
+   "E022",
+   "E026"
+  ],
+  "unresolved": [
+   "Voyager and other skill-library agents are not in the pinned materials; novelty relative to them is not independently assessed."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "Step 1 boundary: LLM plans (DAG) and writes code while the OS runtime executes (met); step 2 artifact: executable tool classes with invocation statements (met); step 3 loop closed with obtainable signals: execution output and error messages plus an LLM critic, not a sound verifier (partial); step 4 ablation of the verification/critic step: absent, only learning on/off; step 5 cost: time only, backbone cost absent",
+    "success_checks": "By-products accumulated into a growing library (Oral lesson); typed handoffs partly (JSON subtask attributes)",
+    "failure_checks": "Assembly of known components (authors concede), single benchmark per claim, no component ablation",
+    "evidence_ids": [
+     "E003",
+     "E005",
+     "E021",
+     "E022",
+     "E030"
+    ],
+    "reason": "Task decomposed into sub-tasks routed to code/API/QA solvers with execution-feedback repair; by-product tools are retained as reusable capital."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Operations are covered by decompose_and_delegate; the retention of generated tools fits C25's reusable-library lesson.",
+  "executes_pattern": true,
+  "resolves_problem": "partial: library growth is demonstrated on spreadsheet tasks and slightly on GAIA, but the generality-to-unfamiliar-apps problem is only shown on one benchmark subset and one qualitative case"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "crystallize_executable_capability",
+    "sub": "H06",
+    "version": "cards@52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:crystallize_executable_capability/H06.1",
+      "status": "met",
+      "reason": "Practice on GAIA dev / self-proposed Excel tasks, evaluation on private test / SheetCopilot-20",
+      "evidence_ids": [
+       "E007",
+       "E008",
+       "E013"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S1",
+      "status": "unmet",
+      "reason": "Admission rests on an LLM critic score > 8; no replayed execution, invocation or state-change check",
+      "evidence_ids": [
+       "E003",
+       "E018"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S2",
+      "status": "partial",
+      "reason": "Generation triggers on retrieval miss, but no explicit dedup or capability-increment test",
+      "evidence_ids": [
+       "E004"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S3",
+      "status": "partial",
+      "reason": "Abstraction (generic parameters) is asked of the generator and scored, validated only through downstream held-out tasks",
+      "evidence_ids": [
+       "E003",
+       "E010"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S4",
+      "status": "met",
+      "reason": "Refiner repairs from errors and critic analysis",
+      "evidence_ids": [
+       "E005"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S5",
+      "status": "partial",
+      "reason": "w/o-learning ablation exists but effect is about four tasks at L1/L2 and no stats; Excel gain may reflect a library hint",
+      "evidence_ids": [
+       "E010",
+       "E011",
+       "E031"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/H06.5",
+      "status": "partial",
+      "reason": "Held-out plus retained-library ablation present; practice/generation/validation cost not reported",
+      "evidence_ids": [
+       "E010",
+       "E024"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E006",
+     "E007",
+     "E013"
+    ],
+    "reason": "Self-directed practice that converts solutions into parameterised executable tools stored in a library."
+   },
+   {
+    "main": "crystallize_executable_capability",
+    "sub": "H07",
+    "version": "cards@52ff9657",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:crystallize_executable_capability/S6",
+      "status": "partial",
+      "reason": "Tool generation sees relevant code and OS info but no external documentation grounding is described",
+      "evidence_ids": [
+       "E004"
+      ]
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/F1",
+      "status": "unmet",
+      "reason": "(satisfied = failure absent) Forging sits inside a larger planner-configurator-actor architecture, so the artifact is not isolated",
+      "evidence_ids": [
+       "E021",
+       "E022"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E004"
+    ],
+    "reason": "Inline tool forging when a live subtask has no matching tool; second sub kept because the running example is on-demand rather than curriculum-driven."
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": [
+   "crystallize_executable_capability: record critic-score-threshold admission as a judgment-gate variant distinct from the execution gate in S1 (proposal only, unchecked)."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "crystallize_executable_capability",
+    "sub": "H06"
+   },
+   "operation_correspondence": "Retain solver by-products as reusable capital -> domain: practice-time admission of parameterised executable skills",
+   "conditions_and_differences": "RS card wants a verifier-closed loop; domain S1 wants execution-based admission; here both are replaced by an LLM critic",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E018"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (1)"
+   ],
+   "question": "Cost of the added structure (calls, tokens, latency)?",
+   "applies_when": "Decomposed multi-call agent",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Average answer time is reported (with a 105 vs 118 s text/table mismatch); tokens, API calls, $ and learning cost are not.",
+   "evidence_ids": [
+    "E023",
+    "E024"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (2)"
+   ],
+   "question": "Ablations isolating each component's marginal contribution?",
+   "applies_when": "Planner, critic, refiner and memory are all claimed useful",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Only the learning on/off ablation; importance of critic/refiner is argued from cross-system comparison.",
+   "evidence_ids": [
+    "E021",
+    "E030"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (3)"
+   ],
+   "question": "Prompts and implementation details disclosed?",
+   "applies_when": "Prompt-engineered pipeline",
+   "applicable": true,
+   "status": "met",
+   "reason": "Planner, tool generator, refiner, executor and critic prompts are listed in Tables 5-9; tool lists in Tables 10-12.",
+   "evidence_ids": [
+    "E028"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (4)"
+   ],
+   "question": "Generalisation beyond one benchmark/domain?",
+   "applies_when": "General-agent claim",
+   "applicable": true,
+   "status": "partial",
+   "reason": "GAIA, SheetCopilot-20 and one PowerPoint case; backbone fixed to GPT-4-turbo; authors flag large cross-LLM variance.",
+   "evidence_ids": [
+    "E010",
+    "E014",
+    "E017",
+    "E026"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#Reviewer expectations (5)"
+   ],
+   "question": "Fair comparison to simpler or concurrent baselines?",
+   "applies_when": "Pipeline claimed better",
+   "applicable": true,
+   "status": "partial",
+   "reason": "GAIA baselines include human-assisted plugins and AutoGPT-4; SheetCopilot numbers are copied from another paper's setup.",
+   "evidence_ids": [
+    "E015",
+    "E020"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S1",
+   "version": "domain-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json crystallize_executable_capability S1",
+    "patterns/sub/H06.md#Step-by-Step 2,4"
+   ],
+   "question": "Is admission gated by execution (replay, invocation, state change) rather than judgement?",
+   "applies_when": "A library admits agent-generated code",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "LLM critic judgement and generality score gate admission; authors acknowledge absence of ground truth.",
+   "evidence_ids": [
+    "E003",
+    "E018",
+    "E027"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/H06.5",
+   "version": "domain-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H06.md#Step-by-Step 5",
+    "patterns/main/crystallize_executable_capability.md#Reviewer expectations (pending)"
+   ],
+   "question": "Held-out evaluation, retained-library ablation, full construction cost, variance and backbone dependence?",
+   "applies_when": "Library gain is claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Held-out and ablation present; construction cost, variance and a second backbone absent.",
+   "evidence_ids": [
+    "E010",
+    "E024",
+    "E026"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2402.07456-1",
+   "version": "local",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "paper-internal: GAIA L1/L2 deltas of about four tasks (E031)"
+   ],
+   "question": "Are learning gains on small benchmark subsets reported with uncertainty or repeated runs?",
+   "applies_when": "Differences of a few tasks out of 93-159, 20-task Excel set",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Single leaderboard submission and one pass@1 run; no intervals, seeds or significance.",
+   "evidence_ids": [
+    "E010",
+    "E014",
+    "E031"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2402.07456-2",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper-internal: w/o-learning fails by choosing pandas (E011); practice prompt names openpyxl (E012)"
+   ],
+   "question": "Is accumulation of tools separated from a one-line library hint given to the no-learning baseline?",
+   "applies_when": "A 0% baseline is explained by a wrong default library",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No hint-only or prompt-only control; the 0%->60% jump may reflect knowledge injection rather than reusable tools.",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2402.07456-3",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper-internal: text vs table mismatches (E009, E023)"
+   ],
+   "question": "Are reported numbers internally consistent?",
+   "applies_when": "Headline comparisons cite text numbers",
+   "applicable": true,
+   "status": "partial",
+   "reason": "AutoGPT-4 L1 14.4 (text) vs 15.05 (Table 1); FRIDAY L1 time 105 s (text) vs 118 s (Table 3); not decisive for the main claims.",
+   "evidence_ids": [
+    "E009",
+    "E023"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "FRIDAY outperforms previous systems on GAIA (L1 40.86% vs 30.3% GPT-4 Plugins, +35% relative)",
+   "setting": "GPT-4-turbo-1106, private test via official server",
+   "baseline_control": "GPT-4, GPT-4-turbo, AutoGPT-4, GPT-4 Plugins (human-selected)",
+   "selection_vs_test": "Tools harvested on dev, scored on private test",
+   "result_denominator": "L1 93 tasks (38/93), L2 20.13%, L3 6.12%",
+   "evidence_ids": [
+    "E002",
+    "E008",
+    "E010",
+    "E019",
+    "E020"
+   ],
+   "counterevidence": "w/o learning already 36.56% (so most of the lift is framework, not self-improvement); baselines not matched",
+   "allowed_conclusion": "The framework as a whole scores above listed baselines; attribution to learning is small"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Self-directed learning improves GAIA performance",
+   "setting": "Learning on dev vs disabled",
+   "baseline_control": "FRIDAY w/o learning",
+   "selection_vs_test": "Dev for learning, private test for scoring",
+   "result_denominator": "L1 36.56->40.86, L2 17.61->20.13, L3 unchanged; about +4 tasks each at L1/L2",
+   "evidence_ids": [
+    "E010",
+    "E030",
+    "E031"
+   ],
+   "counterevidence": "No uncertainty; single run",
+   "allowed_conclusion": "A small positive effect of retained tools, within plausible noise"
+  },
+  {
+   "claim_id": "C3",
+   "text": "FRIDAY masters Excel via 10 self-generated tasks (0% -> 60%), surpassing SheetCopilot (55%)",
+   "setting": "SheetCopilot-20, pass@1, GPT-4",
+   "baseline_control": "FRIDAY w/o learning; SheetCopilot rows from the other paper",
+   "selection_vs_test": "Practice tasks self-generated with a benchmark-aligned objective; evaluation tasks fixed 20",
+   "result_denominator": "12 of 20 vs 0 of 20",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013",
+    "E014",
+    "E015",
+    "E016"
+   ],
+   "counterevidence": "No hint-only control; 20 tasks; cross-paper baseline",
+   "allowed_conclusion": "Practice on openpyxl tasks fixes a failing default and enables 60% on this subset"
+  },
+  {
+   "claim_id": "C4",
+   "text": "FRIDAY learns PowerPoint control through self-directed learning",
+   "setting": "Single slide-construction task (Fig 4)",
+   "baseline_control": "FRIDAY w/o learning (qualitative)",
+   "selection_vs_test": "One task",
+   "result_denominator": "N=1",
+   "evidence_ids": [
+    "E017"
+   ],
+   "counterevidence": "Anecdotal",
+   "allowed_conclusion": "Illustrative only"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A GPT-4-turbo agent that keeps agent-written, critic-approved Python tools gathered on GAIA dev or on 10 self-proposed Excel tasks gains about four tasks on GAIA test L1 and L2 (none at L3) and goes from 0/20 to 12/20 on SheetCopilot-20; most of its lead over listed baselines exists without learning.",
+  "unresolved": [
+   "Attribution of the Excel jump to tool accumulation versus a library hint.",
+   "Tool-level reuse, validity and cost of learning are not reported.",
+   "Admission is judged by an LLM without ground truth; no variance."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "‘按应用手工配工具不可扩展’是真实局限且有对比对象，但最近邻(Voyager式技能库、工具生成agent)只提及未对照，创新主要在集成/移植，残余问题与影响范围刻画不完整。",
+   "evidence_ids": [
+    "E001",
+    "E022",
+    "E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "规划-配置-执行-批评-精炼加按需造工具的机制可描述且与‘陌生应用’对口；但准入依赖无真值的LLM评分、阈值任意，Excel增益可能只是库选择提示，关键假设薄弱。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E011",
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "提示词与工具清单完整，流程(检索未命中→生成→执行→批评→精炼→存入)可重建，练习/测试分离；保留门控为LLM评分>8，阈值/去重/版本/淘汰未述，工具级验证缺失。",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E007",
+    "E028"
+   ],
+   "counterevidence_ids": [
+    "E018"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "GAIA私测经官方服务器判分，信度较高；SheetCopilot-20判分方式未述、对照数字摘自他文；正文与表格有两处数值不一致。",
+   "evidence_ids": [
+    "E008",
+    "E014",
+    "E015"
+   ],
+   "counterevidence_ids": [
+    "E009",
+    "E023"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "仅有学习开/关一项消融；系统间对比未匹配(人工选插件、AutoGPT)，批评/精炼贡献无消融，0%基线因默认库错误而失败、缺提示提示对照，来源归因薄弱。",
+   "evidence_ids": [
+    "E010",
+    "E030"
+   ],
+   "counterevidence_ids": [
+    "E011",
+    "E012",
+    "E020",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "工具在GAIA dev上收集、私有测试集评分；Excel练习任务自生成、评测集固定，二者不相交；但练习目标与基准同域，无泄漏审计，单一骨干，迁移证据有限。",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "单次提交/单次pass@1，无区间、种子或检验；GAIA学习增益约4题(L1/L2)、Excel仅20题；无失败分母分解。",
+   "evidence_ids": [
+    "E010",
+    "E014",
+    "E031"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "仅给平均耗时(文表不一致)，无token/API花费、学习阶段成本、预算匹配；仅说明因预算限制用GPT-4-turbo。",
+   "evidence_ids": [
+    "E023",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 57.5,
+  "display": 57.5,
+  "lower": 57.5,
+  "upper": 57.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

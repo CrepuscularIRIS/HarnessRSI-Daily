@@ -1,0 +1,259 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r05a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整 HTML 全文含附录 A-M（v2, 2026-05-27）；图 1-6 为图像，文中结论已由正文复述。材料齐全，可评分。",
+ "paper": {
+  "paper_key": "2506.06254",
+  "paper_id": "2506.06254",
+  "title": "PersonaAgent: Bridging Memory and Action for Personalized LLM Agents",
+  "version": "2506.06254v2",
+  "claim_type": "system_method",
+  "central_claim": "A personalized agent whose per-user persona (system prompt) links episodic/semantic memory to tool actions, with a test-time user-preference alignment step that rewrites the persona via textual-gradient feedback between simulated and ground-truth responses, significantly outperforms non-personalized, personalized-workflow and general-agent baselines on LaMP tasks."
+ },
+ "provenance": {
+  "input_hash": "5371b9c966106bd075b2c83623c3310d5fd11a5b6c5ad4c30a4a88832571aa18",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref 未由运行环境暴露，故为 null；按总控指定 model type 记录。图 2-4（persona t-SNE、test-time scaling、基座能力）不可读，只用正文文字陈述，未据图评分。",
+  "timestamp": "2026-10-21T00:00:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "2506.06254v2",
+   "url": "https://arxiv.org/html/2506.06254v2",
+   "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+   "sections_read": ["Abstract", "1 Introduction (Table 1)", "2 Methodology (2.1-2.2, Algorithm 1)", "3 Experiments (3.1-3.7, Tables 2-3)", "4 Conclusion", "Limitations", "Appendix A-M (related work, TextGrad, prompts, tools, experimental details, datasets, text generation, persona cases, similarity, execution case, runtime, cold-start)"],
+   "complete": true,
+   "missing_sections": ["Figure 2-4 image content (not in text material)"]
+  }
+ ],
+ "evidence": [
+  {"evidence_id": "E001", "material_id": "2506.06254v2", "locator": "Abstract", "quote": "current LLM agents often adopt a one-size-fits-all approach, lacking the flexibility to respond to users’ varying needs and preferences.", "support_explanation": "作者 gap：通用 LLM 代理缺乏个体级适配。", "kind": "author_report"},
+  {"evidence_id": "E002", "material_id": "2506.06254v2", "locator": "Sec 1 para 5", "quote": "utilize external personalized data but rely on fixed workflows with limited data retrieval capabilities.", "support_explanation": "最近邻 RAG/PAG 的局限：固定流程、检索有限；用户级微调(OPPU 类)因算力随用户数线性增长而不适用（见同段）。", "kind": "author_report"},
+  {"evidence_id": "E003", "material_id": "2506.06254v2", "locator": "Sec 1 para 5", "quote": "enable individual-level personalization but face real-world application challenges due to their computational complexity, which increases dynamically with large-scale users and demands frequent model updates.", "support_explanation": "用户专属微调的可扩展性瓶颈，是转向非权重（persona 提示+记忆）的动机。", "kind": "author_report"},
+  {"evidence_id": "E004", "material_id": "2506.06254v2", "locator": "Abstract", "quote": "(defined as unique system prompt for each user) functions as an intermediary: it leverages insights from personalized memory to control agent actions, while the outcomes of these actions in turn refine the memory.", "support_explanation": "persona=每用户一份系统提示，被编辑对象为非权重 prompt；记忆写回规则见下。", "kind": "author_report"},
+  {"evidence_id": "E005", "material_id": "2506.06254v2", "locator": "Sec 2.2", "quote": "prompt by simulating recent interactions and minimizing textual discrepancies between simulated agent responses and user ground-truth responses.", "support_explanation": "对齐信号：用 (q, 模拟响应, 用户真值响应) 三元组做 TextGrad 式文本损失。", "kind": "author_report"},
+  {"evidence_id": "E006", "material_id": "2506.06254v2", "locator": "Appendix C Gradient Update Prompt", "quote": "Based on the feedback above, generate an updated system prompt that explicitly highlights the user’s unique preferences.", "support_explanation": "更新为整份 persona 的重写，直接生成 '新系统提示'；Algorithm 1 末步 'return updated persona'，无候选比较、验证门或回退。", "kind": "author_report"},
+  {"evidence_id": "E007", "material_id": "2506.06254v2", "locator": "Algorithm 1 step 10", "quote": "return updated persona", "support_explanation": "更新后的 persona 被无条件返回并替换旧版；没有接受/拒绝判据。", "kind": "author_report"},
+  {"evidence_id": "E008", "material_id": "2506.06254v2", "locator": "Appendix F", "quote": "we set alignment batch size n n as 3 3 and alignment iterations as 1 1 to ensure fast adaptation and achieve a tradeoff between the performance and efficiency.", "support_explanation": "默认对齐仅用 3 条最近交互、1 次迭代；而 Sec 3.5 的缩放研究显示约 3 次迭代增益最优。", "kind": "author_report"},
+  {"evidence_id": "E009", "material_id": "2506.06254v2", "locator": "Appendix F", "quote": "with a single run.", "support_explanation": "所有实验单次运行；无多次种子、方差或显著性。", "kind": "author_report"},
+  {"evidence_id": "E010", "material_id": "2506.06254v2", "locator": "Appendix F", "quote": "To ensure reproducibility, we fix the LLM sampling temperature at 0.1, rendering outputs effectively deterministic.", "support_explanation": "低温度使单次运行近似确定，但不能替代对多条用户轨迹/提示扰动的方差估计。", "kind": "author_report"},
+  {"evidence_id": "E011", "material_id": "2506.06254v2", "locator": "Appendix G", "quote": "our test set consists of the 100 users with the most extensive activity histories, selected from the time-ordered version of the LaMP", "support_explanation": "测试集为活动历史最丰富的 100 位用户，选择偏置有利于记忆/个性化方法；每用户测试条数、总测试量在文中未给。", "kind": "author_report"},
+  {"evidence_id": "E012", "material_id": "2506.06254v2", "locator": "Appendix G", "quote": "For each user, the data is chronologically ordered and partitioned into two subsets: a profile set representing their historical behaviors, and a test set reserved for final evaluation.", "support_explanation": "存在 profile/test 划分，但对齐批次 D_batch 取自哪个子集，在已读材料中未明说。", "kind": "author_report"},
+  {"evidence_id": "E013", "material_id": "2506.06254v2", "locator": "Sec 3.2 / Table 2", "quote": "PersonaAgent achieves the best performance across all four decision-making tasks, outperforming non-personalized, personalized, and agentic baselines.", "support_explanation": "读表：LaMP-1 Acc 0.919 vs 最佳基线 MemBank 0.862；LaMP-2M Acc 0.513 vs 0.470(MemBank)；LaMP-2N Acc 0.796 vs 0.768(PAG)；LaMP-3 MAE 0.241 vs 0.277(ICL)。差距约 2.8-5.7 点；单次运行无区间。", "kind": "author_report"},
+  {"evidence_id": "E014", "material_id": "2506.06254v2", "locator": "Sec 3.3 / Table 3", "quote": "removing the test-time alignment module leads to a noticeable drop in performance across the board, confirming its critical role in adapting to real-time user preferences.", "support_explanation": "Table 3：去对齐后 LaMP-1 Acc 0.919→0.894；2M 0.513→0.487；2N 0.796→0.775；LaMP-3 MAE 0.241→0.259、RMSE 0.509→0.560；去 persona 0.846/0.463/0.769、去记忆 0.821/0.460/0.646、去动作 0.764/0.403/0.626。对齐的边际贡献约 2-3 点，小于其他模块。", "kind": "author_report"},
+  {"evidence_id": "E015", "material_id": "2506.06254v2", "locator": "Sec 3.5", "quote": "We observe that increasing the number of alignment iterations leads to consistent gains in both accuracy and F1 score up to around 3 iterations, after which performance plateaus or slightly declines.", "support_explanation": "缩放研究仅在 LaMP-2M；超参(n=3, 1 迭代)与缩放结果均来自同一评测任务，未见独立调参划分。", "kind": "author_report"},
+  {"evidence_id": "E016", "material_id": "2506.06254v2", "locator": "Sec 3.5", "quote": "In this section, we systematically explore the impact of scaling alignment batch samples, alignment iterations, and retrieved memory on LaMP-2M task.", "support_explanation": "同上：调参与结果同一任务。", "kind": "author_report"},
+  {"evidence_id": "E017", "material_id": "2506.06254v2", "locator": "Sec 3.7", "quote": "persona optimization is finalized before the subsequent session begins and does not introduce additional latency to real-time online interactions.", "support_explanation": "对齐成本被异步化而不计入推理延迟；对齐所需的额外 LLM 调用（模拟+梯度+更新）无 token/费用统计。", "kind": "author_report"},
+  {"evidence_id": "E018", "material_id": "2506.06254v2", "locator": "Appendix L Table 5", "quote": "Average runtime per sample (seconds) across LaMP tasks. Lower is better.", "support_explanation": "平均每样本运行时间：PAG 1.24、ReAct 2.61、MemBank 2.92、PersonaAgent 1.79 秒；仅推理，不含对齐开销。", "kind": "author_report"},
+  {"evidence_id": "E019", "material_id": "2506.06254v2", "locator": "Sec 3.1", "quote": "under a unified evaluation pipeline with identical inputs and output formats, ensuring a fair comparison.", "support_explanation": "所有方法同用 Claude 3.5 Sonnet；PersonaAgent 对齐需要用户真值响应，基线是否获得同等标注信息(如把最近 n 条真值作为上下文)未说明。", "kind": "author_report"},
+  {"evidence_id": "E020", "material_id": "2506.06254v2", "locator": "Appendix E", "quote": "one tool (Wikipedia search) for general information access and one tool (episodic memory) for personal data retrieval", "support_explanation": "仅两件工具；动作空间固定 (Sec 2.2 'While the set Â remains fixed')，个性化来自 persona 对工具调用参数/选择的调制，而非新增工具。", "kind": "author_report"},
+  {"evidence_id": "E021", "material_id": "2506.06254v2", "locator": "Appendix D", "quote": "MUST use at least TWO tools to answer the question.", "support_explanation": "初始 persona 含强制至少两次工具调用的规则；此规则属于 PersonaAgent 的初始化而不一定出现在 ReAct/MemBank 提示中，是潜在混杂。", "kind": "author_report"},
+  {"evidence_id": "E022", "material_id": "2506.06254v2", "locator": "Appendix M", "quote": "Specifically, we resample users and restrict each user to 10 historical interactions.", "support_explanation": "冷启动 Table 6：PersonaAgent 对 PAG/ReAct/MemBank 全面领先(LaMP-1 Acc 0.845 vs ReAct 0.802；2M 0.476 vs 0.428)；无消融。", "kind": "author_report"},
+  {"evidence_id": "E023", "material_id": "2506.06254v2", "locator": "Limitations", "quote": "Its reliance on textual feedback for preference alignment may overlook implicit or multi", "support_explanation": "作者承认的边界；隐私风险同段。", "kind": "author_report"},
+  {"evidence_id": "E024", "material_id": "2506.06254v2", "locator": "Appendix G", "quote": "LaMP as the primary evaluation benchmark because it is currently the only widely adopted dataset that provides real user data with longitudinal, time-ordered interaction histories over multiple personalization tasks.", "support_explanation": "评测基准仅 LaMP 系列；未做真实对话评测，作者列为未来工作。", "kind": "author_report"},
+  {"evidence_id": "E025", "material_id": "2506.06254v2", "locator": "Appendix F", "quote": "to summarize the user behaviors into user profile for our initial semantic memory.", "support_explanation": "语义记忆=PAG 式初始用户画像摘要；后续是否随交互更新由 persona 重写承担，语义记忆本身的更新/淘汰规则未述。", "kind": "author_report"},
+  {"evidence_id": "E026", "material_id": "2506.06254v2", "locator": "Algorithm 1 inputs", "quote": "Input: Test User data", "support_explanation": "Algorithm 1 的输入写作 '测试用户数据 D'，D_batch 取自其中并含真值响应；若 D 含被评测的测试条目，则 persona 在含标签的测试数据上被调优(标签泄漏)；若仅取 profile 集则无泄漏。文中未明确，属必须核实的开放点。", "kind": "our_inference"},
+  {"evidence_id": "E027", "material_id": "2506.06254v2", "locator": "Appendix K Figure 6 caption", "quote": "may follow up when the user provide their satisfaction feedback.", "support_explanation": "部署叙述：对齐在用户给出反馈后进行；基准协议如何模拟此反馈时序没有说明。", "kind": "author_report"},
+  {"evidence_id": "E028", "material_id": "2506.06254v2", "locator": "Sec 3.6", "quote": "PersonaAgent consistently outperforms all baselines regardless of the base model’s capability.", "support_explanation": "跨基座(Mistral-Small/Large、Claude 3.5/3.7)的趋势结论来自图 4，图在文本材料中不可读；文字称 Claude-3.7 达 55.0%。", "kind": "author_report"},
+  {"evidence_id": "E029", "material_id": "2506.06254v2", "locator": "Abstract", "quote": "the first personalized LLM agent framework designed to address versatile personalization tasks.", "support_explanation": "'first' 为作者断言；未对比同期个性化代理(其相关工作列了领域专用代理)。", "kind": "author_report"}
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "每用户 persona（系统提示），基线为通用 persona 初始化模板",
+   "information": "可见：最近 n 条 (查询, 模拟响应, 用户真值响应)、当前 persona；真值响应来自用户数据；不可见：未来查询",
+   "operation": "LLM_grad 对每条样本给出 persona 改进反馈→聚合→LLM_update 重写整份 persona",
+   "output": "新的 persona 提示",
+   "conditions": "需用户真值响应；n=3、1 次迭代；Claude 3.5 Sonnet",
+   "feedback": "文本损失(模拟 vs 真值响应)",
+   "selection_rule_data": "无：更新后的 persona 直接取代旧版，未做候选比较或验证",
+   "persistence": "每用户 persona 持久化并跨会话使用（Appendix I 给出示例）",
+   "later_use": "后续每步动作选择/检索查询的系统提示",
+   "claimed_effect": "去对齐后各任务下降约 2-3 点(Table 3)",
+   "failure_boundary": "仅文本反馈；隐私；对齐批次来源未明；无回退",
+   "evidence_ids": ["E005", "E006", "E007", "E008", "E014", "E026"]
+  },
+  {
+   "sig_id": "S2",
+   "object": "用户个人记忆：episodic buffer（时间戳化 (q, r_gt, meta)）与 semantic memory（用户画像摘要）",
+   "information": "用户历史交互",
+   "operation": "top-K 嵌入检索(K=4) 供动作模块使用；语义记忆为摘要函数 f_s 的输出",
+   "output": "检索到的历史条目；用户画像",
+   "conditions": "用户需有历史；冷启动用 10 条历史",
+   "feedback": "无单独的记忆质量反馈",
+   "selection_rule_data": "无准入/淘汰规则",
+   "persistence": "episodic 随交互追加；semantic 为初始摘要",
+   "later_use": "RAG 工具读取",
+   "claimed_effect": "去记忆后 LaMP-2N Acc 0.796→0.646、LaMP-3 MAE 0.241→0.348",
+   "failure_boundary": "记忆增长、冲突与过期处理未述",
+   "evidence_ids": ["E014", "E020", "E022", "E025"]
+  }
+ ],
+ "gap": {
+  "author_gap": "通用 LLM 代理与固定流程的个性化方法无法在个体级、实时地利用个人数据并对齐偏好。",
+  "checked_gap": "被改变的对象明确(每用户 persona 提示+记忆调用方式)，非权重；动机与用户级微调的扩展性瓶颈相符。但 '首个个性化代理' 为断言，相关代理框架(带记忆的 ReAct/Reflexion 类)的差异主要靠自评 Table 1，没有量化的残余瓶颈。",
+  "lineage_closest_adjacent": "祖先：LaMP/RAG/PAG(非参数个性化)、OPPU(用户 PEFT)、ReAct、MemoryBank、TextGrad(文本梯度，直接复用)。邻近：Reflexion 类反思写入与基于反馈的提示优化(H10/H00)——本文把它们应用于 '每用户 persona'。",
+  "residue": "对齐批次与评测条目的分离、更新的验证门、记忆维护均未解决；仅 LaMP 一个基准族。",
+  "stakes": "persona 无门控地改写，若反馈噪声或批次偏差，会固化错误偏好并无回退。",
+  "method_response": "persona 作为记忆与动作之间的中介，并在测试时用文本损失对齐。",
+  "remaining_gap": "对齐协议的泄漏风险；超参选择；未比较更简单的 '把最近 n 条真值拼进画像' 方案；无方差。",
+  "evidence_ids": ["E001", "E002", "E003", "E029"],
+  "unresolved": "Algorithm 1 的 D 是否含评测条目（见 E026）。"
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "主卡操作签名：把新任务/新用户表达为条件(persona 提示+检索到的历史+用户画像)，在推理时求解、无逐用户参数更新——执行。子卡 C03 的 tactic 是统一格式的上游多任务调优+类别级留出，本文无上游调优与类别留出，仅 '检索最近实例作为一等输入' 子动作与之相近，故 sub=null。",
+    "success_failure_checks": "成功：隔离条件信号的消融(partial：去 persona/记忆/对齐三项)；在朴素方案不足的区域取胜并刻画(unmet：冷启动有，但无朴素对照)；失败：缺少污染/重叠分析(触发)；缺少 '更长上下文/最近邻' 廉价基线(部分触发：RAG/PAG 在，但无 '拼接最近 n 条真值' 对照)；单基准族(部分触发)。",
+    "evidence_ids": ["E004", "E014", "E020", "E022"],
+    "reason": "对每个用户以 persona+检索记忆为条件，不更新权重，对应主卡；其中 persona 重写是一次推理时的提示编辑，使它既像条件化又像 H10 的文档重写。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "主卡部分适配；子卡无贴切者，已说明。",
+  "executes_pattern": "yes",
+  "resolves_problem": "partial — 在 LaMP 上相对基线有作者报告的提升；对齐的单独贡献仅约 2-3 点，且对齐协议存在未排除的泄漏可能。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "patterns@52ff9657",
+    "fit": "high",
+    "condition_checks": "H10 步骤：同时收集成败两侧(partial：反馈对每条样本的预期答案与响应做批评，不限于失败)；聚合后再编辑(met：n=3 聚合反馈)；局部化编辑并在独立验证划分上门控(unmet：整份重写，无验证门)；有目的地分配评测预算(unmet)；不用测试选择(unknown：超参在 LaMP-2M 上研究)。attribute S3 保护早期成果：unmet；F5 假设反馈能定位到被编辑工件：partial。",
+    "evidence_ids": ["E005", "E006", "E007", "E008", "E015"]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "patterns@52ff9657",
+    "fit": "medium",
+    "condition_checks": "H00 步骤：固定接地信号(met：用户真值响应)；对比而非叙述(partial：逐条反馈再聚合)；抽象层次(met：persona 写成偏好描述)；生产流与评测流分离(unknown，见 E026)；预算匹配与保留库消融(partial：w/o alignment 有，预算未匹配)。",
+    "evidence_ids": ["E004", "E005", "E014", "E026"]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "patterns@52ff9657",
+    "fit": "low",
+    "condition_checks": "episodic buffer 的 top-K 嵌入检索类似 H03 的 '检索先例'，但内容是用户数据而非代理自身经验，亦无案例适配与写入门控。",
+    "evidence_ids": ["E020", "E025"]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "attribute_and_patch_incumbent",
+   "domain_sub": "H10",
+   "operation_correspondence": "RS 的 '以条件(提示+检索)代替权重更新' 与 H10 的 '以文本梯度重写在位提示' 相合：persona 同时是条件和被编辑工件。",
+   "required_conditions_and_differences": "RS 要求隔离条件信号并比较廉价基线(最近邻/更长上下文)；H10 要求在独立划分上门控更新。本文有三项消融，但无廉价对照与更新门。",
+   "evidence_ids": ["E004", "E006", "E007", "E014"]
+  }
+ ],
+ "expectations": [
+  {"id": "rsi:attribute_and_patch_incumbent/S3", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/attribute_and_patch_incumbent.md"], "applies_when": "在位工件被编辑后替换", "applicable": true, "status": "unmet", "reason": "新 persona 无条件替换旧版，无个别编辑改进检验、回归保护或回退。", "evidence_ids": ["E006", "E007"], "score_item": "X"},
+  {"id": "rsi:attribute_and_patch_incumbent/S4", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/attribute_and_patch_incumbent.md"], "applies_when": "批评来自多条失败", "applicable": true, "status": "partial", "reason": "对 n=3 条样本的反馈做聚合后更新；n 很小，聚合的泛化性未检验。", "evidence_ids": ["E005", "E008"], "score_item": "M"},
+  {"id": "rsi:attribute_and_patch_incumbent/F5", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/attribute_and_patch_incumbent.md"], "applies_when": "把失败归因到被编辑工件", "applicable": true, "status": "partial", "reason": "错误可能来自检索或工具而非 persona；文中未检验失败是否由 persona 引起。", "evidence_ids": ["E005", "E020"], "score_item": "M"},
+  {"id": "rsi:abstract_experience_into_guidance/S3", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "课程由结果驱动", "applicable": true, "status": "met", "reason": "接地信号为用户真值响应(非自评)。", "evidence_ids": ["E005"], "score_item": "M"},
+  {"id": "rsi:abstract_experience_into_guidance/S4", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "存储随使用增长", "applicable": true, "status": "unmet", "reason": "整份重写，无局部 delta 编辑、合并或遗忘；episodic 随交互追加而无淘汰；语义记忆更新规则未述。", "evidence_ids": ["E006", "E025"], "score_item": "X"},
+  {"id": "rsi:abstract_experience_into_guidance/S5", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "写入前需质量过滤", "applicable": true, "status": "unmet", "reason": "无写入前执行/评审过滤。", "evidence_ids": ["E007"], "score_item": "X"},
+  {"id": "rs:adapt_via_conditioning/RE-1", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "声称条件化带来增益", "applicable": true, "status": "partial", "reason": "有去 persona/去记忆/去对齐/去动作四种消融，但无 '同等信息、无条件化' 的匹配对照；对齐的边际仅约 2-3 点。", "evidence_ids": ["E014"], "score_item": "E.causality"},
+  {"id": "rs:adapt_via_conditioning/RE-2", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "公开基准 + 闭源基座", "applicable": true, "status": "unmet", "reason": "未做 LaMP 与基座预训练重叠/污染分析，也未说明对齐批次与评测条目的重叠检验。", "evidence_ids": ["E012", "E026"], "score_item": "E.holdout"},
+  {"id": "rs:adapt_via_conditioning/RE-3", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "与廉价替代方案比较", "applicable": true, "status": "partial", "reason": "有 RAG/PAG/MemBank；缺少 '把最近 n 条真值直接并入画像或上下文' 的同信息对照。", "evidence_ids": ["E013", "E019"], "score_item": "E.causality"},
+  {"id": "rs:adapt_via_conditioning/RE-5", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "声称通用方法", "applicable": true, "status": "partial", "reason": "LaMP-1/2M/2N/3 + 4/5 共六个任务，同一基准族，同一基座家族。", "evidence_ids": ["E024", "E028"], "score_item": "E.holdout"},
+  {"id": "rs:adapt_via_conditioning/RE-6", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "条件源质量/覆盖影响", "applicable": true, "status": "partial", "reason": "有冷启动(10 条历史)与检索条数缩放；未分析噪声/分布差。", "evidence_ids": ["E022", "E015"], "score_item": "E.holdout"},
+  {"id": "local:2506.06254-1", "version": "v1", "source_strength": "common_practice", "source_refs": ["E012", "E026", "E027"], "applies_when": "用含真值的数据更新提示并在同数据族上评测", "applicable": true, "status": "unknown", "reason": "必须明示对齐批次来源、与评测条目的不相交性，以及按时间顺序的评测（先预测后更新）。", "evidence_ids": ["E012", "E026", "E027"], "score_item": "E.holdout"},
+  {"id": "local:2506.06254-2", "version": "v1", "source_strength": "common_practice", "source_refs": ["E008", "E015", "E016"], "applies_when": "超参在评测任务上研究", "applicable": true, "status": "unmet", "reason": "n、迭代次数在 LaMP-2M 上做缩放，与最终报告同一任务；需独立开发划分。", "evidence_ids": ["E008", "E015", "E016"], "score_item": "E.holdout"},
+  {"id": "local:2506.06254-3", "version": "v1", "source_strength": "common_practice", "source_refs": ["E009", "E013"], "applies_when": "宣称 'significantly outperforms' 而差距 2-6 点", "applicable": true, "status": "unmet", "reason": "单次运行，无区间/检验，测试条数未给。", "evidence_ids": ["E009", "E013"], "score_item": "E.statistics"}
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "PersonaAgent 在四个 LaMP 决策任务上全面优于非个性化、个性化工作流与通用代理基线。",
+   "setting": "Claude 3.5 Sonnet；100 位历史最丰富的用户；单次运行；T=0.1",
+   "baseline_control": "Prompt、ICL、RAG、PAG、ReAct、MemBank（统一管线）",
+   "selection_vs_test": "对齐批次来源不明；超参在 LaMP-2M 上研究",
+   "result_denominator": "Table 2 全部指标；文本生成任务在 Appendix H",
+   "evidence_ids": ["E009", "E011", "E013", "E019"],
+   "counterevidence": ["E009", "E026"],
+   "allowed_conclusion": "作者报告 PersonaAgent 在 4 个 LaMP 任务上相对 6 个基线均更优(2.8-5.7 点)；无区间；协议泄漏风险未排除。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "测试时用户偏好对齐是关键组件。",
+   "setting": "Table 3 去对齐",
+   "baseline_control": "去对齐的 PersonaAgent",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "4 任务；约 2-3 点",
+   "evidence_ids": ["E014", "E015", "E026"],
+   "counterevidence": ["E026"],
+   "allowed_conclusion": "去对齐后各任务一致下降约 2-3 点；贡献小于记忆/动作模块；若对齐批次含评测条目则该增益含标签泄漏。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "persona 作为记忆与动作的中介是关键。",
+   "setting": "Table 3 去 persona",
+   "baseline_control": "去 persona",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "4 任务",
+   "evidence_ids": ["E004", "E014", "E021"],
+   "counterevidence": ["E021"],
+   "allowed_conclusion": "去 persona 下降；但 persona 初始化含强制多工具规则(E021)，不能把全部差异归因于 '中介' 设计。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "对齐可在测试时扩展，且冷启动与低延迟下仍有效。",
+   "setting": "Sec 3.5、Appendix L-M",
+   "baseline_control": "PAG/ReAct/MemBank",
+   "selection_vs_test": "LaMP-2M 缩放研究与最终评测同任务",
+   "result_denominator": "冷启动 10 条历史；延迟仅推理",
+   "evidence_ids": ["E015", "E017", "E018", "E022"],
+   "counterevidence": ["E017"],
+   "allowed_conclusion": "冷启动下领先于 3 个基线；延迟对比不含异步对齐成本。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "作者报告：在 LaMP 的 100 位高活跃用户上，PersonaAgent（persona+记忆+动作+测试时对齐）在 4 个决策任务上相对 6 个基线领先 2.8-5.7 点；去对齐约降 2-3 点。因对齐批次与评测条目的分离未明、超参在同一任务上研究、单次运行无方差，评级最高 task。",
+  "not_supported": "对齐更新的留存收益(需分离协议)；'显著' 优于基线；persona 更新机制优于更简单的画像更新；对其他基准的泛化。",
+  "unresolved": "Algorithm 1 的 D 是否含评测条目；总评测条数；对齐的 token 成本。"
+ },
+ "ratings": {
+  "G": {"status": "resolved", "rating": 2, "reason": "对象明确(每用户 persona 提示)，用户微调扩展性的动机站得住；但 '首个个性化代理' 为断言，最近邻差异靠自评矩阵，无量化残余瓶颈。", "evidence_ids": ["E001", "E002", "E003", "E029"], "counterevidence_ids": [], "search_scope": []},
+  "M": {"status": "resolved", "rating": 2, "reason": "persona 中介+文本损失更新有清晰机制，真值接地信号；但与更简单的画像重摘要/拼接方案的可区分预测缺失，反馈能否定位到 persona（而非检索/工具）未检验。", "evidence_ids": ["E004", "E005", "E020"], "counterevidence_ids": [], "search_scope": []},
+  "X": {"status": "resolved", "rating": 2, "reason": "提示、超参、工具、数据划分已披露，操作链可重建；但无保留门、版本、回退、冲突与过期处理，整份无条件重写，对齐批次来源不明，记忆维护规则缺失。", "evidence_ids": ["E006", "E007", "E008", "E025"], "counterevidence_ids": [], "search_scope": []},
+  "E.measurement": {"status": "resolved", "rating": 3, "reason": "LaMP 官方指标(准确率/F1/MAE/RMSE/ROUGE)与用户真值标签可信，统一管线与低温；扣分：仅取 100 位高活跃用户，测试总条数未给，缺少平凡基线核对。", "evidence_ids": ["E011", "E019", "E010"], "counterevidence_ids": [], "search_scope": []},
+  "E.causality": {"status": "resolved", "rating": 2, "reason": "有去对齐/去 persona/去记忆/去动作消融和冷启动对照；缺少同信息的廉价替代(把最近 n 条真值并入画像/上下文)，初始 persona 的强制工具规则混杂，对齐算力不匹配。", "evidence_ids": ["E014", "E021", "E019", "E017"], "counterevidence_ids": ["E021"], "search_scope": []},
+  "E.holdout": {"status": "resolved", "rating": 1, "reason": "存在 profile/test 划分，但 Algorithm 1 输入为 '测试用户数据' 且含真值响应，对齐批次与评测条目的不相交未被证明；n 与迭代数在 LaMP-2M 上研究；公开基准+闭源基座无污染分析。", "evidence_ids": ["E012", "E015", "E016", "E026"], "counterevidence_ids": ["E026"], "search_scope": []},
+  "E.statistics": {"status": "resolved", "rating": 1, "reason": "单次运行；有 100 用户的样本规模，但测试条数未给，无区间/方差/检验；2-6 点的差距被称为 'significantly'。", "evidence_ids": ["E009", "E011", "E013"], "counterevidence_ids": [], "search_scope": []},
+  "E.cost": {"status": "resolved", "rating": 1, "reason": "给出每样本推理时延对比(PersonaAgent 1.79s，介于 PAG 与 ReAct 之间)，但对齐成本被异步化，未报告 token/调用次数/费用，与基线不做同预算比较。", "evidence_ids": ["E017", "E018"], "counterevidence_ids": [], "search_scope": []}
+ },
+ "score": {"raw": 47.5, "display": 47.5, "lower": 47.5, "upper": 47.5, "coverage": 1.0, "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"},
+ "rationale": "每用户persona经文本梯度无门控重写，LaMP上领先基线；但对齐批次与评测条目是否分离未明、超参同任务调、单次运行无方差。task级。"
+}

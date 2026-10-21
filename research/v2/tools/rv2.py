@@ -61,6 +61,9 @@ def normalize_record(rec: dict) -> dict:
         for m in rsp.get("matches", []) or []:
             if m.get("sub_id") is not None:
                 m["sub_id"] = norm_id(m["sub_id"])
+    a = r.get("assessment")
+    if isinstance(a, dict) and a.get("evidence_level") == "none":
+        a["evidence_level"] = None  # "no measurements at all" == not assignable, not a level
     sc = r.get("score")
     if isinstance(sc, dict):
         for k in ("raw", "display", "lower", "upper", "coverage"):
@@ -222,9 +225,11 @@ def check_record(rec_raw: dict, ids) -> list:
             errs.append(f"domain match sub invalid: {m.get('sub')}")
     # assessment / score / status
     a = rec.get("assessment") or {}
-    if a.get("evidence_level") not in ("task", "retained", "improver", "not_applicable", None):
+    if a.get("evidence_level") not in ("task", "retained", "improver", "not_applicable", None,
+                                       *(["not_assessed"] if oos else [])):
         errs.append(f"assessment.evidence_level invalid: {a.get('evidence_level')}")
-    if a.get("claim_support") not in ("supported", "scoped", "unsupported", "contradicted", "unresolved", None):
+    if a.get("claim_support") not in ("supported", "scoped", "unsupported", "contradicted", "unresolved", None,
+                                      *(["not_assessed"] if oos else [])):
         errs.append(f"assessment.claim_support invalid: {a.get('claim_support')}")
     st = rec.get("status")
     if st not in ("reviewed", "needs_fulltext", "needs_evidence", "out_of_scope"):
@@ -309,7 +314,8 @@ def cmd_seats(run: str, batch: str) -> int:
         seat_errs = {}
         for pid in ids:
             ov = ovr.get(pid, {})
-            attempt = ov.get("seat_attempt") or mani["seats"][seat]["attempt"]
+            sa = ov.get("seat_attempt")
+            attempt = (sa.get(seat) if isinstance(sa, dict) else sa) or mani["seats"][seat]["attempt"]
             want_hash = ov.get("input_hash") or mani["input_hash"]
             sdir = bdir / "seats" / seat / "attempts" / attempt
             f = sdir / f"{pid}.json"
@@ -356,14 +362,15 @@ def cmd_aggregate(run: str, batch: str) -> int:
     bdir = REPO / "research/v2/runs" / run / "batches" / batch
     mani = json.load(open(bdir / "manifest.json"))
     conf = json.load(open(bdir / "conflicts.json"))
-    attempt = mani["aggregate"]["attempt"]
-    adir = bdir / "aggregate" / "attempts" / attempt
+    ovr = json.load(open(bdir / "overrides.json")) if (bdir / "overrides.json").exists() else {}
+    default_attempt = mani["aggregate"]["attempt"]
+    adir = bdir / "aggregate" / "attempts" / default_attempt
     ids = mani["papers"]
     ids_obj = card_ids()
     errs, report = {}, {"batch": batch, "papers": {}, "ok": True}
     n_unresolved = 0
     for pid in ids:
-        f = adir / f"{pid}.final.json"
+        f = bdir / "aggregate" / "attempts" / (ovr.get(pid, {}).get("aggregate_attempt") or default_attempt) / f"{pid}.final.json"
         if not f.exists():
             report["ok"] = False
             report["papers"][pid] = "missing final file"

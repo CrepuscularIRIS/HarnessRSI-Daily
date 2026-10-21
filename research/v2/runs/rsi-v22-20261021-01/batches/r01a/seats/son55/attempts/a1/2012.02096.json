@@ -1,0 +1,265 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r01a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Improver (adversary/antagonist) and evaluated product (protagonist policy) are RL-updated weights in a classic non-LLM RL setting; generated environments are transient training distributions, and no prompt/skill/tool/workflow/memory/evaluator/config is retained or evaluated (rubric A3; EVIDENCE.md excludes weight-updating self-play).",
+ "paper": {
+  "paper_key": "2012.02096",
+  "paper_id": "2012.02096",
+  "title": "Emergent Complexity and Zero-shot Transfer via Unsupervised Environment Design",
+  "version": "2012.02096v2",
+  "claim_type": "system_method",
+  "central_claim": "PAIRED (adversary trained on protagonist-vs-antagonist regret) produces a curriculum of increasingly complex solvable environments and yields RL policies with higher zero-shot transfer than domain randomization or minimax adversarial training."
+ },
+ "provenance": {
+  "input_hash": "32d41775e894e896adc8fa9d4cb0f5e2c94c40a763bbc3e94364255f8729709e",
+  "rubric_version": "frozen-v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref are not exposed to the worker agent; model_type follows the claude-kimi type overlay (haiku slot -> claude-sonnet-5-5[1m]) as dispatched by the controller.",
+  "timestamp": "2026-10-21T19:32:55Z"
+ },
+ "rationale": "范围外：改进器与被评产物均为RL权重，环境为瞬时训练分布，无留存的非权重组件；依冻结rubric A3与EVIDENCE.md排除，不评分。",
+ "materials": [
+  {
+   "material_id": "2012.02096-fulltext",
+   "url": "https://arxiv.org/html/2012.02096v2",
+   "sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "version": "2012.02096v2",
+   "path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2012.02096.txt",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-6",
+    "Appendix A-F (theory, extra experiments, hyperparameters)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2012.02096-fulltext",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Abstract",
+   "quote": "To generate structured, solvable environments for our protagonist agent, we introduce a second, antagonist agent that is allied with the environment-generating adversary",
+   "support_explanation": "Three learned agents (protagonist, antagonist, environment adversary) make up the method.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2012.02096-fulltext",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Sec 5.1 Partially Observable Navigation Tasks",
+   "quote": "All agents are trained with PPO",
+   "support_explanation": "Every learned component (protagonist, antagonist, adversary) is updated by PPO gradient updates, i.e. weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2012.02096-fulltext",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Sec 3 Unsupervised Environment Design",
+   "quote": "We then test the trained policies in a set of challenging transfer tasks not provided during training.",
+   "support_explanation": "The evaluated product is the trained RL policy; generated environments are transient training distributions, not retained artifacts.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2012.02096-fulltext",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Abstract",
+   "quote": "PAIRED agents achieve higher zero-shot transfer performance when tested in highly novel environments.",
+   "support_explanation": "The central claim is about policy (weight) transfer, not a non-weight harness component.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2012.02096-fulltext",
+   "material_sha256": "23167f4debbb034686098e153cf9823afc8836d31df28bd31a6c35d672232164",
+   "locator": "Sec 5.1.3 Zero-Shot Transfer",
+   "quote": "In the Labyrinth (Maze) environment, PAIRED agents are able to solve the task in 40% (18%) of trials.",
+   "support_explanation": "Author-reported transfer result of the trained policy (5 seeds, 10 trials each per Fig 3 caption); context only, not scored.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Environment-parameter policy (adversary) generating maze layouts / MuJoCo disturbance forces; protagonist and antagonist navigation policies",
+   "information": "Adversary sees fully observed grid state, timestep and a noise vector; reward = antagonist best return minus protagonist mean return (regret). Protagonist/antagonist see partial 5x5 views.",
+   "operation": "Three-player RL game: adversary proposes environment, antagonist (allied) and protagonist play it, all updated by PPO",
+   "output": "Updated adversary/antagonist/protagonist weights; protagonist policy evaluated zero-shot on hand-designed mazes",
+   "conditions": "Underspecified environment with free parameters; solvable-by-construction via antagonist; Theorem 2 needs adversary-antagonist coordination",
+   "feedback": "Return difference between two learning agents in same generated environment",
+   "selection_rule": "None beyond RL objective; no archive or acceptance gate for generated environments",
+   "persistence": "Policy weights only; generated environments are not stored or reused",
+   "later_use": "Protagonist deployed zero-shot; not applicable to a harness-component retention loop",
+   "claimed_effect": "Higher path length solved and 40%/18% Labyrinth/Maze success vs 10%/0% (minimax) and 0% (DR), author-reported",
+   "failure_boundary": "Non-coordinating antagonist variants degrade (App E.1); regret signal noisy",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E005"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Domain randomization cannot tailor difficulty to the learner and minimax adversaries generate unsolvable environments.",
+  "checked_gap": "Real limitation of prior environment-design methods within RL (cited: POET, asymmetric self-play, Campero et al.); not a harness-level gap.",
+  "lineage": "domain randomization / minimax adversarial RL -> POET and teacher-student curricula -> PAIRED (minimax regret via antagonist)",
+  "closest_adjacent": "POET (population minimax), asymmetric self-play, Campero et al. teacher; compared experimentally only to DR, minimax and PBT-minimax baselines",
+  "residue": "Unsolvable or trivial environments; no learning-progress-adaptive difficulty",
+  "stakes": "Zero-shot transfer and emergent complexity of RL policies",
+  "method_response": "Regret objective via allied antagonist keeps environments difficult but feasible",
+  "remaining_gap": "Equilibrium guarantee needs coordination; noisy regret; small navigation and hopper domains",
+  "evidence_ids": [
+   "E001",
+   "E004"
+  ],
+  "unresolved": [
+   "Gap analysis not completed beyond scope check because paper is excluded"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": "C27",
+    "role": "primary",
+    "fit": "good",
+    "tactic_steps_checked": "C27 steps 1-4 present (named players, utilities, Nash-equilibrium => minimax-regret policy proof in Thm 2, best-response RL as solver); step 5 faithfulness validated only empirically",
+    "success_checks": "Correspondence theorem present (Thm 2, assumes coordination); solver is PPO training",
+    "failure_checks": "Coordination assumption breaks in practice (App E.1 alternatives are worse)",
+    "evidence_ids": [
+     "E001",
+     "E002"
+    ],
+    "reason": "Environment design is recast as a three-player game whose equilibrium coincides with minimax regret, then solved by multi-agent RL."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Identification recorded for completeness although the paper is out of scope.",
+  "executes_pattern": true,
+  "resolves_problem": "not_assessed (out_of_scope)"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [],
+  "unassigned": true,
+  "unassigned_reason": "Nearest domain card self_generate_the_curriculum/H22 (boundary card touching weights); evaluated object here is RL policy weights in classic RL, not a harness component, so no domain card is assigned.",
+  "revision_proposals": []
+ },
+ "pattern_mapping": [],
+ "expectations": [],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "PAIRED (adversary trained on protagonist-vs-antagonist regret) produces a curriculum of increasingly complex solvable environments and yields RL policies with higher zero-shot transfer than domain randomization or minimax adversarial training.",
+   "setting": "RL navigation (15x15 MiniGrid-like) and MuJoCo hopper, PPO, 5 seeds",
+   "baseline_control": "Domain randomization, minimax adversary, PBT minimax",
+   "selection_vs_test": "Hyperparameters chosen on validation environments for transfer; test mazes held out (App F.1.2)",
+   "result_denominator": "10 trials x 5 seeds per transfer env (Fig 3 caption)",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ],
+   "counterevidence": "none examined (scope exclusion)",
+   "allowed_conclusion": "Author-reported RL-policy transfer; no harness-component conclusion"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "not_assessed",
+  "claim_support": "not_assessed",
+  "strongest_supported_claim": "n/a: out_of_scope",
+  "unresolved": [
+   "If aggregator treats boundary 'touches weights' curriculum papers as in scope, a new attempt with a scope ruling is needed."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: ratings not assigned; paper excluded by scope (rubric A3 / EVIDENCE.md), score null.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -1,0 +1,247 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r05a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整 HTML 全文含附录 A-I；材料齐全，可评分。",
+ "paper": {
+  "paper_key": "2505.18524",
+  "paper_id": "2505.18524",
+  "title": "metaTextGrad: Automatically optimizing language model optimizers",
+  "version": "2505.18524v2",
+  "claim_type": "system_method",
+  "central_claim": "A meta-optimizer (meta prompt optimizer + meta structure optimizer) that optimizes existing LLM optimizers (TextGrad TGD, ADAS-TG) per task yields programs with better test accuracy, avg absolute improvement of up to 6% over the best baseline, and the optimized optimizers transfer across models/datasets."
+ },
+ "provenance": {
+  "input_hash": "5371b9c966106bd075b2c83623c3310d5fd11a5b6c5ad4c30a4a88832571aa18",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref 未由运行环境暴露，故为 null；按总控指定 model type 记录。",
+  "timestamp": "2026-10-21T00:00:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "2505.18524v2",
+   "url": "https://arxiv.org/html/2505.18524v2",
+   "sha256": "bed1ec31bb182a30c6e2bc05fd85fde9f3344c58231203f825db566c33c85dc5",
+   "sections_read": ["Abstract", "1 Introduction", "2 Problem Statement", "3 metaTextGrad (3.1-3.3)", "4 Experiment (4.1-4.5)", "5 Related Work", "6 Conclusion", "Appendix A-I", "NeurIPS checklist"],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {"evidence_id": "E001", "material_id": "2505.18524v2", "locator": "Sec 1 para 3", "quote": "However, these optimizers are often fixed, applying the same optimization strategies with the same optimizer prompts independent of the task, lacking a process to align with the specific task.", "support_explanation": "作者 gap：现有 LLM 优化器（OPRO/MIPRO/TextGrad）固定且与任务无关。", "kind": "author_report"},
+  {"evidence_id": "E002", "material_id": "2505.18524v2", "locator": "Sec 1 para 3", "quote": "There is no method to automatically design and improve the optimizers to call based on the characteristics of a task.", "support_explanation": "作者对最近邻空白的断言；未与 self-referential prompt/scaffold 进化类工作逐一对照。", "kind": "author_report"},
+  {"evidence_id": "E003", "material_id": "2505.18524v2", "locator": "Sec 3.3.1 Propose", "quote": "the meta prompt optimizer randomly samples data examples from the training dataset and analyzes the general characteristics of the task type. Based on the current best optimizer prompt, it proposes an improved prompt that is more aligned with the task.", "support_explanation": "meta prompt optimizer 的提案输入仅为训练集样例+当前最佳优化器提示（还有优化器源码，见 Appendix D.1）。", "kind": "author_report"},
+  {"evidence_id": "E004", "material_id": "2505.18524v2", "locator": "Sec 3.3.1 Update", "quote": "the optimized optimizer undergoes an inner loop optimization test on the validation dataset. If the test results outperform those of the previously best optimizer, the optimizer is updated.", "support_explanation": "选择/接受规则：候选优化器在内循环中优化程序，按验证集得分严格超过当前最佳才替换（贪心单谱系）。", "kind": "author_report"},
+  {"evidence_id": "E005", "material_id": "2505.18524v2", "locator": "Sec 4.1", "quote": "we use GPT-4o-mini for LLM calls within the program, GPT-4o for the MIPROv2 and TGD optimizers, and the o1 model for the structure optimizer and the meta-optimizers.", "support_explanation": "meta 层使用 o1，强于 GPT-4o 的基线优化器；模型能力与方法贡献混杂。", "kind": "author_report"},
+  {"evidence_id": "E006", "material_id": "2505.18524v2", "locator": "Appendix C MMLU", "quote": "We selected the MMLU Abstract Algebra dataset and created training, validation, and test sets consisting of 10, 50, and 40 questions, respectively.", "support_explanation": "Abstract Algebra 测试集仅 40 题（1 题=2.5 个百分点）；BBH 各 50/100/100，GPQA 30/100/68。", "kind": "author_report"},
+  {"evidence_id": "E007", "material_id": "2505.18524v2", "locator": "Sec 4.1 Benchmarks", "quote": "the test accuracy for each benchmark is averaged over five random seeds.", "support_explanation": "测试精度为 5 种子均值，但表中无标准差/区间；也未说明种子是重复整个元优化还是仅重复推理。", "kind": "author_report"},
+  {"evidence_id": "E008", "material_id": "2505.18524v2", "locator": "Sec 4.2", "quote": "we achieve up to an 11% absolute performance improvement across these datasets, with an average performance significantly surpassing existing optimizers.", "support_explanation": "'significantly' 无检验支撑。", "kind": "author_report"},
+  {"evidence_id": "E009", "material_id": "2505.18524v2", "locator": "Table 1 (caption + cells read)", "quote": "Accuracy (%) of GPT-4o-mini on benchmarks. Bold indicates the best result, and underlined text represents the second-best.", "support_explanation": "读表：测试均值 metaTextGrad 0.53，最佳基线 0-shot MIPROv2 0.47（+6pt）。逐集测试：Word Sorting 0.65 vs ADAS-TG 0.58；Dyck 0.37 vs 8-shot MIPRO 0.26；GPQA 0.40 与 Best-of-8 同为 0.40（MIPRO 0.38）；Abstract Algebra 0.71，与 TGD 0.71 持平，低于 0-shot MIPROv2 的 0.77。", "kind": "author_report"},
+  {"evidence_id": "E010", "material_id": "2505.18524v2", "locator": "Sec 4.5 after Table 6", "quote": "produces the same results as the optimized ADAS-TG because the meta optimizer did not find a better option during the meta structure optimization.", "support_explanation": "Dyck 上 meta 结构优化未带来额外增益（Table 6：Struct(O) 测试 0.16 = ADAS-TG 0.16），组合模块的价值未被证明。", "kind": "author_report"},
+  {"evidence_id": "E011", "material_id": "2505.18524v2", "locator": "Sec 4.3", "quote": "the token usage per optimization epoch on the MMLU Abstract Algebra dataset reveals that higher-level components require significantly fewer tokens than lower-level ones.", "support_explanation": "成本仅给出单数据集单 epoch 的各层 token 量级（程序层约400k、优化器层约100k、元层约2.5k），无元优化迭代数 J 与总成本。", "kind": "author_report"},
+  {"evidence_id": "E012", "material_id": "2505.18524v2", "locator": "Sec 4.3 after Table 3", "quote": "our method achieves the best performance on BBH Dyck Languages while incurring a lower cost than GPT-4o.", "support_explanation": "Table 3 的成本 0.44$ vs 0.52$ 未说明是否含优化阶段开销，不可作为总成本对比。", "kind": "author_report"},
+  {"evidence_id": "E013", "material_id": "2505.18524v2", "locator": "Sec 4.4", "quote": "our optimizer trained on the GPQA diamond dataset also transfers effectively to the Abstract Algebra dataset.", "support_explanation": "Table 5：迁移到 AA 的测试 0.77 vs TGD 0.71；仅 40 题测试集的单次比较，差 ≈ 2-3 题。", "kind": "author_report"},
+  {"evidence_id": "E014", "material_id": "2505.18524v2", "locator": "Appendix C MMLU", "quote": "However, we observed that the DSPy baselines struggle to adhere to this output format. To accommodate this, we use GPT-4o to evaluate the correctness of responses generated by DSPy-based methods.", "support_explanation": "验证器不一致：DSPy 基线用 GPT-4o 判分，其余用正则；跨方法比较的度量不同。", "kind": "author_report"},
+  {"evidence_id": "E015", "material_id": "2505.18524v2", "locator": "Sec 6 Conclusion", "quote": "our meta optimizer is designed by ourselves, instead of learned by data", "support_explanation": "meta 优化器本身为手工设计、固定；被编辑对象是下一层的优化器，而非元优化器。", "kind": "author_report"},
+  {"evidence_id": "E016", "material_id": "2505.18524v2", "locator": "Appendix F.1 meta-optimized TGD prompt", "quote": "You are part of an optimization system specialized in improving prompts for bracket matching and sequence completion tasks.", "support_explanation": "被留存的优化器提示含强任务领域提示（LIFO、栈）。增益可能来自 o1 写入的领域知识而非通用的优化器对齐。", "kind": "author_report"},
+  {"evidence_id": "E017", "material_id": "2505.18524v2", "locator": "Appendix I Limitations (1)", "quote": "it may not be effective in scenarios where the base model lacks sufficient task-relevant knowledge or reasoning capabilities.", "support_explanation": "作者承认的边界：AIME 2024 上无显著增益；失败结果未入表。", "kind": "author_report"},
+  {"evidence_id": "E018", "material_id": "2505.18524v2", "locator": "Appendix I Limitations (2)", "quote": "The meta-optimizer relies on strong instruction-following and problem analysis capabilities. As a result, it currently requires advanced models such as o1 or Claude-3.5-Sonnet.", "support_explanation": "方法依赖强模型，进一步支持 E005 的模型能力混杂风险。", "kind": "author_report"},
+  {"evidence_id": "E019", "material_id": "2505.18524v2", "locator": "Sec 4.2 (3)", "quote": "we observe that meta-optimized optimizers, due to their stronger task alignment, often achieve significant improvements within the first 1-2 steps.", "support_explanation": "效率主张为观察性叙述，无逐步曲线/表。", "kind": "author_report"},
+  {"evidence_id": "E020", "material_id": "2505.18524v2", "locator": "Sec 4.5", "quote": "we find that all meta optimizers improve performance on the BBH Dyck Languages benchmark.", "support_explanation": "唯一的组件消融，仅 Dyck 一个任务；Table 6 中 TGD(O) 测试 0.24 vs TGD 0.10，ADAS-TG(O) 0.37 vs ADAS-TG 0.16。", "kind": "author_report"},
+  {"evidence_id": "E021", "material_id": "2505.18524v2", "locator": "Sec 4.2", "quote": "Our method outperforms both TGD and ADAS-TG, which serve as the base candidates for metaTextGrad , across all benchmarks and achieves the best performance on most of them.", "support_explanation": "'across all benchmarks'：AA 测试 0.71 对 TGD 0.71 持平；'best on most' 与 AA 低于 0-shot MIPROv2（0.77）、GPQA 与 Best-of-8 并列相矛盾。", "kind": "author_report"},
+  {"evidence_id": "E022", "material_id": "2505.18524v2", "locator": "Appendix B proof, Eq.6", "quote": "we can bound the population risk of the learned optimizer.", "support_explanation": "Theorem 1 的证明对数据依赖的 θ̂ 直接套用固定 θ 的 Hoeffding 界，缺少对 Θ 的一致收敛/并集界；且结论只是 ERM 泛化，不能论证 '必须元优化'。", "kind": "our_inference"},
+  {"evidence_id": "E023", "material_id": "2505.18524v2", "locator": "Sec 5.1", "quote": "However, the LLM optimizers proposed in these methods remain fixed during the optimization process, limiting their effectiveness and adaptability.", "support_explanation": "相关工作仅覆盖 APE/DSPy/ProTeGi/TextGrad/OPTO/MAML；未讨论优化器提示自进化或 scaffold 自我改进类邻居。", "kind": "author_report"},
+  {"evidence_id": "E024", "material_id": "2505.18524v2", "locator": "Sec 4.4", "quote": "our method trained on GPT-4o-mini achieves superior performance compared to unoptimized baselines when evaluated on Claude 3 Haiku.", "support_explanation": "Table 4：Dyck 上 Claude 3 Haiku 测试 0.35 vs ADAS-TG 0.34，实质持平；对 TGD 0.04 与 0-shot 0.10 有明显优势。", "kind": "author_report"},
+  {"evidence_id": "E025", "material_id": "2505.18524v2", "locator": "Appendix D.2", "quote": "You are required to build on one of the existing optimizers and improve it by integrating features from the others, instead of starting from scratch.", "support_explanation": "meta 结构优化的提案形式：以现有优化器源码为参考生成 ImprovedOptimizer 类。", "kind": "author_report"},
+  {"evidence_id": "E026", "material_id": "2505.18524v2", "locator": "Sec 4.1 Baselines", "quote": "We implemented this algorithm within TextGrad as a baseline, referred to as ADAS-TG.", "support_explanation": "ADAS-TG 为作者在 TextGrad 内的重实现，非原始 ADAS；基线忠实度无法独立核对。", "kind": "author_report"}
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "任务特定的优化器提示（TextGrad TGD / ADAS-TG 的 optimizer task description），基线为通用手写提示",
+   "information": "可见：优化器源码、1 个训练集样例(Q,A)、当前最佳优化器提示；不可见：测试集。meta 模型为 o1。",
+   "operation": "LLM 一次调用生成 improved_task_description",
+   "output": "新的优化器提示（候选）",
+   "conditions": "需要强指令遵循的元模型；任务有小规模训练集与度量",
+   "feedback": "以候选优化器在内循环优化程序后的验证集分数 σ 作为反馈（标量）",
+   "selection_rule_data": "σ>σ* 才替换；使用验证集（BBH 100/MMLU 50/GPQA 100）",
+   "persistence": "最佳优化器 M* 在元优化运行内保存，最终返回；Appendix E/F 给出结果文本",
+   "later_use": "返回的优化器在测试集上优化程序并评测；跨模型/跨数据集迁移",
+   "claimed_effect": "Dyck 测试 0.10→0.24(TGD)、0.16→0.37(ADAS-TG)；平均提升",
+   "failure_boundary": "AIME 2024 无显著增益；依赖强元模型",
+   "evidence_ids": ["E003", "E004", "E005", "E016", "E020"]
+  },
+  {
+   "sig_id": "S2",
+   "object": "优化器代码/组合顺序（ImprovedOptimizer 类）",
+   "information": "可见：若干参考优化器源码及已优化过的更优优化器；o1 元模型",
+   "operation": "LLM 整合参考优化器代码，生成新优化器类（序列式策略，各自执行 epoch 次）",
+   "output": "组合优化器代码",
+   "conditions": "接口 __init__/step 不变；结构优化须先于 prompt 优化",
+   "feedback": "组合优化器在验证集上的内循环得分",
+   "selection_rule_data": "同 S1 的 σ>σ* 规则",
+   "persistence": "M* 保存并返回；Dyck 上未找到优于 ADAS-TG(O) 的组合",
+   "later_use": "同 S1",
+   "claimed_effect": "'combination' 带来进一步提升（Dyck 上无）",
+   "failure_boundary": "代码执行失败的处理未描述；Dyck 上结构优化器无增益",
+   "evidence_ids": ["E010", "E025"]
+  }
+ ],
+ "gap": {
+  "author_gap": "现有 LLM 优化器固定、通用、与任务不对齐，且无自动设计优化器的方法。",
+  "checked_gap": "固定优化器提示的局限真实存在，且被改变的对象（优化器提示/代码，一个非权重 harness 组件）定位清晰；但 '优化器是瓶颈' 的证据只有一例反馈噪声的轶事与 Dyck 上基线的低分，缺少对瓶颈的量化诊断。",
+  "lineage_closest_adjacent": "祖先：TextGrad/ProTeGi（文本梯度）、DSPy MIPRO（提示+示例优化）、ADAS（元代理搜索）；本文把优化器自身置于编辑空间。材料内相关工作未涵盖优化器提示自进化（如 PromptBreeder 的 mutation-prompt 进化）和 scaffold 自我改进（如 STOP）——此二者属背景知识，非固定材料，未经核实。",
+  "residue": "元优化器本身手工固定；跨任务通用元优化器未实现；强元模型依赖。",
+  "stakes": "对每个新任务需额外的元优化成本，换取优化器对齐；成本总量未报。",
+  "method_response": "meta prompt optimizer + meta structure optimizer，以内循环验证分数闭合反馈。",
+  "remaining_gap": "未证明增益来自 '优化器对齐' 而非 o1 写入的任务提示；无元优化器自改；无强预算匹配对照。",
+  "evidence_ids": ["E001", "E002", "E015", "E023"],
+  "unresolved": "PromptBreeder、STOP 等最近邻原文不在固定材料中；请求总控是否补材料（见 batch-report）。"
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "主卡 success conditions：点名被固定的组件（优化器提示/结构，因其为 '通用' 而固定）并重设计——部分满足；以单一机制消融证明其为瓶颈——仅 Dyck 一例；论证新设计为何正确——Theorem 1 有缺口。子卡 C15/C23/C24 面向扩散/3D/条件注入，本文无对应 tactic，故 sub=null。",
+    "success_failure_checks": "成功：命名被固定组件(met)；消融(partial)；理论(unmet 缺口)。失败：'组件从未被证明是实际瓶颈'(部分触发)；'新增多个模块无逐项消融'(部分：结构优化器在 Dyck 上无增益)。",
+    "evidence_ids": ["E001", "E010", "E020", "E022"],
+    "reason": "操作形态是把迭代优化过程中惯常固定的 '优化器' 当作自由设计变量并重设计；虽然卡面例子多为生成模型，但操作签名 '识别被固定的组件→当自由变量→重设计' 可对应。弱至中等匹配，不强塞子卡。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "主卡部分适配，子卡无适配；已如实记录。",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial — 在 Dyck/Word Sorting/GPQA 上优化后优化器优于固定基线；Abstract Algebra 未解决，且增益来源未与强模型/任务提示混杂分开。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H19",
+    "version": "patterns@52ff9657",
+    "fit": "high",
+    "condition_checks": "S1 命名不变锚点：partial（元优化器固定但仅在结论中陈述）；S2 以产物下游得分为改进器适应度：met；S3 与固定手写改进器对比：met；S4 搜索成本：partial；S5 容忍非改进步：unmet（贪心 σ>σ*）；F3 基准复用：partial；F4 噪声：partial（5 种子无方差）；F5 锚点泄漏：unmet（o1 对 GPT-4o）。",
+    "evidence_ids": ["E003", "E004", "E005", "E015", "E020", "E021"]
+   },
+   {
+    "main": "search_agent_architecture",
+    "sub": "H17",
+    "version": "patterns@52ff9657",
+    "fit": "low",
+    "condition_checks": "meta 结构优化器在 '优化器组合' 空间做 LLM 提案→执行→择优保留；但无设计空间归档、无代理模型过滤、Dyck 上无增益，故仅弱匹配。",
+    "evidence_ids": ["E010", "E025"]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "make_the_improver_editable",
+   "domain_sub": "H19",
+   "operation_correspondence": "RS 的 '把惯常固定的组件当自由变量' 对应 H19 的 '把改进器（优化器提示）放入被编辑空间并以产物得分评估'。",
+   "required_conditions_and_differences": "H19 要求命名不变锚点、与固定改进器同预算比较、独立谱系/种子；本文有固定基线比较，但预算不匹配、单谱系、无方差。RS 卡要求证明被固定组件是瓶颈，本文仅有 Dyck 消融。",
+   "evidence_ids": ["E004", "E015", "E020"]
+  }
+ ],
+ "expectations": [
+  {"id": "rsi:make_the_improver_editable/S1", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "声称编辑的是改进器本身", "applicable": true, "status": "partial", "reason": "元优化器手工固定并在结论中承认，但未被设计为命名的不可变锚点（含评估/晋升规则的审计）。", "evidence_ids": ["E015"], "score_item": "X"},
+  {"id": "rsi:make_the_improver_editable/S2", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "改进器由其产物评分", "applicable": true, "status": "met", "reason": "候选优化器按其优化的程序在验证集的得分晋升。", "evidence_ids": ["E004"], "score_item": "M"},
+  {"id": "rsi:make_the_improver_editable/S3", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "声称编辑改进器有益", "applicable": true, "status": "met", "reason": "TGD/ADAS-TG/MIPROv2 作为固定改进器基线报告，但预算不匹配（见 S4）。", "evidence_ids": ["E009", "E026"], "score_item": "E.causality"},
+  {"id": "rsi:make_the_improver_editable/S4", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "改进器搜索代价显著", "applicable": true, "status": "partial", "reason": "只报单数据集单 epoch 的分层 token 量级，无元迭代数与总成本，也无同成本基线。", "evidence_ids": ["E011", "E012"], "score_item": "E.cost"},
+  {"id": "rsi:make_the_improver_editable/S5", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "多代搜索", "applicable": false, "status": "unmet", "reason": "单谱系贪心，无归档；声称范围仅为单层优化器优化，故不作为扣分点，仅记录。", "evidence_ids": ["E004"], "score_item": "X"},
+  {"id": "rsi:make_the_improver_editable/F3", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "小固定子集上反复评估晋升", "applicable": true, "status": "partial", "reason": "晋升用验证集、报告用单独测试集，分离存在；但测试集很小（AA 40 题），且未测污染。", "evidence_ids": ["E006", "E004"], "score_item": "E.holdout"},
+  {"id": "rsi:make_the_improver_editable/F4", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "多代/多种子比较", "applicable": true, "status": "partial", "reason": "5 种子均值但无方差/区间/检验。", "evidence_ids": ["E007"], "score_item": "E.statistics"},
+  {"id": "rsi:make_the_improver_editable/F5", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/make_the_improver_editable.md"], "applies_when": "meta 层模型强于基线层模型", "applicable": true, "status": "unmet", "reason": "元优化器用 o1，基线优化器用 GPT-4o，无 '同模型优化器' 对照。", "evidence_ids": ["E005", "E018"], "score_item": "E.causality"},
+  {"id": "rs:generative_process_redesign/RE-1", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md"], "applies_when": "声称重设计常被固定的组件", "applicable": true, "status": "partial", "reason": "仅 Dyck 一个任务的组件消融；结构优化器在该任务无增益。", "evidence_ids": ["E010", "E020"], "score_item": "E.causality"},
+  {"id": "rs:generative_process_redesign/RE-3", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md"], "applies_when": "同时引入多个新模块", "applicable": true, "status": "partial", "reason": "meta prompt 与 meta structure 两模块；Dyck 有逐项消融，其余任务无。", "evidence_ids": ["E020", "E010"], "score_item": "E.causality"},
+  {"id": "rs:generative_process_redesign/RE-4", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md"], "applies_when": "声称新设计正确/必要", "applicable": true, "status": "unmet", "reason": "Theorem 1 是普通 ERM 泛化界，且证明缺一致收敛；不能说明 '必须元优化'。", "evidence_ids": ["E022"], "score_item": "M"},
+  {"id": "local:2505.18524-1", "version": "v1", "source_strength": "common_practice", "source_refs": ["E005", "E018"], "applies_when": "元优化器模型强于被比较的基线优化器", "applicable": true, "status": "unmet", "reason": "需同一强模型（o1）驱动的 TGD/MIPRO 基线，或将 o1 写入的任务提示单独做 ablation，才能区分 '优化器对齐' 与 '强模型注入领域提示'。", "evidence_ids": ["E005", "E016", "E018"], "score_item": "E.causality"},
+  {"id": "local:2505.18524-2", "version": "v1", "source_strength": "common_practice", "source_refs": ["E006", "E009"], "applies_when": "小测试集上声称跨基准提升", "applicable": true, "status": "unmet", "reason": "Abstract Algebra 40 题、GPQA 68 题，无区间或检验；AA 上并无提升。", "evidence_ids": ["E006", "E009", "E021"], "score_item": "E.statistics"}
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "元优化后的优化器在多基准上优于固定的 TGD/ADAS-TG，平均测试精度比最佳基线高至多 6pt。",
+   "setting": "GPT-4o-mini 程序；GPT-4o 优化器；o1 元优化；4 个基准，5 种子均值",
+   "baseline_control": "零样本/8 样本 CoT、自一致、Best-of-N、MIPROv2、TGD、ADAS-TG（重实现）",
+   "selection_vs_test": "验证集晋升，独立测试集报告；测试集 40-100 题",
+   "result_denominator": "Table 1 全 4 基准；平均测试 0.53 对 0.47；AIME 等失败仅在附录文字提及，不入分母",
+   "evidence_ids": ["E007", "E008", "E009", "E021"],
+   "counterevidence": ["E009", "E021"],
+   "allowed_conclusion": "在 Word Sorting/Dyck/GPQA 上相对 TGD、ADAS-TG 有测试精度提升；AA 无提升（0.71 持平，低于 0-shot MIPROv2 0.77）；平均优势以单基准大增益(Dyck)为主，缺方差与显著性。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "meta prompt 与 meta structure 两个组件都提升性能。",
+   "setting": "BBH Dyck, Table 6",
+   "baseline_control": "TGD、ADAS-TG 原始版本",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "仅 1 个基准",
+   "evidence_ids": ["E010", "E020"],
+   "counterevidence": ["E010"],
+   "allowed_conclusion": "meta prompt 优化在 Dyck 上提升了两种优化器；meta 结构优化在 Dyck 上无超出 ADAS-TG(O) 的增益；两者互补的主张未被证明。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "优化后的优化器可跨模型和数据集迁移。",
+   "setting": "Dyck→Claude 3 Haiku；GPQA→Abstract Algebra",
+   "baseline_control": "TGD、ADAS-TG、0-shot CoT",
+   "selection_vs_test": "迁移目标为新模型/新数据集的测试集",
+   "result_denominator": "各一次比较",
+   "evidence_ids": ["E013", "E024"],
+   "counterevidence": ["E024"],
+   "allowed_conclusion": "各有一次迁移正向结果，但对 ADAS-TG 差值很小（0.35 vs 0.34），数据集迁移差距在 40 题测试集上约 2-3 题；不足以称 '强迁移'。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "Theorem 1 说明元优化的必要性。",
+   "setting": "Appendix B",
+   "baseline_control": "无",
+   "selection_vs_test": "不适用",
+   "result_denominator": "不适用",
+   "evidence_ids": ["E022"],
+   "counterevidence": ["E022"],
+   "allowed_conclusion": "是对数据依赖 θ̂ 的泛化界；证明在数据依赖处缺一致收敛；不构成 '必要性'。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在作者的 4 个小基准上，经元优化的优化器提示/结构在测试集上使被优化程序精度相对固定的 TGD/ADAS-TG 提升（Dyck、Word Sorting 明显，GPQA 小幅，AA 持平）；预算未匹配，增益来源（任务提示注入 vs 对齐）未分离。",
+  "not_supported": "跨任务稳健大幅提升；两个元组件互补；优化器自我改进（元优化器固定）；总成本更低。",
+  "unresolved": "总元优化成本；o1 对 GPT-4o 的混杂；PromptBreeder/STOP 类邻居的对比。"
+ },
+ "ratings": {
+  "G": {"status": "resolved", "rating": 2, "reason": "固定通用优化器的局限真实且对象明确（非权重的优化器提示/代码）；但瓶颈证据主要是一例轶事，最近邻（优化器提示自进化、scaffold 自我改进）未覆盖，故 2。", "evidence_ids": ["E001", "E002", "E023"], "counterevidence_ids": [], "search_scope": []},
+  "M": {"status": "resolved", "rating": 2, "reason": "操作可重建（采样样例+当前提示→改写，验证集晋升）；'噪声反馈下任务特定优化器更好' 的因果解释合理但未与 '注入领域提示' 区分；Theorem 1 的证明有缺口。", "evidence_ids": ["E003", "E004", "E016", "E022"], "counterevidence_ids": ["E022"], "search_scope": []},
+  "X": {"status": "resolved", "rating": 3, "reason": "Algorithm 1-4、Appendix D 提示、Appendix E/F 结果完整，选择/保留规则(σ>σ*)明确，信息权限清楚；扣分：元迭代数/内迭代数未给、生成代码失败/回退未述、版本与过期处理无。", "evidence_ids": ["E003", "E004", "E025"], "counterevidence_ids": ["E010"], "search_scope": []},
+  "E.measurement": {"status": "resolved", "rating": 2, "reason": "测试精度明确，但 DSPy 基线由 GPT-4o 判分而其他用正则，度量不一致；Dyck 0-shot 仅 0.05 提示格式/度量敏感；ADAS-TG 为重实现。", "evidence_ids": ["E014", "E026", "E009"], "counterevidence_ids": [], "search_scope": []},
+  "E.causality": {"status": "resolved", "rating": 2, "reason": "有对基础优化器的前后比较与 Dyck 组件消融；但元层 o1 强于基线 GPT-4o、无同模型对照、预算不匹配、结构优化器无增益，留存的优化器含强任务提示，增益归因不清。", "evidence_ids": ["E009", "E020", "E005", "E016"], "counterevidence_ids": ["E010", "E005"], "search_scope": []},
+  "E.holdout": {"status": "resolved", "rating": 3, "reason": "验证集晋升、独立测试集报告；有跨模型与跨数据集各一次迁移；测试集小、同分布，未做污染检验。", "evidence_ids": ["E004", "E006", "E013", "E024"], "counterevidence_ids": [], "search_scope": []},
+  "E.statistics": {"status": "resolved", "rating": 1, "reason": "仅 5 种子均值，无标准差/区间/检验；AA 40 题测试集差异有限；'significantly' 无检验。", "evidence_ids": ["E007", "E008", "E006"], "counterevidence_ids": [], "search_scope": []},
+  "E.cost": {"status": "resolved", "rating": 1, "reason": "只给单数据集单 epoch 分层 token 量级与一个含义不明的 $ 比较，无元优化迭代数和总成本，基线未做同成本比较。", "evidence_ids": ["E011", "E012"], "counterevidence_ids": [], "search_scope": []}
+ },
+ "score": {"raw": 55.0, "display": 55.0, "lower": 55.0, "upper": 55.0, "coverage": 1.0, "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"},
+ "rationale": "元优化优化器提示/结构，任务对齐有增益；但AA持平、o1对GPT-4o混杂、无方差无总成本、定理证明有缺口。证据级retained，范围受限。"
+}

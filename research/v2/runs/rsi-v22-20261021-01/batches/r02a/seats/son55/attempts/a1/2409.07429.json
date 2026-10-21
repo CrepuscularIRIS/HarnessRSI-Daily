@@ -1,0 +1,855 @@
+{
+ "paper": {
+  "paper_key": "2409.07429",
+  "claim_type": "system_method",
+  "central_claim": "AWM 从离线训练样本或在线测试流中诱导可复用 workflow（子例程），选择性写入 agent 记忆以指导后续任务；在 WebArena 比 BrowserGym 相对提升 51.1%、在 Mind2Web 相对提升 24.6%，并在跨任务/网站/领域上泛化。",
+  "paper_id": "2409.07429",
+  "title": "Agent Workflow Memory",
+  "version": "2409.07429v1"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "§1 para 2",
+   "quote": "Moreover, as agents solve each task separately, they do not learn from past successes and failures, and are therefore unable to adapt over time",
+   "support_explanation": "作者对 gap 的陈述：智能体逐任务独立求解、不从成败积累。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "§1 para 3",
+   "quote": "induces workflows from agent trajectories by extracting reusable routines, and then integrates these workflows into agent memory to guide future task-solving processes.",
+   "support_explanation": "核心操作：轨迹→workflow→写入记忆→指导后续任务。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "§2.3 Online Scenario",
+   "quote": "we continue this memory-updating process by iteratively predicting actions for and inducing workflows from streamed test instructions, until all tests are processed.",
+   "support_explanation": "在线模式：测试流上边做边诱导，记忆逐任务更新。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "§1 para 5",
+   "quote": "where it iteratively induces workflows from self-generated past predictions that are judged correct by an evaluator module.",
+   "support_explanation": "在线留存门控：仅 LM 评估器判为成功的自生成轨迹被诱导。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "App A.1 prompt",
+   "quote": "You need to find the repetitive subset of actions across multiple tasks, and extract each of them out as a workflow.",
+   "support_explanation": "诱导 prompt 的具体指令：跨任务抽取重复子集。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "App A.1 prompt",
+   "quote": "Represent the non-fixed elements (input text, button strings) with descriptive variable names as shown in the example.",
+   "support_explanation": "实例特异值被抽象为变量，是 workflow 与具体示例的区别。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "§2.3 Offline Scenario",
+   "quote": "incorporates all induced workflows into the agent memory at inference time to solve test instructions",
+   "support_explanation": "离线时全部 workflow 一次性注入记忆，无检索/选择步骤。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "§3 intro",
+   "quote": "This mechanism maintains an small collection of workflows that are nonetheless relevent to the test tasks.",
+   "support_explanation": "按网站分组运行，记忆规模被分组控制；无遗忘/合并机制描述。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Table 1",
+   "quote": "AWM (ours) 35.5 30.8 29.1 50.9 31.8 43.3 5.9",
+   "support_explanation": "WebArena 总 SR 35.5，平均步数 5.9。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Table 1",
+   "quote": "BrowserGym ax-tree 15.0 17.2 14.8 20.2 19.0 25.5 7.9",
+   "support_explanation": "与 AWM 同观测的无 workflow 基线 SR 15.0、步数 7.9。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "§3.1 baselines",
+   "quote": "to keep a fair comparison with our method, we also run the BrowserGym version with only accessibility tree webpage representations, denoted as BrowserGym",
+   "support_explanation": "作者另跑同观测基线以保持比较公平，相当于 store-off 对照。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "§3.1",
+   "quote": "to ensure mostly stable model outputs.",
+   "support_explanation": "GPT-4 温度 0，单次运行；全文无多种子/置信区间。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "§3.1.3",
+   "quote": "we extract a subset of WebArena examples sourcing from non-overlapping templates, by grouping examples by their templates and randomly choosing one example from each template group.",
+   "support_explanation": "跨模板子集用于排除模板内记忆泄漏。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Table 2",
+   "quote": "AWM (ours) 33.2 24.5 29.3 52.2 31.8 39.4",
+   "support_explanation": "跨模板子集 AWM 总 SR 33.2，仍高于 AutoEval 23.2 与 ax-tree 基线 20.5。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Table 3",
+   "quote": "AWM 4 50.6 57.3 45.1 4.8",
+   "support_explanation": "Mind2Web 跨任务离线 GPT-4：Elem 50.6，Step SR 45.1，SR 4.8。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Table 3",
+   "quote": "MindAct 4 41.6 60.6 36.2 2.0",
+   "support_explanation": "同模型基线 Step SR 36.2，SR 2.0（任务级成功率绝对值极低）。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Table 4",
+   "quote": "AWM online 50.0 56.4 43.6 4.0 42.1 45.1 33.9 1.6 40.9 46.3 35.5 1.7",
+   "support_explanation": "在线 AWM 在跨任务/网站/领域三划分的结果。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Table 4",
+   "quote": "MindAct* 41.6 60.6 36.2 2.0 35.8 51.1 30.1 2.0 21.6 52.8 18.6 1.0",
+   "support_explanation": "三划分基线；跨网站/领域任务级 SR 差异仅 1.0 以内。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "§3.2.2 in-domain",
+   "quote": "induces workflows from model-predicted trajectories that are not always correct, thus can lead to incorrect workflows that degrade model performance.",
+   "support_explanation": "作者承认评估器误判导致错误 workflow 会损害性能，但未量化。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Table 5 + §4.1",
+   "quote": "AWM rule 35.6 6.3 AWM lm 35.5 5.9",
+   "support_explanation": "规则诱导与 LM 诱导在 WebArena 成功率几乎相同。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "App C",
+   "quote": "workflows induced offline and online are not fully compatible with each other, particularly, the offline workflows seem to impair the generative quality and utility efficacy of online workflows",
+   "support_explanation": "离线+在线合并劣于在线，说明记忆内容间存在冲突，作者未设计冲突处理。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "§5",
+   "quote": "suggesting a resistance of current agents to use newly-added actions.",
+   "support_explanation": "AWM_AS 变体中 workflow 动作使用率低，增益有限。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "§3.2.1",
+   "quote": "While augmenting concrete, full examples may bias agents to select elements similar to those presented in the given examples,",
+   "support_explanation": "作者对抽象 vs 具体示例的机制解释，与 Synapse 对比；解释未经独立控制验证。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "§3.1.3 case study",
+   "quote": "the agent successfully builds a more complex workflow",
+   "support_explanation": "案例展示 workflow 组合/滚雪球，但为单例定性。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "App A.3",
+   "quote": "We do not evaluate coverage on WebArena since it requires canonical trajectories, yet which are not available for WebArena.",
+   "support_explanation": "workflow 质量指标（覆盖率）在 WebArena 上未评。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "App A.1",
+   "quote": "Experiments on both datasets use the same prompt.",
+   "support_explanation": "两个基准使用同一诱导 prompt，支持配方的通用性。",
+   "kind": "author_report",
+   "material_id": "M1"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "§2.3 Offline",
+   "quote": "first takes in all training examples from a website by concatenating them into a single prompt",
+   "support_explanation": "离线诱导把整站训练样本拼成一个 prompt，受上下文长度限制。",
+   "kind": "author_report",
+   "material_id": "M1"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "agent 记忆/系统 prompt 中的 workflow 集合（文本，非权重）",
+   "information": "查询、自身轨迹（观测+动作）、LM 评估器二值判断；无金标",
+   "operation": "LM 按 prompt 从成功轨迹抽取子例程并抽象实例变量",
+   "output": "workflow（描述+步骤）追加入记忆",
+   "conditions": "仅评估器判成功的在线轨迹",
+   "feedback": "LM 评估器二值标签（Pan et al. 2024）",
+   "selection_rule/data": "评估器判成功即接受；无其他门控、无拒绝日志",
+   "persistence": "追加至按网站分组的记忆，后续任务全量注入；无版本/遗忘/回退",
+   "later_use": "后续每个任务的上下文",
+   "claimed_effect": "WebArena SR 35.5 vs ax-tree 基线 15.0 / BrowserGym 23.5",
+   "failure_boundary": "评估器误判产生错误 workflow（E019）；离线+在线冲突（E021）",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E009",
+    "E010",
+    "E019",
+    "E021"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "同上（离线版）",
+   "information": "Mind2Web 标注训练样本（金标轨迹）",
+   "operation": "整站训练样本拼接后一次性诱导 workflow",
+   "output": "workflow 集合",
+   "conditions": "有高质量对齐标注",
+   "feedback": "无执行反馈；金标轨迹即信号",
+   "selection_rule/data": "无；全部诱导结果入库",
+   "persistence": "测试期固定记忆",
+   "later_use": "测试任务全量注入",
+   "claimed_effect": "Mind2Web 跨任务 Step SR 45.1 vs 36.2",
+   "failure_boundary": "训练/测试任务分布不匹配时缺口（作者自述）",
+   "evidence_ids": [
+    "E015",
+    "E016",
+    "E027",
+    "E007"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "动作空间（AWM_AS 变体）",
+   "information": "同 S1",
+   "operation": "把 workflow 包装为高层函数动作",
+   "output": "扩展动作空间",
+   "conditions": "workflow 可程序化",
+   "feedback": "无新增",
+   "selection_rule/data": "无",
+   "persistence": "同 S1",
+   "later_use": "agent 可调用",
+   "claimed_effect": "Step SR +1.3，SR 持平；调用占 18.5% 任务",
+   "failure_boundary": "动态环境下固定序列失败（Fig. 7 弹窗例）",
+   "evidence_ids": [
+    "E022"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "agent 只整合固定示例（训练/ICL），难以抽取可复用任务 workflow，逐任务独立求解不积累。",
+  "checked_gap": "真实局限：Synapse 类检索具体示例含实例特异信息（作者称偏置元素选择，E023），SteP 需人工写 workflow；本文版本把 workflow 抽象成带变量的子例程并支持无标注在线诱导。但作者未对 Voyager/ExpeL/Reflexion 类同期留存方法作实验对比。",
+  "lineage/closest_adjacent": "祖先：Synapse（Zheng 2024，检索示例）、SteP（Sodhi 2023，人工 workflow）、程序/技能库归纳（Wang 2024a/c 等）。最近邻覆盖：与 Synapse、SteP 有定量比较；与同类 skill/memory 命名（Voyager、ExpeL、Reflexion）本地无原文，未核。",
+  "residue": "在线诱导依赖评估器可靠性且无质量门/冲突处理；离线+在线不可加；workflow 动作使用率低。",
+  "stakes": "WebArena 长程任务成功率低（基线 15–23%）；可复用子例程可提升成功率与步数效率。",
+  "method_response": "抽象实例变量+子任务粒度诱导+在线评估器门控，直接回应具体示例偏置与无标注场景。",
+  "remaining_gap": "诱导质量保证、评估器误差影响、记忆维护（遗忘/冲突）、预算公平对照均未解决。",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E019",
+   "E021",
+   "E023"
+  ],
+  "unresolved": [
+   "Voyager/ExpeL/Reflexion/Synapse 全文不在输入包内，空检索不证明新颖；最近邻比较依赖本文自述"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [
+   "self_supervised_signal_engineering"
+  ],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "操作等价：新任务以上下文条件（诱导 workflow 注入记忆）求解，无参数更新，满足主卡签名。C03 的步骤1/3（统一 schema + 上游训练教模型解析、类别级留出）未执行：无上游训练，条件是文本记忆；仅 Mind2Web 跨网站/领域有类别级留出。子卡为空。",
+    "success_failure_checks": "成功条件：类别级留出（部分，Mind2Web 跨网站/领域）；条件通道首类输入（未做）；隔离条件信号的消融（有 store-off 基线）；失败：未做污染分析、未与更长上下文/最近邻在受控条件下比较。",
+    "evidence_ids": [
+     "E002",
+     "E007",
+     "E017",
+     "E018",
+     "E010"
+    ],
+    "reason": "操作确为把经验诱导物作为推理期条件；但自适应对象是可编辑记忆状态而非固定模型的新任务条件化，仅部分适配。"
+   },
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "在线模式把 LM 评估器判成功的自生成轨迹作为「制造的监督信号」写入记忆（C08 式生成-过滤，但喂给上下文而非训练）。C08 的训练/再训练步骤不适用；仅过滤门这一步对应。",
+    "success_failure_checks": "过滤门唯一且为同模型家族 LM（E004），评估器误差未量化（E019）。",
+    "evidence_ids": [
+     "E004",
+     "E019"
+    ],
+    "reason": "仅在线门控一步对应；因不更新参数，匹配弱，只作 supporting。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "主卡仅部分适配（无上游训练/统一 schema）；已写明差异。",
+  "executes_pattern": "partial: 以上下文条件替代重训，但缺上游训练与类别留出的完整结构。",
+  "resolves_problem": "partial: 在 WebArena 上提高 SR/降低步数，Mind2Web 提升主要体现在元素准确率与 Step SR，任务级 SR 绝对值仍 <5%，问题未关闭。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02",
+    "version": "taxonomy.json:b115a69b",
+    "fit": "partial",
+    "condition_checks": "H02 步骤：从交互流挖掘子流程、编成带变量的结构化包（met）；dedup/merge（仅 prompt 要求「不生成重叠」，无机械合并或版本化，partial）；留存门（评估器判成功，在线；离线无门，partial）；复用评测（跨网站/领域，met）；报告存活率（未报告，unmet）。H00 的对比式反思未执行（只用成功轨迹）。",
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E005",
+     "E006",
+     "E008",
+     "E017"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": null,
+    "version": "taxonomy.json:b115a69b",
+    "fit": "weak",
+    "condition_checks": "仅 S1（案例单元可重绑定：抽变量、子任务粒度）对应；S2 门控、S3 索引、S4 选择性检索均无（全量注入）。",
+    "evidence_ids": [
+     "E006",
+     "E007"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H02",
+   "operation_correspondence": "RS：任务→条件化表示→无参数更新求解；RSI：轨迹→挖掘 workflow→写入记忆→后续注入。对应点：诱导物进入上下文而非权重。",
+   "conditions_or_differences": "RSI 多出写回/留存/门控步骤（RS 卡无）；RS 的上游训练与类别留出在 AWM 缺失。",
+   "evidence_ids": [
+    "E002",
+    "E007",
+    "E004"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations:1"
+   ],
+   "applies_when": "声称条件化信号带来增益",
+   "applicable": true,
+   "status": "met",
+   "reason": "有同观测、无 workflow 的 BrowserGym ax-tree 基线（SR 15.0 vs 35.5），相当于条件信号开/关；但无评估器门开/关。",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#2"
+   ],
+   "applies_when": "声称泛化/零样本",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未做基座模型对 WebArena/Mind2Web 的污染或重叠分析；跨网站/领域划分提供结构留出但无重叠审计。",
+   "evidence_ids": [
+    "E017"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#3"
+   ],
+   "applies_when": "声称优于具体示例检索",
+   "applicable": true,
+   "status": "partial",
+   "reason": "与 Synapse 对比（Mind2Web GPT-3.5）有数值与机制解释，但非同预算受控复现，WebArena 无检索具体示例对照。",
+   "evidence_ids": [
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#4"
+   ],
+   "applies_when": "多模块管线",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅有规则/LM 诱导、文本/代码、HTML 三组表示消融；评估器门与动作空间变体无充分隔离。",
+   "evidence_ids": [
+    "E020",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#5"
+   ],
+   "applies_when": "声称配方通用",
+   "applicable": true,
+   "status": "met",
+   "reason": "两个基准、五个网站域、同一诱导 prompt。",
+   "evidence_ids": [
+    "E026",
+    "E017"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#6"
+   ],
+   "applies_when": "条件源质量/分布差影响",
+   "applicable": true,
+   "status": "partial",
+   "reason": "讨论了训练/测试分布差与在线优势，指出评估器误差有害，但未量化评估器质量或覆盖敏感度。",
+   "evidence_ids": [
+    "E019",
+    "E017"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#abstract_experience_into_guidance.S3"
+   ],
+   "applies_when": "经验写入依赖反馈信号",
+   "applicable": true,
+   "status": "partial",
+   "reason": "在线靠 LM 评估器；承认不完美但无错误率；离线用金标轨迹。",
+   "evidence_ids": [
+    "E004",
+    "E019"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#abstract_experience_into_guidance.S4"
+   ],
+   "applies_when": "存储随使用增长",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无更新/合并/遗忘/冲突处理；离线+在线合并反而变差（E021）；规模靠按网站分组限制。",
+   "evidence_ids": [
+    "E008",
+    "E021"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "写入前有保留门",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅在线评估器二值门；无执行测试、无边际收益测量、离线无门。",
+   "evidence_ids": [
+    "E004",
+    "E007"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S1"
+   ],
+   "applies_when": "案例作为可复用单元",
+   "applicable": true,
+   "status": "met",
+   "reason": "抽象实例变量并切成子任务粒度。",
+   "evidence_ids": [
+    "E006",
+    "E005"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2409.07429-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#Reviewer expectations (pending): construction vs evaluation streams"
+   ],
+   "applies_when": "记忆在评测流上更新",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "WebArena 在线中记忆由测试流自生成预测构建，评测流=构建流；虽未用金标，但没有分离的留出流；仅跨模板子集与 Mind2Web 划分部分缓解。",
+   "evidence_ids": [
+    "E003",
+    "E013",
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2409.07429-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "same card: budget-matched baselines"
+   ],
+   "applies_when": "对照消耗额外调用",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未报告评估器/诱导调用成本或预算匹配；仅报告成功轨迹步数。",
+   "evidence_ids": [
+    "E009",
+    "E010"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2409.07429-3",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "same card: variance across runs or orderings"
+   ],
+   "applies_when": "累积型存储",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "单次运行、温度 0、未改变流顺序，无方差。",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "WebArena 总 SR 35.5，相对 BrowserGym 提升 51.1%，且步数更少",
+   "setting": "GPT-4 温度0，在线诱导，按网站分组",
+   "baseline/control": "BrowserGym（HTML+ax-tree）23.5；BrowserGym ax-tree 15.0",
+   "selection_vs_test": "在线流：诱导与评测同一测试流（自生成预测，评估器标签），无金标泄漏但无分离留出",
+   "result/denominator": "812 任务，单次运行，无区间",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E012"
+   ],
+   "counterevidence": "对比 23.5 的基线观测更丰富；matched 基线为 15.0。规则诱导与 LM 诱导等效（E020）",
+   "allowed_conclusion": "在同观测无记忆基线上，在线 workflow 记忆使 WebArena SR 大幅提高；单次运行结论"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Mind2Web 跨任务离线 Step SR 提升",
+   "setting": "GPT-4，训练集诱导，测试跨任务",
+   "baseline/control": "MindAct 4",
+   "selection_vs_test": "训练集诱导，测试集评测，分离",
+   "result/denominator": "Step SR 45.1 vs 36.2；SR 4.8 vs 2.0",
+   "evidence_ids": [
+    "E015",
+    "E016"
+   ],
+   "counterevidence": "任务级 SR 极低，差距在小分母上",
+   "allowed_conclusion": "步级成功率提升可信，任务级提升证据弱"
+  },
+  {
+   "claim_id": "C3",
+   "text": "在线 AWM 在跨网站/领域上稳健泛化，差距随分布差增大",
+   "setting": "Mind2Web cross-website/domain",
+   "baseline/control": "MindAct*、AWM offline",
+   "selection_vs_test": "在线流或离线随机训练 workflow",
+   "result/denominator": "Step SR 33.9 vs 30.1；35.5 vs 18.6；任务级 SR 1.6/1.7 vs 2.0/1.0",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "counterevidence": "任务级 SR 在跨网站上低于基线（1.6 vs 2.0）",
+   "allowed_conclusion": "步级指标泛化；任务级无一致提升"
+  },
+  {
+   "claim_id": "C4",
+   "text": "抽象子例程优于具体示例（对比 Synapse）",
+   "setting": "Mind2Web GPT-3.5 离线",
+   "baseline/control": "Synapse 报告结果",
+   "selection_vs_test": "同上",
+   "result/denominator": "Elem +5.0，Step SR +4.0",
+   "evidence_ids": [
+    "E023"
+   ],
+   "counterevidence": "WebArena 上规则诱导（含具体步骤）与 LM 诱导持平（E020）",
+   "allowed_conclusion": "相关性成立，机制归因未受控"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在同观测无记忆基线上，诱导并留存的 workflow 记忆使后续任务 SR 显著提高（WebArena 在线流 15.0→35.5；Mind2Web 离线 Step SR +8.9）。",
+  "unresolved": [
+   "作者主张：超越人工 workflow 与广泛泛化；证据支持的是单次运行下相对提升，任务级 SR 在 Mind2Web 上仍极低；机制归因（抽象优于具体）未受控",
+   "未证明 improver 级改进"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "gap 具体（具体示例偏置、人工 workflow 成本、无积累），与 Synapse/SteP 有定量对比；但同类 memory/skill（Voyager、ExpeL 等）无实验对比，残余问题边界部分清楚。",
+   "evidence_ids": [
+    "E001",
+    "E023",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "抽象变量+子任务粒度+在线评估器门控与问题对应，给出可区分预测（组合 workflow、分布差越大越优）；但 LM 与规则诱导持平削弱「抽象归因」，评估器可靠性假设薄。",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E004",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E020",
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "操作链与 prompt 可重建；但留存门仅评估器二值、全量注入无检索、无版本/回退/冲突/遗忘，离线+在线冲突未处理（S4 unmet）。",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E021",
+    "E004"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "WebArena 为执行式功能正确性评测；Mind2Web 为步级匹配指标且任务级 SR 极低；在线评估器精度未验证。",
+   "evidence_ids": [
+    "E009",
+    "E015",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有同观测无记忆基线与表示消融（规则/LM、文本/代码、HTML），但无评估器门关、无受控检索示例对照，Synapse 对比非同预算。",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E020",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Mind2Web 离线训练/测试分离且有跨网站/领域划分，WebArena 加跨模板子集；但 WebArena 在线评测流=构建流，无基座污染审计。",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E017",
+    "E003"
+   ],
+   "counterevidence_ids": [
+    "E003"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "有样本量与若干负结果（动作 F1 下降、离线+在线较差）但主结果无不确定性，温度 0 单次运行，无种子/顺序方差。",
+   "evidence_ids": [
+    "E012",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "报告步数与 workflow 数（约 7 个/站），但未报告评估器与诱导的调用/令牌成本，也无预算匹配对照。",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "status_reason": "全文含附录完整，八项均可判定。",
+ "rationale": "在线/离线 workflow 诱导并写入记忆，WebArena 同观测基线 15.0→35.5；缺评估器门消融、预算与方差，记忆维护缺失；证据级别 retained，主张 scoped。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "6ad95c219ff9f9b0982545d5b79a2ccd51c93c663f2db81a404d986afe074fbc",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref: 子代理环境未暴露运行记录，按契约填 null",
+  "timestamp": "2026-10-21T19:56:51Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2409.07429v1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "sections_read": [
+    "abstract",
+    "§1 intro",
+    "§2 method (representation, offline/online)",
+    "§3 WebArena + Mind2Web results",
+    "§4 representation ablations",
+    "§5 workflow action space",
+    "§6 related work",
+    "App A prompts/examples/quality",
+    "App B rule-based induction",
+    "App C offline+online"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "score": {
+  "raw": 61.25,
+  "display": 61.3,
+  "lower": 61.25,
+  "upper": 61.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

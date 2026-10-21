@@ -1,0 +1,193 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r04a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full v1 HTML body plus supplementary Sections 7.1-7.11 (Tables 1-10) read. In scope: the retained, feedback-edited object is a natural-language concept library (non-weight); only a small linear adapter is refit.",
+ "paper": {
+  "paper_key": "2504.00185",
+  "paper_id": "2504.00185",
+  "title": "Self-Evolving Visual Concept Library using Vision-Language Critics (Escher)",
+  "version": "2504.00185v1",
+  "claim_type": "system_method",
+  "central_claim": "Escher iteratively evolves a library of natural-language visual concepts: a VLM critic's label-free class-confusion signal guides an LLM, conditioned on a history of past proposals, to add disambiguating concepts, and the evolved library improves zero-shot, few-shot and fine-tuned concept-bottleneck image classifiers without human annotation."
+ },
+ "provenance": {
+  "input_hash": "a0dc10b4895b761f3c64d7b3a8c0055cd00d1ecbae6e28a9c5bb5f23f627d263",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker by the claude-kimi dispatch; model_type is the configured slot only.",
+  "timestamp": "2026-10-21T21:05:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "2504.00185",
+   "url": "https://arxiv.org/html/2504.00185v1",
+   "sha256": "cd4c271cdbb33f8a5b40a419aad452f1d372df73a0d3ee5624dd9696d73626eb",
+   "sections_read": ["Abstract", "1 Introduction", "2 Related Work", "3 Problem Formulation", "4 Method (Algorithm 1)", "5 Experiments (Tables 1-5)", "6 Conclusion", "7.1-7.11 Supplementary (Tables 6-10, prompts, cost)"],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {"evidence_id": "E001", "material_id": "2504.00185", "locator": "Sec 4, Algorithm 1 line 13", "quote": "\\mathcal{C}_{t+1}^{(i)}\\leftarrow\\mathcal{C}_{t}^{(i)}\\cup\\{\\hat{c}^{(i)}\\}", "support_explanation": "Retention rule is an unconditional set union: proposed concepts are appended; no acceptance test, pruning, rollback or best-iteration selection is in the pseudocode, and the final C_T is returned.", "kind": "author_report"},
+  {"evidence_id": "E002", "material_id": "2504.00185", "locator": "Sec 4, Heuristics for disambiguation", "quote": "assumes no access to labels during evolution. However, if labels are provided, we can construct a confusion matrix to identify classes that are confused for each other.", "support_explanation": "Feedback signal is label-free: pairwise confusion computed from the VLM's own image-class scores (top-k confusion, correlation, clustering).", "kind": "author_report"},
+  {"evidence_id": "E003", "material_id": "2504.00185", "locator": "Sec 4, History-sensitive concept evolution", "quote": "To ensure that each new round of feedback generates novel and interesting concepts, we borrow ideas from the program synthesis literature", "support_explanation": "Per class pair, past proposals and the resulting confusion scores are kept in a history bank and appended to the LLM prompt (in-context only, not persisted beyond the run).", "kind": "author_report"},
+  {"evidence_id": "E004", "material_id": "2504.00185", "locator": "Sec 5, Evaluation", "quote": "We follow previous work in using Top-1 accuracy to evaluate the performance of the CBM model on the test set of the classification dataset.", "support_explanation": "Reported accuracy is top-1 on the test split of standard datasets (CIFAR-100, CUB, Food101, NABirds, Flowers, Pets, Cars).", "kind": "author_report"},
+  {"evidence_id": "E005", "material_id": "2504.00185", "locator": "Sec 5, Methodology", "quote": "A CBM conditioned on these concepts produces logits for the images in the validation set, and a heuristic identifies classes that are confused for each other. The specific heuristic and hyperparameters vary depending on the task and underlying algorithm, and grid-searching for such hyperparameters proves to be practical and effective.", "support_explanation": "Evolution consumes validation-set logits, test set is used for reporting; hyperparameters and heuristic vary per task and are grid-searched, but the split used for that search is not stated.", "kind": "author_report"},
+  {"evidence_id": "E006", "material_id": "2504.00185", "locator": "Table 1 (fine-tuned LM4CV vs LM4CV+Escher)", "quote": "performance in all datasets while utilizing no extra human annotations.", "support_explanation": "Table 1 top-1: CUB 63.26 to 83.17, Stanford Cars 86.84 to 93.76, CIFAR-100 84.48 to 89.63, Flowers 94.80 to 96.86, NABirds 76.58 to 78.21, Food101 94.77 to 94.90, Pets 92.50 to 92.86. Single run each; large gains concentrate in three datasets.", "kind": "author_report"},
+  {"evidence_id": "E007", "material_id": "2504.00185", "locator": "Sec 5.2, Observations (few-shot, Table 2)", "quote": "We observe mixed results in few-shot evaluation, with similar performance compared to the baseline on all datasets except for Stanford Cars, which showed modest improvement, and CIFAR100, which showed very modest deterioration (Table", "support_explanation": "Few-shot LaBO: CIFAR100 74.23 vs 73.62 (8-shot), 77.67 vs 77.23 (16-shot); Food101 87.02 vs 86.10; Cars 75.07 vs 75.99 and 81.48 vs 82.56. No consistent gain.", "kind": "author_report"},
+  {"evidence_id": "E008", "material_id": "2504.00185", "locator": "Sec 5.3, Observations (zero-shot, Table 3)", "quote": "output scores are less calibrated than those produced by the finetuned adapter, which leads to noisier iterations.", "support_explanation": "Zero-shot CbD+Escher gains are small (e.g. Flowers 79.41 to 81.37, Cars 75.65 to 77.14, CIFAR-100 76.20 to 77.80, NABirds 53.61 to 54.30); on CUB CbD 62.00 and CbD+Escher 63.33 are still below plain CLIP 64.83.", "kind": "author_report"},
+  {"evidence_id": "E009", "material_id": "2504.00185", "locator": "Sec 5.4, Library learning ablation (Table 4)", "quote": "we rerun LM4CV with three times more concepts per class than the initial set of concepts (for a total of 3810 concepts).", "support_explanation": "Concept-count control: LM4CV with 3x LLM-sampled concepts barely moves (CUB 63.26 to 66.09, CIFAR-100 84.48 to 86.91, Cars unchanged 86.84) while Escher reaches CUB 83.17, Cars 93.76. Count-matched, not call- or token-matched.", "kind": "author_report"},
+  {"evidence_id": "E010", "material_id": "2504.00185", "locator": "Sec 5.4", "quote": "makes asymmetrically more calls to a zero-shot LLM model than the baseline (which only samples concepts once). To verify that", "support_explanation": "Authors acknowledge more LLM calls than the baseline; the control matches concept number only, and training-step budget over 60 iterations vs a single baseline fit is not reconciled (E017).", "kind": "author_report"},
+  {"evidence_id": "E011", "material_id": "2504.00185", "locator": "Sec 7.2, Visual critic ablation (Table 7) vs Sec 7.1 (Table 6)", "quote": "without the visual critic, each iteration degenerates into a random search over disambiguation pairs.", "support_explanation": "Table 7 'Ours-H-VC' (no history and random pair scores) gives CUB 82.41, CIFAR-100 86.76, Cars 88.12, Flowers 96.08, NABirds 77.29, Food 94.95, versus Table 6 'Ours-H' (no history, real critic) CUB 81.58, CIFAR-100 86.73, Cars 88.09, Flowers 96.86, NABirds 77.35, Food 94.97. Our computation: the critic's isolated effect (H vs H-VC) is within about 1 point and negative on CUB; most of the gain over LM4CV survives with random pair selection.", "kind": "our_inference"},
+  {"evidence_id": "E012", "material_id": "2504.00185", "locator": "Table 7 caption", "quote": "We find that the visual critic improves model performance in all cases.", "support_explanation": "Author claim compares full Escher with the double-ablated variant (no history and no critic), so the critic is confounded with history.", "kind": "author_report"},
+  {"evidence_id": "E013", "material_id": "2504.00185", "locator": "Table 6 caption", "quote": "with and without history conditioning. We find that history conditioning helps improve the model performance in the majority of the datasets.", "support_explanation": "History helps on CIFAR-100 (86.73 to 89.63), CUB (81.58 to 83.17), Cars (88.09 to 93.76), NABirds (77.35 to 78.21); ties on Food and Flowers.", "kind": "author_report"},
+  {"evidence_id": "E014", "material_id": "2504.00185", "locator": "Sec 2, Related Work (non-parametric algorithms)", "quote": "This mutation process focuses on each class in isolation and must be repeated for each class, which proves to be impractical for datasets with more than 20 classes.", "support_explanation": "Closest neighbour [5] (LLM-mutate with binary classification loss) is argued against qualitatively; it is not run as a baseline.", "kind": "author_report"},
+  {"evidence_id": "E015", "material_id": "2504.00185", "locator": "Sec 1, Introduction", "quote": "manually defined concepts are labor-intensive, and LLM-generated concepts can be inaccurate or fail to account for interactions between them.", "support_explanation": "Author gap: static (manual or one-shot LLM) concept sets lack discriminative power; no quantification of how much accuracy is lost to this in the baselines.", "kind": "author_report"},
+  {"evidence_id": "E016", "material_id": "2504.00185", "locator": "Sec 3, Visual Recognition with Latent Concept Libraries", "quote": "We also assume that the VLM-based visual recognition engine is well calibrated for confidence estimation.", "support_explanation": "The critic signal is assumed calibrated; Sec 5.3 and the few-shot discussion then attribute weak gains to poor calibration.", "kind": "author_report"},
+  {"evidence_id": "E017", "material_id": "2504.00185", "locator": "Sec 5.1, Setup", "quote": "LM4CV and LM4CV+Escher are trained for the same number of steps per iteration with the same batch size and learning rate.", "support_explanation": "Escher runs 60 iterations (adapter refit each time); the baseline's total training budget is not stated, so budget parity is unclear.", "kind": "author_report"},
+  {"evidence_id": "E018", "material_id": "2504.00185", "locator": "Sec 7.7, LLM queries per experiment", "quote": "Assuming each query is approximately 500 tokens, and each additional history entry adds 100 tokens, we can estimate the total token usage for 50 iterations to be around 128,000 tokens if we only consider just a single query per iteration and around 12.8M tokens for each experiment (approximately an hour).", "support_explanation": "Escher's own cost is disclosed (about 100 queries per iteration, 2-15 min per iteration, 12.8M tokens per experiment); no cost comparison against the baselines is given.", "kind": "author_report"},
+  {"evidence_id": "E019", "material_id": "2504.00185", "locator": "Sec 7.7, Choosing disambiguation heuristics", "quote": "we find that, generally, grid-searching for the best disambiguation heuristic and hyper-parameters is surprisingly practical, when running for low number of iterations with a local language model (around 10 iterations).", "support_explanation": "Heuristic and hyperparameters are tuned per dataset/method; selection data is not identified.", "kind": "author_report"},
+  {"evidence_id": "E020", "material_id": "2504.00185", "locator": "Abstract", "quote": "This work represents, to our knowledge, the first application of concept library learning to real-world visual tasks.", "support_explanation": "Priority claim; the cited neighbour [5] also evolves LLM-generated concepts from classification feedback, so the novelty is the label-free, class-pair-joint variant.", "kind": "author_report"}
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "Per-class natural-language concept library C (inputs to a concept-bottleneck classifier), initialised by zero-shot LLM queries; baseline is the fixed initial library of LM4CV / LaBO / Classify-by-Descriptions.",
+   "information": "VLM (CLIP) image-class scores on validation images; no labels in the evolution step; LLM sees the confused class pair, their current concepts, and the pair's history; the test set is not used for evolution per the text.",
+   "operation": "Refit adapter on current library; compute pairwise confusion r_ij (top-k confusion, correlation, clustering); sample K=50 pairs weighted by confusion with a repeat-decay gamma; LLM (gpt-3.5-turbo or Llama-3.3-70B) proposes disambiguating concepts for both classes with a scratchpad reason field.",
+   "output": "2-5 new concepts per pair unioned into the library; refit classifier.",
+   "conditions": "VLM scores must carry enough signal to localise confusion (assumed calibrated); concept strings must fit the CLIP text context length.",
+   "feedback": "Contrastive confusion between classes derived from VLM scores.",
+   "selection_rule": "Pair sampling by confusion; concepts are appended unconditionally (no accept/reject, no pruning).",
+   "persistence": "Library C_T (and adapter w_T) after T=60 iterations; reused for test-time classification of the same label set; history bank is run-local.",
+   "later_use": "The refit classifier reads the grown library at every subsequent iteration and at test time; no reuse across datasets or label sets is shown.",
+   "claimed_effect": "Fine-tuned LM4CV improves on all 7 datasets (CUB +19.9, Cars +6.9, CIFAR-100 +5.2, others under 2.1); zero-shot small gains; few-shot mixed.",
+   "failure_boundary": "Poorly calibrated critic gives noisy iterations; few-shot overfitting; heuristic over-sensitive to minute errors; LLM concepts exceeding CLIP context halt the loop without a reasoning field.",
+   "evidence_ids": ["E001", "E002", "E005", "E006", "E007", "E008", "E016"]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "Proposer context: history-conditioned prompt (per-pair record of earlier proposals and the confusion score after them).",
+   "information": "Past concepts and subsequent confusion scores for the same class pair.",
+   "operation": "Append history to the LLM query so it avoids regurgitating earlier concepts and sees which proposals did not resolve confusion.",
+   "output": "Novel, history-aware concept proposals.",
+   "conditions": "Prompt length grows linearly with iterations.",
+   "feedback": "Post-proposal confusion score per pair.",
+   "selection_rule": "none beyond sampling decay",
+   "persistence": "Run-local datastructure; not persisted across runs.",
+   "later_use": "Next time the same pair is sampled in the same run.",
+   "claimed_effect": "History conditioning helps in most datasets (Table 6).",
+   "failure_boundary": "No effect on Food101 and Flowers; cost grows with iterations.",
+   "evidence_ids": ["E003", "E013", "E018"]
+  }
+ ],
+ "gap": {
+  "author_gap": "Concept-bottleneck classifiers rely on fixed concept sets (manual or one-shot LLM) that lack discriminative power and ignore interactions; prior mutation approach is per-class and impractical beyond 20 classes.",
+  "checked_gap": "The fixed-concept-set object is clearly identified and the confusable-pair bottleneck is concrete. However, [5] already evolves concepts from classification feedback, so what is new is the label-free, pair-joint scheme; its advantage over [5] is argued but not measured.",
+  "lineage": "Classify-by-Descriptions (zero-shot LLM concepts) -> LaBO / LM4CV (learned adapters over fixed concepts) -> LLM-mutate [5] (per-class evolutionary refinement) -> Escher (label-free pair-joint evolution with history). Library learning from program synthesis (DreamCoder-style) is the stated inspiration. Neighbours cited, not available as fixed local sources.",
+  "closest_adjacent": "[5] LLM-mutate; LM4CV; LaBO; Classify by Descriptions.",
+  "residue": "Few-shot and zero-shot settings gain little; effect on label sets other than the evolved one is unknown.",
+  "stakes": "Concept quality bounds interpretable CBM accuracy, especially on fine-grained data (CUB, Cars).",
+  "method_response": "Target disambiguation concepts to confused class pairs using the VLM's own scores and an in-context history.",
+  "remaining_gap": "No head-to-head with [5]; the critic's marginal contribution beyond random pair selection is small in the authors' own ablations; no transfer or lifelong reuse of the library.",
+  "evidence_ids": ["E014", "E015", "E020"],
+  "unresolved": ["Whether [5] under equal budget matches Escher could not be checked from fixed local sources."]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C07",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "Step 1 diagnosis localised to a structural site: present (missing discriminative concepts for confused pairs). Step 2 internal label-free readout valid under deployment assumptions: present but calibration assumed (E016). Step 3 confine correction to a small lever with frozen backbone: present (concept text plus linear adapter, frozen CLIP and LLM). Step 4 explicit stabiliser against collapse: partial (repeat-decay gamma, CLIP-length guard). Step 5 show the signal tracks the target by intervention: partial (random-critic ablation Table 7 and qualitative confusion-matrix comparison; critic effect small).",
+    "success_failure_checks": "Success: label-free signal manufactured from model scores; downstream metric reported. Failure: validity depends on calibration; internal signal's causal role weak once history is removed.",
+    "evidence_ids": ["E002", "E005", "E011", "E016"],
+    "reason": "The VLM's own image-class scores are turned into a confusion signal that steers an LLM generator; frozen backbones, tiny lever. C07 preferred over C08 because there is no pseudo-label filter-retrain cycle for both components."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Main card matches the manufactured label-free signal; the append-only text-library retention loop is not covered by any original card and is handled by the domain layer.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "patterns/ as hashed in manifest",
+    "fit": "low",
+    "condition_checks": ["S1 attribution scope matches structure: met (edit targets the confused pair only)", "S3 retention protects earlier wins: unmet (append-only, no regression check)", "S4 diagnose mechanisms not instances: partial (pair-level, not clustered)", "F5 feedback assumed to isolate edited artifact: partial (decay gamma guards backbone-caused confusion, no check)"],
+    "evidence_ids": ["E001", "E002", "E003"]
+   }
+  ],
+  "unassigned": ["Perceptual/CBM concept-library growth from VLM-critic confusion: the stored artifact is read by a VLM scorer, not retrieved into an LLM context, so H00/H01/H10 fit only loosely."],
+  "revision_proposals": ["Consider a boundary note under attribute_and_patch_incumbent (or a separate candidate) for perception-side concept libraries edited from critic feedback; single-paper case only, not a new card."]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C07",
+   "domain_namespace": "rsi",
+   "domain_main": "attribute_and_patch_incumbent",
+   "domain_sub": "H10",
+   "operation_correspondence": "Label-free confusion readout (RS) corresponds to failure attribution to a component (domain); LLM-proposed concepts added to the library correspond to a localized edit of the incumbent artifact.",
+   "necessary_conditions_and_differences": "Domain pattern needs re-validation and replacement of the incumbent; here edits are unioned without a regression gate. RS pattern needs a stabiliser and causal validation of the internal signal; only partially present.",
+   "evidence_ids": ["E001", "E002", "E011"]
+  }
+ ],
+ "expectations": [
+  {"id": "rs:self_supervised_signal_engineering/RE-1", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"], "applies_when": "a manufactured signal is claimed to generalise", "applicable": true, "status": "met", "reason": "Three CBM families (zero/few/fine-tuned), seven datasets, and two LLM/VLM backbone swaps (Tables 5, 10).", "evidence_ids": ["E004", "E006"], "score_item": "E.causality"},
+  {"id": "rs:self_supervised_signal_engineering/RE-2", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"], "applies_when": "gain must be attributed to the manufactured signal rather than extra compute", "applicable": true, "status": "partial", "reason": "Concept-count and random-critic controls exist, but not call- or step-matched, and the critic's isolated effect (H vs H-VC) is near zero by our reading of Tables 6-7.", "evidence_ids": ["E009", "E010", "E011"], "score_item": "E.causality"},
+  {"id": "rs:self_supervised_signal_engineering/RE-3", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"], "applies_when": "synthetic signal claimed useful", "applicable": true, "status": "met", "reason": "Reports downstream top-1 accuracy, not just an intermediate property.", "evidence_ids": ["E004", "E006"], "score_item": "E.measurement"},
+  {"id": "rs:self_supervised_signal_engineering/RE-4", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"], "applies_when": "closest prior art exists", "applicable": true, "status": "partial", "reason": "Delta from LLM-mutate [5] is argued in text but [5] is not run.", "evidence_ids": ["E014"], "score_item": "G"},
+  {"id": "rs:self_supervised_signal_engineering/RE-5", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"], "applies_when": "a generate-filter loop adds compute", "applicable": true, "status": "partial", "reason": "Own cost disclosed (12.8M tokens, minutes per iteration), benefit-vs-cost against baselines not analysed.", "evidence_ids": ["E018", "E010"], "score_item": "E.cost"},
+  {"id": "rs:self_supervised_signal_engineering/RE-6", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"], "applies_when": "signal validity rests on calibration assumptions", "applicable": true, "status": "partial", "reason": "Calibration is assumed and then blamed for weak zero/few-shot results; weaker backbones still give gains on LM4CV but not on several CbD cells.", "evidence_ids": ["E016", "E008"], "score_item": "M"},
+  {"id": "rsi:attribute_and_patch_incumbent/S1", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "failures are traced to a component and edited", "applicable": true, "status": "met", "reason": "Edit scope is the confused class pair's concept sets only.", "evidence_ids": ["E001", "E002"], "score_item": "M"},
+  {"id": "rsi:attribute_and_patch_incumbent/S3", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "edits replace or extend an incumbent artifact", "applicable": true, "status": "unmet", "reason": "Union with no per-edit validation, regression check, rollback or best-iteration return.", "evidence_ids": ["E001"], "score_item": "X"},
+  {"id": "rsi:attribute_and_patch_incumbent/F5", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "feedback is assumed to isolate the edited artifact", "applicable": true, "status": "partial", "reason": "Confusion may stem from the CLIP backbone not from missing concepts; gamma decay mitigates but nothing verifies the cause.", "evidence_ids": ["E016"], "score_item": "M"},
+  {"id": "rsi:abstract_experience_into_guidance/S4", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "the store grows over iterations", "applicable": true, "status": "partial", "reason": "No pruning or merging in the library; the adapter can down-weight useless concepts and libraries up to 5000 attributes were fit.", "evidence_ids": ["E001"], "score_item": "X"},
+  {"id": "local:2504.00185-1", "version": "v1", "source_strength": "common_practice", "source_refs": ["E005", "E019"], "applies_when": "hyperparameters and heuristics are tuned per dataset", "applicable": true, "status": "unknown", "reason": "The split used for grid search and for choosing the Top-k heuristic is not stated.", "evidence_ids": ["E005", "E019"], "score_item": "E.holdout"},
+  {"id": "local:2504.00185-2", "version": "v1", "source_strength": "common_practice", "source_refs": ["E010", "E017"], "applies_when": "iterative LLM-in-loop method vs one-shot baseline", "applicable": true, "status": "unmet", "reason": "No LLM-call-, token- or training-step-matched baseline.", "evidence_ids": ["E010", "E017"], "score_item": "E.causality"},
+  {"id": "local:2504.00185-3", "version": "v1", "source_strength": "common_practice", "source_refs": ["E006"], "applies_when": "stochastic LLM proposals drive the gain", "applicable": true, "status": "unmet", "reason": "Single run per cell; the same configuration appears as Food101 94.90 (Table 1) and 94.97 (Tables 6-7), indicating run-to-run variation that is not reported.", "evidence_ids": ["E006", "E013"], "score_item": "E.statistics"}
+ ],
+ "claims": [
+  {"claim_id": "CL1", "text": "Escher improves fine-tuned LM4CV on all datasets without human annotation.", "setting": "Table 1, ViT-L/14, gpt-3.5-turbo, 60 iterations", "baseline_control": "LM4CV with the initial library; 3x-concept control (Table 4)", "selection_vs_test": "Evolution on validation logits, reporting on test set; hyperparameter-tuning split unspecified", "result_denominator": "7 datasets, single run each; gains: CUB +19.9, Cars +6.9, CIFAR-100 +5.2, Flowers +2.1, NABirds +1.6, Pets +0.4, Food +0.1", "evidence_ids": ["E004", "E005", "E006", "E009"], "counterevidence": ["E017"], "allowed_conclusion": "Appending targeted disambiguation concepts raises held-out test accuracy of LM4CV, mostly on fine-grained CUB/Cars/CIFAR-100."},
+  {"claim_id": "CL2", "text": "Escher helps zero-shot and few-shot concept classifiers.", "setting": "Tables 2-3", "baseline_control": "CbD, LaBO", "selection_vs_test": "same as CL1", "result_denominator": "zero-shot gains 0.5-2.0 points on 6 datasets; few-shot 8-shot lower on 3 of 5 datasets (CIFAR100, Food101, Flowers), 16-shot within 0.15 on 3 and +1.08 on Cars, -0.44 on CIFAR100", "evidence_ids": ["E007", "E008"], "counterevidence": ["E007"], "allowed_conclusion": "Small zero-shot gains; few-shot results are mixed."},
+  {"claim_id": "CL3", "text": "The VLM critic's feedback is essential to the gains.", "setting": "Tables 4, 6, 7 (LM4CV)", "baseline_control": "random pair selection (no critic), no history", "selection_vs_test": "same as CL1", "result_denominator": "6 datasets; H vs H-VC differences between -0.83 and +0.78 points", "evidence_ids": ["E009", "E011", "E012", "E013"], "counterevidence": ["E011"], "allowed_conclusion": "Targeted pairwise disambiguation concept generation is supported as the load-bearing step; the critic's own marginal contribution is not established by the reported ablations."},
+  {"claim_id": "CL4", "text": "First application of concept library learning to real-world visual tasks.", "setting": "priority claim", "baseline_control": "n/a", "selection_vs_test": "not_applicable", "result_denominator": "not_applicable", "evidence_ids": ["E020", "E014"], "counterevidence": [], "allowed_conclusion": "Not independently verified; [5] is close prior work."}
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "For fine-tuned concept-bottleneck classifiers (LM4CV) on seven image datasets, a concept library grown by LLM-generated pairwise disambiguation concepts, with pairs chosen from label-free VLM confusion, raises test top-1 accuracy over the initial library and over a count-matched LLM-concept control (largest on CUB, Cars, CIFAR-100). The zero-shot gain is small, few-shot is mixed, and the VLM critic and history components are not shown to be individually necessary beyond random pair selection.",
+  "unresolved": ["Split used for hyperparameter and heuristic selection", "Call- and step-matched baseline", "Comparison to LLM-mutate [5]", "Run-to-run variance", "Transfer of the library beyond the evolved label set"]
+ },
+ "ratings": {
+  "G": {"status": "resolved", "rating": 2, "reason": "The fixed one-shot concept set and the confusable-pair bottleneck are concrete and the lineage to LM4CV/LaBO/CbD/LLM-mutate is laid out, but the closest neighbour [5] is dismissed qualitatively and not run, and the accuracy loss attributable to the gap is not quantified.", "evidence_ids": ["E014", "E015", "E020"], "counterevidence_ids": [], "search_scope": []},
+  "M": {"status": "resolved", "rating": 3, "reason": "Operation, information and rationale are reconstructable and make distinguishable predictions (random vs critic pair selection, history ablation, concept-count control); the stated mechanism is partly undercut because the critic itself adds little in the authors' tables, and calibration is assumed.", "evidence_ids": ["E002", "E003", "E009", "E011", "E016"], "counterevidence_ids": ["E011"], "search_scope": []},
+  "X": {"status": "resolved", "rating": 2, "reason": "Pseudocode, hyperparameters (T, K, gamma, heuristics), prompts and next-round reads are clear, but retention is an unconditional union with no gate, rollback, pruning or best-iteration return, and prompt growth and CLIP-length failure are only noted.", "evidence_ids": ["E001", "E003", "E005", "E018"], "counterevidence_ids": [], "search_scope": []},
+  "E.measurement": {"status": "resolved", "rating": 3, "reason": "Top-1 accuracy on standard labelled test sets with public baselines is a trustworthy metric; baseline concept counts and reproduction details leave some doubt.", "evidence_ids": ["E004", "E006"], "counterevidence_ids": [], "search_scope": []},
+  "E.causality": {"status": "resolved", "rating": 2, "reason": "Count-matched concept, random-critic and history ablations on seven datasets and three CBM families are useful controls, but call/step budgets are not matched, [5] is not run, and by our reading of Tables 6-7 the critic's isolated effect is near zero, contradicting the headline critic claim.", "evidence_ids": ["E009", "E011", "E013"], "counterevidence_ids": ["E010", "E011", "E012", "E017"], "search_scope": []},
+  "E.holdout": {"status": "resolved", "rating": 2, "reason": "Evolution uses validation logits and the test set is used for reporting, with no label use in the evolution step; however the split for hyperparameter/heuristic grid search is unspecified, best heuristic is reported from results, and no transfer to new classes or datasets is shown.", "evidence_ids": ["E002", "E004", "E005"], "counterevidence_ids": ["E019"], "search_scope": []},
+  "E.statistics": {"status": "resolved", "rating": 1, "reason": "Seven datasets and mixed few-shot/zero-shot outcomes are reported honestly, but every cell is a single run with no intervals, and the same configuration differs between tables (Food101 94.90 vs 94.97).", "evidence_ids": ["E006", "E007", "E013"], "counterevidence_ids": [], "search_scope": []},
+  "E.cost": {"status": "resolved", "rating": 2, "reason": "Own cost is disclosed (about 100 queries per iteration, 12.8M tokens, 2-15 min per iteration, hardware) but there is no cost-matched baseline and baseline training budget is unclear.", "evidence_ids": ["E018", "E010", "E017"], "counterevidence_ids": [], "search_scope": []}
+ },
+ "score": {"raw": 56.25, "display": 56.3, "lower": 56.25, "upper": 56.25, "coverage": 1.0, "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"},
+ "rationale": "概念库经VLM批评驱动LLM追加，保留库在测试集上提升，且有概念数对照；但仅追加无门控，自家表6/7显示批评器边际贡献近零，无预算匹配、单次运行。"
+}

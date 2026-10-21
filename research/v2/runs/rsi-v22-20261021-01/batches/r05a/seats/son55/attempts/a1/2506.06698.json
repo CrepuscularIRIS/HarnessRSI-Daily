@@ -1,0 +1,236 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r05a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整 HTML 全文含 Appendix A.1-A.5（提示、经验示例、人工标注任务、离线数据源）；图 1/2/5 为图像，正文已复述其内容。材料齐全，可评分。",
+ "paper": {
+  "paper_key": "2506.06698",
+  "paper_id": "2506.06698",
+  "title": "Contextual Experience Replay for Self-Improvement of Language Agents",
+  "version": "2506.06698v1",
+  "claim_type": "system_method",
+  "central_claim": "Contextual Experience Replay (CER), a training-free framework that distills environment dynamics and skills from past trajectories into a dynamic buffer, retrieves them per task and replays them in the agent's context, improves GPT-4o web agents (WebArena 36.7% hybrid, +51.0% relative over the baseline; VisualWebArena 31.9% online) with modest token overhead and good stability/plasticity."
+ },
+ "provenance": {
+  "input_hash": "5371b9c966106bd075b2c83623c3310d5fd11a5b6c5ad4c30a4a88832571aa18",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref 未由运行环境暴露，故为 null；按总控指定 model type 记录。图 1/2/5 不可读，不据图评分。",
+  "timestamp": "2026-10-21T00:00:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "2506.06698v1",
+   "url": "https://arxiv.org/html/2506.06698v1",
+   "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+   "sections_read": ["Abstract", "1 Introduction", "2 Related work", "3 CER (3.1-3.4)", "4 Experiments (4.1-4.2, Tables 1-3)", "5 Analysis (5.1-5.7, Tables 4-8)", "6 Conclusions", "7 Limitations", "8 Ethics", "Appendix A.1-A.5 (prompts, experience examples, exploration prompt, human-annotated tasks, offline data sources, Table 9)"],
+   "complete": true,
+   "missing_sections": ["Figure 1, 2, 5 image content (not in text material)"]
+  }
+ ],
+ "evidence": [
+  {"evidence_id": "E001", "material_id": "2506.06698v1", "locator": "Abstract", "quote": "Moreover, current LLM agents are not designed to continually learn from past experiences during inference time, which could be crucial for them to gain these environment-specific experiences.", "support_explanation": "作者 gap：智能体不能在推理时从过去经验持续学习。", "kind": "author_report"},
+  {"evidence_id": "E002", "material_id": "2506.06698v1", "locator": "Sec 1 para 4", "quote": "current language agents seldom have an efficient way to continually learn about the environment, so they need to explore the environment from scratch for every single task", "support_explanation": "瓶颈陈述：每个任务从零探索，缺乏环境先验。", "kind": "author_report"},
+  {"evidence_id": "E003", "material_id": "2506.06698v1", "locator": "Sec 2 Learning from Memory", "quote": "or use raw and long observation-action pairs as exemplars directly, which limits their applicability to more complex environments.", "support_explanation": "对最近邻 ExpeL/Synapse 的差异：它们用原始长轨迹作示例；CER 用蒸馏后的经验。该差异的优越性未在本文以原始轨迹重放基线检验。", "kind": "author_report"},
+  {"evidence_id": "E004", "material_id": "2506.06698v1", "locator": "Sec 2 Learning from Memory", "quote": "However, their mechanism requires them to obtain the ground truth reward before they can function, which significantly limits their applicability.", "support_explanation": "对 AutoGuide/AutoManual/AWM 的断言：需要真值奖励；未与其做数值对比（同段还称 AWM 无检索模块，以重写式更新整个记忆）。", "kind": "author_report"},
+  {"evidence_id": "E005", "material_id": "2506.06698v1", "locator": "Sec 3.1", "quote": "The model is also provided with existing experiences in the buffer to avoid repetitive distillation, allowing the continual accumulation of the experiences across time.", "support_explanation": "写入规则：LLM 蒸馏，参考已有经验去重；缓冲区为只追加+去重，无质量门、删除或版本。", "kind": "author_report"},
+  {"evidence_id": "E006", "material_id": "2506.06698v1", "locator": "Sec 3.2", "quote": "We prompt the model with general instructions, the current task goal, the website descriptions, and all dynamics or skills available in the buffer.", "support_explanation": "检索：把缓冲区内全部经验放进提示，由 VLM 选 top-k(k=5)；随缓冲区增长，提示成本线性增加，'可扩展' 未被检验。", "kind": "author_report"},
+  {"evidence_id": "E007", "material_id": "2506.06698v1", "locator": "Sec 3.4 online", "quote": "CER will run the distillation module after each task and run the retrieval and replay module in the next task.", "support_explanation": "在线设置：每个任务后蒸馏，下一任务读取；学习流与评测流是同一任务序列；任务顺序是否随机化、WebArena 模板邻近性未说明。", "kind": "author_report"},
+  {"evidence_id": "E008", "material_id": "2506.06698v1", "locator": "Sec 4.1.1 offline", "quote": "we first ask individuals unfamiliar with WebArena to navigate the website for three hours and design a few tasks they consider important. A filtering process is then applied to ensure that these tasks do not overlap with the test set.", "support_explanation": "离线训练任务由人设计+人工标注金标准轨迹；去重只检查与测试集任务重叠，未说明模板层面的相似度。", "kind": "author_report"},
+  {"evidence_id": "E009", "material_id": "2506.06698v1", "locator": "Appendix A.4", "quote": "The number of training tasks varies across websites, ranging from five to ten, and accounts for approximately 5% of the test set.", "support_explanation": "离线/混合设置使用约占测试集 5% 数量的人工标注轨迹，是特权的人类信号。", "kind": "author_report"},
+  {"evidence_id": "E010", "material_id": "2506.06698v1", "locator": "Abstract / Table 1", "quote": "also gets a competitive average success rate of 36.7%, relatively improving the success rate of the GPT-4o agent baseline by 51.0%.", "support_explanation": "读 Table 1：BrowserGym(GPT-4o) 平均 24.3；CER 离线 33.4、在线 33.2、混合 36.7；(36.7-24.3)/24.3=51.0%。36.7 为混合设置，含人工标注轨迹；纯自生成的在线为 33.2(+36.6%)。", "kind": "author_report"},
+  {"evidence_id": "E011", "material_id": "2506.06698v1", "locator": "Sec 4.1.1", "quote": "by ourselves as the baseline for comparison.", "support_explanation": "基线 GPT-4o+BrowserGym 为作者自行复现，与 CER 同 harness、同模型，利于归因。", "kind": "author_report"},
+  {"evidence_id": "E012", "material_id": "2506.06698v1", "locator": "Table 1 caption", "quote": "The results originate from the corresponding papers except BrowserGym which we reproduce the GPT-4o version by ourselves.", "support_explanation": "其余行（AutoEval 20.2、WebArena 15.0 等）取自各论文，harness/模型不同，'competitive' 不是同条件比较；SteP 因人工策略被排除。", "kind": "author_report"},
+  {"evidence_id": "E013", "material_id": "2506.06698v1", "locator": "Sec 4.1.1", "quote": "We use GPT-4o-2024-0513 as the backbone language model with a temperature of 0.1.", "support_explanation": "固定模型快照与低温度；未见多次运行或种子；GPT-4o 在 WebArena 上的预训练暴露未讨论。", "kind": "author_report"},
+  {"evidence_id": "E014", "material_id": "2506.06698v1", "locator": "Sec 1 para 7", "quote": "outperforms the tree search-based method by 20.8% in relative performance with dozens of times fewer token costs and achieves a competitive success rate of 31.9%.", "support_explanation": "引言称 '少几十倍' token；Sec 4.2 称 '至少少 3 倍'（见 E015）。VWA 31.9 vs Tree Search 26.4 (+20.8% 相对) 与表一致。", "kind": "author_report"},
+  {"evidence_id": "E015", "material_id": "2506.06698v1", "locator": "Sec 4.2", "quote": "thus using at least 3 times fewer tokens.", "support_explanation": "与引言的 'dozens of times' 不一致；Tree Search 的 20 次采样×5 步与 CER 的 30 步设置不同。", "kind": "author_report"},
+  {"evidence_id": "E016", "material_id": "2506.06698v1", "locator": "Table 3 caption", "quote": "Since output tokens do not change much, we only count input tokens here.", "support_explanation": "Table 3：离线 +7885 token(5.8%)，在线 +16337(11.2%)，混合 +20631(17.3%)；SR 相对提升 37.8%/36.7%/52.5%（与摘要 51.0% 不一致）。蒸馏与检索调用的 token 是否计入未说明，且只计输入。", "kind": "author_report"},
+  {"evidence_id": "E017", "material_id": "2506.06698v1", "locator": "Sec 5.1", "quote": "effectively (significant improvement by 52.5%)", "support_explanation": "5.1 称 52.5%，摘要/4.2 称 51.0%：同一指标的两个数字，Table 3 的 SR 为取整值。", "kind": "author_report"},
+  {"evidence_id": "E018", "material_id": "2506.06698v1", "locator": "Sec 5.2", "quote": "The tasks in WebArena are designed based on templates, and at most, five tasks share the same template.", "support_explanation": "任务按模板生成：在线学习流中同模板任务邻近时，经验会直接复用；作者用跨模板成功率回应。", "kind": "author_report"},
+  {"evidence_id": "E019", "material_id": "2506.06698v1", "locator": "Sec 5.2 / Table 4", "quote": "This result validates that the improvement of CER does not come from memorizing the whole trajectory of a task.", "support_explanation": "Table 4（仅 Forum 子集）：ct-SR 44.7→60.0；稳定性 93%，可塑性 141%。'validates' 超出一个子集、单次运行的证据。", "kind": "author_report"},
+  {"evidence_id": "E020", "material_id": "2506.06698v1", "locator": "Sec 5.6 / Table 7", "quote": "The results show that CER performs better with the access to ground truth reward.", "support_explanation": "Table 7（文本观察）：CER 31.4，仅取成功轨迹(用真值评估器过滤)33.5；说明蒸馏失败轨迹引入噪声，门控带来 +2.1。", "kind": "author_report"},
+  {"evidence_id": "E021", "material_id": "2506.06698v1", "locator": "Sec 5.7 / Table 8", "quote": "show that both dynamics and skills are important for CER", "support_explanation": "Table 8（Forum 子集）：CER 37.7；去 skills 33.3；去 dynamics 35.1；约 4-5 题的差异，单次运行。", "kind": "author_report"},
+  {"evidence_id": "E022", "material_id": "2506.06698v1", "locator": "Appendix A.5 / Table 9", "quote": "offline + online settings with self-guided explorations perform even worse than the online-only setting.", "support_explanation": "Table 9（Forum）：基线 22.8；离线(人工)33.3、(自探索)31.6；在线 37.7；混合(人工)41.2、(自探索)35.1。低质量轨迹会拖累。", "kind": "author_report"},
+  {"evidence_id": "E023", "material_id": "2506.06698v1", "locator": "Sec 7 Limitations", "quote": "it requires the trajectories to be goal-oriented to distill high-quality experiences.", "support_explanation": "作者承认的边界：依赖目标导向的高质量轨迹；离线/混合依赖人工标注。", "kind": "author_report"},
+  {"evidence_id": "E024", "material_id": "2506.06698v1", "locator": "Sec 7 Limitations", "quote": "Hybrid is a good improvement solution, but it still can hardly avoid dependence on the human annotator.", "support_explanation": "最佳设置(36.7)依赖人工标注者。", "kind": "author_report"},
+  {"evidence_id": "E025", "material_id": "2506.06698v1", "locator": "Sec 5.4 / Table 5", "quote": "still improves the baseline relatively by 26.53%, proving its validity on weaker open-source models.", "support_explanation": "Table 5：Llama-3.1-70B Gitlab 子集 17.3→22.0（取整相对 27.2%，文中 26.53%）；单子集、单次。", "kind": "author_report"},
+  {"evidence_id": "E026", "material_id": "2506.06698v1", "locator": "Sec 5.5 / Table 6", "quote": "CER with sampling method improves CER w/ ReAct performance by a relative success rate increase of 39.5%.", "support_explanation": "Table 6（Forum）：CER 37.7，采样 43.1，CER+采样 52.6；与采样重排序可叠加。", "kind": "author_report"},
+  {"evidence_id": "E027", "material_id": "2506.06698v1", "locator": "Sec 3", "quote": "All modules here are implemented by prompting a visual language model (VLM), i.e. GPT-4o in our implementation.", "support_explanation": "蒸馏、检索均由同一 GPT-4o 提示实现，提示在 Appendix A.1 完整披露。", "kind": "author_report"},
+  {"evidence_id": "E028", "material_id": "2506.06698v1", "locator": "Sec 5.3", "quote": "Specifically, stability is measured through the percentage of tasks from the baseline that CER is able to solve, which reflects how well CER maintains the original capability of the baseline.", "support_explanation": "稳定性/可塑性以 ct-SR 度量并在 Forum 子集上给出，是自定义指标，不是对存储的过期/冲突/遗忘测试。", "kind": "author_report"}
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "经验缓冲区：环境动态(页面摘要+URL+用途)与技能(带变量的分步指南+动作示例)",
+   "information": "可见：轨迹(在线自生成、离线人工金标准或自探索)、已有缓冲区条目；在线设置不使用奖励/真值标签(CER_success 变体才用真值评估器)",
+   "operation": "两个独立 VLM 模块蒸馏 dynamics 与 skills→追加并去重→检索模块在任务到来时从全缓冲区选 top-k(k=5)→程序化转成自然语言并并入系统提示",
+   "output": "更新的缓冲区；任务时增强的上下文",
+   "conditions": "目标导向的轨迹质量；GPT-4o 级 VLM；WebArena 类可复用页面/URL 结构",
+   "feedback": "无外部结果信号（成败轨迹均蒸馏）；只在 CER_success 变体中用真值过滤",
+   "selection_rule_data": "无准入判据：只追加+去重；检索由 LLM 选择",
+   "persistence": "缓冲区在任务序列中持续存在(在线)或固定(离线)",
+   "later_use": "下一任务检索并回放",
+   "claimed_effect": "WebArena 24.3→33.2(在线)/33.4(离线)/36.7(混合)；VWA 26.2→31.9(在线)",
+   "failure_boundary": "低质量/随机探索轨迹会误导；弱模型收益较小；依赖人工标注的最佳设置",
+   "evidence_ids": ["E005", "E006", "E007", "E010", "E020", "E022", "E023"]
+  }
+ ],
+ "gap": {
+  "author_gap": "智能体缺乏环境特定经验且不能在推理时持续学习；现有记忆方法用原始长轨迹、需真值奖励或重写式更新且仅在简单环境验证。",
+  "checked_gap": "被改变的对象(上下文内的环境动态与技能记忆)明确，非权重；与 ExpeL/Synapse/AWM/AutoGuide/AutoManual/Learn-by-interact/Voyager 的差异被逐条点出，是本批中邻居覆盖最完整的；但对邻居的断言(需真值、无检索)未经数值对比，也没有 '原始轨迹重放' 基线来检验 '蒸馏优于原始' 的关键差异。",
+  "lineage_closest_adjacent": "ExpeL、Synapse、Agent Workflow Memory、AutoGuide、AutoManual、Learn-by-interact、Voyager、Reflexion；经验回放(RL)只是 '松散启发'。",
+  "residue": "无写入门控/遗忘；整缓冲区入提示的检索不可扩展；最佳结果依赖人工标注；在线学习流=评测流。",
+  "stakes": "失败轨迹被蒸馏为经验会误导(Table 7)，缺门控时这些错误会持续留存。",
+  "method_response": "双模块蒸馏(动态/技能)+LLM 检索+上下文回放，支持离线/在线/混合。",
+  "remaining_gap": "与 AWM/ExpeL 等同条件对比、原始轨迹基线、方差、顺序敏感性、写入门控与淘汰机制。",
+  "evidence_ids": ["E001", "E002", "E003", "E004", "E020"],
+  "unresolved": "AWM、ExpeL、Synapse 等邻居原文不在固定材料内，未核实其 '需真值奖励' 的表述是否对所有变体成立。"
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "主卡操作签名：把新任务表达为条件(检索到的环境动态+技能进入上下文)，在推理时求解，无参数更新——执行。C03 的 tactic 是统一格式+上游多任务调优+类别级留出；本文无上游调优，只有 '检索最近实例作为一等输入' 的子动作，且 ct-SR 分析部分对应其类别级泛化检验(仅 Forum 子集)，故 sub=null。",
+    "success_failure_checks": "成功：隔离条件信号的消融(partial：Table 8、Table 7、Table 9)；在朴素方案不足的区域取胜并刻画(partial：低质量轨迹边界)。失败：缺少污染/重叠分析(触发)；缺 '原始轨迹/更长上下文/最近邻' 廉价基线(触发)；仅 web 一类环境(部分触发)。",
+    "evidence_ids": ["E006", "E007", "E020", "E021", "E022"],
+    "reason": "经验以条件形式注入上下文、无权重更新，对应主卡；学习环节(蒸馏并写回)比主卡关注的 '格式/上游训练' 更接近自改进，故部分适配。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "主卡部分适配；子卡无贴切者，已说明。",
+  "executes_pattern": "yes",
+  "resolves_problem": "partial — 在作者 harness 下对 WebArena/VWA 有稳定提升；但 '蒸馏优于原始轨迹' 与 '写入门控缺失会否误导' 未在同条件下解决。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "patterns@52ff9657",
+    "fit": "medium",
+    "condition_checks": "H00 步骤：固定接地信号(unmet：在线无结果信号，成败均蒸馏；Table 7 显示真值过滤更好)；对比而非叙述(unmet：按轨迹叙述蒸馏)；抽象层次(met：变量化技能+动态摘要)；生产流与评测流分离(partial：离线分离，在线同流)；预算匹配与保留库消融(partial：store-off 即基线、dynamics/skills 消融、token 开销)。",
+    "evidence_ids": ["E005", "E007", "E010", "E020", "E021"]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02",
+    "version": "patterns@52ff9657",
+    "fit": "low",
+    "condition_checks": "技能被蒸馏为带变量的分步包，但无版本、无质量/执行门、无跨代理便携性验证；离线→混合利用外部源(人工金标准)。H02 的核心留存门缺失。",
+    "evidence_ids": ["E005", "E009", "E022"]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "RS 的 '检索实例作为条件、不更新权重' 对应 H00 的 '将过去结果抽象成经验并检索注入后续上下文'；CER 的写回环节使其是持久改变的非权重状态。",
+   "required_conditions_and_differences": "RS 要求隔离条件信号并与廉价基线比较；H00 要求以结果信号接地、对比提炼、分离写入流与评测流并做预算匹配消融。CER 在线设置缺结果信号与流分离，离线设置满足分离但依赖人工标注。",
+   "evidence_ids": ["E005", "E007", "E008", "E020"]
+  }
+ ],
+ "expectations": [
+  {"id": "rsi:abstract_experience_into_guidance/S1", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "声称打破某个具体的 '固定' 前提", "applicable": true, "status": "met", "reason": "具体对象是 '每个任务从零探索、不保留环境动态与技能'，而非泛泛的冻结权重框架。", "evidence_ids": ["E002"], "score_item": "G"},
+  {"id": "rsi:abstract_experience_into_guidance/S2", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "从结果提炼经验", "applicable": true, "status": "unmet", "reason": "按轨迹叙述式蒸馏，无成败对比。", "evidence_ids": ["E005", "E020"], "score_item": "M"},
+  {"id": "rsi:abstract_experience_into_guidance/S3", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "经验需要接地信号", "applicable": true, "status": "unmet", "reason": "在线/默认设置不用结果信号；真值过滤变体更好(31.4→33.5)。", "evidence_ids": ["E020"], "score_item": "X"},
+  {"id": "rsi:abstract_experience_into_guidance/S4", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "存储随使用增长", "applicable": true, "status": "partial", "reason": "有 LLM 去重('Summarized before')；无遗忘、淘汰、冲突解决；检索把全缓冲区放入提示。", "evidence_ids": ["E005", "E006"], "score_item": "X"},
+  {"id": "rsi:abstract_experience_into_guidance/S5", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "写入前需保留门", "applicable": true, "status": "unmet", "reason": "无执行测试/质量过滤；所有蒸馏条目进入缓冲区。", "evidence_ids": ["E005", "E020"], "score_item": "X"},
+  {"id": "rsi:abstract_experience_into_guidance/F2", "version": "patterns@52ff9657", "source_strength": "single_source", "source_refs": ["patterns/main/abstract_experience_into_guidance.md"], "applies_when": "把 reflect→store→retrieve 移植到新领域", "applicable": true, "status": "partial", "reason": "领域为 web 导航，但 '动态+技能' 的拆分与离线/在线/混合三设置提供了超出通用签名的具体差异。", "evidence_ids": ["E003", "E005"], "score_item": "G"},
+  {"id": "rs:adapt_via_conditioning/RE-1", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "声称增益来自条件信号", "applicable": true, "status": "partial", "reason": "同 harness 基线 vs CER(全基准)+dynamics/skills 消融(Forum 子集)；无随机/错配经验对照。", "evidence_ids": ["E011", "E021"], "score_item": "E.causality"},
+  {"id": "rs:adapt_via_conditioning/RE-2", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "公开基准+闭源基座", "applicable": true, "status": "unmet", "reason": "无 GPT-4o 对 WebArena 的污染分析；离线任务仅检查与测试任务不重叠，未检查模板相似度。", "evidence_ids": ["E008", "E013"], "score_item": "E.holdout"},
+  {"id": "rs:adapt_via_conditioning/RE-3", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "与廉价替代比较", "applicable": true, "status": "unmet", "reason": "文中称原始轨迹示例的方法受限，但没有原始轨迹重放/最近邻基线。", "evidence_ids": ["E003"], "score_item": "E.causality"},
+  {"id": "rs:adapt_via_conditioning/RE-4", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "多模块管线", "applicable": true, "status": "partial", "reason": "两种经验类型有消融，但 Forum 子集、单次；检索与去重模块无消融。", "evidence_ids": ["E021", "E006"], "score_item": "E.causality"},
+  {"id": "rs:adapt_via_conditioning/RE-5", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "声称通用", "applicable": true, "status": "partial", "reason": "WebArena 全量与 VWA；Llama-3.1 仅 Gitlab 子集；仅 web 导航一类环境。", "evidence_ids": ["E025", "E023"], "score_item": "E.holdout"},
+  {"id": "rs:adapt_via_conditioning/RE-6", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"], "applies_when": "条件源质量影响结果", "applicable": true, "status": "met", "reason": "Table 7(真值过滤)、Table 9(人工 vs 自探索)明确刻画了轨迹质量的影响。", "evidence_ids": ["E020", "E022"], "score_item": "E.holdout"},
+  {"id": "local:2506.06698-1", "version": "v1", "source_strength": "common_practice", "source_refs": ["E007", "E018"], "applies_when": "在线学习流即评测流且任务按模板生成", "applicable": true, "status": "unknown", "reason": "需报告任务顺序是否随机化及对不同顺序的敏感性，以排除同模板邻近带来的复用。", "evidence_ids": ["E007", "E018"], "score_item": "E.holdout"},
+  {"id": "local:2506.06698-2", "version": "v1", "source_strength": "common_practice", "source_refs": ["E013", "E010"], "applies_when": "LLM 提示驱动、小提升的基准比较", "applicable": true, "status": "unmet", "reason": "未报告多次运行方差或置信区间；子集消融仅数个任务差异。", "evidence_ids": ["E013", "E021"], "score_item": "E.statistics"},
+  {"id": "local:2506.06698-3", "version": "v1", "source_strength": "single_source", "source_refs": ["E009", "E010", "E024"], "applies_when": "最佳结果使用人工标注轨迹", "applicable": true, "status": "partial", "reason": "文中区分了离线/在线/混合并列出人工标注，但摘要的 '51.0%' 以混合设置为准。", "evidence_ids": ["E009", "E010", "E024"], "score_item": "E.measurement"}
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "CER 在 WebArena 上相对 GPT-4o 基线相对提升 51.0%（36.7%），在 VWA 上达 31.9%。",
+   "setting": "GPT-4o-2024-0513，T=0.1，BrowserGym；WebArena 全量(812)；VWA 在线",
+   "baseline_control": "同 harness 复现的 GPT-4o+BrowserGym；其他方法数字取自原文",
+   "selection_vs_test": "离线：人工金标准训练任务(≈5%)，与测试集去重；在线：学习流=评测流；混合含二者",
+   "result_denominator": "Table 1/2 完整；单次运行；无区间",
+   "evidence_ids": ["E010", "E011", "E012", "E013"],
+   "counterevidence": ["E009", "E024", "E012"],
+   "allowed_conclusion": "同 harness 下离线 +9.1 点(24.3→33.4)、在线 +8.9 点(→33.2)、混合 +12.4 点(→36.7)；混合含人工标注；与他人 SOTA 比较不是同条件。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "提升来自细粒度经验而非记忆整条轨迹，且稳定性与可塑性良好。",
+   "setting": "Forum 子集，Table 4",
+   "baseline_control": "GPT-4o 基线",
+   "selection_vs_test": "同在线流",
+   "result_denominator": "ct-SR 44.7→60.0；稳定性 93%、可塑性 141%",
+   "evidence_ids": ["E018", "E019", "E028"],
+   "counterevidence": ["E018"],
+   "allowed_conclusion": "Forum 子集上跨模板成功率提升；是自定义指标，未排除模板邻近，不能推广到全基准。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "dynamics 与 skills 两类经验都必要。",
+   "setting": "Table 8，Forum 子集",
+   "baseline_control": "去 skills / 去 dynamics",
+   "selection_vs_test": "同在线流",
+   "result_denominator": "37.7 / 33.3 / 35.1",
+   "evidence_ids": ["E021"],
+   "counterevidence": [],
+   "allowed_conclusion": "子集上去掉任一类均下降 2.6-4.4 点；单次、小子集。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "CER 高效：额外 token 小、比 Tree Search 少几十倍 token。",
+   "setting": "Table 3、Sec 4.2",
+   "baseline_control": "ReAct 基线；Tree Search",
+   "selection_vs_test": "不适用",
+   "result_denominator": "只计输入 token；蒸馏/检索调用计入与否不明",
+   "evidence_ids": ["E014", "E015", "E016", "E017"],
+   "counterevidence": ["E015", "E017"],
+   "allowed_conclusion": "输入 token 比基线多 5.8%-17.3%；与 Tree Search 比 '至少 3 倍'(Sec 4.2) 才是文中可核对的下界，'几十倍' 与 52.5% 的表述前后不一致。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "作者报告：在同一 GPT-4o BrowserGym harness 下，经蒸馏并留存的环境动态/技能经验使 WebArena 成功率从 24.3% 升至 33.2%（在线，自生成轨迹）、33.4%（离线，约 5% 量的人工金标准轨迹，与测试任务去重）、36.7%（混合）；输入 token 增加 5.8%-17.3%。离线设置的任务不用于经验构建，故 retained 成立；在线/混合的学习流同评测流。",
+  "not_supported": "蒸馏优于原始轨迹重放；对 SOTA 的同条件优越性；写入无门控下的长期稳定性；跨环境泛化；'significant' 的统计含义。",
+  "unresolved": "任务顺序敏感性；多次运行方差；模板层相似度；蒸馏/检索调用的 token。"
+ },
+ "ratings": {
+  "G": {"status": "resolved", "rating": 3, "reason": "对象具体(环境动态与技能的上下文记忆)，邻居覆盖最全(ExpeL/Synapse/AWM/AutoGuide/AutoManual/Learn-by-interact/Voyager)并列出逐点差异；扣分：对邻居的 '需真值/无检索' 断言未数值对比，无原始轨迹基线。", "evidence_ids": ["E001", "E002", "E003", "E004"], "counterevidence_ids": [], "search_scope": []},
+  "M": {"status": "resolved", "rating": 3, "reason": "动态/技能分离蒸馏的理由、变量化抽象、LLM 检索并回放的链条可重建，且给出可检验预测(跨模板、稳定性/可塑性、两类经验消融)；扣分：无对比提炼与结果接地，'蒸馏优于原始' 未检验。", "evidence_ids": ["E005", "E006", "E018", "E021"], "counterevidence_ids": ["E020"], "search_scope": []},
+  "X": {"status": "resolved", "rating": 3, "reason": "模块、提示(Appendix A.1)、k、模型快照、三种设置、经验格式均披露，写入=去重追加，读取=全缓冲区 LLM 检索；扣分：无准入门、遗忘/冲突/版本、任务顺序未述、检索随缓冲区线性增长。", "evidence_ids": ["E005", "E006", "E013", "E027"], "counterevidence_ids": [], "search_scope": []},
+  "E.measurement": {"status": "resolved", "rating": 3, "reason": "WebArena/VWA 的功能性评估器全量任务(812/910)，基线同 harness 复现；扣分：其他方法数字取自不同 harness，Table 3/摘要数字有不一致(51.0 vs 52.5)，Table 7 的文本观察设置与 Table 1 不同。", "evidence_ids": ["E010", "E011", "E012", "E017"], "counterevidence_ids": ["E017"], "search_scope": []},
+  "E.causality": {"status": "resolved", "rating": 2, "reason": "同 harness 的 store-off 基线、离线/在线/混合、dynamics/skills 消融、真值过滤与轨迹源对照提供了较多控制；缺：原始轨迹重放基线、错配/随机经验、检索与去重模块消融、与 AWM/ExpeL 的同条件比较；消融仅 Forum 子集。", "evidence_ids": ["E011", "E020", "E021", "E022"], "counterevidence_ids": ["E003"], "search_scope": []},
+  "E.holdout": {"status": "resolved", "rating": 2, "reason": "离线设置：人工设计任务与测试集去重且只占≈5%，可作为留出；但仅检查任务重叠、不查模板相似度，在线/混合的学习流同评测流，无 GPT-4o 污染分析，仅 web 导航。", "evidence_ids": ["E007", "E008", "E009", "E018"], "counterevidence_ids": ["E018"], "search_scope": []},
+  "E.statistics": {"status": "resolved", "rating": 1, "reason": "无多次运行、置信区间或显著性检验；消融与分析集中在小的 Forum 子集（差 2.6-4.4 点约数个任务）；'significant' 无检验。", "evidence_ids": ["E013", "E019", "E021"], "counterevidence_ids": [], "search_scope": []},
+  "E.cost": {"status": "resolved", "rating": 2, "reason": "Table 3 给出三种设置的输入 token 增量及对 Tree Search 的倍数；扣分：只计输入、蒸馏/检索调用是否计入未明，'几十倍' 与 '至少 3 倍' 矛盾，无缓冲区扩展下的成本。", "evidence_ids": ["E014", "E015", "E016"], "counterevidence_ids": ["E015"], "search_scope": []}
+ },
+ "score": {"raw": 65.0, "display": 65.0, "lower": 65.0, "upper": 65.0, "coverage": 1.0, "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"},
+ "rationale": "蒸馏动态/技能经验入上下文，WebArena全量同harness+9~12点；离线留出成立。但无写入门、无原始轨迹基线、单次运行，混合依赖人工标注。"
+}

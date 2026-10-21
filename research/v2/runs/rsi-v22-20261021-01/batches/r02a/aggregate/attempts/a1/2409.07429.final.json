@@ -1,0 +1,1517 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "status": "reviewed",
+ "reason": "In scope (A3 bullet 2): the evaluated retained object is a non-weight workflow memory written from the agent's own evaluator-judged trajectories (online) or induced from training trajectories (offline) and read by a frozen GPT-4/3.5 agent on later tasks.",
+ "paper": {
+  "paper_key": "2409.07429",
+  "paper_id": "2409.07429",
+  "title": "Agent Workflow Memory",
+  "version": "2409.07429v1",
+  "claim_type": "system_method",
+  "central_claim": "Inducing reusable, parameterized sub-routine workflows from (annotated or self-judged) trajectories and keeping them in agent memory improves long-horizon web navigation on WebArena and Mind2Web, offline and online, and generalizes across tasks, websites and domains.",
+  "scope_class": "A (online evaluator-gated workflow memory); offline induction from annotated training trajectories is the B-type use"
+ },
+ "provenance": {
+  "input_hash": "6ad95c219ff9f9b0982545d5b79a2ccd51c93c663f2db81a404d986afe074fbc",
+  "input_package": "batches/r02a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker. Seat attempts used: sol a1, son55 a1 (same input_hash, same material sha256).",
+  "timestamp": "2026-10-21T20:33:59Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2409.07429",
+   "version": "2409.07429v1",
+   "url": "https://arxiv.org/html/2409.07429v1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2409.07429.txt",
+   "extraction_method": "html",
+   "sections_read": [
+    "sol: Full fixed HTML text lines 1–2866: abstract, §§1–7, all tables 1–11, Appendix A prompts/examples/quality, B rule induction, C mixed offline/online",
+    "son55: abstract",
+    "son55: §1 intro",
+    "son55: §2 method (representation, offline/online)",
+    "son55: §3 WebArena + Mind2Web results",
+    "son55: §4 representation ablations",
+    "son55: §5 workflow action space",
+    "son55: §6 related work",
+    "son55: App A prompts/examples/quality",
+    "son55: App B rule-based induction",
+    "son55: App C offline+online",
+    "opus55: full pinned text re-read (claims, method, all result tables, appendices) before opening seat totals"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "note": "Single pinned text; seats' material_id aliases preserved as seat_material_id on evidence."
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "agent 记忆/系统 prompt 中的 workflow 集合（文本，非权重）",
+   "information": "查询、自身轨迹（观测+动作）、LM 评估器二值判断；无金标",
+   "operation": "LM 按 prompt 从成功轨迹抽取子例程并抽象实例变量",
+   "output": "workflow（描述+步骤）追加入记忆",
+   "conditions": "仅评估器判成功的在线轨迹",
+   "feedback": "LM 评估器二值标签（Pan et al. 2024）",
+   "selection_rule/data": "评估器判成功即接受；无其他门控、无拒绝日志",
+   "persistence": "追加至按网站分组的记忆，后续任务全量注入；无版本/遗忘/回退",
+   "later_use": "后续每个任务的上下文",
+   "claimed_effect": "WebArena SR 35.5 vs ax-tree 基线 15.0 / BrowserGym 23.5",
+   "failure_boundary": "评估器误判产生错误 workflow（E019）；离线+在线冲突（E021）",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E004",
+    "son55/E005",
+    "son55/E006",
+    "son55/E007",
+    "son55/E009",
+    "son55/E010",
+    "son55/E019",
+    "son55/E021"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "同上（离线版）",
+   "information": "Mind2Web 标注训练样本（金标轨迹）",
+   "operation": "整站训练样本拼接后一次性诱导 workflow",
+   "output": "workflow 集合",
+   "conditions": "有高质量对齐标注",
+   "feedback": "无执行反馈；金标轨迹即信号",
+   "selection_rule/data": "无；全部诱导结果入库",
+   "persistence": "测试期固定记忆",
+   "later_use": "测试任务全量注入",
+   "claimed_effect": "Mind2Web 跨任务 Step SR 45.1 vs 36.2",
+   "failure_boundary": "训练/测试任务分布不匹配时缺口（作者自述）",
+   "evidence_ids": [
+    "son55/E015",
+    "son55/E016",
+    "son55/E027",
+    "son55/E007"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "动作空间（AWM_AS 变体）",
+   "information": "同 S1",
+   "operation": "把 workflow 包装为高层函数动作",
+   "output": "扩展动作空间",
+   "conditions": "workflow 可程序化",
+   "feedback": "无新增",
+   "selection_rule/data": "无",
+   "persistence": "同 S1",
+   "later_use": "agent 可调用",
+   "claimed_effect": "Step SR +1.3，SR 持平；调用占 18.5% 任务",
+   "failure_boundary": "动态环境下固定序列失败（Fig. 7 弹窗例）",
+   "evidence_ids": [
+    "son55/E022"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "agent 只整合固定示例（训练/ICL），难以抽取可复用任务 workflow，逐任务独立求解不积累。",
+  "checked_gap": "真实局限：Synapse 类检索具体示例含实例特异信息（作者称偏置元素选择，E023），SteP 需人工写 workflow；本文版本把 workflow 抽象成带变量的子例程并支持无标注在线诱导。但作者未对 Voyager/ExpeL/Reflexion 类同期留存方法作实验对比。",
+  "lineage/closest_adjacent": "祖先：Synapse（Zheng 2024，检索示例）、SteP（Sodhi 2023，人工 workflow）、程序/技能库归纳（Wang 2024a/c 等）。最近邻覆盖：与 Synapse、SteP 有定量比较；与同类 skill/memory 命名（Voyager、ExpeL、Reflexion）本地无原文，未核。",
+  "residue": "在线诱导依赖评估器可靠性且无质量门/冲突处理；离线+在线不可加；workflow 动作使用率低。",
+  "stakes": "WebArena 长程任务成功率低（基线 15–23%）；可复用子例程可提升成功率与步数效率。",
+  "method_response": "抽象实例变量+子任务粒度诱导+在线评估器门控，直接回应具体示例偏置与无标注场景。",
+  "remaining_gap": "诱导质量保证、评估器误差影响、记忆维护（遗忘/冲突）、预算公平对照均未解决。",
+  "evidence_ids": [
+   "son55/E001",
+   "son55/E002",
+   "son55/E019",
+   "son55/E021",
+   "son55/E023"
+  ],
+  "unresolved": [
+   "Voyager/ExpeL/Reflexion/Synapse 全文不在输入包内，空检索不证明新颖；最近邻比较依赖本文自述"
+  ]
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "WebArena 总 SR 35.5，相对 BrowserGym 提升 51.1%，且步数更少",
+   "setting": "GPT-4 温度0，在线诱导，按网站分组",
+   "baseline/control": "BrowserGym（HTML+ax-tree）23.5；BrowserGym ax-tree 15.0",
+   "selection_vs_test": "在线流：诱导与评测同一测试流（自生成预测，评估器标签），无金标泄漏但无分离留出",
+   "result/denominator": "812 任务，单次运行，无区间",
+   "evidence_ids": [
+    "son55/E009",
+    "son55/E010",
+    "son55/E011",
+    "son55/E012"
+   ],
+   "counterevidence": "对比 23.5 的基线观测更丰富；matched 基线为 15.0。规则诱导与 LM 诱导等效（E020）",
+   "allowed_conclusion": "在同观测无记忆基线上，在线 workflow 记忆使 WebArena SR 大幅提高；单次运行结论"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Mind2Web 跨任务离线 Step SR 提升",
+   "setting": "GPT-4，训练集诱导，测试跨任务",
+   "baseline/control": "MindAct 4",
+   "selection_vs_test": "训练集诱导，测试集评测，分离",
+   "result/denominator": "Step SR 45.1 vs 36.2；SR 4.8 vs 2.0",
+   "evidence_ids": [
+    "son55/E015",
+    "son55/E016"
+   ],
+   "counterevidence": "任务级 SR 极低，差距在小分母上",
+   "allowed_conclusion": "步级成功率提升可信，任务级提升证据弱"
+  },
+  {
+   "claim_id": "C3",
+   "text": "在线 AWM 在跨网站/领域上稳健泛化，差距随分布差增大",
+   "setting": "Mind2Web cross-website/domain",
+   "baseline/control": "MindAct*、AWM offline",
+   "selection_vs_test": "在线流或离线随机训练 workflow",
+   "result/denominator": "Step SR 33.9 vs 30.1；35.5 vs 18.6；任务级 SR 1.6/1.7 vs 2.0/1.0",
+   "evidence_ids": [
+    "son55/E017",
+    "son55/E018",
+    "son55/E019"
+   ],
+   "counterevidence": "任务级 SR 在跨网站上低于基线（1.6 vs 2.0）",
+   "allowed_conclusion": "步级指标泛化；任务级无一致提升"
+  },
+  {
+   "claim_id": "C4",
+   "text": "抽象子例程优于具体示例（对比 Synapse）",
+   "setting": "Mind2Web GPT-3.5 离线",
+   "baseline/control": "Synapse 报告结果",
+   "selection_vs_test": "同上",
+   "result/denominator": "Elem +5.0，Step SR +4.0",
+   "evidence_ids": [
+    "son55/E023"
+   ],
+   "counterevidence": "WebArena 上规则诱导（含具体步骤）与 LM 诱导持平（E020）",
+   "allowed_conclusion": "相关性成立，机制归因未受控"
+  }
+ ],
+ "base_seat_for_signatures_gap_claims": "son55",
+ "evidence": [
+  {
+   "evidence_id": "sol/E001",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§1 motivation",
+   "quote": "Moreover, as agents solve each task separately, they do not learn from past successes and failures, and are therefore unable to adapt over time",
+   "support_explanation": "Author states fixed per-task examples and absent cross-task experience as the gap.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E002",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§2.3 LM-based induction",
+   "quote": "These workflows are segmented (based on double-line breaks in the model output) and stored separately in the workflow memory.",
+   "support_explanation": "Parameterized subroutines become explicit persistent text entries.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E003",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§2.3 offline",
+   "quote": "Since the workflows are fully induced before test-time inference, the agent uses the same workflow memory",
+   "support_explanation": "Offline variant freezes the training-induced store before test tasks.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E004",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§2.3 online evaluation",
+   "quote": "We evaluate the success rate of the predicted action trajectories",
+   "support_explanation": "Online gains aggregate the same stream used for updating the store; do not treat that stream as independent heldout certification.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E005",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§3.1 benchmark",
+   "quote": "Most importantly, WebArena supports rigorous evaluation on the functional correctness of agent trajectories.",
+   "support_explanation": "Task outcome metric has an execution-based benchmark anchor, unlike the online write gate which uses a neural success classifier.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E006",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§3.1.1 Table 1",
+   "quote": "AWM (ours)\n\n35.5",
+   "support_explanation": "Author-reported WebArena task SR 35.5%, versus BrowserGym 23.5% or matched-observation ax-tree 15.0%; not our reproduction.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E007",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§3.1.3 protocol",
+   "quote": "by grouping examples by their templates and randomly choosing one example from each template group.",
+   "support_explanation": "Cross-template subset removes same-template repetition; Table 2 reports 33.2 vs 20.5 ax-tree on 197 tasks, but updates continue within that subset.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E008",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§4.1 WebArena interpretation",
+   "quote": "using rule- and LM-based workflow induction performs comparably",
+   "support_explanation": "35.6 rule vs 35.5 LM means abstraction-specific advantage is not established for WebArena; Mind2Web Table 6 favors LM.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E009",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§3.2.2 online errors",
+   "quote": "induces workflows from model-predicted trajectories that are not always correct, thus can lead to incorrect workflows that degrade model performance.",
+   "support_explanation": "Self-judge gate can admit bad workflows; no measured marginal admission/retirement test is specified.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E010",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§4.3 negative result",
+   "quote": "Interestingly, using both NL and filtered HTML leads to worse results.",
+   "support_explanation": "Reports representation failure and context-noise boundary, not uniformly positive outcomes.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E011",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§5 action-space boundary",
+   "quote": "the action to choose pop-up airports is executed without seeing the intermediate states with available pop-up options, and is not flexible enough to do so.",
+   "support_explanation": "Executable macro variant lacks intermediate observation; main contribution remains contextual workflows, not verified general callable skills.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E012",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "Appendix C conclusion",
+   "quote": "workflows induced offline and online are not fully compatible with each other",
+   "support_explanation": "Mixing stores can impair utility; Appendix C supplies negative evidence against monotonic accumulation.",
+   "kind": "author_report",
+   "seat_material_id": "2409.07429.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "son55/E001",
+   "locator": "§1 para 2",
+   "quote": "Moreover, as agents solve each task separately, they do not learn from past successes and failures, and are therefore unable to adapt over time",
+   "support_explanation": "作者对 gap 的陈述：智能体逐任务独立求解、不从成败积累。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E002",
+   "locator": "§1 para 3",
+   "quote": "induces workflows from agent trajectories by extracting reusable routines, and then integrates these workflows into agent memory to guide future task-solving processes.",
+   "support_explanation": "核心操作：轨迹→workflow→写入记忆→指导后续任务。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E003",
+   "locator": "§2.3 Online Scenario",
+   "quote": "we continue this memory-updating process by iteratively predicting actions for and inducing workflows from streamed test instructions, until all tests are processed.",
+   "support_explanation": "在线模式：测试流上边做边诱导，记忆逐任务更新。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E004",
+   "locator": "§1 para 5",
+   "quote": "where it iteratively induces workflows from self-generated past predictions that are judged correct by an evaluator module.",
+   "support_explanation": "在线留存门控：仅 LM 评估器判为成功的自生成轨迹被诱导。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E005",
+   "locator": "App A.1 prompt",
+   "quote": "You need to find the repetitive subset of actions across multiple tasks, and extract each of them out as a workflow.",
+   "support_explanation": "诱导 prompt 的具体指令：跨任务抽取重复子集。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E006",
+   "locator": "App A.1 prompt",
+   "quote": "Represent the non-fixed elements (input text, button strings) with descriptive variable names as shown in the example.",
+   "support_explanation": "实例特异值被抽象为变量，是 workflow 与具体示例的区别。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E007",
+   "locator": "§2.3 Offline Scenario",
+   "quote": "incorporates all induced workflows into the agent memory at inference time to solve test instructions",
+   "support_explanation": "离线时全部 workflow 一次性注入记忆，无检索/选择步骤。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E008",
+   "locator": "§3 intro",
+   "quote": "This mechanism maintains an small collection of workflows that are nonetheless relevent to the test tasks.",
+   "support_explanation": "按网站分组运行，记忆规模被分组控制；无遗忘/合并机制描述。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E009",
+   "locator": "Table 1",
+   "quote": "AWM (ours) 35.5 30.8 29.1 50.9 31.8 43.3 5.9",
+   "support_explanation": "WebArena 总 SR 35.5，平均步数 5.9。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E010",
+   "locator": "Table 1",
+   "quote": "BrowserGym ax-tree 15.0 17.2 14.8 20.2 19.0 25.5 7.9",
+   "support_explanation": "与 AWM 同观测的无 workflow 基线 SR 15.0、步数 7.9。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E011",
+   "locator": "§3.1 baselines",
+   "quote": "to keep a fair comparison with our method, we also run the BrowserGym version with only accessibility tree webpage representations, denoted as BrowserGym",
+   "support_explanation": "作者另跑同观测基线以保持比较公平，相当于 store-off 对照。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E012",
+   "locator": "§3.1",
+   "quote": "to ensure mostly stable model outputs.",
+   "support_explanation": "GPT-4 温度 0，单次运行；全文无多种子/置信区间。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E013",
+   "locator": "§3.1.3",
+   "quote": "we extract a subset of WebArena examples sourcing from non-overlapping templates, by grouping examples by their templates and randomly choosing one example from each template group.",
+   "support_explanation": "跨模板子集用于排除模板内记忆泄漏。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E014",
+   "locator": "Table 2",
+   "quote": "AWM (ours) 33.2 24.5 29.3 52.2 31.8 39.4",
+   "support_explanation": "跨模板子集 AWM 总 SR 33.2，仍高于 AutoEval 23.2 与 ax-tree 基线 20.5。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E015",
+   "locator": "Table 3",
+   "quote": "AWM 4 50.6 57.3 45.1 4.8",
+   "support_explanation": "Mind2Web 跨任务离线 GPT-4：Elem 50.6，Step SR 45.1，SR 4.8。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E016",
+   "locator": "Table 3",
+   "quote": "MindAct 4 41.6 60.6 36.2 2.0",
+   "support_explanation": "同模型基线 Step SR 36.2，SR 2.0（任务级成功率绝对值极低）。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E017",
+   "locator": "Table 4",
+   "quote": "AWM online 50.0 56.4 43.6 4.0 42.1 45.1 33.9 1.6 40.9 46.3 35.5 1.7",
+   "support_explanation": "在线 AWM 在跨任务/网站/领域三划分的结果。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E018",
+   "locator": "Table 4",
+   "quote": "MindAct* 41.6 60.6 36.2 2.0 35.8 51.1 30.1 2.0 21.6 52.8 18.6 1.0",
+   "support_explanation": "三划分基线；跨网站/领域任务级 SR 差异仅 1.0 以内。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E019",
+   "locator": "§3.2.2 in-domain",
+   "quote": "induces workflows from model-predicted trajectories that are not always correct, thus can lead to incorrect workflows that degrade model performance.",
+   "support_explanation": "作者承认评估器误判导致错误 workflow 会损害性能，但未量化。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E020",
+   "locator": "Table 5 + §4.1",
+   "quote": "AWM rule 35.6 6.3 AWM lm 35.5 5.9",
+   "support_explanation": "规则诱导与 LM 诱导在 WebArena 成功率几乎相同。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E021",
+   "locator": "App C",
+   "quote": "workflows induced offline and online are not fully compatible with each other, particularly, the offline workflows seem to impair the generative quality and utility efficacy of online workflows",
+   "support_explanation": "离线+在线合并劣于在线，说明记忆内容间存在冲突，作者未设计冲突处理。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E022",
+   "locator": "§5",
+   "quote": "suggesting a resistance of current agents to use newly-added actions.",
+   "support_explanation": "AWM_AS 变体中 workflow 动作使用率低，增益有限。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E023",
+   "locator": "§3.2.1",
+   "quote": "While augmenting concrete, full examples may bias agents to select elements similar to those presented in the given examples,",
+   "support_explanation": "作者对抽象 vs 具体示例的机制解释，与 Synapse 对比；解释未经独立控制验证。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E024",
+   "locator": "§3.1.3 case study",
+   "quote": "the agent successfully builds a more complex workflow",
+   "support_explanation": "案例展示 workflow 组合/滚雪球，但为单例定性。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E025",
+   "locator": "App A.3",
+   "quote": "We do not evaluate coverage on WebArena since it requires canonical trajectories, yet which are not available for WebArena.",
+   "support_explanation": "workflow 质量指标（覆盖率）在 WebArena 上未评。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E026",
+   "locator": "App A.1",
+   "quote": "Experiments on both datasets use the same prompt.",
+   "support_explanation": "两个基准使用同一诱导 prompt，支持配方的通用性。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E027",
+   "locator": "§2.3 Offline",
+   "quote": "first takes in all training examples from a website by concatenating them into a single prompt",
+   "support_explanation": "离线诱导把整站训练样本拼成一个 prompt，受上下文长度限制。",
+   "kind": "author_report",
+   "material_id": "M-2409.07429",
+   "seat_material_id": "M1",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "opus55/E001",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§5 prose vs Table 9",
+   "quote": "and gets the same overall success rate, 3.2 3.2 , of the base memory-augmented AWM",
+   "support_explanation": "Prose claims both variants have task SR 3.2, but Table 9 prints AWM 4.8 and AWM_AS 3.6: an internal reporting inconsistency (sol's E.measurement note verified).",
+   "kind": "author_report",
+   "source_seat": "opus55"
+  },
+  {
+   "evidence_id": "opus55/E002",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "Table 9",
+   "quote": "AWM 50.6 57.3 45.1 4.8 AWM AS 51.8 56.7 46.4 3.6",
+   "support_explanation": "Table values contradicting the §5 prose.",
+   "kind": "author_report",
+   "source_seat": "opus55"
+  },
+  {
+   "evidence_id": "opus55/E003",
+   "material_id": "M-2409.07429",
+   "sha256": "c340302035189c3b1204e6592d9fe822b9a72e4fe901df0d4686d8900f36bd21",
+   "locator": "§2.3 online gate",
+   "quote": "We adopt the LM-based evaluation model of",
+   "support_explanation": "The online write gate is an LM judge (Pan et al.), not benchmark ground truth: no test-label oracle enters the memory.",
+   "kind": "author_report",
+   "source_seat": "opus55"
+  }
+ ],
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [
+   "self_supervised_signal_engineering"
+  ],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "Step 1 canonical schema: parameterized workflow format shared across sites (met); step 2 reference substrate: per-website workflow bank (partial, narrow); step 3: no upstream tuning — the 'skip tuning, condition on reference substrate' branch applies; step 4 category holdout: Mind2Web cross-website/cross-domain offline only; step 5 cheap alternative: Synapse concrete examples and rule-based near-raw workflows tested.",
+    "success_checks": "Conditioning on/off isolated by the same-observation memory-off baseline.",
+    "failure_checks": "No contamination audit; no equal-budget longer-context baseline.",
+    "evidence_ids": [
+     "sol/E002",
+     "sol/E003",
+     "son55/E007",
+     "son55/E017",
+     "son55/E010"
+    ],
+    "reason": "Workflow memory is inference-time conditioning of a frozen model. C03 is the only child of the parent; its reference-substrate/no-tuning branch fits partially, consistent with prior aggregate rulings for memory papers (r01a 2308.10144).",
+    "taken_from_seat": "sol"
+   },
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "Online mode manufactures its adaptation signal by an LM judge filtering self-generated trajectories (generate→filter→adapt), but adapts context rather than training data; C08's retraining steps do not apply, so sub=null.",
+    "success_checks": "Filter is explicit.",
+    "failure_checks": "Filter removal never ablated; judge error unquantified.",
+    "evidence_ids": [
+     "son55/E004",
+     "son55/E019",
+     "opus55/E003"
+    ],
+    "reason": "Only the filter step corresponds; kept as supporting because the supervision-free online claim rests on it.",
+    "taken_from_seat": "son55"
+   }
+  ],
+  "reason": "Parent-level conditioning with C03 partial; supervision-free online gate recorded as weak supporting signal-manufacture.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: WebArena SR raised; Mind2Web task SR remains <5%."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "unassigned": [],
+  "revision_proposals": [],
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "taxonomy.json b115a69b; conditions.json 8704c7da; patterns/ 52ff9657",
+    "fit": "high-partial",
+    "condition_checks": [
+     {
+      "id": "rsi:index_experience_for_reuse/S1",
+      "status": "met",
+      "reason": "Workflows are rebindable units with instance values replaced by variables.",
+      "evidence_ids": [
+       "son55/E006",
+       "son55/E005"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/H03-retrieval",
+      "status": "partial",
+      "reason": "Selection is per-website grouping (distribution matching), all site workflows injected; no within-site similarity retrieval.",
+      "evidence_ids": [
+       "son55/E007",
+       "son55/E008"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/H03-append",
+      "status": "met",
+      "reason": "Online outcomes judged successful are appended so the store grows with use.",
+      "evidence_ids": [
+       "son55/E003",
+       "son55/E004"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "son55/E003",
+     "son55/E006",
+     "son55/E020"
+    ],
+    "reason": "H03's operation (successful trajectories/workflows stored as cases with instance-specific values removed, matched to new tasks, appended with use) is the load-bearing loop; rule-based near-raw induction matching LM induction on WebArena shows precedent reuse, not abstraction, carries the WebArena gain."
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02",
+    "version": "taxonomy.json b115a69b",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "status": "partial",
+      "reason": "Online LM-judge grounding, errors acknowledged, no error rate.",
+      "evidence_ids": [
+       "sol/E009",
+       "son55/E019"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "status": "unmet",
+      "reason": "No update/merge/forget/conflict handling; offline+online mixing degrades.",
+      "evidence_ids": [
+       "son55/E021",
+       "sol/E012"
+      ]
+     },
+     {
+      "id": "H02-dedup",
+      "status": "partial",
+      "reason": "Only a prompt instruction against overlapping workflows; no versioning or portable package.",
+      "evidence_ids": [
+       "son55/E005"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "son55/E002",
+     "son55/E005",
+     "son55/E006"
+    ],
+    "reason": "LM induction mines recurring sub-routines into structured parameterized routines (H02 aspect); H00 rejected because no outcome contrast/lesson writing occurs (success-only induction)."
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H03"
+   },
+   "operation_correspondence": "Stored workflow cases condition a frozen model on later tasks of the same site; RS 'reference substrate' = RSI case base.",
+   "necessary_conditions_and_differences": "RSI adds the write/append step from execution outcomes; RS category holdout only partly present (Mind2Web splits).",
+   "evidence_ids": [
+    "sol/E002",
+    "son55/E003",
+    "son55/E017"
+   ]
+  },
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02"
+   },
+   "operation_correspondence": "LM-judge-filtered self-generated trajectories are mined into routines without labels.",
+   "necessary_conditions_and_differences": "No retraining; filter not ablated.",
+   "evidence_ids": [
+    "son55/E004",
+    "son55/E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md S3"
+   ],
+   "applies_when": "Self-judged outcomes gate retained workflows.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Gate exists, but admits incorrect traces and is not externally calibrated here.",
+   "evidence_ids": [
+    "sol/E009"
+   ],
+   "score_item": "X",
+   "decision_source": "sol",
+   "aggregate_note": "Both seats partial."
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md S4"
+   ],
+   "applies_when": "Store accumulates online.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No explicit consolidation, retirement or rollback policy; incompatibility is observed.",
+   "evidence_ids": [
+    "sol/E002",
+    "sol/E012"
+   ],
+   "score_item": "X",
+   "decision_source": "sol",
+   "aggregate_note": "Both seats unmet."
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "写入前有保留门",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅在线评估器二值门；无执行测试、无边际收益测量、离线无门。",
+   "evidence_ids": [
+    "son55/E004",
+    "son55/E007"
+   ],
+   "score_item": "X",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S1"
+   ],
+   "applies_when": "案例作为可复用单元",
+   "applicable": true,
+   "status": "met",
+   "reason": "抽象实例变量并切成子任务粒度。",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E005"
+   ],
+   "score_item": "M",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations:1"
+   ],
+   "applies_when": "声称条件化信号带来增益",
+   "applicable": true,
+   "status": "met",
+   "reason": "有同观测、无 workflow 的 BrowserGym ax-tree 基线（SR 15.0 vs 35.5），相当于条件信号开/关；但无评估器门开/关。",
+   "evidence_ids": [
+    "son55/E009",
+    "son55/E010",
+    "son55/E011"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#2"
+   ],
+   "applies_when": "声称泛化/零样本",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未做基座模型对 WebArena/Mind2Web 的污染或重叠分析；跨网站/领域划分提供结构留出但无重叠审计。",
+   "evidence_ids": [
+    "son55/E017"
+   ],
+   "score_item": "E.holdout",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#3"
+   ],
+   "applies_when": "声称优于具体示例检索",
+   "applicable": true,
+   "status": "partial",
+   "reason": "与 Synapse 对比（Mind2Web GPT-3.5）有数值与机制解释，但非同预算受控复现，WebArena 无检索具体示例对照。",
+   "evidence_ids": [
+    "son55/E023"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#4"
+   ],
+   "applies_when": "多模块管线",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅有规则/LM 诱导、文本/代码、HTML 三组表示消融；评估器门与动作空间变体无充分隔离。",
+   "evidence_ids": [
+    "son55/E020",
+    "son55/E022"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#5"
+   ],
+   "applies_when": "声称配方通用",
+   "applicable": true,
+   "status": "met",
+   "reason": "两个基准、五个网站域、同一诱导 prompt。",
+   "evidence_ids": [
+    "son55/E026",
+    "son55/E017"
+   ],
+   "score_item": "M",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#6"
+   ],
+   "applies_when": "条件源质量/分布差影响",
+   "applicable": true,
+   "status": "partial",
+   "reason": "讨论了训练/测试分布差与在线优势，指出评估器误差有害，但未量化评估器质量或覆盖敏感度。",
+   "evidence_ids": [
+    "son55/E019",
+    "son55/E017"
+   ],
+   "score_item": "E.holdout",
+   "decision_source": "son55"
+  },
+  {
+   "id": "local:2409.07429-1",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "2409.07429v1 §3.1.3/§3.2.2"
+   ],
+   "applies_when": "online memory is written from the same stream it is scored on",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Cross-template test and offline training/test split help; online target stream still constructs and evaluates memory.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004",
+    "sol/E007"
+   ],
+   "score_item": "E.holdout",
+   "decision_source": "sol",
+   "aggregate_note": "Same check in both seats (memory built on the evaluation stream); partial because offline frozen split and cross-template subset exist and no labels enter memory."
+  },
+  {
+   "id": "local:2409.07429-2",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2409.07429v1 §4.1"
+   ],
+   "applies_when": "the paper attributes gains to abstract sub-routines rather than stored precedent",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Rule and LM match WebArena; Mind2Web supports scoped abstraction benefit.",
+   "evidence_ids": [
+    "sol/E008"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "sol",
+   "aggregate_note": "Abstraction-vs-raw-precedent check (sol's semantics kept under this ID)."
+  },
+  {
+   "id": "local:2409.07429-3",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "2409.07429v1 §§3.1.1,5"
+   ],
+   "applies_when": "method adds induction and judge calls",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Execution steps reported but not full induction dollar/token/call cost.",
+   "evidence_ids": [
+    "sol/E006",
+    "sol/E011"
+   ],
+   "score_item": "E.cost",
+   "decision_source": "sol",
+   "aggregate_note": "Cost check; son55's same check (filed as its local-2, 'unmet') merged here: steps are reported, induction/evaluator cost is not."
+  },
+  {
+   "id": "local:2409.07429-4",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "same card: variance across runs or orderings"
+   ],
+   "applies_when": "headline results from single runs",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "单次运行、温度 0、未改变流顺序，无方差。",
+   "evidence_ids": [
+    "son55/E012"
+   ],
+   "score_item": "E.statistics",
+   "source_id_in_seat": "local:2409.07429-3",
+   "decision_source": "son55",
+   "aggregate_note": "son55's statistics check re-IDed from its local-3 to avoid ID collision."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "Offline workflows induced on training data and frozen improve held-out Mind2Web splits over the same pipeline without workflows; online, the store-off same-observation baseline on WebArena shows the retained memory changes later tasks. Not improver: the induction procedure itself is never modified or compared under matched budget.",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Author-reported, single run: a frozen GPT-4 agent with evaluator-gated online workflow memory reaches 35.5 vs 15.0 SR on WebArena (same observation space), holds on a cross-template subset (33.2 vs 20.5), and offline training-induced workflows raise Mind2Web step SR (45.1 vs 36.2 cross-task; 32.6 vs 18.6 cross-domain). The 'abstract sub-routine beats raw precedent' explanation holds on Mind2Web only.",
+  "unresolved": [
+   "No variance or stream-order sensitivity for any result.",
+   "Induction/evaluator cost not reported.",
+   "No contamination audit of GPT-4 against the benchmarks.",
+   "LM-judge gate accuracy unmeasured."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete bottleneck (per-task agents do not reuse sub-routines; concrete examples bias element selection) with quantitative comparison to the nearest neighbours Synapse (retrieved examples) and SteP (human workflows) and a cited lineage of rule/LM sub-routine extraction. Not 4: memory/skill neighbours such as experience-lesson stores are not compared and the residual over them is asserted, not bounded.",
+   "evidence_ids": [
+    "son55/E001",
+    "son55/E023",
+    "sol/E001",
+    "sol/E007"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Parameterized sub-routine induction plus evaluator-gated online write targets the reuse bottleneck and yields distinguishable predictions (abstract workflows beat concrete examples; composition into longer workflows; online beats offline as train-test gap widens). Not 4: the abstraction hypothesis is undercut on WebArena where rule-based near-raw induction ties LM induction, and the evaluator-reliability assumption is untested.",
+   "evidence_ids": [
+    "son55/E005",
+    "son55/E006",
+    "son55/E004",
+    "son55/E020",
+    "sol/E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Write/read chain and prompts reconstructible (per-website grouping, LM-judge gate, append, full injection). Missing: dedup/merge beyond a prompt instruction, versioning, rollback, retirement, conflict handling; offline+online stores interfere without remedy (App. C).",
+   "evidence_ids": [
+    "son55/E007",
+    "son55/E008",
+    "son55/E021",
+    "sol/E009",
+    "sol/E012"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "WebArena functional-correctness evaluator and defined Mind2Web element/step/task metrics are credible for the claims. Not 4: Mind2Web task SR is <5% so task-level differences are a few items; online LM-judge accuracy unvalidated; §5 prose (3.2) contradicts Table 9 (4.8/3.6).",
+   "evidence_ids": [
+    "son55/E009",
+    "son55/E015",
+    "sol/E005",
+    "opus55/E001",
+    "opus55/E002"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Same-observation memory-off baseline (BrowserGym ax-tree 15.0 vs 35.5) and representation ablations (rule/LM, text/code, HTML) exist. Key gaps: rule-based near-raw induction ties LM induction on WebArena (35.6 vs 35.5) so the 'abstraction' attribution holds only on Mind2Web; no evaluator-gate-off arm; Synapse comparison not budget-matched; headline 51.1% compares to a differently-observed BrowserGym number.",
+   "evidence_ids": [
+    "son55/E010",
+    "son55/E011",
+    "son55/E020",
+    "son55/E023",
+    "sol/E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Offline workflows are induced on the training split and frozen before Mind2Web test, including cross-website/cross-domain splits (offline cross-domain step SR 32.6 vs 18.6); WebArena cross-template subset controls template leakage; the online write gate uses an LM judge, not test labels, so no oracle enters memory. Not 4: no contamination audit and no frozen post-stream held-out test; 'generalizes across domains' for online AWM is in-stream adaptation, which the paper describes transparently.",
+   "evidence_ids": [
+    "son55/E013",
+    "son55/E014",
+    "son55/E017",
+    "sol/E003",
+    "sol/E007",
+    "opus55/E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "son55"
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample sizes (812 / 197 cross-template / Mind2Web splits) and negative results (action-F1 drop, off+on worse, text SR drop) reported, but every main result is a single temperature-0 run with no intervals, seeds or stream-order variation (A2 ladder 1).",
+   "evidence_ids": [
+    "son55/E012",
+    "son55/E021",
+    "sol/E010"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full text §§3–5, Tables 1–11, App. A–C: no CI/seed/order-variance reporting"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Average steps (5.9 vs 7.9) and workflow counts reported; induction and LM-evaluator calls/tokens and failed-task cost not reported; no budget-matched comparison.",
+   "evidence_ids": [
+    "son55/E009",
+    "son55/E010",
+    "son55/E008",
+    "sol/E006"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "§3.1.1 steps, App. A.3 workflow counts; no token/call accounting anywhere"
+   ],
+   "decision_source": "same_supported_fact"
+  }
+ },
+ "score": {
+  "raw": 61.25,
+  "display": 61.3,
+  "lower": 61.25,
+  "upper": 61.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "weights": {
+   "G": 15,
+   "M": 20,
+   "X": 20,
+   "E.measurement": 10,
+   "E.causality": 15,
+   "E.holdout": 10,
+   "E.statistics": 5,
+   "E.cost": 5
+  },
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4; unknown items bound at 0/4 for L/U; raw=null while any unknown remains"
+ },
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ]
+   ],
+   "son55_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "self_supervised_signal_engineering",
+     null
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ],
+    [
+     "self_supervised_signal_engineering",
+     null
+    ]
+   ],
+   "reason": "C03 kept (sol): its no-tuning reference-substrate branch fits memory-as-conditioning and matches prior aggregate rulings; son55's null sub under-specifies a singleton parent with a partially applicable child. son55's supporting signal-manufacture card kept: the supervision-free online mode rests on LM-judge filtering of self-generated trajectories (§2.3).",
+   "evidence_ids": [
+    "sol/E002",
+    "son55/E004",
+    "opus55/E003"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ]
+   ],
+   "son55_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H02"
+    ],
+    [
+     "index_experience_for_reuse",
+     null
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ],
+    [
+     "abstract_experience_into_guidance",
+     "H02"
+    ]
+   ],
+   "reason": "Neither seat's set fits best. H00 (sol) requires outcome reflection/contrast into lessons; AWM induces procedures from successes only. H03's card text explicitly covers workflows stored as cases with instance values removed, matched to new tasks and appended with use; rule-based near-raw induction ties LM induction on WebArena (Table 5), so precedent reuse is load-bearing. son55's H02 kept as secondary for the sub-routine mining aspect. Disclosure: card-induction asset assignments.jsonl lists this paper under H03; the ruling rests on the text and card definitions above.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E006",
+    "son55/E020",
+    "sol/E008"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2409.07429-1].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Same question in both seats. Online memory is written from the evaluation stream (son55's point holds), but offline frozen train→test splits, the cross-template subset and a label-free LM gate partially meet the expectation; 'unmet' would ignore those controls.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E007",
+    "son55/E013",
+    "opus55/E003"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2409.07429-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "partial (abstraction-vs-precedent causality check)",
+   "reason": "ID collision: sol's local-2 = abstraction attribution (partial), son55's local-2 = cost (unmet). Final local-2 keeps sol's check; son55's cost check merged into local-3.",
+   "evidence_ids": [
+    "sol/E008",
+    "son55/E020"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2409.07429-3].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "local-3 cost = partial; son55's statistics check moved to local-4 = unmet",
+   "reason": "ID collision: sol's local-3 = cost (partial), son55's local-3 = statistics (unmet). Both facts verified: steps reported but no call/token accounting; single temperature-0 run.",
+   "evidence_ids": [
+    "sol/E006",
+    "son55/E012"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Not a disagreement: sol did not file RE items. Same-observation no-workflow baseline isolates the conditioning signal (15.0 vs 35.5).",
+   "evidence_ids": [
+    "son55/E010",
+    "son55/E011"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "No overlap/contamination analysis anywhere in the text.",
+   "evidence_ids": [
+    "son55/E017"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Synapse comparison on GPT-3.5 only, not budget-matched.",
+   "evidence_ids": [
+    "son55/E023"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Representation ablations present; gate and action-space variants not isolated.",
+   "evidence_ids": [
+    "son55/E020",
+    "son55/E022"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Two benchmarks, same prompt across sites/domains.",
+   "evidence_ids": [
+    "son55/E026",
+    "son55/E017"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Train-test gap discussed; evaluator quality and coverage sensitivity not quantified.",
+   "evidence_ids": [
+    "son55/E019",
+    "son55/E017"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Only a binary LM-judge write gate online; no gate offline; no marginal-utility test.",
+   "evidence_ids": [
+    "son55/E004",
+    "son55/E007"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Variables replace instance values; sub-task granularity (prompt A.1).",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E005"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "sol's objection (online memory built on the evaluation stream) is real but scoped: the online claim is label-free in-stream adaptation (no oracle enters memory), while the transfer claim is carried by offline frozen workflows on Mind2Web cross-website/domain splits and the WebArena cross-template subset. Remaining gaps (no contamination audit, no frozen post-stream test) keep it below 4.",
+   "evidence_ids": [
+    "son55/E013",
+    "son55/E017",
+    "sol/E003",
+    "opus55/E003"
+   ],
+   "score_impact": "+2.5 vs sol",
+   "mechanical_conflict": true
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read §§1–7, Tables 1–11, App. A–C before opening seat totals. Provisional: G2 M3 X2 Em3 Ec2 Eh3 Es1 Ecost1. On checking, G raised to 3 (seats' shared value verified: quantitative Synapse/SteP comparison and cited sub-routine lineage).",
+  "integrity_checks": "Both seats on 2409.07429v1, material sha256 c3403020 = manifest; input_hash/rubric hash identical; seat hashes equal conflicts.json; all seat quotes verified against the pinned text after whitespace normalization; RS parent/child legal; domain IDs valid.",
+  "core_claim_check": "Headline 51.1% relative is vs BrowserGym (HTML+axtree, literature number 23.5); same-observation baseline is 15.0. 24.6% = 45.1/36.2 verified. §5 prose 3.2 vs Table 9 4.8/3.6 inconsistency confirmed.",
+  "retention_check": "Failure denominators: full WebArena 812 and splits; online cumulative SR counts early no-memory tasks. Selection vs test: offline clean; online writes from test stream via LM judge (no labels). Extra budget: induction + judge calls unreported. 'Retained' = retained improvement here because a memory-off arm on the same observation space exists.",
+  "disclosure": "While checking domain cards, this aggregator viewed card-induction lines in research/patterns/assignments.jsonl for the four in-scope papers (card assets, not reviewer judgments); no seat totals were used before the initial judgment."
+ },
+ "input_seat_hashes": {
+  "sol": "1a84f9ee93327a9e4c75ab2ba305704afc1ef863ef7171ceb8c3296df67d8101",
+  "son55": "42d0503df496a944671572133d485725ef8c0c22f315c31d32bd4110f7a083df"
+ },
+ "final_record_hash": "31c42d9ccb68a2b912094a255df74ae982bced6ecdc4cd069e489818e7437fb9"
+}

@@ -1,0 +1,1656 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r02a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "status": "reviewed",
+ "reason": "In scope (A3 bullet 2): the retained, evaluated object is non-weight tool documentation rewritten from the agent's own tool-execution feedback and then read by frozen consumer LLMs on later benchmark tasks.",
+ "paper": {
+  "paper_key": "2410.08197",
+  "paper_id": "2410.08197",
+  "title": "From Exploration to Mastery: Enabling LLMs to Master Tools via Self-Driven Interactions",
+  "version": "2410.08197v2",
+  "claim_type": "system_method",
+  "central_claim": "DRAFT iteratively explores tools, analyzes execution feedback and rewrites tool documentation (with diversity-promoting exploration and tool-adaptive termination), improving documentation quality and downstream tool use, with revised documentation generalizing across LLMs.",
+  "scope_class": "A: execution-feedback-driven persistent tool-documentation rewriting"
+ },
+ "provenance": {
+  "input_hash": "6ad95c219ff9f9b0982545d5b79a2ccd51c93c663f2db81a404d986afe074fbc",
+  "input_package": "batches/r02a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker. Seat attempts used: sol a1, son55 a1 (same input_hash, same material sha256).",
+  "timestamp": "2026-10-21T20:33:59Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2410.08197",
+   "version": "2410.08197v2",
+   "url": "https://arxiv.org/html/2410.08197v2",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2410.08197.txt",
+   "extraction_method": "html",
+   "sections_read": [
+    "sol: Complete fixed HTML text lines 1–2827: abstract, §§1–6, Tables 1–4, references, Appendices A–E including Table 5 ablations, Table 6 prompts and full five-round revision example. No page_images in manifest; graphical trend values not invented.",
+    "son55: abstract",
+    "son55: §1 intro",
+    "son55: §2 method + Algorithm 1",
+    "son55: §3 experiments incl. ablation/retrieval/human eval",
+    "son55: §4-5 related work/conclusion",
+    "son55: App A human eval",
+    "son55: App B extra ablation",
+    "son55: App C prompts",
+    "son55: App D case study",
+    "son55: App E revision trajectory",
+    "opus55: full pinned text re-read (claims, method, all result tables, appendices) before opening seat totals"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "note": "Single pinned text; seats' material_id aliases preserved as seat_material_id on evidence."
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "每个工具的自然语言文档（非权重 harness 组件）",
+   "information": "当前文档、Explorer 合成 query/参数、工具真实返回、历史修订；无测试 query/金标",
+   "operation": "Explorer 生成单次调用 query→调用工具→Analyzer 提修改建议→Rewriter 重写文档并给下一轮探索方向",
+   "output": "新版工具文档 t_i + 探索建议 d_i",
+   "conditions": "相似度约束+自反思重采样；最多 5 轮",
+   "feedback": "真实 API 返回（执行反馈）+ LLM 分析",
+   "selection_rule/data": "无候选比较或性能验收：每轮重写直接取代；终止看版本相似度>τ",
+   "persistence": "最终文档集替代原文档用于下游",
+   "later_use": "下游 agent/检索器读取修订后文档",
+   "claimed_effect": "TMDB GPT-4o CP 71→88 Win 71 (vs ReAct 71/50)",
+   "failure_boundary": "迭代过多冗余下降（E013/E028）；无效 ID 使探索停滞（App E）",
+   "evidence_ids": [
+    "son55/E002",
+    "son55/E003",
+    "son55/E004",
+    "son55/E005",
+    "son55/E006",
+    "son55/E007",
+    "son55/E012",
+    "son55/E013",
+    "son55/E028"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "探索多样性与终止控制（子机制）",
+   "information": "历史 query 嵌入、文档版本嵌入与 BLEU",
+   "operation": "余弦相似度阈值+自反思；BLEU+嵌入变化量终止",
+   "output": "探索样本集合与停止点",
+   "conditions": "ϕ=0.9，τ=0.75",
+   "feedback": "无任务反馈",
+   "selection_rule/data": "阈值规则",
+   "persistence": "同 S1",
+   "later_use": "同 S1",
+   "claimed_effect": "去掉任一项 CP 降 4–8 点（TMDB）",
+   "failure_boundary": "阈值选择依据未说明",
+   "evidence_ids": [
+    "son55/E005",
+    "son55/E007",
+    "son55/E014",
+    "son55/E031"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "现有工具文档以人类直觉写成，不完整、冗余、不准确；人工修订不可扩展，也跟不上工具演进，造成 LLM 与工具间理解鸿沟。",
+  "checked_gap": "成立：Table 7/8 示例与人工评估（RestBench 完整性 40% vs 16%）支持文档确有缺陷。最近邻 EasyTool（无执行反馈的直接改写）在 TMDB/ToolBench 有对比。缺口：自动改写文本制品的同类方法（提示优化/Reflexion 式）未作对比，文档改写与提示优化的区别只由「真实调用反馈」论述。",
+  "lineage/closest_adjacent": "EasyTool（ChatGPT 直接改写文档）、Reflexion/自反思（作者引用）、tuning-free 工具学习（文档+示例）。本地无这些全文，依赖本文描述。",
+  "residue": "每轮仅一次单调用探索，无验收门；文档质量靠 LLM 自判，无下游性能回路；工具更新场景未测。",
+  "stakes": "文档缺陷导致工具误用（参数约束缺失、错误输出被误解）；小模型+DRAFT 文档超过 GPT-4o 无 DRAFT（ToolBench）。",
+  "method_response": "用真实调用返回作为反馈来源，迭代重写并以多样性与终止机制控制冗余，直接回应「文档与工具实际行为不符」。",
+  "remaining_gap": "质量验收/回退、跨工具迁移、工具演进下的更新、成本均未解决。",
+  "evidence_ids": [
+   "son55/E001",
+   "son55/E011",
+   "son55/E016",
+   "son55/E021"
+  ],
+  "unresolved": [
+   "EasyTool 等全文未入包；提示优化/技能修订类近邻对比缺失，新颖性无法由空检索证明"
+  ]
+ },
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "DRAFT 文档使 LLM 工具使用在 3 个数据集、3 个 LLM 上优于 ReAct/DFSDT/EasyTool",
+   "setting": "RestBench TMDB/Spotify、ToolBench I3，CP 与 Win（测试集规模文中未给出）",
+   "baseline/control": "ReAct、DFSDT、EasyTool（Spotify 无 EasyTool）",
+   "selection_vs_test": "文档由自产探索 query 改写；基准 query 仅用于评测",
+   "result/denominator": "GPT-4o TMDB CP 88 vs 71/74/79；Llama TMDB Win 64=EasyTool",
+   "evidence_ids": [
+    "son55/E008",
+    "son55/E009",
+    "son55/E010",
+    "son55/E022"
+   ],
+   "counterevidence": "下游 agent 框架未说明（E022）；Win 由 ChatGPT 评；单次运行；Llama TMDB Win 与 EasyTool 持平",
+   "allowed_conclusion": "在作者设定的小规模基准上，改写文档与更高 CP/Win 相关；比较条件不完全清楚"
+  },
+  {
+   "claim_id": "C2",
+   "text": "改写后的文档有跨模型泛化",
+   "setting": "GPT-4o 骨干改写；GPT-4o-mini/Llama 使用；Llama 骨干仅 TMDB",
+   "baseline/control": "原始文档",
+   "selection_vs_test": "同上",
+   "result/denominator": "全部 LLM 在 DRAFT 文档下优于 raw 基线（作者报告）",
+   "evidence_ids": [
+    "son55/E019",
+    "son55/E029"
+   ],
+   "counterevidence": "未报告无 DRAFT 的同 agent 原文档基线逐格数字（基线为 ReAct/DFSDT 方法行）",
+   "allowed_conclusion": "跨模型迁移有初步证据"
+  },
+  {
+   "claim_id": "C3",
+   "text": "多样性探索与自适应终止是有效组件",
+   "setting": "三数据集三模型消融",
+   "baseline/control": "完整 DRAFT",
+   "selection_vs_test": "测试集上消融",
+   "result/denominator": "GPT-4o TMDB CP 88→84/80；ToolBench 51→44/46",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E015"
+   ],
+   "counterevidence": "单次运行，差距 2–8 点；测试集规模文中未给出",
+   "allowed_conclusion": "消融方向一致，幅度统计上不确定"
+  },
+  {
+   "claim_id": "C4",
+   "text": "DRAFT 改善文档质量（人工）与检索",
+   "setting": "50 例人工对比；BM25/Contriever",
+   "baseline/control": "raw 文档",
+   "selection_vs_test": "—",
+   "result/denominator": "RestBench 完整性 40% vs 16%；检索 Spotify @10 微降",
+   "evidence_ids": [
+    "son55/E016",
+    "son55/E017",
+    "son55/E018"
+   ],
+   "counterevidence": "检索增益小、Spotify 持平/微降；改写含无证据内容（E020）",
+   "allowed_conclusion": "文档完整性提升有人工支持；准确性主张被 E020/E021 部分削弱"
+  }
+ ],
+ "base_seat_for_signatures_gap_claims": "son55",
+ "evidence": [
+  {
+   "evidence_id": "sol/E001",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§1 feedback-grounded documentation",
+   "quote": "To ensure that tool documentation genuinely reflects the purpose of the tool, we obtain feedback by actually using the tool to get the returned results, thereby producing high quality tool documentation.",
+   "support_explanation": "The retained object is a non-weight tool description, with actual API responses rather than answer-only self-criticism.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E002",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "Abstract / framework overview",
+   "quote": "The learning from experience phase involves an analyzer examining this data to identify discrepancies between intended and actual tool usage, pinpoint ambiguities or inaccuracies in the documentation, and propose targeted improvements.",
+   "support_explanation": "Diagnosis directs revisions; evidence of a critique-rewrite mechanism, not proof its attribution is correct.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E003",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "Framework overview",
+   "quote": "This process is further optimized by implementing a diversity-promoting exploration strategy to ensure explorative diversity and a tool-adaptive termination mechanism to prevent overfitting while enhancing efficiency.",
+   "support_explanation": "Author central auxiliary mechanism claims; stop criterion must be distinguished from outcome validation.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E004",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 experimental subset",
+   "quote": "Due to budget constraints, we focus on the most challenging subset of ToolBench, namely I3-Instruction, which contains complex user requests requiring multiple tools from different categories.",
+   "support_explanation": "Limits dataset coverage; ToolBench claims concern this subset, not the entire benchmark.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E005",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 metrics: correct path rate",
+   "quote": "which measures the proportion of instances where the model-generated sequence of tool calls contains the ground truth tool path as a subsequence, allowing for straightforward accuracy assessment.",
+   "support_explanation": "CP measures path inclusion, not necessarily correct API arguments, final answer or execution outcome.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E006",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 metrics: win rate",
+   "quote": "which evaluates effectiveness through pairwise comparisons by a ChatGPT-based evaluator, capturing nuanced performance differences not reflected by rule-based metrics.",
+   "support_explanation": "Complementary model-judge outcome, with no independently established judge calibration in the supplied text.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E007",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 analysis of iterations",
+   "quote": "This decline may be attributed to the introduction of redundant information as the number of iterations increases, potentially leading to overfitting.",
+   "support_explanation": "Negative iteration effects challenge monotonic revision/retention claims.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E008",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 human evaluation",
+   "quote": "We randomly sampled 50 cases from RestBench and ToolBench for this evaluation.",
+   "support_explanation": "Reports limited sampled human evaluation; no invented per-dataset interpretation of this ambiguous sentence.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E009",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 human evaluation agreement",
+   "quote": "The Fleiss’ Kappa statistics for completeness, conciseness, and accuracy are 0.76, 0.71, and 0.72 on RestBench, while 0.77, 0.69, and 0.71 on ToolBench, indicating a high agreement among the three annotators.",
+   "support_explanation": "Agreement supports annotation consistency, not main task-run uncertainty or ground-truth document correctness.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "sol/E010",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§4 baseline availability",
+   "quote": "The term “-” means that EasyTool has not been implemented on the Spotify dataset.",
+   "support_explanation": "Closest direct document-rewriting baseline is absent on one domain; do not interpret missing cells as zero performance.",
+   "kind": "author_report",
+   "seat_material_id": "2410.08197.txt",
+   "source_seat": "sol"
+  },
+  {
+   "evidence_id": "son55/E001",
+   "locator": "§1 para 3",
+   "quote": "the original human-crafted tool documentation is typically created with human intuition in mind, and is often fraught with inconsistency and ambiguities",
+   "support_explanation": "作者 gap：人类文档对 LLM 不完整/冗余/不准确。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E002",
+   "locator": "§1 para 6",
+   "quote": "DRAFT implements a trial-and-error methodology to incrementally improve the tool documentation.",
+   "support_explanation": "核心操作：试错式增量改进工具文档。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E003",
+   "locator": "§2.2",
+   "quote": "invokes the tool to obtain the result",
+   "support_explanation": "Explorer 实际调用工具，反馈来自真实执行结果而非自评。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E004",
+   "locator": "§2.3",
+   "quote": "the Analyzer delivers its feedback in natural language, offering detailed and nuanced guidance to the Rewriter for subsequent updates.",
+   "support_explanation": "Analyzer 提供自然语言改写建议，不产生标量打分或候选比较。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E005",
+   "locator": "§2.2",
+   "quote": "This constraint ensures that the new query is sufficiently different from all previous queries, promoting diversity in exploration.",
+   "support_explanation": "多样性门：新探索 query 与历史相似度需低于阈值。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E006",
+   "locator": "App C Table 6 prompt I",
+   "quote": "Here, you can focus on queries that only require calling the API once.",
+   "support_explanation": "每轮探索只生成单次 API 调用的 query；每轮一次探索，最多 5 轮。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E007",
+   "locator": "§2.4",
+   "quote": "exceeds a predefined termination threshold τ \\tau , we stop the iterative modifications.",
+   "support_explanation": "终止依据是相邻文档版本的相似度（BLEU+嵌入），而非下游性能。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E008",
+   "locator": "Table 1",
+   "quote": "GPT-4o-mini ReAct 48.00 50.00 24.56 50.00 35.00 50.00 DFSDT 50.00 68.00 35.08 61.40 37.00 84.00 EasyTool 56.00 75.00 - - 42.00 85.00 DRAFT (Ours) 62.00 82.00 43.85 78.94 47.00 88.00",
+   "support_explanation": "GPT-4o-mini 下三数据集 CP/Win：DRAFT 均最高。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E009",
+   "locator": "Table 1",
+   "quote": "GPT-4o ReAct 71.00 50.00 28.07 50.00 37.00 50.00 DFSDT 74.00 61.00 64.91 56.14 41.00 73.00 EasyTool 79.00 62.00 - - 45.00 77.00 DRAFT (Ours) 88.00 71.00 70.17 84.21 51.00 78.00",
+   "support_explanation": "GPT-4o 下的同类结果。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E010",
+   "locator": "Table 1",
+   "quote": "Llama-3-70B ReAct 72.00 50.00 26.31 50.00 41.00 50.00 DFSDT 74.00 38.00 63.15 61.40 42.00 54.00 EasyTool 76.00 64.00 - - 46.00 60.00 DRAFT (Ours) 86.00 64.00 66.66 64.91 53.00 62.00",
+   "support_explanation": "Llama-3-70B：TMDB Win 与 EasyTool 持平 (64.00)。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E011",
+   "locator": "§3.1 Baselines",
+   "quote": "which achieves more concise tool descriptions by using ChatGPT to directly rewrite the documentation and incorporate guidelines",
+   "support_explanation": "EasyTool 是最近邻：无执行反馈的直接改写，且用 ChatGPT 非 GPT-4o。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E012",
+   "locator": "§3.1 Implementation",
+   "quote": "we employ this model to refine the tool documentation by incorporating its own tool usage feedback",
+   "support_explanation": "主实验用 GPT-4o 既作改写骨干，也用自己的工具使用反馈。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E013",
+   "locator": "§3.3 iteration rounds",
+   "quote": "However, a decline in performance is observed after a certain number of iterations.",
+   "support_explanation": "无门控的迭代会因冗余而性能下降，作者以终止机制规避。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E014",
+   "locator": "Table 2",
+   "quote": "DRAFT 88.00 71.00 w/o diversity 84.00 69.00 w/o adaptive 80.00 68.00",
+   "support_explanation": "TMDB/GPT-4o 消融：差异为 4–8 CP、2–3 Win。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E015",
+   "locator": "App B Table 5",
+   "quote": "GPT-4o DRAFT (Ours) 88.00 71.00 70.17 84.21 51.00 78.00 w/o diversity 84.00 69.00 64.91 73.68 44.00 72.00 w/o adaptive 80.00 68.00 59.64 68.42 46.00 76.00",
+   "support_explanation": "三数据集消融方向一致。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E016",
+   "locator": "§3.3 human eval",
+   "quote": "We randomly sampled 50 cases from RestBench and ToolBench for this evaluation.",
+   "support_explanation": "人工评估 50 例、3 名评审，文档质量对比 raw。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E017",
+   "locator": "App A",
+   "quote": "statistics for completeness, conciseness, and accuracy are 0.76, 0.71, and 0.72 on RestBench",
+   "support_explanation": "标注者一致性报告。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E018",
+   "locator": "Table 3",
+   "quote": "BM25 Raw 24.0 35.0 43.9 53.9 DRAFT 29.0 39.4 43.9 54.2 Contriever Raw 29.0 40.4 45.6 49.6 DRAFT 31.0 44.1 47.4 49.2",
+   "support_explanation": "检索增益小且 Spotify 上有持平/微降。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E019",
+   "locator": "§3.2",
+   "quote": "although our tool documentation was revised through utilizing tool usage feedback from a single model, it exhibits robust cross-model generalization capabilities",
+   "support_explanation": "GPT-4o 生成的文档在 mini/Llama 上也提升。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E020",
+   "locator": "Table 7 DRAFT output",
+   "quote": "Users should be prepared for potential connectivity issues, including connection timeouts, and are advised to contact the API provider for support in case of errors like",
+   "support_explanation": "改写文档加入了无执行证据的连接超时建议，说明改写可含未经单次调用核实的内容。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E021",
+   "locator": "Table 7 SQUAKE case",
+   "quote": "\"description\": \"A tool that checks the health status of a specific system and provides relevant information or error messages.",
+   "support_explanation": "该案例中工具名被写成 il 且描述与原工具 SQUAKE 不一致，作者列为改进示例，案例选择未受审计。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E022",
+   "locator": "§3.1 Baselines/metrics",
+   "quote": "Win% is calculated by comparing each method with ReAct.",
+   "support_explanation": "Win 以 ReAct 为对手；全文未说明 DRAFT 行使用的下游 agent 框架（ReAct 或 DFSDT）。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E023",
+   "locator": "Table 1 note",
+   "quote": "EasyTool has not been implemented on the Spotify dataset",
+   "support_explanation": "EasyTool 在 Spotify 无结果，该数据集上最近邻缺对比。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E024",
+   "locator": "§3.1 Datasets",
+   "quote": "Due to budget constraints, we focus on the most challenging subset of ToolBench, namely I3-Instruction",
+   "support_explanation": "ToolBench 仅用 I3 子集；预算受限但无成本数字。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E025",
+   "locator": "§3.1 Metrics",
+   "quote": "which measures the proportion of instances where the model-generated sequence of tool calls contains the ground truth tool path as a subsequence",
+   "support_explanation": "CP% 只检查工具路径包含，不检查最终答案正确。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E026",
+   "locator": "§3.1 Metrics",
+   "quote": "evaluates effectiveness through pairwise comparisons by a ChatGPT-based evaluator",
+   "support_explanation": "Win% 由 ChatGPT 评审，未验证其可靠性。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E027",
+   "locator": "§2.5",
+   "quote": "DRAFT is capable of dynamically maintaining an accurate and up-to-date representation of evolving features within the tool documentation as the tools develop.",
+   "support_explanation": "「随工具更新维护文档」的主张，全文无对应实验。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E028",
+   "locator": "App E",
+   "quote": "as the number of iterations increases, the documentation for the tool becomes increasingly lengthy, leading to the inclusion of redundant information.",
+   "support_explanation": "第 4–5 轮文档膨胀冗余，印证需要终止机制，也说明每轮改写无质量验收。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E029",
+   "locator": "§3.3 cross-model",
+   "quote": "we conduct experiments on RestBench-TMDB using Llama-3-70B as a backbone",
+   "support_explanation": "以 Llama 作改写骨干的跨模型验证仅在 TMDB。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E030",
+   "locator": "§2.4",
+   "quote": "the Rewriter ensures that each version of the documentation builds upon its predecessors",
+   "support_explanation": "改写历史作为 prompt 内版本；无独立版本库或回退。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "son55/E031",
+   "locator": "§3.1 Implementation",
+   "quote": "to 0.75 0.75 , and maximum iteration count to 5 5",
+   "support_explanation": "阈值 τ=0.75 与最多 5 轮，选择依据未说明。",
+   "kind": "author_report",
+   "material_id": "M-2410.08197",
+   "seat_material_id": "M1",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "source_seat": "son55"
+  },
+  {
+   "evidence_id": "opus55/E001",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "Table 1 caption",
+   "quote": "Win% is calculated by comparing each method with ReAct.",
+   "support_explanation": "The downstream inference strategy used for the DRAFT rows (ReAct or DFSDT with revised docs) is not stated anywhere in the text; the comparison to ReAct/DFSDT rows therefore mixes documentation and search-strategy effects (our_inference from the full-text search).",
+   "kind": "our_inference",
+   "source_seat": "opus55"
+  },
+  {
+   "evidence_id": "opus55/E002",
+   "material_id": "M-2410.08197",
+   "sha256": "4d12b1383b31d5691c1ece5dcd85c642a2a2d97ec9d3764ed89f4bab2148b1b0",
+   "locator": "§3.1 implementation",
+   "quote": "We set the similarity threshold ϕ \\phi to 0.9 0.9 , termination threshold τ \\tau to 0.75 0.75 , and maximum iteration count to 5 5 .",
+   "support_explanation": "Fixed hyperparameters; their selection procedure is not described (no validation split mentioned).",
+   "kind": "author_report",
+   "source_seat": "opus55"
+  }
+ ],
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "No labelled supervision for documentation quality → Explorer self-generates queries, real tool returns become the signal, a diversity gate filters samples, the artifact is adapted. C08's retrain step does not apply (artifact is text), C07/C26 not applicable; sub=null.",
+    "success_checks": "Downstream side-by-side comparison on the actual objective; cross-model transfer.",
+    "failure_checks": "Cost of the generate/filter loop unjustified; signal producer and rewriter from the same model.",
+    "evidence_ids": [
+     "son55/E003",
+     "son55/E005",
+     "son55/E012",
+     "son55/E019"
+    ],
+    "reason": "The load-bearing move is manufacturing a feedback signal by self-generated exploration of real tools.",
+    "taken_from_seat": "son55"
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": "Revised docs condition frozen consumers across model families; no unified schema/upstream reader or category holdout, so C03 not assigned.",
+    "success_checks": "Cross-model consumers.",
+    "failure_checks": "No longer-context/demonstration alternative.",
+    "evidence_ids": [
+     "sol/E001",
+     "sol/E004",
+     "son55/E019"
+    ],
+    "reason": "Deployment form of the artifact.",
+    "taken_from_seat": "sol+son55"
+   }
+  ],
+  "reason": "Signal manufacture primary, conditioning supporting; no exact subcard.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "unassigned": [],
+  "revision_proposals": [],
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "taxonomy.json b115a69b; conditions.json 8704c7da",
+    "fit": "high operation / incomplete retention conditions",
+    "condition_checks": [
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "met",
+      "reason": "Analyzer/rewriter see raw API returns, explored queries and revision history.",
+      "evidence_ids": [
+       "sol/E001",
+       "son55/E003",
+       "son55/E030"
+      ]
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "status": "unmet",
+      "reason": "Textual-stability stop; no utility-based acceptance, per-edit preservation or rollback.",
+      "evidence_ids": [
+       "sol/E003",
+       "sol/E007",
+       "son55/E028"
+      ]
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S4",
+      "status": "unmet",
+      "reason": "One exploration instance analyzed per round; no cross-failure aggregation.",
+      "evidence_ids": [
+       "son55/E006",
+       "son55/E004"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol/E001",
+     "sol/E002",
+     "sol/E003",
+     "son55/E007"
+    ],
+    "reason": "A single tool document is rewritten from diagnosed discrepancies (H10). H06 (son55) rejected: crystallize_executable_capability requires verified executable artifacts entering the action space; DRAFT's product is natural-language documentation."
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10"
+   },
+   "operation_correspondence": "Self-generated exploration + real returns = manufactured critique signal driving rewrites of one incumbent document.",
+   "necessary_conditions_and_differences": "H10 expects scored candidates and regression checks; DRAFT has a single rewrite per round and no acceptance gate.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E004",
+    "sol/E003"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "original adapt_via_conditioning reviewer expectation 1"
+   ],
+   "applies_when": "Improvement attributed to revised conditioning.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Raw-doc and EasyTool comparisons help; no budget-matched multi-probe or raw-history control.",
+   "evidence_ids": [
+    "sol/E001",
+    "sol/E010"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "sol"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "original adapt_via_conditioning reviewer expectation 2"
+   ],
+   "applies_when": "Generalization from synthetic probes to downstream queries.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Separate synthetic probes are described; no formal overlap/tuning audit or heldout tool-category exclusion.",
+   "evidence_ids": [
+    "sol/E001",
+    "sol/E004"
+   ],
+   "score_item": "E.holdout",
+   "decision_source": "sol"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations:1"
+   ],
+   "applies_when": "声称制造信号可泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "文档跨 3 个 LLM 泛化，Llama 作骨干仅在 TMDB 验证；数据集 3 个但同属 API 工具域。",
+   "evidence_ids": [
+    "son55/E019",
+    "son55/E029"
+   ],
+   "score_item": "E.holdout",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#2"
+   ],
+   "applies_when": "增益需归因于制造信号本身",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有 w/o diversity、w/o adaptive 消融；缺「无执行反馈的同预算改写」基线（EasyTool 用不同模型且无反馈，不能隔离反馈本身）。",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E015",
+    "son55/E011"
+   ],
+   "score_item": "E.causality",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#3"
+   ],
+   "applies_when": "声称信号有用",
+   "applicable": true,
+   "status": "met",
+   "reason": "在下游工具使用目标（CP/Win）上做并排比较，并补充检索与人工评审。",
+   "evidence_ids": [
+    "son55/E008",
+    "son55/E009",
+    "son55/E016"
+   ],
+   "score_item": "E.measurement",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#4"
+   ],
+   "applies_when": "需阐明与近邻差异",
+   "applicable": true,
+   "status": "partial",
+   "reason": "只与 EasyTool 作对比，未对提示优化/自反思文本制品改写近邻作对照。",
+   "evidence_ids": [
+    "son55/E011",
+    "son55/E023"
+   ],
+   "score_item": "G",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#5"
+   ],
+   "applies_when": "生成/过滤/反馈回路消耗额外计算",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "仅称预算受限与「节省人力」，无调用量/令牌/时间数字，也不见预算匹配。",
+   "evidence_ids": [
+    "son55/E024"
+   ],
+   "score_item": "E.cost",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same#6"
+   ],
+   "applies_when": "声称真实部署适用",
+   "applicable": true,
+   "status": "partial",
+   "reason": "使用真实 API 调用，但需有效 ID 才能探索（App E 中前几轮因无效 ID 受阻），且工具演进场景无实验。",
+   "evidence_ids": [
+    "son55/E027",
+    "son55/E028"
+   ],
+   "score_item": "X",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md S3"
+   ],
+   "applies_when": "Rewrites replace a working document.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Stop by textual stability/max rounds, not disjoint utility; no per-edit preservation gate or rollback.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E007"
+   ],
+   "score_item": "X",
+   "decision_source": "sol",
+   "aggregate_note": "Both seats unmet."
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/H10",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H10.md steps 4–5"
+   ],
+   "applies_when": "Optimizer effectiveness and generality claimed.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Diversity/stopping ablations and consumer transfer reported; full optimizer cost and matched-budget alternative absent.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004",
+    "sol/E010"
+   ],
+   "score_item": "E.cost",
+   "decision_source": "sol"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.S2"
+   ],
+   "applies_when": "多候选需评分预算分配",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "DRAFT 每轮只产生单一重写，无候选评分。",
+   "evidence_ids": [
+    "son55/E004"
+   ],
+   "score_item": "X",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.S4"
+   ],
+   "applies_when": "按机制而非单例改写",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "每轮基于单一探索样本的分析，不跨失败聚类。",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E004"
+   ],
+   "score_item": "M",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.S5"
+   ],
+   "applies_when": "提议者需原始证据",
+   "applicable": true,
+   "status": "met",
+   "reason": "Analyzer 与 Rewriter 直接看到工具原始返回、探索 query 与修订历史。",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E030"
+   ],
+   "score_item": "M",
+   "decision_source": "son55"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.F4"
+   ],
+   "applies_when": "验证信号由提议模型家族自产（失败模式；status 表示「避免该失败」是否满足）",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "改写的验收信号仅为同一 LLM 的分析与自生成探索，无外部金标；失败模式存在，但下游评测使用独立金标路径，缓解了对最终结论的影响。",
+   "evidence_ids": [
+    "son55/E012",
+    "son55/E004",
+    "son55/E020"
+   ],
+   "score_item": "E.measurement",
+   "decision_source": "son55"
+  },
+  {
+   "id": "local:2410.08197-1",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "2410.08197v2 metric definitions"
+   ],
+   "applies_when": "task metrics are path-inclusion and LLM-judge preference",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Gold path inclusion and judge preference do not independently verify all arguments/final answers; human doc audit is complementary.",
+   "evidence_ids": [
+    "sol/E005",
+    "sol/E006",
+    "sol/E008",
+    "sol/E009"
+   ],
+   "score_item": "E.measurement",
+   "decision_source": "sol",
+   "aggregate_note": "sol's measurement check kept under this ID."
+  },
+  {
+   "id": "local:2410.08197-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H10.md evidence profile: variance yes 2 of 12"
+   ],
+   "applies_when": "single-run results on small test sets",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "每格单次运行，测试集规模文中未给出（our_inference：百分比粒度提示约 57–100 条），未报告方差/区间。",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E008"
+   ],
+   "score_item": "E.statistics",
+   "decision_source": "son55"
+  },
+  {
+   "id": "local:2410.08197-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文 §2.5 自述"
+   ],
+   "applies_when": "the paper claims maintenance under tool evolution",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "主张出现在 §2.5，但无工具版本变更/过期的实验。",
+   "evidence_ids": [
+    "son55/E027"
+   ],
+   "score_item": "X",
+   "decision_source": "son55"
+  },
+  {
+   "id": "local:2410.08197-4",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H10.md#Step 5 report without test selection"
+   ],
+   "applies_when": "hyperparameters/iteration count chosen without a stated validation split",
+   "applicable": true,
+   "status": "partial",
+   "reason": "探索 query 由 Explorer 自产，与基准测试 query 分离；τ、轮数、ϕ 选择依据不明，且 Fig 6 以测试集性能随轮数分析。",
+   "evidence_ids": [
+    "son55/E031",
+    "son55/E013",
+    "son55/E006"
+   ],
+   "score_item": "E.holdout",
+   "source_id_in_seat": "local:2410.08197-1",
+   "decision_source": "son55",
+   "aggregate_note": "son55's holdout check re-IDed from its local-1 (ID collision with sol's measurement check; both 'partial', so not flagged mechanically)."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "Revised documentation (the retained artifact) is produced from synthetic exploration, frozen, and read on separate benchmark tasks by three consumer models, outperforming raw documentation. Not improver: the rewriting procedure is not itself modified.",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Author-reported, single run: GPT-4o-revised tool documentation raises CP% and judge win rate over raw docs and EasyTool-rewritten docs on RestBench-TMDB, RestBench-Spotify (no EasyTool) and ToolBench-I3 for GPT-4o, GPT-4o-mini and Llama-3-70B consumers; the iteration curve shows over-rewriting degrades performance.",
+  "unresolved": [
+   "Downstream inference strategy for DRAFT rows unspecified.",
+   "No cost accounting.",
+   "Hyperparameter selection split absent.",
+   "Tool-evolution maintenance claim untested."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete, evidenced gap (human-centric docs incomplete/redundant/inaccurate; case studies and human evaluation) and direct neighbour EasyTool (rewrite without execution feedback) compared quantitatively. Not 4: the prompt/document-optimization lineage (critique-driven rewriting of a single text artifact) is not discussed, so the residual over it is asserted.",
+   "evidence_ids": [
+    "son55/E001",
+    "son55/E011",
+    "son55/E016",
+    "sol/E001",
+    "sol/E010"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Real tool calls ground the analyzer, revision history avoids repetition, diversity constraint and adaptive stop are specified and ablated; distinguishable prediction vs EasyTool (no feedback). Not 4: single-instance analysis per round and a doc-similarity stopping proxy instead of a utility signal.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E004",
+    "son55/E005",
+    "son55/E007",
+    "sol/E002"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Algorithm 1, prompts and thresholds reconstructible; but each rewrite replaces the incumbent with no acceptance/rejection, versioning or rollback; termination by textual stability not utility; exploration can stall on invalid IDs; tool-evolution maintenance claimed but untested.",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E007",
+    "son55/E013",
+    "son55/E028",
+    "son55/E030",
+    "sol/E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "CP% checks gold tool path as subsequence (does not verify arguments/answers and can reward extra calls); Win% is an unvalidated ChatGPT judge vs ReAct; test-set sizes not stated (CP granularity implies ~57–100 items). Human doc evaluation (κ≈0.7) is complementary but not task success.",
+   "evidence_ids": [
+    "son55/E025",
+    "son55/E026",
+    "son55/E022",
+    "sol/E005",
+    "sol/E006",
+    "sol/E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Raw-doc baselines, EasyTool (no-feedback rewrite), diversity and termination ablations across 3 models × 3 datasets point the same way. Gaps: no same-budget no-feedback rewrite with the same rewriter; EasyTool absent on Spotify; the inference strategy for DRAFT rows is unspecified, so doc vs search-strategy effects are not separated; termination ablation (w/o adaptive = always 5 rounds) evaluated on the test benchmarks.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E015",
+    "son55/E011",
+    "sol/E010",
+    "opus55/E001"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "same_supported_fact"
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Documentation is revised from Explorer-synthesized queries and real API returns, never from benchmark queries, and is then evaluated on separate benchmark tasks and by other consumer models (plus a Llama-backbone doc set). Not 4: hyperparameters (τ, ϕ, max rounds) have no stated selection split and the iteration curve is read on test performance; no overlap audit; the tool-evolution claim is untested.",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E019",
+    "son55/E031",
+    "son55/E013",
+    "sol/E004",
+    "opus55/E002"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [],
+   "decision_source": "son55"
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Single run per cell, no intervals or seeds; test-set sizes not stated; ablation differences of 2–7 points correspond to a few items. Human-eval κ and consistent ablation direction reported (A2 ladder 1).",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E017",
+    "sol/E007",
+    "sol/E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Full §§3–5, Tables 1–5, App. A–E: no seeds/CI/significance for task metrics"
+   ],
+   "decision_source": "same_supported_fact"
+  },
+  "E.cost": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No exploration/analysis/rewrite call counts, tokens, time or iterations-per-tool are reported; the efficiency benefit of adaptive termination is asserted without numbers; no budget-matched comparison. The 5-round cap is a design parameter, not cost evidence.",
+   "evidence_ids": [
+    "son55/E024",
+    "opus55/E002"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Abstract, §2.4–2.5, §3 incl. Fig. 6 and Tables 1–5, App. A–E searched for cost/token/budget/API calls/iterations per tool; only 'budget constraints' wording found"
+   ],
+   "decision_source": "son55"
+  }
+ },
+ "score": {
+  "raw": 57.5,
+  "display": 57.5,
+  "lower": 57.5,
+  "upper": 57.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "weights": {
+   "G": 15,
+   "M": 20,
+   "X": 20,
+   "E.measurement": 10,
+   "E.causality": 15,
+   "E.holdout": 10,
+   "E.statistics": 5,
+   "E.cost": 5
+  },
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4; unknown items bound at 0/4 for L/U; raw=null while any unknown remains"
+ },
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "adapt_via_conditioning",
+   "son55_value": "self_supervised_signal_engineering",
+   "decision": "son55",
+   "final_value": "self_supervised_signal_engineering",
+   "reason": "The distinctive operation is manufacturing a feedback signal by self-generated exploration of real tools (diversity-filtered), which then drives adaptation of a non-weight artifact; conditioning describes only how the result is consumed. Consistent with prior rulings for prompt/program optimizers (cal-h2 2310.03714).",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E005",
+    "son55/E012"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "self_supervised_signal_engineering",
+     null
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "self_supervised_signal_engineering",
+     null
+    ]
+   ],
+   "reason": "Both cards kept with null subs (C08 retrain step and C03 upstream-reader steps not applicable); adapt_via_conditioning demoted to supporting.",
+   "evidence_ids": [
+    "son55/E019",
+    "sol/E001"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ]
+   ],
+   "son55_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ],
+    [
+     "crystallize_executable_capability",
+     "H06"
+    ]
+   ],
+   "decision": "sol",
+   "final_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ]
+   ],
+   "reason": "H06 rejected: its parent requires verified executable artifacts entering the action space; documentation is not executable and has no admission gate. son55 itself rated it 'weak, only conceptually adjacent'.",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E006"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2410.08197-2].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: single run per cell, no intervals; test sizes unstated.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E008"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2410.08197-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: §2.5 claims maintenance as tools evolve; no experiment.",
+   "evidence_ids": [
+    "son55/E027"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "son55 filed this card without RE items; raw-doc and EasyTool comparisons exist, no budget-matched control.",
+   "evidence_ids": [
+    "sol/E001",
+    "sol/E010"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Separate synthetic probes; no overlap audit.",
+   "evidence_ids": [
+    "sol/E001",
+    "sol/E004"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Three consumers, one Llama-backbone doc set on TMDB only; all API-tool domain.",
+   "evidence_ids": [
+    "son55/E019",
+    "son55/E029"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Diversity/termination ablations; no same-budget no-feedback rewrite.",
+   "evidence_ids": [
+    "son55/E014",
+    "son55/E015",
+    "son55/E011"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Side-by-side on downstream CP/Win plus retrieval and human evaluation.",
+   "evidence_ids": [
+    "son55/E008",
+    "son55/E009",
+    "son55/E016"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Delta only vs EasyTool; prompt-optimization neighbours absent.",
+   "evidence_ids": [
+    "son55/E011",
+    "son55/E023"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "No cost numbers for the loop.",
+   "evidence_ids": [
+    "son55/E024"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rs:self_supervised_signal_engineering/RE-6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Real API calls but exploration needs valid IDs; tool evolution untested.",
+   "evidence_ids": [
+    "son55/E027",
+    "son55/E028"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/F4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Rewrite acceptance relies on the same LLM's analysis; downstream evaluation uses independent gold paths, which limits the damage to the final conclusion.",
+   "evidence_ids": [
+    "son55/E012",
+    "son55/E020"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/H10].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Ablations and transfer reported; full optimizer cost and matched alternative absent.",
+   "evidence_ids": [
+    "sol/E003",
+    "sol/E004",
+    "sol/E010"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S2].status",
+   "sol_value": null,
+   "son55_value": "not_applicable",
+   "decision": "son55",
+   "final_value": "not_applicable",
+   "reason": "Single rewrite per round, no candidate scoring to check; recorded as condition N/A, no score effect.",
+   "evidence_ids": [
+    "son55/E004"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Per-round single-instance analysis.",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E004"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Raw returns, queries and history visible to analyzer/rewriter (sol records the same as a domain condition check).",
+   "evidence_ids": [
+    "son55/E003",
+    "son55/E030",
+    "sol/E001"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "The selection-on-test risk concerns the artifact: documentation is revised only from synthetic exploration queries and API returns, never benchmark queries, and transfers to other consumer models. sol's concerns (no overlap audit, no category split, hyperparameters without stated validation) are real but secondary; same fixed τ/ϕ/rounds across all datasets limits per-dataset tuning. Below 4 for those reasons.",
+   "evidence_ids": [
+    "son55/E006",
+    "son55/E019",
+    "son55/E031",
+    "sol/E004",
+    "opus55/E002"
+   ],
+   "score_impact": "+2.5 vs sol",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "ratings.E.cost",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "not_reported",
+    "rating": 0
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "not_reported",
+    "rating": 0
+   },
+   "reason": "Full search finds no quantitative cost (calls, tokens, time, rounds per tool). sol credited the 5-round cap and adaptive termination, but a design cap is not reported expenditure and the termination efficiency is asserted without numbers. Anchor 0 applies.",
+   "evidence_ids": [
+    "son55/E024",
+    "opus55/E002"
+   ],
+   "score_impact": "-1.25 vs sol",
+   "mechanical_conflict": true
+  },
+  {
+   "field_path": "expectations[local:2410.08197-1].semantics",
+   "sol_value": "partial (E.measurement)",
+   "son55_value": "partial (E.holdout)",
+   "decision": "revised",
+   "final_value": "local-1 = sol measurement check (partial); son55 holdout check → local-4 (partial)",
+   "reason": "Not flagged mechanically (both 'partial') but the two seats used local-1 for different questions; separated to keep one ID per check (A4).",
+   "evidence_ids": [
+    "sol/E005",
+    "son55/E031"
+   ],
+   "score_impact": "none",
+   "mechanical_conflict": false
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.causality.reason",
+   "shared_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "error": "Both seats omitted that the downstream inference strategy used for the DRAFT rows (ReAct vs DFSDT with revised docs) is never stated, so the gain over the ReAct/DFSDT rows is not cleanly attributable to documentation.",
+   "corrected_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "evidence_ids": [
+    "opus55/E001"
+   ],
+   "score_impact": "none (rating unchanged; rationale corrected)"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read full text incl. App. A–E before seat totals. Provisional: G2 M2–3 X2–3 Em2 Ec2 Eh2–3 Es1 Ecost0. G kept at the seats' 3 after checking that EasyTool (the only tool-doc rewriting neighbour of the period) is compared and the gap is evidenced by human evaluation; prompt-optimization lineage absence keeps it below 4.",
+  "integrity_checks": "Both seats on 2410.08197v2, material sha256 4d12b138 = manifest; hashes/rubric identical; seat hashes equal conflicts.json; all seat quotes verified; parent/child legal.",
+  "core_claim_check": "Cross-model generalization supported for three consumers; 'significantly improves' is single-run; tool-evolution claim untested.",
+  "retention_check": "Failure denominators: CP over full benchmark subsets (sizes unstated). Selection vs test: exploration queries synthetic; hyperparameters without stated validation. Extra budget: exploration/analyzer/rewriter calls unreported; EasyTool rewriter differs. 'Retained' = retained improvement because the frozen revised docs are compared to raw docs on separate tasks."
+ },
+ "input_seat_hashes": {
+  "sol": "175dea5099113c42420c8be8fb62bb9f28f6b06aad2a5c28bc514435dffd71e3",
+  "son55": "cb51d19ec95b9038c925cce45473474b4dbeb1c4693cc267006237e715eebbd6"
+ },
+ "final_record_hash": "3b3c09fdc03e67338aee95c360e7f608f2f40423c5a179471de2011a716cb52b"
+}

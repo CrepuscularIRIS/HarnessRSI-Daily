@@ -1,0 +1,204 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r04a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full v2 HTML including appendices A (action space, prompts), B (induction/reuse stats, example skills) and C (scaled-up and cross-website tasks, significance tests) read. Skill library edited from the agent's own execution feedback; non-weight; in scope as an A-class retained-capability system.",
+ "paper": {
+  "paper_key": "2504.06821",
+  "paper_id": "2504.06821",
+  "title": "Inducing Programmatic Skills for Agentic Tasks (Agent Skill Induction, ASI)",
+  "version": "2504.06821v2",
+  "claim_type": "system_method",
+  "central_claim": "Web agents can adapt online by inducing, verifying by execution, and reusing program-based skills in their action space; on WebArena this beats a static agent and a text-skill adaptive agent (AWM) by 23.5% and 11.3% relative success rate, mainly through execution-based verification during induction, and reduces steps by 10.7-15.3%."
+ },
+ "provenance": {
+  "input_hash": "a0dc10b4895b761f3c64d7b3a8c0055cd00d1ecbae6e28a9c5bb5f23f627d263",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker by the claude-kimi dispatch; model_type is the configured slot only.",
+  "timestamp": "2026-10-21T21:50:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "2504.06821",
+   "url": "https://arxiv.org/html/2504.06821v2",
+   "sha256": "5dfa72ef8d674d89b04211acb01389a875b14c31f332b866241629fc5cc6cbe3",
+   "sections_read": ["Abstract", "1 Introduction", "2 Agent Skill Induction (2.1-2.3)", "3 General Web Navigation (Tables 1-3)", "4 Scaled-Up Browsing (Table 4)", "5 Adapting Across Websites (Tables 5-6)", "6 Related Work", "7 Conclusion", "Appendix A (action space, prompts)", "Appendix B (Table 8, example skills)", "Appendix C (task lists, Tables 17-18)"],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {"evidence_id": "E001", "material_id": "2504.06821", "locator": "Sec 1, Introduction", "quote": "Verified skills are then incorporated into the agent action space and can be directly called to solve future tasks with similar procedures, as depicted in", "support_explanation": "Retention path: a verified skill program is added to the action space A_{t+1} = A_t union D_called and is directly callable on later queries.", "kind": "author_report"},
+  {"evidence_id": "E002", "material_id": "2504.06821", "locator": "Sec 2.2", "quote": "But since ground-truth rewards are unavailable, an LLM-based evaluator", "support_explanation": "No ground-truth reward or demonstrations during the online stream; an LM evaluator V_L (claude-3.5-sonnet, same backbone) judges correctness (0/1) to select episodes for induction and again as check (1) of skill verification. Its error rate is not measured.", "kind": "author_report"},
+  {"evidence_id": "E003", "material_id": "2504.06821", "locator": "Sec 2.3, Skill Verification", "quote": "If all three boxes are checked, we add the skills being called in the trajectory", "support_explanation": "Admission gate: (1) correctness of the re-executed trajectory by the LM evaluator, (2) at least one call to a new skill, (3) all skill-calling actions change the environment. Failed skills are simply not added; no repair loop, retirement or rollback.", "kind": "author_report"},
+  {"evidence_id": "E004", "material_id": "2504.06821", "locator": "Sec 2.3, Skill Verification", "quote": "Next, to avoid spurious successes in skill verification, we truncate the trajectory yielded above by removing any trailing primitive actions after the last call to a skill program.", "support_explanation": "Concrete safeguard: trailing primitive actions (e.g. send_msg_to_user with the answer) are removed so a pass cannot come from the final primitive step alone.", "kind": "author_report"},
+  {"evidence_id": "E005", "material_id": "2504.06821", "locator": "Sec 2.3, Skill Verification", "quote": "While a naive way is to query the agent with the same NL query and allow it to use newly induced skill actions, we find agents may not always use new skills due to the large search space of possible action trajectories.", "support_explanation": "Verification re-runs the same query with a rewritten skill-using prefix tau_D, so verification costs an extra environment rollout per attempted induction; the cost is not reported.", "kind": "author_report"},
+  {"evidence_id": "E006", "material_id": "2504.06821", "locator": "Sec 3.1, Benchmark and Evaluation", "quote": "This program-based evaluator enables relatively rigorous evaluation based on the functional correctness of the action trajectory.", "support_explanation": "Main metric is the official WebArena programmatic checker on 812 test examples across e-commerce, forum, GitLab, CMS and maps; a trustworthy outcome measure independent of the LM evaluator inside the loop.", "kind": "author_report"},
+  {"evidence_id": "E007", "material_id": "2504.06821", "locator": "Table 1 caption and Sec 3.2", "quote": "WebArena success rate by adaptive agents with programmatic skills, in comparison to a static vanilla agent baseline, and a text-skill learning adaptive agent.", "support_explanation": "Claude-3.5-Sonnet backbone: vanilla SR 32.7 / 5.6 steps, AWM 36.3 / 5.9, ASI 40.4 / 5.0 (absolute +7.7 and +4.1; the 23.5% and 11.3% are relative). Per site (ASI vs Claude vanilla / AWM): Shop 40.1 vs 32.6 / 34.8, Admin 44.0 vs 36.8 / 39.0, Reddit 54.7 vs 36.8 / 51.9, GitLab 32.2 vs 26.1 / 28.9, Maps 43.1 vs 38.5 / 39.4, Multi 20.8 vs 20.8 / 18.8 (tie with vanilla). The in-text step reductions are swapped relative to Table 1 (5.0 vs 5.6 is 10.7%, vs 5.9 is 15.3%). Single run, no variance, no significance test on this table.", "kind": "author_report"},
+  {"evidence_id": "E008", "material_id": "2504.06821", "locator": "Abstract", "quote": "outperforms the static baseline agent and its text-skill counterpart by 23.5% and 11.3% in success rate, mainly thanks to the programmatic verification guarantee during the induction phase.", "support_explanation": "Headline claim; the 'guarantee' rests on re-execution judged by the LM evaluator, which can pass wrong skills.", "kind": "author_report"},
+  {"evidence_id": "E009", "material_id": "2504.06821", "locator": "Sec 3.3, Verified Induction Improves End Success Rate", "quote": "), while always present skills in memory, improves end success rate by 4.2 points, indicating the importance of higher-quality induction via verification.", "support_explanation": "Table 3 (shopping, n=180, one run): unverified text 32.6; verified program in memory 36.4; verified text in memory 39.0; verified program as actions (ASI) 40.1. Verification accounts for about 6.4 points (32.6 to 39.0 holding text-in-memory); making the skills executable actions adds about 1.1 points (2 tasks). The text's 4.2-point gain is 3.8 by the table, and 32.6 equals the vanilla shopping score, not AWM's 34.8 in Table 1.", "kind": "our_inference"},
+  {"evidence_id": "E010", "material_id": "2504.06821", "locator": "Table 3 caption", "quote": "Ablation study on induction verification and format on the shopping website.", "support_explanation": "The attribution ablation covers one website only; it bundles three verification checks and does not test unverified programs as actions.", "kind": "author_report"},
+  {"evidence_id": "E011", "material_id": "2504.06821", "locator": "Sec 3.3", "quote": "produced programs pass verification for only 15.6% of the turns, whereas", "support_explanation": "ASI skills pass verification for 15.6% of induction turns versus AWM adding skills 31.4% of the time, evidence that the gate rejects most candidates; no precision check of rejected or accepted skills against ground truth.", "kind": "author_report"},
+  {"evidence_id": "E012", "material_id": "2504.06821", "locator": "Appendix B.1, Table 8", "quote": "the agent reuses at least 1 skill for 42.5% of the cases", "support_explanation": "Table 8 totals: 121 attempted inductions, 55 successful, 308 of 725 examples reuse at least one skill (42.5%); skills come from 7.6% of tasks. Direct evidence that retained skills are later invoked.", "kind": "author_report"},
+  {"evidence_id": "E013", "material_id": "2504.06821", "locator": "Sec 2.1", "quote": "specifying the tasks, and no other information such as demonstration trajectories or ground-truth rewards are available", "support_explanation": "Online adaptation protocol: induction happens on the same query stream that is scored; no disjoint practice or development set, and WebArena tasks come from templates so later queries may repeat earlier procedures. No order or seed variation reported.", "kind": "author_report"},
+  {"evidence_id": "E014", "material_id": "2504.06821", "locator": "Appendix C.3, cross-web significance", "quote": "in success rate, given the presumably greater flexibility of textual workflows,", "support_explanation": "Tables 17-18: scaled-up ASI vs AWM SR t=-2.36 p=0.023, steps p=0.007; ASI vs vanilla SR p=0.0002, steps p=0.030. Cross-website ASI vs AWM SR p=0.167 (not significant), steps p=0.038. Significance is tested only on the small curated sets, not on Table 1.", "kind": "author_report"},
+  {"evidence_id": "E015", "material_id": "2504.06821", "locator": "Sec 5, Adapting Across Websites", "quote": "For each sandbox-real website pair, we take ten information-seeking style queries", "support_explanation": "Table 6: 10 queries per real site (shopping, Reddit, Maps). SR ASI 90.0 / 76.7 / 93.3 vs AWM 80.0 / 56.7 / 100.0 vs vanilla 80.0 / 40.0 / 63.3; AWM beats ASI on Maps. Scoring method for these real-site queries is not specified.", "kind": "author_report"},
+  {"evidence_id": "E016", "material_id": "2504.06821", "locator": "Sec 4, Scaled-Up Browsing", "quote": "Therefore, we curate several case scenarios where the user asks for action-dense instructions, such as the tasks listed in", "support_explanation": "Table 4 uses a handful of hand-curated tasks per site (Tables 9-13 list 5 each); ASI scores 100.0 on Shopping and Maps vs 41.7 / 40.0 for vanilla. Checkpoint scoring who-judges is not stated.", "kind": "author_report"},
+  {"evidence_id": "E017", "material_id": "2504.06821", "locator": "Sec 3.1, Baselines", "quote": "also apply the episode cleaning procedure to enhance induction quality.", "support_explanation": "The AWM baseline is re-run with the same Claude backbone and the same episode cleaning, a fair-comparison effort; AWM's original GPT-4o figure (35.5) is also shown.", "kind": "author_report"},
+  {"evidence_id": "E018", "material_id": "2504.06821", "locator": "Sec 1, Introduction", "quote": "Nonetheless, most existing approaches represent this knowledge in text, offering limited quality and verification guarantees.", "support_explanation": "Author gap: text-form skills in memory lack verification and composability; fixed-before object is the representation and admission of skills.", "kind": "author_report"},
+  {"evidence_id": "E019", "material_id": "2504.06821", "locator": "Sec 3.3, Better Induction Quality", "quote": "we find that the textual skills often have (1) more redundant steps, (2) example-specific context", "support_explanation": "Qualitative evidence from shopping-site skill examples (Table 2): AWM text skills are redundant, example-specific, and mix separable tasks; supports the quality premise but is an illustration, not a measurement.", "kind": "author_report"},
+  {"evidence_id": "E020", "material_id": "2504.06821", "locator": "Sec 7, Conclusion", "quote": "such as the conceptually or empirically suitable granularity of skills, the stability of the online evolving process, and the skill quality in comparison to human expert desiderata.", "support_explanation": "Authors list skill granularity, stability of the online process and quality versus human skills as open issues.", "kind": "author_report"},
+  {"evidence_id": "E021", "material_id": "2504.06821", "locator": "Sec 3.1, Backbone LM", "quote": "We use the top-performing claude-3.5-sonnet model as the LM backbone for all components, including the agent policy", "support_explanation": "Single backbone for policy, evaluator and induction; no second backbone for ASI. The step count treats a skill call as one action though it executes several primitives, so step savings are partly by construction.", "kind": "author_report"}
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "Agent skill library A (callable Python programs in the web action space); baseline is the static primitive action space and AWM's text workflows in memory.",
+   "information": "Episode (query, trajectory) for a WebArena task; LM evaluator verdict (no ground-truth reward, no demonstrations); accessibility-tree observations; induction is per website.",
+   "operation": "Filter episodes by LM evaluator; clean steps and one-line thoughts; LM induces 1+ functions and rewrites the trajectory to call them; truncate trailing primitives; re-run the query with the rewritten prefix; add the called skills if correct, used and valid.",
+   "output": "New callable skill actions in the action space.",
+   "conditions": "Recurring procedures within a website; function size 2-5 steps; environment changes observable; LM evaluator reliability assumed.",
+   "feedback": "Re-execution outcome judged by the LM evaluator plus usage and environment-change checks.",
+   "selection_rule": "Admit only when correctness, skill usage and skill validity all hold (15.6% of attempted turns pass).",
+   "persistence": "Skill library carried across episodes during the online stream; skills can be updated on a new site (+update) but no retirement or versioning is described.",
+   "later_use": "Skills appear as actions in the policy's context and are called in later episodes (42.5% of examples reuse at least one).",
+   "claimed_effect": "WebArena SR 40.4 vs 36.3 (AWM) vs 32.7 (vanilla); fewer steps; larger gains on long-horizon tasks.",
+   "failure_boundary": "Skills tied to page constants or layouts become incompatible on new sites; LM judge may pass wrong skills; no repair loop; granularity and stability open.",
+   "evidence_ids": ["E001", "E002", "E003", "E004", "E011", "E012"]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "Skill representation and usage channel: executable programs in the action space versus text in memory.",
+   "information": "Same induction outputs, re-formatted.",
+   "operation": "Compare (unverified,text,memory), (verified,program,memory), (verified,text,memory), (verified,program,action).",
+   "output": "Shopping-site success rates isolating verification and format.",
+   "conditions": "Shopping site only.",
+   "feedback": "not_applicable (analysis).",
+   "selection_rule": "not_applicable",
+   "persistence": "not_applicable: ablation design",
+   "later_use": "not_applicable",
+   "claimed_effect": "Verification drives most of the gain; text suits memory, programs suit actuation.",
+   "failure_boundary": "One website, single run, 180 tasks.",
+   "evidence_ids": ["E009", "E010"]
+  }
+ ],
+ "gap": {
+  "author_gap": "Online adaptive web agents store induced knowledge as unverified text in memory (AWM), giving limited quality and no composition; offline demonstration collection is costly and mismatched.",
+  "checked_gap": "The fixed object (text skills in memory, admitted without checking) is specific, the nearest neighbour AWM is re-run under matched backbone and cleaning, and example analysis shows concrete defects. Other program-library work (LILO, TroVE-style, Voyager) is cited but not compared.",
+  "lineage": "Demonstrations-based and exploration-based skill learning -> online induction of workflows (AWM, text in memory) -> ASI: executable, verified, composable skills in the action space. Neighbours cited; AWM re-run in-paper; other neighbours not available as fixed local sources.",
+  "closest_adjacent": "AWM (Wang et al., 2024b); Voyager-style skill libraries, LILO/ReGAL-style program learning (cited only).",
+  "residue": "Skill granularity, stability of online evolution, quality versus human skills, and incompatibility under site changes.",
+  "stakes": "Efficiency and correctness on long-horizon web tasks; transfer to real sites.",
+  "method_response": "Represent skills as programs, verify by re-execution before admission, call them as actions.",
+  "remaining_gap": "Verification relies on an LM judge, no repair or retirement, single backbone, tiny transfer sets.",
+  "evidence_ids": ["E018", "E019", "E017", "E020"],
+  "unresolved": ["Comparison with other program-library methods at equal cost could not be checked from fixed local sources."]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "Step 2 machine-checkable intermediate artifact: executable skill programs, present. Step 3 close the loop with verifiable output applied during construction: re-execution with a skill-using prefix, present (judged partly by an LM evaluator). Step 4 ablate the verification step: present on one site (Table 3). Step 5 cost accounting: absent. Step 1 sound-solver boundary: the environment executes exactly but correctness is judged by an LM, so the solver is only partly sound.",
+    "success_failure_checks": "Success: typed handoff artifact (function with args and docstring), closed feedback loop, growing reusable library. Failure: verification partly self-evaluated by the same LM, cost of delegation not reported, single benchmark family.",
+    "evidence_ids": ["E001", "E003", "E009"],
+    "reason": "The load-bearing move is converting advisory text skills into executable objects whose use is verified by execution; C25 is chosen over adapt_via_conditioning (skills are not retrieved examples but actions) and over self_supervised_signal_engineering (the evaluator is a gate, not a training signal; no weights change)."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Executable-artifact verification matches C25's closed-loop with a checker; the persistence of the library across episodes is handled in the domain layer.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "crystallize_executable_capability",
+    "sub": "H06",
+    "version": "patterns/ as hashed in manifest",
+    "fit": "medium",
+    "condition_checks": ["S1 admission gate is execution not judgment: partial (execution plus LM evaluator)", "S2 admit only increments: partial (usage check, no re-derivability test)", "S3 abstraction validated beyond source instance: partial (re-run on same query, reuse stats)", "S4 repair driven by obtainable signals: unmet (no repair loop)", "S5 retained library shown to carry the gain: partial (Table 3, vanilla comparison; no library-removed control)", "H06-step1 practice source disjoint from evaluation: unmet (online stream is the test set)"],
+    "evidence_ids": ["E001", "E003", "E012", "E013"]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "patterns/ as hashed in manifest",
+    "fit": "low",
+    "condition_checks": ["admission checks present", "retirement or quarantine: unmet", "bounded library size or versioned provenance: unmet"],
+    "evidence_ids": ["E003", "E020"]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": ["H06 currently centres on self-proposed practice before demand; ASI induces from live test episodes after the fact. Consider a note under H06/H07 for episode-triggered induction with an execution-and-usage gate (single-paper case)."]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain_namespace": "rsi",
+   "domain_main": "crystallize_executable_capability",
+   "domain_sub": "H06",
+   "operation_correspondence": "Executable program skills verified by re-execution (RS artifact-and-checker) correspond to H06's execution-gated admission into the action space; the growing validated library is the shared reuse capital.",
+   "necessary_conditions_and_differences": "H06 needs a practice source disjoint from evaluation and a repair loop; ASI learns from the scored stream and has no repair. C25 needs a sound checker; here an LM evaluator is part of the check.",
+   "evidence_ids": ["E001", "E003", "E013"]
+  }
+ ],
+ "expectations": [
+  {"id": "rs:decompose_and_delegate/RE-1", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"], "applies_when": "a verification or delegation step adds compute", "applicable": true, "status": "unmet", "reason": "No token, call, or wall-clock cost for induction and the extra verification rollouts; only task step counts and induction attempt counts are given.", "evidence_ids": ["E005", "E012"], "score_item": "E.cost"},
+  {"id": "rs:decompose_and_delegate/RE-2", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"], "applies_when": "a load-bearing step is claimed", "applicable": true, "status": "partial", "reason": "A 2x2-style ablation separates verification and format, but on one site and one run, and the three checks are not separated.", "evidence_ids": ["E009", "E010"], "score_item": "E.causality"},
+  {"id": "rs:decompose_and_delegate/RE-3", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"], "applies_when": "prompt-driven pipeline", "applicable": true, "status": "met", "reason": "Prompts for evaluation, cleaning and induction and the action space are listed in Appendix A.", "evidence_ids": ["E002"], "score_item": "X"},
+  {"id": "rs:decompose_and_delegate/RE-4", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"], "applies_when": "a single benchmark family dominates", "applicable": true, "status": "partial", "reason": "WebArena plus curated long-horizon tasks and 10-query real-site transfers; one backbone and one agent framework.", "evidence_ids": ["E015", "E016", "E021"], "score_item": "E.holdout"},
+  {"id": "rs:decompose_and_delegate/RE-5", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"], "applies_when": "compared with simpler baselines and concurrent methods", "applicable": true, "status": "partial", "reason": "Static baseline and AWM (re-run on the same backbone) are included; other program-library methods are not.", "evidence_ids": ["E017"], "score_item": "G"},
+  {"id": "rs:decompose_and_delegate/RE-6", "version": "rs-15-31", "source_strength": "observed_in_reviews", "source_refs": ["research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"], "applies_when": "structure imposed on a task", "applicable": true, "status": "partial", "reason": "Qualitative skill examples show text-skill defects, and reuse statistics show skills get called, but no diagnostic links a specific sub-task failure to final success.", "evidence_ids": ["E019", "E012"], "score_item": "M"},
+  {"id": "rsi:crystallize_executable_capability/S1", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "executable skills are admitted", "applicable": true, "status": "partial", "reason": "Execution, usage and environment-change checks exist, but the correctness check is an LM judgment.", "evidence_ids": ["E002", "E003"], "score_item": "X"},
+  {"id": "rsi:crystallize_executable_capability/S4", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "failed drafts could be repaired", "applicable": true, "status": "unmet", "reason": "Failed verification drops the candidate; no traceback-driven repair.", "evidence_ids": ["E003", "E011"], "score_item": "X"},
+  {"id": "rsi:crystallize_executable_capability/S5", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "a retained library is credited with the gain", "applicable": true, "status": "partial", "reason": "Comparison with the no-skill vanilla agent and format/verification ablation exist; no run that keeps the loop but removes the stored library at test time.", "evidence_ids": ["E007", "E009"], "score_item": "E.causality"},
+  {"id": "rsi:crystallize_executable_capability/H06-step1", "version": "patterns-sub", "source_strength": "common_practice", "source_refs": ["patterns/sub/H06.md"], "applies_when": "skills are harvested from tasks later scored", "applicable": true, "status": "unmet", "reason": "Induction uses the scored WebArena stream; only the 10-query real-site transfer is outside it.", "evidence_ids": ["E013", "E015"], "score_item": "E.holdout"},
+  {"id": "rsi:crystallize_executable_capability/F4", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "reuse bounded by fixed input shape", "applicable": true, "status": "partial", "reason": "Skills embed site-specific link constants and become incompatible on different layouts; the paper reports this openly.", "evidence_ids": ["E015", "E020"], "score_item": "X"},
+  {"id": "rsi:evidence_gated_retention/S2", "version": "patterns-main", "source_strength": "common_practice", "source_refs": ["research/patterns/conditions.json"], "applies_when": "a library accumulates", "applicable": true, "status": "unmet", "reason": "Admission exists but no retirement, quarantine or size bound.", "evidence_ids": ["E003"], "score_item": "X"},
+  {"id": "local:2504.06821-1", "version": "v1", "source_strength": "common_practice", "source_refs": ["E013", "E002"], "applies_when": "an LM evaluator gates what is retained", "applicable": true, "status": "unmet", "reason": "Evaluator precision/recall against the WebArena checker is not reported although it gates both episode selection and skill admission.", "evidence_ids": ["E002", "E003"], "score_item": "E.measurement"},
+  {"id": "local:2504.06821-2", "version": "v1", "source_strength": "common_practice", "source_refs": ["E007", "E021"], "applies_when": "step counts compare agents with different action spaces", "applicable": true, "status": "partial", "reason": "A skill call counts as one step although it executes several primitives, so step reductions are partly by construction; the paper acknowledges this mechanism.", "evidence_ids": ["E007", "E021"], "score_item": "E.measurement"},
+  {"id": "local:2504.06821-3", "version": "v1", "source_strength": "common_practice", "source_refs": ["E007", "E014"], "applies_when": "online stream results depend on task order and LM sampling", "applicable": true, "status": "unmet", "reason": "Single pass, no order or seed variation, and significance tests omitted on the main Table 1.", "evidence_ids": ["E007", "E013", "E014"], "score_item": "E.statistics"}
+ ],
+ "claims": [
+  {"claim_id": "CL1", "text": "ASI beats the static agent and AWM on WebArena success rate and steps.", "setting": "Claude-3.5-Sonnet for all components, 812 tasks, online induction", "baseline_control": "vanilla BrowserGym agent; AWM re-run with Claude and cleaning", "selection_vs_test": "induction on the same query stream that is scored, no ground-truth reward; scoring by the official programmatic checker", "result_denominator": "SR 40.4 vs 36.3 vs 32.7; steps 5.0 vs 5.9 vs 5.6; one run", "evidence_ids": ["E006", "E007", "E013", "E017"], "counterevidence": ["E013"], "allowed_conclusion": "In a single online pass ASI scored about 4 points above AWM and 8 above a static agent; no variance estimate."},
+  {"claim_id": "CL2", "text": "Execution-based verification is what drives the gain; programs as actions add efficiency.", "setting": "Table 3, shopping, n=180", "baseline_control": "unverified text in memory", "selection_vs_test": "same online stream", "result_denominator": "32.6, 36.4, 39.0, 40.1", "evidence_ids": ["E009", "E010", "E011"], "counterevidence": ["E009"], "allowed_conclusion": "On shopping, verified induction accounts for most of the gain; format as actions adds about one point."},
+  {"claim_id": "CL3", "text": "ASI is more efficient and accurate on scaled-up long-horizon tasks.", "setting": "Table 4, handful of curated tasks per site", "baseline_control": "vanilla, AWM", "selection_vs_test": "not specified", "result_denominator": "5 tasks per site; t-tests p<0.05", "evidence_ids": ["E014", "E016"], "counterevidence": [], "allowed_conclusion": "Directionally supported on a small curated set."},
+  {"claim_id": "CL4", "text": "Induced skills transfer to real websites and can be updated.", "setting": "Table 6, 10 queries per site", "baseline_control": "vanilla, AWM", "selection_vs_test": "skills from WebArena sandbox, tested on real sites", "result_denominator": "ASI vs AWM SR not significant (p=0.17); AWM higher on Maps", "evidence_ids": ["E014", "E015"], "counterevidence": ["E015"], "allowed_conclusion": "Common skills partly transfer; success parity with AWM, efficiency advantage."}
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "With Claude-3.5-Sonnet, execution-verified program skills induced online from the agent's own episodes and admitted to the action space were reused in 42.5% of WebArena examples and coincided with 40.4% success versus 36.3% for a re-run AWM baseline and 32.7% for a static agent (single run, no variance); a shopping-only ablation attributes most of the gain to verification rather than to the executable format. Transfer and long-horizon claims rest on very small curated sets; the 'verification guarantee' is bounded by an LM evaluator.",
+  "unresolved": ["Run-to-run and order variance", "LM-evaluator accuracy", "Cost of induction and verification", "Library-removed control", "Second backbone"]
+ },
+ "ratings": {
+  "G": {"status": "resolved", "rating": 3, "reason": "A specific, previously fixed object (unverified text skills in memory) is identified with qualitative defect evidence, and the nearest neighbour AWM is re-run under matched backbone and cleaning; other program-library neighbours are cited but not compared and the residual limits are stated only briefly.", "evidence_ids": ["E017", "E018", "E019", "E020"], "counterevidence_ids": [], "search_scope": []},
+  "M": {"status": "resolved", "rating": 3, "reason": "Each design step (cleaning, rewritten prefix, truncation against spurious success, three admission checks) has a stated rationale and yields distinguishable predictions that Table 3 and Table 8 test; weakened because the verification rests on the same LM judge and no skill-correctness ground truth is shown.", "evidence_ids": ["E002", "E003", "E004", "E005", "E011"], "counterevidence_ids": [], "search_scope": []},
+  "X": {"status": "resolved", "rating": 3, "reason": "Full prompts, action space, gate definition and reuse path are given and reconstructable, with failure modes (page-specific constants, incompatibility) reported; no repair loop, retirement, versioning or library bound.", "evidence_ids": ["E001", "E003", "E011", "E012", "E015"], "counterevidence_ids": [], "search_scope": []},
+  "E.measurement": {"status": "resolved", "rating": 3, "reason": "The headline metric is the official WebArena programmatic checker on 812 tasks; scoring of the curated and real-site sets is unspecified, the in-loop LM evaluator is unvalidated, and step counts are not comparable across action spaces.", "evidence_ids": ["E006"], "counterevidence_ids": ["E002", "E021"], "search_scope": []},
+  "E.causality": {"status": "resolved", "rating": 2, "reason": "A verification-by-format ablation and a re-run AWM baseline give a real attribution, but it is one site, one run, bundles three checks, omits unverified programs as actions and a library-removed control, and verification adds unreported extra rollouts versus the baselines.", "evidence_ids": ["E009", "E010", "E017"], "counterevidence_ids": ["E005"], "search_scope": []},
+  "E.holdout": {"status": "resolved", "rating": 2, "reason": "No label leakage (no ground-truth rewards), but induction happens on the scored query stream of template-based tasks, and the independent test is only 10 real-site queries per domain with skills from the sandbox; no contamination analysis.", "evidence_ids": ["E013", "E015"], "counterevidence_ids": ["E013"], "search_scope": []},
+  "E.statistics": {"status": "resolved", "rating": 2, "reason": "t-tests are reported for the small scaled-up and cross-website sets (including a non-significant ASI-vs-AWM result) but not for the main 812-task comparison, which is a single online pass with no repetition, order variation or interval; small numeric inconsistencies (4.2 vs 3.8 points) remain.", "evidence_ids": ["E007", "E014", "E009"], "counterevidence_ids": [], "search_scope": []},
+  "E.cost": {"status": "resolved", "rating": 1, "reason": "Only environment step counts and induction attempt/success counts (121/55) are given; no LM calls, tokens, wall-clock, or the cost of verification rollouts, and no equal-budget comparison with AWM or vanilla.", "evidence_ids": ["E012", "E005"], "counterevidence_ids": [], "search_scope": []}
+ },
+ "score": {"raw": 65.0, "display": 65.0, "lower": 65.0, "upper": 65.0, "coverage": 1.0, "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"},
+ "rationale": "A类可执行技能库：执行验证门控清晰、AWM对照公平、Table3归因到验证；但在计分流上在线归纳、单次运行、主表无显著性、无成本核算，迁移集极小。"
+}
