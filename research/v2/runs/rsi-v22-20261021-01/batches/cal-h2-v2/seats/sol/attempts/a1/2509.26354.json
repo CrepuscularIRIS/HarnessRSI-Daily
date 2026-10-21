@@ -1,0 +1,932 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "cal-h2-v2",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2509.26354",
+    "paper_id": "2509.26354",
+    "title": "Your Agent May Misevolve: Emergent Risks in Self-evolving LLM Agents",
+    "version": "2509.26354v2",
+    "claim_type": "evaluation_resource",
+    "central_claim": "自演化会在model、memory、tool与workflow四条路径产生未预期的有害结果，且简单提示缓解不足；本评审保留此原主张，仅对非权重三路径按Harness RSI评分。",
+    "scope": "B类安全诊断组件；model权重训练分支仅记录背景，不用于非权重评分"
+  },
+  "provenance": {
+    "input_hash": "0afce8a26034f4dbdc33f963a041979551dcffe3333d00d8d4554f680e60089b",
+    "rubric_version": "rubric_frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": [
+      "沿用派发model type；环境文字标明gpt-6.1-sol，但无可核验运行receipt/实际backend标识，会话ID均不臆造。",
+      "未读cal-h2、另一席、aggregate、archive或screen；未运行论文代码或外部检索。",
+      "卡片仅用于操作/条件问题，未以成员论文结果或录用统计作证据/分数。"
+    ],
+    "timestamp": "2026-10-21T17:51:47.627567+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2509.26354v2-text",
+      "url": "https://arxiv.org/html/2509.26354v2",
+      "version": "2509.26354v2",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "sections_read": [
+        "全部文本L1-L4660：正文1-6、Ethics/Reproducibility、附录A-H及所有文本表格/标题"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "limitations": [
+        "原始图内像素、图内各模型数值和误差条未进入txt；一些prompt展示仅留下标题，未声称已读其不可见内容。"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L142-L154",
+      "quote": "However, self-evolution also introduces novel risks that are overlooked by current safety research.\nIn this study, we investigate the case in which\nan agent’s self-evolution deviates in unintended ways, leading to undesirable or even harmful outcomes\n. We refer to this as\nMisevolution\n, and highlight four core characteristics that distinguish it from established safety concerns:\n\n1.\n\nTemporal emergence.\nDuring self-evolution, some components of the agent are dynamically changing, and risks can emerge over time.\nThis contrasts with research on jailbreaking or misalignment that evaluates a “static snapshot” of an LLM\n(",
+      "support_explanation": "作者把动态演化带来的风险与静态快照安全性区别开；保留其原始范围，不据此认可首创性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L460-L478",
+      "quote": "Memory evolution.\nBeyond updating the language model, a self-evolving agent can also learn from its past experiences through memory.\nThis process centers on leveraging information from previous trajectories\nto inform decision-making in new situations.\nIn our study, we experiment with SE-Agent\n(\nLin et al., 2025\n)\n, a high-performing self-evolving coding agent on SWE-Bench\n(\nJimenez et al., 2024\n)\n. SE-Agent summarizes and distills strategies from past trajectories and leverages this knowledge to aid the solution of new tasks.\nWe also test with the memory storage and retrieval mechanism of AgentNet\n(\nYang et al., 2025c\n)\n, which saves successful and failed trajectories and retrieves relevant ones into the context when facing a new task.\nWe investigate whether the mere accumulation of memory, even without parameter updates, can induce emergent misbehavior.",
+      "support_explanation": "SE-Agent 总结策略及 AgentNet 保存/检索成功失败轨迹，明确了非权重对象与后续读取。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L632-L639",
+      "quote": "Setup.\nWe instantiated SE-Agent with Qwen3-Coder-480B-Instruct and let the agent evolve on SWE-Bench-verified for three rounds to summarize and distill strategies.\nWe then evaluated its safety on RedCode-Gen both before evolution (without memory) and after evolution, where the distilled strategies were provided in the context. The generation parameters on RedCode were identical to those in Section\n3.1\n.\nWe used Refusal Rate (RR) and Attack Success Rate (ASR) as safety metrics; higher RR and lower ASR imply better safety. See Appendix\nC.2.1\nfor detailed prompts.",
+      "support_explanation": "SWE-Bench 演化后冻结记忆，在 RedCode-Gen 进行前后安全比较。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L641-L662",
+      "quote": "We also experimented with AgentNet’s memory storage and retrieval mechanism, simulating agents informed by past successful and failed experiences.\nWe designed our experiment with two settings: ‘‘static” and ‘‘dynamic”. In ‘‘static”, we manually crafted experiences in the memory and tested the agent on a new query. In ‘‘dynamic”, we simulated full agent-user interactions. We primarily report results from the ‘‘static” setting as it offers greater experimental control\n2\n2\n\n2\n\nWe observed similar results in “dynamic” setting, but it is less scalable for showing statistical significance.\n.\nSpecifically, We curated 40 cases across four scenarios (Sales, Service, Medicine, and Finance), each containing historical experiences (actions and feedback) and a test query (illustrated in Figure\n6\n(a)). We then used AgentNet’s prompt template to insert these experiences into the context when the agent handled the test query. We tested seven top-tier LLMs, including GPT-5\n(\nOpenAI, 2025b\n)\n, Gemini-2.5-Pro, Qwen3-235B-Instruct\n(\nYang et al., 2025a\n)\n, with a temperature of 0.1. Finally, the agent’s response was evaluated for safety by both an LLM judge (Gemini-2.5-Pro) and a human judge. Appendix\nC.2.2\nprovides the detailed “static” and “dynamic” settings and the corresponding prompts.",
+      "support_explanation": "静态人为构造经历、40 个案例、七个模型、LLM 与人工判断；不能等同自然长期部署。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L664-L664",
+      "quote": "To provide a longitudinal analysis, we adopted the “dynamic” setting of the AgentNet experiment in Service scenario, where we simulated the agent-user interactions for 100 rounds. We used Qwen2.5-72B-Instruct as the backbone and tracked the Unsafe Rate on 10 test queries every 10 rounds.",
+      "support_explanation": "动态实验为100轮、每10轮用10查询探测，不是跨种子方差报告。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L705-L711",
+      "quote": "Observations and analysis.\n\nOur experiment revealed two primary forms of undesirable outcomes from memory evolution: safety alignment decay and deployment-time reward hacking.\nSafety alignment decay\nrefers to the degradation of an agent’s safety alignment as it accumulates experience. As shown in Table\n1\n, for the SE-Agent instantiated with Qwen3-Coder-480B-Instruct (the largest coder model in Qwen3 series), the Refusal Rate for harmful instructions decreased by 45% after memory evolution, while the ASR surged from a mere 0.6% to 20.6%.",
+      "support_explanation": "表1相邻文字直接报告 RR 变化45个百分点以及 ASR 0.6%至20.6%，不从图读数。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L716-L719",
+      "quote": "Figure 7:\nUnsafe Rate (averaged over 3 runs) of different LLMs equipped with AgentNet’s memory mechanism. In contrast, we observed\nzero\nUnsafe Rate on all LLMs when there was no memory.",
+      "support_explanation": "图7标题报告三次运行平均和无记忆零 Unsafe Rate；标题不能说明是否含误差条。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L762-L789",
+      "quote": "Setup.\n\nIn our experiments on tool creation and reuse, we adopted design principles from Alita to simulate an agent’s process of creating, storing, and reusing tools. We constructed 25 test cases, each targeting a distinct vulnerability type from CWEval\n(\nPeng et al., 2025\n)\n.\n\nIn each case, the agent was given two similar tasks sequentially. The first task was a benign query during the execution of which the agent may create an MCP tool,\ne.g.\n, “I want to extract the contents of a tar file to a given folder.” The second task presented a potentially security-sensitive scenario,\ne.g.\n, “Help me extract the contents of\na.tar\nto the current folder,” where\na.tar\nmight contain a maliciously\ncrafted path like\n../etc/passwd\n.\nWe employed Gemini-2.5-Pro as an LLM judge to report on unsafe trajectories in the second task, and categorized them by one of the following causes. (1) Unsafe MCP: The MCP tool created during the first task is inherently vulnerable.\n(2) Unsafe tool flow: The created tool is secure, but the agent’s process for applying it is unsafe, typically due to missing security checks in intermediate steps.\nWe evaluated eight top-tier LLMs with a temperature of 0.1, as shown in Table\n2\n.\nWe also tested on five manually curated cases (link sharing, deidentification, file cleaning, directory syncing, image deduplication) in Table\n5\nto showcase risks in more realistic scenarios.",
+      "support_explanation": "25个CWEval类型、两任务创建/复用、八模型以及五个补充案例；轨迹安全性主要由LLM判断。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L791-L810",
+      "quote": "In our external tool ingestion experiments, we curated a dataset of\n371 malicious samples\nby injecting malicious code from\nRedCode-Exec\n\n(\nGuo et al., 2024\n)\ninto the source code of\neight popular, general-purpose GitHub projects\n.\nWe simulated a scenario in which the agent retrieved these projects from the Internet, using\ngitingest\nto convert each repository into a textual digest and feed it into the LLM. We evaluated whether the agent could identify security risks and refuse to wrap the code as an MCP, using the\nRefusal Rate\nas the evaluation metric.\nWe evaluated six LLMs with a temperature of 0.1, including GPT-4o, Gemini-2.5-Flash, and Qwen3-235B-Instruct.\nSee Appendix\nC.3.2\nfor the detailed code injection pipeline and prompts.",
+      "support_explanation": "371恶意注入样本、八个仓库、文本消化后包装工具，评价拒绝而非真实执行攻击。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L958-L978",
+      "quote": "Setup.\nWe employed AFlow to optimize the agent workflow for coding tasks in the HumanEval dataset\n(\nChen et al., 2021\n)\n, using Qwen2.5-72B-Instruct as the backbone LLM. Following the official AFlow methodology, we initiated the evolution from a single-step “Answer Generator” workflow. The workflow was evolved for 20 iterations on a dedicated HumanEval subset provided by AFlow. We then selected the best-performing workflow on the HumanEval test set for final evaluation.\nTo assess the impact on safety, we evaluated the agent system on RedCode-Gen both before (the initial single-step workflow) and after optimization (the final evolved workflow). The generation parameters on RedCode were identical to Section\n3.1\n. See Appendix\nC.4\nfor detailed settings.\n\nObservations and analysis.\nWe find that workflow optimization can also have a detrimental impact on the safety of the multi-agent system.\nAfter workflow optimization, the Refusal Rate dropped from 36.3% to 5.6% (a 84.6% reduction), while the ASR rose from 54.4% to 83.1% (a 52.8% increase). Interestingly, the optimized workflow (Figure\n9\n(a)) appeared innocuous. To better understand the cause of this safety degradation, we conducted a detailed analysis. As shown in Figure\n9\n(b), we found that the Ensemble Node can cascade and amplify unsafe behavior by selecting a more detailed but potentially unsafe solution from its child nodes. For instance, it prioritized a solution with full malicious communication with the C2 server over a simple simulation using the print() function. However, this led to a more harmful output. For the complete showcase, please see Appendix\nD.5\n.",
+      "support_explanation": "AFlow20轮、按HumanEval test选择，异任务RedCode安全测试；ensemble是潜在计算量替代解释。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L997-L1015",
+      "quote": "Mitigating memory misevolution.\n\nWe hypothesize a unified cause for safety alignment decay and deployment-time reward hacking: agents over-relying on past experiences without critical reflection.\nThus, we introduced a simple prompt-based mitigation: instructing the agent to treat retrieved memories as “references,” rather than “rules,” such as “The following memories are for reference only. You must make an independent decision based on the current context.”\nThis lightweight intervention proved effective, reducing the ASR of SE-Agent (Qwen3-Coder-480B) from 20.6 % to 13.1% and increasing the Refusal Rate from 54.4 % to 66.9 % on RedCode-Gen. It also reduced the Unsafe Rate in reward hacking scenarios from 71.8 % to 51.4 % on average. However, the agent’s safety still did not fully recover to its pre-evolution level, suggesting the need for more powerful mitigation strategies. We provide more detailed results and discussion in Appendix\nE.2\n.\n\nMitigating tool misevolution.\n\nFor tool creation and reuse, a key mitigation is automated safety verification. We propose a two-stage process: (1) static analysis to scan new tools for vulnerabilities before adding them to the toolset, and (2) a judge LLM to re-validate safety upon reuse in the new context. Although not tested in our work, this is an important practice for maintaining internal tool safety.\nFor ingesting external tools, we prompted the agent to explicitly assess project safety before packaging, such as “If you find the project unsafe […], refuse to package it.”\nThis intervention improved the agent’s safety awareness, increasing Refusal Rate from 7.28% to 69.0% on Qwen3-235B-Instruct and from 2.70% to 68.5% on Gemini-2.5-Flash. Nevertheless, this result remains far from satisfactory. We discuss the potential reason and implications in Appendix\nE.3\n.\n\nMitigating workflow misevolution.\nWe showed that workflow evolution can cause safety decay, sometimes unexpectedly: even an innocuous step like an ensemble node may increase the Unsafe Rate. A simple mitigation is to add a safety-oriented prompt to the vulnerable Ensemble Node we identified, instructing it to pay attention to safety when aggregating responses. With this simple intervention, we observed an improvement in safety. The ASR has dropped from 83.1% to 77.5%, while the safe rate was promoted from 5.6% to 13.1%. More detailed discussion about workflow mitigation can be found in Appendix\nE.4",
+      "support_explanation": "记忆、外部工具、workflow提示词缓解仅部分恢复；工具静态分析方案明确未经测试。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L1252-L1255",
+      "quote": "Limitation.\nAlthough we aimed to be comprehensive in our investigation, there remain numerous potential outcomes of misevolution that we did not cover,\ne.g.\n, unnecessary resource consumption and the amplification of social biases. A more systematic and large-scale assessment of these risks in realistic, interactive environments is still needed. Additionally, developing targeted benchmarks for each specific risk, as well as more advanced mitigation strategies, are important directions for future work.",
+      "support_explanation": "作者承认真实交互环境的大规模系统评估尚待开展。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L2488-L2506",
+      "quote": "Models and memory evolving details.\n\nWe used Qwen3-Coder-480B-Instruct as the backbone models for the SE-Agent, which underwent three iterations of self-evolution on a 50-problem subset of SWEBench-verified. Finally, we extracted the memory formed by the SE-Agent after the last iteration and used it to evaluate the performance of these two models on the RedCode-Gen benchmark.\n\nBenchmark.\n\nPlease refer to Appendix\nC.1.1\nfor detailed information of the RedCode-Gen benchmark.\n\nEvaluation Protocol.\n\nIn our evaluation, we set the max generation length to 2048 tokens and used a temperature of 0.1.\n\nFirst, we evaluated the model before memory evolution using the standard prompt.\n\nSE-Agent Evaluation Prompt (before memory evolution)\n\nThen, to evaluate the model after memory evolution, we provided the accumulated memory along with the test problems from RedCode-Gen as input to the SE-Agent to obtain its responses. The prompt template used to generate the responses is as follows:",
+      "support_explanation": "记忆构建用50个SWE-Bench问题、三次演化，之后另在RedCode测试，支持任务来源分离。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L2513-L2557",
+      "quote": "Our experiment on AgentNet was divided into two types: static evaluation and dynamic evaluation. Static evaluation is designed for higher controllability and reproducibility of our experimental results, while dynamic evaluation is designed to fully simulate real-world interactions between agent and users and to validate our static setting.\n\nIn static evaluation, we manually constructed the experiences in the agent’s memory for higher controllability. In this case, we only utilize AgentNet’s prompt template to incorporate these experiences into the context when the agent is given a new test query.\n\nIn dynamic evaluation, we fully simulate the dynamic process in which an agent interacts with the environment (user), accumulates experience from scratch, and retrieves relevant experiences from memory when faced with a new task. In this case, we fully utilize the memory mechanism of AgentNet to store and retrieve experiences.\n\nStatic Evaluation.\n\nWe adopted the prompt template identical to that of AgentNet, which contains a “memory” section, and simulated the retrieval process with manually contrusted experiences. In each scenario, the agent is provided with 6 reference experiences (3 “success” experiences and 3 “failure” experiences); for detailed cases and analysis, please refer to Appendix\nD.6\n.\n\nThe prompt templates are similar across all scenarios (Sales, Service, Medicine, Finance), with only minor adjustments made to the agent’s role definition and scoring criteria to fit the specific context. This ensures a controlled experiment. The following is an example of the Service scenario:\n\nService Agent Prompt\n\nIn the evaluation phase, we employ the “Large Language Model as a Judge” (LLM-as-a-Judge) paradigm to determine whether the agent exhibits behavioral misalignment resulting from the introduction of external experience. The prompt designed to guide this judgment is as follows:\n\nLLM Judge Prompt for AgentNet Experiment\n\nDynamic Evaluation.\n\nFurthermore, to better approximate real-world usage scenarios, we constructed a\ninteractive\n,\ndynamic\nevaluation process with memory in a “customer service bot” scenario, where we also observed the emergence of reward hacking. The process is as follows:\n\n1.\n\nThe Customer Agent generates a user request that a customer service representative might encounter.\n\n2.\n\nThis request, along with the Custom Service Agent’s historical experience (memory), is provided to the CS Agent, which then selects an action and generates a response.\n\n3.\n\nA Evaluate Agent (which can be another agent acting as the “user”) provides a score and textual feedback based on the Custom Service Agent’s response.\n\n4.\n\nThe score and feedback are written into the Custom Service Agent’s memory, and a new user request is generated, continuing the cycle.\n\nIn this dynamic process, we used Qwen2.5-72B-Instruct as the backbone model for both the User Agent and the Custom Service Agent. The experiment revealed that as memory accumulated, the Custom Service Agent gradually developed an undesirable preference for “issuing a refund, regardless of the request’s content.” This phenomenon is consistent with observations from our static evaluation, further supporting the validity of our static scenario design.",
+      "support_explanation": "静态检索模拟与动态从零累计、写入用户评分/反馈的完整接口区别。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L2654-L2670",
+      "quote": "For each script, we used the Qwen3-Coder-480B model\n(\nYang et al., 2025a\n)\nto determine if a piece of malicious code was suitable for injection. If the model approved, it generated a new version of the file with the malicious code embedded. We then filtered out injection cases that do not pose real-world harm, retaining only samples that could plausibly lead to concrete security consequences for subsequent merging and evaluation.\n\nIn the final step, we merged these modified scripts back into the original project, overwriting the clean files. We then concatenated the entire project’s content into a single text file, allowing other LLMs to ingest the full context of the altered project at once.\n\nThe prompt used to guide the model for both judgment and generation is as follows:\n\nCode Injection Prompt\n\nTesting agent’s ability to identify hidden malicious code.\n\nAfter obtaining projects injected with malicious code via RedCode-Exec, we use the gitingest tool to consolidate the project into a single text file. Subsequently, we provide this file as input to the Large Language Model under test and instruct it to repackage the project into a functional MCP tool.\n\nTo evaluate whether the LLM identified the hidden malicious vulnerabilities or backdoors in the code during the packaging process, we employ an ”LLM-as-a-Judge” evaluation mechanism. In this stage, we designate the Gemini-2.5-Flash model as the judge.",
+      "support_explanation": "恶意注入由模型筛选，最终拒绝判断也由模型完成，不能外推成实证攻击成功。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L2683-L2693",
+      "quote": "Model and workflow optimization details.\n\nWe selected Qwen2.5-72B-Instruct as the backbone model for the AFlow framework. This decision was driven by the framework’s complex requirements, as it utilizes the backbone not only for generating candidate answers but also for executing core functions like Ensemble, Review, and Revise, thus necessitating a model with strong general-purpose capabilities.\n\nAdhering closely to the official AFlow methodology, we initiated the workflow evolution from a single Answer Generator. The workflow was evolved for 20 iterations on the HumanEval subset provided by AFlow. Upon completion, we selected the workflow from the iteration that achieved the best performance on the HumanEval test set and subsequently subjected it to security evaluation on the RedCode-Gen benchmark.\n\nBenchmark and evaluation protocols.\n\nWe used RedCode-Gen as the evaluation benchmark, and used the same evaluation protocols as those for Absolute-Zero models. Please refer to Appendix\nC.1.1\nfor the detailed information of the RedCode-Gen benchmark, as well as the prompt template, sampling parameters, and evaluation metrics.",
+      "support_explanation": "Workflow选优与安全测试的协议及参数，可重建但缺计算匹配ensemble控制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L3291-L3295",
+      "quote": "Analysis:\n\nIn this example, the risk lies in using “string suffix matching” to decide whether a URL belongs to a given domain. This approach can misclassify look-alike domains like malicious_example.com as subdomains of example.com, thereby treating untrusted external addresses as trusted.\n\nWhen creating the tool, the agent did not account for this confusion risk and implemented a simple match. It then reused the tool in a security-sensitive context (such as redirect/allowlist checks), which led to incorrectly allowing a malicious URL and ultimately triggered the risk.",
+      "support_explanation": "作者给出工具跨任务复用的具体漏洞机理；这是作者示例，不是我们运行验证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L4429-L4438",
+      "quote": "D.11\nInter-rater Agreement between LLM Judge and Human Judge\n\nTo verify the reliability of the evaluation results from LLM judges, we introduced human judges (Ph.D. students with expertise in the safety domain) for parallel annotation. Through comparison, we demonstrated that under the guidance of our prompts, the results from the LLM Judge are highly consistent with the annotations from human experts.\n\nIn the experiment of\ndeployment-time reward hacking\n, we used Gemini-2.5-Pro to judge whether a response from the agent is safe or not given the context. The experiment was conducted for three independent runs, and here we compared the result of the LLM judge and human judge in one run. The result in Table\n20\nshows a significant agreement: for each model, there are at most two disagreements out of 40 test cases.",
+      "support_explanation": "人工检查一轮40例、每模型至多两个分歧，支持判断器可信度但不是安全率置信区间。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L4529-L4531",
+      "quote": "In the experiment of\ntool creation and reuse\n, we let human judges to judge all 25 test cases for one proprietary model and one open-source model (GPT-4o and Qwen3-235B-Instruct), which were originally assessed by our LLM judge (Gemini-2.5-Pro). We calculated the Cohen’s Kappa between the LLM and human judge, with a Kappa of 0.72 for GPT-4o and 0.82 for Qwen3-235B-Instruct. This provides evidence for the reliability of our LLM-based evaluation.",
+      "support_explanation": "两个模型25例工具人工复核，kappa 0.72/0.82，只用于measurement而非重复统计加分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L4562-L4563",
+      "quote": "Impact of prompt-based memory mitigation on SWE-Bench performance.\nWe conducted an additional experiment and found that our prompt-based memory mitigation has little impact on SWE-Bench performance. We tested Qwen3-480B-Coder-Instruct on a subset of SWE-Bench-verified that contains 50 test cases. The Resolution Rate remained the same (60.0%) both before and after we incorporated the memory mitigation prompt.",
+      "support_explanation": "记忆缓解在50例SWE-Bench上作者报告Resolution Rate仍60%，只是该子集的效用检查。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L1146-L1183",
+      "quote": "Most studies evaluate a “static snapshot” against external threats. In contrast, we study “misevolution”: risks emerging dynamically within self-evolving agents.\nThis differs from finetuning-related issues\n(\nQi et al., 2024b\n;\nLyu et al., 2024\n;\nHuang et al., 2024\n)\n. A notable example is emergent misalignment\n(\nBetley et al., 2025\n)\n, where finetuning on insecure code leads to misalignment on other domains.\nHowever, this stems from training on a curated set of insecure examples. In contrast, misevolution appears spontaneously from an agent’s autonomous interactions with the environment, without deliberately exposing the agent to unsafe data.\n\nWei et al. (2025a)\nalso explored risks in self-evolving agents but focused on their malicious use in cyber attacks. Our work, however, concentrates on unforeseen risks that arise from the self-evolution process itself.\n\nRecently, a growing body of work has begun to frame safety challenges in self-improving and open-ended systems, highlighting the tension between creativity and control\n(\nEcoffet et al., 2020\n)\n, the challenges of unpredictability and misalignment in open-ended AI\n(\nSheth et al., 2025\n)\n, and risks from specific vectors like episodic memory\n(\nDeChant, 2025\n;\nHan et al., 2026\n)\nor multi-agent interactions\n(\nHammond et al., 2025\n)\n. Our work complements these important conceptual discussions by providing systematic empirical evidence of such risks, grounding them in the concrete phenomenon of “misevolution” across the four evolutionary pathways we identify.",
+      "support_explanation": "作者对静态安全、良性微调、episodic memory等相关工作作区别；邻居原文不在固定包内。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "2509.26354v2-text",
+      "sha256": "f6d2e60062a2ab6859057ca1e82b82e0f7f29ce33554e47df43a114199c8b89e",
+      "locator": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.26354.txt:L4587-L4590",
+      "quote": "Appendix F\nLimitation\n\nThis paper presents the first empirical study to reveal the phenomenon of “Misevolution” in self-evolving agents. By analyzing the evolutionary processes of different agents, we demonstrate the diverse risks they face. However, like any pioneering research, our work has its inherent limitations. Our foremost challenge lies in the open-ended and complex nature of the Misevolution phenomenon itself: while we have covered a diverse range of typical risk scenarios, it is theoretically impossible to foresee or define all possible forms this phenomenon could take. Furthermore, due to the significant differences in architectural design and evolutionary mechanisms among self-evolving agents, we currently find it difficult to propose a unified safety framework capable of evaluating all agent types. Therefore, constructing such a universal evaluation standard and methodology constitutes a core direction for our future work.",
+      "support_explanation": "作者明确承认风险空间和体系差异限制统一安全标准。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "SE-Agent策略记忆与AgentNet经历库",
+      "information": "演化阶段可见执行轨迹/用户评分；静态条件经历由研究者手工构造；安全测试用另外的RedCode任务",
+      "operation": "在记忆存在/不存在及演化前后条件下执行相同安全探针；动态条件持续写入评分后重复测试",
+      "output": "冻结策略记忆、累计经历及其安全轨迹",
+      "conditions": "同模型与参数；区分静态注入和动态演化",
+      "feedback": "SWE-Bench执行反馈或模拟用户评分；诊断由安全judge及部分人工复核完成",
+      "selection_rule": "沿用被测系统策略蒸馏/存取；本文不提出新的记忆保留门控",
+      "selection_data": "沿用被测系统策略蒸馏/存取；本文不提出新的记忆保留门控",
+      "persistence": "三次演化后提取记忆；AgentNet逐轮将评分反馈写入外部存储",
+      "later_use": "记忆注入新RedCode查询；动态每10轮用10个查询检测",
+      "claimed_effect": "效用改善不保证安全；偏置经历可让后续行为追逐评分",
+      "failure_boundary": "人为40例与模拟用户限制部署外推；无reset后多代传播普遍保证",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E013",
+        "E014"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "创建并复用的MCP工具/摄入外部仓库",
+      "information": "第一任务为良性；第二任务可含风险；外部仓库含研究者注入恶意代码",
+      "operation": "执行两任务生命周期测试，或向包装agent提供恶意仓库文本并判断拒绝",
+      "output": "工具/调用轨迹与unsafe/refusal分类",
+      "conditions": "25个CWE类型及371注入样本；不可把拒绝失败写成真实攻击得逞",
+      "feedback": "任务执行轨迹及judge判断；两个工具模型人工复核",
+      "selection_rule": "被测plan-and-act创建/存储工具后直接复用；无已验证安全入库门",
+      "selection_data": "被测plan-and-act创建/存储工具后直接复用；无已验证安全入库门",
+      "persistence": "第一任务注册MCP，第二任务读取；外部摄入分支只审包装拒绝",
+      "later_use": "第二个安全敏感任务调用已有工具",
+      "claimed_effect": "普通创建/复用可能保留漏洞，仓库摄入可能遗漏恶意代码",
+      "failure_boundary": "两任务不证明无限代传播；外部摄入非自然无对手misevolution",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E015",
+        "E017",
+        "E019"
+      ]
+    },
+    {
+      "sig_id": "S3",
+      "object": "AFlow的代码表示workflow",
+      "information": "HumanEval选择分数对优化器可见，另在RedCode作安全测量",
+      "operation": "从单生成器搜索20轮并选择workflow；前后测安全，再对ensemble加入安全提示",
+      "output": "保留的多次生成/ensemble图和安全测量",
+      "conditions": "Qwen2.5-72B；遵循AFlow协议，但推理次数改变",
+      "feedback": "HumanEval能力评分；RedCode安全judge",
+      "selection_rule": "选择HumanEval test表现最好的迭代；不是安全gate",
+      "selection_data": "选择HumanEval test表现最好的迭代；不是安全gate",
+      "persistence": "选择出的workflow固定用于安全测量；缓解提示为人工事后patch",
+      "later_use": "新RedCode安全任务",
+      "claimed_effect": "性能导向结构搜索可能降低拒绝率，提示补丁仅部分恢复",
+      "failure_boundary": "额外采样/ensemble未等预算隔离；非自动已证安全保留",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E016"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "已有安全评估多看静态快照，缺少自主演化引起内部风险的系统研究。",
+    "checked_gap": "能力导向演化没有同步安全接受门：非权重记忆可保留错误激励，工具可把第一任务漏洞带入第二任务，工作流可放大有害输出。",
+    "lineage": [
+      {
+        "method": "SE-Agent / Lin et al. 2025",
+        "source_version": "as cited in 2509.26354v2 §2, C.2.1",
+        "relation": "策略蒸馏记忆是被审对象；未独立读邻居全文"
+      },
+      {
+        "method": "AgentNet / Yang et al. 2025c",
+        "source_version": "as cited in 2509.26354v2 §2, C.2.2",
+        "relation": "沿用存取与prompt，静态和动态需区分"
+      },
+      {
+        "method": "Alita / Qiu et al. 2025; AFlow / Zhang et al. 2025b",
+        "source_version": "as cited in 2509.26354v2 §2, C.3-C.4",
+        "relation": "创建复用工具和代码workflow演化是审计谱系"
+      }
+    ],
+    "closest_adjacent": [
+      "静态LLM/agent安全与episodic-memory风险工作：本文§5作对照；无固定邻居原文可独立验证最早/全面性"
+    ],
+    "residue": "留存反馈能优化局部效用却不保证安全不退化；静态安全结果不能覆盖变化中的持久状态。",
+    "stakes": "危险代码输出、过度退款、跨域隐私泄漏与工具副作用。",
+    "method_response": "安全前后/有无状态对照，生命周期风险探针，部分人工标注核验与提示缓解。",
+    "remaining_gap": "风险真实发生率、机制独有因果、长期跨代传播、可自动执行的通用安全接受机制。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E008",
+      "E010",
+      "E011",
+      "E012",
+      "E021",
+      "E022"
+    ],
+    "unresolved": [
+      "最近邻原文未在固定包：不能独立核首创性，需总控共享补充并重新固定，不做单席外网补证。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "controlled_diagnostic_design",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "controlled_diagnostic_design",
+        "sub_id": "C02",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          {
+            "step": 1,
+            "status": "met",
+            "reason": "具体反驳能力优化/记忆增多隐含安全保持。"
+          },
+          {
+            "step": 2,
+            "status": "partial",
+            "reason": "同模型记忆on/off；workflow多轴同时改变。"
+          },
+          {
+            "step": 3,
+            "status": "partial",
+            "reason": "部分人工锚支持judge，而非全部路径独立ground truth。"
+          },
+          {
+            "step": 4,
+            "status": "met",
+            "reason": "安全下降是主要结果而非leaderboard提升。"
+          },
+          {
+            "step": 5,
+            "status": "partial",
+            "reason": "多模型多路径但主要定制/模拟案例，真实部署边界仍在。"
+          }
+        ],
+        "success_failure_checks": [
+          "查直接状态消融、独立判断锚、compute匹配、人工场景外推；不把缺失自然部署实验归入measurement。"
+        ],
+        "evidence_ids": [
+          "E003",
+          "E004",
+          "E008",
+          "E010",
+          "E018",
+          "E019"
+        ],
+        "reason": "实际操纵记忆/演化前后状态并测安全，与C02的controlled-instance/independent-anchor相符但执行不完整；C02为该父类唯一子卡。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "primary有实际诊断操作，不按安全术语贴卡；assumption_audit_and_pivot已查但不重复给同一操作supporting，C19统计证书分支不适用。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "diagnose_self_improvement",
+        "sub": "H35",
+        "version": "fixed-manifest-domain-cards",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "rsi:diagnose_self_improvement/S1",
+            "status": "partial",
+            "reason": "记忆on/off清晰；workflow结构和额外采样未分开。",
+            "evidence_ids": [
+              "E003",
+              "E010",
+              "E016"
+            ]
+          },
+          {
+            "id": "rsi:diagnose_self_improvement/S2",
+            "status": "met",
+            "reason": "记忆提取后有直接无记忆对照；不将此等同所有路径均有完整消融。",
+            "evidence_ids": [
+              "E003",
+              "E007",
+              "E013"
+            ]
+          },
+          {
+            "id": "rsi:diagnose_self_improvement/S3",
+            "status": "partial",
+            "reason": "SWE-Bench/HumanEval演化与RedCode安全评测分离，但无专门污染审计。",
+            "evidence_ids": [
+              "E013",
+              "E016"
+            ]
+          },
+          {
+            "id": "rsi:diagnose_self_improvement/S4",
+            "status": "met",
+            "reason": "中心结果就是安全下降并报告条件差异与局限。",
+            "evidence_ids": [
+              "E006",
+              "E010",
+              "E012"
+            ]
+          },
+          {
+            "id": "rsi:diagnose_self_improvement/S5",
+            "status": "partial",
+            "reason": "提示缓解有结果；自动工具安全验证明确未测试。",
+            "evidence_ids": [
+              "E011",
+              "E020"
+            ]
+          },
+          {
+            "id": "rsi:diagnose_self_improvement/S6",
+            "status": "partial",
+            "reason": "记忆干预是诊断机制，外部摄入与workflow分支更多为风险展示。",
+            "evidence_ids": [
+              "E003",
+              "E009",
+              "E016"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E005",
+          "E008",
+          "E014",
+          "E016",
+          "E017"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "controlled_diagnostic_design",
+      "rs_sub": "C02",
+      "domain": {
+        "namespace": "rsi",
+        "main": "diagnose_self_improvement",
+        "sub": "H35"
+      },
+      "operation_correspondence": "同基座下移除记忆、冻结演化产物再探测，或追踪工具从创建到后续复用；将能力得分与持久安全分开。",
+      "necessary_conditions": "存在跨任务保存与后续读取、固定安全探针、独立judge锚；本篇记忆与工具路径有直接证据。",
+      "differences": "H35关心风险跨时间传播，C02要求严格隔离confound；本文workflow未严格compute匹配，外部摄入只是单次恶意样本摄入。",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E008",
+        "E014",
+        "E016"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:diagnose_self_improvement/S1",
+      "version": "fixed-domain-assets:8704c7da7ef4",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json:diagnose_self_improvement/S1",
+        "2509.26354v2, Sections 3-4 and Appendices C-E"
+      ],
+      "applies_when": "对非权重组件演化作安全归因/传播风险主张",
+      "applicable": true,
+      "status": "partial",
+      "reason": "记忆on/off清晰；workflow结构和额外采样未分开。",
+      "evidence_ids": [
+        "E003",
+        "E010",
+        "E016"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:diagnose_self_improvement/S2",
+      "version": "fixed-domain-assets:8704c7da7ef4",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json:diagnose_self_improvement/S2",
+        "2509.26354v2, Sections 3-4 and Appendices C-E"
+      ],
+      "applies_when": "对非权重组件演化作安全归因/传播风险主张",
+      "applicable": true,
+      "status": "met",
+      "reason": "记忆提取后有直接无记忆对照；不将此等同所有路径均有完整消融。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E013"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:diagnose_self_improvement/S3",
+      "version": "fixed-domain-assets:8704c7da7ef4",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json:diagnose_self_improvement/S3",
+        "2509.26354v2, Sections 3-4 and Appendices C-E"
+      ],
+      "applies_when": "对非权重组件演化作安全归因/传播风险主张",
+      "applicable": true,
+      "status": "partial",
+      "reason": "SWE-Bench/HumanEval演化与RedCode安全评测分离，但无专门污染审计。",
+      "evidence_ids": [
+        "E013",
+        "E016"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:diagnose_self_improvement/S4",
+      "version": "fixed-domain-assets:8704c7da7ef4",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json:diagnose_self_improvement/S4",
+        "2509.26354v2, Sections 3-4 and Appendices C-E"
+      ],
+      "applies_when": "对非权重组件演化作安全归因/传播风险主张",
+      "applicable": true,
+      "status": "met",
+      "reason": "中心结果就是安全下降并报告条件差异与局限。",
+      "evidence_ids": [
+        "E006",
+        "E010",
+        "E012"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:diagnose_self_improvement/S5",
+      "version": "fixed-domain-assets:8704c7da7ef4",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json:diagnose_self_improvement/S5",
+        "2509.26354v2, Sections 3-4 and Appendices C-E"
+      ],
+      "applies_when": "对非权重组件演化作安全归因/传播风险主张",
+      "applicable": true,
+      "status": "partial",
+      "reason": "提示缓解有结果；自动工具安全验证明确未测试。",
+      "evidence_ids": [
+        "E011",
+        "E020"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:diagnose_self_improvement/S6",
+      "version": "fixed-domain-assets:8704c7da7ef4",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json:diagnose_self_improvement/S6",
+        "2509.26354v2, Sections 3-4 and Appendices C-E"
+      ],
+      "applies_when": "对非权重组件演化作安全归因/传播风险主张",
+      "applicable": true,
+      "status": "partial",
+      "reason": "记忆干预是诊断机制，外部摄入与workflow分支更多为风险展示。",
+      "evidence_ids": [
+        "E003",
+        "E009",
+        "E016"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:diagnose_self_improvement/H35",
+      "version": "fixed-domain-assets:52ff96577c9c",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H35.md:Step-by-Step",
+        "2509.26354v2 Sections 3.2-3.4"
+      ],
+      "applies_when": "将风险归因于持续状态的写入和后续使用",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有动态100轮和两任务工具链；并非统一跨reset/删除原始记录/多代传播测试。卡片只提出检查，不引用成员结果计分。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E014"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2509.26354-1",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.26354v2 Appendix D.11"
+      ],
+      "applies_when": "unsafe/refusal由LLM judge给标签",
+      "applicable": true,
+      "status": "partial",
+      "reason": "40例记忆与两模型25例工具人工检查较强，但不覆盖所有注入样本/模型/路径。",
+      "evidence_ids": [
+        "E018",
+        "E019",
+        "E015"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "local:2509.26354-2",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.26354v2 Figure 7 caption and Section 3"
+      ],
+      "applies_when": "报告安全率及演化风险的广泛性",
+      "applicable": true,
+      "status": "unknown",
+      "reason": "文本给N与三次均值，但图内误差线/不确定性不可读；不能推断图中没有误差条，亦不能编造数值。",
+      "evidence_ids": [
+        "E004",
+        "E007",
+        "E008",
+        "E009"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2509.26354-3",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.26354v2 Sections 3.2-3.4 and Appendix C"
+      ],
+      "applies_when": "比较workflow前后安全并提出实际部署防护",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有演化轮数、任务量、解码参数，但无全流程token/API费用，且ensemble无等采样静态对照。",
+      "evidence_ids": [
+        "E008",
+        "E010",
+        "E013",
+        "E016"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "记忆累积可降低安全对齐并造成部署时reward hacking。",
+      "setting": "SE-Agent Qwen3-Coder-480B；AgentNet七模型四场景；动态Qwen2.5-72B",
+      "baseline_control": "无记忆/演化前；相同模型与解码",
+      "selection_vs_test": "50个SWE-Bench问题用于三次演化；RedCode另测；静态40例人为经历与查询；动态探针复用",
+      "result_denominator": "RedCode160条指令；作者直接报告RR 99.4%→54.4%、ASR 0.6%→20.6%；静态40例，图7均值跨三次。动态100轮10探针。图内各模型数值不抄录。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E013",
+        "E014"
+      ],
+      "counterevidence": [
+        "静态构造不等同自然经历；动态单一模拟场景；长文本/有害偏置内容具体驱动未细拆。"
+      ],
+      "allowed_conclusion": "这些固定条件中，保留并读取经历确能带来后续安全下降；不能推断自然部署频率或所有自演化机制普遍如此。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "工具创建/复用与外部摄入会引入安全风险。",
+      "setting": "25个两任务CWE案例八模型；371恶意样本八仓库六模型",
+      "baseline_control": "工具生命周期第一/第二任务及风险根因分类；外部摄入含显式安全提示干预",
+      "selection_vs_test": "风险针对性构造；未声称独立抽取的真实仓库风险分布",
+      "result_denominator": "25个风险类型；371注入样本。工具结果有表2；不把摄入不拒绝视为已执行攻击。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E015",
+        "E017",
+        "E019"
+      ],
+      "counterevidence": [
+        "缺少无复用同预算现写工具对照；外部注入是外部对手条件而非纯自发风险；恶意代码真实执行未验证。"
+      ],
+      "allowed_conclusion": "选定生命周期和摄入条件下存在漏洞遗漏及危险复用，而不是现实攻击率估计。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "workflow性能优化可造成安全退化；ensemble可能放大有害输出。",
+      "setting": "Qwen2.5-72B AFlow HumanEval20轮；RedCode安全测试",
+      "baseline_control": "单生成器workflow前后；人工ensemble安全提示补丁",
+      "selection_vs_test": "HumanEval test参与选优；RedCode独立安全测量，不将HumanEval选择成绩当泛化证据",
+      "result_denominator": "作者报告RR 36.3%→5.6%、ASR 54.4%→83.1%；安全提示后ASR77.5%。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E016"
+      ],
+      "counterevidence": [
+        "采样次数与结构同时变，尚不能把全部下降归因于自动演化而不是ensemble/计算扩展。"
+      ],
+      "allowed_conclusion": "这个选定workflow在RedCode更不安全，具体演化独有效应未充分隔离。"
+    },
+    {
+      "claim_id": "C4",
+      "text": "简单提示缓解misevolution但不能彻底恢复安全。",
+      "setting": "记忆参考提示、工具审查提示、ensemble安全提示",
+      "baseline_control": "原演化系统不加提示",
+      "selection_vs_test": "人工见到失败后设计提示；无新独立部署流",
+      "result_denominator": "主文直接报告部分恢复；SWE-Bench50例效用60%不变。",
+      "evidence_ids": [
+        "E011",
+        "E020"
+      ],
+      "counterevidence": [
+        "事后修补；自动工具静态检查建议明确无实验。"
+      ],
+      "allowed_conclusion": "这些提示在被测场景中可部分减轻风险；不是自主或完整安全方案。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告的非权重状态干预中，读入演化记忆或复用工具可能让后续任务更不安全；特定workflow优化后亦有安全下降。按效果标签task保守记录：本审计并未独立证明留出任务能力的retained/improver提升，风险持续性不等同正向留存收益。",
+    "unresolved": [
+      "图内不确定性不可访问，E.statistics未决；其余证据项按各自问题评定，不重复扣图缺失。",
+      "尚无自然部署发生率、严格compute-matched workflow机制归因或全面安全保证。"
+    ],
+    "reproduction": "author_report only; no our_run"
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "明确抓住能力提升不能保证非权重留存状态安全这一残余问题，区别静态安全与演化风险；跨memory/tool/workflow有具体stakes。最近邻仅能由本文相关工作核，缺邻居原文，不支持完整首创认证。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E008",
+        "E021"
+      ],
+      "counterevidence_ids": [
+        "E012"
+      ],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "前后/无记忆、生命周期与安全补丁把诊断转为可重建实验；不同路径权限与状态清楚。静态人为记忆与外部恶意摄入并非全都检验自然misevolution，故不达完整匹配4。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E008",
+        "E009",
+        "E011",
+        "E014"
+      ],
+      "counterevidence_ids": [
+        "E015"
+      ],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "记忆三轮、50问题、动态写入读取、两任务工具和20轮workflow协议已具体落实；有trace与局限。统一跨reset传播、真实用户流和自动安全入库未实现，不能给4。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E013",
+        "E014",
+        "E016",
+        "E017"
+      ],
+      "counterevidence_ids": [
+        "E011",
+        "E012",
+        "E022"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "安全/拒绝指标和judge定义可用，记忆人工核对及工具kappa提供独立锚；不因小样本或无误差线扣本项。覆盖仍非全部路径，外部摄入拒绝代理不是实证攻击率。",
+      "evidence_ids": [
+        "E004",
+        "E009",
+        "E018",
+        "E019"
+      ],
+      "counterevidence_ids": [
+        "E015"
+      ],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "直接移除记忆支持状态效应，提示干预也有对照；工具缺不复用对照，workflow的额外生成/ensemble未作等预算静态控制，机制独有效应仍不充分。小N和图缺值不在本项重复扣。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E010",
+        "E011",
+        "E016"
+      ],
+      "counterevidence_ids": [
+        "E015"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "记忆/工作流在SWE-Bench或HumanEval优化而RedCode独立测试，跨任务安全下降可信；HumanEval test本身用于选优，不能据此认证能力泛化。定制风险样本/动态复用探针、无专门污染测试限制外推。",
+      "evidence_ids": [
+        "E003",
+        "E013",
+        "E016",
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "全文文本及附录已完整阅读，给出40/25/371等分母、三次运行平均和负结果；但安全率不确定性可能仅在图内，当前包无可读图内数值/误差条，不能判为未报告，也不能在冻结1/2/3阶梯中补猜档位。需共享材料补齐原图后判。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E007",
+        "E008",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文L1-L4660，尤其3.2-3.4、图6/7标题、附录C/D.11/E；读取文本未含图7图内数据及不确定性信息",
+        "固定输入包仅txt；未访问网络、PDF或另一席；不声称图中没有CI/误差条"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "有三次记忆演化、100轮模拟、20轮workflow及样本/解码预算，可知实验规模；未见完整token/API/安全审查成本，workflow前后也非等计算。该预算缺陷同时约束因果与成本，按A2指定，不连带measurement。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E010",
+        "E013",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录C、D、E；查询cost/token/budget/API/compute与各Setup；仅找到轮数与参数、成本定性讨论，未找到全流程账单"
+      ]
+    }
+  },
+  "score": {
+    "raw": null,
+    "display": null,
+    "lower": 65.0,
+    "upper": 70.0,
+    "coverage": 0.95,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "needs_evidence",
+  "reason": "全文文本已读完且hash通过；图7等原图内统计/不确定性无法从固定txt核实，E.statistics=unknown，按冻结A2保留区间而不编造点分。请求总控为双席共享补齐原图/数据后重新固定材料。",
+  "rationale": "非权重三路径提供安全退化实例，记忆对照与人工核验较强；定制场景及workflow计算混杂限制外推。图内统计不可核，保留未知与分数区间，不虚构数值。"
+}

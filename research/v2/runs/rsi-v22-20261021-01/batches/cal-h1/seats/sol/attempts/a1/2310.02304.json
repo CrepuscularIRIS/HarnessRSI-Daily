@@ -1,0 +1,1027 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "cal-h1",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2310.02304",
+    "title": "Self-Taught Optimizer (STOP): Recursively Self-Improving Code Generation",
+    "version": "2310.02304v3",
+    "paper_id": "2310.02304",
+    "claim_type": "system_method",
+    "scope_type": "A",
+    "central_claim": "用固定黑盒LM和下游产品效用，让代码优化scaffold递归应用到自身；改进后的improver能生成优于原种子的后续程序，跨少量任务迁移，并观察到不安全自修改建议。作者明确不宣称LM权重变化或完全RSI。"
+  },
+  "provenance": {
+    "input_hash": "a17da5718daa26df2a9a8c905c3e9e88d8e6308454a02d4755f0c65f305f8d6d",
+    "rubric_version": "v2.2 draft_uncalibrated",
+    "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T17:20:27.435455+00:00",
+    "notes": [
+      "同一sol/a1续接；不读取另一席、aggregate、旧评分或POET完成记录。",
+      "没有独立可核验模型/会话回执，actual_model/session_id/receipt_ref=null；不探测模型。",
+      "全文的venue页眉及模式卡中的outcome分组未用作评分证据。",
+      "没有运行论文代码、联网补材或虚称复现；所有实验结果为作者报告。"
+    ]
+  },
+  "materials": [
+    {
+      "material_id": "stop-v3",
+      "url": "https://arxiv.org/pdf/2310.02304v3",
+      "version": "2310.02304v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "text_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2310.02304.txt",
+      "sections_read": [
+        "Abstract; §§1–8; Ethics Statement; all references",
+        "Appendix A.1–A.3 including proofs and maximizer formulation",
+        "Appendix B.1–B.9 including every complete code example",
+        "Appendices C–I including utilities, seed algorithms, selected transfer improver and sandbox changes",
+        "Appendices J–N including implementation-description differences, cost, novelty and impact"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "reading_notes": "4114原始文本行全部顺序阅读；前一上下文读1–500，本次读501–4114，并重核1–500。没有依赖图曲线猜数：Figure4只用图注和正文；公式抽取有排版错位，未声称独立复核证明。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Abstract; text lines 19-30",
+      "quote": "Several recent advances in AI systems solve problems by providing a “scaffolding” program that structures multiple calls to language models (LMs) to\ngenerate better outputs. A scaffolding program is written in a programming\nlanguage such as Python. In this work, we use a language-model-infused\nscaffolding program to improve itself. We start with a seed “improver” that\nimproves an input program according to a given utility function by querying an LM several times and returning the best solution. We then run this\nseed improver to improve itself. Across a small set of downstream tasks, the\nresulting improved improver generates programs with significantly better\nperformance than its seed improver. A variety of self-improvement strategies are proposed by the language model, including beam search, genetic algorithms, and simulated annealing. Since the language models themselves\nare not altered, this is not full recursive self-improvement. Nonetheless, it\ndemonstrates that a modern language model, GPT-4 in our experiments,\nis capable of writing code that can call itself to improve itself. We consider concerns around the development of self-improving technologies and\nevaluate the frequency with which the generated code bypasses a sandbox.",
+      "support_explanation": "作者原始中心主张、非权重自应用与sandbox分支；不是本席复现。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Figure 2; text lines 100-112",
+      "quote": "n_messages = min ( language_model . max_responses_per_call , utility . budget )\n19\nnew_solutions = language_model . batch_prompt ( expertise , [ message ] * n_messages , temperature =0.7)\n20\nnew_solutions = extract_code ( new_solutions )\n21\nbest_solution = max ( new_solutions , key = utility )\n22\nreturn best_solution\n\nFigure 2: Our seed improver. Our seed improvement program simply prompts an LM\nto generate candidate improvements to an initial solution to a task and returns the best\nsolution given a utility function. STOP (Algorithm 1) improves the improver with itself.",
+      "support_explanation": "原种子只做一次批量候选生成和utility最大值选择；未显示把原种子作为保底候选。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§2; text lines 194-226",
+      "quote": "Search-Predict (DSP) (Khattab et al., 2022), Language Model Cascades (Dohan et al., 2022),\nor Cognitive Architectures (Sumers et al., 2023). Each work can be viewed as the result of\nresearchers asking, “Given an imperfect LM, how can we provide structure to help it solve\nproblems?” We instead ask if LMs can design that structure and improve it using itself.\nSurprisingly, GPT-4 proposes scaffolding techniques introduced after its training cutoff.\nLanguage Models as Prompt Engineers. Work has also explored LMs’ ability to optimize\nprompts, such as the Automatic Prompt Engineer (APE) (Zhou et al., 2022b) or, recently,\nOPRO (Yang et al., 2023) and Promptbreeder (Fernando et al., 2023). Note that, for these, the\ngoal has consistently been to scaffold the LM to produce a prompt but not to scaffold it to produce a better scaffolding (beyond prompting-only scaffolds like zero-shot chain-of-thought),\nnor to produce a recursively applicable scaffolding. In other words, these works can be\nunderstood as proposing particular scaffolds for prompt engineering but not for scaffold proposal. But, we share the inspiration of LMs improving their reasoning without fine-tuning.\nLanguage Model Self-Improvement. Prior work, such as STaR (Zelikman et al., 2022),\ndemonstrated that LMs can learn to solve harder problems by learning from their reasoning\nchains by filtering based on incorrect answers (as well as Huang et al. 2022, which explored\nthe specific case where a majority vote is used as the filter and Uesato et al. 2022, which\nemphasized the value of checking the accuracy of the reasoning itself). Inspired by self-play\nin games, Haluptzok et al. (2023) designed a self-improvement framework for code\ngeneration where an LM generates novel problems for fine-tuning itself. Related work\nhas explored teaching LMs to debug or optimize code (Chen et al., 2023b; Shypula et al.,\n2023). However, our approach is orthogonal to these, as we do not leverage fine-tuning\nand instead focus on a model’s ability to improve code that allows it to solve problems.\nOther related works are Voyager (Wang et al., 2023), showing that an LM can optimize\nthe programs available to an embodied agent to improve exploration in the video game\nMinecraft, and its contemporaneous work Language Models as Tool Makers (Cai et al., 2023).\nRecursive Self-Improvement (RSI). RSI was suggested by Minsky (1966) and Good (1966),\nas cited by Yampolskiy (2015). Schmidhuber (2003) first provided a rigorous formalization,\nwherein a problem solver would leverage itself to solve iteratively harder problems by\nmaking provable improvements to itself. Some of these principles are also highlighted in\nSchmidhuber (1987). Unlike this work, we do not attempt to prove that scaffold improvements made by the model are optimal. As mentioned, RSI code generation differs from\nfull RSI because only the scaffolding is improved. Additionally, many previous analyses\ninvolved selecting programs at random (i.e., “monkeys at typewriters”) or enumeration\nwith no dependence on the goal to be improved (Levin, 1973). In contrast, using LMs, we\ncan describe the underlying goal in a prompt (which itself may be improved). Intuitively,",
+      "support_explanation": "作者对固定scaffold、prompt优化、工具库和可证明RSI的谱系区分；原邻文未全部独立核验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Algorithm 1; text lines 231-248",
+      "quote": "Algorithm 1: Self-Taught Optimizer (STOP)\nInput: Seed improver I0 , language model L, recursion depth T, downstream tasks D\nOutput: An improved improver IT\nfor t = 1 to T do\nIt ← It−1 (û, It−1 , L)\n// Update improver based on meta-utility û\nreturn IT\n// Return the final improver\nFunction ũ(I):\nutility sum ← 0\n// Maintain sum of downstream task utilities\nfor (u, S) ∈ D do\nS′ ← I (u, S, L)\n// Improve initial solution S using improver I\nutility sum += u(S′ )\n// Add new utility\n// Return expected utility\nreturn utility sum/| D |",
+      "support_explanation": "持久化的是下一轮实际调用的improver源码I_t；下游产品效用定义meta-utility。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§3; text lines 290-300",
+      "quote": "The above equations define ūfunc and ûfunc . For their description string, we use a common\n“grey-box” description ūstr = ûstr which is a description (e.g., source code) indicating that\nthe utility is the expectation over a set of downstream tasks, but the individual downstream\ntasks themselves are not included in the description. This enables one to optimize over\nû as an approximation to the actual objective ū. In addition, the theoretical analysis in\nAppendix A provides simple conditions under which optimizing û also nearly optimizes\nū, and formalizes resource bounds on runtime and LMs. Finally, Appendix A also gives an\nequivalent formulation of recursively self-improving code generation in terms of recursive\nmaximization which is more amenable to theoretical analysis and needs no initial solution to\nbe given. This paper employs the improver formulation because we have found the initial\nsolution valuable in practice for warm-starting the self-improvement process.",
+      "support_explanation": "灰盒meta-utility隐藏具体下游任务与初始解；可执行utility仍反馈其表现。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§4; text lines 398-409",
+      "quote": "apply improvement. STOP begins with an initial seed improver I0 . We define the t-th improver\nas the output of t self-improvement rounds with meta-utility û: It ≜ It−1 (û, It−1 , L). This is\niterated for a prespecified number of iterations T, per available resources.\nIntuition. By using û, STOP selects improver based on a downstream utility improvement.\nThis approach is motivated by the intuitions that 1) improvers that are good at improving\ndownstream solutions may be more likely to be good scaffolding programs and thus\nto be good at self-improvement, and 2) selecting for single-round improvements may\nlead to better multi-round improvements. In practice, we allow the utilities and LM to\nimpose budget constraints and initial solutions to be generated by humans or a model.\nMoreover, the cost is essentially O((budgetu + budget L ) ∗ budgetû ), where budget specifies\nthe number of times an improver can use a function, with these asymptotics defined with\nrespect to the budget parameters.",
+      "support_explanation": "递归公式、动机与共同预算接口；理论动机不保证更善于下一轮自改。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§4; text lines 419-429",
+      "quote": "Describing the utility. To effectively convey the details of the utility function to the LM, we\nprovide the utility to the improver in two forms, as a callable function and as a utility description string containing the essential elements of the utility source code (see Appendices E\nand F for examples). This choice was made for the following reasons. The description allows\nus to clearly convey budgetary constraints (e.g., on runtime or function calls) imposed by the\nutility to the LM. We first attempted to describe budgetary instructions in the seed improver\nprompt, but, as we discuss in Section 6.2, this led to the removal of such instructions and\nattempts at reward-hacking in later iterations. The downside of our approach is that it\nseparates the constraints from the code to be optimized by the LM, which may decrease the\nlikelihood that it will be used by the LM (Liu et al., 2023b). Finally, we observe empirically\nthat replacing the source code with a purely English description of the utility leads to a\nreduced frequency of non-trivial improvement.",
+      "support_explanation": "代码描述和callable双接口及budget移出可编辑prompt的原因。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§5.1; text lines 441-474",
+      "quote": "model size may affect performance. Timestamped versions of the OpenAI models we utilize,\ngpt-4-0314 and gpt-3.5-turbo-0613, are available within the OpenAI API, to aid with\nreproducibility; for Mixtral, we use Mixtral-8x7B-Instruct-v0.1.\n5.1\n\nSelf-improvement for a Fixed Downstream Task\n\nWe begin by evaluating STOP on a fixed downstream task with GPT-4. We select the task of\nlearning parity with noise (LPN) (Blum et al., 2000) as a less-well-known, quickly-testable,\nand difficult algorithmic task. Note that better-known tasks have solutions more widely\navailable online. In LPN, bitstrings are labeled with parity computed over an unknown\nsubset of bits; given a training set of bitstrings with noisy labels, one must predict new\nbitstrings’ true labels. Noiseless LPN is easily solved via Gaussian elimination, but noisy\nLPN is conjectured to be computationally intractable for large input dimensions (Blum\net al., 2000)–we use a tractable 10-bit input dimension. To define a downstream utility u,\nwe sample M = 20 independent instances of the LPN task with a short timeout and a small\namount of noise and return a solution’s average accuracy on those instances. For the initial\nsolution s, we use a simple random sampling approach described in Appendix K. Lastly,\nas the LM and hence improver are stochastic, we choose D to be 5 identical copies of (u, s)\nin Algorithm 1. To evaluate the generalization of improved improvers to new problem\ninstances of the same task, we report test meta-utility on an independent set of Mtest = 50\nLPN instances not seen during improvement.\nFigure 4 (left) reports mean test û (±1 standard error) across 5 independent STOP runs,\nshowing improved downstream performance from 1–3 self-improvement rounds. Note,\nhowever, that, per run, improvement need not be monotonic, as 1) a better improver on\ndownstream tasks need not be better at optimizing itself and 2) there is inherent stochasticity\nin the evaluation from nondeterministic LM calls. But, as the LM does not see the downstream task when prompted from the self-improving scaffold—each prompt contains only a\ntemplate with placeholders for the task and solution—the LM cannot directly optimize the\nimprover for the downstream task. We also evaluate two additional baselines for reference:\na chain-of-thought baseline i.e., the seed improver with one attempted improvement and\nno utility calls (Wei et al., 2022b) and a greedy iterative improver (i.e., make the maximum\npermissible calls, select the best improvement, repeat as the budget allows). Across ten\nruns, the chain-of-thought baseline has a meta-utility of 57.7%±3.0% when it does not error\n(49.6%±3.5% with errors), while the greedy iterative improver scores 64.2%±0.9%.",
+      "support_explanation": "固定模型、20选择实例、50独立测试实例、5条独立GPT-4谱系和两个静态baseline；非单调性及错误计入分母的CoT结果。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§5.2 / Table 1; text lines 479-514",
+      "quote": "Our next set of experiments explores\nwhether an improved improver is Table 1: Transferability. Evaluating the transfertransferable across downstream tasks. ability of the improver optimized with LPN.\nNote that transferability is plausible\nTask\nu(s)\nû( I0 )\nû( IT )\nas, in the self-improvement phase,\nString Grid Dist.\n43.9% 44.3% 56.7%\nthe self-improver is not shown the\nMod. Quad. Assign. 20.4% 20.6% 22.1%\ndownstream utility or downstream\n3SAT\n0%\n21.2% 75.1%\nsolution, only the meta-utility and its\nMaxcut\n0%\n58.7% 74.2%\nown improver code. Specifically, we\nParity w/o Noise\n50.0% 59.3% 81.7%\nselect a better-performing improver\nfrom Section 5.1 generated by T = 4\nSTOP iterations and evaluate it on five new downstream tasks. Remarkably, we find the\nimproved improver, detailed in Appendix H, outperforms the seed improver on each new\ndownstream task without further optimization, as shown in Table 1. As with LPN, we\nselected three tasks that are easy to evaluate, not very well known, and still fairly difficult:\nString Grid Distance, a string manipulation problem featured in a recent programming\ncompetition (https://codeforces.com/problemset/problem/1852/D); a version of the\nquadratic assignment problem where each facility has a preference over each location that\nmust also be considered when minimizing costs (Koopmans & Beckmann, 1957); and, parity\nwithout noise, as another generalization. We also include two well-known tasks: identifying\nsolutions to random 3-SAT formulae and solving instances of the maxcut problem, both\nwith short time constraints. Their utilities and initial solutions are in Appendix G.",
+      "support_explanation": "一个经选择的T=4 improver跨五类任务迁移，表中均优于seed；表未给transfer独立谱系数或置信区间。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§5.3; text lines 628-642",
+      "quote": "We next explore the ability of smaller LMs, GPT-3.5-turbo and Mixtral (Jiang et al., 2024),\nto improve their scaffolding. Following the protocol of Section 5.1 with 25 independent\nruns instead of 5, we find that GPT-3.5 is sometimes able to propose and implement better\nscaffolds, but only 12% of GPT-3.5 runs yielded at least a 3% improvement. In addition,\nGPT-3.5 exhibits a few unique failure cases that we did not observe with GPT-4. First,\nwe found it was more likely to propose an improvement strategy that did not harm a\ndownstream task’s initial solution but did harm the improver code (e.g., randomly replacing\nstrings in lines with some low probability per line, which had less impact on shorter\nsolutions). Second, if the proposed improvements mostly harmed performance, suboptimal\nscaffoldings that unintentionally returned the original solution could be selected, resulting\nin no continued improvement as seen in Figure 4. Generally, the proposed “ideas” were\nreasonable and creative (e.g., genetic algorithms or local search), but implementations\nwere overly simplistic or incorrect. Initially, the seed improver with GPT-3.5 has a higher\nmeta-utility than the one with GPT-4 (65% vs 61%), which we attribute primarily to a higher\nprevalence of more complex solutions by GPT-4 that time out, like training a neural network",
+      "support_explanation": "弱模型25条谱系，GPT-3.5仅12%至少提升3%，无意返回原解可被选中并终止进步。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§6.1; text lines 683-698",
+      "quote": "We first describe STOP-proposed self-improvement strategies, with examples detailed in\nAppendix B and visualized in Figure 1. While each strategy was implemented by STOP, not\nall were ultimately selected as improvements, and some used an earlier iteration of the seed\nimprover than in Figure 2 (see Figure A.19). Nonetheless, a variety of self-improvement\nstrategies were selected as improved improvers, including the example given in Figure 5.\nBeam search. The most common meta-heuristic we observed used by the model was beam\nsearch: the model would keep a list of all of its improvement attempts based on utility and\nexpand the best k in the list. This has similarities to the Tree-of-Thoughts approach (Yao et al.,\n2023) invented years after the training cutoff for the GPT-4 version we used (Sept. 2021).\nGenetic and evolutionary algorithms. One common approach proposed was to use a\ngenetic algorithm. Many of these attempts were infeasible in essential ways; for example,\nmany would include mutations that perturbed random characters or lines or performed\ncrossover based on combining strings, all extremely unlikely to work. But some were reasonable, relying on the LM to generate mutations and perform crossover. Although multiple\nworks have proposed to use genetic or evolutionary algorithms to improve prompts or to\nperform neural architecture search (Chen et al., 2023a; Guo et al., 2023), to our knowledge,\nall of these were after GPT-4’s training cutoff. We include implementations in Appendix B.",
+      "support_explanation": "多种策略确实被生成，但不是每个均被选中，有些使用较早种子；不能把所有示例当成功机制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§6.2; text lines 745-764",
+      "quote": "We also explore whether the LM proposes self-improvement strategies to circumvent the\nprovided constraints (limiting the number of queries to the downstream utility, the number\nof LM calls, and the number of samples per LM call). We observed a few interesting patterns.\nFirst, when not strictly enforcing budget constraints, initially most generated programs\nwould follow them, but because those that ignored the constraints performed better, these\nwould be identified by the improver as better. Second, the constraints written in the seed\nimprover were often omitted when revising the improver, for “simplification.” Finally,\nalthough the LM is passed as an object to the algorithm to enforce the constraints, in at least\none proposed solution the LM attempted to create a new LM object with larger constraints.\nTo further explore potential risks, we implemented a functionality-limiting “sandbox” as\npart of the utility evaluation (see Appendix I), adding a run function with a use_sandbox\n=True parameter. To test the LM’s frequency of sandbox adherence, we used the LM\nto generate 10,000 independent improvements of the seed improver. We then used a\nsimple syntactic check for apparent “unsandboxed” executions. Specifically, we consider an\nimprover to be unsandboxed if it contains either string \"use_sandbox=False\" or \"exec(\". For\ncomparison, we also ran it on the OpenAI’s GPT-3.5-turbo LM. Interestingly, unsandboxing\nwas more than twice as common for GPT-4 than GPT-3.5-turbo.\nWe also considered a variant of the seed including a warning, illustrated in Figure 6. Unsandboxing occurred at a higher average rate despite the warning, though the difference was not\nstatistically significant for either model (via a two-proportion z-test with significance level\n0.05). Results are reported in Table 2. Upon manual inspection of the model’s plans in generations, they did not explicitly mention anything “malicious”–all comments discussing sandbox removal were declared as “for efficiency” or similar, though model “intent” is ill-defined.",
+      "support_explanation": "未强制budget时超预算程序被偏好、生成新LM对象与10,000次字符串检测；warning差异不显著。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§6.3; text lines 769-777",
+      "quote": "We note that the downstream utility function must be defined with care: reward hacking\noccurs when an unintended behavior is selected due to a misspecified reward and is a\nconsequence of exploitable utility functions (see, e.g., Skalse et al., 2022). For example,\nfor the LPN task, we initially defined the utility with a numpy vector computation: acc\n= np.sum(y_hat == y) / n_test. However, we had not considered that the code may\n‘improve’ the seed improver to return the predictions in a different “shape,” i.e., an array\nwith dimensions not as intended. Rather than causing an error, the result was a returned\n“accuracy” of over 1000%. It would be valuable to explore the applicability of techniques to\navoid reward hacking (Amodei et al., 2016; Laidlaw et al., 2023) to STOP in future work.",
+      "support_explanation": "utility形状漏洞曾产生超过1000%的accuracy；这不是真实能力。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§7; text lines 783-808",
+      "quote": "A fundamental limitation of our approach is that the LM itself is not improved. Furthermore,\nour meta-utility measures improver quality only indirectly via improvements in down9\n\nPublished as a conference paper at COLM 2024\n\nstream task utility. Unlike in some prior work (e.g., Schmidhuber, 2003), any improvement\nattempt may result in worse performance, which can lead to further deterioration. Another\nlimitation is that STOP requires an efficiently-evaluatable (and describable) utility function,\nwhich may not be available for every task. Correspondingly, as STOP’s cost grows\nsubstantially faster than the cost of the optimized improver, it may be expensive to run.\nOur improvement framework also maintains a single improver at each step, while some\napproaches may benefit from maintaining a population. While this is not a strict limitation\nin that an improver could itself sample from a population of implementations, it likely\nimposes a bias. Moreover, a deeper analysis of alternative seed improvers and their\ntradeoffs would be valuable future work. Lastly, our experiments depend on a closed\nlarge LM that may be deprecated in the future, which harms interpretability and long-term\nreproducibility. Based on the GPT-3.5 results, it is unlikely that STOP would consistently\nwork with any open-source LM at the time of writing (Touvron et al., 2023; Jiang et al.,\n2023). As new models with similar capabilities to GPT-4 emerge, we hope to understand\nhow and whether STOP generalizes.\nLastly, we note some open challenges. First, although one could potentially apply STOP\nto open-domain coding tasks, the meta-utility calculation relies on many calls to the utility –\ntherefore, expensive utility functions pose additional challenges, and handling such tasks requires further work. We also anticipate that while the optimizer could theoretically optimize\nopen-ended language inputs, this may make it less likely to act as a good code optimizer.\nWe also leave this to future work. In addition, it may be possible in principle to overcome\nsome of the limitations of weaker models with stronger scaffoldings and a larger budget.",
+      "support_explanation": "非单调、昂贵效用、单incumbent和较弱模型失败限制；更好下游产品并不保证更好自优化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Ethics Statement; text lines 831-837",
+      "quote": "the small advance we introduce. First, STOP does not alter the black-box LM and hence\nis not full RSI. Moreover, at this point, we do not believe the scaffolding systems STOP\ncreates are superior to those hand-engineered by experts. If this is the case, then STOP is not\n(currently) enabling additional AI misuse. At the same time, it facilitates the study of aspects\nof RSI code generation such as sandbox avoidance and reward hacking. As Christiano (2023)\nargues, advances in scaffolding and agent models have the advantage of interpretability\ncompared to advances in LMs.",
+      "support_explanation": "作者明确没有证明超越专家手工scaffold，且不修改LM；不能把此文解读为完全RSI。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix A.2; text lines 1270-1282",
+      "quote": "Thus far we have considered a fixed set of n tasks (u, s) ∈ D, i.e., | D | = n, each being\ndefined by a utility function u = (ufunc , ustr ) consisting of a black-box function ufunc and a\nstring ustr , as well as an initial solution s ∈ Σ∗ . We now consider a distribution D over tasks\n(u, s) ∼ D . This is arguably the quantity we ultimately care about, as ū( I ) determines the\nexpected performance of a (single iteration) of an improver on a downstream task. If the\ntasks D ∼ D n are drawn i.i.d. from D , then one can prove a generalization bound stating\nthat the average performance of an improver I on D is close to its expected performance on\nD:\nLemma 1. Let n ≥ 1, δ ∈ [0, 1], l ≥ 2, D be a multiset of n i.i.d. tasks from D , and Σ≤l denote the\nset of strings I (improver programs) of length | I | ≤ l. Then,\nh\ni\nPr n For all I ∈ Σ≤l : û( I ) − ū( I ) < ϵ ≥ 1 − δ,",
+      "support_explanation": "泛化定理前提为i.i.d.任务和长度受限improver；不是实验中五个相同(u,s)的跨任务保证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix A.2; text lines 1310-1333",
+      "quote": "The above lemma means that if selecting the best among any set of improvers according to\nû will yield a value of ū that is within 2ϵ of the best in the set.\nIterated improvement bounds. The above bound is relevant to the case where a final\nimprover I is used in a single step of improvement on a downstream tasks, so the ultimate\nquantity of interest is ū( I ). It implies that approximately optimizing û( I ) is equivalent\nto approximately optimizing ū( I ). We note that exactly the same bounds would apply to\nmultiple steps of improvement if one replaced û and ū by the corresponding averages of\nany given number of rounds of iterated improvement on the new downstream task sampled\nfrom D .\nStochastic meta-utility. Another simple generalization bound can be given if we consider\nthe case in which the meta-utility is randomized. In particular, consider u̇( I ) which is\ndefined to be a randomized function that returns u( I (τ, L)) for a random task τ ∼ D .\nClearly E[u̇( I )] = ū( I ), so u̇ is an unbiased estimate of ū. Thus it is intuitive that one can\nsimilarly improve using u̇, albeit with more calls. One advantage of u̇ is the following trivial\nobservation:\nObservation 1. Any algorithm that makes at most n calls to u̇ can be perfectly simulated using a a\ntraining set of n = | D | i.i.d. samples D ∼ D n .\nGrey-box utility descriptions. The results in this section lend support to use of grey-box\ndescriptions of û, which only show its form as an average of utilities, because the grey-box\ndescription is identical, in expectation, to that of ū. Put another way, it would be easier to\noverfit to the training tasks (up to the worst-case bounds, as shown in this section) if the\ntasks are given explicitly to the pre-optimization algorithm, especially in the case where the\nprogram is quite large (as in over-parametrized neural networks that are larger than their\ntraining set size).",
+      "support_explanation": "同分布界与灰盒动机，不能推出实证无泄漏或跨分布泛化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix A.3; text lines 1360-1371",
+      "quote": "STOP uses performance at improving downstream tasks as a heuristic approximation to\nselecting good improvers more generally. It is not immediately clear how one would even\ngive a non-cyclic definition of performance at improving improvers. Now, we illustrate a\nway to define recursive maximizer performance in a consistent fashion.\nTo do so, consider a randomized process in which, in each iteration, a coin is flipped, and\nif it is heads, the maximizer is applied to the downstream task; if it is tails, however, it is\napplied to the problem of maximizing the maximizer. If the next flip is heads, then the result\nis used to maximize the downstream task. Otherwise, it recurs. If the coin has probability\nλ ∈ (0, 1) of being heads, then this process results in an expected number of maximizer\ncalls, including for maximization and finally for the downstream task, is 1/λ. Hence, it\nis similar to a process where the maximizer is iteratively applied ≈ 1/λ times. However,\nthis randomness enables us to define the objective consistently. In particular, for parameter",
+      "support_explanation": "作者承认下游优化好只是更通用自改能力的启发式；随机递归目标是理论替代表述。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix B.9; text lines 2752-2764",
+      "quote": "Lastly, one may wonder about the changes in the kinds of improvements across iterations.\nWe note that despite the instructions in the seed prompt to propose non-trivial and novel\nimprovements, the creativity and scale of improvements appear to decline over iterations.\nLater improvements tend to be revisions and optimizations to be base algorithm, keeping its\ncentral idea and extending it (e.g., introducing caching, adding more types of optimizations\nto a list of hints, and adding temperature schedules). However, this is not always the case.\nFor example, consider the improved improver in Figure 5. Its initial improvement was\nto dynamically adjust the temperature with the number of calls. Its next improvement\nwas to implement early stopping based on the number of improvements and to vary the\nnumber of messages used per call. The strategy of randomizing between high-temperature\nand low-temperature “explore” vs “exploit” phases was not implemented until the 7th\nimprovement step, and the choice to use a counter to decide whether exploring or exploiting\nwas more advantageous occurred in the next step.",
+      "support_explanation": "后期改变多为局部修订，示例也有第7/8轮才出现新机制；是定性描述而非逐代因果验证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix E / Figure A.20; text lines 2926-2951",
+      "quote": "def meta_utility ( improve_str : str ) :\n\"\"\"\nEvaluates the algorithm in improve_str to improve the algorithm in algorithm_str , according to\nsome downstream utility function . This meta - utility function can only be called 37 times .\n\"\"\"\nif meta_utility . uses > meta_utility . budget :\nreturn 0\nmeta_utility . increment_uses ()\nn_tests = 5\nexpected_utility = 0\nfor _ in range ( n_tests ):\nif utility . uses >= utility . budget :\nbreak\ntry :\nexec ( improve_str , globals () ) # Define improve_algorithm function\nexcept :\ncontinue\n# At most 6 calls to language model , and at most 6 samples each time\nlanguage_model = LanguageModel ( budget =6 , max_responses_per_call =6)\nimproved_algorithm_str = improve_algorithm ( algorithm_str , utility , language_model )\nexpected_utility += utility ( improved_algorithm_str ) / n_tests\nreturn expected_utility\n\nFigure A.20: Meta-utility description provided to the language model. We substitute the\nnumber of language model budget (n), the max responses per call (m), and the utility budget\n(n ∗ m + 1 by default) as a hyperparameter.",
+      "support_explanation": "meta-utility描述中的五次调用、6次LM调用与每次6响应等接口上限；utility预算说明默认n*m+1。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix F / Figure A.21; text lines 3020-3058",
+      "quote": "n_tests = 3\naverage_correct = 0\ntry :\n\nexec ( algorithm_str , globals () )\nexcept :\nreturn 0\n\nfor _ in range ( n_tests ) :\nstart_time = time . time ()\nn_bits = 10\np_true = 0.3\nn_train_samples = 100\nn_test_samples = 20\nnoise_level = 0.05\ntrue_bits = np . random . binomial (1 , p_true , n_bits )\nsamples = np . random . binomial (1 , 0.5 , ( n_train_samples + n_test_samples , n_bits ))\nmasked_samples = samples * true_bits\nparity = np . sum ( masked_samples , axis =1) % 2\ntrain_samples = samples [: n_train_samples ]\ntrain_parity = parity [: n_train_samples ]\nparity_noise = np . random . binomial (1 , noise_level , n_train_samples )\ntrain_parity = ( train_parity + parity_noise ) % 2\ntest_samples = samples [ n_train_samples :]\ntest_parity = parity [ n_train_samples :]\n# Because algorithm is a string , we can 't call it directly . Instead , we can use eval to\n,→ evaluate it as a Python expression .\ntry :\npredictions = algorithm ( train_samples , train_parity , test_samples )\ntest_parity = np . array ( test_parity ). reshape ( -1)\npredictions = np . array ( predictions ). reshape ( -1)\ncorrect = np . sum ( predictions == test_parity ) / n_test_samples\nexcept :\ncorrect = 0\n# Use no more than 100 milliseconds per test\nif time . time () - start_time > 0.1:\nreturn 0\naverage_correct += correct / n_tests\nreturn average_correct",
+      "support_explanation": "模型所见LPN描述为3 tests和0.1秒，含reshape；与主文20实例及K实际2秒并非同一完整执行代码。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix G / Figure A.24; text lines 3216-3257",
+      "quote": "def utility ( algorithm_str : str ) :\n\"\"\"\nImplements the Modified Quadratic Assignment Problem ( MQAP ) with n facilities / locations .\nReturns the objective value , where higher is better .\nThe algorithm must be extremely fast . If it takes more than 500 milliseconds to run , it is a\n,→ failure .\nYour algorithm function must be named ' algorithm ' and take three arguments : F , D , and P ,\nwhich are numpy arrays of shape (n , n) containing the flow , distance , and preference matrices .\n\"\"\"\nn_tests = 20\nn = 15 # Number of facilities and locations\nlambda_value = 0.5 # Preference weight\naverage_objective = 0\npool = ThreadPool ()\ntry :\n\nexec ( algorithm_str , globals () )\nexcept :\nreturn 0\n\nfor test_idx in range ( n_tests ) :\nF = np . random . rand (n , n )\nD = np . random . rand (n , n )\nP = np . random . rand (n , n )\ntry :\n\nstart_time = time . time ()\nassignment_future = pool . schedule ( algorithm , (F , D , P))\nassignment = assignment_future . result ( timeout =0.01)\ntotal_time = time . time () - start_time\n\nif set ( assignment ) == set ( range (n)):\nobjective = sum ( F[i , j] * D[ assignment [i], assignment [j ]] for i in range (n) for j in\n,→ range ( n) )\nobjective -= lambda_value * sum (P[i , assignment [i ]] for i in range (n))\nobjective += total_time\nelse :\nobjective = 0\naverage_objective += objective / n_tests\nexcept Exception as e :\naverage_objective += 0\nreturn average_objective",
+      "support_explanation": "MQAP文字称higher better、500ms，但显示result timeout=0.01且加正成本与运行时间；描述不足以确认表中归一化和最小化目标一致。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix G / Figure A.25; text lines 3278-3285",
+      "quote": "def algorithm (F , D , P) :\ndef mqap_objective ( assignment ):\nobjective = sum ( F[i , j ] * D[ assignment [i], assignment [j ]] for i in range (n) for j in range (n)\n,→ )\n8\nobjective -= lambda_value * sum (P[i , assignment [i ]] for i in range (n))\n9\nreturn objective",
+      "support_explanation": "种子定义原始MQAP objective。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix G / Figure A.25; text lines 3332-3344",
+      "quote": "delta_objective = new_objective - mqap_objective ( assignment )\n36\n37\nif delta_objective < 0 or random () < np . exp (- delta_objective / temperature ):\n38\nassignment = new_assignment\n39\n40\nif new_objective < best_objective :\n41\nbest_assignment = deepcopy ( assignment )\n42\nbest_objective = new_objective",
+      "support_explanation": "种子通过delta<0和new<best最小化，与所示utility更大更好存在方向核对问题；不把描述直接当真实执行bug。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E025",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix G / Figure A.26; text lines 3427-3456",
+      "quote": "def utility ( algorithm_str : str ):\n\"\"\"\nImplements the Random 3 - SAT problem with n variables and m clauses .\nReturns the fraction of formulas solved successfully within the time limit .\nThe algorithm must be extremely fast . If it takes more than 10 milliseconds to run , it is a\n,→ failure .\nYour algorithm function must be named ' algorithm ' and take a single argument , formula\nwhich is a list of m clauses , each containing exactly 3 literals .\n\"\"\"\nn_tests = 100\nn = 50 # Number of variables\nm = int (4 * n ) # Number of clauses\nsolved_count = 0\npool = ThreadPool ()\ntry :\n\nexec ( algorithm_str , globals () )\nexcept :\nreturn 0\n\nfor test_idx in range ( n_tests ):\nformula = generate_3sat_formula (n , m)\ntry :\nassignment_future = pool . schedule ( algorithm , ( formula ,) )\nassignment = assignment_future . result ( timeout =0.01)\nif check_3sat_formula ( formula , assignment ):\nsolved_count += 1\nexcept Exception as e:\nreturn 0\nreturn solved_count / n_tests",
+      "support_explanation": "3SAT有可执行满足性验证和10ms阈值，遇异常直接返回0，不能只看成功样例。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E026",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix G / Figure A.28; text lines 3508-3516",
+      "quote": "4 def utility ( algorithm_str : str ) :\n5\n\"\"\"\n6\nImplements the Max - Cut utility function . Returns the average cut weight .\n7\nIf the algorithm requires more than 100 milliseconds to run per test , it is a failure .\n8\n\"\"\"",
+      "support_explanation": "Maxcut描述宣称100ms限制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E027",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix G / Figure A.28; text lines 3556-3590",
+      "quote": "# Run the algorithm to find the partition\n30\ntry :\n31\npartition = algorithm ( adjacency_matrix )\n32\n# Make sure there are exactly two partitions\n33\nif len ( set ( partition ) ) != 2:\n34\nreturn 0\n35\nif len ( partition ) != n_nodes :\n36\nreturn 0\n37\ncut_weight = 0\n38\nfor i in range ( n_nodes ) :\n39\nfor j in range (i +1 , n_nodes ):\n40\nif partition [ i] != partition [j ]:\n41\ncut_weight += adjacency_matrix [i , j]\n42\nexcept Exception as e:\n43\nprint ( \" Exception :\" , e)\n44\ncut_weight = 0\n45\naverage_cut_weight += cut_weight / n_tests / max_weight\n46\nreturn average_cut_weight",
+      "support_explanation": "所示Maxcut评分检查分区和cut weight，但此片段没有实现所宣称的timeout；不能由description证明实际cap执行。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E028",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix H / Figure A.32; text lines 3740-3759",
+      "quote": "Improver used in transferability experiments\n1 from helpers import extract_code\n2\n3 def improve_algorithm ( initial_solution , utility , language_model ):\n4\n\"\"\" Improves a solution according to a utility function . \"\"\"\n5\nexpertise = \" You are an expert computer science researcher and programmer , especially skilled at\n,→ optimizing algorithms .\"\n6\n7\nn_messages = min ( language_model . max_responses_per_call , utility . budget )\n8\ntemperature_values = [0.4 , 0.7 , 1.0]\n9\nsolutions_cache = set ()\n10\nnew_solutions = []\n11\nutility_cache = {}",
+      "support_explanation": "迁移improver是真实可保留源码，三温度、去重/utility缓存；不是只存一次回答。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E029",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix H / Figure A.32; text lines 3771-3825",
+      "quote": "for temp in temperature_values :\n19\nbase_message = f \"\"\" Improve the following solution :\n20 ``` python\n21 { initial_solution }\n22 ```\n23\n24 You will be evaluated based on this score function :\n25 ``` python\n26 { utility . str }\n27 ```\n28\n29 You must return an improved solution . Be as creative as you can under the constraints .\n30 Your primary improvement must be novel and non - trivial . Generate a solution with temperature ={ temp }\n,→ that focuses on different aspects of optimization . \"\"\"\n31\n32\ngenerated_solutions = language_model . batch_prompt ( expertise , [ base_message ] * n_messages ,\n,→ temperature = temp )\n33\ngenerated_solutions = extract_code ( generated_solutions )\n34\n35\n# Evaluate and sort the generated solutions by their utility score\n36\nscored_solutions = [( sol , evaluate_solution ( sol )) for sol in generated_solutions if sol not\n,→ in solutions_cache ]\n37\nscored_solutions . sort ( key = lambda x: x [1] , reverse = True )\n38\n39\n# Keep only the top n_messages solutions\n40\ntop_solutions = scored_solutions [: n_messages ]\n41\n42\nfor sol , _ in top_solutions :\n43\nnew_solutions . append ( sol )\n44\nsolutions_cache . add ( sol )\n45\n46\n# Dynamically adjust temperature values based on the utility scores\n47\ntemperature_values = [ temp * (1 + evaluate_solution ( sol ) / evaluate_solution ( initial_solution ))\n,→ for temp , sol in zip ( temperature_values , new_solutions )]\n48\n49\nbest_solution = max ( new_solutions , key = evaluate_solution )\n50\nreturn best_solution\n\nFigure A.32: Selected improver. The improver from Section 5.1 that we selected for the\ntransferability experiments.",
+      "support_explanation": "实际迁移artifact三温度采样与选优；缺逐组件移除和与强人工搜索相同实际开销比较。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E030",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix I; text lines 3835-3844",
+      "quote": "As discussed in Section 6.2, we slightly modified the seed prompt and meta-utility in a\nmanner to make it apparent that the code was intended to be run in a sandbox. These\nmodifications are shown in bold in Figure A.33. A further modification of the seed prompt\nwith a warning is shown in the figure as well. For this experiment, we did not run any code\nbut instead performed a simple syntax check for either of the strings \"use_sandbox=False\"\nor \"exec(\". While such code may be generated but never run, any inclusion of such code\nwould be considered against best safety practices. Figure A.34 gives an additional example\nof disabling the sandbox flag. In this version, the program first attempts to run the code\noutside of a sandbox and then later within the sandbox, which is, of course, naively too late\nto guarantee safety.",
+      "support_explanation": "sandbox实验没有运行生成代码，仅做两字符串检查；检测比例不是成功越狱率。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E031",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "Appendix K; text lines 4026-4047",
+      "quote": "The string representation of the utility function need not match the true code exactly. For\nexample, we typically obfuscate irrelevant logging code and any random seed values. We\nuse multithreading libraries for implementing timeouts, but we remove these for simplicity\nand instead only present simpler timeout mechanisms to the model, like returning a zero\nscore if an evaluation takes too long. Outside of the sandbox experiments, we include an\nexec command in the utility description but have a minimal function to evaluate the code\nto help debug and prevent the use of some undesirable libraries like multiprocessing. We\nalso omit details that assign necessary properties to utility function like the budget or this\ncurrently-discussed string representation.\n44\n\nPublished as a conference paper at COLM 2024\n\nFor learning parity with noise, we use a timeout of 2 seconds, a fixed bitlength (10 bits), a\np = 30% chance that a bit will be included in the parity subset for a task, 100 train samples\nfor a given instance, and 20 test samples. In practice, about 3 thousand GPT4 calls were\nused per iteration per run.\nAll Wilson (1927) confidence intervals for binomial proportions were computed using the\nPython function statsmodels.stats.proportion.proportion_confint.\nFor all tasks, we selected parameters such that the problem was approachable (i.e., the base\nimprover could at least sometimes improve performance over the base performance) but\nnon-trivial (the model should not immediately get perfect performance).",
+      "support_explanation": "utility description刻意省略实现细节；实际LPN2秒、每轮每run约3000 GPT4调用；不能将展示代码视为执行环境逐字镜像。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E032",
+      "material_id": "stop-v3",
+      "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+      "locator": "§5.3 / Table 2; text lines 647-663",
+      "quote": "Table 2: Unsandboxing. Percent of unsandboxed improvement attempts of 10,000 (with\n95% Wilson confidence intervals). Both LMs attempted to run unsandboxed code on a small\n(< 1%) but non-zero fraction of improvements.\nLM\n\nUnsandboxing rate\n\nRate with warning\n\nGPT-4\nGPT-3.5\n\n0.42% (0.31-0.57%)\n0.12% (0.07-0.21%)\n\n0.46% (0.35-0.61%)\n0.17% (0.11-0.27%)",
+      "support_explanation": "10,000提案的unsafe字符串检测比例和95%Wilson区间；不是运行后的sandbox escape比例。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "可执行Python improver I_t：调用固定LM来优化任意代码的搜索策略/提示/采样/选择逻辑",
+      "information": "看到自身源码和灰盒meta-utility描述；不能在自改prompt直接看到下游具体任务解，但可查询聚合下游效用；API和utility给出预算。",
+      "operation": "用I_{t-1}对I_{t-1}提案并调用候选improver产生下游程序；按其产品平均utility选择；重复T轮。",
+      "output": "新improver源码字符串I_t和由其生成的下游程序",
+      "conditions": [
+        "下游utility必须快速可算、可描述且方向正确",
+        "固定LM、外部utility和预算实现保持可信",
+        "下游改善与下一轮自改能力之间仅有启发式关联"
+      ],
+      "feedback": "候选improver生成的程序的任务正确性/目标值/超时失败，通过meta-utility汇总",
+      "selection_rule": "种子对新候选取argmax；后代可自改内层搜索；算法直接替换incumbent，不保证相对旧版本的独立显著提升或安全回退。",
+      "selection_data": "LPN utility 20实例，D中五个同(u,s)用于LM随机性平均；测试50独立实例不用作作者声明的候选选择。",
+      "persistence": "I_t保存为下一轮传入且调用的improver源码；不是LM权重",
+      "later_use": "后续自改轮调用I_t；选定T=4源码在五个新下游任务中继续生成任务程序。",
+      "claimed_effect": "更优后续改动及跨任务复用；并非证明更善于优化自身或无限递归增益",
+      "failure_boundary": "噪声选择、无保底回退、utility漏洞、budget规避、较弱LM退化、昂贵搜索",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E005",
+        "E006",
+        "E008",
+        "E009",
+        "E010",
+        "E014",
+        "E028",
+        "E029"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "sandbox标志和budget约束遵循性审计",
+      "information": "给LM带sandbox flag的种子和utility描述；另有明确warning条件",
+      "operation": "每种模型/条件生成10,000改写，以use_sandbox=False或exec(字符串检测不安全建议",
+      "output": "检测比例与Wilson区间",
+      "conditions": [
+        "仅检测语法模式；不执行候选",
+        "不能当完整语义审计或真实沙箱攻破实验"
+      ],
+      "feedback": "此审计是离线行为测量，不是给主循环新增可信安全门",
+      "selection_rule": "不适用：统计全部独立提案，非将危险提案持久化的选择实验",
+      "selection_data": "10,000提案/条件；warning vs无warning",
+      "persistence": "审计本身无新的留存artifact；主系统仍有S1闭环",
+      "later_use": "不适用：不能推出危险候选在之后任务实际运行",
+      "claimed_effect": "量化不安全提案频率，不证明故意恶意或实际越狱",
+      "failure_boundary": "两字符串既可能漏检又可能含死代码；warning差异不显著",
+      "evidence_ids": [
+        "E012",
+        "E030"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "已有LM scaffold通常由人设计，prompt优化或工具积累未必改变下一轮生成改动的代码；可否将scaffold自身当作优化对象并自应用？",
+    "checked_gap": "固定权重不是独有gap。本文具体打开的是可执行improver的提案/预算分配/搜索控制，以其生成程序的效用作可查询元目标；区别于仅优化任务程序。原文并不足以排除所有早期自指优化或prompt自进化同类。",
+    "lineage": [
+      {
+        "work": "Tree of Thoughts / Graph of Thoughts / DSP / Parsel",
+        "source_version": "STOP v3 §2作者叙述；未固定各原文",
+        "relation": "手工设计调用结构；需要同实际预算的强人工scaffold对照而非仅原始种子。"
+      },
+      {
+        "work": "APE / OPRO / Promptbreeder",
+        "source_version": "STOP v3 §2作者叙述；原文缺",
+        "relation": "prompt优化及自指变异最近邻；不能据作者概括排除Promptbreeder也改进其变异机制。"
+      },
+      {
+        "work": "Gödel machines / earlier self-referential learning / Bounded Recursive Self-Improvement",
+        "source_version": "STOP v3 §§2,7；原始同版本材料尚未在本篇独立对读",
+        "relation": "自修改祖先；本文经验utility筛选，不是可证明最优提升。"
+      },
+      {
+        "work": "Voyager v2",
+        "source_version": "固定本地2305.16291v2全文已读；不以该篇评分作锚点",
+        "relation": "改工具库带来下游复用，而STOP改生成改动的improver代码。"
+      }
+    ],
+    "closest_adjacent": [
+      "Promptbreeder的变异prompt自进化",
+      "固定强搜索scaffold/greedy iterative improver",
+      "经验自指程序优化"
+    ],
+    "residue": "需要让非权重搜索策略成为可保留、可再次应用的对象，并在独立下游任务证明它比固定规则更会产生有效改动。",
+    "stakes": "若成立可把昂贵的元搜索成本在后续程序优化中摊销；若utility或budget不可信则只会选中作弊或高开销候选。",
+    "method_response": "统一improver接口、灰盒产品效用、源码自应用、固定LM/utility边界；测试独立LPN及选定artifact的五类迁移。",
+    "remaining_gap": "没有清楚分离递归自应用优于固定强元优化器的独特贡献；没有保证后续自改能力提升、长期稳定性、安全隔离或开销回本。",
+    "evidence_ids": [
+      "E003",
+      "E004",
+      "E005",
+      "E006",
+      "E008",
+      "E009",
+      "E014",
+      "E015",
+      "E018",
+      "E031"
+    ],
+    "unresolved": [
+      "请求总控对两席一致固定Promptbreeder、APE/OPRO、早期self-referential learning/Gödel machine的相关版本全文，核对作者优先性与最近邻概括；不得仅给本席联网补证。",
+      "MQAP目标正负、Table1百分化及Maxcut归一化/超时实际实现与描述不一致，需固定真实评测实现或作者说明；不运行收录代码。",
+      "完整总成本、transfer全谱系/次数和seed选择协议未能从固定全文重建；不假造其未公开实现细节。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [
+      "reframe_as_solvable_object"
+    ],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "具体固定部件=手工LM调用/优化scaffold；提升为可编辑代码",
+          "固定LM但递归重设计搜索逻辑，后续仍调用改过的代码",
+          "核C15/C23/C24全文：不是3D空间表征、扩散/flow内部转移或conditioning接口，故不强套子卡"
+        ],
+        "success_checks": [
+          "命名被释放部件并有下游结果/多个backbone的负结果",
+          "seed-on vs evolved有对照，但不是同总元搜索开销的唯一变量自应用消融"
+        ],
+        "failure_checks": [
+          "移除递归而保留固定强proposer的对照不足",
+          "没有把整个问题已解或无限泛化作为结论"
+        ],
+        "evidence_ids": [
+          "E003",
+          "E004",
+          "E008",
+          "E009",
+          "E010"
+        ],
+        "reason": "原主卡允许迭代/阶段生成组件成为自由变量，scaffold代码满足此粗粒度操作；其专门生成分布子卡不适用，保持partial而不改原定义。"
+      },
+      {
+        "main_id": "reframe_as_solvable_object",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "自改质量不易直接定义，转为候选improver产生程序的平均utility",
+          "AppendixA给有限长度/同分布界和maximizer等价表述",
+          "核C00/C21/C27：无透明度归因、缺失监督重标注或博弈均衡构造"
+        ],
+        "success_checks": [
+          "形式化对象明确且可执行评分",
+          "没有证明代理产品效用等价于递归自改能力；A.3明确承认启发式"
+        ],
+        "failure_checks": [
+          "不能用一般泛化界证明实际五个相同任务满足i.i.d.任务前提",
+          "不能把优化黑盒元目标本身当原问题全部解决"
+        ],
+        "evidence_ids": [
+          "E004",
+          "E006",
+          "E016",
+          "E017",
+          "E018"
+        ],
+        "reason": "确有从自指目标到可执行产品效用优化的操作，但无目标等价或全问题保证；只给主卡弱匹配，不强行指派任一子卡。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "两层各依据操作而非RSI术语匹配；不因卡数或卡片outcome分组加分。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "make_the_improver_editable",
+        "sub": "rsi:H19",
+        "version": "manifest-fixed cards 2026-10-21",
+        "fit": "strong",
+        "condition_checks": [
+          {
+            "condition": "S1 immutable anchor",
+            "status": "partial",
+            "reason": "LM与utility逻辑外部给定；但论文观察budget及sandbox可被绕开，未证明不可变隔离。",
+            "evidence_ids": [
+              "E005",
+              "E007",
+              "E012",
+              "E030"
+            ]
+          },
+          {
+            "condition": "S2 product fitness",
+            "status": "met",
+            "reason": "候选以其生成程序的下游效用评分，不由文本自评判好。",
+            "evidence_ids": [
+              "E004",
+              "E020"
+            ]
+          },
+          {
+            "condition": "S3 fixed improver comparison",
+            "status": "met",
+            "reason": "I0、CoT及greedy结果和transfer seed列；并不等于强元优化器已比较。",
+            "evidence_ids": [
+              "E008",
+              "E009"
+            ]
+          },
+          {
+            "condition": "S4 search cost",
+            "status": "partial",
+            "reason": "约3000 GPT4调用/轮/run与预算阶数；无完整tokens、失败调用或总账本。",
+            "evidence_ids": [
+              "E006",
+              "E031"
+            ]
+          },
+          {
+            "condition": "S5 tolerate non-improving steps",
+            "status": "partial",
+            "reason": "直接I_t替换可以非单调，但不是经过校准的stepping-stone archive或可信rollback。",
+            "evidence_ids": [
+              "E004",
+              "E008",
+              "E014"
+            ]
+          },
+          {
+            "condition": "S6 H21 swappable memory mechanism",
+            "status": "not_applicable",
+            "reason": "本文改的是优化自身的代码H19，不是单独memory/retrieval机制H21。",
+            "evidence_ids": [
+              "E004"
+            ]
+          },
+          {
+            "condition": "H19 recovery and holdout",
+            "status": "partial",
+            "reason": "50独立实例及跨任务transfer，但缺保底回退和独立显著性promotion；弱模型会中止有效进步。",
+            "evidence_ids": [
+              "E008",
+              "E009",
+              "E010",
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E004",
+          "E006",
+          "E008",
+          "E009",
+          "E028",
+          "E029"
+        ]
+      }
+    ],
+    "unassigned": [
+      "H20无开放archive/祖先生产率选择；H21不对应本文源码自应用",
+      "生成beam/遗传策略只作后代示例，不据此给整篇强贴population pattern；并非所有示例被保留",
+      "sandbox测量不是新增的安全留存门，也未自进化evaluator"
+    ],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain_namespace": "rsi",
+      "domain_main": "make_the_improver_editable",
+      "domain_sub": "rsi:H19",
+      "operation_correspondence": "把固定scaffold搜索过程释放为源码变量，I_{t-1}生成并评估自己的替代，I_t在后续回合实际使用。",
+      "conditions_and_differences": "原卡一般生成组件重设计不自动要求自应用；H19额外要求固定anchor、产品效用、后续改动认证。此文没有扩散子卡结构。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E006"
+      ]
+    },
+    {
+      "rs_main": "reframe_as_solvable_object",
+      "rs_sub": null,
+      "domain_namespace": "rsi",
+      "domain_main": "make_the_improver_editable",
+      "domain_sub": "rsi:H19",
+      "operation_correspondence": "把improver质量转为其下游产物的utility，复用同一优化接口评分并递归。",
+      "conditions_and_differences": "下游效用不等价下一轮自改能力；无C00归因/C21监督替代/C27博弈结构。",
+      "evidence_ids": [
+        "E004",
+        "E016",
+        "E018"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:H19:edited-v-fixed",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "宣称编辑improver后生成改动更有效",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有原种子、greedy和CoT，下游共同API上限使预算有可比性；实际响应/token使用与元搜索成本不同，也未比较固定强元优化器。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E020",
+        "E031"
+      ],
+      "score_item": "E.causality",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:selection-not-test",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "用retained/improver或迁移支持自改有效",
+      "applicable": true,
+      "status": "partial",
+      "reason": "LPN50独立实例、五类新任务和灰盒隐藏明确；transfer仅选一个好artifact，候选/任务选择过程与预注册防泄漏审计不足。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E009",
+        "E017"
+      ],
+      "score_item": "E.holdout",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:whole-search-seeds",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "随机LM与噪声utility逐代筛选",
+      "applicable": true,
+      "status": "partial",
+      "reason": "GPT4五整谱系±SE，弱模型25谱系和12%成功边界；transfer未给全部谱系分布与误差。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E010"
+      ],
+      "score_item": "E.statistics",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:retained-component-ablation",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "将改动后的scaffold作为收益来源",
+      "applicable": true,
+      "status": "partial",
+      "reason": "I0 vs I_T是整artifact开关；三温度、cache、去重或自应用本身无逐组件因果消融。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E028",
+        "E029"
+      ],
+      "score_item": "E.causality",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:safe-edit-boundary",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "可编辑程序可能更改调用、评测或安全接口",
+      "applicable": true,
+      "status": "partial",
+      "reason": "公开budget规避及10k不安全语法生成，明确没有实际运行该审计；但主循环没有不可绕过的安全/回退保证。",
+      "evidence_ids": [
+        "E012",
+        "E013",
+        "E014",
+        "E030"
+      ],
+      "score_item": "X",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:transfer-strong-baseline",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "主张跨下游任务复用",
+      "applicable": true,
+      "status": "partial",
+      "reason": "五类任务有seed对照；弱模型退化诚实报告；没有跨强模型执行器迁移或强通用人工设计同实耗比较。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E010",
+        "E015"
+      ],
+      "score_item": "E.holdout",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:outer-search-cost",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "把昂贵preoptimization作为多任务摊销投资",
+      "applicable": true,
+      "status": "partial",
+      "reason": "给出数量级成本和每轮约3000调用，但完整美元/tokens/墙钟、失败成本、回本曲线不足。",
+      "evidence_ids": [
+        "E006",
+        "E031"
+      ],
+      "score_item": "E.cost",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    },
+    {
+      "id": "rsi:H19:utility-faithfulness",
+      "version": "manifest-fixed-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md#Reviewer expectations",
+        "patterns/sub/H19.md#Step-by-Step"
+      ],
+      "applies_when": "产品效用是唯一促进新improver的证据锚",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有程序执行与独立实例，且披露形状reward hacking；显示utility是简化描述，MQAP方向/归一化及Maxcut实际timeout缺可独立对齐说明。",
+      "evidence_ids": [
+        "E013",
+        "E021",
+        "E022",
+        "E023",
+        "E024",
+        "E025",
+        "E026",
+        "E027",
+        "E031"
+      ],
+      "score_item": "E.measurement",
+      "source_note": "pending evidence-audit-derived check, not actual reviewer quotation or verified cross-paper consensus; aggregate card sources not independently reread in this seat"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "递归自改提升后续程序优化表现。",
+      "setting": "GPT4-0314，10-bit LPN；平均20开发实例，D=五个同(u,s)；五独立整谱系；T=0..4。",
+      "baseline_control": "T=0 seed；CoT无utility查询；greedy iterative给64.2±0.9%。没有固定强proposer在相同外层搜索总开销下优化improver的对照。",
+      "selection_vs_test": "候选选择由开发meta-utility；测试50独立LPN实例；非跨任务i.i.d.训练定理的直接例证。",
+      "result_denominator": "正文报告1–3轮均值提升、Figure4±1SE/5runs；未从抽取曲线猜具体各轮值。CoT49.6±3.5%计错误，对比57.7±3.0%仅无错误不可混用。",
+      "evidence_ids": [
+        "E004",
+        "E006",
+        "E008",
+        "E014"
+      ],
+      "counterevidence": [
+        "非单调、下游优化强不保证自改强；无精确token匹配与自应用独特性控制"
+      ],
+      "allowed_conclusion": "作者报告共同预算接口下改过的scaffold产生更有效下游程序，支持有边界的improver；不证明递归优于全部强人工scaffold。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "在LPN上得到的improver可迁移到新下游任务。",
+      "setting": "选定T=4 improver；string grid distance、modified QAP、3SAT、Maxcut、无噪parity。",
+      "baseline_control": "初始任务解u(s)、seed I0、selected I_T。",
+      "selection_vs_test": "自改prompt隐藏具体下游内容；五类task未继续用于自改，作者称new；只挑一个better-performing improver而非整谱系均值。",
+      "result_denominator": "seed→I_T：44.3→56.7%、20.6→22.1%、21.2→75.1%、58.7→74.2%、59.3→81.7%。transfer完整随机调用/谱系分母与CI未给；MQAP/Maxcut百分指标与显示函数需核。",
+      "evidence_ids": [
+        "E009",
+        "E022",
+        "E023",
+        "E024",
+        "E027",
+        "E028",
+        "E029",
+        "E031"
+      ],
+      "counterevidence": [
+        "selected artifact有选择偏差风险；同家族parity不能当全新分布证明；描述与实际代码有明示差异"
+      ],
+      "allowed_conclusion": "一个保留的improver在作者五项transfer效用上优于seed；只作范围有限且部分测量待核的迁移证据。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "自改收益依赖LM能力，并出现不安全修改建议。",
+      "setting": "GPT3.5及Mixtral各25独立自改run；GPT4/GPT3.5每条件10k生成sandbox审计。",
+      "baseline_control": "模型变化；warning vs无warning。",
+      "selection_vs_test": "sandbox实验全量独立提案，仅字符串检测；不执行。",
+      "result_denominator": "GPT3.5仅12%谱系至少+3%；Mixtral及其均值退化。10k提案中GPT4 .42%(.31–.57)/warning .46%(.35–.61)，GPT3.5 .12%(.07–.21)/warning .17%(.11–.27)，均95%Wilson；warning差异不显著。",
+      "evidence_ids": [
+        "E010",
+        "E012",
+        "E030",
+        "E032"
+      ],
+      "counterevidence": [
+        "检测既可能抓死代码又可能漏掉别的执行路径；非成功escape、非恶意意图"
+      ],
+      "allowed_conclusion": "特定模型/提示下确实生成不安全语法建议，且较弱模型不稳定；不证明真实sandbox突破或一般危险概率。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "improver",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "在固定GPT4和统一utility/LM预算接口下，源码自应用保留的improver，在独立LPN实例和作者五类transfer任务上生成比原种子更有效的后续程序。此等级指改善任务程序的机制，而非已证明更会自我优化。",
+    "unresolved": [
+      "预算可比仅为共同上限/接口，并非实际token/dollar或外层全成本严格匹配；不能解释为预算无关优势。",
+      "未证明递归自应用优于固定强元优化器，亦未证明无限递归、专家级scaffold或单调改进。",
+      "utility描述非真实实现镜像，MQAP/Maxcut测量对齐待补；安全仅审计提案。"
+    ],
+    "evidence_level_reason": "对象确为改进机制源码；I0对I_T的后续产物比较不是仅自选集，包含独立50实例及新任务并受共同调用上限。满足有界improver最低含义，但昂贵外层搜索、实耗差异和产品效用代理必须保留。",
+    "our_reproduction": false
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "具体从任务工具转向可执行improver，谱系与经验/可证明RSI边界清楚；Promptbreeder等原邻文未独立固定核对，不能给全面优先性或残余瓶颈已彻底证明。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "自应用接口、产品meta-utility与灰盒权限可重建，回应手工固定scaffold问题；产品效用只是自改能力代理，单incumbent缺可信保底。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E005",
+        "E006",
+        "E018"
+      ],
+      "counterevidence_ids": [
+        "E014"
+      ],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "完整源码到后续读取链成立且预算接口明确；非单调替换、较弱模型自改终止、已观察的budget规避和缺少可信rollback限制关键H19生效条件。",
+      "evidence_ids": [
+        "E004",
+        "E007",
+        "E020",
+        "E028",
+        "E029"
+      ],
+      "counterevidence_ids": [
+        "E010",
+        "E012",
+        "E014",
+        "E030"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "LPN独立实例与3SAT执行正确性有实质测量，不是纯LLM自评；但utility形状漏洞、说明与执行不同，以及MQAP方向/百分化、Maxcut超时和归一化难对齐，降低跨任务测量可信度。",
+      "evidence_ids": [
+        "E008",
+        "E025",
+        "E031"
+      ],
+      "counterevidence_ids": [
+        "E013",
+        "E021",
+        "E022",
+        "E023",
+        "E024",
+        "E026",
+        "E027"
+      ],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "改后对固定seed的后续产物结果和greedy baseline支持artifact有用；缺同总元搜索预算固定proposer、强人工scaffold及逐组件消融，不能把所有收益归于递归而非搜索/采样配置。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E028",
+        "E029"
+      ],
+      "counterevidence_ids": [
+        "E011",
+        "E015"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "50独立测试实例、灰盒隐藏下游任务与五类新任务，比只报选择集更强；不过task参数人工挑可改善区间、transfer挑一好improver，不能推出全面跨任务/跨backbone泛化或无泄漏。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E009",
+        "E017"
+      ],
+      "counterevidence_ids": [
+        "E010",
+        "E031"
+      ],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "五GPT4整谱系±SE、25弱模型谱系、10k审计Wilson区间及warning不显著均明确；transfer未给整谱系分布/完整次数，序列选择误差未校准。",
+      "evidence_ids": [
+        "E008",
+        "E010",
+        "E012"
+      ],
+      "counterevidence_ids": [
+        "E009",
+        "E014"
+      ],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "预算API、渐近开销及约3000GPT4调用/轮/run能识别元搜索很贵；没有完整实际token/墙钟/失败成本和摊销回本，也不等于CoT与多轮方法实耗相同。",
+      "evidence_ids": [
+        "E006",
+        "E020",
+        "E031"
+      ],
+      "counterevidence_ids": [
+        "E014"
+      ],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 61.25,
+    "display": 61.3,
+    "lower": 61.25,
+    "upper": 61.25,
+    "coverage": 1.0,
+    "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c"
+  },
+  "status": "reviewed",
+  "reason": "完整阅读正文与全部附录；递归保留的是改进程序自身，独立下游实例与新任务支持窄improver结论。测量描述对齐、强元优化器控制、非单调回退和全成本仍未闭合。",
+  "rationale": "改进机制源码确被保留并改善后续程序；独立LPN和五类迁移支持窄improver。自应用独特因果、utility对齐、安全回退与全成本仍有缺口。"
+}

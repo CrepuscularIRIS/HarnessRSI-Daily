@@ -1,0 +1,787 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "cal-h1-v2",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "status_reason": "Full text (arXiv PDF v3 incl. appendices) read; eight ratings resolved. Evidence is author-reported; no reproduction.",
+ "reason": "Full text (arXiv PDF v3 incl. appendices) read; eight ratings resolved. Evidence is author-reported; no reproduction.",
+ "paper": {
+  "paper_key": "2308.02151",
+  "paper_id": "2308.02151",
+  "title": "Retroformer: Retrospective Large Language Agents with Policy Gradient Optimization",
+  "version": "2308.02151v3",
+  "claim_type": "component_training",
+  "central_claim": "Training a small retrospective language model with policy gradient (PPO on next-trial return change) so that its reflections, appended to a frozen actor LLM prompt, improve language agents on HotPotQA, AlfWorld and WebShop faster and further than frozen-LM self-reflection (Reflexion)."
+ },
+ "provenance": {
+  "input_hash": "0e70ef7b4874b46fef4c8e77c81bb694d4c5df2b38285141b680e4566627c5d1",
+  "rubric_version": "frozen v1.0 (rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "haiku(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker; null by design (no probing).",
+  "timestamp": "2026-10-21T18:03:14Z"
+ },
+ "rationale": "PPO-trained reflector credited by next-trial return; clear writer credit path, but oracle retries, single runs, one-figure untrained arm, no cost. Component_training, retained-level, scoped.",
+ "materials": [
+  {
+   "material_id": "M-2308.02151",
+   "role": "target_fulltext",
+   "url": "https://arxiv.org/pdf/2308.02151v3",
+   "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "chars": 69791,
+   "extraction_method": "pdf",
+   "sections_read": [
+    "title/abstract",
+    "introduction",
+    "related work/background",
+    "method",
+    "experiments/results",
+    "discussion/limitations/conclusion",
+    "appendix/supplement (as present in extraction)"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2308.02151.txt"
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "EV001",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Abstract",
+   "quote": "learning a retrospective model, which automatically tunes the language agent prompts from environment feedback through policy gradient",
+   "support_explanation": "Core operation: a trained retrospective LM rewrites actor prompt context (reflections) from environment feedback; actor stays frozen.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV002",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 3",
+   "quote": "the only learnable parameters are in the retrospective model",
+   "support_explanation": "Weights updated only in the retrospective model (LoRA); the retained prompt-level artifact is the reflection text.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV003",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 1",
+   "quote": "generating useful reflective feedback from a pre-trained, frozen LLM is challenging",
+   "support_explanation": "Author gap: frozen-LM reflections are uninformative (credit assignment).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV004",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 4.1",
+   "quote": "The self-reflection responses that summarize prior failed attempts are appended to the actor prompt as the long-term memory.",
+   "support_explanation": "Persistence: reflections are per-task text memory appended to the actor prompt across retries.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV005",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 4.1",
+   "quote": "we store the instructions and responses of the retrospective model of each trial, together with the episode returns in a local dataset, which we call replay buffer.",
+   "support_explanation": "Replay buffer of (instruction, reflection, return) triples used to fine-tune the retrospective model.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV006",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 4.2",
+   "quote": "the difference in episode returns between two consecutive trials naturally serves as a reward signal for fine-tuning the retrospective model Mr with reinforcement learning.",
+   "support_explanation": "Reward for the improver is the next-trial return change (improvement relative to previous episode).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV007",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 4.2",
+   "quote": "In online execution, we use best-of-n sampler, with the scores evaluated by the learned reward model",
+   "support_explanation": "Inference-time compute: best-of-n with a learned reward model for the retrospective model; n not stated here.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV008",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 4.1",
+   "quote": "Operating under a sparse reward signal, such as binary success status (success/failure), the model detects the root cause of failure",
+   "support_explanation": "The retrospective step is triggered by a success/failure signal (ground-truth correctness) at test time as in Reflexion.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV009",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 5.2",
+   "quote": "The agent is evaluated on 100 validation tasks from the distractor dev split of open-source HotPotQA dataset, 134 tasks in AlfWorld and 100 tasks in WebShop",
+   "support_explanation": "Evaluation set sizes: 100/134/100 tasks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV010",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "App C.1",
+   "quote": "to isolate the randomness of LM from the effects of reflections",
+   "support_explanation": "Actor temperature 0 gives determinism, which also means no run-to-run variance is estimated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV011",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "App C.1",
+   "quote": "We collected 3,383 reflection samples by running the base rollout policy for 3 trials",
+   "support_explanation": "Training data for HotPotQA: 3,383 reflection samples from the training set; AlfWorld 523, WebShop 267.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV012",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "App C.1",
+   "quote": "We fine-tune the retrospective model Mr with 4-bit quantized LoRA adapters",
+   "support_explanation": "LoRA rank 1 or 4 (0.53M / 2.25M trainable parameters).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV013",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 5.3 Fig 4 legend",
+   "quote": "Retroformer (LoRA r = 0, GPT-3)",
+   "support_explanation": "An untrained (rank 0) retrospective variant appears only in the HotPotQA GPT-3 figure; no numeric table.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV014",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 5.3",
+   "quote": "the performance improvement by Retroformer over the frozen baselines is observed but the improvements may be limited",
+   "support_explanation": "WebShop improvement is small (about 4% at four retries); authors note verbal feedback may not suit this environment.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV015",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Table 2 caption",
+   "quote": "denotes the learnable parameters of each approach",
+   "support_explanation": "Table reports #params, #retries and success rate for ReAct, Reflexion, SAC and Retroformer; one number per cell, no intervals.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV016",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 4.1",
+   "quote": "we use soft matching (e.g., f1 score) whenever possible to evaluate the alignment of the generated output with the expected answer or product as the reward function",
+   "support_explanation": "Reward shaping with f1 against ground-truth answers (needs labels) for HotPotQA.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV017",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "Sec 5.2",
+   "quote": "This agent enhances from verbal feedback of the environment, but does not use gradient signals explicitly.",
+   "support_explanation": "Reflexion baseline: uses an untrained reflector; its reflector model and sampling budget differ from Retroformer.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV018",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "App C Algorithm 1",
+   "quote": "as the Retrospective model with LONGCHAT-16 K",
+   "support_explanation": "Algorithm 1 initialization line names text-davinci-003 and LongChat for the retrospective model, inconsistent with the text (LongChat only).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV019",
+   "material_id": "M-2308.02151",
+   "material_sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+   "locator": "App C.1",
+   "quote": "All experiments are done in Google Cloud Platform (GCP) GKE environment with A100 40GB GPUs.",
+   "support_explanation": "Compute described only as hardware type; no GPU-hours or training cost.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "retrospective model (LongChat-7B + LoRA) that writes reflection text appended to the actor prompt",
+   "information": "previous trajectory, binary/F1 episode return, persistent reflections of this task; actor weights hidden",
+   "operation": "sample two reflections for a failed task, roll out the next episode with each, rate by return difference, train reward model and PPO",
+   "output": "reflection text (prompt memory) and updated retrospective LoRA weights",
+   "conditions": "tasks with scalar/binary return and retries; offline data from the training set",
+   "feedback": "next-trial episode return minus current return",
+   "selection_rule": "reward-model-scored best-of-n at inference; PPO objective with KL to reference",
+   "selection_data": "training-split rollouts (3,383 / 523 / 267 reflection samples)",
+   "persistence": "LoRA adapter weights (trained improver); per-task reflection memory in prompt",
+   "later_use": "every retry on validation tasks reads the accumulated reflections",
+   "claimed_effect": "as read from the garbled Table 2 extraction: HotPotQA 54% at 4 retries vs Reflexion 50-52%; AlfWorld 100% vs about 84-85%; WebShop +1-2 pts",
+   "failure_boundary": "WebShop gains small; reflection memory is per task; uses ground-truth success signal for retries",
+   "evidence_ids": [
+    "EV001",
+    "EV002",
+    "EV004",
+    "EV005",
+    "EV006",
+    "EV007",
+    "EV008"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Frozen LLM reflections are uninformative for credit assignment and language agents are not optimized with environment rewards in a gradient-compatible way.",
+  "checked_gap": "The fixed object is the reflector/improver (frozen or the actor itself in Reflexion); Retroformer makes it a trained small model. The weight-trained improver produces non-weight prompt edits, so the work is in scope as component_training.",
+  "lineage": "ReAct -> Self-Refine/Reflexion (verbal feedback, frozen reflector) -> Retroformer (RL-trained reflector); RLHF/PPO machinery from TRL.",
+  "closest_adjacent": "Reflexion, Self-Refine, RAP, SAC baseline; concurrent prompt-optimizer RL (not discussed).",
+  "residue": "Reflector quality (root-cause analysis) limits learning from failures.",
+  "stakes": "Figure 1 shows a looping failure produced by a frozen reflector.",
+  "method_response": "Learn the reflector from the return change its reflections cause.",
+  "remaining_gap": "Multi-environment generalization, cost, WebShop-like exploration-heavy tasks.",
+  "evidence_ids": [
+   "EV003",
+   "EV014"
+  ],
+  "unresolved": [
+   "no external check of more recent trained-reflector or prompt-RL papers"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C26",
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": "C26: build comparative signal from non-human source: yes (reflection pairs rated by downstream return difference); learned reward model plus PPO: yes; re-granularize credit: reflection-level rating; unit of supervision is pair comparison: yes.",
+    "success_checks": "signal tied to the actual downstream objective: met (success rate); ablate against simple self-improvement baseline: partial (frozen reflector, r=0 arm in one figure); generalization beyond one model family: partial.",
+    "failure_checks": "delta from prior cooperative/preference training: partially argued; cost of the loop not justified (no cost report).",
+    "evidence_ids": [
+     "EV005",
+     "EV006",
+     "EV013"
+    ],
+    "reason": "Rating = return change of an execution-verified rollout; trained with reward model and PPO."
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": "Reflections condition a frozen actor at inference with no actor updates; no trained schema parsing so sub-card null.",
+    "success_checks": "conditioning-off arm: ReAct (no reflection) exists; contamination analysis none.",
+    "failure_checks": "sensitivity to reflection quality: Fig 5 qualitative.",
+    "evidence_ids": [
+     "EV001",
+     "EV004"
+    ],
+    "reason": "Memory prompt is the conditioning channel for the frozen actor."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Both matches grounded.",
+  "executes_pattern": "self_supervised_signal_engineering: yes.",
+  "resolves_problem": "partially: improved reflections on three tasks; credit-assignment claim shown qualitatively."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "amortize_improver_into_trained_policy",
+    "sub": "H27",
+    "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+    "fit": "high: the reflector (proposer of prompt edits) is trained by PPO on the change in next-episode return",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "met",
+      "note": "reward is next-trial return minus current return, relative to the previous episode",
+      "evidence_ids": [
+       "EV006"
+      ]
+     },
+     {
+      "id": "S2",
+      "status": "met",
+      "note": "reflection credited by the actor outcome in the next trial",
+      "evidence_ids": [
+       "EV006"
+      ]
+     },
+     {
+      "id": "S3",
+      "status": "partial",
+      "note": "actor is frozen and treated as environment; writer is trained against the actual reader but not co-trained",
+      "evidence_ids": [
+       "EV002"
+      ]
+     },
+     {
+      "id": "S5",
+      "status": "partial",
+      "note": "trained on rollouts from three environments; per-environment sizes differ; transfer across families not tested",
+      "evidence_ids": [
+       "EV011"
+      ]
+     },
+     {
+      "id": "F1",
+      "status": "unmet",
+      "note": "close to optimizer swap on the known Reflexion loop (generate reflection, retry, score) with PPO replacing the frozen reflector",
+      "evidence_ids": [
+       "EV017"
+      ]
+     },
+     {
+      "id": "F4",
+      "status": "met",
+      "note": "writer is not trained on a composite proxy in isolation: its reward is downstream return",
+      "evidence_ids": [
+       "EV006"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "EV001",
+     "EV005",
+     "EV006"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+    "fit": "medium: failed attempts are reflected into concise lessons stored as per-task memory and injected into retries",
+    "condition_checks": [
+     {
+      "id": "S3",
+      "status": "met",
+      "note": "grounding signal is environment return/F1",
+      "evidence_ids": [
+       "EV006",
+       "EV016"
+      ]
+     },
+     {
+      "id": "S4",
+      "status": "unmet",
+      "note": "no consolidation or forgetting; memory is per task and short",
+      "evidence_ids": [
+       "EV004"
+      ]
+     },
+     {
+      "id": "S5",
+      "status": "unmet",
+      "note": "no gate on which reflections are kept beyond best-of-n scoring",
+      "evidence_ids": [
+       "EV007"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "EV004"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C26",
+   "domain": {
+    "namespace": "rsi",
+    "main": "amortize_improver_into_trained_policy",
+    "sub": "H27"
+   },
+   "operation_correspondence": "RS: manufacture a comparative reward from execution outcomes and optimize with a reward model/PPO; RSI: train the reflection proposer on the return change its edit caused.",
+   "conditions_differences": "H27 asks to beat the amortized search and an untrained same-size proposer on unseen task families with cost accounting; only a partial HotPotQA arm and no cost are reported.",
+   "evidence_ids": [
+    "EV006",
+    "EV013",
+    "EV019"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S1",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/amortize_improver_into_trained_policy.md"
+   ],
+   "applies_when": "proposer trained by RL/preferences",
+   "applicable": true,
+   "status": "met",
+   "reason": "Reward is relative return change between consecutive trials.",
+   "evidence_ids": [
+    "EV006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S2",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/amortize_improver_into_trained_policy.md"
+   ],
+   "applies_when": "memory/reflection writer trained",
+   "applicable": true,
+   "status": "met",
+   "reason": "Reward comes from what the actor does with the reflection in the next trial.",
+   "evidence_ids": [
+    "EV006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S3",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/amortize_improver_into_trained_policy.md"
+   ],
+   "applies_when": "writer and reader",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Reader (actor) frozen, trained against its behavior but not coupled; two actors tested.",
+   "evidence_ids": [
+    "EV002",
+    "EV015"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/F1",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/amortize_improver_into_trained_policy.md"
+   ],
+   "applies_when": "training a known loop",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Reflexion loop with PPO-trained reflector; the structure of the loop is unchanged.",
+   "evidence_ids": [
+    "EV017"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "RS card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "a manufactured signal is trained on",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Untrained r=0 arm only in HotPotQA GPT-3 figure; no ablation of reward model, SFT stage, best-of-n or reward shaping.",
+   "evidence_ids": [
+    "EV013",
+    "EV007"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "version": "RS card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "signal proxies the real objective",
+   "applicable": true,
+   "status": "met",
+   "reason": "Compared on actual task success rates, not a proxy.",
+   "evidence_ids": [
+    "EV009",
+    "EV015"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "RS card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "training loop has compute cost",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Only hardware type; no GPU-hours, rollout counts for AlfWorld/WebShop beyond sample numbers, or inference best-of-n cost.",
+   "evidence_ids": [
+    "EV019",
+    "EV007"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "RS card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "deployment realism / test-set information",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Retries on validation tasks rely on the ground-truth success signal at test time.",
+   "evidence_ids": [
+    "EV008"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2308.02151-1",
+   "version": "paper-specific",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Reflexion-style protocol"
+   ],
+   "applies_when": "success-over-retries is compared against a baseline that cannot retry",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Reflexion shares the oracle retry, but the ReAct row reports a single value with no retries, so the ReAct comparison conflates retry access (Table 2 read from a garbled PDF extraction).",
+   "evidence_ids": [
+    "EV008",
+    "EV015"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2308.02151-2",
+   "version": "paper-specific",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "inference best-of-n sampler"
+   ],
+   "applies_when": "trained model uses extra sampling at inference",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No budget-matched Reflexion (same number of reflection samples) is reported.",
+   "evidence_ids": [
+    "EV007",
+    "EV017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2308.02151-3",
+   "version": "paper-specific",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "100-task evaluation sets"
+   ],
+   "applies_when": "few-point differences on 100 tasks are claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Single deterministic run per cell, no intervals; HotPotQA and WebShop margins are 1-4 points on 100 tasks.",
+   "evidence_ids": [
+    "EV009",
+    "EV010",
+    "EV015"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Retroformer outperforms Reflexion/ReAct on HotPotQA, AlfWorld, WebShop",
+   "setting": "GPT-3 and GPT-4 actors, 100/134/100 validation tasks, retries up to 4",
+   "baseline_control": "ReAct, Reflexion, SAC",
+   "selection_vs_test": "reflections trained on training split; validation tasks used for reporting; retries use ground-truth success signal",
+   "result_denominator": "success rate; 100/134/100 tasks; one run per cell",
+   "evidence_ids": [
+    "EV008",
+    "EV009",
+    "EV015"
+   ],
+   "counterevidence": [
+    "EV014"
+   ],
+   "allowed_conclusion": "Under the retry protocol, the trained reflector improves success on AlfWorld clearly and on HotPotQA modestly; WebShop gains are within noise."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Policy gradient improves reflection quality (credit assignment)",
+   "setting": "HotPotQA examples; untrained r=0 arm in a figure",
+   "baseline_control": "frozen LM reflection",
+   "selection_vs_test": "n/a",
+   "result_denominator": "qualitative examples",
+   "evidence_ids": [
+    "EV003",
+    "EV013"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Qualitative examples plus one untrained-arm curve; not a controlled credit-assignment test."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "With a ground-truth success signal for retries, a PPO-trained 7B reflector (LoRA) raises success over Reflexion with frozen reflectors on AlfWorld (100% vs 84-85%) and modestly on HotPotQA, with small WebShop effect (author-reported single runs).",
+  "unresolved": [
+   "budget-matched baselines",
+   "variance",
+   "untrained-reflector arm on all environments",
+   "training cost"
+  ],
+  "retained_trace": {
+   "before": "frozen/untrained reflector",
+   "proposed_change": "reflection text and LoRA update",
+   "selection": "return difference ratings, reward model, PPO; best-of-n at inference",
+   "persisted": "LoRA weights + per-task reflection memory",
+   "later_tasks": "validation tasks with retries",
+   "measured_gain": "Table 2",
+   "improver_level": "partial: untrained-vs-trained reflector compared only in a HotPotQA figure"
+  }
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Names a concrete residual (frozen LM reflections give poor credit assignment, Fig 1 example) against Reflexion/Self-Refine/RAP with a feature table; additional trained-reflector or prompt-RL neighbors are not covered, and gradient-compatibility is partly motivation.",
+   "evidence_ids": [
+    "EV003",
+    "EV017"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Using the next-trial return change of paired reflection rollouts as reward for a reward model/PPO is a coherent mechanism with a clear credit path; weak spots are the low-signal ratings when returns stay at 0 and the formulation/Algorithm inconsistency.",
+   "evidence_ids": [
+    "EV005",
+    "EV006"
+   ],
+   "counterevidence_ids": [
+    "EV018"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Data collection counts, LoRA ranks, SFT+reward-model+PPO pipeline and prompts are described, with the writer-reader interface clear; inference best-of-n size, memory length handling and consistency of the algorithm listing are unclear, and no retention gate/versioning exists.",
+   "evidence_ids": [
+    "EV004",
+    "EV011",
+    "EV012"
+   ],
+   "counterevidence_ids": [
+    "EV018",
+    "EV007"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Standard task success rates on three public environments, with rewards computed from ground truth; test-time retry uses the success signal, and metric definition for HotPotQA success is not spelled out.",
+   "evidence_ids": [
+    "EV009",
+    "EV015"
+   ],
+   "counterevidence_ids": [
+    "EV008"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "ReAct/Reflexion/SAC baselines and an untrained r=0 arm only in one HotPotQA figure; no ablation of the reward model, SFT, reward shaping or best-of-n, no budget-matched Reflexion, and Reflexion uses a different reflector model.",
+   "evidence_ids": [
+    "EV013",
+    "EV015",
+    "EV017"
+   ],
+   "counterevidence_ids": [
+    "EV007"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Training tasks are separate from validation tasks, but retries on validation tasks use the ground-truth success signal (A2: oracle retry), reflector selection details are not given and the only transferred asset is a reflector trained on the same three environments.",
+   "evidence_ids": [
+    "EV009",
+    "EV011"
+   ],
+   "counterevidence_ids": [
+    "EV008"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Task counts are stated and WebShop limitation is acknowledged, but each cell is one deterministic run (temperature 0) with no intervals or seeds; HotPotQA/WebShop margins are 1-4 points on 100 tasks.",
+   "evidence_ids": [
+    "EV009",
+    "EV010",
+    "EV014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Parameter counts and sample counts are given but no training compute, rollout cost or inference best-of-n cost; baselines are not cost-matched.",
+   "evidence_ids": [
+    "EV011",
+    "EV019"
+   ],
+   "counterevidence_ids": [
+    "EV007"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

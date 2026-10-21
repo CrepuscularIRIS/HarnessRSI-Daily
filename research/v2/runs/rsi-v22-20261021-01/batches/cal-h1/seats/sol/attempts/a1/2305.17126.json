@@ -1,0 +1,916 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "cal-h1",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2305.17126",
+    "paper_id": "2305.17126",
+    "title": "Large Language Models as Tool Makers",
+    "version": "2305.17126v2",
+    "claim_type": "system_method",
+    "central_claim": "LATM自动制作、验证并缓存可复用Python工具，由强模型承担一次性制作、轻模型调用；可在复杂推理任务上保持接近强模型的性能并降低摊销服务成本，dispatcher可支持动态任务流。",
+    "scope_class": "A",
+    "scope_reason": "非权重Python工具经执行/示范验证后包装缓存，在后续新实例调用；动态触发链有说明，但实验证据主要是离线建工具后的复用和分离路由试验。"
+  },
+  "provenance": {
+    "input_hash": "a17da5718daa26df2a9a8c905c3e9e88d8e6308454a02d4755f0c65f305f8d6d",
+    "rubric_version": "v2.2 draft_uncalibrated; calibration generic anchors",
+    "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "rs_cards_hash": "80901fbdf15c2639474e4e777702da656b247da0d9601c5e8d510e8b75b1f019",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T17:26:32.310740+00:00",
+    "notes": [
+      "Model type follows assigned configured seat; actual upstream ID, session receipt and session ID unavailable in supplied runtime records; no probing performed.",
+      "Continuation segment 3 for same a1. Earlier three paper outputs not opened or changed.",
+      "Material SHA-256 verified against manifest. Read all 5078 text lines including Appendices A–E; appendix HTML code contains truncated percent/modulo strings, so algorithm interfaces are assessed from prose and surviving examples, not claimed executable reproduction.",
+      "Original/domain card outcome statistics are not scoring evidence; expectations below are tentative single-source checks, not observed reviews or established consensus."
+    ]
+  },
+  "materials": [
+    {
+      "material_id": "LATM-v2",
+      "url": "https://arxiv.org/html/2305.17126v2",
+      "version": "2305.17126v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "sections_read": [
+        "title/abstract",
+        "1 Introduction",
+        "2 Related Work",
+        "3 LATM and 3.1",
+        "4 Functional Cache",
+        "5.1–5.5 all experiments/tables",
+        "6 Conclusion",
+        "Appendix A Dispatcher",
+        "Appendix B Broader Impact and Limitations",
+        "Appendix C all prompts",
+        "Appendix D all six wrapped-tool examples",
+        "Appendix E Dataset Construction",
+        "remaining HTML footer"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "limitations": "HTML conversion damages several Appendix D code fragments and abbreviates two demonstrations per displayed wrapped tool in the source itself; no absent-method inference from that damage."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 153-153",
+      "quote": "However, the applicability of these tool-using methods is largely contingent on the availability of suitable tools. According to the lessons learned from the evolutionary milestones of humans, a crucial turning point was that humans got the ability to fabricate their own tools to address emerging challenges. Inspired by the importance of tool-making for humans, in this work, we embark on an initial exploration to apply this evolutionary concept to the realm of LLMs. We propose a",
+      "support_explanation": "作者具体缺口是现有工具使用依赖合适的现成工具，不是泛泛的冻结模型背景。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 270-286",
+      "quote": "Similar to\nLATM\n, methods like Chameleon\n(\nLu et al., 2023\n)\nalso incorporate Python executors in the pipeline. However, their primary focus is on using Python executors to accurately solve sub-steps involving arithmetic reasoning, similar to\nGao et al. (2023)\n;\nChen et al. (2022)\n. In contrast, we use Python executors to create\nreusable\ntools for addressing other task instances. Furthermore, the separation of the\ntool maker\nand\ntool user\nenables the use of a lightweight model for most inferences, thus enhancing efficiency and cost-effectiveness in",
+      "support_explanation": "与Chameleon/PAL式逐实例Python推理的作者自述区别是跨实例复用与maker/user分工；未获得邻居原文，不能独立认证优先权。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 318-328",
+      "quote": "Early attempts on tool-making.\n\nConcurrent and independent to our work, several early attempts have been made towards using LLMs to make tools.\nWang et al. (2023)\nconducted research within the Minecraft environment and demonstrated the ability of an LLM-powered agent to acquire new skills in the form of programs. Similarly,\nQian et al. (2023)\nproposes a method of decomposing problem-solving for each individual instance into an abstract tool creation phase and a concrete tool application phase. Our work aligns with the spirit of both\nWang et al. (2023)\nand\nQian et al. (2023)\nin the aim to let LLMs to generate their own tools for problem-solving. However, we also underscore the significance of tool reusability and cost-effectiveness stemming from the division of labor. The idea of tool making is also mentioned in a recent survey paper",
+      "support_explanation": "作者明确列出并发Voyager与Qian工具制作路线；本文着重复用和成本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 375-380",
+      "quote": "where several concrete demonstrations are provided, and the model is required to write programs that produce the demonstrated behaviors. In our experiments, we use\n3\n3\ndemonstrations for this stage. If the proposed tool is unexecutable or encounters errors,\ntool maker\nappends the error messages to the history and makes another attempt.",
+      "support_explanation": "生成使用3个示范，执行异常反馈进历史再提案。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 384-404",
+      "quote": "Tool Verification:\nIn this stage, the\ntool maker\ngenerates unit tests using validation samples and subsequently executes these tests on the proposed tool. We utilize\n3\n3\nvalidation samples in our experiments. If the tool fails any of these tests, the\ntool maker\nrecords the error in its history and makes an attempt to rectify the issues within the unit tests (this procedure will only correct the function calls in the unit test part and will not correct the function). The ability of LLMs to self-debug has been demonstrated effectively in recent research\n(\nMadaan et al., 2023\n;\nChen et al., 2023c\n;\nLu et al., 2023\n;\nKim et al., 2023\n)\n. However, within the\nLATM\npipeline, the verification stage serves a slightly different usage. This stage fulfills two key roles: 1) it provides examples that demonstrate how to convert natural language questions into function calls, and 2) it verifies the tool’s reliability, enabling the entire process to be fully automated.",
+      "support_explanation": "3个有答案验证例上产生和执行单测；该阶段只修function call，不修函数；不能把验证称为独立形式正确性保证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 408-433",
+      "quote": "Tool Wrapping:\nIf the execution or verification fails over a preset threshold, the Tool Making stage is viewed as failed. Otherwise,\ntool maker\nis ready to prepare the\nwrapped tool\nfor\ntool user\n. This step involves wrapping up the function code and providing demonstrations of how to convert a task into a function call. These demonstrations are extracted from the Tool Verification step, which converts questions into unit tests. This final product is then ready for use by the\ntool user\n. Please see Appendix\nD\nfor examples of the wrapped tools.\n\nTool Using.\n\nThis second stage involves a lightweight and cost-effective model, such as GPT-3.5 Turbo, to serve as the\ntool user\n. The\ntool user\n’s role is to utilize the verified tool to solve various instances of the task. The prompt for this stage is the\nwrapped tool\nwhich contains the function for solving the task and demonstrations of how to convert a task query into a function call. With the demonstrations,\ntool user\ncan then generate the required function call in an\nin-context learning\nfashion. The function calls are then executed to solve the task. Optionally, postprocessing can be applied to convert the output to match the required format of the task, such as options for multiple-choice questions.",
+      "support_explanation": "包装代码与验证例的调用示范，随后冻结工具供小模型调用执行。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 499-519",
+      "quote": "The\ndispatcher\nmaintains a repository of existing tools crafted by the\ntool maker\nin the format of function APIs. Upon receipt of a new task instance, the\ndispatcher\nfirst attempts to locate a compatible tool within the cache. If such a tool is present, the\ndispatcher\nassigns the instance and corresponding tool to the\ntool user\nfor resolution. However, if no suitable tool is available, the\ndispatcher\nidentifies this as a novel task, either solving it with a powerful model or, if necessary, invoking a human labeler. These new instances are then cached until a sufficient number are amassed to craft a new tool, further enriching the\nfunctional cache\n. This mechanism allows for the\nfunctionally\nsimilar tasks to reuse these tools, expanding the coverage of the classic cache mechanism and reducing the overall serving cost. Given the simplicity of the dispatching task, a lightweight model equipped with appropriate prompts (See Appendix\nC\n) can efficiently serve as the\ndispatcher\n, adding only a marginal cost to the entire pipeline.",
+      "support_explanation": "缓存库和dispatcher缺口检测明确；新任务可能依赖强模型或人工标签，需先攒够例子。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 529-548",
+      "quote": "We evaluate our approach on six datasets from diverse domains, including Logical Deduction, Tracking Shuffled Objects, Dyck Language, Word Sorting, Chinese Remainder Theorem, and Scheduling Meeting. The first five datasets are sourced from BigBench\n(\nSrivastava et al., 2022\n)\n. We take the\n5\n5\nobjects version of the Logical Deduction and Tracking Shuffled Objects tasks, referred to as Logical Deduction (5) and Tracking Shuffled Objects (5) in the paper. We also constructed the Scheduling Meeting task to demonstrate the effectiveness of\nLATM\nin real-world scenarios. Detailed information on dataset generation can be found in Appendix\nE\n. We divide each dataset into training, validation, and test sets, containing 3, 3, and 240 instances, respectively.\n\nModel settings.\n\nDuring the tool-making stage, we set the temperature to 0.3 to introduce randomness to the generation process, allowing for retries if necessary. For this stage, we conduct experiments using GPT-4 and GPT-3.5 Turbo models with the\nChatCompletion\nAPI, always appending the response to the chat history to create an interactive experience. In the tool-using stage, the LLM API call is made only once, and we also perform ablation studies on GPT-3-type models with the standard\nCompletion\nAPI. When using the tools, we consistently set the temperature to 0.0. We set the maximal retry times to be 3 for the tool-proposing and tool-verification stages.",
+      "support_explanation": "六任务，每任务3 train/3 validation/240 test；温度和最多3次重试明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 612-624",
+      "quote": "Our observations indicate that when GPT-4 is employed as the\ntool maker\n, the model frequently devises suitable algorithms for solving tasks. For instance, as shown in Table\n1\n, the\ntool maker\ncreates code to solve the logical deduction task by searching through all permutations and selecting the correct one that satisfies the given constraints. In our experiment, the tool-verification stage is mainly used to provide examples that demonstrate how to convert natural language questions into function calls, and we only observe 2 cases out of the 60 trials that the\ntool maker\ncan correct its mistakes with the guide of error messages. See Section\n5.5\nfor more discussions on the\ntool maker\n.",
+      "support_explanation": "60次工具制作只观察到2次通过报错修正，不能把系统成功全部归给调试。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 642-652",
+      "quote": ". The results demonstrate that with the help of the\ntool\n, a lightweight model like GPT-3.5 Turbo can achieve performance on par with GPT-4, significantly outperforming CoT prompting. Additionally, the average cost of using GPT-3.5 Turbo with the\ntool\nis much lower compared to using GPT-4. This highlights the effectiveness of\nLATM\nin enhancing the performance of lightweight models and therefore reducing the cost compared to employing expensive models. Intriguingly, for the Dyck Language task, GPT-3.5 Turbo as the\ntool user\neven surpasses GPT-4 in its role as the\ntool user\n. Upon investigating the failure cases, we find that when converting the question into a function call, GPT-4 occasionally superfluously closes some brackets within the argument instead of leaving the argument unchanged and letting the function solve it, which leads to incorrect function output.",
+      "support_explanation": "小模型工具增益与Dyck GPT-4错误转换参数的失败模式。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 690-706",
+      "quote": "GPT-3.5\n\nTurbo\n\nCoT\n\n66.4\n\n61.6\n\n20.4\n\n59.2\n\n0.0\n\n18.9",
+      "support_explanation": "Table 2 GPT-3.5 CoT六任务准确率，顺序见表头。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 717-732",
+      "quote": "LATM\n\n79.7 (+13.3)\n\n99.6 (+38.0)\n\n92.2\n(+71.8)\n\n98.3 (+39.1)\n\n100.0\n(+100.0)\n\n100.0\n(+81.1)",
+      "support_explanation": "Table 2 GPT-3.5 LATM六任务准确率79.7/99.6/92.2/98.3/100/100。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 793-822",
+      "quote": "Table 2:\nAccuracy comparison between\nLATM\nand Chain-of-Thought.\nThe six tasks are detailed in Section\n5.1\n. For\nLATM\n, the\ntool\nis created by GPT-4 and utilized by both GPT-3.5 Turbo and GPT-4. The results demonstrate that the application of\nLATM\ncan significantly enhance the performance of GPT-3.5 Turbo, often surpassing or matching GPT-4’s performance with CoT in certain scenarios. The last column depicts the overall cost of processing\nn\nn\nsamples. Here,\nC\nC\nrepresents the cost of one call to GPT-4, while\nc\nc\ndenotes the cost of one call to GPT-3.5 Turbo. At the time of writing this paper,\nC\nC\nis over 15x larger than\nc\nc\n. The few-shot CoT demonstrations for the first four tasks are provided by\nSuzgun et al. (2022)\n, while for the last two tasks, we apply direct few-shot prompting without CoT.",
+      "support_explanation": "成本论证使用调用单价C/c与渐近式而非完整token、重试和执行时间账单。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 843-862",
+      "quote": "Identifying existing tools.\n\nThe first part of our evaluation assesses the\ndispatcher\n’s capability to recognize existing tools within the\nfunctional cache\nthat correspond to a given instance, analogous to the cache fetching phase of traditional cache systems. To this end, we generate a test set of 100 samples, randomly mixed from the six tasks discussed in Section\n5.1\n. For each instance, the\ndispatcher\nis tasked to determine the appropriate tool from existing ones, utilizing prompts containing task examples associated with these tools (See Appendix\nC\n). Success is measured by the correct identification of the tool. Over five random constructions of the test set, the accuracy in correctly determining the suitable tool is\n95\n%\n±\n2\n%\n95\\%\\pm 2\\%\n.",
+      "support_explanation": "dispatcher有工具识别在五个100题混合样本集报告95±2%，并非完整动态闭环成功率。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 864-879",
+      "quote": "Requesting tool-making.\n\nThe second part of our evaluation tests the\ndispatcher\n’s ability to request tool-making for instances originating from an unseen task. This situation is akin to enqueuing a new instance into the cache when a cache miss happens. We randomly designate four tasks as existing tasks with readily available tools and select four other tasks for testing—two of these are unseen, and the other two fall within the realm of existing tasks. Again, a test set of 100 samples is generated. For each instance in the test set, the\ndispatcher\ndetermines whether it needs to request tool-making or if an existing tool can solve the instance. Over multiple runs, the accuracy of making the correct decision stands at\n96\n%\n±\n3\n%\n96\\%\\pm 3\\%\n, demonstrating the robustness of our approach in efficiently managing the\nfunctional cache\n.",
+      "support_explanation": "新任务识别报告96±3%，四已知中选二、两未知的局部路由试验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 935-973",
+      "quote": "GPT-4\n\n3/5\n\n4/5\n\n5/5\n\n5/5\n\n5/5\n\n3/5\n\nTable 3:\nSuccess rate of generating new tools (Python functions that pass the tool-verification step) in the tool-making stage with GPT-4 v.s. GPT-3.5 Turbo.\nWe run\n5\n5\ntrials for each model on each task,\nn\nn\n/5 means\nn\nn\ntrails out of\n5\n5\nsuccesses to produce a valid tool. For hard tasks like Logical Deduction and Tracking Shuffled Objects, GPT-3.5 Turbo fails in all trials, showing the necessity of using a more powerful model as\ntool maker\n.\n\nWe investigate the capacity requirements for the language model used in the tool-making stage (See Table\n3\n). Generally, we found that a more powerful and expensive model better serves the purpose, as this stage is performed only once for each task, and high accuracy is crucial for effectively passing tools to a smaller model. Specifically, on hard tasks like Logical Deduction and Tracking Shuffled Objects, GPT-3.5 Turbo fails in all the 5 trails. And the major failure reason is that the tool is not general enough and may only work on the training samples. On the other hand, we also discovered that for easy tasks, the\ntool maker\ncan be a lightweight language model. For simple tasks like Word Sorting, GPT-3.5 Turbo can effortlessly generate a program that solves the task. Another limitation that may contribute to the\ntool maker\n’s failure is the context length constraints. Since we use the entire history in each step of tool-making to enhance the reliability of the tool-making stage, this also introduces a longer context. In this case GPT-4 with 8192 context length is preferable.",
+      "support_explanation": "GPT-4六任务工具产生成功分母3/5,4/5,5/5,5/5,5/5,3/5；弱maker和上下文不足失败明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 1103-1143",
+      "quote": "CoT as a tool does not help.\n\nIn addition to\nLATM\n, we investigate if we can improve task performance by reusing Chain-of-Thought (CoT) from a larger model to a smaller model similar to\nLATM\npipeline. Specifically, we use the same larger model (GPT-4) in the “CoT-making” stage, using zero-shot prompting “Let’s think step by step.” to elicit the intermediate thought steps, and then use the generated CoT to the same smaller tool-using model (GPT-3.5 Turbo). We test this on two tasks and report the results Table\n5\n. We observe that using CoT from a large model has a similar or even worse performance than human-written CoT, which is much worse than\nLATM\n.\n\nAccuracy\n\nGPT-4 CoT\n\nHuman-written CoT\n\nLATM\n\nLogical Deduction (5)\n\n36.8\n\n66.4\n\n79.7\n\nTracking Shuffled Objects (5)\n\n63.2\n\n61.6\n\n99.6\n\nTable 5:\nAccuracy of using CoT generated by GPT-4.\nThe performance is similar to human-written CoT, which is much worse than\nLATM\n.",
+      "support_explanation": "GPT-4生成CoT迁移对照只在两任务报告，工具优于此自然语言替代。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 1156-1158",
+      "quote": "In our evaluation process, we identified a significant lack of high-quality datasets that authentically represent daily human-computer interactions, including recurring tasks such as scheduling meetings or booking flights over email or phone calls, in their raw natural language format. We anticipate that our work will stimulate the research community to create such datasets, which could prove instrumental in cultivating the next generation of AI systems. These systems, capable of generating and applying their own tools, will be equipped to tackle complex tasks more effectively. An exciting avenue for future research is enabling the\ntool maker\nto refine and upgrade existing tools to manage new problem instances, much like in software development. This adaptability could further catalyze the evolution of the AI ecosystem, unlocking a wealth of opportunities.",
+      "support_explanation": "作者承认真实交互数据缺口；升级已有工具是未来工作而非已实现维护机制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "LATM-v2",
+      "sha256": "98e7796ade6caf6f0934d15eb35fdd95ad2d5ece8ef4a66c62ed588c25af156f",
+      "locator": "lines 1186-1192",
+      "quote": "However, this newfound autonomy of LLMs is a double-edged sword. As we endow LLMs with the ability to generate their own tools, we also create a scenario where the quality of the tools they develop may not always meet the standards or expectations set by human developers. Without proper safeguards, there’s a risk that these models could generate solutions that are suboptimal, incorrect, or even potentially harmful. Furthermore, as LLMs become more autonomous, the potential for loss of control increases. If these models are widely used without appropriate regulation, there could be unforeseen consequences, potentially even leading to scenarios where humans lose control over the AI systems.\n\nIn this study, we have not addressed these control and safety issues in depth, and our work has some limitations. Our proposed framework,\nLLM As Tool Maker\n, while effective in the tested scenarios, is still in its early stages of development. It is crucial to note that the real-world performance and safety of the system may vary based on the complexity and nature of the tasks it is applied to. Additionally, the evaluation and validation of the tools created by the\ntool maker\nin a real-world setting is a challenge that needs to be addressed.",
+      "support_explanation": "作者承认质量、安全与真实场景验证仍未解决。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "每任务类型的可复用Python utility及其调用示范",
+      "information": "强maker看到3个标注训练示范与3个标注验证示范及执行报错；test不用于制作（按作者划分）；标签是外部特权，不是自生真值。",
+      "operation": "由示范提案函数→执行报错修函数（proposing）→验证例生成断言测试并只修调用（verification）→成功后包装代码/调用示范",
+      "output": "缓存的函数与调用上下文",
+      "conditions": "可程序化重复任务、足够强的maker、可执行Python、标注例与上下文容量",
+      "feedback": "Python错误、验证例已知答案",
+      "selection_rule": "proposing和verification各最多3次重试，超过阈值失败，否则包装",
+      "selection_data": "3训练+3验证例/任务",
+      "persistence": "函数代码及调用示范保存作wrapped tool/cache；无既有工具升级/版本回滚机制",
+      "later_use": "小模型在240个新test实例生成参数并执行固定工具",
+      "claimed_effect": "提高小模型推理准确率并摊销强maker调用",
+      "failure_boundary": "测试可只证明3例；参数解析可能错；maker有失败；更新已有工具属未来工作。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E008",
+        "E009",
+        "E010",
+        "E016",
+        "E018"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "工具API库存及在线dispatcher",
+      "information": "轻模型看到库存API说明和当前请求；新请求标签须由强模型/人工另获",
+      "operation": "兼容工具命中则调user，未命中则收集示范并触发maker",
+      "output": "工具选择/unknown决策及可扩充功能缓存",
+      "conditions": "重复任务类别可辨认、请求足够重复以摊销、未覆盖请求可获得答案",
+      "feedback": "任务识别是否正确；不是在线边际收益门",
+      "selection_rule": "API兼容性，不是统计性工具效用门",
+      "selection_data": "独立100例路由混合集测试；不是完整工具成长流",
+      "persistence": "函数API库扩大；去重/淘汰/冲突策略未建立",
+      "later_use": "后续功能相似请求选择缓存工具",
+      "claimed_effect": "动态流中复用工具降低服务成本",
+      "failure_boundary": "路由试验与制作/使用分开；开放任务新颖性、错误积累和长期服务成本未证",
+      "evidence_ids": [
+        "E007",
+        "E014",
+        "E015",
+        "E019"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "工具使用受预先存在的工具约束；强模型直接逐请求推理成本高，普通响应缓存只复用文本相似答案。",
+    "checked_gap": "本文确实改变可复用求解函数库存，并将强模型算法生成与轻模型参数解析拆开；同一任务的新实例使用已保留工具有测试证据。",
+    "lineage": [
+      {
+        "name": "PAL/Program-of-Thought/Chameleon Python execution",
+        "source_version": "LATM v2 §2 references; neighbor full texts absent",
+        "relation": "逐实例执行与本文跨实例函数复用不同",
+        "evidence_ids": [
+          "E002"
+        ]
+      },
+      {
+        "name": "Voyager (Wang et al. 2023), Qian et al. 2023 abstract tool creation",
+        "source_version": "LATM v2 §2 concurrent-work description only",
+        "relation": "工具合成/代码技能近邻；作者承认并发，不主张本文首创",
+        "evidence_ids": [
+          "E003"
+        ]
+      }
+    ],
+    "closest_adjacent": "同类工具创造、程序辅助推理、LLM cascades与功能缓存是必须比较的近邻；只凭LATM related-work陈述不能独立确认所有差别。",
+    "residue": "可执行通用函数能否从6例产生并由弱模型在同类新输入可靠调用，且成本是否可摊销。",
+    "stakes": "减少对每个请求使用昂贵强模型的依赖，并避免逐实例重写相同算法。",
+    "method_response": "强maker一次生成并验证→固定工具→轻user解析→执行；dispatcher查库存再决定创建。",
+    "remaining_gap": "仅六规则任务，实际自然交互数据缺乏；缺完整成本、泛化强度和开放任务动态流验证。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E006",
+      "E008",
+      "E013",
+      "E018"
+    ],
+    "unresolved": [
+      "请总控统一补固定版本Chameleon、PAL/PoT及Qian工具制作邻居全文，以核谱系与相同预算替代；不通过网络单席补证。",
+      "Voyager完整原文属于前一上下文但本次按禁读边界不回读既有评审；不把记忆中的上一篇分数当锚。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "decompose_and_delegate",
+    "supporting": [
+      "adapt_via_conditioning"
+    ],
+    "outside_taxonomy": false,
+    "reason": "实际操作是把自然语言结构提取与组合/精确计算分开，以可执行函数/调用跨边界，固定工具再以示范条件化弱user。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "decompose_and_delegate",
+        "sub_id": "C25",
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          {
+            "step": 1,
+            "status": "met",
+            "reason": "小模型复杂算法推理交Python，保留语言参数提取。"
+          },
+          {
+            "step": 2,
+            "status": "met",
+            "reason": "代码/调用/断言是机器可检查中间物。"
+          },
+          {
+            "step": 3,
+            "status": "met",
+            "reason": "执行报错在制作中反馈，验证调用可修。"
+          },
+          {
+            "step": 4,
+            "status": "partial",
+            "reason": "CoT与maker/user对照存在；没有verification-off同预算切口，2/60修错提示修复贡献有限。"
+          },
+          {
+            "step": 5,
+            "status": "partial",
+            "reason": "六任务与价格表存在，solver延迟/全部重试成本缺。"
+          }
+        ],
+        "success/failure_checks": [
+          "函数可执行不等于对所有输入正确；3验证例只保证有限覆盖。",
+          "真实数据和求解器扩展成本仍未覆盖；不可把Python解释器正确外推为生成算法正确。"
+        ],
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E006",
+          "E009",
+          "E010",
+          "E013",
+          "E017"
+        ],
+        "reason": "C25为正确父类下唯一子卡；执行反馈在构造期间参与修正而非只有末端答案过滤。"
+      },
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "以wrapped function和调用例作为固定user的上下文，不作参数更新。",
+          "已读C03全文：其canonical多任务schema/上游学习或共享检索基底/整类holdout并非本文核心，故子卡留null，不强塞C03。"
+        ],
+        "success/failure_checks": [
+          "实现同类实例条件化，非新任务类别零样本迁移。",
+          "特定有标签示范可见性必须保留，不能声称无监督。"
+        ],
+        "evidence_ids": [
+          "E005",
+          "E006",
+          "E008"
+        ],
+        "reason": "符合主卡条件化接口，未充分执行C03更严格的类别级跨任务战术。"
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "crystallize_executable_capability",
+        "sub": "H07",
+        "version": "manifest domain_cards_hash",
+        "fit": "high for tool forging/reuse; partial for live demand closed-loop evidence",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "执行+已知答案断言作为工具门；正确性仅局部",
+            "evidence_ids": [
+              "E005"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "partial",
+            "reason": "把逐实例算法制作摊销，未做边际能力/重复条目准入测试",
+            "evidence_ids": [
+              "E006",
+              "E007"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "3+3构造/验证之外240同类实例复用",
+            "evidence_ids": [
+              "E008",
+              "E012"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "met",
+            "reason": "proposing执行报错可驱动修复，但2/60修复成功限制效应",
+            "evidence_ids": [
+              "E004",
+              "E009"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "有same-user CoT与CoT-transfer对照，无相同工具去门/去库存匹配预算切口",
+            "evidence_ids": [
+              "E011",
+              "E012",
+              "E017"
+            ]
+          },
+          {
+            "id": "S6",
+            "status": "met",
+            "reason": "依据外部有答案示范制作，不单靠模型无条件自判",
+            "evidence_ids": [
+              "E004",
+              "E005"
+            ]
+          },
+          {
+            "id": "F4",
+            "status": "partial",
+            "reason": "跨固定任务schema的新实例，不支持开放式任意功能增长",
+            "evidence_ids": [
+              "E008",
+              "E018"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E008",
+          "E012"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "decompose_and_delegate",
+      "rs_sub": "C25",
+      "domain_namespace": "rsi",
+      "domain_main": "crystallize_executable_capability",
+      "domain_sub": "H07",
+      "operation_correspondence": "机器可检查的中间函数经执行反馈修复，封装后登记再供新实例调用，把一次求解转为保留能力。",
+      "necessary_conditions": "标签示范、可执行且可复用的程序问题、能解析参数的user。",
+      "differences": "原卡涵盖一般solver边界，领域H07额外要求需求触发与留存；在线全链仅分部验证，不能据此声称长期工具演化。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E014",
+        "E015"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain_namespace": "rsi",
+      "domain_main": "crystallize_executable_capability",
+      "domain_sub": "H07",
+      "operation_correspondence": "已保留工具及其验证调用例组成user条件输入。",
+      "necessary_conditions": "使用时工具接口/示范有效、格式解析可靠。",
+      "differences": "并非学习新权重，也非完整C03跨类别统一schema迁移。",
+      "evidence_ids": [
+        "E006",
+        "E008",
+        "E010"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:crystallize_executable_capability:HELDOUT",
+      "version": "manifest-bound domain cards; pending expectation",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md#Reviewer expectations",
+        "patterns/sub/H07.md#Step-by-Step",
+        "research/patterns/conditions.json#crystallize_executable_capability",
+        {
+          "material_id": "LATM-v2",
+          "evidence_ids": [
+            "E008",
+            "E012"
+          ]
+        }
+      ],
+      "source_strength_reason": "卡内为paper-practice/evidence-audit归纳且pending；本席只全文复核本篇，不把跨论文计数视为本席已复核common_practice，更不冒充实际review。",
+      "applies_when": "声称执行验证后的保留工具可可靠/便宜地供新实例调用",
+      "applicable": true,
+      "check": "同类新实例复用应与工具制作/选择分离",
+      "status": "met",
+      "reason": "3/3/240划分明确，仅支持类内，不是跨任务类型泛化。",
+      "evidence_ids": [
+        "E008",
+        "E012"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability:LEAKAGE",
+      "version": "manifest-bound domain cards; pending expectation",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md#Reviewer expectations",
+        "patterns/sub/H07.md#Step-by-Step",
+        "research/patterns/conditions.json#crystallize_executable_capability",
+        {
+          "material_id": "LATM-v2",
+          "evidence_ids": [
+            "E008"
+          ]
+        }
+      ],
+      "source_strength_reason": "卡内为paper-practice/evidence-audit归纳且pending；本席只全文复核本篇，不把跨论文计数视为本席已复核common_practice，更不冒充实际review。",
+      "applies_when": "声称执行验证后的保留工具可可靠/便宜地供新实例调用",
+      "applicable": true,
+      "check": "应检查构造集、测试集及预训练重叠",
+      "status": "unmet",
+      "reason": "报告划分，但未提供重叠/预训练污染实际测试；不据此断言已污染。",
+      "evidence_ids": [
+        "E008"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability:IMPROVER-CONTROL",
+      "version": "manifest-bound domain cards; pending expectation",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md#Reviewer expectations",
+        "patterns/sub/H07.md#Step-by-Step",
+        "research/patterns/conditions.json#crystallize_executable_capability",
+        {
+          "material_id": "LATM-v2",
+          "evidence_ids": [
+            "E011",
+            "E012",
+            "E017"
+          ]
+        }
+      ],
+      "source_strength_reason": "卡内为paper-practice/evidence-audit归纳且pending；本席只全文复核本篇，不把跨论文计数视为本席已复核common_practice，更不冒充实际review。",
+      "applies_when": "声称执行验证后的保留工具可可靠/便宜地供新实例调用",
+      "applicable": true,
+      "check": "保留工具应胜自然语言/其他改进器等预算替代",
+      "status": "partial",
+      "reason": "有相同user CoT和两任务teacher CoT替代，未匹配全搜索预算或测试verification-off。",
+      "evidence_ids": [
+        "E011",
+        "E012",
+        "E017"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability:COST",
+      "version": "manifest-bound domain cards; pending expectation",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md#Reviewer expectations",
+        "patterns/sub/H07.md#Step-by-Step",
+        "research/patterns/conditions.json#crystallize_executable_capability",
+        {
+          "material_id": "LATM-v2",
+          "evidence_ids": [
+            "E008",
+            "E013",
+            "E016"
+          ]
+        }
+      ],
+      "source_strength_reason": "卡内为paper-practice/evidence-audit归纳且pending；本席只全文复核本篇，不把跨论文计数视为本席已复核common_practice，更不冒充实际review。",
+      "applies_when": "声称执行验证后的保留工具可可靠/便宜地供新实例调用",
+      "applicable": true,
+      "check": "工具创建/验证/检索开销与每题节省应完整计入",
+      "status": "partial",
+      "reason": "报告单价和摊销表达式、重试上限，缺token、失败制作、solver运行、路由实账。",
+      "evidence_ids": [
+        "E008",
+        "E013",
+        "E016"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability:VARIANCE-CORRECTNESS",
+      "version": "manifest-bound domain cards; pending expectation",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md#Reviewer expectations",
+        "patterns/sub/H07.md#Step-by-Step",
+        "research/patterns/conditions.json#crystallize_executable_capability",
+        {
+          "material_id": "LATM-v2",
+          "evidence_ids": [
+            "E005",
+            "E008",
+            "E014",
+            "E015",
+            "E016"
+          ]
+        }
+      ],
+      "source_strength_reason": "卡内为paper-practice/evidence-audit归纳且pending；本席只全文复核本篇，不把跨论文计数视为本席已复核common_practice，更不冒充实际review。",
+      "applies_when": "声称执行验证后的保留工具可可靠/便宜地供新实例调用",
+      "applicable": true,
+      "check": "应有已知答案正确性及构造/使用重复和失败分母",
+      "status": "partial",
+      "reason": "已知答案验证、5次maker成功分母和dispatcher误差有；Table2构造种子方差与失败纳入未给。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E014",
+        "E015",
+        "E016"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability:BACKBONE",
+      "version": "manifest-bound domain cards; pending expectation",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md#Reviewer expectations",
+        "patterns/sub/H07.md#Step-by-Step",
+        "research/patterns/conditions.json#crystallize_executable_capability",
+        {
+          "material_id": "LATM-v2",
+          "evidence_ids": [
+            "E016",
+            "E010"
+          ]
+        }
+      ],
+      "source_strength_reason": "卡内为paper-practice/evidence-audit归纳且pending；本席只全文复核本篇，不把跨论文计数视为本席已复核common_practice，更不冒充实际review。",
+      "applies_when": "声称执行验证后的保留工具可可靠/便宜地供新实例调用",
+      "applicable": true,
+      "check": "应明确弱基座是否能创建及使用工具",
+      "status": "met",
+      "reason": "maker两种、user多种；弱maker在难任务0/5边界明确。",
+      "evidence_ids": [
+        "E016",
+        "E010"
+      ],
+      "score_item": "M"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "强maker工具可使弱user性能接近强模型并显著胜CoT",
+      "setting": "GPT-4 maker；GPT-3.5/GPT-4 user；六任务",
+      "baseline/control": "相同user的few-shot CoT；另含两任务GPT-4 CoT转移；maker/user强度对照",
+      "selection_vs_test": "每类3train+3validation选择工具，240test评估调用；工具种子选择与Table2失败制作摊销关系不完整",
+      "result/denominator": "GPT-3.5 LATM 79.7/99.6/92.2/98.3/100/100%，CoT 66.4/61.6/20.4/59.2/0/18.9%；同类test名义分母各240，表中小数与整数计数未逐项对账",
+      "evidence_ids": [
+        "E008",
+        "E010",
+        "E011",
+        "E012",
+        "E016",
+        "E017"
+      ],
+      "counterevidence": [
+        "GPT-4 CoT逻辑题88.8%仍高于GPT-3.5工具79.7%，非所有任务等价；并无预登记等效检验。",
+        "制作成功并非所有trial；没有完整跨构造种子最终准确率分布。"
+      ],
+      "allowed_conclusion": "已成功构造工具条件下，六类同分布新实例上明显提高弱user准确率；不能说普遍等效强模型。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "通过一次制作多次调用显著降低平均服务成本",
+      "setting": "多次功能同类请求，强maker/弱user分工",
+      "baseline/control": "逐题GPT-4；Table4不同user单价",
+      "selection_vs_test": "成本为理论摊销/时价而非独立服务流计费实验",
+      "result/denominator": "Table2 O(nc+C)与O(nC)，C>15c；给每千token单价，未给全链实际token/重试/执行/dispatcher成本",
+      "evidence_ids": [
+        "E006",
+        "E008",
+        "E013",
+        "E016"
+      ],
+      "counterevidence": [
+        "制作可失败、每次调用prompt包含代码和例子、复杂求解器运行费用不在C/c常数中。"
+      ],
+      "allowed_conclusion": "重复请求下分工有合理摊销优势与价格依据；实际净成本/盈亏平衡未完整测量。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "dispatcher可实现动态流功能缓存",
+      "setting": "六预定义任务的局部路由测试",
+      "baseline/control": "有工具识别与已知/未知判定；未提供完整stream基线",
+      "selection_vs_test": "100题混合集，前者5次随机构造；后者多次运行次数未明确",
+      "result/denominator": "选择工具95±2%，请求新工具96±3%；非端到端任务解决准确率",
+      "evidence_ids": [
+        "E007",
+        "E014",
+        "E015"
+      ],
+      "counterevidence": [
+        "没报告边来新任务边制作再使用的完整长流、缓存淘汰或累计失败/成本。"
+      ],
+      "allowed_conclusion": "有限预设类别下两种dispatcher决策可靠；不构成开放长期缓存闭环的直接实证。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告的固定工具在构造/验证例之外同类新实例被实际调用，支持有限任务类型内保留工具收益；六任务不同基座和CoT替代对照支持算法委托价值，不支持improver改进或一般开放任务在线演化。",
+    "unresolved": [
+      "Table2具体采用哪一个成功制作trial及失败成本纳入方式不透明。",
+      "没有验证门/库存独立干预或完整端到端动态流测量。",
+      "实际全链成本与泄漏/重叠审计缺失，邻居全文未固定。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "具体静态工具与逐请求成本瓶颈、程序推理/制作并发邻居清楚；近邻差别只有作者文本未独立读全，开放场景重要性和残余缺口仍不完整。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "强maker提算法、轻user提参数的责任边界清楚；可检验预测为代码优于CoT转移且弱maker会失败。3例验证无法充分保证泛化，功能novelty检测只在预定义类型测试。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E016",
+        "E017"
+      ],
+      "counterevidence_ids": [
+        "E019"
+      ],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "生成、报错修复、调用单测、重试阈值、包装、读库存到后续调用可重建，附录接口/提示详；没有既有工具升级、版本/回滚/冲突机制，动态生长链未整体验证。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E008"
+      ],
+      "counterevidence_ids": [
+        "E018"
+      ],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "六规则任务已知答案与明确test规模，加工具制作成功率和路由指标；工具验证只3例且来源HTML代码损伤，不支持完全语义正确/一般在线表现。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E012",
+        "E014",
+        "E015",
+        "E016"
+      ],
+      "counterevidence_ids": [
+        "E019"
+      ],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "same-user CoT及教师CoT转移、maker/user强度对照支持可执行委托效应，但没隔离缓存保留/门控与额外强模型计算；2/60修复不能证明调试主导收益。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012",
+        "E016",
+        "E017"
+      ],
+      "counterevidence_ids": [
+        "E009"
+      ],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "3train+3validation之外240实例，支持同类后续调用留存；未给内容/预训练重叠审计或跨类型/真实自然交互留出，保留原文更广应用主张作为限制。",
+      "evidence_ids": [
+        "E008",
+        "E012"
+      ],
+      "counterevidence_ids": [
+        "E018"
+      ],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "制作每任务5trial失败分母与路由误差/样本数报告，已知弱maker失败；主准确率未给构造种子方差/区间，Table2失败工具如何计入不清楚。",
+      "evidence_ids": [
+        "E008",
+        "E014",
+        "E015",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "强弱模型单价比、价格表及重试上限让摊销方向可判；实际token/所有失败候选/dispatcher/solver费用与延迟未完整量化，预算比较不足。",
+      "evidence_ids": [
+        "E008",
+        "E013",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Full LATM v2 §§1–6 and Appendices A–E, all 5078 fixed-text lines; Tables 1–5 and all surviving tool/prompt examples."
+      ]
+    }
+  },
+  "score": {
+    "raw": 68.75,
+    "display": 68.8,
+    "lower": 68.75,
+    "upper": 68.75,
+    "coverage": 1.0,
+    "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c"
+  },
+  "status": "reviewed",
+  "reason": "方法/实验/附录全文可评；代码HTML损伤不影响主要主张事实，但不声称运行验证。邻居与成本缺口限制强结论，不阻塞当前校准评分。",
+  "rationale": "验证后保留函数确实用于同类新实例，分工与接口清楚；六任务支持弱模型获益。仅三验证例、成功工具选择和门控因果未充分拆开，成本主要为摊销式，动态流仅测路由。"
+}

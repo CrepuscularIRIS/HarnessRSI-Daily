@@ -1,66 +1,48 @@
-# Pipeline — how a paper gets from "someone mentioned it" to the board
+# Harness RSI：先研究分析与评分，再精选 Reel
 
-Distilled from the run that built this repo (research/PIPELINE.md is that run's log). Every step names its input,
-output, who does it, and the check that must pass. Deterministic steps are scripts; judgment steps are LLM work whose
-output is validated by a script before anything is published.
+当前：旧分数/Reel 已归档；已有模式卡保留；v2.2 是待校准设计，尚无新分数或新画报。
+[设计依据](DESIGN_BASIS.md) → [评分规则](../research/SCORE_SPEC.md) → [逐篇工作表](../research/REVIEW_WORKSHEET.md)。
 
-```
-Grok bot ──▶ inbox/YYYY-MM-DD.jsonl
-                 │
-                 ▼  (D) research/ingest.py            dedup, arXiv metadata → corpus.jsonl, HF code links (Grok)
-            research/queue/YYYY-MM-DD.txt  ──▶ 本地打分 session (dual-model blind panel)
-                 │
-                 ▼  (L) 1 screen      research/SCREEN_RUBRIC.md      → research/screen.jsonl        tier A/B/C
-                 ▼  (L) 2 signature   research/SIGNATURE_SCHEMA.md   → research/signatures.jsonl    (A/B only)
-                 ▼  (L) 3 assign      research/patterns/taxonomy_view.json → research/patterns/assignments.jsonl
-                 ▼  (L) 4 judge ×2    research/judge.py (blind seats sol, son55) → judgments/passes/<date>.{sol,son55}.jsonl
-                 ▼  (D) 4b merge+arb  research/merge_judgments.py + judge.py --arb (opus) → judgments/<date>.jsonl (one final record/paper)
-                 ▼  (D) 5 score       research/score.py build        → research/scores.jsonl
-                 ▼  (D) 6 board       research/build_board.py        → papers/README.md, README top-30
-                 ▼  (D) 7 checks      see "Check suite"              → commit
-```
-(D) = deterministic script · (L) = LLM judgment, validated by a script
+## 一次性准备与按证据更新
 
-## Steps
+先核既有语料、签名、Harness 模式卡和 reviewer expectations 的来源/适用范围。
+从实际研究操作及成功/失败条件逆向形成卡片；没有真实审稿就使用有来源的审稿期望。
+现有卡片已完成，先复用；只有资料缺口或新反证触发定向补读、修订建议和版本更新。
+再将期望映射到评分轴，做开发/留出校准、冻结 rubric。Open Scientist 建议安装到 CC，用 study 支持缺口诊断与独立审阅。
+不把安装完成、卡片存在或结构检查通过当作评分已经可靠。
 
-| # | Step | Who | Input → output | Validation (must pass) |
-|---|---|---|---|---|
-| 0 | Collect candidates | Grok bot | web/arXiv/HF/GitHub/X → `inbox/YYYY-MM-DD.jsonl` | `inbox/README.md` format |
-| 1 | Ingest + queue | Grok bot (script) | inbox → `corpus.jsonl`, `fulltext/<id>.txt`, `hf_meta.jsonl` | prints remaining LLM steps |
-| 2 | Screen | 打分 session | title+abstract → `screen.jsonl` row (tier, level, kind, evolved) | enums per `SCREEN_RUBRIC.md` |
-| 3 | Signature (A/B) | 打分 session | full text → `signatures.jsonl` row | `python3 research/check_signatures.py <file> <ids>` |
-| 4 | Assign pattern | 打分 session | signature + `taxonomy_view.json` → `assignments.jsonl` row (sub, secondary_main, fit) | sub id exists; no outcome labels used |
-| 5 | Judge ×2 (blind) | 两个盲席位（`judge.py --seat`：gpt-6.1-sol、claude-sonnet-5-5） | full text + spec + conditions → one record per paper per seat in `passes/<B>.{sol,son55}.jsonl` | each record passes `score.py check` (quotes verified) before being kept |
-| 5b | Merge + arbitrate | script + 仲裁席（claude-opus-5-5） | `merge_judgments.py`：一致保留、分歧 unclear+FLAG → `judge.py --arb` 补判 → `<B>.jsonl` 最终单条记录 | `merge_judgments.py --apply-arb` re-checks the whole batch; `score.py check <B>.jsonl <ids>` = 0 problems |
-| 6 | Score | script | final judgments → `scores.jsonl` | `score.py build` reports 0 skipped |
-| 7 | Board | 打分 session (script) | scores → `papers/README.md`, README block | — |
-| 8 | Diagnosis card (optional, top new A papers) | 打分 session | `cards/_TEMPLATE.md` | `python3 check_cards.py` |
+## 每批流程
 
-## Check suite (run before every commit)
+1. **Grok 收集**：[GROK_PROMPT](agents/GROK_PROMPT.md)。一手来源、明确操作/实验的候选写 inbox，保留当前统一格式；不打分、不生成 Reel。
+2. **核对与入库**：检查 ID/title/version、原始来源与重复。`python3 research/ingest.py inbox/<batch>.jsonl` 只处理新 arXiv ID；
+   已有 ID 的版本更新单独处理，无 arXiv ID 的正式材料保留 inbox 独立核对。确认逐行有处理结果后才移动到 processed。
+3. **完整阅读与签名**：固定全文/附录及 hash。旧裁剪全文只可作索引；缺材料标 needs_fulltext。先提取改了什么、怎么选择与留存、信息权限、对照和结果，不评分。
+4. **Gap identify 与谱系**：核作者 gap、最近邻、祖先/前沿残余与代价；说明本文机制如何回应它，以及还剩什么。不是每篇强行生成一个新 idea。
+5. **模式与审稿期望**：严格按原15+31做识别，再记录本领域卡与逐篇映射；按真实操作选卡或有理由的 outside_taxonomy，逐项核生效条件、失败边界和适用 expectation；无真实 review 不跳过此步。
+6. **双席证据判定与评分**：6.1 Sol 与 Sonnet 5.5 独立初评，Opus 5.5 逐篇聚合。[LOCAL_SCORING_PROMPT](agents/LOCAL_SCORING_PROMPT.md)。核主张-证据矩阵，尤其留存改动在之后任务上是否有效；
+   写独立的 evidence_level 与 claim_support，再按冻结权重计算 G/M/X/E；独立语义审核通过才成为有效分数。
+7. **动态选题**：[REEL_SELECTION](REEL_SELECTION.md)。先过质量底线，再按数量上限/可选机制限额挑选；默认最多 9 篇，不凑数量。
+8. **GLM 5.3 / Reel 画报**：[REEL_PROMPT](agents/REEL_PROMPT.md)。只处理有效 selection；paper2assets → 内容策划 → paper2poster → 图文核验与渲染 QA → 精选入口。
 
-```bash
-python3 test_check_cards.py && python3 check_cards.py
-PYTHONPATH=research python3 research/score.py check research/judgments/<today>.jsonl research/judgments/ids_<today>.txt
-PYTHONPATH=research python3 research/score.py build && python3 research/build_board.py
-PYTHONPATH=research python3 research/build_bundles.py && python3 research/check_patterns.py   # only if cards changed
-```
+证据不足返回阅读/检索；机制条件冲突返回审阅；Reel 发现新反证返回判定。不是走完步骤就自动通过。
+日常改阈值只重选题，改论文判断须重审，改 rubric/卡片须新版本并复核受影响分数。
 
-## Periodic work
+## 数据与边界
 
-| Cadence | Task | How |
-|---|---|---|
-| daily | steps 1–7 for the day's inbox | one commit `daily: YYYY-MM-DD (A×n, B×m)` |
-| weekly | diagnosis cards for the week's top 1–3 new A papers; refresh `python3 research/contrast.py` | commit `weekly: …` |
-| monthly or on model change | calibration: re-judge 3 gold papers into `/tmp/cal.jsonl`, run `PYTHONPATH=research python3 research/calibrate.py /tmp/cal.jsonl` | FLAG → stop publishing scores, ask a human |
-| monthly | taxonomy health: share of new papers with `fit: low`; if > 30%, propose (do not apply) a taxonomy revision | issue for a human |
-| when OpenReview quota allows | fetch ICLR reviews for the contrast set, ≤ 400 requests/hour | `research/fetch_reviews.py` |
+| 资产 | 位置 / 状态 |
+|---|---|
+| 原始语料/全文 | research/corpus.jsonl、research/fulltext/（本地；旧缓存可能裁剪） |
+| 既有逆向模式卡 | patterns/、research/patterns/；保持原件 |
+| 历史线索 | research/screen.jsonl、research/patterns/assignments.jsonl；不能直接当新判断 |
+| 新版阅读、校准、判断、选题 | research/v2/；当前只有说明，拟分开 readings/calibration/judgments/selections |
+| 旧分数/Reel/运行记录 | archive/2026-10-21-reset/；不进入新评分输入 |
+| 对外画报 | reel/；只容纳选中且完成 QA 的新成品 |
 
-## Data rules that cost us rework (keep them)
+旧 scorer、board、merge/batch、monitor 与 Reel 批量入口继续返回退役错误。
+新版 scorer/selector/publisher 尚未实现；本次没有批量评审、抓取、启动 Grok Bot 或运行研究实验。
 
-- **Outcome labels never reach a judging or assigning model.** Strip venue headers from PDFs; never pass `openreview.jsonl` labels into prompts.
-- **Rejected papers are mostly abstract-only.** Never compare accepted vs rejected work on evidence or limitations — only on mechanism.
-- **Dedup across sources by fuzzy title** (`contrast.or_duplicates`); the arXiv id is canonical.
-- **Code availability comes from data, not from a truncated text** (`score.code_sources`: anchors → arXiv comment → HF Papers).
-- **OpenReview authenticated quota is 500 requests per sliding hour.** Never loop retries; honor `Retry-After`.
-- **Local only, never committed:** `research/fulltext/`, `research/reviews/`, `research/patterns/bundles/`, credentials.
-- Pattern cards never name a paper; diagnosis cards (`cards/`) do, and must cite versions and SHAs.
+## 大语料执行入口
+
+直接把 [LOCAL_SCORING_PROMPT](agents/LOCAL_SCORING_PROMPT.md) 交给 claude-kimi（Claude Code）；model type 已配置，直接沿用。默认每批5篇、每轮并行2批，双席独立初评后 Opus 逐篇聚合、总控验收并开下一轮。
+只有总控写共享索引和最终提交，worker 各写独立 attempt；断点恢复依赖材料/规则/输出 hash，不靠文件存在。格式与检查见 [BATCH_CONTRACT](../research/BATCH_CONTRACT.md)。
+本轮只准备了完整提示词与原卡参考包；没有启动这些模型，也没有新增批量评分结果。

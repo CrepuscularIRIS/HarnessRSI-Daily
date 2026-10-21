@@ -1,0 +1,1239 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "cal-h1",
+  "attempt_id": "a2",
+  "seat": "sol",
+  "supersedes": "a1",
+  "paper": {
+    "paper_key": "2308.02151",
+    "paper_id": "2308.02151",
+    "title": "Retroformer: Retrospective Large Language Agents with Policy Gradient Optimization",
+    "version": "2308.02151v3",
+    "claim_type": "component_training",
+    "scope_class": "B",
+    "scope_reason": "训练 reflector 不是纯 task-policy 权重自改进：其输出是环境反馈驱动、跨同任务 trials 留存的非权重 actor prompt 补充，故是可放入 harness 闭环的反思组件。独立文本跨任务留存不成立，不把它当 A 类长期递归 harness。",
+    "central_claim": "通过对 retrospective LM 做环境回报驱动的 policy-gradient 训练，自动生成诊断失败根因和行动计划的 actor prompt 改动，使冻结黑箱 language actor 在多环境、多任务上比不利用环境梯度的基线更快且更好地完成任务。"
+  },
+  "provenance": {
+    "input_hash": "19db3ed1f9d83642dd58a4cf0232403dc49b62a0bddefc9adb94c3b96a9b523a",
+    "input_manifest": "research/v2/runs/rsi-v22-20261021-01/batches/cal-h1/inputs_2308.02151_v2.json",
+    "rubric_version": "v2.2 draft_uncalibrated; calibration generic anchors",
+    "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T17:38:44.937893Z",
+    "notes": [
+      "使用用户指定 sonnet(gpt-6.1-sol) 席；环境自述 gpt-6.1-sol，但没有独立实际模型调用凭据/会话 ID/receipt，因此三项 null，不进行探测。",
+      "expectations_hash 取 manifest assets.domain_conditions.sha256；manifest 未单列 expectations，领域卡期望内容另外受 domain_cards_hash 约束。",
+      "a2 独立重读固定 PDF 材料，显式 supersedes a1；没有读取 a1、另一席、aggregate、conflicts、archive 或 screen 判定。",
+      "论文/卡片自带 venue 与 outcome 文字仅作源背景，不读取本论文录用记录、不使用 outcome 统计作为证据或评分。",
+      "本输入包固定 69791 字符、sha256 已核，与任务背景约69814字符计数略异；以 manifest hash 为准。",
+      "全文文本 E.1 HotPotQA actor 示例所在 PDF p16 无可恢复正文；E.2 三组 reflector prompt 及 E.1 ALFWorld/WebShop actor 示例均已读。此非核心示例局部抽取限制被明示，不再次把完整方法/实验/C附录误判为缺全文。"
+    ]
+  },
+  "materials": [
+    {
+      "material_id": "M1",
+      "url": "https://arxiv.org/pdf/2308.02151v3",
+      "version": "2308.02151v3",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2308.02151.txt",
+      "sections_read": [
+        "Abstract",
+        "§1 Introduction",
+        "§2 Related Work",
+        "§3 Notation and Formulation",
+        "§4.1 Retrospective Agent Architecture",
+        "§4.2 Policy Gradient Optimization",
+        "§5.1–5.3 environments/settings/results",
+        "§6 Conclusion",
+        "References (bibliographic pointers only)",
+        "Appendix A Challenges",
+        "Appendix B Intuition",
+        "Appendix C.1–C.3 implementation, Algorithm 1, baselines and rewards",
+        "Appendix D Additional Experiments",
+        "Appendix E.1 actor examples (ALFWorld, WebShop; HotPotQA heading only)",
+        "Appendix E.2 all three retrospective instruction examples",
+        "Table 1–2 text and Figure 1–7 captions/text (not independent graphical digitization)"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "extraction_limitations": [
+        "HotPotQA actor prompt image/example p16 has no body in fixed text (E026); not claimed read or reconstructed.",
+        "Table 2 extracted column-wise; row values interpreted using headers, method labels and corroborating prose; no raw output files."
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 23-29",
+      "quote": "paper introduces a principled framework for reinforcing large language agents\nby learning a retrospective model, which automatically tunes the language agent\nprompts from environment feedback through policy gradient. Specifically, our\nproposed agent architecture learns from rewards across multiple environments and\ntasks, for fine-tuning a pre-trained language model which refines the language\nagent prompt by summarizing the root cause of prior failed attempts and proposing action plans. Experimental results on various tasks demonstrate that the language agents improve over time and that our approach considerably outperforms\nbaselines that do not properly leverage gradients from the environment.",
+      "support_explanation": "作者中心主张：训练 retrospective model，借环境反馈改 actor prompt，跨任务产生更好反思。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 64-74",
+      "quote": "LLM to have a good understanding of where the agent made mistakes in a specific environment, i.e.,\nthe credit assignment problem (Sutton & Barto, 2018), as well as the ability to generate a summary\ncontaining actionable insights for improvement. The verbal reinforcement cannot be optimal, if the\nfrozen language model has not been properly fine-tuned to specialize in credit assignment problems\nfor the tasks in given environments. Furthermore, the existing language agents do not reason and\nplan in ways that are compatible with differentiable, gradient-based learning from rewards by exploiting the existing abundant reinforcement learning techniques. To address these limitations, this\npaper introduces Retroformer, a principled framework for reinforcing language agents by learning a plug-in retrospective model, which automatically refines the language agent prompts from\nenvironment feedback through policy optimization. Specifically, our proposed agent architecture\ncan learn from arbitrary reward information across multiple environments and tasks, for iteratively\nfine-tuning a pre-trained language model, which refines the language agent prompts by reflecting on\nfailed attempts and assigning credits of actions taken by the agent on future rewards.",
+      "support_explanation": "作者定位冻结反思器的 credit-assignment 局限；这不是独立最近邻全文核查。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 278-281",
+      "quote": "Note that the only learnable parameters are in the retrospective model Mr . Since LLM action agent\nis frozen, it can be considered as part of the environment. Specifically, if we construct another\nenvironment with the transition function T ′ = T (S, •) ◦ L : S × X → S, and the same reward\nfunction R, then Eq. (2) is just a regular RL optimization so all the popular RL algorithms apply.",
+      "support_explanation": "把冻结 actor 纳入环境，把可训练反思器当 RL policy；优化对象和参数权限明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 383-389",
+      "quote": "As illustrated in Fig. 2(a), for the actor and retrospective models, we apply a standard communication protocol modified from the Relexion agent architecture (Shinn et al., 2023), in which the\nretrospective model refines the actor prompt by appending verbal feedback to the prompt.\nActor Model The actor model is a LLM hosted in the cloud, whose model parameters are hidden\nand frozen all the time. The actor LM is instructed to generate actions with required textual content,\ntaking into account the observed states. Similar to reinforcement learning, we select an action or\ngeneration, denoted as at , from the current policy πθ at time step t and receive an observation,\nrepresented by st , from the environment. We use ReAct (Yao et al., 2023) as our actor prompt.",
+      "support_explanation": "采用 Reflexion 式追加反馈协议及 ReAct actor prompt，actor 始终冻结。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 394-412",
+      "quote": "Retrospective Model The retrospective model Mr is instantiated as a local LM. Its primary function is to produce self-reflections, offering valuable feedback for diagnosing a possible reason for\nprior failure and devising a new, concise, high-level plan that aims to mitigate same failure. Operating under a sparse reward signal, such as binary success status (success/failure), the model detects\nthe root cause of failure by considering the current trajectory alongside its persistent memory.\nyk,i = Mr ([sk,i,τ , ak,i,τ , rk,i,τ ]Tτ=1 , Gk,i ).\n|\n{z\n}\n\n(4)\n\nReflection prompt xk,i\n\nThis self-reflection feedback yk,i is appended to the actor prompt to prevent repetitive errors in a\nspecific environment in future attempts. Consider a multi-step task, wherein the agent failed in the\nprior trial. In such a scenario, the retrospective model can detect that a particular action, denoted\nas at , led to subsequent erroneous actions and final failure. In future trials, the actor LM can use\nthese self-reflections, which are appended to the prompt, to adapt its reasoning and action steps at\ntime t, opting for the alternative action a′t . This iterative process empowers the agent to exploit past\nexperiences within a specific environment and task, thereby avoiding repetitive errors.",
+      "support_explanation": "反思器读取已发生轨迹与回报，输出诊断及计划，追加到后续同任务重试 prompt。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 413-424",
+      "quote": "Memory Module The actor model generates thoughts and actions, by conditioning on its recent\ninteractions (short-term memory) and reflection responses (long-term memory) in the text prompt.\n• Short-term memory. The trajectory history τi of the current episode i serves as the short-term\nmemory for decision making and reasoning.\n• Long-term memory. The self-reflection responses that summarize prior failed attempts are appended to the actor prompt as the long-term memory.\nTo facilitate policy optimization in Section 4.2, we store the instructions and responses of the retrospective model of each trial, together with the episode returns in a local dataset, which we call\nreplay buffer. We sample from the replay buffer to fine-tune the retrospective model. The long and\nshort-term memory components provide context that is specific to a given task over several failed\ntrials and the replay buffer provides demonstrations of good and bad reflections across the tasks and\nenvironments, so that our Retroformer agent not only exploits lessons learned over failed trials\nin the current task, but also explores by learning from success in other related tasks.\n• Replay buffer. The memory DRL which stores the triplets (xk,i , yk,i , Gk,i ) of the reflection instruction prompt xk,i , reflection response yk,i and episode return Gk,i of trial i and task k.",
+      "support_explanation": "区分当次轨迹、同任务长期反思及跨任务训练 replay；后者不是跨任务文本记忆迁移证据。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 484-491",
+      "quote": "Response Rating As illustrated in Fig. 2(b), let us assume a reflection prompt xk,i and the corresponding episode return Gk,i , and the retrospective model Mr generates the response yk,i that\nsummarizes the mistakes in i, which results in the return Gk,i+1 in the next attempt i + 1. Because\nthe actor is a frozen LM and the temperature is low as default (Yao et al., 2023), the injected randomness that leads to differences in returns ∆Gk,i = Gk,i+1 − Gk,i are mostly from the reflection\nresponses yk,i , in which positive ∆Gk,i indicates better responses that help the actor learn from\nprior errors, and hence should be rated with higher scores; negative or zero ∆Gk,i indicates worse\nresponses that needs to be avoided and hence should be rated with lower scores. Therefore, we\napproximate the rating score of a reflection instruction-response pair (xk,i , yk,i ) as:\nr(xk,i , yk,i ) ≜ Gk,i+1 − Gk,i .",
+      "support_explanation": "回报差被当作反思质量，低温 actor 减少但不能证明消除环境和回归均值混杂。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 513-522",
+      "quote": "For offline training, we collected the dataset DRL by rolling out a base policy, i.e., the frozen actor\nLM and the initialized retrospective LM, in the tasks in the training sets for N trials and compute\n6\n\nPublished as a conference paper at ICLR 2024\n\nthe ratings. We apply the standard RLHF pipeline to fine-tune the retrospective model offline before\nevaluating the agent in the validation tasks. In online execution, we use best-of-n sampler, with\nthe scores evaluated by the learned reward model from RLHF pipeline (Ouyang et al., 2022), for\ngenerating better retrospective responses in each trial.",
+      "support_explanation": "训练集 offline rollouts、validation 评估及部署 best-of-n reward-model 选择；n 未给定。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 559-570",
+      "quote": "We use GPT-3 (model: text-davinci-003) and GPT-4 as the frozen actor model. For the retrospective\nmodel, we fine-tune it from LongChat (model: longchat-7b-16k). The implementation details, which\ninclude data collection and model training are in Appendix C.\nEvaluation Metrics We report the success rate over validation tasks in an environment. The agent\nis evaluated on 100 validation tasks from the distractor dev split of open-source HotPotQA dataset,\n134 tasks in AlfWorld and 100 tasks in WebShop, as in (Shinn et al., 2023).\nBaselines We experiment with two language agent baselines: 1) ReAct (Yao et al., 2023). This\nis the state-of-the-art frozen language agent architecture, which does not learn from the environment rewards at all, thus serving as a baseline for showing how the agent performs without using\nenvironment feedback. 2) Reflexion (Shinn et al., 2023). This is the state-of-the-art language agent\narchitecture that the authors identify from literature so far. This agent enhances from verbal feedback\nof the environment, but does not use gradient signals explicitly. It can serve as a baseline for showing the effectiveness of gradient-based learning. 3) SAC. Furthermore, we include one online RL\nalgorithm, i.e., Soft Actor-Critic (Haarnoja et al., 2018), or SAC as baseline model for comparison.",
+      "support_explanation": "actor 型号、反思器基座、三个环境评估分母及 ReAct/Reflexion/SAC 对照。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 716-750",
+      "quote": "Question Answering – HotPotQA We visualize the performances of Retroformer against\nthe baselines in Fig. 4.\nAs shown in Table 2, we observe that our method consistently improve the agent performances over trials and the effects of fine-tuned\nretrospective model (Retroformer) are mostly significant in the first few trials.\n\nSuccess rate (%)\n\nHotPotQA (100 distractor tasks)\nFurthermore, as shown in Fig. 4, our agent\n55\noutperforms the two strong baselines. Specifically, the results indicate that our reinforced\n50\nmodel provides the language agents with betRetroformer (LoRA r = 1, GPT-4)\nter reflection responses in early trials, which\n45\nRetroformer (LoRA r = 4, GPT-4)\nRetroformer (LoRA r = 4, GPT-3)\nenables the agents to learn faster, while also\nRetroformer (LoRA r = 0, GPT-3)\n40\nachieving better performances in the end. Our\nReflexion (GPT-3)\nReflexion (GPT-4)\nRetroformer agent achieves 54% success\nReAct (GPT-3)\n35\nReAct (GPT-4)\nrate in 4 trials, which is better than the state0.0 0.5 1.0 1.5 2.0 2.5 3.0 3.5 4.0\nof-the-art 50% success rate reported in (Jang,\nEpisode ID\n2023) that uses a much larger frozen language\nmodel, i.e., GPT-3 (model: text-davinci-003) as\nthe reflection component. The results show the\neffectiveness of our policy gradient approach Figure 4: Retroformer shows faster and consistent performance improvement of success rate.\nfor fine-tuning the agent with offline samples.",
+      "support_explanation": "作者报告 HotPotQA 4 trials 54%，Reflexion GPT-3 50%；成功率曲线有 r=0 变体，不能据此隔离 SFT/PPO/best-of-n。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 818-829",
+      "quote": "within 3 retries. Similar patterns are observed that the agent performs slightly better with more\nlearnable parameters (r = 4) and that the improvements are mostly from early retries. We find that\nthe reinforced retrospective model behaves like a summarization model of the prior failed plans and\nfinds the differences of the prior plan with the task descriptions. With the permissible actions seen in\nthe task instructions, this behavior effectively prevents repetitive failures and reduces search spaces.\nWeb Browsing – WebShop As in Fig. 6(b), the performance improvement by\nRetroformer over the frozen baselines is observed but the improvements may be limited,\nwhen compared with HotPotQA and AlfWorld, with 4% improvement in success rate with 4 retries.\nThis limitation was also observed in (Shinn et al., 2023) as web browsing requires a significant\namount of exploration with more precise search queries, if compared with HotPotQA. The results\nprobably indicate that the verbal feedback approach (Reflexion, Retroformer) is not an optimal\nmethod for this environment, but our fine-tuning method still proves effective.",
+      "support_explanation": "ALFWorld 3 retries 解决评估环境，WebShop 收益较小及探索限制；仅作者报告。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1011-1017",
+      "quote": "Model We use GPT-3 (model: text-davinci-003) as the frozen actor model. For the retrospective\nmodel, we instantiate it from LongChat (model: longchat-7b-16k), which is a LM with 16k context\nlength by fine-tuning llama-7b on instruction-following samples from ShareGPT. In all experiments,\nwe set the temperature of actor LM as zero, i.e., T=0 and top p =1 to isolate the randomness of\nLM from the effects of reflections. We acknowledge that setting a higher temperature value can\nencourage exploration but it can obscure the impact of the proposed approaches, making it difficult\nto compare against existing baselines with T=0 (Yao et al., 2023; Shinn et al., 2023).",
+      "support_explanation": "actor 温度0、top-p1 的固定设置，用于减少生成随机性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1022-1036",
+      "quote": "Data Collection For HotPotQA environment, We collected 3,383 reflection samples by running\nthe base rollout policy for 3 trials (N = 3) for 3,000 tasks in the training set, in which 1,084\ninstruction-response pairs have positive ratings. For AlfWorld, we collected 523 reflection samples\nand for WebShop, we collected 267 reflection samples.\nTraining We fine-tune the retrospective model Mr with 4-bit quantized LoRA adapters (r=1 or\nr=4) on the offline RL datasets with epochs=4; batch size=8; lr=1.4e-5. The number of trainable\nparameters is 0.53M (0.015% of llama-7b) or 2.25M. Since longchat-16k is based on Llama, we\nused the default llama recipes for finetuning. Specifically, we first run supervised fine-tuning trainer\non the samples with positive ratings for 2 epochs and then the RLHF pipeline, including reward\nmodeling, and RL fine-tuning with PPO, on the whole offline rating dataset using the default settings\nfor llama-7b model. We list the key hyperparameters here:\n• Supervised Finetuning: learning rate=1e-5, batch size=32, max steps=5,000\n• Reward Modeling: learning rate=2.5e-5, batch size=32, max steps=20,000\n• Policy Gradient Finetuning: learning rate=1.4e-5, max steps=20,000, output max length=128,\nbatch size=64, gradient accumulation steps=8, ppo epochs=4",
+      "support_explanation": "训练数据数量、正评分样本、LoRA、SFT→reward modeling→PPO；超参有总述与分阶段口径差异。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1038-1044",
+      "quote": "Reproducibility All experiments are done in Google Cloud Platform (GCP) GKE environment\nwith A100 40GB GPUs. The code can be found in https://anonymous.4open.science/\nr/Retroformer-F107. We plan to open source the code repository after the review period.\nAlgorithm The offline PPO algorithm we used for finetuning the Retrospective component in this\npaper is presented below in Algorithm 1. It contains three steps: offline data collection, reward\nmodel learning, and policy gradient finetuning. We use the offline ratings data to train a reward\nmodel first, and plug in the reward model for PPO finetuning.",
+      "support_explanation": "报告 A100 40GB 及三阶段训练算法，不给总体 GPU-hours 或 API 消耗。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1060-1082",
+      "quote": "for unsuccessful tasks j do\n(1)\n(2)\n7:\nRandomly sample a pair of reflection responses (yk,j , yk,j ) with Retrospective LM temperature set to ts , with the same instruction prompt defined in Eq. (4).\n(1)\n(2)\n8:\nRoll out the next episode with yk,j , and receive the episodic returns (Gk,i+1 , Gk,i+1 ).\n9:\nCompute reflection response rating by r(xk,i , yk,i ) ≜ Gk,i+1 − Gk,i in Eq. (5).\n10:\nLabel the response with higher ratings as the accepted response while the lower response\nis labeled as the rejected response.\n11:\nend for\n12:\nend for\n13: end for\n14: Step 2. Reward Model Learning. Use the R EWARD T RAINER in TRL to train a model for\nclassifying accepted and rejected responses given instructions.\n15: Step 3: Policy Gradient Finetuning. Plug-in the trained reward model and use the PPOT RAINER\nin TRL to finetune the Retrospective model for generating reflection responses with higher ratings.",
+      "support_explanation": "同失败轨迹采样两条反思并分别 next-rollout，按 delta 排偏好，再训练 reward model 与 PPO；不是留出准入门。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1099-1119",
+      "quote": "HotPotQA F1 reward is used in the HotPotQA environment for comparing the matching of a\ngenerated answer to a question against the ground truth answer. After removing the stopwords in\nboth answers, we calculate the number of common tokens in two answers. Then Precision is # of\ncommon tokens divided by # of generated answer tokens and the Recall is # common tokens divided\nby # ground truth answer tokens. We can then compute f1 from precision and recall.\nAlfWorld The binary success (1) and failure of the tasks at the end of episode is used as the\nreward.\nWebShop In each episode, the agent receives a reward r = R(sT , a) in the end at timestep T ,\nwhere a = choose[buy], y is the product chosen by the agent in the final state sT , and Yatt and\nYopt are its corresponding attributes and options. The reward is defined as:\nr = rtype ·\n\n|Uatt ∩ Yatt | + |Uopt ∩ Yopt | + 1[yprice ≤ uprice ]\n|Uatt | + |Uopt | + 1\n\n(7)\n\nwhere the type reward rtype = TextMatch(ȳ, ȳ ∗ ) is based on text matching heuristics to assign\nlow reward when y and y ∗ have similar attributes and options but are obviously different types\nof products. For example, “butter” and “plant-based meat” differ in types but may both contain\nattributes “cruelty-free”, “non-GMO”, and an option “size: pack of 2”.",
+      "support_explanation": "奖励来源与公式：HotPotQA answer F1、ALFWorld binary success、WebShop product attribute/options/type matching。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1178-1185",
+      "quote": "[Few-Shot Demonstrations]\nYour memory for the task below:\nTrial 0: I will try to find a different task to complete. I will look for other objects in the\nroom and try to complete tasks related to those objects. For example, I could try to find a book\nto read or a glass to drink from. I will also try to use the objects I have found in the room in\ndifferent ways to see if that helps me complete a task.\n\nYour task is to: heat some mug and put it in coffeemachine.",
+      "support_explanation": "ALFWorld actor 例子显式读取同任务 Trial 0 memory；不是跨任务 guidance store。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1232-1235",
+      "quote": "Your memory for the task below:\nTrial 0: In this attempt, I was unsuccessful. I accidentally bought a product that was more than\nmy budget of $50. The initial search results were not good.\nAction: search[3 ounce bright citrus deodorant sensitive skin]",
+      "support_explanation": "WebShop actor 例子读取前一次同任务失败反思。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1289-1294",
+      "quote": "You are an advanced reasoning agent that can improve based on self reflection. You will be\ngiven a previous reasoning trial in which you were given access to an Docstore API environment\nand a question to answer. You were unsuccessful in answering the question either because you\nguessed the wrong answer with Finish[<answer>], or you used up your set number of reasoning\nsteps. In a few sentences, Diagnose a possible reason for failure and devise a new, concise,\nhigh level plan that aims to mitigate the same failure. Use complete sentences.",
+      "support_explanation": "HotPotQA 反思 prompt 是失败诊断和高层计划，不提供正确答案文本；可见 INCORRECT 标签。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1344-1351",
+      "quote": "An example of the AlfWorld retrospective instruction prompt is shown below.\nYou will be given the history of a past experience in which you were placed in an environment and\ngiven a task to complete. You were unsuccessful in completing the task. Do not summarize your\nenvironment, but rather think about the strategy and path you took to attempt to complete the\ntask. Devise a concise, new plan of action that accounts for your mistake with reference to\nspecific actions that you should have taken. For example, if you tried A and B but forgot C, then\ndevise a plan to achieve C with environment-specific actions. You will need this later when you\nare solving the same task. Give your plan after \"Plan\". Here are two examples:",
+      "support_explanation": "ALFWorld 反思 prompt 明确后续 solving the same task，限定文本留存收益范围。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1393-1398",
+      "quote": "An example of the WebShop retrospective instruction prompt is shown below.\nYou will be given the history of a past experience in which you were placed in an environment and given a task\nto complete. You were unsuccessful in completing the task. Do not summarize your environment, but rather think\nabout the strategy and path you took to attempt to complete the task. Devise a concise, new plan of action that\naccounts for your mistake with reference to specific actions that you should have taken. There are two examples\nbelow.",
+      "support_explanation": "WebShop 反思 prompt 要求从过去失败策略提出新计划。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1443-1447",
+      "quote": "STATUS: FAIL\nNext plan: In this attempt, I was unsuccessful. I accidentally bought a product that was $100, which is more\nthan my budget of $30. Either way, the initial search results were not good. Next time, I will do\nsearch[\"variety pack of chips\"] and then check if the results meet the dairy free and the $30 budget\nconstraints. I will continue to refine my searches so that I can find more products.",
+      "support_explanation": "具体失败及预算修正计划；例子展示接口和失败边界，不是系统统计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1146-1152",
+      "quote": "Figure 7: Response refinement from the reinforced retrospective model with structured format.\nStructured Reflections and Action Plans. We discover one emergent behavior of the reinforced\nmodel that it can automatically paraphrase the original responses into two separate structured sections, namely Reflection section and New plan: section, although not being explicitly trained or\nprompted for. One such example is shown in Fig. 7. The paraphrased response retrospects in the\nfirst paragraph and provides actionable insights next, while the response from the frozen LM interleaved both parts in one paragraph, making it hard to comprehend. We can also observer from\nFig. 5 that the reinforced response removes the messy, irrelevant “Next trial:” content in the end for\ncleaner format, which may very likely result from LLM hallucination.",
+      "support_explanation": "作者对结构化反思及清理无关内容的定性观察，不能替代总体因果对照。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 203-212",
+      "quote": "However, these approaches fail to learn from valuable feedback, such as environment rewards, to enhance the agent’s behaviors, resulting in performances that are solely dependent on the quality of the\npre-trained LLM. Self-refine (Madaan et al., 2023a) addresses this limitation by employing a single\nLLM as a generator, refiner, and provider of feedback, allowing for iterative refinement of outputs.\nHowever, it is not specifically tailored for real-world task-based interaction with the environment.\nOn the other hand, RAP (Hao et al., 2023) repurposes the LLM to function as both a world model\nand a reasoning agent. It incorporates Monte Carlo Tree Search for strategic exploration within the\nextensive realm of reasoning with environment rewards. This approach enables effective navigation and decision-making in complex domains. Recently, Shinn et al. (2023) presents Reflexion, a\nframework that equips agents with dynamic memory and self-reflection capabilities, enhancing their\nreasoning skills. Self-reflection plays a pivotal role, allowing autonomous agents to iteratively refine\npast actions, make improvements, and prevent repetitive errors.",
+      "support_explanation": "本文对 Self-Refine、RAP、Reflexion 的对比叙述；相关工作原文未在本输入包提供。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E025",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 960-975",
+      "quote": "Spurious Actions LLMs are not pre-trained or designed with an action-agent application in mind.\nEven some restrictions are explicitly specified in the prompt, the LLM model may still generate\nspurious actions that are not in the action space A.\nLimited Prompt Length LLM itself is stateless. However, in applications it is preferred to empower agents with states or memories for better performance. It has been observed that LLM based\nagents are easy to run into infinite loops if the states are not handled nicely. Many LLM agents\nconcatenate all the previous state descriptions and actions into the prompt so that LLM as a way to\nbestow ”state” to the LLM. Inevitably this methodology runs into the prompt length issues. As the\ntrajectory grows longer, the prompt runs out of spaces.\nHeuristic Prompt Engineering Even though a lot of paradigms have been proposed to improve\nLLM agents’ performance (Yao et al., 2023; Ahn et al., 2022), there is a lack of systematic methodologies for consistent model refinement. In fact, manual prompt tuning is still widely used in a lot\nof the application scenarios.\nProhibitive Training Most of the well-performing LLMs are too large to be fit in just one or two\nGPUs. It is technically challenging to optimize the LLMs directly as is done in the the classical\nreinforcement learning setting. In particular, OpenAI has not provided any solution for RL based\nfinetuning. Most of the issues are caused by the fact that LLMs are not pre-trained or designed with\nan action-agent application in mind.",
+      "support_explanation": "动作幻觉、prompt 长度及昂贵权重训练等自述边界。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E026",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 1160-1172",
+      "quote": "ACTOR P ROMPT E NGINEERING\n\nAn example of the HotPotQA actor language model prompt is shown below.\n\n15\n\nPublished as a conference paper at ICLR 2024\n\n16\n\nPublished as a conference paper at ICLR 2024\n\nAn example of the AlfWorld actor language model prompt is shown below.",
+      "support_explanation": "E.1 HotPotQA actor 示例标题后 PDF p16 文本空白；局部图像/排版抽取限制，不把不存在的 prompt 内容当已读。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E027",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 580-583",
+      "quote": "Table 2: Results with Retroformer in the HotPotQA, AlfWorld and Webshop environments. We\nreport the average success rate for the language agents over tasks in the environment. “#Params”\ndenotes the learnable parameters of each approach. “#Retries” denotes the number of retry attempts.\n“LoRA r” denotes the rank of low-rank adaptation matrices for fine-tuning.",
+      "support_explanation": "Table 2 指标为平均任务成功率，N 标作 retry attempts；正文另用 trials，存在计数命名含混。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E028",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 636-655",
+      "quote": "N=1\nN=4\n\n42%\n50%\n\n46%\n52%\n\n76.87%\n84.33%\n\n81.34%\n85.07%\n\n35%\n35%\n\n42%\n44%",
+      "support_explanation": "Table 2 Reflexion N=1/4 的 GPT-3/4、HotPotQA/ALFWorld/WebShop 六列数字；列次序见表头。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E029",
+      "material_id": "M1",
+      "material_hash": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "sha256": "0a9923ff11a979515f65f71d238b721c6fbb8cdef72e9e7f04a5b4566fdfbdbc",
+      "locator": "2308.02151v3 PDF extraction lines 680-714",
+      "quote": "2.25M\n\nN=1\nN=4\n\n48%\n54%\n\n51%\n54%\n\n97.76%\n100%\n\n97.76%\n100%\n\n34%\n36%\n\n43%\n46%\n\nReAct\n\n0\n\nReflexion\n\n0\n\nRetroformer\n(w/ LoRA r=1)\nRetroformer\n(w/ LoRA r=4)",
+      "support_explanation": "Table 2 r=4 的 GPT-3/4 六列结果及方法标签；N=4 ALFWorld 两个 actor 均100%。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "冻结 actor 的任务内 prompt/长期 memory 文字，非 actor 权重",
+      "information": "task instruction、已发生状态/动作/奖励和失败标记；反思器可用环境奖励，无证据表明部署 prompt 可见正确答案文本。训练奖励可访问 ground-truth answer/product。",
+      "operation": "失败 trial 完成后生成根因诊断与 concise plan；在下次 actor prompt 中追加。",
+      "output": "task-conditioned reflection response y",
+      "conditions": [
+        "需要可读轨迹和环境 outcome；actor 黑箱冻结；失败后可再次尝试同任务。"
+      ],
+      "feedback": "HotPotQA F1、ALFWorld binary success、WebShop matching reward",
+      "selection_rule": "部署声称 reward-model best-of-n；n、并列/拒绝/回滚阈值未报。不是独立执行验证后才允许 memory 落盘。",
+      "selection_data": "当前失败轨迹及训练出的 reward model",
+      "persistence": "反思存为同任务下一 trials 的 prompt 文本；未证明跨题 lesson library；当次轨迹为 short-term memory。",
+      "later_use": "actor 下次尝试同题读入 Trial memory；不是完成后下一独立任务。",
+      "claimed_effect": "减少重复错误，提高后续尝试成功率。",
+      "failure_boundary": "误诊、无关反思、有限上下文、WebShop 探索需求；没有长期冲突/过期维护协议。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E008",
+        "E017",
+        "E018",
+        "E019",
+        "E020",
+        "E021",
+        "E022",
+        "E025"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "生成 prompt 改动的 retrospective policy 及 learned reward model（权重层训练）",
+      "information": "训练任务真实环境奖励；每个失败状态两条反思候选各产生 next-rollout；冻结 actor 纳入环境。",
+      "operation": "收集 replay→以 next-return delta 建偏好→positive-only SFT→偏好 reward modeling→KL-constrained PPO 微调 LoRA reflector。",
+      "output": "LongChat-7b-16k 的已训练反思器/LoRA 与 reward model",
+      "conditions": [
+        "能训练本地 reflector 权重、能反复调用冻结 actor/环境；回报差足够可靠，训练/评估边界需明确。"
+      ],
+      "feedback": "r(x,y)=G_next-G_current；同状态两候选按 delta 排序。",
+      "selection_rule": "训练数据偏好以相对 delta 排序；正评分样本用于 SFT，其余评分数据用于 reward/PPO；checkpoint 选择未报。",
+      "selection_data": "HotPotQA 3000 train tasks→3383 reflection samples（1084 positive），ALFWorld523、WebShop267 samples",
+      "persistence": "训练权重跨 validation tasks 复用，非新增跨任务文本状态；不将它计为非权重 improver 自改进。",
+      "later_use": "训练出的 policy 为验证任务每次失败生成新文本，再按 S1 读入。",
+      "claimed_effect": "比 frozen reflector 有效，更快完成任务，可作用于 GPT-3/4 actor。",
+      "failure_boundary": "delta 含环境/重试噪声，reward model 误差，training/eval 细节不足；SFT/PPO/best-of-n 混杂。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E008",
+        "E009",
+        "E012",
+        "E013",
+        "E014",
+        "E015",
+        "E016"
+      ]
+    }
+  ],
+  "retained_trace": {
+    "before": "ReAct actor prompt 或固定 Reflexion reflector；actor 无任务反馈权重更新。",
+    "proposed_change": "由失败轨迹生成反思文字。",
+    "selection_data_rule": "训练时 next-trial return delta；部署 learned reward model best-of-n。",
+    "persisted_change": "同题后续 trials 的 actor prompt 追加内容；跨题复用的是反思器权重。",
+    "later_tasks": "证据为同题下次尝试；训练出的组件在名义 validation 新题使用，不等同文本跨题迁移。",
+    "measured_gain": "Table 2 r=4 N=4 vs Reflexion：HotPotQA GPT-3 54 vs50、GPT-4 54 vs52；ALFWorld 100 vs84.33/85.07；WebShop36 vs35、46 vs44。",
+    "evidence_ids": [
+      "E006",
+      "E008",
+      "E009",
+      "E020",
+      "E027",
+      "E028",
+      "E029"
+    ],
+    "conclusion": "task，非 retained/improver；没有证明被留存的非权重文本在后续独立任务上带来提升。"
+  },
+  "gap": {
+    "author_gap": "现有冻结反思器不能适配环境 credit assignment，容易只是复述失败行动；黑箱 actor 也不能直接 backprop。",
+    "checked_gap": "本文给可定位失败例及可训练反思组件，确实把人工/冻结反思改为环境回报优化；但不能从这些材料核实作者对全部前沿方法的排他性比较。",
+    "lineage": [
+      {
+        "method": "ReAct",
+        "source_version": "Yao et al., 2023, cited in target v3 §2/§4.1; original version not fixed in this packet",
+        "role": "提供 frozen actor reasoning/action scaffold",
+        "evidence_ids": [
+          "E004",
+          "E024"
+        ]
+      },
+      {
+        "method": "Reflexion",
+        "source_version": "arXiv:2303.11366 (citation only; original version/fulltext not provided)",
+        "role": "直接祖先：失败→反思→下一试 prompt memory；本文训练 reflector",
+        "evidence_ids": [
+          "E002",
+          "E004",
+          "E024"
+        ]
+      },
+      {
+        "method": "SFT + reward modeling + PPO/RLHF",
+        "source_version": "target v3 §4.2 / Appendix C, citing Ouyang 2022/Schulman2017; neighbor originals not supplied",
+        "role": "成熟权重优化 machinery 被移用于 prompt proposer",
+        "evidence_ids": [
+          "E003",
+          "E013",
+          "E015"
+        ]
+      }
+    ],
+    "closest_adjacent": [
+      {
+        "method": "Reflexion / Self-Refine / RAP",
+        "comparison": "同样具有反馈/反思或搜索，但本文声称 frozen verbal feedback 未按特定环境训练；RAP 是搜索而不是相同 learned reflector。这里只核作者叙述，不独立认证最近邻覆盖。",
+        "source": "target v3 §§1–2 and Table1",
+        "evidence_ids": [
+          "E002",
+          "E024"
+        ]
+      }
+    ],
+    "residue": "冻结 actor 可通过 context 调整，但生成 useful feedback 的机制本身不随环境奖励改善。",
+    "stakes": "重复搜索/计划错误与额外 trials，且无法访问大 actor 权重。",
+    "method_response": "把 actor 作为 environment，将 reflection y 当动作，以未来回报差训练 proposer，再生成可读 prompt edits。",
+    "remaining_gap": "缺少 clean PPO attribution、独立 test/transfer 协议、成本/统计与跨任务文本留存。",
+    "evidence_ids": [
+      "E002",
+      "E003",
+      "E004",
+      "E005",
+      "E007",
+      "E008",
+      "E011",
+      "E013",
+      "E015"
+    ],
+    "unresolved": [
+      "输入包没有 Reflexion/Self-Refine/RAP 原文版本和同时代 prompt optimizer 邻居全文；已禁止外部检索，请总控如需完整 novelty/gap 判定为两席共同补包。此限制不以空检索当新颖证明。",
+      "没有独立核实跨环境共享反思器训练还是 per-domain checkpoints；跨环境架构可用不等于未见任务族迁移。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "reframe_as_solvable_object",
+    "supporting": [
+      "generative_process_redesign"
+    ],
+    "matches": [
+      {
+        "main_id": "reframe_as_solvable_object",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "原问题：不能通过 hidden frozen actor 对 prompt generator 优化。",
+          "将 actor 与 task transition 合成新 environment，反思器作为 policy，以 return optimization 套用 PPO。",
+          "Eq.2 提供 reduction，Algorithm1 实施；learned reward/delta 近似并不自动忠实反思因果价值。",
+          "C00 是固定模型透明性测量、C21 是代际生成传输、C27 是多主体 game；本文单 agent RL reduction 不执行这些子 tactic，故 null。"
+        ],
+        "success/failure_checks": [
+          {
+            "condition": "formal target/reduction",
+            "status": "met",
+            "reason": "actor fixed、参数只在 retrospective model，RL 环境重写明确。"
+          },
+          {
+            "condition": "faithfulness of surrogate",
+            "status": "partial",
+            "reason": "真正环境回报与 learned preference reward 之间缺校验；delta 不足以证明 credit assignment。"
+          },
+          {
+            "condition": "solver scalable and useful",
+            "status": "partial",
+            "reason": "三任务结果与 LoRA，但无总预算核对。"
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E007",
+          "E013",
+          "E015"
+        ],
+        "reason": "实际改变优化对象使成熟 RL solver 可用于不可微 actor 的 prompt-generation，不是只把相关工作称为 RL。"
+      },
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "显式解除 frozen reflector 默认，用可训练 retrospective LM 改善 staged retry generation。",
+          "固定 actor，改变生成下一轮 conditioning 的反思组件。",
+          "C15 是几何表示，C23 是 refinement chain prior/schedule/kernel，C24 更贴近 conditioning 但强调同数据/计算固定的接口 redesign；这里同时训练 generator 并增加 best-of-n，不硬贴具体子卡。"
+        ],
+        "success/failure_checks": [
+          {
+            "condition": "named fixed component",
+            "status": "met",
+            "reason": "§1 明确 frozen reflection 问题并只训练 Mr。"
+          },
+          {
+            "condition": "load-bearing isolation",
+            "status": "partial",
+            "reason": "有 baselines/rank 变体，但 SFT/PPO/sampling 未隔离。"
+          },
+          {
+            "condition": "quality/efficiency boundary",
+            "status": "partial",
+            "reason": "WebShop 边界明确，实际成本和 unseen-family transfer 不足。"
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E004",
+          "E008",
+          "E010",
+          "E011",
+          "E013"
+        ],
+        "reason": "核心新增对象是反思生成组件，固定黑箱 actor；不把组件训练等同整个 harness 的递归自改进。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "15主卡/31子卡 overview 已读；原主卡的操作签名适配，两项都不在具体子卡定义内，保留 null，不造新子卡。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "amortize_improver_into_trained_policy",
+        "sub": "rsi:H27",
+        "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:S1",
+            "status": "met",
+            "reason": "delta-next-return 定义明确，双候选按相对改善排序。",
+            "evidence_ids": [
+              "E007",
+              "E015"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:S2",
+            "status": "met",
+            "reason": "奖励来自 actor 实际读入反思后的下一试，不是仅评价反思文字。",
+            "evidence_ids": [
+              "E005",
+              "E015"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:S3",
+            "status": "partial",
+            "reason": "writer 针对冻结 consumer 采样和训练；未系统检验 actor 更换/分布漂移下同步适配。",
+            "evidence_ids": [
+              "E009",
+              "E012",
+              "E015"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:S4",
+            "status": "partial",
+            "reason": "query-conditioned reflector 为具体对象，但追加反思沿用 Reflexion；贡献是训练而非全新 artifact 类。",
+            "evidence_ids": [
+              "E003",
+              "E004",
+              "E013"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:S5",
+            "status": "partial",
+            "reason": "三个任务环境及两类 actor 有结果；没有清晰的 unseen-family 元训练/迁移实验。",
+            "evidence_ids": [
+              "E008",
+              "E009",
+              "E013"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:F1",
+            "status": "partial",
+            "reason": "沿用现成反思架构和 SFT/RLHF/PPO，缺少单独 SFT、reward-model/best-of-n、PPO 消融；这是归因风险，不根据卡内历史 outcome 推论文命运。",
+            "evidence_ids": [
+              "E004",
+              "E008",
+              "E013"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:F2",
+            "status": "met",
+            "reason": "边缘 controller 风险未触发：训练对象确为改 actor prompt 的 reflector。",
+            "evidence_ids": [
+              "E003",
+              "E005"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:F3",
+            "status": "not_applicable",
+            "reason": "中心主张不是只加安全或 paraphrase 属性。",
+            "evidence_ids": [
+              "E001"
+            ]
+          },
+          {
+            "id": "rsi:amortize_improver_into_trained_policy:F4",
+            "status": "not_applicable",
+            "reason": "不是 memory curator 的复合代理奖励；反思器按 next-return delta 学习，但 learned reward 的误差仍未校验。",
+            "evidence_ids": [
+              "E007",
+              "E015"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E005",
+          "E007",
+          "E008",
+          "E013",
+          "E015"
+        ]
+      }
+    ],
+    "unassigned": [
+      "S1 有 task-local append reflection，但缺新任务文本 store reuse，故 H00 仅边界对照，不认定 fully executes transferable-guidance。",
+      "不匹配 make_the_improver_editable/H19–21：改进过程本身没有非权重自写回；训练 reflector 权重不能替代该条件。"
+    ],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "reframe_as_solvable_object",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "amortize_improver_into_trained_policy",
+        "sub": "H27"
+      },
+      "operation_correspondence": "冻结 actor 当环境，反思输出当 RL action，将 task-return 改善回传给 proposer；正是训练 harness-edit proposer 的 downstream utility credit。",
+      "necessary_conditions_and_differences": "需要 actor 冻结、可训练 reflector 和可执行反馈；H27 的 matched prompting/search baseline、clean holdout 和实际 amortization cost 未满足充分证据。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E008",
+        "E013",
+        "E015"
+      ]
+    },
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "amortize_improver_into_trained_policy",
+        "sub": "H27"
+      },
+      "operation_correspondence": "把固定的反思生成策略转成可训练的 query-conditioned prompt改进器，产生下轮 actor conditioning。",
+      "necessary_conditions_and_differences": "训练所得权重在任务间复用；text memory 仅同题 trials 复用，不能把领域 H00 的跨题 textual retained 条件视为已满足。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E005",
+        "E006",
+        "E013",
+        "E020"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:H27:delta_downstream_utility",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "训练 prompt proposer 并声称其输出改善 actor。",
+      "applicable": true,
+      "status": "met",
+      "reason": "以同失败状态产生候选、以其引导的下一试回报差训练反思器，覆盖 downstream-use credit。",
+      "evidence_ids": [
+        "E007",
+        "E015"
+      ],
+      "score_item": [
+        "M",
+        "X"
+      ]
+    },
+    {
+      "id": "rsi:H27:trained_vs_prompted_matched_budget",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "声称训练反思优于冻结/提示反思。",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有 Reflexion、r=0 曲线及两种 LoRA rank，但 proposer 型号/SFT/reward-model/best-of-n 同时改变，n 和 API/token 总预算未报告，不能隔离 PPO。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E010",
+        "E013"
+      ],
+      "score_item": [
+        "E.causality",
+        "E.cost"
+      ]
+    },
+    {
+      "id": "rsi:H27:training_seed_variance",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "RL improver 有随机训练或多候选采样。",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "相关完整实验、附录均未见多训练 seed、重复 rollout、置信区间或方差；actor T=0 不是训练重复。",
+      "evidence_ids": [
+        "E009",
+        "E012",
+        "E013"
+      ],
+      "score_item": [
+        "E.statistics"
+      ]
+    },
+    {
+      "id": "rsi:H27:leakage_guard",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "训练反思器后用公开 validation 衡量泛化。",
+      "applicable": true,
+      "status": "partial",
+      "reason": "明确 training rollout 与 validation 区分，但缺 ALFWorld/WebShop train IDs、去重/近邻审计、checkpoint selection 和 reward-model 验证集协议。没有证据声称实际泄漏。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E013"
+      ],
+      "score_item": [
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "rsi:H27:heldout_separation",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "声称跨任务/环境学习并改进冻结 actor。",
+      "applicable": true,
+      "status": "partial",
+      "reason": "HotPotQA training 3000 与 distractor dev100 有名义分离；其余环境及选模型与最终报告边界不够明确。文本 memory 只在同题 retry，不证明跨题文本留存迁移。",
+      "evidence_ids": [
+        "E006",
+        "E008",
+        "E009",
+        "E013",
+        "E020"
+      ],
+      "score_item": [
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "rsi:H27:training_vs_search_cost",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "训练 proposer 以改善/加速多次任务尝试。",
+      "applicable": true,
+      "status": "partial",
+      "reason": "给训练样本、LoRA 参数量、阶段设置、A100 型号和重试数；无 GPU-hours、训练/双候选 rollout/在线 best-of-n 总调用与摊销曲线。",
+      "evidence_ids": [
+        "E008",
+        "E013",
+        "E014",
+        "E027"
+      ],
+      "score_item": [
+        "E.cost"
+      ]
+    },
+    {
+      "id": "rsi:H27:artifact_ablation",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/amortize_improver_into_trained_policy.md#Reviewer expectations; patterns/sub/H27.md#Step-by-Step",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "把收益归因于更有效的反思文本。",
+      "applicable": true,
+      "status": "partial",
+      "reason": "ReAct 与 Reflexion 可比较有无反馈架构；没有 loop-on/store-off、shuffled reflection、同基座 SFT-only/PPO-off 的严格隔离。",
+      "evidence_ids": [
+        "E004",
+        "E009",
+        "E010",
+        "E013"
+      ],
+      "score_item": [
+        "E.causality"
+      ]
+    },
+    {
+      "id": "rsi:H27:same_task_vs_transfer",
+      "version": "sha256:52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H00.md#Step-by-Step; docs/EVIDENCE.md#证据等级",
+        "research/patterns/conditions.json#amortize_improver_into_trained_policy"
+      ],
+      "source_qualification": "固定领域卡的 paper-practice/evidence-audit 归纳，非本文真实审稿；未逐一复核卡内独立来源，故不升格 common_practice。",
+      "applies_when": "把 reflection memory 解释为 retained improvement。",
+      "applicable": true,
+      "status": "partial",
+      "reason": "同任务重试反馈链可见，但不同任务之间传递的是训练出的权重而非固定文本 lesson store；不套用 H00 的跨题文本迁移成功。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E017",
+        "E020"
+      ],
+      "score_item": [
+        "X",
+        "E.holdout"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "环境回报训练反思器提高 frozen actor 成功率和 learning speed。",
+      "setting": "GPT-3 text-davinci-003 / GPT-4 frozen actor；LongChat-7b16k LoRA r1/r4；HotPotQA100、ALFWorld134、WebShop100 validation tasks。",
+      "baseline/control": "ReAct、Reflexion、SAC；固定 actor T=0；相同名义 N；r=0 在曲线中。",
+      "selection_vs_test": "offline training tasks 数据训练，报告 validation；未定义另一个 sealed final test 或 checkpoint选择边界。",
+      "result/denominator": {
+        "denominators": {
+          "HotPotQA": 100,
+          "ALFWorld": 134,
+          "WebShop": 100
+        },
+        "table2_r4_N4": {
+          "GPT3": {
+            "HotPotQA": 54,
+            "ALFWorld": 100,
+            "WebShop": 36
+          },
+          "GPT4": {
+            "HotPotQA": 54,
+            "ALFWorld": 100,
+            "WebShop": 46
+          }
+        },
+        "table2_Reflexion_N4": {
+          "GPT3": {
+            "HotPotQA": 50,
+            "ALFWorld": 84.33,
+            "WebShop": 35
+          },
+          "GPT4": {
+            "HotPotQA": 52,
+            "ALFWorld": 85.07,
+            "WebShop": 44
+          }
+        },
+        "units": "success rate percent, author-reported; counts not back-computed from rounded values",
+        "failures": "成功率覆盖固定任务分母；各类 timeout/unscored exclusions 未具体说明；WebShop 小收益为明确边界。"
+      },
+      "evidence_ids": [
+        "E009",
+        "E010",
+        "E011",
+        "E012",
+        "E027",
+        "E028",
+        "E029"
+      ],
+      "counterevidence": [
+        "无训练重复/CI；不同 proposer 及训练/采样预算；结果无法孤立归因 policy gradient。",
+        "摘要/引言18%/36%/4%与不同 baselines/actors/retries 口径不统一；不把其当 matched Reflexion 百分点净增益。"
+      ],
+      "allowed_conclusion": "作者报告的 trained-reflector system 在这三组 validation 设置上优于所列 baselines；不能证明相同总算力更有效或通用在线自我进化。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "policy gradient 学会有用根因诊断，而非 frozen LM 无信息复述。",
+      "setting": "同一失败轨迹生成候选，以 next-trial delta 建偏好；案例 Figures1/5/7。",
+      "baseline/control": "冻结反思与 reinforced 反思案例；r=0/rank曲线；无独立 SFT-only/selection-only。",
+      "selection_vs_test": "学习 reward model 后还用 best-of-n 选择反思，无独立 reward calibration；案例不是随机总体。",
+      "result/denominator": "定性案例展示错误纠正/结构化计划；没有整体根因归因准确率或机制因果分母。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E013",
+        "E015",
+        "E023"
+      ],
+      "counterevidence": [
+        "回报差/偏好训练也可能学格式、任务常识或候选筛选；没有等预算 component factorial ablation。"
+      ],
+      "allowed_conclusion": "机制有可重建操作与支持性例子；policy-gradient 专属净效应、普遍 credit-assignment 改善未被完全隔离。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "代理随时间学习、反思 memory 供 future attempts 使用。",
+      "setting": "每一 task 的多 trials 及 offline trained proposer 在 validation 调用。",
+      "baseline/control": "任务内 append reflection 对比 fixed/no-reflection actor；未做跨题文本 store 冻结迁移。",
+      "selection_vs_test": "retry 反馈来自同一评估 task 的失败；独立任务之间留存的是训练权重，不是其前题文本改动。",
+      "result/denominator": "同题重试成功率曲线；无 new-task retained-text gain 分母。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E008",
+        "E017",
+        "E018",
+        "E020"
+      ],
+      "counterevidence": [
+        "long-term memory 是 same-task context，不是跨任务非权重 library；不能据训练改进器称 improver evidence。"
+      ],
+      "allowed_conclusion": "任务内 prompt 适应与训练反思组件的验证集效果；evidence_level=task。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告：离线训练的反思器加 learned reward/采样的系统包，在三个名义 validation 环境的固定 GPT-3/4 actor 上提高多次同任务尝试成功率；训练得到的反思 policy 可用于验证任务。未证明跨独立任务保留文本的收益，或相同总预算下 PPO 对根因诊断的独立因果效应。",
+    "unresolved": [
+      "关键最近邻原文与版本不在固定输入包。",
+      "checkpoint选择/训练-验证去重协议、部署best-of-n n、SFT/PPO/采样贡献、统计和成本未充分报告。",
+      "HotPotQA E.1 actor 示例图像正文在固定文本未抽取；不影响重建主要算法，不能假称逐字读过。"
+    ],
+    "evidence_ids": [
+      "E003",
+      "E005",
+      "E006",
+      "E008",
+      "E009",
+      "E013",
+      "E015",
+      "E020",
+      "E028",
+      "E029"
+    ],
+    "reproduction": "no_run; author_report only",
+    "audit_status": "pending"
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "冻结反思不能可靠诊断失败和黑箱 actor 不能直接训练是具体问题，失败例与 Reflexion/ReAct 对比有支撑；但最近邻仅核本文叙述，未取得 Reflexion/Self-Refine/RAP 原文或同时代 prompt optimizer 材料，不能证成完整 frontier residual。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E024",
+        "E025"
+      ],
+      "counterevidence_ids": [
+        "E004"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "冻结 actor 并入环境→可训练 reflector→next-return delta→偏好 reward model→PPO→反思追加的可重建逻辑对准问题，可预测 trained 与 frozen proposer 差异；但 delta 的因果解释依赖低随机性且 SFT/PPO/采样贡献未分清，未达4。",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E007",
+        "E013",
+        "E015"
+      ],
+      "counterevidence_ids": [
+        "E008",
+        "E012"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "完整附录给训练样本、配对、奖励、超参及五组可读 actor/reflector 示例，核心链可重建；但 best-of-n 的 n/退回机制、偏好并列处理、reward model 验证、跨任务 memory 范围与部分超参口径不明。保留是任务内 append，不是带回滚的跨任务 store；不把无长期 store 当 component_training 必须具备的功能。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E008",
+        "E013",
+        "E015",
+        "E017",
+        "E018",
+        "E019",
+        "E020",
+        "E021"
+      ],
+      "counterevidence_ids": [
+        "E025",
+        "E026"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "三个可执行环境、100/134/100 的分母、明确答案/成功/产品匹配奖励及 GPT-3/4 success 表构成相关客观测量。成功率与 F1 shaping 的映射、WebShop heuristic 的误差和 learned reward calibration 没有独立核验，故非4。",
+      "evidence_ids": [
+        "E009",
+        "E016",
+        "E027",
+        "E028",
+        "E029"
+      ],
+      "counterevidence_ids": [
+        "E007",
+        "E023"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有 ReAct/Reflexion、相同 actor 与 nominal retries、r=0/r=1/r=4 对比且 T=0 降噪，支持训练版系统包的收益；但没有 isolate SFT vs PPO vs learned reward best-of-n、同模型同预算反思对照或 store-off。不能把整体差值解释成 policy-gradient 或特定文本 credit assignment 的净因果效果。",
+      "evidence_ids": [
+        "E004",
+        "E009",
+        "E010",
+        "E012",
+        "E028",
+        "E029"
+      ],
+      "counterevidence_ids": [
+        "E008",
+        "E013",
+        "E023"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "明确 offline training set→validation，HotPotQA 3000 train/100 dev；对 trained component 有初步泛化证据。ALFWorld/WebShop 的训练任务身份、checkpoint/超参选择集和封存 test 边界不清；没有本文文本留存的跨新任务迁移结果。名义 validation 不自行等同泄漏，也不当独立最终 holdout。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E013"
+      ],
+      "counterevidence_ids": [
+        "E006",
+        "E020"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "有各环境评估分母和数据样本数，WebShop 有弱收益边界及具体失败例；未报告 seeds、重复运行/置信区间、配对任务统计、超时/未评分 trial 处理。保留完整分母的正面信息给1，不把统计未报说成零失败。",
+      "evidence_ids": [
+        "E009",
+        "E011",
+        "E013",
+        "E022"
+      ],
+      "counterevidence_ids": [
+        "E012",
+        "E027"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告 LoRA 可训练参数、训练样本/超参、A100 40GB 和 N=1/4，成本接口有少量信息；没有训练时间/卡数总耗、双反思 rollout 与 online best-of-n 的 n/calls/tokens，因而不支持相同预算或更快学习等于实际效率。",
+      "evidence_ids": [
+        "E008",
+        "E013",
+        "E014",
+        "E027"
+      ],
+      "counterevidence_ids": [
+        "E015"
+      ],
+      "search_scope": [
+        "2308.02151v3 §§1–6, Table 1–2, Figures 1–7, Appendices A–E; fixed PDF text lines 1–1449",
+        "§4.2 and Appendix C.1 / Algorithm 1: training, rating and selection",
+        "Appendix E.1–E.2: actor/reflector examples; HotPotQA actor image example not text-recovered"
+      ]
+    }
+  },
+  "score": {
+    "raw": 55.0,
+    "display": 55.0,
+    "lower": 55.0,
+    "upper": 55.0,
+    "coverage": 1.0,
+    "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c",
+    "weights": {
+      "G": 15,
+      "M": 20,
+      "X": 20,
+      "E.measurement": 10,
+      "E.causality": 15,
+      "E.holdout": 10,
+      "E.statistics": 5,
+      "E.cost": 5
+    },
+    "calibration_only": true
+  },
+  "status": "reviewed",
+  "reason": "固定v3 PDF文本含完整核心方法、实验及C训练附录、E反思提示词，足以完成组件训练主张的校准初评；少量示例抽取限制、邻居缺口和未报告证据均明确，不用旧结论补齐。",
+  "rationale": "完整附录支持训练反思器改写冻结actor的任务内提示词；三环境有收益，但PPO与SFT/采样未隔离，跨题文本留存、独立留出、统计和总成本证据不足。"
+}

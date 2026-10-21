@@ -80,10 +80,8 @@ def main(argv: list[str]) -> int:
         with queue.open("x") as q:  # "x": refuse to append to an existing file
             q.write("".join(f"{a}\n" for a in added))
     print(f"\nadded {len(added)} papers to corpus ({len(new) - len(added)} ids not found on arXiv); queued in {queue}")
-    print("Remaining LLM steps per paper (see docs/PIPELINE.md):")
-    for aid in added:
-        print(f"  {aid}  {meta[aid]['title'][:70]}\n    1 screen → research/screen.jsonl  2 signature → research/signatures.jsonl"
-              f"  3 assign → research/patterns/assignments.jsonl  4 judge → research/judgments/<date>.jsonl")
+    print("Candidates ingested, not quality-reviewed. Follow docs/PIPELINE.md and docs/agents/LOCAL_SCORING_PROMPT.md.")
+    print("Cached HTML may be truncated. Verify complete versioned materials before v2 calibration; do not resume legacy batches.")
     return 0
 
 

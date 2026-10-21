@@ -1,0 +1,996 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "cal-h1-v2",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2305.16291",
+    "paper_id": "2305.16291",
+    "title": "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+    "version": "2305.16291v2",
+    "claim_type": "system_method",
+    "central_claim": "Voyager无需微调，通过自主课程、可执行skill库和环境反馈/错误/自验证迭代，持续探索Minecraft、积累复杂技能，并在新世界从零库存迁移到新任务。",
+    "scope_class": "A",
+    "scope_reason": "被修改与后续评价的留存产物是可执行代码skill及其检索库，非权重；真实执行反馈门控写回后实际跨任务读取。"
+  },
+  "provenance": {
+    "input_hash": "0e70ef7b4874b46fef4c8e77c81bb694d4c5df2b38285141b680e4566627c5d1",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "使用指定已配置 model type；没有可核验的底层模型回执、session ID 或 receipt，故留 null。不读取被 supersede cal-h1、另一席、aggregate、screen、archive；不联网、不运行论文代码。",
+    "timestamp": "2026-10-21T17:57:28.531283+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "paper-fulltext",
+      "url": "https://arxiv.org/html/2305.16291v2",
+      "version": "2305.16291v2",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "sections_read": [
+        "Abstract; §§1–8完整正文、表格与图注",
+        "Appendix A.1–A.6全部算法、prompt、helper与skill代码示例、自验证例子",
+        "Appendix B.1–B.4.5全部实验、逐次物品/地形、检索与模型变体",
+        "entire supplied text lines 1–13882"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "limitations": "HTML代码散为多行但已逐行完整阅读；不运行代码，图像像素未独立量化，依据表格/图注/正文；独立邻居全文未提供。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "Abstract; text lines 78-85",
+      "quote": ", the first LLM-powered embodied lifelong learning agent in Minecraft that continuously explores the world, acquires diverse skills, and makes novel discoveries without human intervention.\nVoyager\nconsists of three key components: 1) an automatic curriculum that maximizes exploration, 2) an ever-growing skill library of executable code for storing and retrieving complex behaviors, and 3) a new iterative prompting mechanism that incorporates environment feedback, execution errors, and self-verification for program improvement.\n\nVoyager\ninteracts with GPT-4 via blackbox queries, which bypasses the need for model parameter fine-tuning. The skills developed by\nVoyager\nare temporally extended, interpretable, and compositional, which compounds the agent’s abilities rapidly and alleviates catastrophic forgetting.",
+      "support_explanation": "原主张为自主终身探索、代码库累积、冻结基座，无参数微调。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§1; text lines 198-198",
+      "quote": "However, these agents are not lifelong learners that can progressively acquire, update, accumulate, and transfer knowledge over extended time spans",
+      "support_explanation": "作者定位不能跨长时段积累和转移知识的既有 agent 局限；未独立核邻居原文。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§2.1; text lines 407-418",
+      "quote": "The agent’s current state\n, including inventory, equipment, nearby blocks and entities, biome, time, health and hunger bars, and position;\n\n(3)\n\nPreviously completed and failed tasks\n, reflecting the agent’s current exploration progress and capabilities frontier;\n\n(4)\n\nAdditional context\n: We also leverage GPT-3.5 to self-ask questions based on the agent’s current state and exploration progress and self-answer questions. We opt to use GPT-3.5 instead of GPT-4 for standard NLP tasks due to budgetary considerations.",
+      "support_explanation": "curriculum 可见状态、完成/失败任务和额外GPT-3.5上下文；不是无信息自发探索。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§2.2 Figure4; text lines 427-430",
+      "quote": "Top: Adding a new skill.\nEach time GPT-4 generates and verifies a new skill, we add it to the skill library, represented by a vector database. The key is the embedding vector of the program description (generated by GPT-3.5), while the value is the program itself.\nBottom: Skill retrieval.\nWhen faced with a new task proposed by the automatic curriculum, we first leverage GPT-3.5 to generate a general suggestion for solving the task, which is combined with environment feedback as the query context. Subsequently, we perform querying to identify the top-5 relevant skills.",
+      "support_explanation": "description embedding为key、代码为value；top5检索后供下一任务。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§2.2; text lines 442-458",
+      "quote": "Guidelines for code generation\n, such as “\nYour function will be reused for building more complex functions. Therefore, you should make it generic and reusable.\n”;\n\n(2)\n\nControl primitive APIs, and relevant skills\nretrieved from the skill library, which are crucial for in-context learning\n[\n36\n,\n37\n,\n38\n]\nto work well;",
+      "support_explanation": "生成代码依赖控制primitive与检索skill，提示复用和组合。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§2.3; text lines 525-542",
+      "quote": "Self-verification for checking task success.\nInstead of manually coding success checkers for each new task proposed by the automatic curriculum, we instantiate another GPT-4 agent for self-verification. By providing\nVoyager\n’s current state and the task to GPT-4, we ask it to act as a critic\n[\n47\n,\n48\n,\n49\n]\nand inform us whether the program achieves the task. In addition, if the task fails, it provides a critique by suggesting how to complete the task (Fig.\n6\n). Hence, our self-verification is more comprehensive than self-reflection\n[\n30\n]\nby both checking success and reflecting on mistakes.",
+      "support_explanation": "接受门是GPT-4根据环境状态判断成功，不等于形式/独立执行判定器。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§2.3; text lines 544-548",
+      "quote": "During each round of code generation, we execute the generated program to obtain environment feedback and execution errors from the code interpreter, which are incorporated into GPT-4’s prompt for the next round of code refinement. This iterative process repeats until self-verification validates the task’s completion, at which point we add this new skill to the skill library and ask the automatic curriculum for a new objective (Fig.\n2\n). If the agent gets stuck after 4 rounds of code generation, then we query the curriculum for another task. This iterative prompting approach significantly improves program synthesis for embodied control, enabling\nVoyager\nto continuously acquire diverse skills without human intervention.",
+      "support_explanation": "执行反馈/错误/critic循环最多四轮；成功后实际写库，失败换任务。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§3.1; text lines 562-591",
+      "quote": "We leverage OpenAI’s\ngpt-4-0314\n\n[\n35\n]\nand\ngpt-3.5-turbo-0301\n\n[\n50\n]\nAPIs for text completion, along with\ntext-embedding-ada-002\n\n[\n51\n]\nAPI for text embedding. We set all temperatures to 0 except for the automatic curriculum, which uses temperature\n=\n=\n0.1 to encourage task diversity. Our simulation environment is built on top of MineDojo\n[\n23\n]\nand leverages Mineflayer\n[\n52\n]\nJavaScript APIs for motor controls. See Appendix, Sec.",
+      "support_explanation": "固定GPT版本、embedding版本、温度和Mineflayer控制权限。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§3.2; text lines 631-643",
+      "quote": "Note that we do not directly compare with prior methods that take Minecraft screen pixels as input and output low-level controls\n[\n53\n,\n54\n,\n55\n]\n. It would not be an apple-to-apple comparison, because we rely on the high-level Mineflayer\n[\n52\n]\nAPI to control the agent. Our work’s focus is on pushing the limits of GPT-4 for lifelong embodied agent learning, rather than solving the 3D perception or sensorimotor control problems.",
+      "support_explanation": "不直接比像素原始控制器有明确合理界限；本结果仅高层API规划技能。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§3.3; text lines 965-977",
+      "quote": "To evaluate zero-shot generalization, we clear the agent’s inventory, reset it to a newly instantiated world, and test it with unseen tasks.\nFor both\nVoyager\nand AutoGPT, we utilize GPT-4 to break down the task into a series of subgoals.\nTable.\n2\nand Fig.\n8\nshow\nVoyager\ncan consistently solve all the tasks, while baselines cannot solve any task within 50 prompting iterations. What’s interesting to note is that our skill library constructed from lifelong learning not only enhances\nVoyager\n’s performance but also gives a boost to AutoGPT. This demonstrates that the skill library serves as a versatile tool that can be readily employed by other methods, effectively acting as a plug-and-play asset to enhance performance.",
+      "support_explanation": "库存清空、新世界、新任务、GPT-4分解；支持后续复用但泛化需缩限，不能忽略表2有成功的变体。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "Table2 caption; text lines 982-982",
+      "quote": "Zero-shot generalization to unseen tasks. Fractions indicate the number of successful trials out of three total attempts. 0/3 means the method fails to solve the task within the maximal prompting iterations (50). Numbers are prompting iterations averaged over three trials. The fewer the iterations, the more efficient the method.",
+      "support_explanation": "每任务三次、50迭代上限、失败分母明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "Table2; text lines 1105-1141",
+      "quote": "AutoGPT\n[\n28\n]\nw/ Our Skill Library\n\n39\n(\n1\n/\n3\n)\n(\\nicefrac{{1}}{{3}})\n\n30\n(\n1\n/\n3\n)\n(\\nicefrac{{1}}{{3}})\n\nN/A\n(\n0\n/\n3\n)\n(\\nicefrac{{0}}{{3}})\n\n30\n(\n2\n/\n3\n)\n(\\nicefrac{{2}}{{3}})",
+      "support_explanation": "AutoGPT加库在前三个中的两项和compass已有成功；不能引用概括句说所有baseline任何任务均失败。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "Table2; text lines 1143-1188",
+      "quote": "Voyager\nw/o Skill Library\n\n36\n(\n2\n/\n3\n)\n(\\nicefrac{{2}}{{3}})\n\n30\n±\n9\n30\\pm 9\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}\n\n27\n±\n9\n27\\pm 9\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}\n\n26\n±\n3\n26\\pm 3\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}",
+      "support_explanation": "无库Voyager已解决多数新任务，反事实是效率和特定可靠性收益，不是唯一能解。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "Table2; text lines 1190-1239",
+      "quote": "Voyager\n(Ours)\n\n𝟏𝟗\n±\n𝟑\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{19\\pm 3}}\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}\n\n𝟏𝟖\n±\n𝟕\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{18\\pm 7}}\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}\n\n𝟐𝟏\n±\n𝟓\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{21\\pm 5}}\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}\n\n𝟏𝟖\n±\n𝟐\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{18\\pm 2}}\n\n(\n𝟑\n/\n𝟑\n)\n{\\color[rgb]{0.09,0.45,0.27}\\mathbf{(\\nicefrac{{3}}{{3}})}}",
+      "support_explanation": "完整库在四任务各3/3成功，19±3/18±7/21±5/18±2迭代。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§3.4; text lines 1250-1256",
+      "quote": "We ablate 6 design choices (automatic curriculum, skill library, environment feedback, execution errors, self-verification, and GPT-4 for code generation) in\nVoyager\nand study their impact on exploration performance (see Appendix, Sec.\nB.3\nfor details of each ablated variant). Results are shown in Fig.\n9\n. We highlight the key findings below:",
+      "support_explanation": "六个组件消融是报告的因果证据；非独立新优化器比较。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§4; text lines 1357-1374",
+      "quote": "Cost.\nThe GPT-4 API incurs significant costs. It is\n15\n×\n15\\times\nmore expensive than GPT-3.5. Nevertheless,\nVoyager\nrequires the quantum leap in code generation quality from GPT-4 (Fig.\n9\n), which GPT-3.5 and open-source LLMs cannot provide\n[\n60\n]\n.\n\nInaccuracies.\nDespite the iterative prompting mechanism, there are still cases where the agent gets stuck and fails to generate the correct skill. The automatic curriculum has the flexibility to reattempt this task at a later time.\nOccasionally, self-verification module may also fail, such as not recognizing spider string as a success signal of beating a spider.",
+      "support_explanation": "仅相对API价格和定性成本，critic有错误；非完整构建/查询token账本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§5; text lines 1503-1516",
+      "quote": "Inner Monologue\n[\n26\n]\nincorporates environment feedback for robot planning with LLMs.\nCode as Policies\n[\n16\n]\nand ProgPrompt\n[\n22\n]\ndirectly leverage LLMs to generate executable robot policies.",
+      "support_explanation": "Inner Monologue环境反馈及Code as Policies/ProgPrompt代码policy谱系。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§5; text lines 1563-1578",
+      "quote": "Generative Agents\n[\n82\n]\nleverages ChatGPT\n[\n50\n]\nto simulate human behaviors by storing agents’ experiences as memories and retrieving those for planning, but its agent actions are not executable. SPRING\n[\n83\n]\nis a concurrent work that uses GPT-4 to extract game mechanics from game manuals, based on which it answers questions arranged in a directed acyclic graph and predicts the next action.\nAll these works lack a skill library for developing more complex behaviors, which are crucial components for the success of\nVoyager\nin lifelong learning.",
+      "support_explanation": "作者区分Generative Agents文本记忆与可执行库；没有读邻居原文，不能断言独立新颖性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§A.3.2; text lines 2115-2119",
+      "quote": "We leverage GPT-3.5 to self-ask questions to provide additional context. Each question is paired with a concept that is used for retrieving the most relevant document from the wiki knowledge base\n[\n23\n]\n. We feed the document content to GPT-3.5 for self-answering questions. In practice, using a wiki knowledge base is optional since GPT-3.5 already possesses a good understanding of Minecraft game mechanics. However, the external knowledge base becomes advantageous if GPT-3.5 is not pre-trained in that specific domain. See Sec.",
+      "support_explanation": "额外wiki检索是可选；公开世界知识与手工API为信息来源。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§B.1; text lines 13352-13364",
+      "quote": "Our simulation environment is built upon MineDojo\n[\n23\n]\nand utilizes Mineflayer\n[\n52\n]\nJavaScript APIs for motor controls (Sec.\nA.4.2\n). Additionally, we incorporate many\nbot.chat()\ninto Mineflayer functions to provide abundant environment feedback and implement various condition checks along with try-catch exceptions for continuous execution. If the bot dies, it is resurrected near the closest ground, and its inventory is preserved for uninterrupted exploration. The bot recycles its crafting table and furnace after program execution. For detailed implementations, please refer to our codebase.",
+      "support_explanation": "死后复活保留库存、工具回收和丰富chat反馈；限定常规生存能力外推。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§B.2; text lines 13369-13400",
+      "quote": "ReAct\n\n[\n29\n]\nuses chain-of-thought prompting\n[\n46\n]\nby generating both reasoning traces and action plans with LLMs. We provide it with our environment feedback and the agent states as observations. ReAct undergoes one round of code generation from scratch, followed by three rounds of code refinement. This process is then repeated until the maximum prompting iteration is reached.\n\nReflexion\n\n[\n30\n]\nis built on top of ReAct\n[\n29\n]\nwith self-reflection to infer more intuitive future actions. We provide it with environment feedback, the agent states, execution errors, and our self-verification module. Similar to ReAct, Reflexion undergoes one round of code generation from scratch, followed by three rounds of code refinement. This process is then repeated until the maximum prompting iteration is reached.\n\nAutoGPT\n\n[\n28\n]\nis a popular software tool that automates NLP tasks by decomposing a high-level goal into multiple subgoals and executing them in a ReAct-style loop. We re-implement AutoGPT by using GPT-4 to do task decomposition and provide it with the agent states, environment feedback, and execution errors as observations for subgoal execution. Compared with\nVoyager\n, AutoGPT lacks the skill library for accumulating knowledge, self-verification for assessing task success, and automatic curriculum for open-ended exploration. During each subgoal execution, if no execution error occurs, we consider the subgoal completed and proceed to the next one. Otherwise, we refine the program until three rounds of code refinement (equivalent to four rounds of code generation) are completed, and then move on to the next subgoal. If three consecutive subgoals do not result in acquiring a new item, we replan by rerunning the task decomposition.\n\nThe task is “explore the world and get as many items as possible” for all baselines.",
+      "support_explanation": "ReAct/Reflexion重解释与AutoGPT不同模块/终止条件；并非原版算法的无条件胜负。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§B.3; text lines 13520-13541",
+      "quote": "w/o Skill Library\n: We remove the skill library, eliminating skill retrieval for code generation.\n\n•\n\nw/o Environment Feedback\n: We exclude environment feedback (chat log) from the prompt for code generation.\n\n•\n\nw/o Execution Errors\n: We exclude execution errors from the prompt for code generation.\n\n•\n\nw/o Self-Verification\n: For each task, we generate code without self-verification and iteratively refine the program for 3 rounds (equivalent to 4 rounds of code generation in total).\n\n•\n\nGPT-3.5\n: We replace GPT-4 with GPT-3.5 for code generation. We retain GPT-4 for the automatic curriculum and the self-verification module.",
+      "support_explanation": "store-off精确定义，critic-off/GPT3.5替换控制，后者仍保留GPT4课程和critic。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§B.4.4; text lines 13767-13769",
+      "quote": "We conduct an evaluation of our skill retrieval (309 samples in total) and the results are in Table.\nA.4\n. The top-5 accuracy standing at 96.5% suggests our retrieval process is reliable (note that we include the top-5 relevant skills in the prompt for synthesizing a new skill).",
+      "support_explanation": "309个retrieval样本top5 96.5%；只是检索相关性非技能语义正确性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§B.4.5; text lines 13813-13819",
+      "quote": "In the main paper, all of Voyager’s experiments are conducted with\ngpt-4-0314\n. We additionally run new experiments with\ngpt-4-0613\nand find that the performance is roughly the same (Fig.\nA.4\n). It demonstrates that Voyager is robust to model variations.",
+      "support_explanation": "补充GPT4-0613变体，不等于跨模型族/弱基座普遍成立。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E025",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§A.5 self-verification prompt; text lines 12691-12726",
+      "quote": "{\n\n\"\nreasoning\n\":\n\n\"\nYou\n\nhave\n\nrotten\n\nflesh\n\nin\n\nyour\n\ninventory\n,\n\nwhich\n\nmeans\n\nyou\n\nsuccessfully\n\nkilled\n\none\n\nzombie\n.\",",
+      "support_explanation": "只从最终rotten_flesh推断杀僵尸，库存来源歧义；缺少动作前后变化或事件核验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E026",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§B.4.1; text lines 13559-13566",
+      "quote": "We run three trials for each method. The items collected by\nVoyager\nin each trial is\n\n•\n\nTrial 1\n: ‘iron_ingot’, ‘stone_shovel’, ‘iron_leggings’, ‘fishing_rod’, ‘pufferfish’, ‘oak_log’, ‘cooked_mutton’, ‘green_dye’, ‘flint’, ‘chest’, ‘iron_sword’, ‘string’, ‘ender_pearl’, ‘raw_copper’, ‘crafting_table’, ‘cactus’, ‘lapis_lazuli’, ‘iron_pickaxe’, ‘copper_ingot’, ‘stone_pickaxe’, ‘wooden_hoe’, ‘scaffolding’, ‘stick’, ‘porkchop’, ‘copper_block’, ‘gravel’, ‘grass_block’, ‘white_bed’, ‘bone’, ‘dirt’, ‘mutton’, ‘white_wool’, ‘oak_sapling’, ‘coal’, ‘bamboo’, ‘wooden_pickaxe’, ‘rotten_flesh’, ‘cooked_porkchop’, ‘cod’, ‘iron_boots’, ‘lightning_rod’, ‘diorite’, ‘water_bucket’, ‘shears’, ‘furnace’, ‘andesite’, ‘granite’, ‘bucket’, ‘wooden_sword’, ‘sandstone’, ‘iron_helmet’, ‘raw_iron’, ‘sand’, ‘acacia_log’, ‘cooked_cod’, ‘oak_planks’, ‘azure_bluet’, ‘iron_shovel’, ‘acacia_planks’, ‘shield’, ‘iron_axe’, ‘iron_chestplate’, ‘cobblestone’;",
+      "support_explanation": "报告三次完整探索和逐次物品列表，可核分母但无主结果显著性检验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E027",
+      "material_id": "paper-fulltext",
+      "sha256": "bb749871317b0c553b0c90b3e472646b71d076291012ceb05c5dab868bc4dba7",
+      "locator": "§3.5; text lines 1336-1352",
+      "quote": "Human as a critic (equivalent to\nVoyager\n’s self-verification module): humans provide visual critique to\nVoyager\n, allowing it to modify the code from the previous round. This feedback is essential for correcting certain errors in the spatial details of a 3D structure that\nVoyager\ncannot perceive directly.\n\n(2)\n\nHuman as a curriculum (equivalent to\nVoyager\n’s automatic curriculum module): humans break down a complex building task into smaller steps, guiding\nVoyager\nto complete them incrementally. This approach improves\nVoyager\n’s ability to handle more sophisticated 3D construction tasks.",
+      "support_explanation": "建筑展示有人类critic/curriculum，不能计自主系统结果。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "持久化skill vector database中的可执行JavaScript函数",
+      "information": "GPT-4可见结构化agent状态、手写Mineflayer高层API、top5已有代码、执行错误及另一个GPT-4的成功判断；不是像素控制",
+      "operation": "按当前任务检索→生成/执行→据chat、traceback、critic修复最多4轮→成功则description embedding索引代码→下个任务检索/组合",
+      "output": "新增代码skill及description embedding",
+      "conditions": "代码接口、可读游戏状态与强代码基座；非全自动正确性判定器",
+      "feedback": "环境状态、程序错误和GPT-4自验证",
+      "selection_rule": "critic success=true才add_skill，四次失败写failed_tasks并换任务；无独立回放/抽象输入测试门",
+      "selection_data": "当前练习任务执行后的状态",
+      "persistence": "skill_manager / vector database；代码value及描述embedding key",
+      "later_use": "下一练习技能和新世界指定任务中检索top5并组合",
+      "claimed_effect": "行动能力积累、减少重新推导和支持新任务迁移",
+      "failure_boundary": "一次任务成功不证明抽象普适；critic会错，缺去重/版本回退/过期治理；未训练improver",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E010",
+        "E014",
+        "E016",
+        "E025"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "下一任务、completed_tasks与failed_tasks记录",
+      "information": "当前inventory、附近block/entity、位置、状态和渐进warm-up可见性；GPT-3.5可选wiki上下文",
+      "operation": "GPT-4按多样化和可达性约束生成任务→执行后记成功或失败→下一次课程读取",
+      "output": "动态探索课程与后续技能练习需求",
+      "conditions": "世界知识大致正确、当前资源可达且任务可由状态验证",
+      "feedback": "完成/失败历史与当前环境资源",
+      "selection_rule": "最多4轮代码尝试后由critic决定完成或暂退；非外部holdout frontier认证",
+      "selection_data": "同一探索轨迹的当前状态",
+      "persistence": "curriculum agent完成/失败列表",
+      "later_use": "之后task proposal读取探索进度；warm-up按完成任务数扩展信息",
+      "claimed_effect": "可控难度与新颖性使探索不中止",
+      "failure_boundary": "会提不存在物品；随机课程来自Voyager获得101物品，不是通用最优课程证明；无长期课程稳定性保证",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E019",
+        "E022"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "已有LLM规划或代码policy缺少长时程自主选择目标、技能积累与迁移，单次代码经常失败；纯原始动作学习难以系统探索。",
+    "checked_gap": "本论文自身给出既有代码policy、环境反馈、ReAct/Reflexion和文本memory谱系，消融确认当前配置中持久代码与课程有用；未独立阅读这些邻居，不能把作者first或all lack宣称当核验新颖性。",
+    "lineage": [
+      {
+        "name": "Code as Policies / ProgPrompt",
+        "version": "Voyager v2 §5所述；独立邻居版本未供",
+        "relation": "可执行代码为高层policy和组合接口",
+        "source": "paper-fulltext §5 E017"
+      },
+      {
+        "name": "Inner Monologue / ReAct / Reflexion / AutoGPT",
+        "version": "本文v2 §§3.2,5,B.2重解释；邻居原文未供",
+        "relation": "环境反馈、推理行动循环、自反思及任务分解祖先；本文增加持久skill库/动态课程",
+        "source": "paper-fulltext §§3.2,5,B.2 E017,E021"
+      },
+      {
+        "name": "Generative Agents / SPRING",
+        "version": "本文v2 §5所述；邻居独立版本未供",
+        "relation": "经验检索与并发世界知识规划邻居；文本memory不等同可执行skill",
+        "source": "paper-fulltext §5 E018"
+      }
+    ],
+    "closest_adjacent": "同API代码policy+反馈修复、具备持久文本memory的agent、自动Minecraft课程；仅核本文对比与重解释实现。",
+    "residue": "一次正确程序不能自动累积为后续行动能力；无固定终点探索还需可达且多样的新任务。",
+    "stakes": "重复从零写长程序和无合适目标使探索停滞；低层像素控制不在本文要解决的瓶颈内。",
+    "method_response": "持久化执行过且critic判成功的代码，embedding检索组合；记录完成/失败让课程适配live状态。",
+    "remaining_gap": "critic语义误判、无独立抽象测试/增量门/库维护；四个相关新任务无结构holdout审计；缺完整成本与跨域长期认证。",
+    "evidence_ids": [
+      "E002",
+      "E003",
+      "E004",
+      "E007",
+      "E009",
+      "E010",
+      "E016",
+      "E017",
+      "E018",
+      "E025"
+    ],
+    "unresolved": [
+      "缺Code as Policies/ProgPrompt/Reflexion/Generative Agents/同期课程方法的独立固定全文，需总控统一补输入后才能独立核前沿gap；本席不联网补证。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [
+      "generative_process_redesign"
+    ],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "统一任务/状态/代码prompt组织异质Minecraft任务",
+          "reference substrate是agent自己练习得到的代码库；top5描述embedding检索进入冻结模型上下文",
+          "未训练新context-parser；C03允许跳过upstream tuning直接检索reference substrate",
+          "新世界四个任务构成有限transfer测试，但未排除整个技能类别或审计底座预训练重叠",
+          "有store-off对照，无同预算长原始context/文本memory替代"
+        ],
+        "success_checks": [
+          "实际不更新模型权重而检索代码条件化",
+          "去库及加库给AutoGPT使条件化信号可隔离"
+        ],
+        "failure_checks": [
+          "新世界不等于结构类别留出",
+          "尚未测试长context/更简单memory与完整成本公平"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E004",
+          "E005",
+          "E010",
+          "E012",
+          "E013",
+          "E014",
+          "E022"
+        ],
+        "reason": "载荷是检索的可执行reference substrate，经统一prompt使冻结GPT4组合新任务；与C03检索分支相符但结构holdout和朴素conditioning控制不完整。"
+      },
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "将固定目标课程改为依赖状态和执行结果的任务生成",
+          "固定代码模型/API，改变练习数据/目标生成过程",
+          "随机/手工课程为可区分替代",
+          "C15/C23/C24不是这一任务课程操作，子卡不强配"
+        ],
+        "success_checks": [
+          "课程读取成功/失败历史",
+          "有课程移除/替换实验"
+        ],
+        "failure_checks": [
+          "课程本身由LLM生成和判断，未独立证明frontier",
+          "主卡生成过程宽定义适配而非原生成图像tactic"
+        ],
+        "evidence_ids": [
+          "E003",
+          "E007",
+          "E015",
+          "E022"
+        ],
+        "reason": "动态重设计练习任务分布，不把仅提novelty search当作新模式；领域H23更精确。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "两项实际操作分别为代码条件化复用与任务生成；不因多组件多贴卡。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "crystallize_executable_capability",
+        "sub": "H06",
+        "version": "manifest-fixed",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "partial",
+            "reason": "确实执行后才入库，但门为GPT4读最终状态而非独立事件/回放；库存可歧义且报告critic失败。",
+            "evidence_ids": [
+              "E006",
+              "E007",
+              "E016",
+              "E025"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "unmet",
+            "reason": "无当前policy难以重推/冗余筛除的能力增量门；不把新增函数等同新增能力。",
+            "evidence_ids": [
+              "E004",
+              "E007"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "新世界任务显示整个库复用，但未逐项验证每个泛化函数的未见输入；库中示例部分无参数且有假设。",
+            "evidence_ids": [
+              "E005",
+              "E010",
+              "E013",
+              "E014"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "met",
+            "reason": "环境反馈和traceback可获得，失败后代码修复至多4轮。",
+            "evidence_ids": [
+              "E007",
+              "E022"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "met",
+            "reason": "明确store-off以及AutoGPT外挂同库，支持库承载部分收益而非只基座强。",
+            "evidence_ids": [
+              "E012",
+              "E013",
+              "E014",
+              "E022"
+            ]
+          },
+          {
+            "id": "S6",
+            "status": "partial",
+            "reason": "手工API/提示和可选wiki提供grounding；仍有世界知识及函数hallucination。",
+            "evidence_ids": [
+              "E005",
+              "E019",
+              "E020"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E006",
+          "E007",
+          "E010",
+          "E022"
+        ]
+      },
+      {
+        "main": "self_generate_the_curriculum",
+        "sub": "H23",
+        "version": "manifest-fixed",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "partial",
+            "reason": "执行真实但成功由GPT4状态推断；不完全外部认证。",
+            "evidence_ids": [
+              "E006",
+              "E025"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "根据完成/失败和live state产生下一课程而非预置日程。",
+            "evidence_ids": [
+              "E003",
+              "E007"
+            ]
+          },
+          {
+            "id": "S6",
+            "status": "partial",
+            "reason": "有手工/随机课程与新世界任务，后者仅四个相关任务且无系统隔离审计。",
+            "evidence_ids": [
+              "E010",
+              "E011",
+              "E015"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E007",
+          "E019",
+          "E022"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "crystallize_executable_capability",
+        "sub": "H06"
+      },
+      "operation_correspondence": "练习代码作为reference substrate持久化，description embedding top5检索进入固定prompt使冻结GPT4组合下一任务；H06额外要求真实执行及接受门。",
+      "necessary_conditions": "可执行接口、描述检索、固定模型会读代码和成功反馈；能保存与下一任务读取。",
+      "differences": "原C03更强调类别级留出与统一schema；本文Minecraft窄域、检索代码并非重新训练context-reader；自验证门非独立语义测试。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E010",
+        "E022"
+      ]
+    },
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "self_generate_the_curriculum",
+        "sub": "H23"
+      },
+      "operation_correspondence": "固定任务序列成为GPT4依赖当前环境与成功失败历史生成的下一任务分布，输出用于下一轮代码练习。",
+      "necessary_conditions": "可读状态与任务历史，约束可达难度、可验证性和多样性。",
+      "differences": "不改变低层生成模型的representation/conditioning内核；H23是课程调度而非学习一个对抗proposer。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E015",
+        "E019"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:crystallize_executable_capability/S1",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json S1",
+        "patterns/sub/H06.md steps2,4"
+      ],
+      "applies_when": "用技能成功作为接受信号",
+      "applicable": true,
+      "status": "partial",
+      "reason": "执行环境真实，但GPT4根据最终库存自验，未报告独立事件真值校准；不能以无exception代替语义成功。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E016",
+        "E025"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/S2",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json S2",
+        "patterns/sub/H06.md step4"
+      ],
+      "applies_when": "宣称每次入库扩展能力",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "add_skill未设去重、当前policy无法低成本重推或增量能力门。",
+      "evidence_ids": [
+        "E004",
+        "E007"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/S3",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json S3",
+        "patterns/sub/H06.md step3"
+      ],
+      "applies_when": "从单次代码成功外推可复用抽象",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有整个库在新世界的后续收益；缺单函数未见输入测试、版本回退或自动抽象验证。",
+      "evidence_ids": [
+        "E005",
+        "E010",
+        "E013",
+        "E014"
+      ],
+      "score_item": [
+        "X",
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/S5",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/patterns/conditions.json S5",
+        "patterns/sub/H06.md step5"
+      ],
+      "applies_when": "归因于留存代码库",
+      "applicable": true,
+      "status": "met",
+      "reason": "固定框架去库和AutoGPT加同库使留存部分有可辨识作用；不声称每个阶段都优于无库。",
+      "evidence_ids": [
+        "E012",
+        "E013",
+        "E014",
+        "E022"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/H06",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H06.md steps1,5"
+      ],
+      "applies_when": "主张练习技能支持未见请求",
+      "applicable": true,
+      "status": "partial",
+      "reason": "清空库存新世界四任务且有去库反事实；未提供练习任务与评测技能类别的显式排除/污染审计。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E013",
+        "E014"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2305.16291-1",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper-fulltext §4 Cost",
+        "patterns/sub/H06.md step5"
+      ],
+      "applies_when": "将prompt迭代效率理解为实际净成本",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "相同迭代数不等于相同token、critic/curriculum调用；全文含附录未见构建/验证/检索全成本账本。",
+      "evidence_ids": [
+        "E008",
+        "E011",
+        "E016",
+        "E021"
+      ],
+      "score_item": [
+        "E.causality",
+        "E.cost"
+      ]
+    },
+    {
+      "id": "local:2305.16291-2",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper-fulltext §3.2 interface comparison",
+        "paper-fulltext §B.1 experimental setup"
+      ],
+      "applies_when": "把API具身结果外推像素/生存控制",
+      "applicable": true,
+      "status": "challenged_with_evidence",
+      "reason": "作者合理拒绝直接与像素低层控制比较；保留同API基线。复活保库存、自动回收和chat helper界定结果范围，不把无需像素对照作缺陷。",
+      "evidence_ids": [
+        "E009",
+        "E020",
+        "E021"
+      ],
+      "score_item": "G"
+    },
+    {
+      "id": "local:2305.16291-3",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper-fulltext Table1/Table2",
+        "paper-fulltext §B.4.1"
+      ],
+      "applies_when": "声称运行可靠性与平均速度",
+      "applicable": true,
+      "status": "partial",
+      "reason": "三次探索和三次/任务有失败分母与±；未见主结果显著性测试/更多随机种子，按冻结A2统计阶梯2。",
+      "evidence_ids": [
+        "E011",
+        "E012",
+        "E013",
+        "E014",
+        "E026"
+      ],
+      "score_item": "E.statistics"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "自驱课程、代码库与迭代提示使Voyager持续探索并明显超过既有LLM agent的物品/地图/tech-tree表现。",
+      "setting": "Minecraft/MineDojo+Mineflayer；gpt4-0314代码/课程/critic，GPT3.5辅助，ada-002描述检索；160 prompting iterations；结构化状态、手工primitive、复活保库存。",
+      "baseline_control": "同API重解释ReAct/Reflexion/AutoGPT；六种消融；不比像素控制有明确接口原因。",
+      "selection_vs_test": "探索过程物品本身也是curriculum及skill选择数据；此部分是在线task表现，不单独作独立留存证据。",
+      "result_denominator": "每方法三次；平均63 items/160迭代；完整tech-tree wood6±2、stone11±2、iron21±7均3/3，diamond102仅1/3；无库wood7±2、stone9±4、iron29±11均3/3，diamond0/3，故库不是所有阶段更快。",
+      "evidence_ids": [
+        "E001",
+        "E008",
+        "E009",
+        "E015",
+        "E020",
+        "E021",
+        "E022",
+        "E026"
+      ],
+      "counterevidence": [
+        "E016",
+        "E020",
+        "E021"
+      ],
+      "allowed_conclusion": "高层API、强冻结代码模型下有限时长Minecraft探索改善，不证明无限持续进步、原始控制/视觉能力或真实机器人安全。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "探索中保留的代码库能在新世界从零库存解决新任务并作为其它agent可插拔资产。",
+      "setting": "新实例世界清空库存；4任务diamond pickaxe/golden sword/lava bucket/compass；50迭代；3次/任务；GPT4任务分解。",
+      "baseline_control": "Voyager no-library、AutoGPT有无同库、ReAct、Reflexion。",
+      "selection_vs_test": "库存/世界重置而库保留；作者称unseen任务，但无结构类别排除与pretraining/primitive重叠审计，且仍可在线反馈修复。",
+      "result_denominator": "完整4×3=12/12成功，迭代19±3/18±7/21±5/18±2；无库分别2/3、3/3、3/3、3/3（36、30±9、27±9、26±3）；AutoGPT加库1/3、1/3、0/3、2/3（39/30/N/A/30），无库全0/3。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012",
+        "E013",
+        "E014"
+      ],
+      "counterevidence": [
+        "E013"
+      ],
+      "allowed_conclusion": "有作者报告的有限跨世界/跨目标留存收益及复用消融，故retained；不是无需任何尝试的zero-shot、结构OOD或所有baseline都不能解，更不是improver改善。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "库检索可靠，强代码模型与反馈各模块是性能关键。",
+      "setting": "309 retrieval样本；top5入prompt；六组件消融和GPT4版本检查。",
+      "baseline_control": "store-off、feedback-off、critic-off、GPT3.5仅换code generator、gpt4-0613补充。",
+      "selection_vs_test": "检索相关性不是执行语义正确率；无独立每个函数的抽象输入验证。",
+      "result_denominator": "top5相关性96.5±0.3/309 samples；移除self-verification物品-73%，随机课程-93%；GPT3.5替换仍保留GPT4课程和critic。",
+      "evidence_ids": [
+        "E015",
+        "E022",
+        "E023",
+        "E024"
+      ],
+      "counterevidence": [
+        "E006",
+        "E016",
+        "E025"
+      ],
+      "allowed_conclusion": "支持该框架组件作用和同族GPT4版本稳定，不证明检索正确即代码正确，或弱基座一般可实现同类成长。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告保留的可执行库在新世界四个未见目标中带来相对去库的速度/特定可靠性收益，外挂给AutoGPT也有有限改善；不能说所有无库方法都失败、无需在线反馈或结构OOD，也无improver递归改善证据。",
+    "unresolved": [
+      "独立邻居全文/版本缺失",
+      "无练习与评测技能类别/基座预训练重叠审计",
+      "自验与抽象代码正确性无独立ground-truth校准",
+      "全流程构建/失败/critic/检索成本及预算匹配缺失",
+      "新目标仅4个且3次/目标，无法支撑无界或跨域终身成长"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "明确残余瓶颈是跨任务积累可执行能力，区分代码policy/文本memory/规划及接口界限；邻居原文未独立供应，不能完成独立novelty核验。",
+      "evidence_ids": [
+        "E002",
+        "E009",
+        "E017",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 4,
+      "reason": "生成—执行—错误/critic修复—写库—描述检索—后续组合链可重建；条件化代码库和动态课程回应反复重推与目标缺失，去库/换课程有可区分预测。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "完整伪码、prompts、API、温度、warm-up与四轮规则清楚；门依赖最终状态LLM推断，无每技能抽象验证、增量/去重门、版本回退和长期库维护。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E008",
+        "E025"
+      ],
+      "counterevidence_ids": [
+        "E025"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "库存/物品和里程碑是可观测结果且失败可数；自验可能用预有物品推断动作成功，报告critic失败，缺事件真值/独立校准。检索准确率不能代替技能正确率。",
+      "evidence_ids": [
+        "E006",
+        "E011",
+        "E016",
+        "E023",
+        "E025"
+      ],
+      "counterevidence_ids": [
+        "E025"
+      ],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "同框架去库、AutoGPT外挂同库及六模块消融，直接支持部分库收益；未匹配全部token/critic/构建预算或比更简单长context/文本记忆，原版基线为重解释。",
+      "evidence_ids": [
+        "E012",
+        "E013",
+        "E014",
+        "E015",
+        "E021",
+        "E022"
+      ],
+      "counterevidence_ids": [
+        "E021"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "新世界库存重置且四新目标有去库反事实，满足有限retained；任务共享Minecraft primitive，无严格类别留出/重叠审计，zero-shot仍允许50轮反馈，不能外推广义OOD。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E013",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "三次完整探索和每目标三次、有±和失败分母；无主要比较显著性检验或更充分跨运行不确定性，按A2阶梯2，不把小样本缺陷重复扣measurement。",
+      "evidence_ids": [
+        "E011",
+        "E012",
+        "E013",
+        "E014",
+        "E026"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告prompt迭代上限/相对API价格和3.5分工，但全文附录未给练习构库、失败修复、critic/课程、embedding与检索token/美元/时间总账；迭代数不是完整等预算。",
+      "evidence_ids": [
+        "E008",
+        "E011",
+        "E016",
+        "E021"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§§1–8、Appendix A所有算法/提示/代码与B.1–B.4.5；成本仅相对API价格和prompt迭代，没有全流程账本。"
+      ]
+    }
+  },
+  "score": {
+    "raw": 71.25,
+    "display": 71.2,
+    "lower": 71.25,
+    "upper": 71.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整固定全文及所有附录已读，哈希一致；范围内代码库闭环，作者实验非本席复现。",
+  "rationale": "可执行库有新世界复用与去库/外挂对照；但成功门依赖GPT4状态推断，四个相关任务无结构留出审计，构库和全部调用成本缺账。"
+}

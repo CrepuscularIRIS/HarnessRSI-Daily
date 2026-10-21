@@ -1,0 +1,773 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "cal-h1",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "1901.01753",
+  "paper_id": "arXiv:1901.01753",
+  "title": "Paired Open-Ended Trailblazer (POET): Endlessly Generating Increasingly Complex and Diverse Learning Environments and Their Solutions",
+  "version": "1901.01753v3",
+  "claim_type": "system_method",
+  "central_claim": "POET pairs the generation of environmental challenges with the optimisation of agents and allows stepping-stone solutions to transfer between environments; in a 2-D bipedal obstacle course it produces diverse, increasingly challenging environments and solutions that direct ES optimisation and a direct-path curriculum cannot reach (claim scope: environments POET itself created and solved)."
+ },
+ "provenance": {
+  "input_hash": "a17da5718daa26df2a9a8c905c3e9e88d8e6308454a02d4755f0c65f305f8d6d",
+  "rubric_version": "SCORE_SPEC draft_uncalibrated v2.2",
+  "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "haiku(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this subagent context; model_type is the configured type only. Scope note: weight-updating inner loop (ES) plus non-weight environment population; reviewed as a boundary case rather than excluded.",
+  "timestamp": "2026-10-21T17:10:52Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/1901.01753v3",
+   "sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "chars": 92444,
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Background",
+    "3 POET algorithm",
+    "4 Experiments and results (4.1-4.3)",
+    "5 Discussion",
+    "6 Supplemental (6.1 environments, 6.2 transfer, Algorithms 3-4)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E01",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 3; 1901.01753.txt L1041",
+   "quote": "Generating new environments is how POET continues to produce new challenges. To generate a new environment, POET simply mutates (i.e. randomly perturbs) the encoding (i.e. the parameter vector) of an active environment.",
+   "support_explanation": "Environment generator: random mutation of the environment encoding; the generated environments are the retained non-weight object.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E02",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.2; 1901.01753.txt L1674",
+   "quote": "then filters out child environments that appear too challenging or too trivial for the current level of capability of agents.",
+   "support_explanation": "Minimal-criterion gate (50<=score<=300) is the acceptance rule for new environments; thresholds are hand-set (Sec 4.2).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E03",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.2; 1901.01753.txt L1648",
+   "quote": "In our experiments, this condition is that the paired agent of the environment achieves a reward of 200 or above",
+   "support_explanation": "Parent eligibility rule: only environments whose paired agent already scores >=200 may reproduce.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E04",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 3; 1901.01753.txt L1043",
+   "quote": "The population of active environments is capped at a maximum size, and when the size of the population exceeds that threshold, the oldest environments are removed to make room (as in a queue).",
+   "support_explanation": "Retention/expiry rule: FIFO queue with capacity cap (population of 20 active environments in the reported runs); no value-based retirement.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E05",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Supp 6.1; 1901.01753.txt L2483",
+   "quote": "Measuring novelty introduces an explicit pressure for diversity among the environments by encouraging newly admitted environments to have notably different encodings than those previously admitted.",
+   "support_explanation": "Novelty ranking over environment encodings (kNN with archive of previously admitted environments) decides which MC-passing children are admitted.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E06",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Supp 6.2; 1901.01753.txt L2982",
+   "quote": "This transfer mechanism reflects the idea that skills gained when interacting with one environment might serve as a stepping stone to improved performance when interacting with another environment.",
+   "support_explanation": "Cross-environment transfer: agents from other environments (and one-ES-step proposals) replace the paired agent only if they score higher in the target environment.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E07",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 2.2; 1901.01753.txt L513",
+   "quote": "In contrast, in POET, we accept problems if (according to some heuristics) they seem likely to be improved upon and/or solved after some amount of dedicated optimization effort",
+   "support_explanation": "Author-stated difference from MCC (which rejects any environment not immediately solved by the current population).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E08",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L1807",
+   "quote": "we ran ES five times with different initialization and random seeds up to 16,000 ES steps",
+   "support_explanation": "Direct-optimization control: 5 ES runs per POET-generated environment, 16,000 steps; not stated as compute-matched to POET.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E09",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L1893",
+   "quote": "that assumes the POET distribution is centered on the single POET score and measures whether the direct optimization distribution’s mean is statistically significantly lower.",
+   "support_explanation": "Statistical test is a single-sample t-test against one POET score per environment (n=5 environments); POET itself has no sampling distribution here.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E10",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L1931",
+   "quote": "To be fair, each run of the control algorithm is given the same computational budget (measured in total number of ES steps) spent by POET to solve the environment,",
+   "support_explanation": "Direct-path curriculum control is matched to the ES steps along the target's ancestor line only, not to POET's total multi-branch compute.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E11",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L2299",
+   "quote": "no extremely challenging environments are solved at all (Fig.",
+   "support_explanation": "No-transfer ablation (3 relaunched runs): zero extremely challenging environments created/solved; evidence that transfer is load-bearing.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E12",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L2011",
+   "quote": "These runs each take about 10 days to complete on 256 CPU cores.",
+   "support_explanation": "Only wall-clock/hardware cost is given (3 runs, ~25,200 iterations each); no cost for rejected children or for control runs beyond ES-step counts.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E13",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L1889",
+   "quote": "such algorithms are not trying to perform well on a specific preconceived target, and thus some amount of post-hoc analysis is often necessary.",
+   "support_explanation": "Targets for all controls are chosen post hoc from environments POET itself created and solved (selection effect acknowledged by authors).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E14",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 5; 1901.01753.txt L2345",
+   "quote": "An additional constraint that exists in this initial work is that the body of the agent is fixed, ultimately limiting the sort of obstacles it can overcome",
+   "support_explanation": "Stated limitation: fixed body; together with bounded encoding ranges the difficulty can saturate.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E15",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 5; 1901.01753.txt L2338",
+   "quote": "The present problem space is a 2-D course of obstacles that can be generated within distributions defined by the genome describing the environment.",
+   "support_explanation": "Open-endedness is demonstrated only inside a bounded hand-defined 2-D genome (authors state difficulty can \"max out\").",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E16",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 4.3; 1901.01753.txt L2237",
+   "quote": "was confirmed by separately turning off transfer and running the kneeling (local optimum) agent in the original (parent) environment for 3,000 iterations",
+   "support_explanation": "Single qualitative parent<-child backward-transfer case with a small confirming control.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E17",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 3; 1901.01753.txt L1490",
+   "quote": "Our software implementation of POET, which will be released as open source code shortly,",
+   "support_explanation": "Code not available at the pinned version; reproduction details rely on appendix algorithms/tables.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E18",
+   "material_id": "M1",
+   "material_sha256": "42b0398561663ec6bc714f706f147a5800984484b22ff811c4ab7cc7fc3ade2a",
+   "locator": "Sec 5; 1901.01753.txt L2371",
+   "quote": "While ES is the base optimization algorithm in this paper for training solvers for various tasks under POET, including the main transfer mechanism, POET can be instantiated with any RL or optimization algorithm.",
+   "support_explanation": "Inner optimizer is policy-weight training (ES); the weights of controllers are the primary learned object.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "population of (environment encoding, paired controller) pairs; baseline = single flat environment + random controller",
+   "information": "agent score in each environment; environment encoding vector (5 obstacle genes + seed); archive of past encodings; no labels or test data",
+   "operation": "mutate eligible parents (agent reward>=200), clone parent agent into child, keep children with 50<=reward<=300, rank by encoding novelty, admit up to max_admitted, drop oldest beyond capacity",
+   "output": "new (environment, agent) pairs added to EA_list",
+   "conditions": "encoding space bounded by gene ranges; thresholds 200/50/300 hand-set; simulator reward defines solved (reach end and >=230)",
+   "feedback": "paired agent performance (simulator reward) in parent and child environments",
+   "selection_rule": "eligibility threshold + minimal criterion window + novelty rank + capacity/FIFO expiry",
+   "selection_data": "the same environments that the agents train on (no separate validation)",
+   "persistence": "EA_list (<=20 active pairs) plus novelty archive of encodings; seed stored per environment",
+   "later_use": "child pairs are optimised by ES and take part in transfer on later iterations",
+   "claimed_effect": "creates increasingly complex, diverse environments that are neither too easy nor too hard (Sec 4.3)",
+   "failure_boundary": "bounded encoding; fixed body; heuristics for thresholds untested; FIFO expiry can drop useful stepping stones",
+   "evidence_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E14",
+    "E15"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "controller weights paired with each environment",
+   "information": "reward of candidate agents from all other environments evaluated in the target environment, plus one-ES-step proposals",
+   "operation": "periodic transfer: evaluate other agents (direct) and their one-step ES refinements (proposal) in target environment; replace paired agent if better",
+   "output": "replaced / unchanged paired controller",
+   "conditions": "requires >1 active environments; transfer interval N_transfer",
+   "feedback": "target-environment reward",
+   "selection_rule": "argmax reward over candidates, replace only if better than incumbent",
+   "selection_data": "target environment itself (training = evaluation)",
+   "persistence": "replacement writes new weights into EA_list entry",
+   "later_use": "next ES steps start from the transferred weights",
+   "claimed_effect": "skills from one environment unlock progress in others; without transfer no extremely challenging environment is solved",
+   "failure_boundary": "no guard against negative transfer other than score comparison on the same environment",
+   "evidence_ids": [
+    "E06",
+    "E11",
+    "E16"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "controller weights (inner optimizer)",
+   "information": "episode reward in own environment",
+   "operation": "one ES (evolution strategies) step per iteration per pair",
+   "output": "updated weights",
+   "conditions": "512 samples/step, Adam, learning-rate and sigma reset on transfer/birth",
+   "feedback": "environment reward",
+   "selection_rule": "gradient-like ES update",
+   "selection_data": "training environment",
+   "persistence": "weights in EA_list",
+   "later_use": "used for eligibility, transfer and children",
+   "claimed_effect": "per-environment mastery (absent in MCC)",
+   "failure_boundary": "ES alone converges to degenerate freezing behaviour on hard environments (authors)",
+   "evidence_ids": [
+    "E18",
+    "E08"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Problems are conceived by researchers and only solutions are learned; MCC co-evolves problems and solvers but applies no pressure for per-environment mastery and deletes environments the current population cannot already solve; fixed curricula cannot know which stepping stones matter.",
+  "checked_gap": "Partially confirmed by controls inside the paper: direct ES on 5 POET-generated environments and a direct-path curriculum control both fail on harder targets. The harness-RSI relevant fixed object is the environment/task distribution (non-weight), but the demonstrated performance gain is carried by controller weights.",
+  "lineage": [
+   "Novelty search / QD / Innovation Engine / CMOEA -> goal switching among niches (static environment)",
+   "MCC (Brant & Stanley) -> co-evolving problems and solvers under minimal criteria",
+   "POET -> adds per-environment ES optimisation, MC window that keeps harder-but-improvable environments, novelty ranking, periodic cross-environment transfer"
+  ],
+  "closest_adjacent": [
+   "MCC (as described in POET v3 Sec 2.2; original not pinned here)",
+   "CMOEA / Innovation Engine (as described in Sec 2.1)",
+   "automatic-curriculum methods cited in Sec 1 (adversarial task generators, reverse curriculum, teacher-student, PowerPlay); not compared experimentally"
+  ],
+  "residue": "Sec 2.2: MCC has no force for optimisation within each environment and rejects environments the current population cannot immediately solve.",
+  "stakes": "Without per-environment mastery and improvable-but-unsolved environments, self-generated curricula stall on easy or already-solved problems; authors tie this to open-endedness.",
+  "method_response": "MC window [50,300] on score after attempted transfer, parent eligibility >=200, novelty ranking, ES optimisation per pair, and periodic transfer.",
+  "remaining_gap": "No unbounded encoding, fixed body, ES only, no learned environment-proposal policy, no evidence of benefit on externally defined or held-out environments; no comparison with other automatic-curriculum generators.",
+  "evidence_ids": [
+   "E07",
+   "E14",
+   "E15"
+  ],
+  "unresolved": [
+   "Original MCC / CMOEA / curriculum-learning papers are not in the pinned materials; nearest-neighbour judgement rests on POET's own description. Post-2019 successors are deliberately not used.",
+   "Scope: retained improvement is mostly controller weights (training-based); the non-weight environment population is the harness-like object. Scope status should be confirmed by the aggregator."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Closest operation is C08-style generate-and-gate: a generator (environment mutation) manufactures candidate training instances, a single quality gate (minimal criterion window on agent score) filters them, retained instances are folded back and the learner's state steers the generator (eligibility). Fit is partial: instances are RL environments, learner is trained by ES, there are no labels or pseudo-labels.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: shown for POET-selected targets in the 2-D domain only; the generality of open-ended generation is not shown.",
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     {
+      "step": "1 binding constraint is the corpus rather than the learner",
+      "status": "met",
+      "note": "fixed human-designed environments are the stated limit (Sec 1)"
+     },
+     {
+      "step": "2 controllable generator reaching under-covered region",
+      "status": "met",
+      "note": "mutation of encodings reaches harder environments; support extension shown by Figure 5 vs controls"
+     },
+     {
+      "step": "3 one load-bearing filter",
+      "status": "partial",
+      "note": "minimal criterion window plus novelty rank; neither ablated"
+     },
+     {
+      "step": "4 retrain on filtered set and iterate; learner state steers generator",
+      "status": "met",
+      "note": "eligibility threshold and MC use agent score; ES continues on admitted pairs"
+     },
+     {
+      "step": "5 transfer to real evaluation target",
+      "status": "unmet",
+      "note": "no external target; evaluation is on POET-created environments"
+     }
+    ],
+    "success_checks": [
+     "generator+filter loop closed with learner feedback: met",
+     "downstream target metric on externally defined target: unmet"
+    ],
+    "failure_checks": [
+     "proxy-only validation: partly present (post-hoc targets)",
+     "cheaper non-generative baselines: direct ES and direct-path curriculum are included"
+    ],
+    "evidence_ids": [
+     "E01",
+     "E02",
+     "E03",
+     "E10",
+     "E13"
+    ],
+    "reason": "Chosen for operation (generate, gate, fold back, learner-steered), not for terminology."
+   }
+  ]
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main_id": "self_generate_the_curriculum",
+    "sub_id": "H23",
+    "version": "domain-cards sha 52ff9657",
+    "fit": "partial",
+    "role": "primary",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "met",
+      "note": "validity anchor is the simulator and agent score, independent of the mutation generator"
+     },
+     {
+      "id": "S2",
+      "status": "partial",
+      "note": "frontier signal is agent score in the same environment, not a fixed held-out validation environment"
+     },
+     {
+      "id": "S3",
+      "status": "partial",
+      "note": "scalar score windows, no weakness diagnosis"
+     },
+     {
+      "id": "S4",
+      "status": "met",
+      "note": "stepping stones kept and transferred across branches"
+     },
+     {
+      "id": "S5",
+      "status": "partial",
+      "note": "hardware/time reported, nested cost of rejected children not"
+     },
+     {
+      "id": "S6",
+      "status": "unmet",
+      "note": "no certification outside the loop"
+     },
+     {
+      "id": "F1",
+      "status": "partial",
+      "note": "difficulty is validity-checked via MC window; validity only as solvable-by-some-agent"
+     }
+    ],
+    "evidence_ids": [
+     "E01",
+     "E02",
+     "E03",
+     "E04",
+     "E05"
+    ],
+    "reason": "Procedural difficulty window plus archive of stepping stones matches H23 step 2; differs because no learner-weakness diagnosis and no LLM; training is ES (weights), a declared boundary pattern."
+   },
+   {
+    "main_id": "population_search_executable_fitness",
+    "sub_id": "H16",
+    "version": "domain-cards sha 52ff9657",
+    "fit": "weak",
+    "role": "supporting",
+    "condition_checks": [
+     {
+      "id": "S5",
+      "status": "unmet",
+      "note": "no ablation of novelty/archive retention rule"
+     },
+     {
+      "id": "F6",
+      "status": "not_observed",
+      "note": "diversity is part of the deliverable but is coupled to executable fitness"
+     }
+    ],
+    "evidence_ids": [
+     "E05",
+     "E04"
+    ],
+    "reason": "Novelty-ranked admission and niche-wise transfer resemble quality-diversity retention; the candidates are environments, not LLM-edited artifacts, so fit is weak."
+   }
+  ],
+  "unassigned": [
+   "cross-environment transfer of controller weights (goal switching) has no dedicated domain card"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H23",
+   "operation_correspondence": "RS C08 generate-and-gate of training instances corresponds to H23 procedural difficulty-window generation with archive; both keep learner feedback in the loop",
+   "necessary_conditions_or_differences": "C08 assumes label-like instances for retraining; POET instances are environments and the learner is trained by ES. H23 assumes diagnosed weaknesses; POET uses a score window only.",
+   "evidence_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E05"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi.self_generate_the_curriculum.valid_tasks",
+   "version": "card-pending@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "generated tasks must stay valid and solvable",
+   "applicable": true,
+   "status": "met",
+   "reason": "Validity of generated environments is anchored by simulator reward of an agent (MC window) rather than by the mutation generator; solvability only by some agent in the population.",
+   "evidence_ids": [
+    "E02",
+    "E03"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi.self_generate_the_curriculum.seed_variance",
+   "version": "card-pending@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "multi-round co-evolution claims",
+   "applicable": true,
+   "status": "partial",
+   "reason": "3 POET runs and 5 ES runs per target; per-run columns shown; no variance curve across rounds, and t-test treats a single POET score as a distribution.",
+   "evidence_ids": [
+    "E08",
+    "E09"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi.self_generate_the_curriculum.budget_matched_untargeted",
+   "version": "card-pending@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "targeted generation claimed better than untargeted",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Direct-path curriculum is compute-matched only along the ancestor line; ES-alone is not matched; no untargeted random-environment generator without MC.",
+   "evidence_ids": [
+    "E08",
+    "E10"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi.self_generate_the_curriculum.leakage_guard",
+   "version": "card-pending@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "diagnostic reads benchmark failures",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "No external benchmark is read by the generator; training and evaluation environments coincide by design. Missing generalisation to unseen environments is handled under E.holdout, not here.",
+   "evidence_ids": [
+    "E13"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi.self_generate_the_curriculum.loop_cost",
+   "version": "card-pending@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "generator plus nested rollouts",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Hardware and wall-clock given (256 cores, ~10 days/run); cost of rejected children and per-control compute not given in gain units.",
+   "evidence_ids": [
+    "E12",
+    "E10"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi.self_generate_the_curriculum.certify_outside_loop",
+   "version": "card-pending@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/self_generate_the_curriculum.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "held-out/cross-task certification expected for curriculum claims",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "All controls target environments POET created and solved; no held-out environments, original Hardcore benchmark, or other curricula as target.",
+   "evidence_ids": [
+    "E13",
+    "E15"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi.population_search.retention_rule_ablation",
+   "version": "card-pending@52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/population_search_executable_fitness.md (Reviewer expectations, card-reported audit counts; not re-verified)"
+   ],
+   "applies_when": "archive/retention rule claimed to carry diversity",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Neither the MC window, novelty ranking nor FIFO expiry is ablated; only transfer is ablated.",
+   "evidence_ids": [
+    "E02",
+    "E04",
+    "E05",
+    "E11"
+   ],
+   "score_item": "E.causality"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "POET-created and solved environments (5 selected, single-obstacle and mixed) cannot be solved by direct ES from scratch (max ES scores 13.6-39.6 vs success 230)",
+   "setting": "ES, 5 seeds, 16,000 steps vs POET environments",
+   "baseline_control": "ES from scratch (not compute-matched to POET)",
+   "selection_vs_test": "targets chosen post hoc from POET outputs; train=eval environment",
+   "result_denominator": "5 environments x 5 ES runs; single-sample t-test p<0.01; POET score is one run each",
+   "evidence_ids": [
+    "E08",
+    "E09",
+    "E13"
+   ],
+   "counterevidence": "ES budget (16,000 steps) far below POET total compute; MC/novelty not ablated",
+   "allowed_conclusion": "For these five POET-chosen environments, plain ES with that budget fails; no claim about general superiority."
+  },
+  {
+   "claim_id": "C2",
+   "text": "A direct-path curriculum control cannot reach the very/extremely challenging environments POET invents",
+   "setting": "3 POET runs, targets sampled per difficulty level, 5 control runs each",
+   "baseline_control": "single-chain incremental curriculum with ES, budget = ES steps along target ancestors",
+   "selection_vs_test": "post-hoc targets",
+   "result_denominator": "Mann-Whitney on distances; per-level medians in figure only",
+   "evidence_ids": [
+    "E10",
+    "E13"
+   ],
+   "counterevidence": "control budget excludes POET's other branches; result shown mainly in plots (numbers not tabulated in text)",
+   "allowed_conclusion": "Single-path incremental curricula, as implemented here, fall short on harder POET targets."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Cross-environment transfer is essential: POET without transfer solves no extremely challenging environment and covers less space",
+   "setting": "3 relaunched runs with transfer disabled",
+   "baseline_control": "POET with transfer",
+   "selection_vs_test": "same-environment evaluation",
+   "result_denominator": "3 runs; coverage Mann-Whitney p<2.2e-16 over sampled 3000 environments",
+   "evidence_ids": [
+    "E11",
+    "E16"
+   ],
+   "counterevidence": "Only one ablation component; no ablation of MC/novelty; weights transfer is a weight-level mechanism",
+   "allowed_conclusion": "Transfer is load-bearing for reaching the hardest environments in this domain."
+  },
+  {
+   "claim_id": "C4",
+   "text": "POET can continue to create novel, increasingly complex capabilities without bound (open-endedness)",
+   "setting": "bounded 2-D genome, 25,200 iterations",
+   "baseline_control": "none",
+   "selection_vs_test": "n/a",
+   "result_denominator": "none",
+   "evidence_ids": [
+    "E14",
+    "E15"
+   ],
+   "counterevidence": "authors state difficulty can max out; fixed body",
+   "allowed_conclusion": "Not supported beyond the bounded 2-D domain."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "In the 2-D bipedal domain, POET-generated environments that were selected post hoc were not solved by plain ES (5 runs, 16,000 steps) or a single-path curriculum under an ancestor-line compute match, and disabling transfer removes the hardest environments.",
+  "unresolved": [
+   "No held-out environments; training and evaluation coincide so evidence level is capped at task.",
+   "Retention of the non-weight environment population is not isolated from retained controller weights.",
+   "Unbounded open-endedness claim not supported."
+  ],
+  "not_reproduced": "author_report only; no code execution or reproduction by this seat"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete residual bottleneck (MCC cannot optimise within environments and rejects not-yet-solvable ones; fixed curricula lack stepping stones) with a sourced lineage (NS/QD/Innovation Engine/CMOEA/MCC/curriculum learning) and clear remaining limits. Capped at 3: nearest-neighbour originals are not pinned, the gap is motivational rather than a measured failure of a deployed harness, and the non-weight versus weight split of the object is blurred.",
+   "evidence_ids": [
+    "E07",
+    "E14",
+    "E15"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Mechanism is reconstructable: MC window keeps improvable-but-unsolved environments, eligibility prevents wasted reproduction, novelty drives diversity, ES gives per-environment mastery, transfer provides stepping stones; distinguishable predictions (no-transfer fails on hardest, single-path fails) are tested. Thresholds 200/50/300 and the choice of ES are unargued heuristics.",
+   "evidence_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E05",
+    "E06",
+    "E07"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Algorithms 1-4, parameter tables, hyperparameters and expiry rule are given; retention is gated by eligibility, MC and score-based replacement, next-round reading is explicit. No versioning/rollback beyond FIFO and seed-stored environments, no negative-transfer or stale-pair handling, code unreleased at this version.",
+   "evidence_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E06",
+    "E17"
+   ],
+   "counterevidence_ids": [
+    "E14"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Simulator reward with a fixed solved criterion (reach end and >=230) and seed-stored environments is an objective verifier; difficulty levels are defined against reference values. Difficulty/complexity of generated environments is hand-defined, and targets are POET's own outputs.",
+   "evidence_ids": [
+    "E02",
+    "E13"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Three controls on the claim: direct ES (5 runs per target), direct-path curriculum with ancestor-line compute match, and POET without transfer (3 runs) plus a confirmed backward-transfer case. Gaps: ES not compute-matched, MC/novelty/expiry not ablated, no alternative curriculum generator.",
+   "evidence_ids": [
+    "E08",
+    "E10",
+    "E11",
+    "E16"
+   ],
+   "counterevidence_ids": [
+    "E13"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "No held-out environments: every control targets an environment POET created and solved, training and evaluation coincide, and claim C1-C3 are scoped by the authors to these targets. No generalisation to external environments is claimed or shown.",
+   "evidence_ids": [
+    "E13",
+    "E09"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "3 POET runs and 5 ES runs per target with significance tests, but a single-sample t-test against one POET score, no confidence intervals on key POET numbers, and no denominator of environments generated versus solved is reported in the main text.",
+   "evidence_ids": [
+    "E09"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Hardware and wall-clock reported (256 cores, ~10 days per run) and the direct-path control is ES-step matched along ancestors; ES baseline and total POET search (rejected children, other branches) are not matched or accounted in comparable units.",
+   "evidence_ids": [
+    "E12",
+    "E10",
+    "E08"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "status_reason": "Full HTML text with appendix read; boundary scope (training-based loop with non-weight environment population) flagged for aggregator.",
+ "rationale": "Boundary-scope system_method. Strong controls for transfer but no held-out environments; targets chosen post hoc; weights carry the gain. Evidence level task, claim scoped.",
+ "score": {
+  "raw": 70.0,
+  "display": 70.0,
+  "lower": 70.0,
+  "upper": 70.0,
+  "coverage": 1.0,
+  "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c"
+ }
+}

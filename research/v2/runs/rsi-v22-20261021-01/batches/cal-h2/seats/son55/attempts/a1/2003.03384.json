@@ -1,0 +1,944 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "cal-h2",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "2003.03384",
+  "paper_id": "arXiv:2003.03384",
+  "title": "AutoML-Zero: Evolving Machine Learning Algorithms From Scratch",
+  "version": "2003.03384v2",
+  "claim_type": "system_method",
+  "central_claim": "AutoML-Zero：仅用基本数学运算作构件，用正则化进化从空程序搜索完整 ML 算法（Setup/Predict/Learn）；进化能重新发现带反向传播的两层网络，在 CIFAR-10 变体上进化出超过调参 2 层 NN 的算法（双线性、归一化梯度、权重平均），并随任务类型出现类 dropout、学习率衰减等适配。",
+  "scope_note": "搜索框架 + 发现的算法；范围边界：非 LLM 的程序进化(2020)，产出是 ML 学习算法而非 agent 外壳，作者明确放弃自指要求。"
+ },
+ "provenance": {
+  "input_hash": "c207b92d703bece74dfe18d99279518ec792f7dde3af75ae92a38f6d7a2fd6b2",
+  "rubric_version": "SCORE_SPEC v2.2 draft_uncalibrated (generic anchors)",
+  "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "haiku(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref null: subagent dispatched via claude-kimi model type; no run receipt exposed to the worker (not probed). Score arithmetic: coverage is a 0..1 fraction; lower/upper are 0..100.",
+  "timestamp": "2026-10-21T17:27:58Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2003.03384",
+   "url": "https://arxiv.org/html/2003.03384v2",
+   "sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "chars": 102902,
+   "method": "html",
+   "sections_read": [
+    "Abstract",
+    "§1–§5",
+    "Supplement S1–S10(含 S3/S5/S7/S8/S9/S10；S6 原始代码仅略读)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "S6 原始进化代码仅略读",
+    "图 4/6/7/8 数值在图像中"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E01",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "Abstract",
+   "quote": "Our goal is to show that AutoML can go further: it is possible today to automatically discover complete machine learning algorithms just using basic mathematical operations as building blocks.",
+   "support_explanation": "中心主张：用基本数学运算自动发现完整 ML 算法。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E02",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§1",
+   "quote": "human-designed components bias the search results in favor of human-designed algorithms, possibly reducing the innovation potential of AutoML",
+   "support_explanation": "作者 gap：专家设计的构件使搜索偏向人类算法。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E03",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§1",
+   "quote": "the space is so generic that it ends up being quite sparse.",
+   "support_explanation": "搜索空间极稀疏，随机搜索不足。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E04",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.1",
+   "quote": "To avoid biasing the choice of ops, we use a simple criterion: those that are typically learned by high-school level.",
+   "support_explanation": "算子仅取高中水平运算，刻意排除 ML 概念与导数。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E05",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.2",
+   "quote": "This parent is then copied and mutated to produce a child algorithm that is added to the population, while the oldest algorithm in the population is removed.",
+   "support_explanation": "正则化进化：复制-变异-加入种群，淘汰最老者（留存规则）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E06",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.2",
+   "quote": "(i) insert a random instruction or remove an instruction at a random location in a component function, (ii) randomize all the instructions in a component function, or (iii) modify one of the arguments of an instruction by replacing it with a random choice",
+   "support_explanation": "三类随机变异，无评价信号引导（非接地变异）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E07",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.2",
+   "quote": "(FEC) that detects equivalent supervised ML algorithms, even if they have different implementations, achieving a 4x speedup.",
+   "support_explanation": "功能等价检查，4× 加速。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E08",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S3",
+   "quote": "we consistently save 75 % 75\\% of our compute",
+   "support_explanation": "hurdles 以滚动 75 分位早停，稳定节省 75% 算力。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E09",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.1",
+   "quote": "Even in the simple case of linear regression, we find that evolution is 5 times more efficient than RS.",
+   "support_explanation": "等评估数下进化比随机搜索效率高 5×（线性回归）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E10",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.1",
+   "quote": "As soon as we advance to nonlinear data, the gap widens and we can no longer find solutions with RS.",
+   "support_explanation": "非线性数据上随机搜索找不到解。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E11",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.1",
+   "quote": "We restrict the search space by only using necessary ops and fixing component function lengths to those of known solutions.",
+   "support_explanation": "§4.1 的结果在人为收窄的空间（仅必要算子、固定长度）下取得。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E12",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.1",
+   "quote": "evolution not only discovers the forward pass, but also “invents” back-propagation code to learn the weights",
+   "support_explanation": "D=100 个任务时进化重新发现含反向传播的两层网络。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E13",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.2",
+   "quote": "The candidate algorithms perform better in 13 out of 20 experiments.",
+   "support_explanation": "20 次独立搜索中 13 次在 T_select 上优于 2 层 NN（失败分母）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E14",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.2",
+   "quote": "Evaluating with 5 different random seeds, the best evolved algorithm’s accuracy",
+   "support_explanation": "最终评测 5 个种子：进化算法 84.06±0.10%，线性 77.65±0.22%，2 层 NN 82.22±0.17%。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E15",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.2",
+   "quote": "For comparison, we tune two hand-designed baselines, one linear and one nonlinear, using the same total compute that went into discovering and tuning the evolved algorithm.",
+   "support_explanation": "两个手工基线用与发现+调参相同总算力调参（口径含糊）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E16",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.2",
+   "quote": "This algorithm is limited by our simple search space, which cannot currently represent some techniques that are crucial in state-of-the-art models, like batch normalization or convolution.",
+   "support_explanation": "作者承认搜索空间不能表示批归一化、卷积；基线是同样简化的网络。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E17",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S7",
+   "quote": "We stress that the CIFAR-10 test set was used only in this final evaluation",
+   "support_explanation": "测试集仅用于最终评估，不参与 T_search 与 T_select。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E18",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S7",
+   "quote": "we treat all the constants in the algorithms as hyperparameters and jointly tune them using random search.",
+   "support_explanation": "迁移到 3072 维时对常数做随机搜索调参。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E19",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§5",
+   "quote": "This required time-consuming analysis that could be automated by future work.",
+   "support_explanation": "超参数耦合需要人工识别并解耦（自动化留作未来工作）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E20",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S8",
+   "quote": "4 out of the 6 ablations caused a large drop in accuracy.",
+   "support_explanation": "敲除消融：6 个代码段中 4 个导致显著下降。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E21",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S8",
+   "quote": "The remaining 2 code sections show no significant loss upon ablation, and so were removed for code readability.",
+   "support_explanation": "另 2 段无显著影响，被删去。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E22",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.3",
+   "quote": "We find that the noisy ReLU is reproducible and arises preferentially in the case of little data",
+   "support_explanation": "少样本下噪声 ReLU 在 8/30 次重复出现，对照 0/30。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E23",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.3",
+   "quote": "While we do not know the reason, the preference is statistically significant",
+   "support_explanation": "多分类下“权重均值作学习率”24/30 vs 对照 0/30，但原因未知。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E24",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.3",
+   "quote": "With overwhelming confidence, the decay appears much more often in the cases with fewer training steps",
+   "support_explanation": "学习率衰减 30/30 vs 对照 3/30。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E25",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.3",
+   "quote": "Altogether, these experiments show that the resulting algorithms seem to adapt well to the different types of tasks.",
+   "support_explanation": "作者结论（措辞谨慎）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E26",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S10",
+   "quote": "Each experiment setup was run 100 times.",
+   "support_explanation": "基线实验在三个算力级别各重复 100 次。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E27",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S9",
+   "quote": "We find that all four upgrades are beneficial across the three different compute scales tested.",
+   "support_explanation": "搜索方法四项升级在三种规模下均有益（每行 30 次）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E28",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§5",
+   "quote": "was not the focus of this study but to reach our results, it helped to",
+   "support_explanation": "作者称搜索方法非重点。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E29",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.2",
+   "quote": "population and runs on a commodity CPU core.",
+   "support_explanation": "每个进程在一个商用 CPU 核上运行（共 W=10k 进程，约 5 天，作者在 S5 给出）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E30",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.1",
+   "quote": "We then run the evolution experiments with the same combined total number of evaluations as for RS.",
+   "support_explanation": "进化与随机搜索等评估数对比。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E31",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§2",
+   "quote": "but focus on common machine learning tasks and have dropped the self-reflexivity requirement.",
+   "support_explanation": "作者明确放弃自指（自我改进）要求：不是自我改进闭环。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E32",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§2",
+   "quote": "also search for a symbolic optimizer, but in a restricted search space of hand-tuned operations",
+   "support_explanation": "最近邻 Bello 2017：受限的符号优化器搜索。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E33",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S4",
+   "quote": "We use all the tasks from 36 of the pairs to form the",
+   "support_explanation": "36 个类对用于 T_search，其余 9 对用于 T_select（类对级划分）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E34",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S7",
+   "quote": "we finally run the tuned algorithms on 2000 examples from the held-out CIFAR-10 test set",
+   "support_explanation": "最终仅 2000 个留出测试样本。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E35",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§4.2",
+   "quote": "This gain also generalizes to binary classification tasks extracted from other datasets: SVHN",
+   "support_explanation": "增益迁移到 SVHN、ImageNet(降采样)、Fashion MNIST。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E36",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "S2",
+   "quote": "In particular, there are no derivatives so any gradient computation used for training must be evolved.",
+   "support_explanation": "搜索空间不含导数，梯度必须被进化出来。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E37",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§5",
+   "quote": "Preliminary implementations of crossover and geographic structure did not help in our experiments.",
+   "support_explanation": "交叉与地理结构的初步实现无效（负面结果被报告）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E38",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.2",
+   "quote": "None of the meta-parameters were tuned in the final set of experiments at full compute scale.",
+   "support_explanation": "最终全规模实验未调元参数。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E39",
+   "material_id": "M-2003.03384",
+   "material_hash": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+   "locator": "§3.2",
+   "quote": "Run time: 5 5 days.",
+   "support_explanation": "每个实验约 5 天。",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "ML 算法程序：Setup/Predict/Learn 三个函数的指令序列（含模型结构、初始化、学习规则）",
+   "information": "搜索任务集 T_search 上的验证集损失/准确率（每任务中位数）；测试集与 T_select 不可见",
+   "operation": "随机变异（插入/删除/随机化/改参数）→ 在代理任务上评测 → 锦标赛选择 → 淘汰最老个体",
+   "output": "候选算法种群及每次搜索实验的最优候选",
+   "conditions": "投影到 8–256 维的二分类 CIFAR-10/MNIST 代理任务；FEC、hurdles、迁移",
+   "feedback": "任务准确率（真值标签）",
+   "selection_rule": "T 个随机个体的最优者为父代；实验结束后在 T_select 上排序选最佳",
+   "persistence": "种群 + 最终选出的算法程序",
+   "later_use": "重新调常数后在原维度 CIFAR-10 测试及其它数据集上运行",
+   "claimed_effect": "84.06±0.10% 超过线性(77.65)与 2 层 NN(82.22)",
+   "failure_boundary": "空间不能表示批归一化/卷积；超参耦合需人工解耦；仅二分类任务",
+   "evidence_ids": [
+    "E04",
+    "E05",
+    "E06",
+    "E13",
+    "E14",
+    "E16"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "搜索方法自身（FEC、hurdles、迁移、MNIST 多样性）",
+   "information": "搜索中累积的指纹缓存、种群准确率分布",
+   "operation": "指纹去重复用评分；按 75 分位早停；跨进程迁移半数种群；加入 MNIST 任务",
+   "output": "更高吞吐与更好最终算法",
+   "conditions": "同上",
+   "feedback": "评估结果",
+   "selection_rule": "消融行逐项加入",
+   "persistence": "LRU 缓存；迁移种群",
+   "later_use": "同一搜索内",
+   "claimed_effect": "四项升级均有益（S9 表）",
+   "failure_boundary": "交叉/地理结构无效",
+   "evidence_ids": [
+    "E07",
+    "E08",
+    "E27",
+    "E37"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "AutoML 的搜索空间依赖专家设计的构件，偏向人类算法且需要精心构造，削弱了创新潜力与省力初衷。",
+  "checked_gap": "真实且来源充足（NAS、受限符号优化器、学习优化器）；最近邻的残余明确：它们固定了模型结构/反传，本文把结构与学习规则都变成搜索变量。“减少人类偏置”属信念，尚无证明偏置是瓶颈；该对象是 ML 算法而非 agent 外壳。",
+  "lineage": "祖先：遗传编程(Koza)、Bengio 1994 符号学习规则、神经进化；最近邻：Zoph&Le NAS、Real 2017/2019 正则化进化、Andrychowicz 学习优化器、Bello 2017、Mei 2020；程序合成：Lenat/Schmidhuber 自改进程序。版本为论文自述，本地无固定副本。",
+  "closest_adjacent": [
+   {
+    "name": "Bello et al. 2017",
+    "source_version": "as cited",
+    "solved": "符号化优化器搜索",
+    "not_solved": "受限于手工算子，且假定网络与梯度"
+   },
+   {
+    "name": "Zoph & Le / Real 2017 NAS",
+    "source_version": "as cited",
+    "solved": "专家层构件上的结构搜索",
+    "not_solved": "学习规则与初始化不在空间内"
+   }
+  ],
+  "residue": "完整算法（结构+初始化+学习规则）的无偏发现，以及能把进化的算法迁移到全尺寸任务的流程。",
+  "stakes": "若成功可发现新 ML 概念并省去专家设计。",
+  "method_response": "生成式指令空间 + 正则化进化 + 代理任务/FEC/hurdles/迁移。",
+  "remaining_gap": "空间有隐含偏置、需人工解耦、结果仍为简单二分类、与强基线的差距小。",
+  "evidence_ids": [
+   "E02",
+   "E03",
+   "E16",
+   "E31",
+   "E32"
+  ],
+  "unresolved": [
+   "最近邻无本地固定原文",
+   "最终评测所用类对（是否与搜索类对重叠）文中未明确",
+   "总 CPU 核时未汇总"
+  ]
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "outside_taxonomy": true,
+  "reason": "考察 relax_discrete_search_to_continuous(C22)：本文保持离散进化搜索，无连续松弛/共享权重；generative_process_redesign：对象不是生成式迭代流程；assumption_audit_and_pivot：上游卡以保证/防御的前提转向与定理为中心，本文无此结构。无主卡匹配，按原规则记 outside_taxonomy，仍完整评价。",
+  "matches": [],
+  "executes_pattern": false,
+  "resolves_problem": false,
+  "resolves_problem_reason": "不适用（无主卡匹配）。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "version": "52ff96577c9c",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "cond": "rsi:population_search_executable_fitness:S1",
+      "status": "met",
+      "note": "贡献在搜索层与空间设计，非某个应用领域",
+      "evidence_ids": [
+       "E03",
+       "E07",
+       "E08"
+      ]
+     },
+     {
+      "cond": "rsi:population_search_executable_fitness:S2",
+      "status": "met",
+      "note": "评测器先于循环；代理任务秩可迁移到全维度/他数据集",
+      "evidence_ids": [
+       "E13",
+       "E14",
+       "E35"
+      ]
+     },
+     {
+      "cond": "rsi:population_search_executable_fitness:S3",
+      "status": "partial",
+      "note": "固定三函数骨架，但无合法性保证、规模较大(21/21/45 指令)",
+      "evidence_ids": [
+       "E04",
+       "E36"
+      ]
+     },
+     {
+      "cond": "rsi:population_search_executable_fitness:S4",
+      "status": "unmet",
+      "note": "变异是随机的，不由评测器观测引导",
+      "evidence_ids": [
+       "E06"
+      ]
+     },
+     {
+      "cond": "rsi:population_search_executable_fitness:S5",
+      "status": "partial",
+      "note": "FEC/迁移经消融证明有益；交叉无效",
+      "evidence_ids": [
+       "E27",
+       "E37"
+      ]
+     },
+     {
+      "cond": "rsi:population_search_executable_fitness:F4",
+      "status": "avoided",
+      "note": "代理任务有真值且验证了迁移",
+      "evidence_ids": [
+       "E35",
+       "E17"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E05",
+     "E06",
+     "E13"
+    ],
+    "reason": "与 H14 的“可执行基因组+评测器+种群保留”一致；差异：无 LLM 变异（随机变异）、基因组是 ML 算法而非 agent 外壳。"
+   }
+  ],
+  "unassigned": [
+   "学习算法发现(基因组=ML 算法，训练的是被评测的小模型)：无对应领域主卡，范围边界案例"
+  ],
+  "revision_proposals": [
+   {
+    "type": "scope_note",
+    "target": "population_search_executable_fitness",
+    "note": "非 LLM 的程序进化(2020)是否纳入需总控定范围；仅为 proposal，未核",
+    "status": "proposal_unchecked"
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": null,
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "population_search_executable_fitness",
+    "sub": "H14"
+   },
+   "operation_correspondence": "无 RS 对应；领域层：随机变异的程序进化+可执行评测器+种群保留。",
+   "necessary_conditions_or_differences": "无 LLM 变异；变异非接地。",
+   "evidence_ids": [
+    "E05",
+    "E06",
+    "E13"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:H14:BuildEvaluatorFirst",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "patterns/sub/H14.md#Step-by-Step (pending, card-audit derived)"
+   ],
+   "applies_when": "声称评测器可信",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "met",
+   "reason": "真值标签、T_select 与留出测试分离；代理秩迁移到原维度。",
+   "evidence_ids": [
+    "E13",
+    "E17",
+    "E35"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:H14:ShrinkEvolvedUnit",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "patterns/sub/H14.md#Step-by-Step (pending, card-audit derived)"
+   ],
+   "applies_when": "进化单元应小且在保证合法的骨架中",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "partial",
+   "reason": "固定三函数骨架，但无合法性保证，且空间稀疏。",
+   "evidence_ids": [
+    "E03",
+    "E36"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:H14:GroundMutations",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "patterns/sub/H14.md#Step-by-Step (pending, card-audit derived)"
+   ],
+   "applies_when": "变异应由评测器观测引导",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "unmet",
+   "reason": "三类随机变异，靠选择压力。",
+   "evidence_ids": [
+    "E06"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:H14:SpendEvaluationsDeliberately",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "patterns/sub/H14.md#Step-by-Step (pending, card-audit derived)"
+   ],
+   "applies_when": "去重、早停、分配预算并报成本",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "met",
+   "reason": "FEC(4×)、hurdles(75%)、迁移；运行时长、核类型有说明；总核时未汇总。",
+   "evidence_ids": [
+    "E07",
+    "E08",
+    "E29",
+    "E39"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:H14:SeparateSelectionReportVariance",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "patterns/sub/H14.md#Step-by-Step (pending, card-audit derived)"
+   ],
+   "applies_when": "选择与报告分离并报告方差",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "met",
+   "reason": "T_search/T_select/测试三层，5 种子±，100 次重复，30 次对照与 p 值。",
+   "evidence_ids": [
+    "E14",
+    "E17",
+    "E26",
+    "E24"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi:H14:CrossTaskTransfer",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "patterns/sub/H14.md#Step-by-Step (pending, card-audit derived)"
+   ],
+   "applies_when": "跨任务迁移须与通用基线比较",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "partial",
+   "reason": "迁移到 SVHN/ImageNet/Fashion MNIST 并与线性/NN 对比；仅图像二分类。",
+   "evidence_ids": [
+    "E35",
+    "E15"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness:F1",
+   "version": "52ff96577c9c",
+   "source_strength": "pending(card_audit_derived)",
+   "source_refs": [
+    "research/patterns/conditions.json#population_search_executable_fitness.F1"
+   ],
+   "applies_when": "声称搜索层贡献",
+   "applicable": true,
+   "applicability_note": "yes",
+   "status": "met",
+   "reason": "不是把通用循环套到新领域；贡献为空间与加速。",
+   "evidence_ids": [
+    "E03",
+    "E07",
+    "E08"
+   ],
+   "score_item": "G"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "进化在极稀疏空间中远胜随机搜索，并能重新发现含反传的两层网络",
+   "setting": "§4.1：线性/仿射/教师网络回归，人为收窄的空间",
+   "baseline_control": "同评估数随机搜索",
+   "selection_vs_test": "D 个搜索任务；教师真值可验证",
+   "result_denominator": "成功率密度；每图 3 任务×10k–100k 评估；重复至统计显著",
+   "evidence_ids": [
+    "E09",
+    "E10",
+    "E11",
+    "E12",
+    "E30"
+   ],
+   "counterevidence": [
+    "E11"
+   ],
+   "allowed_conclusion": "在收窄空间里进化显著优于随机搜索并复现反传；不能外推到无约束空间。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "由零开始（58 个算子）进化出的算法在留出 CIFAR-10 测试上超过 2 层 NN，并迁移到其它数据集",
+   "setting": "投影二分类 CIFAR-10/MNIST 代理任务→3072 维 CIFAR-10",
+   "baseline_control": "线性与 2 层 NN，同总算力调参",
+   "selection_vs_test": "T_search(36 类对) / T_select(9 类对) / 保留的 CIFAR-10 测试集",
+   "result_denominator": "20 次搜索实验中 13 次优于 NN；最终 5 种子",
+   "evidence_ids": [
+    "E13",
+    "E14",
+    "E15",
+    "E17",
+    "E35"
+   ],
+   "counterevidence": [
+    "E16",
+    "E19",
+    "E34"
+   ],
+   "allowed_conclusion": "在所测二分类视觉任务上，进化出的简单算法稍优于调参的基线（+1.84pp）；非全自动（人工解耦），空间有限。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "进化会根据任务类型适配算法（少数据→噪声/类 dropout，快速训练→学习率衰减）",
+   "setting": "§4.3：三种任务类型，种群从两层 NN 初始化",
+   "baseline_control": "30 次重复的对照实验",
+   "selection_vs_test": "不涉及测试集，统计 motif 出现频次",
+   "result_denominator": "8/30 vs 0/30；30/30 vs 3/30；24/30 vs 0/30",
+   "evidence_ids": [
+    "E22",
+    "E23",
+    "E24",
+    "E25"
+   ],
+   "counterevidence": [
+    "E23"
+   ],
+   "allowed_conclusion": "适配现象在统计上显著；motif 判定与归因为人工分析，部分机理未知。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "FEC、hurdles、迁移与 MNIST 多样性均改进搜索",
+   "setting": "S9 简化设定，3 个算力级别，每行 30 次",
+   "baseline_control": "基线进化",
+   "selection_vs_test": "未见泄漏",
+   "result_denominator": "30 次/行",
+   "evidence_ids": [
+    "E27",
+    "E37"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "在该简化设定下改进成立。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "进化选出的算法（留存程序）在独立选择任务、保留测试集与其它数据集上优于调参基线（作者报告；用于评分，不是我们复现）；无 improver 层证据，且搜索本身不自我改进。",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在人为设定的简单二分类视觉代理任务上，进化可从空程序发现比调参 2 层 NN 稍好的算法，并在任务类型改变时出现适配；“全自动发现 ML 算法”需附带人工解耦与受限空间的前提。",
+  "unresolved": [
+   "最终评测类对",
+   "总核时",
+   "非视觉任务"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "非权重对象（完整学习算法）与近邻清晰；残余缺口有界，但“偏置是瓶颈”未证，且对象不是 agent 外壳。",
+   "evidence_ids": [
+    "E02",
+    "E03",
+    "E32",
+    "E31"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 4,
+   "reason": "空间、变异、选择、淘汰与加速组件可重建，并提出可区分预测（密度越低进化越优、各升级逐项消融）。",
+   "evidence_ids": [
+    "E04",
+    "E05",
+    "E07",
+    "E09"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 4,
+   "reason": "算子集、变异、种群规模、迁移、早停、选择协议、调参与人工解耦步骤均清楚披露，边界(不能表示BN/卷积)说明明确。",
+   "evidence_ids": [
+    "E05",
+    "E06",
+    "E18",
+    "E19",
+    "E38"
+   ],
+   "counterevidence_ids": [
+    "E19"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "真值准确率、独立 T_select 与保留测试集、5 种子；测试仅 2000 例，基线较弱(无动量/正则化)，类对不明。",
+   "evidence_ids": [
+    "E14",
+    "E17",
+    "E34"
+   ],
+   "counterevidence_ids": [
+    "E16"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "有随机搜索对照、四项升级消融、6 段敲除+敲入验证、30 次对照；人工筛选 motif 与手工解耦、基线较简。",
+   "evidence_ids": [
+    "E09",
+    "E20",
+    "E22",
+    "E24"
+   ],
+   "counterevidence_ids": [
+    "E19",
+    "E21",
+    "E23"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "T_search/T_select/测试三层并迁移到三个其它数据集；仅图像二分类，迁移前需人工解耦并重调。",
+   "evidence_ids": [
+    "E17",
+    "E33",
+    "E35"
+   ],
+   "counterevidence_ids": [
+    "E19"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 4,
+   "reason": "最终比较 5 种子±、13/20 成功分母、30/100 次重复与对照及 p 值、逐行消融 30 次。",
+   "evidence_ids": [
+    "E13",
+    "E14",
+    "E22",
+    "E26",
+    "E27"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "同评估数的 RS 对比、FEC/hurdles 节省、运行时长与核类型有；基线算力“同总算力”口径含糊，总核时未汇总。",
+   "evidence_ids": [
+    "E15",
+    "E29",
+    "E30",
+    "E39"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 86.25,
+  "display": 86.3,
+  "lower": 86.25,
+  "upper": 86.25,
+  "coverage": 1.0,
+  "rubric_hash": "c877879754eedbf6de3b920e8dff7dbcbb0c4d174bbace60b7ccec2de0584b3c"
+ },
+ "status": "reviewed",
+ "status_reason": "全文含补充材料已读；范围为边界案例：评分采用 reviewed，范围判定留给总控/Opus。",
+ "rationale": "方法与统计严谨（含失败分母、随机搜索与消融），算法与 H14 近似，但属非 LLM、非 agent 外壳的 AutoML；范围为边界，建议复核。",
+ "scope_assessment": {
+  "in_scope": "borderline_B",
+  "reason": "满足“基于执行反馈修改非权重组件(程序)并留存”的操作形式；但无自我改进闭环(作者放弃自指)、产物是 ML 学习算法、变异非 LLM、训练的是被评测的小模型权重。",
+  "if_excluded": "若总控判定范围外，应改为 out_of_scope 且 score=null；本记录的八项评分不应进入排名。"
+ }
+}

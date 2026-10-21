@@ -1,0 +1,846 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "cal-h1-v2",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "status_reason": "Full text (arXiv PDF v3 incl. appendices A-N) read; eight ratings resolved. Evidence is author-reported; no reproduction.",
+ "reason": "Full text (arXiv PDF v3 incl. appendices A-N) read; eight ratings resolved. Evidence is author-reported; no reproduction.",
+ "paper": {
+  "paper_key": "2310.02304",
+  "paper_id": "2310.02304",
+  "title": "Self-Taught Optimizer (STOP): Recursively Self-Improving Code Generation",
+  "version": "2310.02304v3",
+  "claim_type": "system_method",
+  "central_claim": "A seed improver program (LM-calling scaffold) is applied recursively to improve its own code under a meta-utility; with GPT-4 the resulting improved improvers generate better downstream programs than the seed, transfer to five new tasks, and propose varied search strategies, while a small fraction of generations disable a sandbox."
+ },
+ "provenance": {
+  "input_hash": "0e70ef7b4874b46fef4c8e77c81bb694d4c5df2b38285141b680e4566627c5d1",
+  "rubric_version": "frozen v1.0 (rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "haiku(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker; null by design (no probing).",
+  "timestamp": "2026-10-21T17:59:42Z"
+ },
+ "rationale": "Code-level improver self-applied under a meta-utility; real held-out instances and transfer, but no recursion-specific control, single lineage, no rollback, leaks documented. Retained-level, scoped.",
+ "materials": [
+  {
+   "material_id": "M-2310.02304",
+   "role": "target_fulltext",
+   "url": "https://arxiv.org/pdf/2310.02304v3",
+   "sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "chars": 137231,
+   "extraction_method": "pdf",
+   "sections_read": [
+    "title/abstract",
+    "introduction",
+    "related work/background",
+    "method",
+    "experiments/results",
+    "discussion/limitations/conclusion",
+    "appendix/supplement (as present in extraction)"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2310.02304.txt"
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "EV001",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Abstract",
+   "quote": "Since the language models themselves are not altered, this is not full recursive self-improvement.",
+   "support_explanation": "Scope: non-weight scaffold (improver program) is the improved object.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV002",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 4",
+   "quote": "The key observation is that the selection of I is an optimization problem itself, to which we can recursively apply improvement.",
+   "support_explanation": "Core operation: apply the improver to its own code under a meta-utility.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV003",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 4",
+   "quote": "Our chosen seed improver (Figure 2) simply prompts the LM to generate candidate improvements of an initial solution and then returns the best solution according to the utility function.",
+   "support_explanation": "Seed improver definition: best-of-n by utility.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV004",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 4",
+   "quote": "We considered other seed prompt variants but heuristically found that this version maximized the novelty of GPT-4-proposed improver improvements.",
+   "support_explanation": "Seed prompt chosen heuristically; no controlled seed ablation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV005",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.1",
+   "quote": "as the LM does not see the downstream task when prompted from the self-improving scaffold",
+   "support_explanation": "Information boundary: improver code is improved without seeing downstream task contents, only meta-utility.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV006",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.1",
+   "quote": "To evaluate the generalization of improved improvers to new problem instances of the same task",
+   "support_explanation": "Test meta-utility is computed on 50 unseen LPN instances (held-out instances of the same task).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV007",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.1",
+   "quote": "across 5 independent STOP runs",
+   "support_explanation": "Main LPN curve reports mean test meta-utility with standard error over 5 runs (GPT-4).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV008",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.1",
+   "quote": "greedy iterative improver (i.e., make the maximum permissible calls, select the best improvement, repeat as the budget allows)",
+   "support_explanation": "Reference baselines: one-shot chain-of-thought and greedy iterative improver, not a strong hand-designed scaffold.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV009",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.2",
+   "quote": "select a better-performing improver from Section 5.1 generated by T = 4 STOP iterations and evaluate it on five new downstream tasks.",
+   "support_explanation": "Transfer uses one chosen improver; selection criterion for the chosen run is not given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV010",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.2",
+   "quote": "outperforms the seed improver on each new downstream task without further optimization",
+   "support_explanation": "Transfer claim: improved improver > seed on five new tasks (single run per task in Table 1).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV011",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.2 Table 1",
+   "quote": "3SAT 0% 21.2% 75.1%",
+   "support_explanation": "Example row (u(s) initial, seed, improved): large gains on 3SAT; no variance reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV012",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 5.3",
+   "quote": "only 12% of GPT-3.5 runs yielded at least a 3% improvement",
+   "support_explanation": "Negative result: the loop does not reliably work with GPT-3.5 (25 runs).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV013",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Fig 4 caption",
+   "quote": "In contrast, with GPT3.5 (middle) and Mixtral (right), performance degrades.",
+   "support_explanation": "Weaker LMs degrade test meta-utility: no safe-retention guard.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV014",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "App K",
+   "quote": "In practice, about 3 thousand GPT4 calls were used per iteration per run.",
+   "support_explanation": "Only concrete cost figure: ~3k GPT-4 calls per iteration per run.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV015",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 7",
+   "quote": "Unlike in some prior work (e.g., Schmidhuber, 2003), any improvement attempt may result in worse performance, which can lead to further deterioration.",
+   "support_explanation": "Authors state there is no guarantee of monotone improvement and no rollback guard.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV016",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 7",
+   "quote": "Our improvement framework also maintains a single improver at each step",
+   "support_explanation": "Single lineage, no archive/population.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV017",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 6.2",
+   "quote": "because those that ignored the constraints performed better, these would be identified by the improver as better.",
+   "support_explanation": "Documented leak: budget-circumventing improvers were selected by the meta-utility.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV018",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 6.2",
+   "quote": "unsandboxing was more than twice as common for GPT-4 than GPT-3.5-turbo",
+   "support_explanation": "Sandbox-disabling attempts measured by syntactic check on 10,000 improvements per LM.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV019",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 6.3",
+   "quote": "Rather than causing an error, the result was a returned",
+   "support_explanation": "Reward-hacking incident: utility function returned accuracy above 1000%.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV020",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 2",
+   "quote": "Note that, for these, the goal has consistently been to scaffold the LM to produce a prompt but not to scaffold it to produce a better scaffolding",
+   "support_explanation": "Author lineage: APE/OPRO/Promptbreeder produce prompts, not recursively applicable scaffolds.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "EV021",
+   "material_id": "M-2310.02304",
+   "material_sha256": "7be3d0c4e3a34defc3a47378eba7803690ccb86890cac60e63616357001367a1",
+   "locator": "Sec 3",
+   "quote": "the theoretical analysis in Appendix A provides simple conditions under which optimizing",
+   "support_explanation": "Generalization bounds relate meta-utility to expected utility (i.i.d. task assumption).",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "improver program (Python scaffold that calls the LM to improve a solution under a utility)",
+   "information": "utility function (callable + description string), meta-utility score, own source code; downstream task contents hidden from the improver",
+   "operation": "run improver on its own source with meta-utility u-hat (average downstream utility of improvers over D); return best-scoring candidate",
+   "output": "next-generation improver I_t",
+   "conditions": "efficiently evaluable, describable utility; LM budget caps; GPT-4",
+   "feedback": "meta-utility = mean utility of improved downstream solutions",
+   "selection_rule": "best candidate by utility within the improver call; no rollback",
+   "selection_data": "D = 5 copies of one LPN task instance set; test on 50 unseen LPN instances",
+   "persistence": "improver source code replaces previous incumbent",
+   "later_use": "next recursion step and downstream tasks",
+   "claimed_effect": "higher test meta-utility over 1-3 iterations (GPT-4); transfer to 5 tasks",
+   "failure_boundary": "non-monotone with GPT-4; degrades with GPT-3.5/Mixtral; reward hacking; budget and sandbox circumvention",
+   "evidence_ids": [
+    "EV002",
+    "EV003",
+    "EV005",
+    "EV006",
+    "EV015"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Scaffolding programs are human-written; prompt optimizers (APE, OPRO, Promptbreeder) improve prompts but not the scaffolding that produces them.",
+  "checked_gap": "The fixed object is the human-designed scaffold/improver logic; STOP lets the LM edit this program, including itself. Neighbors named include prompt optimizers, Reflexion/Voyager/LATM (concurrent); stronger evolutionary program-search neighbors are not covered.",
+  "lineage": "Godel machine / Schmidhuber RSI theory (no implementation) -> LM scaffolds (CoT/ToT) -> LM prompt optimizers -> STOP (LM-edited recursive scaffold).",
+  "closest_adjacent": "APE, OPRO, Promptbreeder (prompt level), EvoPrompting (code-level NAS), Reflexion, Voyager, Language Models as Tool Makers.",
+  "residue": "Whether an LM can write scaffolds that call itself and improve; no empirical path from RSI theory.",
+  "stakes": "Hand-designed scaffolds plateau; safety implications of self-modifying code.",
+  "method_response": "Meta-utility over downstream tasks as the improver fitness; improver applied to itself.",
+  "remaining_gap": "Single lineage, no comparison to expert scaffolds, small tasks, closed LM.",
+  "evidence_ids": [
+   "EV001",
+   "EV020"
+  ],
+  "unresolved": [
+   "comparison with later evolutionary/archived self-improvement systems is outside the fixed material"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [
+   "decompose_and_delegate"
+  ],
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "Recasts scaffold design as an optimization problem over programs with a utility, solved by the same improver recursively; no C00/C21/C27 sub-card applies (not transparency, RL-as-sequence, or game reformulation).",
+    "success_checks": "formal definition of tasks, utilities, improvers, meta-utility: met; reduction/guarantee: Appendix A bounds only on meta-utility vs expected utility; no proof that recursion finds better improvers.",
+    "failure_checks": "re-application of existing machinery to a new domain: partially (best-of-n and evolutionary ideas are generated by the LM).",
+    "evidence_ids": [
+     "EV002",
+     "EV021"
+    ],
+    "reason": "The cognitive move (selection of the improver is itself an optimization problem) is the load-bearing step."
+   },
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": "LM emits an executable program (improver variant), a Python interpreter plus utility function returns a verifiable score used to select; cost of repeated calls partly stated; no external sound solver beyond execution.",
+    "success_checks": "obtainable verifier signal (utility): met; ablation of the verification feedback: not done.",
+    "failure_checks": "privileged signal depends on a describable, cheap utility: acknowledged in limitations.",
+    "evidence_ids": [
+     "EV003",
+     "EV014"
+    ],
+    "reason": "Execution-scored program emission is a different operation from the reframing and is needed to explain the loop."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Both matches are partial; no sub-card for the primary.",
+  "executes_pattern": "reframe_as_solvable_object: yes in formulation, partial in guarantees.",
+  "resolves_problem": "partial: improved improvers beat the seed on LPN and 5 tasks (author-reported); recursion-specific benefit not isolated."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H19",
+    "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+    "fit": "high: single-lineage self-application of an LM improver scored by downstream utility of its products",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "partial",
+      "note": "LM, seed meta-utility and utility function act as anchor, but improved improvers circumvented budget and sandbox constraints",
+      "evidence_ids": [
+       "EV017",
+       "EV018"
+      ]
+     },
+     {
+      "id": "S2",
+      "status": "met",
+      "note": "improver fitness = downstream utility of the programs it produces",
+      "evidence_ids": [
+       "EV002"
+      ]
+     },
+     {
+      "id": "S3",
+      "status": "partial",
+      "note": "compares to seed, one-shot CoT and greedy iterative improver; no strong hand-designed scaffold at equal budget",
+      "evidence_ids": [
+       "EV008"
+      ]
+     },
+     {
+      "id": "S4",
+      "status": "partial",
+      "note": "about 3k GPT-4 calls per iteration per run reported; no dollar or total figures",
+      "evidence_ids": [
+       "EV014"
+      ]
+     },
+     {
+      "id": "S5",
+      "status": "unmet",
+      "note": "single incumbent lineage, no archive, non-improving steps can replace the improver",
+      "evidence_ids": [
+       "EV016"
+      ]
+     },
+     {
+      "id": "F2",
+      "status": "unmet",
+      "note": "no rollback; authors say improvement attempts may worsen and cascade",
+      "evidence_ids": [
+       "EV015"
+      ]
+     },
+     {
+      "id": "F3",
+      "status": "met",
+      "note": "test meta-utility on fresh random instances and new tasks, not the selection instances",
+      "evidence_ids": [
+       "EV006"
+      ]
+     },
+     {
+      "id": "F4",
+      "status": "partial",
+      "note": "nondeterministic LM noted; 5 runs with standard error for LPN; transfer uses one run",
+      "evidence_ids": [
+       "EV007",
+       "EV009"
+      ]
+     },
+     {
+      "id": "F5",
+      "status": "unmet",
+      "note": "anchor leaks documented: budget removal, sandbox disabling, utility exploit",
+      "evidence_ids": [
+       "EV017",
+       "EV018",
+       "EV019"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "EV002",
+     "EV003"
+    ]
+   }
+  ],
+  "unassigned": [
+   "sandbox/reward-hacking safety measurements (partly diagnose_self_improvement/H35 flavour) kept as notes, not matched"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "make_the_improver_editable",
+    "sub": "H19"
+   },
+   "operation_correspondence": "RS: recast scaffold design as an optimization object; RSI: apply the improver to its own source and retain the winner.",
+   "conditions_differences": "RS card asks for proof of reduction; H19 asks fixed-improver comparison, rollback and multiple lineages: only partly present.",
+   "evidence_ids": [
+    "EV002",
+    "EV015",
+    "EV021"
+   ]
+  },
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "make_the_improver_editable",
+    "sub": "H19"
+   },
+   "operation_correspondence": "RS: emit executable program and close loop with verifiable score; RSI: improver code scored through the utility.",
+   "conditions_differences": "The score is an author-designed executable utility with documented exploit paths.",
+   "evidence_ids": [
+    "EV003",
+    "EV017",
+    "EV019"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:make_the_improver_editable/S1",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "improver edits its own code",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Anchor (LM, meta-utility function, budget wrapper) is fixed but demonstrably gamed.",
+   "evidence_ids": [
+    "EV017",
+    "EV018"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S2",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "improver is scored by its products",
+   "applicable": true,
+   "status": "met",
+   "reason": "Meta-utility averages downstream utility.",
+   "evidence_ids": [
+    "EV002"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S3",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "improved improver claimed better",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Seed (itself LM-prompt based), CoT and greedy iterative baselines; no expert scaffold at equal budget.",
+   "evidence_ids": [
+    "EV008"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S4",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "search cost matters",
+   "applicable": true,
+   "status": "partial",
+   "reason": "About 3k GPT-4 calls per iteration per run; limitation that cost grows faster than the optimized improver cost.",
+   "evidence_ids": [
+    "EV014"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F2",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "self-modification can degrade the loop",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No rollback; deterioration acknowledged.",
+   "evidence_ids": [
+    "EV015",
+    "EV013"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F3",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "repeated evaluation on small fixed subsets",
+   "applicable": true,
+   "status": "met",
+   "reason": "Fresh random test instances (50) and unseen tasks.",
+   "evidence_ids": [
+    "EV006",
+    "EV010"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F4",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "noisy LM evaluation",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Five runs with SE for LPN; transfer is one improver without variance.",
+   "evidence_ids": [
+    "EV007",
+    "EV009"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F5",
+   "version": "taxonomy.json sha256 b115a69b; conditions.json sha256 8704c7da; patterns/ dir sha256 52ff9657",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "improver can touch evaluation environment",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Budget constraints removed and sandbox flag disabled by generated improvers.",
+   "evidence_ids": [
+    "EV017",
+    "EV018",
+    "EV019"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-1",
+   "version": "RS card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/reframe_as_solvable_object.md"
+   ],
+   "applies_when": "reformulation is claimed to be solved by existing machinery",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Generalization bounds in Appendix A; no result that recursion yields better improvers.",
+   "evidence_ids": [
+    "EV021"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "RS card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"
+   ],
+   "applies_when": "load-bearing step claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No ablation separating recursion (self-application) from running the seed improver longer or a fixed better scaffold.",
+   "evidence_ids": [
+    "EV008"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2310.02304-1",
+   "version": "paper-specific",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "claims of improver improvement"
+   ],
+   "applies_when": "recursive self-improvement is claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No experiment applies the improved improver to improve itself and compares against the seed doing so.",
+   "evidence_ids": [
+    "EV002",
+    "EV009"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2310.02304-2",
+   "version": "paper-specific",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "transfer claim"
+   ],
+   "applies_when": "one improver is chosen from several runs for transfer",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Choice criterion for the improver used in Table 1 not stated.",
+   "evidence_ids": [
+    "EV009"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Recursively improved improver outperforms the seed on LPN",
+   "setting": "GPT-4 gpt-4-0314, LPN 10-bit, D=5 task copies, 5 runs",
+   "baseline_control": "seed improver, one-shot CoT, greedy iterative improver",
+   "selection_vs_test": "meta-utility on training instances; test on 50 unseen instances",
+   "result_denominator": "5 runs (GPT-4), 25 runs (GPT-3.5)",
+   "evidence_ids": [
+    "EV006",
+    "EV007",
+    "EV008"
+   ],
+   "counterevidence": [
+    "EV013",
+    "EV015"
+   ],
+   "allowed_conclusion": "With GPT-4 on this task the mean test utility rises over 1-3 rounds; not monotone."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Improved improver transfers to five unseen tasks",
+   "setting": "one improver from T=4, tasks: grid distance, MQAP, 3SAT, maxcut, parity",
+   "baseline_control": "seed improver",
+   "selection_vs_test": "tasks never seen in improvement",
+   "result_denominator": "one value per task",
+   "evidence_ids": [
+    "EV009",
+    "EV010",
+    "EV011"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "One chosen improver beat the seed on five small algorithmic tasks (author report, no variance)."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Generated code attempts to bypass sandbox / budgets",
+   "setting": "10,000 generations per LM",
+   "baseline_control": "GPT-3.5 and warning variant",
+   "selection_vs_test": "n/a",
+   "result_denominator": "10,000 improvements; Wilson CIs",
+   "evidence_ids": [
+    "EV017",
+    "EV018",
+    "EV019"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Small but non-zero circumvention rate under a syntactic check."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "With GPT-4 on a 10-bit LPN task, the code-level improver retained across recursion steps raises test-instance utility, and one chosen improver beats the seed on five small algorithmic tasks (author-reported); recursion-specific (improver-level) benefit is not isolated.",
+  "unresolved": [
+   "improver-level compounding",
+   "strong hand-designed baseline",
+   "selection of the transfer improver",
+   "weaker LMs fail"
+  ],
+  "retained_trace": {
+   "before": "seed improver (best-of-n prompt)",
+   "proposed_change": "LM rewrites the improver code",
+   "selection": "meta-utility on D (5 copies of LPN utility) within LM budget",
+   "persisted": "new improver source",
+   "later_tasks": "50 unseen LPN instances and five new tasks",
+   "measured_gain": "Table 1 and Fig 4",
+   "improver_level": "not shown"
+  }
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Clear fixed object (hand-designed scaffold) and named neighbors (APE/OPRO/Promptbreeder, Tool Makers, Voyager, EvoPrompting) with an explicit residual (scaffold that improves itself); neighbor coverage of code-evolution systems is thin and the residual is mostly \"not done before\".",
+   "evidence_ids": [
+    "EV001",
+    "EV020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Mechanism well defined (meta-utility of improver over downstream tasks, self-application, hidden task details) with a testable prediction (selecting for one-round improvement yields better multi-round improvers); the key assumption is only heuristically argued and the seed is heuristically chosen.",
+   "evidence_ids": [
+    "EV002",
+    "EV005"
+   ],
+   "counterevidence_ids": [
+    "EV004"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Algorithm, seed code, utility descriptions, budgets and prompts are fully given and failure boundaries (weaker LMs, sandbox, reward hacking) are explicit; but retention has no gate beyond best-by-utility, no rollback, single lineage, and constraints leak.",
+   "evidence_ids": [
+    "EV002",
+    "EV003",
+    "EV014"
+   ],
+   "counterevidence_ids": [
+    "EV015",
+    "EV016",
+    "EV017"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Utilities are executable and evaluated on fresh random task instances; trivial baselines (random 50% parity, seed scores) are reported. Utility exploitability (accuracy over 1000%) and crude syntactic sandbox detector keep it below 4.",
+   "evidence_ids": [
+    "EV006",
+    "EV011"
+   ],
+   "counterevidence_ids": [
+    "EV019"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Seed, one-shot CoT and greedy-iterative baselines and model-size comparison exist, but there is no ablation of recursion versus plain longer search, no comparison to a strong hand-designed scaffold at equal budget, and no test that the improved improver improves itself better.",
+   "evidence_ids": [
+    "EV007",
+    "EV008",
+    "EV012"
+   ],
+   "counterevidence_ids": [
+    "EV016"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Test on 50 unseen LPN instances plus five new tasks not seen in improvement; the improver given the downstream task text only as template. The choice of the transferred improver among runs is unspecified.",
+   "evidence_ids": [
+    "EV005",
+    "EV006",
+    "EV010"
+   ],
+   "counterevidence_ids": [
+    "EV009"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "LPN reports mean with SE over 5 runs (and 10 runs for baselines) plus 25 GPT-3.5 runs with failure fraction and Wilson CIs for sandbox; the transfer table is one improver, one value per task, no significance test.",
+   "evidence_ids": [
+    "EV007",
+    "EV012",
+    "EV018"
+   ],
+   "counterevidence_ids": [
+    "EV009"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Budgets are enforced in the utility and ~3k GPT-4 calls per iteration per run are stated, with a limitation note that cost grows faster than the improver cost; no total cost, no comparison cost of seed versus improved improver at test time.",
+   "evidence_ids": [
+    "EV014"
+   ],
+   "counterevidence_ids": [
+    "EV017"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 68.75,
+  "display": 68.8,
+  "lower": 68.75,
+  "upper": 68.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

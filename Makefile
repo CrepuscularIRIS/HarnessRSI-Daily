@@ -1,21 +1,17 @@
-.PHONY: run, help, all, check-log, test
-
-all: run
-
+.PHONY: all check help score board run test check-log
+all: check
+check:
+	python3 test_check_cards.py
+	python3 check_cards.py
+	python3 -m py_compile research/*.py
 help:
-	@echo "Usage: make [target]"
-	@echo "Targets:"
-	@echo "  all - Generate today's digest"
-	@echo "  run - Generate today's digest"
-	@echo "  test - Run offline rendering unit tests"
-	@echo "  check-log - Check activity logs"
-	@echo "  help - Display this help message"
-
+	@echo "make check: offline checks; make run: inherited relevance digest; scoring/Reel reset: docs/PIPELINE.md"
+score board:
+	@echo "Legacy scoring/board retired. v2 is draft_uncalibrated; read research/SCORE_SPEC.md." >&2
+	@exit 2
 run:
 	uv run python main.py
-
 test:
 	uv run python test_digest.py
-
 check-log:
 	uv run python check_log.py

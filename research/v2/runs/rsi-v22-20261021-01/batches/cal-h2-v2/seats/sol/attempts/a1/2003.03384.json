@@ -1,0 +1,804 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "cal-h2-v2",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2003.03384",
+    "paper_id": "2003.03384",
+    "title": "AutoML-Zero: Evolving Machine Learning Algorithms From Scratch",
+    "version": "2003.03384v2",
+    "claim_type": "system_method",
+    "central_claim": "低人工偏置的基础数学操作程序空间可由进化从空程序自动发现完整机器学习算法，复现反传神经网络并找到超过简单神经网络的学习程序，还能因任务条件而出现不同学习技巧。",
+    "scope_class": "B",
+    "scope_reason": "被外层执行feedback搜索、保留并跨任务复用的产物是Setup/Predict/Learn程序代码，可作学习/优化工具组件；不是只保留数值权重。内层训练权重不触发A3排除。本文明确放弃self-reflexivity，不算A类递归改进器或通用Agent框架。"
+  },
+  "provenance": {
+    "input_hash": "0afce8a26034f4dbdc33f963a041979551dcffe3333d00d8d4554f680e60089b",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "receipt_note": "当前配置来自用户指定；无权威可绑定运行回执，未探测或重配。",
+    "timestamp": "2026-10-21T18:17:47.020320+00:00",
+    "rs_parents_hash": "aa8c4eabb1641c4acb72c887046b116495365134f27d2021d2e3b46e91db543b",
+    "rs_cards_hash": "80901fbdf15c2639474e4e777702da656b247da0d9601c5e8d510e8b75b1f019",
+    "domain_taxonomy_hash": "b115a69baefde0f628ad94a0f4c2b7252d03dd4d0386d30c642158e54457dfd3",
+    "expectations_hash_note": "conditions.json固定领域检查；原卡RE按Reviewer expectations原顺序(1-based)，由固定rs_manifest/rs_cards_dir绑定。"
+  },
+  "materials": [
+    {
+      "material_id": "M1",
+      "url": "https://arxiv.org/html/2003.03384v2",
+      "version": "2003.03384v2",
+      "sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2003.03384.txt",
+      "sections_read": [
+        "abstract",
+        "§1-5",
+        "S1 full related work",
+        "S2 all 65 operation vocabulary",
+        "S3 search implementation",
+        "S4 task generation",
+        "S5 all configs",
+        "S6 raw programs",
+        "S7 selection/evaluation/tuning",
+        "S8 interpretation/ablations",
+        "S9 all search ablations",
+        "S10 baselines"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E01",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 59-69",
+      "quote": "Machine learning research has advanced in multiple aspects, including model structures and learning methods. The effort to automate such research, known as\nAutoML\n, has also made significant progress. However, this progress has largely focused on the architecture of neural networks, where it has relied on sophisticated expert-designed layers as building blocks—or similarly restrictive search spaces. Our goal is to show that\nAutoML\ncan go further: it is possible today to automatically discover complete machine learning algorithms just using basic mathematical operations as building blocks. We demonstrate this by introducing a novel framework that significantly reduces human bias through a generic search space. Despite the vastness of this space, evolutionary search can still discover two-layer neural networks trained by backpropagation. These simple neural networks can then be surpassed by evolving directly on tasks of interest,\ne.g\n.\nCIFAR-10 variants, where modern techniques emerge in the top algorithms, such as bilinear interactions, normalized gradients, and weight averaging. Moreover, evolution adapts algorithms to different task types:\ne.g\n.\n, dropout-like techniques appear when little data is available. We believe these preliminary successes in discovering machine learning algorithms from scratch indicate a promising new direction for the field.",
+      "support_explanation": "作者原主张：由基本数学操作自动发现完整学习算法、降低人工偏置及任务适应。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E02",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 135-145",
+      "quote": "; in these works, all other algorithmic aspects remain hand-designed. This approach may save compute time but has two drawbacks. First, human-designed components bias the search results in favor of human-designed algorithms, possibly reducing the innovation potential of\nAutoML\n. Innovation is also limited by having fewer options\n(\nElsken et al., 2019b\n)\n. Indeed, dominant aspects of performance are often left out\n(\nYang et al., 2020\n)\n. Second, constrained search spaces need to be carefully composed",
+      "support_explanation": "作者声称限定算法子部件的搜索空间将人类偏置与范围限制带入搜索。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E03",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 350-358",
+      "quote": "). Our search space, on the other hand, aims to minimize restrictions and manual design. Unlike these three studies, we do not even assume the existence of a neural network or of gradients.\n\nWe note that our work also relates to program synthesis efforts. Early approaches have proposed to search for programs that improve themselves\n(\nLenat, 1983\n;\nSchmidhuber, 1987\n)\n. We share similar goals in searching for learning algorithms, but focus on common machine learning tasks and have dropped the self-reflexivity requirement. More recently, program synthesis has focused on solving problems like sorting",
+      "support_explanation": "与符号optimizer及自指程序合成的关系；明确放弃self-reflexivity，不能宣称递归改进搜索器。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E04",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 497-514",
+      "quote": "We represent algorithms as computer programs that act on a small virtual memory with separate address spaces for scalar, vector and matrix variables (\ne.g\n.\n\ns1\n,\nv1\n,\nm1\n), all of which are floating-point and share the dimensionality of the task’s input features (\nF\nF\n). Programs are sequences of instructions. Each instruction has an operation—or\nop\n—that determines its function (\ne.g\n.\n“multiply a scalar with a vector”). To avoid biasing the choice of ops, we use a simple criterion: those that are typically learned by high-school level. We purposefully exclude machine learning concepts, matrix decompositions, and derivatives. Instructions have op-specific arguments too. These are typically addresses in the memory (",
+      "support_explanation": "搜索和留存的外层对象是带类型内存的程序；不是仅模型权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E05",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 667-679",
+      "quote": "The virtual memory is zero-initialized and persistent, and shared globally throughout the whole evaluation. This way,\nSetup\ncan initialize memory variables (\ne.g\n.\nthe weights),\nLearn\ncan adjust them during training, and\nPredict\ncan use them. This procedure yields an accuracy for each task. The median across\nD\nD\ntasks is used as a measure of the algorithm’s quality by the search method.",
+      "support_explanation": "内存/权重只在每个候选评估内持久，跨任务以accuracy中位数衡量程序；区分两层状态。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E06",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 1164-1189",
+      "quote": "none of the three component functions has any instructions/code lines. The population is then improved through cycles. Each cycle picks\nT\n<\nP\nT\\!\\!<\\!P\nalgorithms at random and selects the best performing one as the\nparent\n,\ni.e\n.\n\ntournament selection\n\n(\nGoldberg & Deb, 1991\n)\n. This parent is then copied and\nmutated\nto produce a\nchild\nalgorithm that is added to the population, while the oldest algorithm in the population is removed. The mutations that produce the child from the parent must be tailored to the search space; we use a random choice among three types of actions: (i) insert a random instruction or remove an instruction at a random location in a component function, (ii) randomize all the instructions in a component function, or (iii) modify one of the arguments of an instruction by replacing it with a random choice (\ne.g\n.\n“swap the output address” or “change the value of a constant”). These are illustrated in Figure\n3\n.",
+      "support_explanation": "tournament选父代、随机代码变异、加入子代且移除最老者；不是所有孩子必须优于父代才提交。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E07",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 1976-1978",
+      "quote": ") and compare the results to a hand-designed reference, a 2-layer fully connected neural network trained by gradient descent. The candidate algorithms perform better in 13 out of 20 experiments. To make sure the improvement is not specific to the small proxy tasks, we select the best algorithm for a final evaluation on binary classification with the original CIFAR-10 data.\n\nSince we are evaluating on tasks with different dimensionality in the final evaluation, we treat all the constants in the best evolved algorithm as hyperparameters and tune them jointly through RS using the validation set. For comparison, we tune two hand-designed baselines, one linear and one nonlinear, using the same total compute that went into discovering and tuning the evolved algorithm. We finally evaluate them all on unseen CIFAR-10 test data. Evaluating with 5 different random seeds, the best evolved algorithm’s accuracy (",
+      "support_explanation": "20次搜索的13个候选在selection上胜NN，之后挑一个作final；基线含相同发现+调参总预算。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E08",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 1979-1996",
+      "quote": "84.06\n±\n0.10\n%\n84.06\\pm 0.10\\%\n) significantly outperforms the linear baseline (logistic regression,\n77.65\n±\n0.22\n%\n77.65\\pm 0.22\\%\n) and the nonlinear baseline (2-layer fully connected neural network,\n82.22\n±\n0.17\n%\n82.22\\pm 0.17\\%\n). This gain also generalizes to binary classification tasks extracted from other datasets: SVHN",
+      "support_explanation": "五种子final accuracy：84.06±0.10，logistic77.65±0.22，NN82.22±0.17；±为SD。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E09",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 2062-2062",
+      "quote": "). This algorithm is limited by our simple search space, which cannot currently represent some techniques that are crucial in state-of-the-art models, like batch normalization or convolution. Nevertheless, the algorithm shows interesting characteristics, which we describe below.",
+      "support_explanation": "明确不能表示batchnorm或convolution，非SOTA视觉或任意算法发现证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E10",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 2390-2412",
+      "quote": ". Was this adaptation a result of the small number of examples or did we simply get lucky? To answer this, we perform\n30\n30\nrepeats of this experiment and of a control experiment. The control has\n800\n800\nexamples/100 epochs. We find that the noisy ReLU is reproducible and arises preferentially in the case of little data\n(expt:\n8\n/\n30\n8/30\n, control:\n0\n/\n30\n0/30\n,\np\n<\n0.0005\np\\!<\\!0.0005\n).",
+      "support_explanation": "低数据30次对照重复：noisy ReLU 8/30 vs0/30及显著性；含失败分母。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E11",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 5297-5311",
+      "quote": "Functional Equivalence Checking (FEC)\n. The lack of heavy design of the search space allows for mutations that do not have an effect on the accuracy (\ne.g\n.\nadding an instruction that writes to an address that is never read). When these mutations occur, the child algorithm behaves identically to its parent. To prevent these identically functioning algorithms from being repeatedly evaluated (\ni.e\n.\ntrained and validated in full many times), we keep an LRU cache mapping evaluated algorithm fingerprints to their accuracies. Before evaluating an algorithm, we first quickly fingerprint it and consult the cache to see if it has already been evaluated. If it has, we reuse the stored accuracy instead of computing it again. This way, we can keep the different implementations of the same algorithm for the sake of diversity: even though they produce the same accuracy now, they may behave differently upon further mutation.\n\nTo fingerprint an algorithm, we train it for 10 steps and validate it on 10 examples. The 20 resulting predictions are then truncated and hashed to produce an integer fingerprint. The cache holds\n100\n​\nk\n100\\textrm{k}\nfingerprint–accuracy pairs.",
+      "support_explanation": "FEC是短轨迹预测指纹与LRU缓存的启发式，非形式等价证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E12",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 5425-5425",
+      "quote": ". Lastly, we time each algorithm as it is being executed and terminate it if its run-time exceeds a fixed threshold; we set this threshold to 4x the run-time of a plain neural network trained with gradient descent.",
+      "support_explanation": "候选runtime超过普通NN四倍会终止，搜索存在明确耗时边界。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E13",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6398-6406",
+      "quote": "trials to tune the hyperparameters, but only a few hundred were required to tune the best algorithm in Figure\n6\n—note that this algorithm only has 3 constants. To make comparisons with baselines fair, we tune these baselines using the same amount of resources that went into tunining\nand evolving\nour algorithms. All hyperparameter-tuning trials use 8000 training and 2000 validation examples from the CIFAR-10\ntraining\nset. After tuning, we finally run the tuned algorithms on 2000 examples from the held-out CIFAR-10\ntest\nset. We repeat this final evaluation with 5 different random seeds and report the mean and standard deviation. We stress that the CIFAR-10 test set was used only in this final evaluation, and never in",
+      "support_explanation": "上限一万超参trial，基线同发现+调参资源，8k/2k训练验证及2000独立test、五种子。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E14",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6484-6492",
+      "quote": ". However, when we move to a new dataset with higher dimensions, the L2-norm of\nv\n1\nv_{1}\nmight no longer be a good learning rate. This can cause the evolved algorithms’ performance to drop dramatically on the new dataset. To resolve this, we identify these parameters by manual inspection of the evolved code. We then manually decouple them: in the example, we would set\ns\n2\ns_{2}\nto a constant that we can tune with random-search. This recovers the performance. Automating the decoupling process would be a useful direction for future work.",
+      "support_explanation": "跨数据维度时人工识别/解耦计算型超参，恢复可调常数，限制完全自动转移。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E15",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6512-6518",
+      "quote": "(c) Once we have hypotheses about interesting code sections, we perform ablations/\nknock-outs\n, where we remove the code section from the algorithm to see if there is a significant loss in accuracy. As an example, for Section\n4.2\n, we identified 6 interesting code sections in the best evolved algorithm to perform ablations. For each ablation, we removed the relevant code section, then tuned all the hyperparameters / constants again, and then computed the loss in validation accuracy. 4 out of the 6 ablations caused a large drop in accuracy. These are the ones that we discussed in Section\n4.2\n. Namely, (1) the addition of noise to the input (",
+      "support_explanation": "逐片段knockout后重调超参，有4/6有效，非仅肉眼解释。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E16",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6533-6548",
+      "quote": "); and (4) the weight averaging (\n−\n4.11\n%\n-4.11\\%\n). The remaining 2 code sections show no significant loss upon ablation, and so were removed for code readability.\nAlso for readability, we reorder some instructions when this makes no difference to the accuracy either (\ne.g\n.\nwe move related code lines closer to each other). After this procedure, the code looks like that in Figure\n6\n.\n\n(d) If an ablation suggests that a code section is indeed helpful to the original algorithm, we then perform a\nknock-in\n. That is, we insert the code section into simpler algorithms to see if it improves their performance too. This way we confirmed the usefulness of the 4 code sections mentioned in (c), for example.",
+      "support_explanation": "weight averaging ablation −4.11pp，另两片段无效删除；knock-in确认作用。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E17",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6553-6568",
+      "quote": "To verify the effectiveness of the upgrades mentioned in Supplementary Section\nS3\n, we conduct ablation studies using the experiment setup of Section\n4.2\n, except for the following simplifications to reduce compute: (i) we limit the ops to only those that are necessary to construct a neural network trained with gradient descent (as was done for Figure\n5\n),\ni.e\n.\nallowed\nSetup\nops are {OP57, OP64, OP65}, allowed\nPredict\nops are {OP28, OP32, OP49}, and allowed\nLearn\nops are {OP3, OP4, OP17, OP19, OP24, OP26, OP29, OP41}; (ii) we reduce the projected dimensionality from 256 to 16, and (iii) we use",
+      "support_explanation": "S9搜索机制消融使用更小、更受限的NN搜索空间，不能直接充当完整空间因果证据。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E18",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6594-6613",
+      "quote": "Supplementary Table S2\n:\nAblation studies. Each row summarizes the results of 30 search runs under one given experimental setting. Rows #0–4 all use the same setting, except for the search method: each row implements an upgrade to the method and shows the resulting improvement. “Best Accuracy” is the accuracy of the best algorithm for each experiment (\n±\n2\n​\nSEM\n\\pm 2\\operatorname{SEM}\n), evaluated on unseen projected binary CIFAR-10 tasks. “Success Fraction” is the fraction (\n±\n2\n​\nσ\n\\pm 2\\sigma\n) of those experiments that produce algorithms that are more accurate than a plain neural network trained with gradient descent (\n0.750\n0.750\n). This fraction helps us estimate the likelihood of high performing outliers, which we are keenly interested in. The experimental setting for row #5 is the same as row #3, except that instead of using both projected binary CIFAR-10 and projected binary MNIST data for the search, we use only projected binary MNIST data (as for other rows, the accuracy is reported on projected binary CIFAR-10 data). Row #5 indicates that searching\ncompletely\non MNIST data is not as helpful as searching partially on it (row #3). Overall, rows #0–4 suggest that all four upgrades are beneficial.",
+      "support_explanation": "30search runs、2SEM accuracy、2sigma成功率与unseen projected tasks，统计层级明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E19",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6811-6813",
+      "quote": ", except at an even lower compute scale (10 processes). Each setup was run 100 times. The results are consistent with those with more compute, but we no longer observe successes (“successes” defined in Table\nS2\n).",
+      "support_explanation": "低10core 100次重复无NN成功，保留负结果分母。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E20",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 6926-6933",
+      "quote": "ops: {OP2, OP3, OP4, OP17, OP19, OP24, OP26, OP29, OP41}. Experiments end after each process has run 100B training steps—\ni.e\n.\nthe training loop described in Section\n3.1\nruns 100B times. (We chose “training steps” instead of “number of algorithms” as the experiment-ending criterion because the latter varies due to early stopping, FEC,\netc\n. We also did not choose “time” as the experiment-ending criterion to make comparisons hardware-agnostic. For reference, each experiment took roughly 12 hours on our hardware.)",
+      "support_explanation": "S10统一每process100B training steps并解释不用候选数或walltime比较，参考12小时。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E21",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 2473-2481",
+      "quote": "In this paper, we proposed an ambitious goal for\nAutoML\n: the automatic discovery of whole ML algorithms from basic operations with minimal restrictions on form. The objective was to reduce human bias in the search space, in the hope that this will eventually lead to new ML concepts. As a start, we demonstrated the potential of this research direction by constructing a novel framework that represents an ML algorithm as a computer program comprised of three component functions (\nSetup\n,\nPredict\n,\nLearn\n). Starting from empty component functions and using only basic mathematical operations, we evolved neural networks, gradient descent, multiplicative interactions, weight averaging, normalized gradients, and the like. These results are promising, but there is still much work to be done. In the remainder of this section, we motivate future work with concrete observations.",
+      "support_explanation": "原完整算法发现目标和Setup/Predict/Learn分解，从空程序进化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E22",
+      "material_id": "M1",
+      "material_sha256": "333ed78eaac80924bc3eb5da5481c45f89ca00845a3bbd0ee43b2864c514bc88",
+      "locator": "lines 1899-1909",
+      "quote": "​\nt\n\\mathcal{T}_{select}\n, ı.e tasks for model selection. The CIFAR-10 test set is reserved for final evaluation to report results. Features are projected to\n8\n≤\nF\n≤\n256\n8\\leq F\\leq 256\ndim. Each evaluation is on",
+      "support_explanation": "test保留到最终评估，与投影proxy维度分离。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "非权重学习算法程序：Setup/Predict/Learn三函数、标量/向量/矩阵指令与常数",
+      "information": "外层见训练/validation任务fitness；每候选执行在train例Predict之后才给Learn标签，test/selection不写回外层search。内存每次评估重新初始化并在候选评估内维持。",
+      "operation": "从空程序起始，tournament挑父，随机增删/重写/改参数，执行训练和验证，以age-regularized evolution更新群体。",
+      "output": "新代码算法及跨任务accuracy中位数fitness",
+      "conditions": "类型内存和基本数学指令；固定Setup/Predict/Learn scaffold仍是人工先验；预算巨大且不能表示conv/batchnorm/loops。",
+      "feedback": "监督任务validation accuracy直接选择父代；变异本身随机，不读LLM反思。",
+      "selection_rule": "随机T个取best父代；子代加入，移除最老者，即非单调父子提交门槛。",
+      "data": "CIFAR/MNIST投影binary tasks；主空间20search实验",
+      "persistence": "群体与checkpoint保存代码、常数和fitness；不把候选内learned weights当跨任务演化产物。",
+      "later_use": "search候选到未见class-pair selection，最优程序调常数后在原维度独立test从头训练，另外数据集迁移。",
+      "claimed_effect": "完整算法被搜索而不只人类NN结构子部件",
+      "failure_boundary": "超参耦合需人工解耦；初步浅层有偏空间非任意算法生成；未自改外层搜索器",
+      "evidence_ids": [
+        "E01",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E09",
+        "E13",
+        "E14",
+        "E21"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "候选评估和分布式搜索资源分配",
+      "information": "短train/validation预测轨迹、population accuracies、跨worker候选；非最终test。",
+      "operation": "FEC短指纹查LRU复用fitness；hurdles提前停止弱候选；islands迁移与MNIST任务增加多样性；数值异常赋低分，runtime超限终止。",
+      "output": "可承受规模的代码搜索及缓存/群体",
+      "conditions": "短指纹可能误并；早停proxy需迁移检验，非语义等价保证。",
+      "feedback": "任务准确率、指纹重复、数值/运行异常",
+      "selection_rule": "LRU约100k fingerprints；预测hash一致复用分；hurdle使用population分位；runtime阈值4x普通NN。",
+      "data": "通常多天多worker；S9 1000/100/10core，S10 100B training steps/process",
+      "persistence": "fitness cache、各worker程序池和checkpoint",
+      "later_use": "减少冗余候选评估，迁移程序继续变异",
+      "claimed_effect": "提高发现高性能程序概率与吞吐",
+      "failure_boundary": "10core重复无NN成功；S9/S10简化空间不可当完整空间同等证据；不是自动搜索器自我改写",
+      "evidence_ids": [
+        "E11",
+        "E12",
+        "E17",
+        "E18",
+        "E19",
+        "E20"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "已有AutoML多以专家NN层或单独optimizer部件搜索，其他学习过程手工固定，算法创新被空间限制。",
+    "checked_gap": "本文明示无梯度/神经网络原语仍可构建可学习程序，确实扩大可表达的算法对象；文内把Bello符号optimizer、学习规则进化、程序合成等作邻居，不只对比NAS。",
+    "lineage": [
+      {
+        "name": "regularized evolution (Real et al. 2019)",
+        "source_version": "2003.03384v2",
+        "source": "§3.2及S1/S3，本文引述",
+        "relationship": "父代tournament与age removal沿用；本文主要变化为更一般算法程序空间",
+        "status": "neighbor_original_not_supplied"
+      },
+      {
+        "name": "Bello et al. 2017 symbolic optimizer; Risi & Stanley 2010; earlier learning-rule evolution",
+        "source_version": "2003.03384v2",
+        "source": "§2 lines305-350与S1",
+        "relationship": "已搜索符号学习规则，但本文不预设NN或梯度",
+        "status": "author_report_only"
+      },
+      {
+        "name": "Lenat/Schmidhuber self-improving programs; program synthesis",
+        "source_version": "2003.03384v2",
+        "source": "§2 lines352-358及S1",
+        "relationship": "程序合成祖先，但本方法放弃self-reflexivity，不是从程序搜索就自动获得递归自改进",
+        "status": "author_report_only"
+      }
+    ],
+    "closest_adjacent": [
+      "符号optimizer/learning-rule search",
+      "genetic programming",
+      "NAS regularized evolution"
+    ],
+    "residue": "能否在不把NN层和gradient作为原语时，以计算可承受的执行搜索发现整个训练-预测程序。",
+    "stakes": "算法设计空间中手工偏置与搜索稀疏性之间的代价；扩大对象会使有效程序极稀少。",
+    "method_response": "低级typed instruction空间+三函数scaffold；进化、FEC、migration、hurdles，多任务proxy与独立原维test。",
+    "remaining_gap": "不能表达卷积/批操作、强人工scaffold仍在、超参人工解耦与高算力，尚无通用深层/复杂任务自动发现。",
+    "evidence_ids": [
+      "E01",
+      "E02",
+      "E03",
+      "E04",
+      "E06",
+      "E09",
+      "E11",
+      "E14",
+      "E19",
+      "E21"
+    ],
+    "unresolved": [
+      "固定包缺Bello/Real/Risi等相邻原文；未进行WebSearch/WebFetch，故邻居优先性及完整谱系残余无法独立确认。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "reframe_as_solvable_object",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "reframe_as_solvable_object",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "把完整学习算法设计重写为三函数typed program的离散搜索对象",
+          "把程序执行的median validation accuracy作为可计算优化目标",
+          "交给已有regularized evolution/tournament machinery",
+          "原任务faithfulness由新任务/原维度test验证，非形式等价或最优保证",
+          "C00是固定模型归因，C21是制造缺失监督，C27是均衡重写，均不适用"
+        ],
+        "success_failure_checks": {
+          "central_object_defined": "met",
+          "imports_solver": "met",
+          "faithfulness_empirical": "met",
+          "correspondence_theorem": "not_reported",
+          "scaling_boundary": "partial"
+        },
+        "evidence_ids": [
+          "E04",
+          "E05",
+          "E06",
+          "E07",
+          "E13",
+          "E19",
+          "E21"
+        ],
+        "reason": "实际把整套学习过程化为可执行程序优化对象，借成熟进化求解；属于主定义的经验性部分执行，未证明全问题等价或可解性，不硬选无关子卡。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原15 overview与31 overview已核；比generative_process_redesign更贴近优化对象重写，因为此处不在既定生成/精化链内只换prior或condition；也无assumption-audit的定理重证或反例攻击。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [],
+    "unassigned": [
+      {
+        "sig_id": "S1",
+        "nearest_main": "population_search_executable_fitness",
+        "nearest_sub": "H14",
+        "reason": "程序群体→执行fitness→选择/留存操作相近，但固定main signature和H14明确要求LLM生成变异；AutoML-Zero完全随机句法变异，不能把历史祖先硬标LLM mutation。也无H15蒸馏搜索记忆或H16质量多样性前沿。",
+        "evidence_ids": [
+          "E04",
+          "E06",
+          "E11"
+        ]
+      }
+    ],
+    "revision_proposals": [
+      {
+        "kind": "boundary_case",
+        "target": "population_search_executable_fitness/H14",
+        "proposal": "阶段末讨论将mutation_source区分LLM与classical随机变异，或另设历史非LLM程序搜索边界；本批不改卡，单篇仅case，不宣称已形成新candidate_pattern。",
+        "evidence_ids": [
+          "E03",
+          "E06"
+        ]
+      }
+    ]
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "reframe_as_solvable_object",
+      "rs_sub": null,
+      "domain_namespace": "rsi",
+      "domain_main": null,
+      "domain_sub": null,
+      "operation_correspondence": "完整学习算法→typed executable program→执行validation fitness→population search→保存可复用代码；最邻近rsi:population_search_executable_fitness/H14但非正式匹配。",
+      "necessary_conditions_and_differences": "外层产物是非权重代码，满足B组件范围；缺LLM mutation这一现卡必要条件，因此domain保持unassigned。原卡主定义可部分适配但没有C子战术。",
+      "evidence_ids": [
+        "E04",
+        "E05",
+        "E06",
+        "E13"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:reframe_as_solvable_object/RE-02",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/reframe_as_solvable_object.md#Reviewer expectations[2]"
+      ],
+      "applies_when": "将整体算法问题重写为新优化对象",
+      "applicable": true,
+      "status": "met",
+      "reason": "typed memory、指令和三函数及任务fitness定义可重建，非模糊算法创新口号。",
+      "evidence_ids": [
+        "E04",
+        "E05",
+        "E06",
+        "E21"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rs:reframe_as_solvable_object/RE-04",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/reframe_as_solvable_object.md#Reviewer expectations[4]"
+      ],
+      "applies_when": "proxy程序搜索需对应真实学习能力",
+      "applicable": true,
+      "status": "met",
+      "reason": "有原维独立test和逐片段re-tuned ablation/knock-in，不只报selection均值。",
+      "evidence_ids": [
+        "E07",
+        "E08",
+        "E13",
+        "E15",
+        "E16"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "rs:reframe_as_solvable_object/RE-05",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/reframe_as_solvable_object.md#Reviewer expectations[5]"
+      ],
+      "applies_when": "新求解器的可用性依赖规模和可表达性",
+      "applicable": true,
+      "status": "partial",
+      "reason": "多预算重复与低算力失败已揭示，仍需大CPU且不能表示卷积/批操作，超参迁移人工完成。",
+      "evidence_ids": [
+        "E09",
+        "E14",
+        "E18",
+        "E19",
+        "E20"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2003.03384-1",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§4.2与S7 lines6398-6406"
+      ],
+      "applies_when": "对比自动发现算法与手工NN性能",
+      "applicable": true,
+      "status": "met",
+      "reason": "基线调参资源含演化+调参，总预算口径明确。",
+      "evidence_ids": [
+        "E07",
+        "E13"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2003.03384-2",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "S7 lines6371-6406"
+      ],
+      "applies_when": "从多个search候选挑best后报性能",
+      "applicable": true,
+      "status": "met",
+      "reason": "selection用于排序，独立test只作最终报告；13/20属于selection不作留出。",
+      "evidence_ids": [
+        "E07",
+        "E13",
+        "E22"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2003.03384-3",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "S7 lines6484-6492及S8"
+      ],
+      "applies_when": "声称最少人工输入/完整自动发现",
+      "applicable": true,
+      "status": "partial",
+      "reason": "披露人工超参解耦与简化，支持程序搜索自动化，不是完全无人值守迁移。",
+      "evidence_ids": [
+        "E14",
+        "E15",
+        "E16"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2003.03384-4",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§4.3与S9-S10重复实验实践"
+      ],
+      "applies_when": "搜索随机且小概率产生赢家",
+      "applicable": true,
+      "status": "met",
+      "reason": "有30/100runs区间、五seed、适应实验检验及零成功分母；主空间跨run方差仍较弱。",
+      "evidence_ids": [
+        "E08",
+        "E10",
+        "E18",
+        "E19"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2003.03384-5",
+      "version": "manifest-bound-v2.2",
+      "source_strength": "single_source",
+      "source_refs": [
+        "S3 FEC lines5297-5311"
+      ],
+      "applies_when": "短轨迹等价缓存决定省略评估",
+      "applicable": true,
+      "status": "partial",
+      "reason": "短预测hash/LRU过程明确，但没有语义等价或碰撞错误率校验，不能称完备等价判定。",
+      "evidence_ids": [
+        "E11"
+      ],
+      "score_item": "M"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "从基本数学操作和空程序自动发现完整ML算法",
+      "setting": "teacher rediscovery restricted space及CIFAR/MNIST较大generic空间分开",
+      "baseline_control": "random search；hand-designed linear/2-layerNN；不是SOTA convnets",
+      "selection_vs_test": "search→class-pair select→原维test；调参使用training split validation",
+      "result_denominator": "generic主实验20search，13在selection上胜NN；最终最佳算法5seed test84.06±0.10，NN82.22±0.17",
+      "evidence_ids": [
+        "E01",
+        "E04",
+        "E06",
+        "E07",
+        "E08",
+        "E13",
+        "E21"
+      ],
+      "counterevidence": [
+        "E09:不能表示conv/batchnorm",
+        "E14:迁移需人工超参解耦"
+      ],
+      "allowed_conclusion": "受限基础操作scaffold中可发现整个可运行学习程序，且最佳程序在指定binary任务胜基线；非任意算法或无需人工的完整研究自动化。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "可留存的算法代码对后来任务有效而非只优化选择分",
+      "setting": "原维CIFAR binary，SVHN/downsampledImageNet/FashionMNIST binary；每任务重新训练",
+      "baseline_control": "同总资源linear/NN，额外数据集也评同基线",
+      "selection_vs_test": "最终CIFAR test未参加search/select/tuning；transfer常数需调整",
+      "result_denominator": "CIFAR final2000test×5seeds；transfer报告88.12/80.78/98.60 vs NN85.14/78.44/98.21",
+      "evidence_ids": [
+        "E07",
+        "E08",
+        "E13",
+        "E14"
+      ],
+      "counterevidence": [
+        "E14:手工decoupling限制无人工transfer"
+      ],
+      "allowed_conclusion": "支持B组件层的retained code收益；不外推整机agent或外层improver自我提升。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "搜索可按任务条件适应并产生有益程序片段",
+      "setting": "低数据、快速训练、multiclass；普通及simplified搜索空间",
+      "baseline_control": "30重复条件对照、6片段knockout重调参、knock-in；S9增量升级",
+      "selection_vs_test": "机制检验包含validation；与最终test结论区分",
+      "result_denominator": "低数据8/30 vs0/30,p<0.0005；4/6片段有效；S9各30或100search，10core无成功",
+      "evidence_ids": [
+        "E10",
+        "E15",
+        "E16",
+        "E17",
+        "E18",
+        "E19"
+      ],
+      "counterevidence": [
+        "E17:搜索升级消融受限空间，不是全空间同等检验"
+      ],
+      "allowed_conclusion": "支持特定条件下的适应和片段作用，未证明随机句法变异机制会自我进化或普遍低成本。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告外层保留的非权重学习程序在新任务重新训练后，原维独立CIFAR test和若干binary迁移集胜同资源简单基线；发现过程有机制消融和重复。成果是受限算法工具组件，不是递归改写improver或全面无人工算法研究。",
+    "unresolved": [
+      "相邻原文谱系未独立核实",
+      "人工超参解耦尚未自动化",
+      "FEC短轨迹误判率",
+      "完整空间搜索升级的正交因果证据",
+      "全部研究计算和人工分析总成本"
+    ],
+    "reproduction": "未运行被评论文代码；所有实验结论为author_report，内外层解释为依据原文的评审推断。"
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "具名问题是NAS/optimizer搜索把算法其他部件固定，限制可发现的学习规则；本文以统一基础操作程序扩展。文内比较了程序合成、neuroevolution、符号optimizer，不只有NAS；关键邻居原文未固定，优先性仍未完全核实。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E04"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Setup/Predict/Learn、类型内存、从空程序随机变异和执行fitness可重建，回应手工组件偏置。FEC/hurdles/migration提高可搜索性，缺少形式可达性/全空间最优保证；超参耦合需人工介入，不等于完全自动发现任意学习算法。",
+      "evidence_ids": [
+        "E04",
+        "E05",
+        "E06",
+        "E11",
+        "E21"
+      ],
+      "counterevidence_ids": [
+        "E09",
+        "E14"
+      ],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "父代选择、子代保留/年龄淘汰、内外层状态、FEC/门槛/超时与最后选择调参测试都有明确定义。程序被留存再训练后用于新任务，不是沿用旧权重。仍有手工解耦、FEC指纹非等价证书和跨配置细节差异，故不到4。",
+      "evidence_ids": [
+        "E04",
+        "E05",
+        "E06",
+        "E11",
+        "E12",
+        "E13"
+      ],
+      "counterevidence_ids": [
+        "E14"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 4,
+      "reason": "监督分类准确率、明确定义的任务中位数fitness和独立test是与算法学习性能直接一致的可核验指标，提供linear/NN平凡强度基线；选择fitness与final accuracy分清。未用代理标签多样性或模型自评分代替目标。",
+      "evidence_ids": [
+        "E05",
+        "E07",
+        "E08",
+        "E13"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "基线获发现+调参相同资源，片段knockout重调参和knock-in支持机制；另有随机搜索/升级消融。主要搜索升级因果表在受限NN空间执行，完整空间优势与多个工程升级未被完全正交隔离，人工迁移介入也在边界内。",
+      "evidence_ids": [
+        "E07",
+        "E13",
+        "E15",
+        "E16",
+        "E18"
+      ],
+      "counterevidence_ids": [
+        "E14",
+        "E17"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 4,
+      "reason": "明分search/selection与最终未用CIFAR test；selection的13/20不冒充最终留出。换到3072维和额外数据集的结果检验proxy到真实任务，常数在training split验证集重调而非test优化；此分针对其有限监督算法发现主张，不声称无标签在线自改进。",
+      "evidence_ids": [
+        "E07",
+        "E13",
+        "E22"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4.2、S4、S7：class-pair search/select划分、8k/2k训练验证、2000test、跨数据集评估及超参重调"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "五seed final均值SD、30次适应对照显著性、30/100次search区间与低算力零成功分母均有。符合A2的多种子+区间+检验3+阶梯；主空间20次的整体search/tuning跨重复不确定性未同样完整，未给4。",
+      "evidence_ids": [
+        "E08",
+        "E10",
+        "E18",
+        "E19"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "大规模CPU/天数配置、吞吐与hurdle/4x超时，基线预算含搜索和调参；S10以训练steps固定预算并给参考时间。缺全部失败搜索与人工分析的统一端到端实际总账，不把高算力或代码链接视为负/正分。",
+      "evidence_ids": [
+        "E07",
+        "E12",
+        "E13",
+        "E20"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§3.2、§4各Experiment Details、S3、S5、S7、S9-S10：workers/5days/training steps、失败/调参预算与人工解耦成本"
+      ]
+    }
+  },
+  "status": "reviewed",
+  "reason": "完整正文及S1-S10足以评审；范围按外层留存代码判为B，不因内层训练权重排除；领域卡LLM必要条件缺失如实unassigned。",
+  "rationale": "外层留存的是完整学习程序而非权重；独立测试、同资源基线及多运行统计较强。仍依赖大算力和人工解耦，且非递归自改进，领域LLM变异卡不硬贴。",
+  "score": {
+    "raw": 80.0,
+    "display": 80.0,
+    "lower": 80.0,
+    "upper": 80.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}
