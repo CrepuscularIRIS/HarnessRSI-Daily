@@ -1,10 +1,10 @@
 """Hourly health check of the agent-maintained repo. Read-only: reports, never commits.
 
 Checks every commit since the last run (state in .git/monitor_last):
-  - file ownership by commit prefix (collect/ingest/maintenance = Grok, triage/score/cards = Dots;
-    reel: commits are the maintainers' own, checked by check_reel.py);
+  - file ownership by commit prefix (collect/ingest/maintenance = Grok, triage/score/cards = the local scoring
+    session; reel: commits are the maintainers' own, checked by check_reel.py);
   - no agent touches the judging standards; nobody commits full texts, reviews, bundles or .env;
-  - Dots edits README.md only inside the board and poster-gallery blocks;
+  - the scoring session edits README.md only inside the board and poster-gallery blocks;
   - new reel/<id>/ directories pass research/check_reel.py;
   - new judgment files re-verified here (quotes checked against freshly fetched full text) and scores.jsonl reproducible;
   - card checks, latest CI run, open issues, queue backlog.
@@ -26,12 +26,12 @@ REPO = "CrepuscularIRIS/HarnessRSI-Daily"
 OWN = {
     "grok": ["inbox/*", "research/corpus.jsonl", "research/hf_meta.jsonl", "research/queue/*.txt",
              "research/patterns/contrast.json", "research/patterns/contrast.md"],
-    "dots": ["research/screen.jsonl", "research/signatures.jsonl", "research/patterns/assignments.jsonl",
-             "research/judgments/*", "research/scores.jsonl", "papers/README.md", "README.md", "cards/*",
-             "research/queue/*.txt", "research/queue/done/*"],
+    "local": ["research/screen.jsonl", "research/signatures.jsonl", "research/patterns/assignments.jsonl",
+              "research/judgments/*", "research/scores.jsonl", "papers/README.md", "README.md", "cards/*",
+              "research/queue/*.txt", "research/queue/done/*"],
 }
 # Human commits must not use these prefixes (use feat:/fix:/docs:/chore:), or they are checked as agent commits.
-ROLE = {"collect": "grok", "ingest": "grok", "maintenance": "grok", "triage": "dots", "score": "dots", "cards": "dots"}
+ROLE = {"collect": "grok", "ingest": "grok", "maintenance": "grok", "triage": "local", "score": "local", "cards": "local"}
 PROTECTED = ["docs/EVIDENCE.md", "cards/_TEMPLATE.md", "check_cards.py", ".github/*", "research/*_SPEC.md",
              "research/*_SCHEMA.md", "research/SCREEN_RUBRIC.md", "research/score.py", "research/check_*.py",
              "research/calibrate.py", "research/patterns/taxonomy*.json", "research/patterns/conditions.json", "patterns/*",
@@ -62,11 +62,11 @@ def commit_issues(sha: str, subject: str) -> list[str]:
     if role:
         out += [f"{sha[:7]} ({role}) touches protected {f}" for f in files if match(f, PROTECTED)]
         out += [f"{sha[:7]} ({role}) outside its files: {f}" for f in files if not match(f, OWN[role]) and not match(f, PROTECTED)]
-        if role == "dots" and "README.md" in files:
+        if role == "local" and "README.md" in files:
             before = sh("git", "show", f"{sha}^:README.md", check=False)
             after = sh("git", "show", f"{sha}:README.md")
             if BOARD.sub("", before) != BOARD.sub("", after):
-                out.append(f"{sha[:7]} (dots) edits README.md outside the board/gallery blocks")
+                out.append(f"{sha[:7]} (local) edits README.md outside the board/gallery blocks")
     return out
 
 
@@ -93,7 +93,10 @@ def main(argv: list[str]) -> int:
     # independent re-verification of new judgments
     changed = {f for c, _ in commits for f in sh("git", "show", "--name-only", "--format=", c).split()}
     for jf in sorted(f for f in changed if re.fullmatch(r"research/judgments/(?!ids_).+\.jsonl", f) and Path(f).exists()):
-        ids = Path(jf).with_name(f"ids_{Path(jf).stem}.txt")
+        stem = Path(jf).stem
+        if stem.endswith((".sol", ".opus")):  # dual-model file: ids file is shared per batch
+            stem = stem.rsplit(".", 1)[0]
+        ids = Path(jf).with_name(f"ids_{stem}.txt")
         if ids.exists():
             sh(sys.executable, "research/fetch_fulltext.py", "--ids", str(ids), check=False)
             r = subprocess.run([sys.executable, "research/score.py", "check", jf, str(ids)], capture_output=True, text=True,

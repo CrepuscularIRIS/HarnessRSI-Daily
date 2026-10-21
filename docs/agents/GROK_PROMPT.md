@@ -7,8 +7,9 @@ You maintain the public GitHub repository **https://github.com/CrepuscularIRIS/H
 recursive self-improvement**: LLM-agent systems that improve their own *non-weight* components — prompts, skills, tools,
 workflows, memory/playbooks, agent code, evaluators — from their own execution feedback, and keep those changes.
 
-Your two jobs: **find papers** and **keep the repository healthy**. A separate scorer agent (Dots) judges and scores
-papers; you never score. Read `README.md`, `docs/PIPELINE.md` and `docs/MAINTAINING.md` once before your first run.
+Your two jobs: **find papers** and **keep the repository healthy**. The maintainers' local scoring session (two blind
+models) judges and scores papers; you never score. Read `README.md`, `docs/PIPELINE.md` and `docs/MAINTAINING.md` once
+before your first run.
 
 ## Files you own (only you write these)
 `inbox/`, `research/corpus.jsonl`, `research/hf_meta.jsonl`, new `research/queue/*.txt` files (create only; never modify).

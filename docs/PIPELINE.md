@@ -8,13 +8,13 @@ output is validated by a script before anything is published.
 Grok bot ──▶ inbox/YYYY-MM-DD.jsonl
                  │
                  ▼  (D) research/ingest.py            dedup, arXiv metadata → corpus.jsonl, HF code links (Grok)
-            research/queue/YYYY-MM-DD.txt  ──▶ Dots
+            research/queue/YYYY-MM-DD.txt  ──▶ 本地打分 session (dual-model blind panel)
                  │
                  ▼  (L) 1 screen      research/SCREEN_RUBRIC.md      → research/screen.jsonl        tier A/B/C
                  ▼  (L) 2 signature   research/SIGNATURE_SCHEMA.md   → research/signatures.jsonl    (A/B only)
                  ▼  (L) 3 assign      research/patterns/taxonomy_view.json → research/patterns/assignments.jsonl
-                 ▼  (L) 4 judge       research/SCORE_SPEC.md         → research/judgments/<date>.jsonl
-                 ▼  (D) 5 score       research/score.py build        → research/scores.jsonl
+                 ▼  (L) 4 judge ×2    research/SCORE_SPEC.md         → research/judgments/<date>.{sol,opus}.jsonl  (two blind models)
+                 ▼  (D) 5 score       research/score.py build        → research/scores.jsonl (average; Δ>10 or band mismatch → judgments/DUAL_FLAGS.md)
                  ▼  (D) 6 board       research/build_board.py        → papers/README.md, README top-30
                  ▼  (D) 7 checks      see "Check suite"              → commit
 ```
@@ -26,13 +26,13 @@ Grok bot ──▶ inbox/YYYY-MM-DD.jsonl
 |---|---|---|---|---|
 | 0 | Collect candidates | Grok bot | web/arXiv/HF/GitHub/X → `inbox/YYYY-MM-DD.jsonl` | `inbox/README.md` format |
 | 1 | Ingest + queue | Grok bot (script) | inbox → `corpus.jsonl`, `fulltext/<id>.txt`, `hf_meta.jsonl` | prints remaining LLM steps |
-| 2 | Screen | Dots | title+abstract → `screen.jsonl` row (tier, level, kind, evolved) | enums per `SCREEN_RUBRIC.md` |
-| 3 | Signature (A/B) | Dots | full text → `signatures.jsonl` row | `python3 research/check_signatures.py <file> <ids>` |
-| 4 | Assign pattern | Dots | signature + `taxonomy_view.json` → `assignments.jsonl` row (sub, secondary_main, fit) | sub id exists; no outcome labels used |
-| 5 | Judge | Dots | full text + `conditions.json[main]` + main/sub cards → judgment row | `PYTHONPATH=research python3 research/score.py check <file> <ids>` (quotes verified against the full text) |
-| 6 | Score | Dots (script) | judgments → `scores.jsonl` | `score.py build` reports 0 skipped |
-| 7 | Board | Dots (script) | scores → `papers/README.md`, README block | — |
-| 8 | Diagnosis card (optional, top new A papers) | Dots | `cards/_TEMPLATE.md` | `python3 check_cards.py` |
+| 2 | Screen | 打分 session | title+abstract → `screen.jsonl` row (tier, level, kind, evolved) | enums per `SCREEN_RUBRIC.md` |
+| 3 | Signature (A/B) | 打分 session | full text → `signatures.jsonl` row | `python3 research/check_signatures.py <file> <ids>` |
+| 4 | Assign pattern | 打分 session | signature + `taxonomy_view.json` → `assignments.jsonl` row (sub, secondary_main, fit) | sub id exists; no outcome labels used |
+| 5 | Judge ×2 (blind) | 两个盲 subagent（gpt-6.1-sol、claude-opus-5-5） | full text + `conditions.json[main]` + main/sub cards → one judgment row per model in `<date>.{sol,opus}.jsonl` | `PYTHONPATH=research python3 research/score.py check <file> <ids>` for both files (quotes verified against the full text) |
+| 6 | Score | script | the two models' judgments → averaged `scores.jsonl`; disagreements → `judgments/DUAL_FLAGS.md` | `score.py build` reports 0 skipped |
+| 7 | Board | 打分 session (script) | scores → `papers/README.md`, README block | — |
+| 8 | Diagnosis card (optional, top new A papers) | 打分 session | `cards/_TEMPLATE.md` | `python3 check_cards.py` |
 
 ## Check suite (run before every commit)
 

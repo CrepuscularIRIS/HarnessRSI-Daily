@@ -1,6 +1,6 @@
 # 维护规范（给维护 Agent 和人）
 
-> 操作流程见 [PIPELINE.md](PIPELINE.md)；分工与提示词见 [agents/](agents/ROLES.md)（收集：Grok，维护与打分：Dots）。本页只放硬规则。
+> 操作流程见 [PIPELINE.md](PIPELINE.md)；分工与提示词见 [agents/](agents/ROLES.md)（收集：Grok；打分：本地双模型盲评 session；Reel：维护者）。本页只放硬规则。
 
 本仓库是公开项目。**一个看起来很自信的错误，比漏收一篇论文的代价大。**
 

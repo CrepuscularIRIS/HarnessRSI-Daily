@@ -9,6 +9,6 @@ The collector (Grok bot) writes one file per run: `inbox/YYYY-MM-DD.jsonl` (appe
 ```
 
 - `arxiv` is required when the work is on arXiv; otherwise give `url` (technical report, blog, repo) and leave `arxiv` null.
-- Recall over precision: the scorer (Dots) screens. But do not add papers that are clearly weight-only RL/fine-tuning.
+- Recall over precision: the scoring session screens. But do not add papers that are clearly weight-only RL/fine-tuning.
 - Do not judge quality, do not score, do not edit any other file.
-- After `research/ingest.py` has run on it, the collector moves the file to `inbox/processed/`; new ids go to `research/queue/` for the scorer (Dots).
+- After `research/ingest.py` has run on it, the collector moves the file to `inbox/processed/`; new ids go to `research/queue/` for the scoring session.
