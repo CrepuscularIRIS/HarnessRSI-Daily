@@ -1,0 +1,768 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r05a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2506.06254",
+    "paper_id": "2506.06254",
+    "title": "PersonaAgent: Bridging Memory and Action for Personalized LLM Agents",
+    "version": "2506.06254v2",
+    "claim_type": "system_method",
+    "central_claim": "PersonaAgent以持久用户persona连接episodic/semantic memory及固定工具动作，通过近期交互的文本梯度对齐提升多任务个性化，并兼顾效率与冷启动。"
+  },
+  "provenance": {
+    "input_hash": "5371b9c966106bd075b2c83623c3310d5fd11a5b6c5ad4c30a4a88832571aa18",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T21:24:45.709775+00:00",
+    "notes": "派发上下文标示sonnet→gpt-6.1-sol；无独立模型回执、可验证会话ID或receipt，故置null；未探测模型。分段续接同attempt，未读已完成两篇JSON。"
+  },
+  "materials": [
+    {
+      "material_id": "2506.06254.txt",
+      "url": "https://arxiv.org/html/2506.06254v2",
+      "version": "2506.06254v2",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "sections_read": [
+        "abstract",
+        "§1–5",
+        "Algorithm 1",
+        "Tables 1–3",
+        "all figure captions",
+        "Appendices A–M including full prompts/cases and Tables 4–6"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "全文和全部附录完整读取；无page_images；不根据图caption杜撰曲线数值。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§1–2 persona definition",
+      "quote": "a unique system prompt for each user serving as an intermediary that continuously evolves by integrating user-data-driven memory to guide agent actions and refining the memory based on the action results.",
+      "support_explanation": "用户级非权重更新对象，非一次回答内自纠错。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§2.1 Semantic Memory",
+      "quote": "In PersonaAgent, semantic memory abstracts and consolidates stable user traits, such as enduring preferences and long-term goals, into a compact profile that persists across sessions.",
+      "support_explanation": "跨会话profile留存；双层语义/episodic而非模型权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§2.2 alignment",
+      "quote": "In particular, we optimize the\npersona\nprompt by simulating recent interactions and minimizing textual discrepancies between simulated agent responses and user ground-truth responses.",
+      "support_explanation": "监督来自历史用户真值，模拟答复和真值差异用于诊断。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§2.2 Algorithm 1",
+      "quote": "Input:\nTest User data",
+      "support_explanation": "算法将优化输入称为Test User data，和Appendix G历史profile/test划分的批样本对应未完全写清；不能擅认最终test标签泄漏，也不能确认完全隔离。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§2.2 fixed action set",
+      "quote": "While the set\n𝒜\n^\n\\hat{\\mathcal{A}}\nremains fixed",
+      "support_explanation": "更新persona影响tool选择/参数，不扩张工具库。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§3.1 common backbone",
+      "quote": "under a unified evaluation pipeline with identical inputs and output formats, ensuring a fair comparison.",
+      "support_explanation": "作者报告统一输入输出；不代表搜索/优化预算严格相等。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Table 2 LaMP-1 row",
+      "quote": "0.772\n\n0.780\n\n0.715\n\n0.837\n\n0.837\n\n0.862\n\n0.919",
+      "support_explanation": "按Prompt/ICL/RAG/PAG/ReAct/MemBank/PersonaAgent，最后.919 vs MemBank.862。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Table 3 ablation",
+      "quote": "w/o alignment\n\n0.894\n\n0.893\n\n0.487\n\n0.403\n\n0.775\n\n0.502\n\n0.259\n\n0.560",
+      "support_explanation": "去alignment跨四任务下降；不是匹配额外调用的替代优化器比较。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Table 3 full system",
+      "quote": "PersonaAgent\n\n0.919\n\n0.918\n\n0.513\n\n0.424\n\n0.796\n\n0.532\n\n0.241\n\n0.509",
+      "support_explanation": "分类Accuracy/F1及评分MAE/RMSE，非在线真实满意度。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix F optimization budget",
+      "quote": "we set alignment batch size\nn\nn\nas\n3\n3\nand alignment iterations as\n1\n1",
+      "support_explanation": "默认三条最近交互、一轮优化，§3.5另测迭代与批量敏感性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix F reproducibility",
+      "quote": "All experiments were conducted on Amazon Bedrock\n(\nAmazon Web Services, 2023\n)\nwith a single run.",
+      "support_explanation": "单次运行，无主结果CI或多种子方差；低温不是统计保证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix G chronological split",
+      "quote": "For each user, the data is chronologically ordered and partitioned into two subsets: a profile set representing their historical behaviors, and a test set reserved for final evaluation.",
+      "support_explanation": "历史与终测明确按时间划分；alignment batch精确归属仍需核对。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix G population",
+      "quote": "our test set consists of the 100 users with the most extensive activity histories",
+      "support_explanation": "主要为rich-history用户，Appendix M另测10历史事件冷启动。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix G intended evaluation boundary",
+      "quote": "We view the interactive dialogue evaluation using datasets that provide real-user, long-session conversational histories as an important future direction, but outside the intended scope of this work.",
+      "support_explanation": "不将离线LaMP回放扩展为在线漂移/真实部署试验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix B TextGrad lineage",
+      "quote": "which forms the core of our user-preference alignment framework.",
+      "support_explanation": "TextGrad优化是直接谱系；新贡献是用户persona与memory/action整合，非新数值梯度。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix L Table 5 averages",
+      "quote": "Average\n\n1.24\n\n2.61\n\n2.92\n\n1.79",
+      "support_explanation": "PAG/ReAct/MemBank/PersonaAgent秒，在线推理低于agentic对照但高于PAG。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§2.2 off-path cost",
+      "quote": "the alignment process is conducted asynchronously with user instructions and does not affect response latency",
+      "support_explanation": "推理延迟不含用户间的异步对齐成本；不能据此认总计算更低。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "Appendix M sparse history",
+      "quote": "we resample users and restrict each user to 10 historical interactions.",
+      "support_explanation": "有冷启动边界实验但无误差估计或在线偏好漂移验证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§2.1 retrieval",
+      "quote": "are retrieved and used to ground the agent’s next response, thereby preserving alignment and consistency with the user’s behavior history.",
+      "support_explanation": "前文Eq2的embedding topK检索历史事件供后续响应。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2506.06254.txt",
+      "sha256": "f2e0e52644f8d7066778fa0d7af792f1d6516de05e4779ab4669b521dadd0273",
+      "locator": "§3.5 iterations",
+      "quote": "performance plateaus or slightly declines.",
+      "support_explanation": "存在优化步数边界；无全程单调改善保证。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "每用户persona系统prompt",
+      "information": "语义profile、近期query/模拟答复/真实用户答复，默认n=3",
+      "operation": "逐例LLM_grad诊断后汇总，由LLM_update重写persona；默认1轮",
+      "output": "用户专用P*",
+      "conditions": "用户有历史标签；固定工具集与冻结基座",
+      "feedback": "模拟答复与历史用户真值的文本误差",
+      "selection_rule": "更新后直接使用，未描述候选比较、阈值接受、回退或成功集回归门",
+      "selection_data": "近期历史交互；Algorithm1名为Test User data，profile/终测对应未完全明确",
+      "persistence": "用户级persona及长期profile",
+      "later_use": "后续响应/工具检索参数由persona条件化",
+      "claimed_effect": "去alignment后LaMP1 .919→.894，2M .513→.487",
+      "failure_boundary": "离线回放不等同在线偏好变化；迭代过多平台或下降",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E008",
+        "E010",
+        "E012",
+        "E020"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "时间戳用户事件与稳定profile双层memory",
+      "information": "用户query、groundtruth response与timestamp/context",
+      "operation": "episodic按embedding topK检索，semantic总结长期特征，persona指导memory工具与Wikipedia",
+      "output": "后续task的个性化动作/答案",
+      "conditions": "个人历史可读且分用户，K=4",
+      "feedback": "历史真实响应；用户满意反馈仅展示可触发未来优化",
+      "selection_rule": "相似度topK非效用门；无生成记忆的外部验证/过期冲突处理细则",
+      "selection_data": "chronological历史profile与终测集",
+      "persistence": "episodic buffer及跨会话semantic profile",
+      "later_use": "新query检索历史，persona整合profile与工具结果",
+      "claimed_effect": "memory/persona/action消融均下降",
+      "failure_boundary": "相似不代表适用；rich-history100用户选择偏差，冷启动另测",
+      "evidence_ids": [
+        "E002",
+        "E012",
+        "E013",
+        "E018",
+        "E019"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "静态RAG/PAG只在文本侧利用profile，通用agent不把个人偏好系统化贯穿工具与动作",
+    "checked_gap": "将每用户persona作为memory/action中介、由近期真值更新的对象明确；TextGrad本身已有，实时偏好漂移难点未被在线实证验证",
+    "lineage": [
+      {
+        "method": "TextGrad",
+        "source": "本文Appendix B，Yuksekgonul et al.2025；独立版本未固定"
+      },
+      {
+        "method": "RAG/PAG",
+        "source": "本文§3.1与Appendix A，Salemi2024b/Richardson2023；独立原文未固定"
+      },
+      {
+        "method": "MemoryBank",
+        "source": "本文§3.1/Appendix F，Zhong2024，改造成LaMP事件；独立版本未固定"
+      }
+    ],
+    "closest_adjacent": [
+      "PAG profile conditioning",
+      "TextGrad prompt rewrite",
+      "MemoryBank episodic retention"
+    ],
+    "residue": "个人长期特征与近期动作参数的连接、固定persona不能修正历史偏好拟合误差",
+    "stakes": "用户级一致性与额外agentic调用延迟",
+    "method_response": "双层memory供persona，历史回放文字诊断驱动persona写回",
+    "remaining_gap": "缺强个性化prompt优化器/等预算更长context对照，实时变化与多轮交互未测试",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E008",
+      "E014",
+      "E015"
+    ],
+    "unresolved": [
+      "请求总控共享固定TextGrad/PAG/MemoryBank原文核最近邻；仅据本文自述谱系，不声称独立新颖性核验。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "outside_taxonomy": false,
+    "reason": "以持久persona与检索历史条件化冻结LLM，子卡C03参考实例分支部分相符，结构外推未证。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "固定LLM，以用户profile/历史topK及persona作统一conditioning",
+          "C03无上游训练分支与retrievable bank对应，但新任务类别整组留出与格式学习非本篇目标"
+        ],
+        "success_checks": [
+          "多LaMP任务及memory/persona/align消融",
+          "语义profile与历史实例有可识别参考substrate"
+        ],
+        "failure_checks": [
+          "非类别级外推",
+          "优化批与终测边界不完全明确",
+          "无同计算的简单更长profile对照"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E008",
+          "E012",
+          "E019"
+        ],
+        "reason": "C03检索参考实例而不改参数的分支部分对应；不以training-free标签认定完整满足。"
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H10",
+        "version": "manifest-pinned",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "unmet",
+            "reason": "无改善后才接受/成功集保护门，迭代有下降风险",
+            "evidence_ids": [
+              "E003",
+              "E020"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "逐例反馈批聚合后重写，但未定位失败族或原子section",
+            "evidence_ids": [
+              "E003",
+              "E010"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "met",
+            "reason": "反馈看到query、模拟答复和真实历史答复",
+            "evidence_ids": [
+              "E003"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E008"
+        ]
+      },
+      {
+        "main": "index_experience_for_reuse",
+        "sub": "H03",
+        "version": "manifest-pinned",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "id": "S4",
+            "status": "met",
+            "reason": "每新query topK历史事件，默认K4",
+            "evidence_ids": [
+              "E019"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "去memory降低，但同时移除信息与调用，不是同预算store off",
+            "evidence_ids": [
+              "E009",
+              "E008"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "partial",
+            "reason": "原始响应来自用户真值，生成profile/更新prompt无独立门",
+            "evidence_ids": [
+              "E002",
+              "E003"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E012",
+          "E019"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H10"
+      },
+      "operation_correspondence": "conditioning对象是每用户prompt；由历史响应误差引导替换而非随机prompt种群",
+      "necessary_conditions": "真实历史反馈、用户隔离、更新后下游使用；并非工具代码生成或权重训练",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E005"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "index_experience_for_reuse",
+        "sub": "H03"
+      },
+      "operation_correspondence": "用户历史事件作检索参考substrate；semantic profile不能替代episodic细节",
+      "necessary_conditions": "匹配query的历史实例、topK上下文预算；无完整效用write gate",
+      "evidence_ids": [
+        "E002",
+        "E019"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md",
+        "patterns/sub/H10.md"
+      ],
+      "applies_when": "声称持久persona或记忆改善后续个性化决策",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "缺成功集保护、接受/回退；不是由作者缺实验降为材料unknown",
+      "evidence_ids": [
+        "E003",
+        "E020"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/H10",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H10.md"
+      ],
+      "applies_when": "声称持久persona或记忆改善后续个性化决策",
+      "applicable": true,
+      "status": "partial",
+      "reason": "三例反馈聚合重写确实执行，但无独立候选选择/验证及总优化成本",
+      "evidence_ids": [
+        "E003",
+        "E010",
+        "E017"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:index_experience_for_reuse/S5",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/index_experience_for_reuse.md",
+        "patterns/sub/H03.md"
+      ],
+      "applies_when": "声称持久persona或记忆改善后续个性化决策",
+      "applicable": true,
+      "status": "partial",
+      "reason": "去memory和去alignment均下降；额外计算与信息暴露未匹配",
+      "evidence_ids": [
+        "E008",
+        "E009"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2506.06254-1",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper §2.2 Algorithm1",
+        "paper Appendix G"
+      ],
+      "applies_when": "声称持久persona或记忆改善后续个性化决策",
+      "applicable": true,
+      "status": "partial",
+      "reason": "时间split明确但alignment批被称Test User data；需显式样本归属/标签可用时点",
+      "evidence_ids": [
+        "E004",
+        "E012"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2506.06254-2",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper Appendix L",
+        "paper §2.2"
+      ],
+      "applies_when": "声称持久persona或记忆改善后续个性化决策",
+      "applicable": true,
+      "status": "partial",
+      "reason": "在线latency有数据，异步对齐不在响应路径不等于零总成本",
+      "evidence_ids": [
+        "E016",
+        "E017"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "persona+记忆+动作对齐改善个性化",
+      "setting": "100历史最丰富用户，LaMP1/2M/2N/3，Claude3.5Sonnet统一主实验",
+      "baseline_control": "Prompt/ICL/RAG/PAG/ReAct/MemBank及alignment/persona/memory/action ablations",
+      "selection_vs_test": "profile/test按时间划分，但alignment批的profile归属和调参用split未完整写出",
+      "result_denominator": "LaMP1Acc .919 vs MemBank .862，去alignment .894；2M .513 vs .470，去alignment .487；3MAE .241 vs .321；100用户非完整任务样本分母",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008",
+        "E009",
+        "E012",
+        "E013"
+      ],
+      "counterevidence": [
+        "E004",
+        "E011",
+        "E014"
+      ],
+      "allowed_conclusion": "在固定LaMP回放协议作者报告改善，消融支持persona与历史对齐有用；不证明在线漂移适应或普遍真实满意度"
+    },
+    {
+      "claim_id": "C2",
+      "text": "低延迟且冷启动鲁棒",
+      "setting": "AppendixL统一运行环境；M每用户10历史事件",
+      "baseline_control": "PAG/ReAct/MemBank",
+      "selection_vs_test": "逐样本推理计时；异步对齐排除响应关键路径，不是总计算",
+      "result_denominator": "平均1.79s vs PAG1.24/ReAct2.61/MemBank2.92；冷启动重采样未给重复误差",
+      "evidence_ids": [
+        "E016",
+        "E017",
+        "E018"
+      ],
+      "counterevidence": [
+        "E011"
+      ],
+      "allowed_conclusion": "在线路径较agentic对照快、较PAG慢；不能证明全生命周期计算更低或真实部署鲁棒"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "持久非权重persona由历史回放反馈修改，作者报告多LaMP结果及组件消融改善；chronological终测存在，但优化批与终测标签时点未明确，保守停task，不视为improver。",
+    "unresolved": [
+      "alignment数据精确来自profile还是终测前缀、是否排除被对齐样本",
+      "缺相同信息及调用预算的替代prompt优化器",
+      "无多次试验CI与线上偏好变化试验"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "瓶颈对象及TextGrad/PAG谱系清楚，但剩余创新主要是用户persona整合；最邻近优化器原文与正面对照不足",
+      "evidence_ids": [
+        "E001",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "历史回放误差→反馈聚合→prompt更新→动作与检索条件化链具体，有针对性消融；没有独立接受门",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E005",
+        "E008",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "双层记忆、固定工具、批量与迭代设置落地；无版本回退、冲突过期和成功保护机制",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E010",
+        "E020"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "LaMP真实用户标签与标准Acc/F1/MAE/RMSE直接可信，ROUGE仅生成词面；不能代称真实满意度",
+      "evidence_ids": [
+        "E007",
+        "E009",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "统一模型/输入输出及四种组件消融；未匹配历史信息、额外对齐计算或比较其他优化器",
+      "evidence_ids": [
+        "E006",
+        "E008",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "时间profile/test split与10历史事件边界明确，但Algorithm1的Test User data未给批样本归属和标签可用时点；无跨用户/领域外推",
+      "evidence_ids": [
+        "E004",
+        "E012",
+        "E013",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "单run且100用户，报告负向/平台变化；没有主结果CI/跨运行方差，低温不替代不确定性",
+      "evidence_ids": [
+        "E011",
+        "E013",
+        "E020"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有统一环境逐样本latency与默认n/K/轮数；异步alignment总tokens/美元、失败更新、吞吐未计",
+      "evidence_ids": [
+        "E010",
+        "E016",
+        "E017"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full main text",
+        "Algorithm1",
+        "Appendices A–M",
+        "Tables 1–6"
+      ]
+    }
+  },
+  "score": {
+    "raw": 56.25,
+    "display": 56.2,
+    "lower": 56.25,
+    "upper": 56.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整固定全文及全部附录可读；缺失是作者控制/报告不足，不是材料阻塞。",
+  "rationale": "用户persona把双层历史记忆与固定工具连接，反馈重写及消融具体；时间划分虽有，优化批边界、预算归因和单run不确定性仍弱，在线偏好漂移未验证。"
+}

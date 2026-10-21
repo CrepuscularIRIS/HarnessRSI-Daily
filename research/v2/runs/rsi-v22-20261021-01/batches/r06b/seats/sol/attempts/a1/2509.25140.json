@@ -1,0 +1,590 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r06b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2509.25140",
+    "paper_id": "2509.25140",
+    "title": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+    "version": "2509.25140v2",
+    "claim_type": "system_method",
+    "central_claim": "从自判成功及失败轨迹提炼可迁移推理记忆，并以MaTTS形成记忆与测试时扩展的双向增益；跨web/coding提高成功率并减少交互步数，出现更高层策略。"
+  },
+  "provenance": {
+    "input_hash": "cd236d8d2e204dd65670fb08213a68f8385c5880a50cc301ebe1d85d29946d2e",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按派发的 sonnet→gpt-6.1-sol；无可绑定的独立运行回执或会话ID，未额外探测。",
+    "timestamp": "2026-10-21T21:36:54.649179+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2509.25140.txt",
+      "url": "https://arxiv.org/html/2509.25140v2",
+      "version": "2509.25140v2",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "sections_read": [
+        "Abstract",
+        "1–7; Tables1–4",
+        "Appendices A–F; Tables5–6"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "3008行固定HTML全文含附录已读；图内prompts不完整可见，无page_images，不编造图值。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "A.2 Storage",
+      "quote": "We persist the memory pool for each independent run, enabling continual accumulation of experiences throughout test-time learning.",
+      "support_explanation": "跨任务保留JSON memory，而非仅当前题反思。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "A.2 Consolidation",
+      "quote": "newly generated items are directly added without additional pruning.",
+      "support_explanation": "实际维护只是追加，没有merge/delete；不映射H01。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "B.1 Baselines",
+      "quote": "The only difference is about “Memory Extraction”",
+      "support_explanation": "Synapse/AWM共用检索和追加实现，隔离表示/提炼方案，非完整原实现优越性证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "§5 judge calibration",
+      "quote": "we find to be 72.7%.",
+      "support_explanation": "在线自判与真值校验准确率72.7%，并有模拟噪声压力测试。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "§4.4",
+      "quote": "Pass@1 rises from",
+      "support_explanation": "49.7→53.0随机单轨输出，区分BoN直接挑选效应，但仍在线memory构建。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "B.2",
+      "quote": "Each instance requires generating a patch to address the underlying bug described in the input issue.",
+      "support_explanation": "500个人工验证issue、官方测试验收，目标指标可信。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "C.2 Table5",
+      "quote": "while the total token consumption is increased only by around 4.3%",
+      "support_explanation": "常规memory全token含动作/judge/extraction；53054.5 vs50847.4，非MaTTS全预算。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "C.1",
+      "quote": "excessive experiences may introduce conflicts or noise.",
+      "support_explanation": "检索1条49.7→4条44.4，负结果与适用边界给出。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "A.3",
+      "quote": "without appealing to external judgment.",
+      "support_explanation": "顺序refinement来自同模型；不能把自判当独立正确性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "A.1",
+      "quote": "the output format is constrained to at most three memory items",
+      "support_explanation": "每轨最多3条title/description/content，成功策略和失败教训不同提示。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "B.1 Metrics",
+      "quote": "A task is marked as “successful” only if the agent’s final output or state precisely matches the pre-defined ground-truth goal",
+      "support_explanation": "最终评价用benchmark真值，非memory judge自己评分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2509.25140.txt",
+      "sha256": "e26c66a8f2871436df9d135852ea5068daa185e4d899ad097e957826c0ab86d5",
+      "locator": "§5 Fig7",
+      "quote": "only successful trajectories versus leveraging both successes and failures.",
+      "support_explanation": "成功only46.5 vs含失败49.7，提供失败经验增量消融。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "冻结agent的外部推理memory pool",
+      "information": "当前query、轨迹thinking、结束状态和自判success/failure；历史query embedding",
+      "operation": "执行→自判→至多3条策略/失败教训→append JSON→top1近邻经验对应memory注入system prompt",
+      "output": "title/description/content条目及后续答案",
+      "conditions": "重复任务流、相似query能触发可迁移策略",
+      "feedback": "同backbone温度0二分类judge，校准72.7%；外部真值只用于评测与噪声分析",
+      "selection_rule": "成功/失败决定提炼提示；无独立条目验收/删除",
+      "selection_data": "已完成在线测试任务的轨迹",
+      "persistence": "每独立run的JSON pool跨题追加；embedding另存",
+      "later_use": "后续query cosine top1，要求每步显式讨论使用memory",
+      "claimed_effect": "更高SR、更少agent-env steps",
+      "failure_boundary": "错标签、检索冲突、无限增长；online test流不等于冻结holdout",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004",
+        "E008",
+        "E010"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "固定MaTTS记忆提炼流程",
+      "information": "同任务k条并行轨迹或k次顺序检查",
+      "operation": "并行self-contrast找稳定策略；顺序自检修正后提炼；BoN同模型选答案",
+      "output": "对比增强的后续记忆和当前输出",
+      "conditions": "k=1..5；更多推理计算",
+      "feedback": "同模型轨迹自比较而非外部真值",
+      "selection_rule": "并行LLM best-of-N；分析另报随机Pass@1",
+      "selection_data": "当前在线任务多次探索",
+      "persistence": "派生memory留在S1 pool；不改写提炼算法",
+      "later_use": "下一任务读取新memory",
+      "claimed_effect": "memory↔scaling synergy",
+      "failure_boundary": "当题BoN提升不能单独归因留存；k增加带来预算变化",
+      "evidence_ids": [
+        "E005",
+        "E009"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "原memory存原始轨迹或成功workflow，缺失败与策略层推理；通常未联合设计memory与TTS。",
+    "checked_gap": "同检索/追加下对比Synapse、AWM及success-only支持提炼内容的差异；最近邻原文未供应，不能确认其均不能利用失败。",
+    "lineage": [
+      {
+        "name": "Synapse",
+        "version": "Zheng et al.2024，本文v2引用；未提供独立原文"
+      },
+      {
+        "name": "AWM",
+        "version": "Wang et al.2025d，本文v2引用；未提供独立原文"
+      }
+    ],
+    "closest_adjacent": "轨迹ICL与抽象workflow复用，另有Reflexion式反馈记忆。",
+    "residue": "失败counterfactual策略与多轨对比在同一追加pool中组合。",
+    "stakes": "相似环境中重复错误、无效探索；把噪声反思变成永久规则的风险。",
+    "method_response": "成功/失败分提示提炼，top1检索；MaTTS对比丰富经验。",
+    "remaining_gap": "冻结构建流外转移、长期维护、顺序方差与所有scaling成本。",
+    "evidence_ids": [
+      "E002",
+      "E003",
+      "E004",
+      "E008",
+      "E012"
+    ],
+    "unresolved": [
+      "请求总控共同补充Synapse、AWM与Reflexion固定原文；本席仅核对本文v2对邻居的描述，不作完整新颖性断言。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "经验→抽象参考基质；cosine检索并条件化冻结agent（C03 1–3）",
+          "三套任务集但在线构建，无冻结新类别实验（4部分）",
+          "同检索consolidation的抽象基线与memory-off（5部分）"
+        ],
+        "success_checks": [
+          "有持久reference substrate和直接消费"
+        ],
+        "failure_checks": [
+          "类别独立转移/去重不足；追加无维护"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E010"
+        ],
+        "reason": "确实通过历史经验条件化当前policy；非C03完整的schema/category holdout训练设定。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "操作可由reference-conditioned adaptation覆盖；自判不是实际参数/latent reward优化，不硬套C26。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00",
+        "version": "manifest-frozen",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S2",
+            "status": "met",
+            "reason": "成功/失败教训及MaTTS跨轨对比"
+          },
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "自判校准并分析噪声"
+          },
+          {
+            "id": "S4",
+            "status": "unmet",
+            "reason": "明确不prune、merge或forget"
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "自判决定教训，不独立验收每条规则"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E004",
+          "E010",
+          "E012"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00"
+      },
+      "operation_correspondence": "轨迹不是直接回放；提炼title/content后成为后续reference conditioning",
+      "necessary_conditions": "失败归因正确且跨任务策略可转移",
+      "differences": "H00明确要求outcome→lesson持久化；C03本身不保证反馈闭环",
+      "evidence_ids": [
+        "E001",
+        "E004",
+        "E010"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定卡/conditions与本文v2，非真实review"
+      ],
+      "applies_when": "主张推理memory跨题改善执行与scaling",
+      "applicable": true,
+      "status": "met",
+      "reason": "自判72.7%与70–90%噪声实验，评测另用benchmark真值。",
+      "evidence_ids": [
+        "E004",
+        "E011"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定卡/conditions与本文v2，非真实review"
+      ],
+      "applies_when": "主张推理memory跨题改善执行与scaling",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "只追加不维护，检索更多反而退化。",
+      "evidence_ids": [
+        "E002",
+        "E008"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/H00",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定卡/conditions与本文v2，非真实review"
+      ],
+      "applies_when": "主张推理memory跨题改善执行与scaling",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有success-only、相同检索/追加的抽象基线；scaling附加成本未完整匹配。",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E012"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定卡/conditions与本文v2，非真实review"
+      ],
+      "applies_when": "主张推理memory跨题改善执行与scaling",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Mind2Web类别split存在，但memory在线积累；无冻结pool新域及近重审计。",
+      "evidence_ids": [
+        "E001"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2509.25140-1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定卡/conditions与本文v2，非真实review"
+      ],
+      "applies_when": "主张推理memory跨题改善执行与scaling",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "全文主结果无seed/order区间；给样本量和检索退化负结果。",
+      "evidence_ids": [
+        "E008"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2509.25140-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定卡/conditions与本文v2，非真实review"
+      ],
+      "applies_when": "主张推理memory跨题改善执行与scaling",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Table5包含judge和提炼，MaTTS全rollout/BoN与latency未覆盖。",
+      "evidence_ids": [
+        "E007"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "ReasoningBank跨web/coding提高成功率并减少步数",
+      "setting": "WebArena684，Mind2Web1341，SWE-Verified500；多Gemini/Claude，另Gemma12B",
+      "baseline_control": "No memory/Synapse/AWM共享检索与追加；success-only消融",
+      "selection_vs_test": "测试在线顺序的前题轨迹构建memory，未来题不提前可见；不是固定memory独立评测",
+      "result": "WebArena flash40.5→48.8，pro46.7→53.9；SWE flash34.2→38.8；失败教训46.5→49.7，更多检索有退化",
+      "denominator": "684/1341/500；Shopping187",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E006",
+        "E008",
+        "E011",
+        "E012"
+      ],
+      "counterevidence": [
+        "对照提炼成本与内容长度不完全相等；无stream顺序/seed误差线"
+      ],
+      "allowed_conclusion": "作者报告固定improver下保留memory帮助在线后续任务；不证明无分布限制 lifelong learning。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "memory与MaTTS双向增强并涌现高层策略",
+      "setting": "Shopping flash k≤5，随机Pass@1与LLM BoN分开",
+      "baseline_control": "w/o memory；w/o aggregation，k相同",
+      "selection_vs_test": "同query探索生成更丰富memory；后续评测仍在线流",
+      "result": "k5 BoN55.1 vs vanilla52.4，顺序54.5 vs51.9；随机Pass@1 49.7→53.0；涌现为个案",
+      "denominator": "Shopping187，未给重复独立stream",
+      "evidence_ids": [
+        "E005",
+        "E009"
+      ],
+      "counterevidence": [
+        "策略层级个案不是算法自身增强的证据；当前BoN与长期memory混合"
+      ],
+      "allowed_conclusion": "支持有限在线系统协同；没有改写并比较improver算法的improver级证据。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "同backbone及同检索/追加的在线实验支持策略memory对后续任务的有界增益；失败教训和对比提炼有局部消融。",
+    "unresolved": [
+      "冻结跨域memory、stream方差、长时维护和完整MaTTS预算未证；最近邻全文待补。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "失败经验与策略表示问题具体且有近邻实证；独立全文核查缺。",
+      "evidence_ids": [
+        "E003",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "提炼、检索、追加与MaTTS对比路径清楚；策略涌现仅个案。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "JSON schema、温度、top1与提示注入可重建；无长期条目维护与验收。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "官方web/test验收，且self-judge有72.7%校准与噪声实验；非完全独立盲验证。",
+      "evidence_ids": [
+        "E004",
+        "E006",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "固定检索/追加的抽象替代、失败和aggregation消融；完整等token预算不齐。",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "在线无未来标签但构建与评估流同benchmark；类别split不是冻结pool转移证书。",
+      "evidence_ids": [
+        "E001"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "分母/负结果明确；完整正文附录无多seed/stream区间。",
+      "evidence_ids": [
+        "E008"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "动作/judge/提炼token细分完整于常规memory，MaTTS总探索/选择与时延未全计。",
+      "evidence_ids": [
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§4–5; Appendices A–F; Tables1–6"
+      ]
+    }
+  },
+  "score": {
+    "raw": 68.75,
+    "display": 68.8,
+    "lower": 68.75,
+    "upper": 68.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "固定全文完整；保留并消费非权重memory，属于闭环范围。",
+  "rationale": "成功/失败策略提炼与MaTTS有同骨干替代及消融，官方验收和自判校准支持在线留存增益。缺冻结独立流、长期维护与顺序方差，全成本只覆盖常规memory。"
+}

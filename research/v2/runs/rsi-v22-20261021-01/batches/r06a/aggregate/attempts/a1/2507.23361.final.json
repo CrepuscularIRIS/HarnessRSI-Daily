@@ -1,0 +1,1545 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r06a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_id": "2507.23361",
+  "claim_type": "system_method",
+  "central_claim": "SWE-Exp: distilling a multi-faceted experience bank (comprehension perspectives/reflections and modification strategies) from prior successful and failed repair trajectories, retrieving and adapting one relevant experience per decision point inside an MCTS Instructor/Assistant agent, lifts SWE-Bench Verified Pass@1 to 73.0% (Claude 4 Sonnet) and 42.0% (DeepSeek-V3), moving agents from memoryless exploration to experience-driven repair.",
+  "paper_key": "2507.23361",
+  "version": "2507.23361v2",
+  "title": "SWE-Exp: Experience-Driven Software Issue Resolution"
+ },
+ "provenance": {
+  "input_hash": "7fcdb70a5a9d9a6b66dbb34ed49e81286680e0f632d5cadd6da80e541135965c",
+  "input_package": "batches/r06a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-21T22:03:11Z"
+ },
+ "materials": [
+  {
+   "material_id": "2507.23361.txt",
+   "url": "https://arxiv.org/html/2507.23361v2",
+   "version": "2507.23361v2",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2507.23361.txt",
+   "sections_read": [
+    "Opus: complete pinned text read end-to-end (abstract, all sections, tables, appendices) before opening seat records; targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§3.2–3.3; lines 483–491",
+   "quote": "Success Or Failure Annotation.\nEach trajectory is annotated with success (i.e., producing correct patches validated against ground truth) or failure. For failure trajectories, additional metadata is appended to capture the failure cause—whether due to incorrect localization, flawed modification strategy, or insufficient problem comprehension. Such a categorization enables targeted experience extraction for both positive and negative patterns.\n\n3.3.\nExperiences Extraction\n\nRaw trajectories, while comprehensive, are often too lengthy, noisy, and problem-specific to be directly reused. Our next stage aims to transform them into structured, reusable knowledge. An\nExperiencer\nagent is instructed to extract experiences from both success and failure trajectories.",
+   "support_explanation": "成功/失败标注和轨迹抽象产生持久非权重经验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§3.4.1; lines 624–634",
+   "quote": "The framework implements a context-aware retrieval system that seamlessly integrates with the tree search process. Before each decision, the agent retrieves\nN\nN\nmost relevant experiences from the experience bank based on the vector similarities between the new issue type and attributes with keys in the vector database.\n\nTo adapt the experiences to the current context, a rerank agent then selects\nK\nK\nexperiences that are deemed helpful for resolving the current issue.\nDuring the experience reuse stage, the agent analyzes the similarities and differences between past and present issues, generating contextualized guidance that preserves the essence of successful strategies while adapting to new scenarios.\nFor comprehension experiences, the agent compares problem statements to suggest strategic approaches for problem comprehension. The detailed prompt to reuse comprehension experiences is as follows:",
+   "support_explanation": "相似检索、rerank、重绑定供后续issue使用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§4.4; lines 1638–1657",
+   "quote": "During the experience collection phase, we run SWE-Search on the SWE-Bench-Verified benchmark, collect the resulting trajectories, and extract structured experiences from them.\n\nDuring experience retrieval, we first identify the top\nN\n=\n10\nN=10\nissues that are most relevant in terms of error type based on cosine similarity. Subsequently, a dedicated reranking agent evaluates these candidates and selects\nk\n=\n1\nk=1\nmost applicable experience to guide the current resolution process. We compute cosine similarity based on embeddings generated by the Multilingual-E5-Large model\n2\n2\n\n2\n\nhttps://huggingface.co/intfloat/multilingual-e5-large-instruct\n. To prevent data leakage, we exclude all experiences originating from the same code repository and generated after the target instance.",
+   "support_explanation": "库来自同一个SWE-Bench-Verified；规则文字同时提同仓库与目标之后，未明确完全排除目标本身及所有同仓库项。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§6.1; lines 1928–1933",
+   "quote": "One critical concern about our experience-driven framework is the threat of knowledge leakage\n(\nZhang et al., 2025d\n)\n. Specifically, in datasets such as SWE-bench, multiple instances from the same repository may correspond to closely related or even identical buggy code segments. If experiences are retrieved from the same repository as the target instance, especially via similarity-based matching, there is a high risk that the agent leverages repository-specific signals or implicitly accesses ground-truth-relevant information. This can lead to artificially inflated performance and fails to demonstrate the true generalizability of the extracted experiences.\nTo avoid data leakage, experience retrieval strictly respects both repository boundaries and temporal order: for each instance, we exclude all trajectories from the same repository that are temporally posterior to the current issue. This setup simulates a realistic setting in which agents can only leverage past experiences, and enables a fair assessment of the generalization capability of our experience-driven framework.",
+   "support_explanation": "明确写排除同仓库且时间在后的轨迹；不能当作严格跨仓库/实例互斥证明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "Table2; lines 1784–1818",
+   "quote": "SWE-Exp\n\n42.0%\n\n-\n\nw/o Comprehension Experience\n\n38.8%\n\n-3.2%\n\nw/o Modification Experience\n\n39.4%\n\n-2.6%\n\nw/o Dual-Agent\n\n39.8%\n\n-2.2%\n\nw/o Experiences Extraction\n\n36.0%\n\n-6.0%\n\nw/o LLM Reranking\n\n38.2%\n\n-3.8%",
+   "support_explanation": "抽象/重排/两类经验及双agent逐一消融，部分归因可查。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§5.3; lines 1858–1865",
+   "quote": "We vary the number of experiences from 0 to 4, where 0 means no experience is used. As the results in Figure\n4(a)\nshow, the relationship between experience number and performance demonstrates an increase-then-stable trend. Without any experience, the system achieves 37.8% Pass@1. The performance peaks at 42.0% when exactly 1 experience is used, while dropping as the number continues to increase.\nThis pattern demonstrates that while relevant experiences can significantly enhance performance, excessive guidance can introduce cognitive burden or conflicting information to the agent. This finding underscores the importance of selective experience retrieval and highlights the need for quality over quantity in experience-driven agent systems.\n\nWhen comparing the resolved instances across different numbers of retrieved experiences (from 0 to 4), we observe substantial variability in the subsets of issues successfully solved. As illustrated in Figure\n3\n, a large number of issues (131) are consistently resolved across all settings. When utilizing past experiences, each experience demonstrates the ability to uniquely resolve specific instances. This suggests that mitigating the misleading influences within individual experiences, while allowing the accumulation of experience to contribute positively, may further enhance the agent’s ability to resolve issues.",
+   "support_explanation": "store-off 37.8到单经验42.0；131项跨配置共同成功，是配置差异而非重复种子。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§6.3; lines 1955–1963",
+   "quote": "Table\n3\ncompares the efficiency of SWE-Exp against SWE-Search under the\nDeepSeek-V3-0324\nsetting. Despite extending with more modules such as the dual-agent architecture and the experience mechanism, the overall overhead introduced by SWE-Exp remains modest. Concretely, the average token consumption increases only slightly (203.3K vs. 189.1K), while the average API usage cost remains nearly unchanged ($0.13 vs. $0.12), indicating that the additional reasoning and coordination steps do not substantially inflate token-level expenses.\n\nIn terms of runtime, the experience mechanism introduces an additional overhead of approximately 37 seconds per instance. Nevertheless, the total wall-clock time increases marginally (15min49s vs. 12min37s), suggesting that the retrieval component constitutes a relatively small fraction of the end-to-end execution time.\n\nOverall, these results demonstrate that the substantial performance gains of SWE-Exp are achieved with minimal additional computational and monetary cost.",
+   "support_explanation": "在线token/API/时间报告，未含离线收集与抽取摊销。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§6.4; lines 2002–2004",
+   "quote": "While these results are promising, SWE-Exp still faces several limitations. Its effectiveness depends on the quality of extracted experiences and their relevance to the target issue; if the retrieved knowledge fails to align with the current problem’s semantics, performance may degrade. Moreover, the agent currently lacks a robust mechanism to assess the applicability of prior experiences in novel contexts, which may lead to inappropriate reuse or misleading to irrelevant patterns.\n\nFuture work may address these challenges by developing more robust experience extraction methods that better filter noise and identify transferable knowledge patterns. In addition, exploring more accurate retrieval and alignment techniques, incorporating confidence estimation or applicability scoring, and integrating formal verification can further enhance the reliability and adaptability of experience-driven agents in dynamic and unfamiliar code environment.",
+   "support_explanation": "作者承认适用性评估缺少可靠机制、错配可害。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§5.1; lines 1747–1754",
+   "quote": "Overall, SWE-Exp demonstrates strong effectiveness under both open-source and closed-source model settings. Using the open-source\nDeepSeek-V3-0324\nbackbone, SWE-Exp achieves a Pass@1 score of 42.0%, outperforming all other reported methods under the same model. In particular, it surpasses a diverse set of agent-based frameworks, including SWE-Agent, OpenHands and SWE-Search, which adopt different agentic designs and control strategies.\nWe observe similar advantages under the closed-source setting. When evaluated with\nClaude-4 Sonnet\n, SWE-Exp achieves a Pass@1 score of 73.0%, consistently outperforming strong agentic baselines such as SWE-Agent, OpenHands, and SWE-Search under the same model. These gains suggest that the benefits of experience-guided orchestration scale up even when the model already has a strong capability.\n\nCompared to SAGE and EvoCoder, two other experience-driven frameworks that also build upon SWE-Bench-verified trajectories, SWE-Exp attains a higher resolution rate under identical model conditions. While SAGE emphasizes stage-wise self-improvement within a single repair process, its experience is primarily localized to the current instance. In contrast, SWE-Exp abstracts and reuses experience across trajectories from different repositories, enabling cross-task generalization and more informed orchestration decisions. This distinction allows SWE-Exp to better capture recurring repair patterns and failure modes, leading to consistently stronger performance.",
+   "support_explanation": "两基座主表73%/42%，同模型对照与同类经验基线。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2507.23361.txt",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§6.2; lines 1941–1950",
+   "quote": "We manually verified the correctness of LLM-extracted experiences on a subset of 75 instances, ensuring that the extracted experiences faithfully reflect the underlying trajectories and problem contexts. We then conducted targeted experiments to study different strategies for incorporating these experiences. We also found that, although experiences have been shown to enhance the ability of agent, they could introduce misleading thoughts—particularly at the problem comprehension stage. In early implementations, we allowed the\nInstructor\nto explicitly cite comprehension experiences as part of its thinking and instructions. While this made the decision process interpretable, it led to too much dependence: the\nInstructor\ncontinued using experience even after enough environment exploration, sometimes applying inappropriate strategies. Therefore adding experience as message context—without forcing instructor to use experiences—was the most effective, avoiding inflexible or misleading in the late issue resolution. This illustrates the misleading nature of experience during the comprehension stage: even when the environment has already been sufficiently explored, the agent may continue relying on past experience, leading to inappropriate strategies. This tendency also aligns with a broader trend observed in our quantitative evaluation in Figure\n4(a)\n: increasing the number of experiences beyond one led to a steady decline in performance. While a single experience boosted Pass@1 from 37.2% to 42.0%, adding more examples degraded performance, dropping to 39.8% with two experiences and further declining to 39.0% with four experiences. These results suggest that excessive experience may impair the agent’s ability to focus and generalize effectively to the current issue.\n\nMoreover, increasing the number of past trajectories used for experience generalization tended to introduce irrelevant or conflicting information, which negatively impacted the agent’s effectiveness on the current issue, as the model found it harder to focus on the most relevant information and was more likely to rely on irrelevant or confusing information. In contrast, modification experience showed higher robustness: since the specific direction of the modification instruction is already decided by the Instructor, the Assistant can better assess whether a given experience makes sense or not.\nOverall, providing one single relevant experience alongside the interaction history yields the best performance for the Instructor.",
+   "support_explanation": "人工核验75例；经验过多会降效，37.2与§5.3无经验37.8存在数字差异。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "However, current agents act as memoryless explorers—treating each problem separately without retaining or reusing knowledge from previous repair experiences.",
+   "support_explanation": "Author-stated gap: the fixed thing is per-issue statelessness.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "3.3 Experiences Extraction",
+   "quote": "An Experiencer agent is instructed to extract experiences from both success and failure trajectories.",
+   "support_explanation": "Write path: LLM reflector over both outcomes.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "5.2 ablation description",
+   "quote": "disables cross-repository experience abstraction and instead directly uses the raw problem statement and golden patch as in-context demonstrations",
+   "support_explanation": "Shows golden patches are available to extraction / raw-demo baseline; alternative-abstraction control exists.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "4.4 Implementation",
+   "quote": "To prevent data leakage, we exclude all experiences originating from the same code repository and generated after the target instance.",
+   "support_explanation": "Leakage guard: same-repo later experiences removed; same-repo earlier ones remain allowed.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "4.4 Implementation",
+   "quote": "During the experience collection phase, we run SWE-Search on the SWE-Bench-Verified benchmark, collect the resulting trajectories, and extract structured experiences from them.",
+   "support_explanation": "Bank is built offline once from the baseline's own trajectories on the evaluation benchmark; not an iterative loop of SWE-Exp's own runs.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "Table 1 SWE-Search rows",
+   "quote": "SWE-Search DeepSeek-V3-0324 35.4% Claude-4 sonnet (20250514) 70.8%",
+   "support_explanation": "Base scaffold Pass@1.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "Table 1 SWE-Exp rows",
+   "quote": "SWE-Exp DeepSeek-V3-0324 42.0% Claude-4 sonnet (20250514) 73.0%",
+   "support_explanation": "Headline: +6.6 pt (DeepSeek), +2.2 pt (Claude) over SWE-Search; one run, 500 instances.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "Table 2",
+   "quote": "SWE-Exp 42.0% - w/o Comprehension Experience 38.8% -3.2% w/o Modification Experience 39.4% -2.6% w/o Dual-Agent 39.8% -2.2% w/o Experiences Extraction 36.0% -6.0% w/o LLM Reranking 38.2% -3.8%",
+   "support_explanation": "Component ablations (DeepSeek only); raw-demo variant (36.0) is below the no-experience level (37.8, E009).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "5.3 RQ3",
+   "quote": "Without any experience, the system achieves 37.8% Pass@1. The performance peaks at 42.0% when exactly 1 experience is used, while dropping as the number continues to increase.",
+   "support_explanation": "Store-off control inside the full scaffold: +4.2 pt; k chosen at the peak on the same 500 instances.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "6.2",
+   "quote": "While a single experience boosted Pass@1 from 37.2% to 42.0%, adding more examples degraded performance, dropping to 39.8% with two experiences and further declining to 39.0% with four experiences.",
+   "support_explanation": "Internal inconsistency: no-experience baseline reported as 37.2% here and 37.8% in 5.3; non-monotone k curve.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "4.4 retrieval",
+   "quote": "a dedicated reranking agent evaluates these candidates and selects",
+   "support_explanation": "Retrieval is N=10 by cosine on issue type/description, LLM rerank to k=1.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "7 Threats to validity",
+   "quote": "its training data composition is not publicly disclosed, making it impossible to verify potential overlap with our evaluation dataset",
+   "support_explanation": "Authors concede base-model contamination cannot be excluded.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "6.3 Cost",
+   "quote": "the average token consumption increases only slightly (203.3K vs. 189.1K), while the average API usage cost remains nearly unchanged ($0.13 vs. $0.12)",
+   "support_explanation": "Per-instance online overhead vs SWE-Search (DeepSeek); bank-construction cost absent.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "6.4 Limitations",
+   "quote": "Moreover, the agent currently lacks a robust mechanism to assess the applicability of prior experiences in novel contexts, which may lead to inappropriate reuse or misleading to irrelevant patterns.",
+   "support_explanation": "No applicability gate or maintenance of reused experience.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "5.1",
+   "quote": "While SAGE emphasizes stage-wise self-improvement within a single repair process, its experience is primarily localized to the current instance.",
+   "support_explanation": "Authors' differentiation from the nearest experience-driven neighbor.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "5.3",
+   "quote": "a large number of issues (131) are consistently resolved across all settings.",
+   "support_explanation": "Instance-level variability across experience settings is substantial; evidence that single-run margins of a few points are noise-prone.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "5.3 bank size",
+   "quote": "consisting of 25 issues each from Django, SymPy, and Sphinx",
+   "support_explanation": "Bank-size analysis uses a 75-instance subset on DeepSeek only.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "6.2",
+   "quote": "We manually verified the correctness of LLM-extracted experiences on a subset of 75 instances",
+   "support_explanation": "Extraction quality only spot-checked on 75 instances, no reported error rate.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "5.1",
+   "quote": "Compared to SAGE and EvoCoder, two other experience-driven frameworks that also build upon SWE-Bench-verified trajectories, SWE-Exp attains a higher resolution rate under identical model conditions.",
+   "support_explanation": "Neighbor comparison is by table numbers; provenance (rerun vs copied) of baseline numbers not stated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§3.3.3 comprehension example",
+   "quote": "The golden patch reveals that the solution was to modify the role assignment for variable documentation fields rather than changing the fuzzy matching logic.",
+   "support_explanation": "Stored experiences are written with access to benchmark golden patches of other SWE-bench Verified items — privileged ground truth from the evaluated benchmark enters the bank.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§6.1",
+   "quote": "for each instance, we exclude all trajectories from the same repository that are temporally posterior to the current issue.",
+   "support_explanation": "Only same-repository, later trajectories are excluded: same-repo earlier items and all other-repo items (any date) stay retrievable; exclusion of the target's own trajectory is not stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§4.4",
+   "quote": "To prevent data leakage, we exclude all experiences originating from the same code repository and generated after the target instance.",
+   "support_explanation": "Second wording of the guard; together with opus:O02 the rule reads as (same repo AND later).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§5.3 Finding 3",
+   "quote": "Retrieving one single experience is sufficient to achieve optimal performance.",
+   "support_explanation": "k=1 is selected by the sweep on the same 500 issues used for the headline.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§8.2",
+   "quote": "However, existing frameworks mainly target general-purpose tasks and lack domain-specific optimizations for software engineering scenarios",
+   "support_explanation": "Residual against the experience-memory lineage (ExpeL, AutoGuide, ExACT) is stated as SE specialisation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "Table 2",
+   "quote": "w/o Experiences Extraction 36.0% -6.0%",
+   "support_explanation": "Raw problem+golden-patch demonstrations score below the no-experience setting (37.8/37.2).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O07",
+   "material_id": "2507.23361.txt",
+   "material_hash": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "sha256": "075b105b864d43cbecf04ee36ac36c129fa4955c236cee902975829e1ae260c5",
+   "locator": "§4.4",
+   "quote": "During the experience collection phase, we run SWE-Search on the SWE-Bench-Verified benchmark, collect the resulting trajectories, and extract structured experiences from them.",
+   "support_explanation": "The bank is built once, offline, from baseline-agent trajectories on the evaluated benchmark.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Experience Bank: vector DB of LLM-distilled text items (comprehension perspective / failure reflections; modification strategies) indexed by LLM-generated issue_type and description",
+   "information": "Past SWE-Search trajectories on SWE-Bench-Verified labeled success/failure by ground-truth tests; Experiencer also sees the golden patch; target instance's own patch/trajectory not visible (same-repo later instances excluded)",
+   "operation": "Experiencer abstracts perspective (success) or reflections vs golden patch (failure) and up to 3 modification insights; embed; at test time retrieve N=10 by cosine, LLM rerank to k=1, Reuser rewrites experience for the issue / rewrites the Instructor's instruction",
+   "output": "Guidance text injected into Instructor (comprehension) and Assistant instruction (modification)",
+   "conditions": "Ground-truth success labels and golden patches available for past issues; embeddings of issue type/description",
+   "feedback": "Test-validated resolution outcome and golden patch of earlier issues",
+   "selection_rule/data": "No admission gate beyond outcome annotation; all items stored; one item retrieved per decision by rerank",
+   "persistence": "Offline-built bank, frozen during evaluation; per-instance membership varies by repo/time exclusion; no update, merge, expiry or rollback",
+   "later_use": "Retrieved at each MCTS decision node of later issues",
+   "claimed_effect": "Pass@1 DeepSeek 35.4 -> 42.0, Claude 70.8 -> 73.0",
+   "failure_boundary": "Misleading experience (k>1 degrades), no applicability check, bank construction uses privileged supervision, single benchmark/language",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E004",
+    "son55:E005",
+    "son55:E009",
+    "son55:E011",
+    "son55:E014"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Instructor/Assistant dual-agent role split inside MCTS",
+   "information": "Issue, interaction history, retrieved experiences",
+   "operation": "Instructor issues next-step instruction, Assistant executes tool action",
+   "output": "Trajectory",
+   "conditions": "n/a",
+   "feedback": "n/a",
+   "selection_rule/data": "not_applicable: static architecture, no feedback-driven selection or retention",
+   "persistence": "not_applicable: fixed design",
+   "later_use": "n/a",
+   "claimed_effect": "w/o Dual-Agent -2.2 pt",
+   "failure_boundary": "Confound with experience gain in headline comparison to SWE-Search",
+   "evidence_ids": [
+    "son55:E008"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "SWE agents treat each issue in isolation (redundant exploration, no knowledge transfer, no strategic evolution) and prior experience frameworks are general-purpose, lacking software-engineering-specific structure.",
+  "checked_gap": "The statelessness limitation is real and the neighbors (ExpeL, AutoGuide, AgentRR, EvoCoder, SAGE, ExACT) are named and two are compared; the SE-specific residual is cross-repository, two-facet abstraction, argued qualitatively against SAGE's within-instance abstractions. Evidence for redundant exploration across similar issues is by citation, not measured here.",
+  "lineage/closest_adjacent": "ExpeL (insight store with ADD/EDIT/UPVOTE/DOWNVOTE), EvoCoder (reflection for issue reproduction), SAGE (plan abstractions from own task experience), AutoGuide, AgentRR, ExACT; base scaffold SWE-Search (MCTS).",
+  "residue": "Reuse across heterogeneous repositories; noise from multiple retrieved experiences; applicability assessment of retrieved experience.",
+  "stakes": "Resolution rate on SWE-Bench Verified and wasted search effort.",
+  "method_response": "Offline distillation into comprehension/modification facets, similarity retrieval + LLM rerank, k=1 adaptation by Reuser, role-split agents.",
+  "remaining_gap": "No maintenance/gating of the bank, no applicability scoring (authors), no online accumulation loop, no multi-language evidence.",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E015",
+   "son55:E019",
+   "son55:E014"
+  ],
+  "unresolved": [
+   "Neighbor papers (ExpeL, SAGE, EvoCoder) not in pinned materials: provenance and comparability of their table numbers cannot be verified"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Both seats: frozen LLM agents conditioned on retrieved, adapted experience text; sub_id null (repo/time guard is not a category holdout; no unified-schema upstream phase). Fit recorded as son55's 'partial' (sol 'high'), consistent with run convention for memory papers.",
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 steps: no unified-schema upstream tuning (step 3 absent), generalization tested by repo/time exclusion rather than whole-category holdout (step 4 partial), cheaper alternatives tested (raw golden-patch demos, similarity-only rerank, zero experience: step 5 largely met). Retrieval-as-conditioning sub-move executed at inference with frozen LLMs.",
+    "success_failure_checks": "Success: toggle-conditioning ablation (k=0) present; contamination audit partial (repo/time guard, base-model contamination conceded). Failure: single-benchmark, multi-module pipeline with ablations only on DeepSeek.",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E009",
+     "son55:E004",
+     "son55:E011",
+     "son55:E012"
+    ],
+    "reason": "No weights change; adaptation comes by conditioning on retrieved distilled text. The editable-store dimension is outside C03, hence sub_id null."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "cards@domain_cards_hash",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "status": "met",
+      "evidence_ids": [
+       "son55:E002",
+       "son55:E005"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S2",
+      "status": "partial",
+      "evidence_ids": [
+       "son55:E002",
+       "son55:E003"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "status": "unmet",
+      "evidence_ids": [
+       "son55:E014"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "son55:E002",
+     "son55:E003",
+     "son55:E005",
+     "son55:E014"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "cards@domain_cards_hash",
+    "fit": "medium (secondary; abstraction places the primary move in H00)",
+    "condition_checks": [
+     {
+      "id": "rsi:index_experience_for_reuse/S4",
+      "status": "met",
+      "evidence_ids": [
+       "son55:E009",
+       "son55:E011"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/S5",
+      "status": "met",
+      "evidence_ids": [
+       "son55:E009"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/F3",
+      "status": "partial",
+      "evidence_ids": [
+       "son55:E004",
+       "son55:E005"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "son55:E004",
+     "son55:E009",
+     "son55:E011"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "RS conditioning substrate = retrieved distilled experiences; domain H00 supplies the write path (reflect on success/failure outcomes into abstract perspective/modification text) and the retrieve-inject step.",
+   "conditions_differences": "H00 asks for contrast and freeze/separation of store from evaluation; here contrast is trajectory vs golden patch and separation is repo/time exclusion within the same benchmark. RS card has no analog of the offline reflector.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E004",
+    "son55:E009"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "local:2507.23361-6",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md steps1–3",
+    "§3.3",
+    "AppendixB.4–B.5"
+   ],
+   "applies_when": "离线经验库提升跨issue修复、声称泛化",
+   "applicable": true,
+   "status": "met",
+   "reason": "Opus final (sol local-1 merged): abstraction is compared against raw problem+golden-patch demonstrations (36.0, opus:O06) and similarity-only selection (38.2). sol's residual concern (no applicability check) is scored in X.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E008",
+    "opus:O06"
+   ],
+   "score_item": "M",
+   "origin": "sol:local:2507.23361-1; son55:local:2507.23361-6"
+  },
+  {
+   "id": "local:2507.23361-5",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md step4",
+    "§4.4",
+    "§6.1"
+   ],
+   "applies_when": "离线经验库提升跨issue修复、声称泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus final (sol local-2 merged): a repo/time guard exists, but it excludes only same-repo later items, does not state self-exclusion, the bank carries golden-patch content (opus:O01–O03) and k is tuned on the evaluated set (opus:O04); no fresh or held-out-repository evaluation.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "son55:E004",
+    "opus:O01",
+    "opus:O02",
+    "opus:O04"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:local:2507.23361-2; son55:local:2507.23361-5"
+  },
+  {
+   "id": "local:2507.23361-2",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md step5",
+    "Table2",
+    "§6.3"
+   ],
+   "applies_when": "离线经验库提升跨issue修复、声称泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有store-off与各模块消融、在线费用；未等预算或计离线成本。",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E003",
+    "sol:E004",
+    "sol:E005",
+    "sol:E006",
+    "sol:E007",
+    "son55:E013",
+    "son55:E019",
+    "son55:E008"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:local:2507.23361-3; son55:local:2507.23361-2"
+  },
+  {
+   "id": "local:2507.23361-3",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§5.1–5.3",
+    "AppendicesA–B"
+   ],
+   "applies_when": "离线经验库提升跨issue修复、声称泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "同一超参配置需重复种子/区间，全文未提供。",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E003",
+    "sol:E004",
+    "sol:E005",
+    "sol:E006",
+    "sol:E007",
+    "son55:E010",
+    "son55:E016"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2507.23361-4; son55:local:2507.23361-3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S1",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Claims learning from experience into a text store",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Names the fixed thing (statelessness across issues) but the 'memoryless' framing largely restates the premise; SE-specific facet structure is the added content.",
+   "evidence_ids": [
+    "son55:E001"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S1"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Lessons extracted from outcomes",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Failures are contrasted with the golden patch and successes abstracted separately; no paired success/failure on the same issue.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S2"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "A store is written from outcomes",
+   "applicable": true,
+   "status": "met",
+   "reason": "Success/failure from ground-truth tests and golden patches (privileged supervision available for earlier issues).",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E005"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Store grows over time",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No consolidation, forgetting, conflict handling or versioning; bank saturates around 300 items per authors' own curve.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E017"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S4"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Entries are admitted for reuse",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus final: every success and failure trajectory is distilled and stored; manual checking of 75 items is a quality audit, and LLM reranking is read-time selection, not a gate on what is kept.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E018",
+    "son55:E011"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S5"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F2",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Reflect-store-retrieve loop applied to one more vertical",
+   "applicable": true,
+   "status": "partial",
+   "reason": "SWE is the vertical, but there is an SE-specific two-facet abstraction and ablations rather than domain as sole novelty.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E015"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:abstract_experience_into_guidance/F2"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S4",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md"
+   ],
+   "applies_when": "Retrieval of precedent",
+   "applicable": true,
+   "status": "met",
+   "reason": "Selective retrieval (N=10 then k=1) and finding that k>1 degrades.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:index_experience_for_reuse/S4"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md"
+   ],
+   "applies_when": "A retained store is claimed to carry the gain",
+   "applicable": true,
+   "status": "met",
+   "reason": "k=0 control inside the full scaffold: 37.8 vs 42.0.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:index_experience_for_reuse/S5"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md"
+   ],
+   "applies_when": "Store built from the evaluation stream",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Bank is built from other instances of the same benchmark with same-repo-later exclusion; same-repo earlier instances allowed; hyperparameter k tuned on the same benchmark.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E009"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:index_experience_for_reuse/F3"
+  },
+  {
+   "id": "local:2507.23361-1",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Claim that the stored experience carries the gain",
+   "applicable": true,
+   "status": "met",
+   "reason": "Zero-experience control with loop and dual-agent kept.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2507.23361-1"
+  },
+  {
+   "id": "local:2507.23361-4",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "LLM reflector builds the store",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Online retrieval/rerank/reuse cost reported; extraction and trajectory-collection cost for the bank not reported.",
+   "evidence_ids": [
+    "son55:E013",
+    "son55:E005"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:local:2507.23361-4"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Gain attributed to conditioning",
+   "applicable": true,
+   "status": "met",
+   "reason": "k=0 vs k=1 within same scaffold.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-1"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Held-out/zero-shot generalization claim",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Repo/time guard but no data-overlap analysis for base models.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E012"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:adapt_via_conditioning/RE-2"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Multi-module pipeline",
+   "applicable": true,
+   "status": "met",
+   "reason": "Five component ablations plus k and bank-size sweeps (DeepSeek only).",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E017"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-4"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Claim of a generic recipe",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Only Python SWE-bench Verified; no second task or language.",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:adapt_via_conditioning/RE-5"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "SWE-Exp achieves 73.0% (Claude 4 Sonnet) and 42.0% (DeepSeek-V3) Pass@1, outperforming other agent frameworks.",
+   "setting": "SWE-Bench Verified, 500 issues, SWE-Search scaffold extended",
+   "baseline/control": "Agentless, SWE-Agent, SWE-Search, OpenHands, EvoCoder, SAGE",
+   "selection_vs_test": "k, N and bank-size chosen/analysed on the same benchmark; bank built from other instances of that benchmark",
+   "result/denominator": "DeepSeek 35.4 -> 42.0; Claude 70.8 -> 73.0; single run of 500",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E007",
+    "son55:E019"
+   ],
+   "counterevidence": [
+    "son55:E016",
+    "opus:O04"
+   ],
+   "allowed_conclusion": "Higher single-run Pass@1 than the listed scaffolds; Claude margin (+2.2, i.e. 11 issues) is within plausible run noise; SOTA comparison relies on numbers of unstated provenance."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Retained experience contributes independently of the dual-agent design (comprehension, modification, extraction, reranking each matter).",
+   "setting": "DeepSeek ablation, 500 issues",
+   "baseline/control": "k=0 and component removals",
+   "selection_vs_test": "same test set",
+   "result/denominator": "k=0: 37.8; full 42.0; ablations 36.0-39.8",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009"
+   ],
+   "counterevidence": [
+    "son55:E010",
+    "opus:O06"
+   ],
+   "allowed_conclusion": "Experience adds about +4.2 pt over the no-experience configuration in one DeepSeek run; raw golden-patch demonstrations are worse than none."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Overhead is minimal.",
+   "setting": "DeepSeek, SWE-Search vs SWE-Exp",
+   "baseline/control": "SWE-Search",
+   "selection_vs_test": "n/a",
+   "result/denominator": "203.3K vs 189.1K tokens; 15m49s vs 12m37s",
+   "evidence_ids": [
+    "son55:E013"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Per-instance online overhead small; bank-construction cost not included."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Experience generalizes across repositories.",
+   "setting": "Repo/time exclusion",
+   "baseline/control": "none stratified by repo",
+   "selection_vs_test": "same benchmark",
+   "result/denominator": "No per-repo breakdown",
+   "evidence_ids": [
+    "son55:E004"
+   ],
+   "counterevidence": [
+    "son55:E012",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "allowed_conclusion": "Cross-repo claim not isolated: same-repo earlier experiences remain eligible and no per-repo or cross-repo-only analysis is given."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "A retained, offline-written experience bank is read on later issues and the k=0 setting is a same-scaffold store-off control (37.8/37.2 vs 42.0); under run precedent (r02b, r04b) that is retained even without an independent held-out split. The bank's benchmark origin, golden-patch content and test-tuned k are scored in E.holdout=1, not by lowering the level.",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Author-reported single runs on SWE-bench Verified: with DeepSeek-V3, retrieving one LLM-reranked experience distilled from SWE-Search trajectories on other benchmark issues raises Pass@1 from 37.8 (or 37.2) to 42.0 within the same dual-agent MCTS scaffold; the 73.0 Claude headline is +2.2 over SWE-Search and mixes the dual-agent redesign. Cross-repository generalisation is not isolated (same-repo earlier experiences allowed). Not reproduced.",
+  "unresolved": [
+   "Whether the target's own trajectory is excluded from its bank.",
+   "No-experience baseline reported as 37.8 (§5.3) and 37.2 (§6.2).",
+   "Experience effect under Claude; bank-construction cost; run-to-run variance."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with sol. 'Memoryless explorer' is the generic premise of the parent card (S1 partial); the experience-memory lineage (ExpeL, AutoGuide, ExACT) is cited but the stated residual against it is SE specialisation (opus:O05, card F2), and the residual against SAGE/EvoCoder is argued qualitatively. A real limitation with incomplete residual boundaries = 2.",
+   "evidence_ids": [
+    "sol:E009",
+    "son55:E001",
+    "son55:E015",
+    "son55:E019",
+    "opus:O05"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Comprehension vs modification experiences, rerank and instruction rewriting each have a rationale and a tested alternative (raw demos, similarity-only, k sweep); why abstraction helps rests on one case study and applicability is untested.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003",
+    "son55:E008",
+    "son55:E011",
+    "sol:E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with son55. Write→retrieve→rerank→rewrite is reconstructable with prompts and hyperparameters, but the retention mechanics the rubric checks are absent or unclear: no admission gate (all trajectories distilled), no update/versioning/forgetting/rollback, the bank is built once from baseline trajectories so 'continuous learning' is not run as a loop (opus:O07), the leakage rule is worded two ways and self-exclusion is unstated (opus:O02, opus:O03), and the authors admit no applicability check.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E011",
+    "son55:E014",
+    "opus:O02",
+    "opus:O03",
+    "opus:O07"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Test-executed resolution on SWE-bench Verified is a credible validator; a five-agent discriminator picks one of up to two patches; base-model contamination is conceded and some baseline numbers are of mixed provenance, so not 4.",
+   "evidence_ids": [
+    "sol:E009",
+    "son55:E007",
+    "son55:E012",
+    "son55:E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with son55. A same-scaffold store-off (k=0), an alternative store content (raw golden-patch demos, opus:O06), rerank-off, comprehension-off, modification-off and dual-agent-off isolate the experience effect on DeepSeek-V3 — the strongest control set in this batch. Not 4: no random/irrelevant-experience control, no Claude ablation, headline vs SWE-Search confounded with the dual-agent redesign. sol's remaining reasons are scored once elsewhere under A2: golden-patch / benchmark-origin information → E.holdout; small online overhead (+7.5% tokens) → E.cost; single-run noise → E.statistics.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009",
+    "son55:E003",
+    "sol:E005",
+    "sol:E006",
+    "opus:O06"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus sides with sol. The bank is distilled from trajectories on the evaluated benchmark with golden-patch content (opus:O01, opus:O07); the guard excludes only same-repo later items, does not state self-exclusion (opus:O02, opus:O03); k is selected on the reported set (opus:O04); no fresh or held-out-repository set. son55's 2 assumed the target is kept out of its own bank, which the text does not establish. Not 0 because a documented temporal/repo guard exists.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "son55:E004",
+    "son55:E005",
+    "son55:E009",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "opus:O04"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked (A2 rung 1). n=500 with single runs, no seeds or intervals; the store-off value is reported as 37.8 and 37.2; non-monotone k curve and 131 always-solved issues show configuration-level noise near the margins.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E016",
+    "sol:E006"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Online tokens, API cost and wall time vs SWE-Search are reported (+37.5 s retrieval/rerank); trajectory collection and extraction for the bank and Claude costs are not.",
+   "evidence_ids": [
+    "sol:E007",
+    "son55:E013",
+    "son55:E005"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v2 text incl. Appendices A–B read; in scope (A, system_method): non-weight experience bank written from execution-verified trajectories and read at later issues. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "assessment.evidence_level",
+   "sol_value": "task",
+   "son55_value": "retained",
+   "decision": "son55",
+   "final_value": "retained",
+   "reason": "Same-scaffold store-off (k=0) on later issues meets the run's retained convention (r02b, r04b); sol's concerns (benchmark-built bank, guard ambiguity) are scored in E.holdout=1.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "opus:O07"
+   ],
+   "score_impact": "none (evidence_level is not scored)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ]
+   ],
+   "son55_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "reason": "H00 is primary (abstracted lessons from success/failure). H03 is kept as a secondary match because the read path is H03's operation — retrieve one issue-indexed precedent by similarity and adapt it to the new issue — and its conditions (selective retrieval S4, store-off S5, test-stream F3) are the right checks. Not padding: a distinct main card and operation.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E011",
+    "sol:E002"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2507.23361-1].status",
+   "sol_value": "partial",
+   "son55_value": "met",
+   "decision": "revised",
+   "final_value": "local-1 = son55's store-off question → met; sol's local-1 (abstraction vs raw demos) renumbered local-6 → met",
+   "reason": "A4 collision (same ID, different questions). k=0 control verified (opus:O06 context); sol's question verified against Table 2.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E003",
+    "opus:O06"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2507.23361-2].status",
+   "sol_value": "unmet",
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "local-2 = son55's budget/headline-confound question → partial (sol local-3 merged, same status); sol's local-2 (clean holdout) renumbered local-5 → partial",
+   "reason": "A4 collision. Online cost reported, no compute-matched variant, headline mixes dual-agent; holdout question resolved under local-5.",
+   "evidence_ids": [
+    "son55:E013",
+    "sol:E007",
+    "opus:O02"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2507.23361-3].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "local-3 = variance → unmet (sol local-4 merged, unmet); sol's local-3 renumbered local-2 → partial",
+   "reason": "A4 collision. Single runs, two values for the same store-off setting.",
+   "evidence_ids": [
+    "son55:E010",
+    "sol:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2507.23361-4].status",
+   "sol_value": "unmet",
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "local-4 = bank-construction cost → partial; sol's local-4 renumbered local-3 → unmet",
+   "reason": "A4 collision. Online overhead reported, offline collection/extraction not.",
+   "evidence_ids": [
+    "son55:E013",
+    "opus:O07"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2507.23361-5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "son55 verified with sol local-2 merged (sol 'unmet'): a documented guard exists, so partial, but it is same-repo-later only, self-exclusion unstated, golden-patch content stored and k tuned on test.",
+   "evidence_ids": [
+    "son55:E004",
+    "opus:O01",
+    "opus:O02",
+    "opus:O04"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2507.23361-6].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: raw golden-patch demos (36.0) and similarity-only (38.2) tested against abstraction+rerank.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E008",
+    "opus:O06"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: k=0 vs k=1 in the same scaffold.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: repo/time guard; no bank–test or base-model overlap analysis.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: five component ablations plus k and bank-size sweeps (DeepSeek only).",
+   "evidence_ids": [
+    "son55:E008"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: one benchmark, Python only.",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/F2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified, strengthened: the paper's own residual vs ExpeL-type memory is SE specialisation (opus:O05).",
+   "evidence_ids": [
+    "son55:E019",
+    "opus:O05"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: statelessness named; largely the parent premise.",
+   "evidence_ids": [
+    "son55:E001"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: failures contrasted with golden patches; no same-issue success/failure pairs.",
+   "evidence_ids": [
+    "son55:E002",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: ground-truth-validated success/failure decides what becomes a lesson (privileged supervision, scored in E.holdout).",
+   "evidence_ids": [
+    "sol:E001",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no consolidation, forgetting or conflict handling.",
+   "evidence_ids": [
+    "son55:E014",
+    "opus:O07"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "unmet",
+   "reason": "Every trajectory is distilled and stored; read-time rerank and a 75-item manual audit are not a keep-gate (card S5: tests/filters/judged merges decide what survives before reuse).",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E018",
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/F3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: bank built from the evaluated benchmark (not the target stream itself).",
+   "evidence_ids": [
+    "son55:E005",
+    "opus:O07"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: N=10 → k=1 with stated harm of more experiences.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: store removed (k=0) and reported.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.G: residual vs memory lineage is SE specialisation.",
+   "evidence_ids": [
+    "opus:O05",
+    "son55:E015"
+   ],
+   "score_impact": "−3.75 vs son55 (15×1/4)"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.X: no gate/versioning/maintenance; one-shot offline bank; guard worded two ways.",
+   "evidence_ids": [
+    "son55:E014",
+    "opus:O02",
+    "opus:O03",
+    "opus:O07"
+   ],
+   "score_impact": "−5.0 vs sol (20×1/4)"
+  },
+  {
+   "field_path": "ratings.E.causality",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.E.causality: store-off + alternative content + four component ablations; sol's other reasons belong to E.holdout/E.cost/E.statistics (A2).",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009",
+    "opus:O06"
+   ],
+   "score_impact": "+3.75 vs sol (15×1/4)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "See ratings.E.holdout: golden-patch bank from the evaluated benchmark, same-repo-later-only guard, self-exclusion unstated, k tuned on test.",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O04",
+    "sol:E004"
+   ],
+   "score_impact": "−2.5 vs son55 (10×1/4)"
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Before seat scores: in scope; offline bank from SWE-Search trajectories on the same benchmark with golden-patch content; k=0 store-off exists; guard = same-repo-later only; 37.8/37.2 inconsistency; initial bands G2 M3 X2 Em3 Ec3 Eh1 Es1 Ecost2.",
+  "integrity_checks": "Both seats a1 on 2507.23361v2, material sha 075b1056…; canonical seat hashes equal conflicts.json; RS/domain ids valid; both identified adapt_via_conditioning (sub null) + H00.",
+  "core_claim_check": "Re-read §3–7 and App. A–B; confirmed both guard wordings, the golden-patch example, k selection on test, Table 2 raw-demo arm below no-experience.",
+  "seat_flags_checked": "son55's 37.8 vs 37.2 verified (son55:E009, son55:E010); sol's self-exclusion ambiguity verified (opus:O02, opus:O03).",
+  "rating_agreement": "4/8 identical and re-checked (M, E.measurement, E.statistics, E.cost); G → sol, X → son55, E.causality → son55, E.holdout → sol.",
+  "expectation_renumbering": "sol local-1→6, local-2→5, local-3→2, local-4→3 (son55 numbering canonical).",
+  "retained_vs_retained_gain": "Retained gain shown in-benchmark via k=0 (single run); not shown on held-out repositories or a fresh set."
+ },
+ "input_seat_hashes": {
+  "sol": "8a3716645684b0d350cc47d7348a9cb16cdfd9e62ebc990b4c312fe91bdee9ea",
+  "son55": "7d248b557683ec2e0a086ad4b26e138ccd5790b515a5809d72982e664cc13ead"
+ },
+ "score": {
+  "raw": 57.5,
+  "display": 57.5,
+  "lower": 57.5,
+  "upper": 57.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "14736e166436213542d7941b080c6fbf221c150d6a9d93c35c84d42f745478e0"
+}

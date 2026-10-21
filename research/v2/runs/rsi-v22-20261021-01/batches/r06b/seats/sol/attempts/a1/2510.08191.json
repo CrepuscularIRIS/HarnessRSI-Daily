@@ -1,0 +1,657 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r06b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2510.08191",
+    "paper_id": "2510.08191",
+    "title": "Training-Free Group Relative Policy Optimization",
+    "version": "2510.08191v1",
+    "claim_type": "system_method",
+    "central_claim": "以组内胜负轨迹提炼semantic advantage并多epoch编辑外部experience作为token prior，在不改权重下产生类似GRPO的策略改善；百条样本低成本提升OOD数学和web任务，超过fine-tuned小模型并保持跨域通用性。"
+  },
+  "provenance": {
+    "input_hash": "cd236d8d2e204dd65670fb08213a68f8385c5880a50cc301ebe1d85d29946d2e",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按派发的 sonnet→gpt-6.1-sol；无可绑定的独立运行回执或会话ID，未额外探测。",
+    "timestamp": "2026-10-21T21:47:41.381848+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2510.08191.txt",
+      "url": "https://arxiv.org/html/2510.08191v1",
+      "version": "2510.08191v1",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "sections_read": [
+        "Abstract; §§1–6; Tables1–6",
+        "Appendices A–C; Figures5–14 case trajectories and math prompts"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "4050行固定v1 HTML已全读含案例及prompt附录；图4动态曲线仅caption，无page_images，不补造曲线数值。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§2",
+      "quote": "we generate such semantic advantages only for groups with both clear winners and losers.",
+      "support_explanation": "默认只对奖励混合组做比较，非任意叙述。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§2 Optimization",
+      "quote": "we prompt the LLM to generate a list of operations",
+      "support_explanation": "留存库支持add/delete/modify/keep；非参数优化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§2 Optimization",
+      "quote": "produces a shifted output distribution in subsequent batches or epochs.",
+      "support_explanation": "当前library被后续batch/epoch条件化复用。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§3.1 Benchmarks",
+      "quote": "we evaluate each problem with 32 independent runs and report the average Pass@1 score, which we denote as Mean@32.",
+      "support_explanation": "Mean@32是32次单输出平均，不能写best-of32；未报告区间/搜索种子方差。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§3.1 Setup",
+      "quote": "We run the learning process for 3 epochs with a single batch per epoch (i.e., 3 steps)",
+      "support_explanation": "DAPO100、G5、温度.7，AIME测试.3；建库/测试分离但无近重审计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§3.1 Effectiveness",
+      "quote": "matching the quantity learned from Training-Free GRPO.",
+      "support_explanation": "直接生成等数量经验79.8/67.3不如baseline80/67.9；只是数量非等探索预算。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§3.1 Removing Group Computation",
+      "quote": "We also remove the group computation by setting the group size of",
+      "support_explanation": "G1消融80.4/69.3 vsG5 full82.7/73.3，同时少五倍rollout。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§3.2 Ablation",
+      "quote": "a stratified random sample of 51 instances from the WebWalkerQA test set",
+      "support_explanation": "web消融分母51且2epochs，不能等同主表3epochs完整测试；QwQ pass1负结果27.5→25.5。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§3.2",
+      "quote": "even under performing its own ReAct baseline (27.5%).",
+      "support_explanation": "较弱QwQ负迁移；不是所有模型工具用法都改善。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§4.1",
+      "quote": "by simply plugging in domain-specific learned experiences.",
+      "support_explanation": "Table6 Math/Web各自经验切换，不是同一经验库从math迁web；基座亦不同。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§4.2 Training Cost",
+      "quote": "which consumes 38M input tokens and 6.6M output tokens",
+      "support_explanation": "100样本3steps六小时约$18；未细分rollout/summary/extraction/merge且web成本不全。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§4.2 Inference Cost",
+      "quote": "The inference cost per problem averages $0.005.",
+      "support_explanation": "小模型专用服务$0.005/query；大API约$0.02，需区分训练省钱与部署成本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "Appendix B Fig13",
+      "quote": "Each final experience must satisfy the following requirements",
+      "support_explanation": "每条≤32words、合并/删除、JSON ID更新；无逐edit独立效用验证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "Appendix B Fig11",
+      "quote": "Given the grading of this rollout and the correct answer, identify and explain any steps that represent detours, errors, or backtracking",
+      "support_explanation": "训练summary明确可见当前样本真值；未将训练真值误报测试oracle。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2510.08191.txt",
+      "sha256": "8e3cddf9c9dd9864ce7426602c21a0e6b15cc23f606c86def8458183d358d62e",
+      "locator": "§2 Group Advantage",
+      "quote": "functionally equivalent to vanilla GRPO’s",
+      "support_explanation": "作者等价性措辞；无数学objective/收敛/KL界证明，不把类比当已证。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "冻结LLM的外部experience library ℰ",
+      "information": "同query G个工具/文本rollout、scalar reward、训练GT、已有ID经验",
+      "operation": "奖励混合组→逐轨摘要→胜负比较生成自然语言semantic advantage/候选编辑→batch聚合add/modify/delete/keep及merge→更新ℰ",
+      "output": "紧凑策略条目，math48条示例；后续任务带经验prompt",
+      "conditions": "强基座可归因失败；百条训练集有正负组且策略适用测试分布",
+      "feedback": "抽象reward model ℛ给scalar；默认总结/比较可见GT，noGT改多数/自判",
+      "selection_rule": "全同reward组跳过；LLM审议更新及去重，未独立逐edit验收/rollback",
+      "selection_data": "DAPO100或AFM100训练；math3epoch/G5，web3epoch/G3",
+      "persistence": "非权重共享文本库跨batch/epoch留存，完成建库后用于不同dataset测试",
+      "later_use": "math提示在解题前读取experiences；web同ReAct消费领域库",
+      "claimed_effect": "比静态prompt更高OOD Mean@32/pass@1、更少tool调用",
+      "failure_boundary": "LLM反思未必真因；G1对照预算变化；弱基座web负迁移；无形式GRPO等价",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E005",
+        "E008",
+        "E009",
+        "E013",
+        "E014",
+        "E015"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "参数RL贵、百条样本可能过拟合，within-query self-refinement不能留存通用经验；希望在context space实现类似GRPO。",
+    "checked_gap": "大模型API轻量域适应动机真实；本文保留跨样本库并组内比较，但把Reflexion/TextGrad等统称within-sample需独立近邻校验。",
+    "lineage": [
+      {
+        "name": "GRPO/PPO",
+        "version": "本文v1引DeepSeekMath/Schulman；公式比较，独立原文未供应"
+      },
+      {
+        "name": "Reflexion/TextGrad/ICRL",
+        "version": "本文v1§5引用；独立原文未供应"
+      },
+      {
+        "name": "Agent KB",
+        "version": "本文v1§5称hierarchical shared cross-task knowledge/offpolicy单次；未供应原文"
+      }
+    ],
+    "closest_adjacent": "反馈反思经验库、文本prompt优化；组内正负对比与batch编辑而非首次无权重适应。",
+    "residue": "只混合奖励组的轨迹比较、三步多epoch共享库与ID化编辑结合。",
+    "stakes": "API模型低流量专域部署，避免一次性回答内重复错误；不等于取代同基座RL的已证结论。",
+    "method_response": "将GT标注rollout的胜负对比浓缩为策略并跨训练样本复用，之后固定library测试。",
+    "remaining_gap": "同基座同样本同计算的RL/其他文本优化器、semantic advantage单独因果、近重审计和跨域单库泛化。",
+    "evidence_ids": [
+      "E001",
+      "E006",
+      "E007",
+      "E010",
+      "E015"
+    ],
+    "unresolved": [
+      "请求总控向两席同供Agent KB、Reflexion、TextGrad及GRPO/ReTool固定原文；本文对谱系的within-sample与成本描述不能替代邻居原文。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "共享schema把经验作为reference substrate条件化冻结policy（1–3部分）",
+          "DAPO→AIME/AFM→WebWalker跨dataset但非类别排除/污染审计（4部分）",
+          "同模型store-off及等数量生成经验；非等预算text optimizer（5部分）"
+        ],
+        "success_checks": [
+          "有固定训练后参考库与不同dataset后续消费"
+        ],
+        "failure_checks": [
+          "参照迁移未用共享表示显式对齐；无训练context parser；大API对小RL混淆"
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E005",
+          "E006",
+          "E010"
+        ],
+        "reason": "条件化是实际机制；所谓GRPO只是语义类比。不把GT reward包装成新自监督objective，也不把JSON编辑角色链当可靠solver委托。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "C03覆盖reference conditioning但只中适配其完整战术。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01",
+        "version": "manifest-frozen",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "partial",
+            "reason": "具体共享库vs单query改进，但主要贡献仍无权重优化范式"
+          },
+          {
+            "id": "S2",
+            "status": "met",
+            "reason": "仅混合正负reward组做相对对比"
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "训练GT可见；reward实现和web grader验证未细述"
+          },
+          {
+            "id": "S4",
+            "status": "met",
+            "reason": "add/modify/delete/keep及batch merge、ID引用、去重与32词约束"
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "LLM建议选择，无独立gate/rollback"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E013",
+          "E014"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01"
+      },
+      "operation_correspondence": "共享经验充当reference substrate；由rewarded组比较编辑既有library，下一任务condition on library",
+      "necessary_conditions": "奖励可信、比较归因可迁移、编辑不破坏已有策略",
+      "differences": "H01聚焦add/delete/merge policy；C03不要求组内reward或自然语言RL类比",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E013"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "met",
+      "reason": "正负组直接比较，uniform reward组跳过。",
+      "evidence_ids": [
+        "E001",
+        "E014"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "met",
+      "reason": "有ID更新、删除合并和≤32词规则；长期增长上限仍未测。",
+      "evidence_ids": [
+        "E002",
+        "E013"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "partial",
+      "reason": "LLM改库但无逐编辑验收。",
+      "evidence_ids": [
+        "E013"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/F3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "大671B API对不同32B RL不能证明同基座optimizer优越或GRPO等价。",
+      "evidence_ids": [
+        "E010",
+        "E015"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "partial",
+      "reason": "等数量直接经验无效是有用对照；无同预算Reflexion/TextGrad/GRPO，G1还改变探索预算。",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "partial",
+      "reason": "训练100与AIME/WebWalker分dataset，但未去近重或检查pretrain contamination。",
+      "evidence_ids": [
+        "E005",
+        "E008"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2510.08191-1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "32独立评估均值不是CI；建库seed/跨学习方差未报告。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E009"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2510.08191-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "固定原卡/领域卡与本文v1，非实际review或成员结果"
+      ],
+      "applies_when": "声称semantic advantage替代RL更新并实现低成本跨域提升",
+      "applicable": true,
+      "status": "partial",
+      "reason": "训练总体tokens/dollars及服务成本实报，承认大API单题更贵；不全覆盖web/role成本及同预算RL。",
+      "evidence_ids": [
+        "E011",
+        "E012"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "semantic advantage跨epoch构建库提升OOD math/web",
+      "setting": "math DAPO100→AIME24/25，3epochs,G5；AFM100→WebWalkerQA，3epochs,G3；默认DeepSeek-V3.1-Terminus",
+      "baseline_control": "同模型ReAct/direct；等数量direct experiences；无GT；G1；不同模型复用流程",
+      "selection_vs_test": "训练GT用于学习ℰ；测试新dataset，未描述依据测试选择候选；多步曲线展示测试但未交代专用validation",
+      "result": "math ReAct80/67.9→82.7/73.3 Mean@32；direct68.6/52.9→72.6/54；web63.2→67.8 pass1；51例2epoch消融noGT66.7与base持平，QwQ27.5→25.5负迁移",
+      "denominator": "训练各100；math每题32runs但本文未明列AIME题数；web消融51，主表完整测试题数未报",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E008",
+        "E009"
+      ],
+      "counterevidence": [
+        "无同预算semantic comparison消融；无统计区间或独立学习seed；web reward/judge具体实现与噪声校准缺失"
+      ],
+      "allowed_conclusion": "有边界的作者报告支持固定非权重库对后续不同dataset任务改善；不能证明所有模型、无真值或不相干任务都改善。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "像GRPO一样优化、优于fine-tuning并保持跨域通用能力且低成本",
+      "setting": "671B DeepSeek API vsQwen2.5-32B ReTool/其他RL；Table6切换Math/Web专用库",
+      "baseline_control": "different backbone/data/training regime；同模型小版本只有自身pre/post",
+      "selection_vs_test": "Math/Web分别构建并按目标域选库，不是一个库从源域迁移目标域",
+      "result": "训练38M输入/6.6M输出、约6h/$18；ReTool约20000GPUh/$10000；服务大API约$0.02/query vs小模型$0.005/query",
+      "denominator": "学习3steps/100，价格含cache假设；web与各反思role开销未拆解",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012",
+        "E015"
+      ],
+      "counterevidence": [
+        "冻结参数只保证未改权重，不保证带错误context无害或KL上界；对小模型RL的总性能由强base混淆；无同基座equivalence/样本效率实验"
+      ],
+      "allowed_conclusion": "可用低额外API构建成本改善强基座，适合部分低流量部署；不证明替代同基座RL、通用transfer或形式等价。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "有训练后留存经验供不同数据集后续任务消费并改善同基座得分；经验数量对照及无GT/G1消融提供部分支持。",
+    "unresolved": [
+      "组内比较与额外采样预算未隔离；GRPO/KL只是未证类比，跨域表现来自切换领域库与更强base。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "成本/样本问题真实但gap多为无权重范式；邻居within-query概括与prior首创边界未独立核。",
+      "evidence_ids": [
+        "E001",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "正负对比→改库→后续复用合理；无效用gate，GRPO advantage/KL等价核心解释无形式保障。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "math summary/比较/JSON编辑/32word合并提示完整；无独立gate、版本回退，web提示和reward实现不足。",
+      "evidence_ids": [
+        "E002",
+        "E013",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "math标准答案和Mean@32与正确率对齐；reward/答案提取及web评价信号未充分验证。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "同模型基线、等数量经验、noGT/G1有用；G1算力变化且RL跨基座，缺等预算text optimizer。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "百条训练与不同dataset测试分离，库留存；无近重/类别排除审计，专用库切换非单库跨域。",
+      "evidence_ids": [
+        "E005",
+        "E008",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "32次独立测试均值与51例分层消融、负结果；没有CI/主分数学习seed方差或重复失败计数。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "总体训练token/时间/价格和推断单题成本有报告；cache/不同模型基础设施依赖，无同预算及web全成本。",
+      "evidence_ids": [
+        "E011",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§§2–5 Tables1–6; Appendices A–C"
+      ]
+    }
+  },
+  "score": {
+    "raw": 56.25,
+    "display": 56.2,
+    "lower": 56.25,
+    "upper": 56.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "固定v1全文含附录完整；编辑并留存非权重经验供后续新任务消费。",
+  "rationale": "组内反馈编辑经验库有训练/测试分离及同基座提升。G1未匹配探索预算，GRPO等价未证；大API对小RL和按域切库不证明通用替代。无区间/学习seed，弱基座web有负迁移。"
+}

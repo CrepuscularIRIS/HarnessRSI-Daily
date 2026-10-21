@@ -1,0 +1,362 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r06a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "provenance": {
+    "input_hash": "7fcdb70a5a9d9a6b66dbb34ed49e81286680e0f632d5cadd6da80e541135965c",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按指定 sonnet 类型/gpt-6.1-sol 席执行；无独立运行回执与可导出会话标识，不探测模型。",
+    "timestamp": "2026-10-21T21:43:57.760444+00:00"
+  },
+  "paper": {
+    "paper_key": "2508.03682",
+    "paper_id": "2508.03682",
+    "title": "Self-Questioning Language Models",
+    "version": "2508.03682v4",
+    "claim_type": "component_training",
+    "central_claim": "以非对称自博弈联合强化学习提问者与解题者，无外部训练题库或标准答案，提升训练后语言模型的算术、代数与编程能力。"
+  },
+  "materials": [
+    {
+      "material_id": "2508.03682.txt",
+      "url": "https://arxiv.org/html/2508.03682v4",
+      "sha256": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886",
+      "sections_read": [
+        "Abstract",
+        "1–6",
+        "References",
+        "Appendix A.1–A.4 (including prompts and generated code examples)"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2508.03682.txt",
+      "sha256": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886",
+      "locator": "§4.1; lines 465–485",
+      "quote": "The proposer policy\nπ\nP\nt\n​\n(\nx\n)\n\\pi_{P_{t}}(x)\nand the solver policy\nπ\nS\n​\n(\ny\npred\n∣\nx\n)\n\\pi_{S}(y_{\\text{pred}}\\mid x)\nare both trained via reinforcement learning to maximize their expected rewards:",
+      "support_explanation": "提问策略和求解策略都通过强化学习更新，定义被优化对象。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2508.03682.txt",
+      "sha256": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886",
+      "locator": "§4.2; lines 558–558",
+      "quote": "In the context of self-play without access to ground-truth answers, a central challenge is how to perform verification. One straightforward approach is to have the proposer not only generate a problem but also provide a corresponding solution. The solver’s output can then be compared against the proposer’s solution to assess correctness. However, there is no inherent reason to trust the proposer’s solution over the solver’s. In most self-play setups, both models are initialized from the same pre-trained language model (and in our experiments, also share weights). As a result, both are equally susceptible to error, making verification by mutual agreement unreliable.",
+      "support_explanation": "实验中两角色共享权重；验证讨论没有把生成题目或测试变成被独立评价的留存 harness。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2508.03682.txt",
+      "sha256": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886",
+      "locator": "Appendix A.1; lines 1349–1355",
+      "quote": "We build our implementation on top of verl\n(\nSheng et al., 2024\n)\n. A list of hyperparameters can be found in Table\n4\n. For all experiments, we report the best test accuracy achieved over 100 training steps, averaged over three training runs.",
+      "support_explanation": "实现和评测以训练步及训练后的测试准确率为对象；三次训练运行不是非权重留存实验。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "同一预训练语言模型承担的 proposer/solver 参数",
+      "information": "解题采样多数答案；编程时生成的单元测试与通过率",
+      "operation": "生成当前能力附近的问题并交替强化学习提问者与解题者",
+      "output": "更新后的共享模型权重和在线合成训练题",
+      "conditions": "基础模型能生成有效任务；共识或生成测试提供可用奖励",
+      "feedback": "求解成功率与难度奖励",
+      "selection_rule": "鼓励非平凡但可解任务；求解者按共识/测试奖励训练",
+      "selection_data": "在线自生成的训练题和采样解答",
+      "persistence": "权重检查点；生成题和测试服务训练",
+      "later_use": "后续训练步及训练后模型测试",
+      "claimed_effect": "不使用外部训练题库的推理能力提升",
+      "failure_boundary": "共享错误可被共识固化；不证明持久非权重 harness 更新",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "语言模型后训练依赖外部任务数据和可用真值/验证器",
+    "checked_gap": "本文以自博弈产生训练任务并优化参数；该问题不是本项目非权重 harness 残余问题",
+    "lineage": [
+      {
+        "name": "asymmetric self-play (Sukhbaatar et al., 2017)",
+        "version": "本文引用版本；邻文原文未固定",
+        "source": "§2 Related Work"
+      }
+    ],
+    "closest_adjacent": [
+      "asymmetric self-play",
+      "majority-vote unsupervised RL"
+    ],
+    "residue": "以学习到的提问策略替代固定外部训练分布",
+    "stakes": "不能把权重自博弈收益当作 Harness RSI 的非权重留存收益",
+    "method_response": "联合学习提问和求解策略；不同任务使用共识或生成测试奖励",
+    "remaining_gap": "未独立评价执行反馈驱动的持久 prompt/tool/workflow/memory 更新",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003"
+    ],
+    "unresolved": [
+      "邻文原文不在固定输入，需总控补充非对称自博弈与无监督 RL 最近邻原文才能独立核查 novelty；不阻塞 A3 范围判定。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "把固定外部训练题分布改为可学习且随 solver 改变的生成过程",
+          "未见适用的特定原子卡，不强贴子类"
+        ],
+        "success/failure_checks": [
+          "固定任务分布被显式释放",
+          "自博弈模块和更新频率实验只证明训练策略效果，不证明非权重留存"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003"
+        ],
+        "reason": "被释放的变量是迭代后训练的题目生成分布；映射不把所有自博弈视为 harness。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原模式可识别；模式覆盖与项目收录范围是两个判断。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "self_generate_the_curriculum",
+        "sub": "H22",
+        "version": "manifest-fixed",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "H22",
+            "status": "met",
+            "reason": "提问者和解题者均通过 RL 更新，构成学习的 proposer–solver 耦合，区别于固定生成器的 H23。",
+            "evidence_ids": [
+              "E001",
+              "E002"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "self_generate_the_curriculum",
+        "sub": "H22"
+      },
+      "operation_correspondence": "固定外部任务分布→由 solver 奖励反馈联合训练的任务提问策略",
+      "conditions_and_differences": "H22 是涉及权重的边界卡；本篇被留存评价的是模型参数，冻结 A3 排除。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "local:2508.03682-1",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§4.1",
+        "§4.2",
+        "Appendix A.1"
+      ],
+      "applies_when": "判定被更新及评价的留存对象",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "提问者和求解者均做权重训练；没有被独立评价的持久非权重 harness 更新。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "score_item": "M"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "自提问自博弈无需外部训练题库即可提高语言模型推理能力",
+      "setting": "Qwen2.5/Llama，算术、代数和编程",
+      "baseline/control": "初始模型、format-reward、固定 proposer 及 proposer 更新频率消融",
+      "selection_vs_test": "生成训练任务与训练后测试；不是独立非权重留存评测",
+      "result/denominator": "作者报告多任务训练后准确率；本文按范围排除，不计项目分数",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "属于语言模型权重后训练；生成问题与测试是训练支架，不自动构成 Harness RSI。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告自博弈训练后的模型任务收益，不支持非权重 harness 留存或 improver 改进证据。",
+    "unresolved": []
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，更新与评价的产物是权重，范围排除而非低分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验、局限与附录 A.1–A.4 核实被评价对象"
+      ]
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "冻结 A3：proposer/solver 都通过 RL 更新参数，实验角色共享权重；问题、单元测试和代码是训练支架，未独立评价反馈驱动的留存非权重 harness。",
+  "rationale": "全文含附录确认本篇是自博弈语言模型后训练，提问与解题共享权重并联合 RL；生成题目和测试不是被评价的持久 harness，按冻结 A3 排除。"
+}

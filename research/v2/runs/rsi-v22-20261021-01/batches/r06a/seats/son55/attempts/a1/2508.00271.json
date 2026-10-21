@@ -1,0 +1,826 @@
+{
+ "paper": {
+  "paper_id": "2508.00271",
+  "claim_type": "system_method",
+  "central_claim": "MetaAgent: starting from a minimal reason-plus-help-seeking workflow with a tool router, an agent that after each task distills self-reflection and ground-truth-verified reflection into a concise experience text carried into later contexts, and builds an in-house persistent knowledge base from its tool-use history ('meta tool learning', no parameter updates), outperforms workflow-based baselines and matches or exceeds end-to-end trained agents on GAIA, WebWalkerQA and BrowseComp.",
+  "paper_key": "2508.00271",
+  "version": "2508.00271v2",
+  "title": "MetaAgent: Toward Self-Evolving Agent via Tool Meta-Learning"
+ },
+ "status": "reviewed",
+ "reason": "Full text read; non-weight, retained experience text and persistent knowledge base are updated from task outcomes and read in later tasks: in scope as system_method. E.causality left unknown because ablation values (Figure 3) are not observable in the pinned material; controller may supply the Figure 3 page image.",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "As MetaAgent solves tasks, it continually conducts self-reflection and answer verification, distilling actionable experience into concise texts that are dynamically incorporated into future task contexts.",
+   "support_explanation": "Retained object: a concise experience text conditioning later contexts.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "2.2 Dynamic Context Engineering",
+   "quote": "Second, if ground-truth answers are available, verified reflection compares the predicted answer",
+   "support_explanation": "Verified reflection uses the gold answer of the task just solved.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "2.2",
+   "quote": "Verified reflection is only performed after the answer is finalized, and the updated experience is used exclusively in subsequent tasks to prevent information leakage.",
+   "support_explanation": "Same-item leakage guard only; gold labels of earlier benchmark items feed later items.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "2.2",
+   "quote": "In our experiments, experience is constructed online from scratch, ensuring no information leakage during evaluation.",
+   "support_explanation": "Learning stream is the evaluation stream (online on the benchmark).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "3.1 Implementation Details",
+   "quote": "we initialize the in-house tool by simulating task completion three times for each benchmark, thereby proactively gathering and constructing the persistent memory required by MetaAgent",
+   "support_explanation": "Knowledge base is pre-populated by running the benchmark's own questions three times before scored runs: extra search budget and test-question exposure not given to baselines.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "2.2",
+   "quote": "If MetaAgent lacks confidence in its reasoning process or the concluded answer, the self-reflection experience",
+   "support_explanation": "Low-confidence self-reflection triggers a within-task retry (extra attempt).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Table 1 MetaAgent row",
+   "quote": "MetaAgent (QwQ-32B) 61.5 42.3 25.0 47.6 55.0 49.6 47.9 52.1 7.9 6.4 7.1",
+   "support_explanation": "Headline numbers GAIA 47.6, WebWalkerQA 52.1, BrowseComp 7.1.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Table 1 WebThinker-RL row",
+   "quote": "WebThinker-32B-RL 56.4 50.0 16.7 48.5 58.8 44.6 40.4 46.5 2.4 3.1 2.7",
+   "support_explanation": "Best trained baseline: GAIA 48.5 exceeds MetaAgent 47.6.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "3.1 Datasets",
+   "quote": "we use 103 questions from the text-only validation subset",
+   "support_explanation": "GAIA evaluation set is 103 questions, so one question is about 1 point (Level 3 has 12 questions).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "3.1 Datasets",
+   "quote": "we evaluate on two selected topics, Art and History , totaling 257 questions",
+   "support_explanation": "BrowseComp is a 257-question cost-driven subset; 7.1 vs 2.7 is about 18 vs 7 questions.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "3.3 Ablation",
+   "quote": "(1) removing self reflection (w/o self reflection); (2) removing verified reflection (w/o verified reflection); (3) removing the use of in-house tools (w/o in-house tool); (4) using only the minimal workflow",
+   "support_explanation": "Store/loop-off ablations exist but only as Figure 3 on GAIA; bar values are not in the text.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "3.3 Ablation findings",
+   "quote": "both self-reflection and verified reflection are critical, and their combination forms a meta tool learning loop that substantially boosts performance",
+   "support_explanation": "Qualitative claim with no numbers in text.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Figure 3 caption",
+   "quote": "Ablation Study. Key components of MetaAgent are individually removed and evaluated on the GAIA benchmark.",
+   "support_explanation": "Ablations restricted to the 103-question GAIA set.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "3.1 Implementation Details",
+   "quote": "For all baselines, we either report the results from original papers or run the official implementations.",
+   "support_explanation": "Baseline provenance is mixed and per-baseline source is not stated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "3.4 Case Study",
+   "quote": "Informed by this self-reflection, MetaAgent launches a second attempt",
+   "support_explanation": "Within-task retry gives MetaAgent extra search attempts versus single-pass baselines.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Table 2",
+   "quote": "MetaAgent w/ QwQ-32B 61.5 42.3 25.0 47.6 w/ Gemini-2.5-Flash 64.1 46.2 16.7 49.5",
+   "support_explanation": "Backbone swap on GAIA only; not a causal control for evolution.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "2.2 Self-Expansion",
+   "quote": "MetaAgent incrementally constructs an in-house tool—a persistent local knowledge base",
+   "support_explanation": "Second retained object: raw tool-interaction content cache (BGE-m3 index).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Table 1 vs level counts",
+   "quote": null,
+   "support_explanation": "From GAIA split sizes (about 39/52/12 questions) the reported percentages give 49 solved for MetaAgent and 50 for WebThinker-RL: the GAIA average gap is one question.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "4 Related Works",
+   "quote": null,
+   "support_explanation": "Related work covers RAG, agentic search, workflow and RL-trained agents; no memory/experience-reflection agents (e.g. reflection-memory or insight-store agents) are discussed or compared.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Single cumulative natural-language experience text E carried in the agent input X_t = {q, p, E_{t-1}}",
+   "information": "Trajectory and final answer; gold answer (verified reflection) when available; previous E; self-reflection without labels when confidence low",
+   "operation": "LLM reflection function Omega rewrites E from (X, Y, A*, E_{t-1}); self-reflection summary added to input for a retry",
+   "output": "Updated E (concise strategies for planning and tool use)",
+   "conditions": "Gold answers available for the stream; E prepended wholesale to later tasks",
+   "feedback": "Ground-truth comparison (verified) and model's own confidence (self)",
+   "selection_rule/data": "None reported: every Omega rewrite is accepted; no validation of the new E against a held-out set",
+   "persistence": "E persists across tasks in the stream",
+   "later_use": "Prepended to the next task's input",
+   "claimed_effect": "Novice-to-expert progression; benchmark gains",
+   "failure_boundary": "No maintenance (size, conflict, forgetting, rollback); gold-label dependence; same stream for learning and scoring",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004",
+    "E006"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "In-house tool: persistent vector index (BGE-m3) of all content the tool router touched",
+   "information": "Raw web pages and tool outputs from all tool calls",
+   "operation": "Append all external knowledge to C; initialize C by simulating each benchmark's tasks three times; agent can query C later",
+   "output": "Local retrievable memory",
+   "conditions": "Pre-pass over the benchmark's own questions",
+   "feedback": "None (no outcome signal, no utility measure)",
+   "selection_rule/data": "None: everything browsed is stored",
+   "persistence": "Persistent across tasks",
+   "later_use": "Retrieval during later tasks",
+   "claimed_effect": "Mitigates single-pass search information loss, especially on BrowseComp",
+   "failure_boundary": "Pre-pass exposes the test questions' evidence; not outcome-grounded experience",
+   "evidence_ids": [
+    "E005",
+    "E017"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Workflow-based agents rely on hand-designed strategies and cannot adapt; end-to-end trained agents need costly annotated data and may degrade elsewhere. Proposed: a minimal workflow that evolves through experience.",
+  "checked_gap": "The fixed object (expert-written strategies in prompts/workflows) is named and is a legitimate target, but related work never addresses agents that already learn text experience or memory from outcomes, so the residual versus those neighbors is not established.",
+  "lineage/closest_adjacent": "Cited neighbors: Search-o1, WebThinker, Search-R1, DeepResearcher, Mind-Map agent. Missing from the pinned text: reflection-memory / insight-store agents, which are the direct ancestors of the experience mechanism.",
+  "residue": "Not stated relative to experience-learning agents.",
+  "stakes": "Deep information-seeking accuracy (GAIA, WebWalkerQA, BrowseComp).",
+  "method_response": "Reflection-distilled experience text plus persistent tool-use knowledge base on a minimal router-based workflow.",
+  "remaining_gap": "No maintenance or gating of E or C; gold labels required; evaluation on the learning stream.",
+  "evidence_ids": [
+   "E001",
+   "E019"
+  ],
+  "unresolved": [
+   "Whether experience-text accumulation is new relative to reflection/insight-store agents cannot be assessed from the pinned material"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 steps: no unified schema or upstream tuning; conditioning substrate (experience text, knowledge-base retrieval) is mutable; generalization test is not category held-out (step 4 unmet); cheaper alternatives (static memory, longer context) not tested (step 5 unmet).",
+    "success_failure_checks": "Success: conditioning-off ablation exists but values unobserved. Failure: test-stream exposure (3 pre-passes, gold-answer reflection on benchmark items), single-recipe on information-seeking only.",
+    "evidence_ids": [
+     "E001",
+     "E005",
+     "E011"
+    ],
+    "reason": "No parameter update; adaptation by conditioning future inputs. Router delegation to search/code tools (decompose_and_delegate/C25) was considered and not selected: help requests are free-form text with no verifiable artifact closure and it is generic tool use rather than the contribution."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Weak-to-moderate match; recorded as partial.",
+  "executes_pattern": "partial",
+  "resolves_problem": "unresolved: task gains reported, but the contribution of retained experience versus extra passes/retries is not isolated in observable evidence"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "cards@domain_cards_hash",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S1",
+      "status": "met",
+      "evidence_ids": [
+       "E001"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "status": "partial",
+      "evidence_ids": [
+       "E002",
+       "E006"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "status": "unmet",
+      "evidence_ids": [
+       "E002"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "status": "unmet",
+      "evidence_ids": [
+       "E002"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E001",
+     "E002",
+     "E003",
+     "E004"
+    ]
+   }
+  ],
+  "unassigned": [
+   "In-house tool (S2): raw browsed-content vector cache with no outcome grounding or gating; not forced onto index_experience_for_reuse"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "Conditioning substrate = cumulative experience text; domain H00 supplies the write (reflect on outcomes with gold answers) and inject steps. Whole-text prepending replaces retrieval.",
+   "conditions_differences": "H00 requires store-stream separation and budget-matched store-off ablation; here the store is learned on the evaluation stream and the pre-pass adds budget.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004",
+    "E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S1",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Claims learning from experience into text",
+   "applicable": true,
+   "status": "met",
+   "reason": "Names the static thing (expert-curated strategies/workflows) and replaces it with learned experience.",
+   "evidence_ids": [
+    "E001"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Lessons from outcomes",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Verified reflection analyzes successes and failures against the gold answer but no paired contrast on the same task is described.",
+   "evidence_ids": [
+    "E002"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Store is written from outcomes",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Gold answers ground verified reflection (but stream-level gold labels are test labels); self-reflection is ungrounded self-judgment.",
+   "evidence_ids": [
+    "E002",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Store grows",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "E is rewritten wholesale each time (monolithic summary risk); C only appends; no forgetting or conflict handling.",
+   "evidence_ids": [
+    "E002",
+    "E017"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Entries are admitted for reuse",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Every rewrite and every browsed page is retained; no test or utility gate.",
+   "evidence_ids": [
+    "E017"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F1",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Frozen-weights framing is offered as contribution",
+   "applicable": true,
+   "status": "partial",
+   "reason": "'Without changing model parameters' is prominent, though a concrete mechanism is also supplied.",
+   "evidence_ids": [
+    "E001"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2508.00271-1",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Retained store claimed to carry the gain",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Loop-off ablations are reported in Figure 3 but values are not in the pinned text.",
+   "evidence_ids": [
+    "E011",
+    "E013"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2508.00271-2",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Budget-matched baselines",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Three pre-passes over benchmark questions and low-confidence retries are not given to baselines; no cost accounting.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E015"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2508.00271-3",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Order-dependent accumulating store",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Single run, stream order unspecified, no variance.",
+   "evidence_ids": [
+    "E009",
+    "E018"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2508.00271-4",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Per-task LLM reflection",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No reflection or tool-call cost reported.",
+   "evidence_ids": [
+    "E019"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2508.00271-5",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Store built on the same stream that is scored",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Experience learned online with test gold answers and knowledge base pre-built from the test questions; only same-item leakage is guarded.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2508.00271-6",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Specific abstraction scheme claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No alternative abstraction/editing scheme compared (e.g., append-only lessons vs rewrite).",
+   "evidence_ids": [
+    "E011"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Held-out generalization claim",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Knowledge base built from the evaluation questions; no overlap analysis.",
+   "evidence_ids": [
+    "E005"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Retrieval/context conditioning claim",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No static memory, longer-context or nearest-neighbor baseline given equal exposure.",
+   "evidence_ids": [
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Claim of generic recipe",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Three benchmarks and a backbone swap (GAIA only), all information-seeking.",
+   "evidence_ids": [
+    "E016",
+    "E007"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "MetaAgent outperforms workflow baselines and matches or exceeds end-to-end trained agents.",
+   "setting": "QwQ-32B backbone; GAIA text-only 103, WebWalkerQA 680, BrowseComp Art+History 257",
+   "baseline/control": "Direct, RAG, query planning, iterative RAG, ReAct, Search-o1, WebThinker (mixed provenance)",
+   "selection_vs_test": "Experience learned online on the same questions with gold answers; knowledge base pre-built by 3 simulated passes of the same questions",
+   "result/denominator": "GAIA 47.6 (49/103) vs WebThinker-RL 48.5 (50/103); WebWalkerQA 52.1 vs 46.5; BrowseComp 7.1 vs 2.7; single run",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E014",
+    "E018"
+   ],
+   "counterevidence": [
+    "E005",
+    "E015"
+   ],
+   "allowed_conclusion": "On these subsets the full system scored above workflow baselines and roughly level with the trained agent on GAIA; compute and test-question exposure differ from baselines."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Meta tool learning (self/verified reflection + in-house tool) is responsible for the gains.",
+   "setting": "GAIA ablation (Figure 3)",
+   "baseline/control": "Ablated variants and minimal workflow",
+   "selection_vs_test": "same 103 questions",
+   "result/denominator": "values not observable in text",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013"
+   ],
+   "counterevidence": [
+    "E005",
+    "E015"
+   ],
+   "allowed_conclusion": "Unresolved from observable evidence; the strength depends on Figure 3 values and compute-matched baselines."
+  },
+  {
+   "claim_id": "C3",
+   "text": "The design is backbone-agnostic.",
+   "setting": "GAIA with Gemini-2.5-Flash",
+   "baseline/control": "Vanilla backbones",
+   "selection_vs_test": "same",
+   "result/denominator": "49.5 vs 7.8 (Gemini); 47.6 vs 22.3 (QwQ)",
+   "evidence_ids": [
+    "E016"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "System including tools beats the tool-less backbone on GAIA; not an evolution-specific control."
+  },
+  {
+   "claim_id": "C4",
+   "text": "No information leakage during evaluation.",
+   "setting": "Online experience from scratch",
+   "baseline/control": "none",
+   "selection_vs_test": "gold answers of earlier test items used",
+   "result/denominator": "n/a",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005"
+   ],
+   "counterevidence": [
+    "E005"
+   ],
+   "allowed_conclusion": "Only same-item leakage is excluded; stream-level label and evidence exposure remain."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A router-based agent with online-learned experience text and a pre-populated knowledge base scored above expert-workflow baselines and similar to the best trained agent on small GAIA/BrowseComp subsets and WebWalkerQA, in single runs; the portion attributable to retained experience as opposed to extra passes, retries and test-stream exposure is not demonstrated in observable evidence.",
+  "unresolved": [
+   "Figure 3 ablation values",
+   "Compute/token cost",
+   "Run-to-run variance and stream order",
+   "Effect of pre-pass over test questions",
+   "Baseline provenance",
+   "Neighbor experience-learning agents"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Fixed object (hand-written strategies/workflows) is named but the nearest neighbors for the actual mechanism (agents that distill outcome reflections into text memory) are absent from related work, so no residual bottleneck against them is established; problem statement is generic.",
+   "evidence_ids": [
+    "E001",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Concrete loop (reflect with gold answer, rewrite E, prepend; cache tool content) with an intuitive causal story, but the rewrite function, retention policy and the reason monolithic rewrite avoids collapse are unspecified; reliance on gold answers and pre-pass undermines the learning story.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E017"
+   ],
+   "counterevidence_ids": [
+    "E005"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Write path (Eq.7) and read path (prepend E, query C) are described, but Omega prompt, E size control, update schedule, task order, retry limits and any gate/versioning/rollback are missing; information permissions (gold answers during the stream) are partly explicit.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E005",
+    "E006"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "EM on GAIA/BrowseComp and LLM-equivalence on WebWalkerQA follow official settings, but test sets are small or cost-driven subsets, the equivalence judge is not specified, and baseline numbers have mixed provenance.",
+   "evidence_ids": [
+    "E007",
+    "E009",
+    "E010",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "The only controls that could isolate the retained experience and knowledge base are the Figure 3 ablations, whose values are not in the pinned text; Table 1 and Table 2 comparisons do not isolate evolution and are confounded by pre-pass and retries. Rating withheld pending the Figure 3 page image.",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E005",
+    "E015"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Only same-item leakage is prevented; experience is learned online from gold answers of earlier benchmark questions and the knowledge base is built by solving the benchmark questions three times, so learning stream equals evaluation stream with no held-out split.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Set sizes are stated and mixed results are reported, but single runs without intervals; GAIA margin to the best trained baseline is one question of 103 and Level 3 has 12 questions.",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No tokens, tool calls, wall time or reflection cost are reported even though the system adds three pre-passes, retries and per-task reflection; only the hardware (eight A100) is mentioned.",
+   "evidence_ids": [],
+   "counterevidence_ids": [
+    "E005",
+    "E015"
+   ],
+   "search_scope": [
+    "Sections 2-3 incl. implementation details",
+    "Tables 1-3 and Figure 3 caption",
+    "Discussion and case study",
+    "Conclusion",
+    "No appendix exists in the pinned material"
+   ]
+  }
+ },
+ "rationale": "经验文本+工具缓存在基准流上在线学习（含金标与对测试题的3遍预跑），无预算匹配与成本；消融值在图中不可见，因果项unknown。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r06a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "7fcdb70a5a9d9a6b66dbb34ed49e81286680e0f632d5cadd6da80e541135965c",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; model_type is configured type only",
+  "timestamp": "2026-10-21T21:40:22Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2508.00271v2",
+   "sha256": "6adefb992d5ed6d5ab72d68fafee540379a42e1eb0e720ba0bd53ce91ef98bab",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2.1-2.2 Method (minimal workflow, dynamic context engineering, in-house tools)",
+    "3 Experiments (settings, datasets, implementation, Table 1, ablation, Table 2, case study Table 3)",
+    "4 Related Works",
+    "5 Conclusion"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure 3 ablation bar values are graphical only and not present in the pinned text (no page_images in manifest); no appendix exists in the pinned HTML text"
+   ]
+  }
+ ],
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 32.5,
+  "upper": 47.5,
+  "coverage": 0.85,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

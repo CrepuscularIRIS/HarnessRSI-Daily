@@ -1,0 +1,859 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r05a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2506.06698",
+    "paper_id": "2506.06698",
+    "title": "Contextual Experience Replay for Self-Improvement of Language Agents",
+    "version": "2506.06698v1",
+    "claim_type": "system_method",
+    "central_claim": "CER从成功与失败轨迹蒸馏页面动力学和参数化技能，持续写入buffer、按新任务检索并上下文回放，无权重训练/主循环不需groundtruth reward，实现高效且稳定可塑的web-agent自改进。"
+  },
+  "provenance": {
+    "input_hash": "5371b9c966106bd075b2c83623c3310d5fd11a5b6c5ad4c30a4a88832571aa18",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T21:27:04.974825+00:00",
+    "notes": "派发上下文标示sonnet→gpt-6.1-sol；无独立模型回执、可验证会话ID或receipt，故置null；未探测模型。分段续接同attempt，未读已完成两篇JSON。"
+  },
+  "materials": [
+    {
+      "material_id": "2506.06698.txt",
+      "url": "https://arxiv.org/html/2506.06698v1",
+      "version": "2506.06698v1",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "sections_read": [
+        "abstract",
+        "§1–8",
+        "Tables 1–9",
+        "Figures 1–9 with complete textual prompts/examples",
+        "Appendices A.1–A.5 including all offline task instructions"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "固定完整HTML已读；无page_images，不推断图像中未出现数字；不执行附录prompt/动作。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§2 prior memory methods",
+      "quote": "However, they either test on relatively simple web environments",
+      "support_explanation": "作者对ExpeL/Synapse的scope主张，独立邻居原文未固定；不当成已核验的新颖性结论。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§2 reward dependence gap",
+      "quote": "their mechanism requires them to obtain the ground truth reward before they can function",
+      "support_explanation": "对AutoGuide/AutoManual/AWM的作者比较；不是本评审独立确认。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§3.1 abstraction",
+      "quote": "The model is also provided with existing experiences in the buffer to avoid repetitive distillation, allowing the continual accumulation of the experiences across time.",
+      "support_explanation": "有旧buffer读取与去重提示，但没有冲突/遗忘或外部写入门。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§3.1 dynamics and skill units",
+      "quote": "The dynamics distillation module will distill a list of summaries of different web pages, their corresponding URL, and inferred possible usages.",
+      "support_explanation": "环境动力学实际是页面摘要/URL/用途，不是学习完整状态转移模型。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§3.1 skills representation",
+      "quote": "the guideline contains both natural language summaries and concrete action examples for each step",
+      "support_explanation": "参数化子目标步骤保存可复用操作；非生成可执行函数库。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§3.2 retrieval",
+      "quote": "We prompt the model with general instructions, the current task goal, the website descriptions, and all dynamics or skills available in the buffer.",
+      "support_explanation": "VLM看整个buffer再选topK，不是向量近邻，规模成本随库增长。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§3.4 persistence across tasks",
+      "quote": "will run the distillation module after each task and run the retrieval and replay module in the next task.",
+      "support_explanation": "后任务读前任务经验，跨任务持久反馈环。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§4 benchmark denominator",
+      "quote": "have 812 tasks across five different websites corresponding to different domains: shopping, shopping administration, online forum, map, and project collaboration (Gitlab).",
+      "support_explanation": "完整WA812；紧接正文VWA910。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§4.1.1 offline construction",
+      "quote": "A filtering process is then applied to ensure that these tasks do not overlap with the test set. Finally, these tasks are annotated by humans to obtain gold trajectories for offline learning.",
+      "support_explanation": "offline构库与终测任务显式不重叠；gold demonstration为有成本外部输入，不是在线自生。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§4.1.1 matched base agent",
+      "quote": "by ourselves as the baseline for comparison.",
+      "support_explanation": "作者自跑同GPT4o/BrowserGym baseline，而其他主表方法多取原文，不等同全都等预算。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 1 WA baseline",
+      "quote": "26.6\n\n28\n\n22.8\n\n21.4\n\n18.4\n\n24.3",
+      "support_explanation": "BrowserGym五域与总SR24.3；CER offline33.4 online33.2 hybrid36.7。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 1 hybrid row",
+      "quote": "32.8\n\n41.2\n\n41.2\n\n37.2\n\n30.4\n\n36.7",
+      "support_explanation": "hybrid五域与总成功率；36.7为overall，非域均值。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 2 VWA CER row",
+      "quote": "27.0\n\n38.1\n\n24.4\n\n31.9",
+      "support_explanation": "三个站点和整体SR；baseline26.2，非树搜索26.4。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§5.2 cross-template definition",
+      "quote": "calculated by the number of templates solved (at least one task is solved) divided by the total number of templates.",
+      "support_explanation": "ct-SR是模板覆盖率，不是整个未见模板holdout；不能据此排除先见同模板。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 4 template metrics",
+      "quote": "Baseline\n\n44.7\n\n100\n\n100\n\nCER\n\n60.0\n\n93\n\n141",
+      "support_explanation": "ctSR44.7→60；保留基线覆盖93%，新问题覆盖141%，不是长期遗忘率实验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 8 component ablation",
+      "quote": "CER\n\n37.7\n\nCER\n- skills\n\n33.3\n\nCER\n- dynamics\n\n35.1",
+      "support_explanation": "Forum的两种经验各有贡献，但未有raw memory/无retrieval/同额外调用对照。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§5.6 oracle filtering",
+      "quote": "uses ground truth evaluators from the environment to filter out and learn from successful experiences only.",
+      "support_explanation": "success-only是额外oracle消融，不是主CER必须有真值；其收益不用于证明无oracle主张。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§5.6 failure contamination",
+      "quote": "the failed trajectories provide some misleading action sequences that will negatively influence the agent’s decision-making.",
+      "support_explanation": "31.4→33.5 text-only oracle对照揭示错误经验风险；不与多模态36.7直接比。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 3 cost coverage",
+      "quote": "Since output tokens do not change much, we only count input tokens here.",
+      "support_explanation": "有input-token增量但输出和完整成本被排除；无法认定全生命周期budget-matched。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Table 3 hybrid cost row",
+      "quote": "36.7\n\n20631\n\n17.3%\n\n52.5%",
+      "support_explanation": "报告hybrid每task增20631 input/17.3%，SR相对52.5%与Table1 24.3→36.7约51.0%不完全一致。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Appendix A.5 negative result",
+      "quote": "offline + online settings with self-guided explorations perform even worse than the online-only setting.",
+      "support_explanation": "self-exploration hybrid35.1低于online37.7；人示范hybrid41.2，明确非单调累积。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Appendix A.4 training tasks",
+      "quote": "The number of training tasks varies across websites, ranging from five to ten, and accounts for approximately 5% of the test set.",
+      "support_explanation": "作者的成本/规模说法；列表Gitlab有12条故不照单全收5–10精确性，总人时/注释成本未计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "Appendix A.1 Figure 4 write behavior",
+      "quote": "Check existing skills before generating; do not summarize skills that have already been summarized; instead, use \"Summarized before\" in the steps.",
+      "support_explanation": "存量去重提示是唯一明确admission近似，非验证门。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§7 limitations",
+      "quote": "partially because the agent can directly navigate to a specific page with its URL.",
+      "support_explanation": "收益部分源于URL快捷跳转，不宜泛化到任意数字或物理环境。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E025",
+      "material_id": "2506.06698.txt",
+      "sha256": "796760ec86fa163f147ad0b64bdd0f461266dadc3e7d8e5ff18499c1e024b184",
+      "locator": "§5.5 sampling control",
+      "quote": "We sampled 3 times for each task with max steps of 20",
+      "support_explanation": "采样+rerank额外算力有配置，Forum43.1→52.6说明兼容，不是只用CER同预算比较。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "dynamic experience buffer内页面摘要和参数化技能",
+      "information": "任务goal、网页状态/动作轨迹、已有buffer；无主循环groundtruth奖励要求",
+      "operation": "分别蒸馏dynamics与skills，跳过已总结条目，持久追加；新任务VLM分别看全库取最多5+5，转文字加入system context",
+      "output": "页面名/描述/用途/URL，子目标动作模板与自然语言说明",
+      "conditions": "可观测网页痕迹，强VLM，目标导向连续轨迹，URL可直达",
+      "feedback": "真实环境观测/动作后果；成功性主要靠VLM隐式判断，主循环不按真值过滤",
+      "selection_rule": "提示去重与相关性topK；无外部admission gate/失败撤回/冲突消解",
+      "selection_data": "online每已完成任务的轨迹；offline额外人示范或随机探索；hybrid兼有",
+      "persistence": "跨任务buffer，offline终测时固定，online/hybrid每任务后写",
+      "later_use": "下一任务读取经验条件化同冻结agent",
+      "claimed_effect": "WA24.3→offline33.4/online33.2/hybrid36.7；VWA26.2→31.9",
+      "failure_boundary": "失败轨迹误导、全库检索成本增长、同环境暴露/任务顺序与无oracle成功判断",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E009",
+        "E011",
+        "E012",
+        "E013",
+        "E018",
+        "E023"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "两种经验来源与部署更新方式",
+      "information": "人工构造不重叠task的gold轨迹，或自导探索轨迹，或当下任务序列",
+      "operation": "offline预先蒸馏后freeze；online从空库逐task更新；hybrid先离线再在线",
+      "output": "不同初始化与更新流的可比agent",
+      "conditions": "offline人工轨迹/检查成本明确可得；online不回看未来任务",
+      "feedback": "在线自然轨迹不需要外部真值，success-only另作oracle消融",
+      "selection_rule": "人工过滤任务overlap；online次序敏感性/模型间随机性未报告",
+      "selection_data": "offline训练任务约5%规模、终测WA全812；VWA全910只online",
+      "persistence": "固定或流式更新的非权重库",
+      "later_use": "测试任务使用既有buffer；不是反复原题重试",
+      "claimed_effect": "offline独立任务改善；self-exploration hybrid35.1低于online37.7",
+      "failure_boundary": "offline不同任务仍同网站/相似模板；在线基准经验不能作sealed heldout",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009",
+        "E017",
+        "E021",
+        "E022"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "web agents每任务重头探索，原始长轨迹memory难扩展，已有workflow/guide需要真值奖励或全库重写",
+    "checked_gap": "细粒度页面事实+参数化子目标模板、分路检索与无需奖励的流式吸收具体；ExpeL/AutoManual/AWM最近邻仅本文二手，强弱差异未独立核实",
+    "lineage": [
+      {
+        "method": "ReAct / BrowserGym",
+        "source": "本文§2/4.1.1，Yao2023b/Drouin2024；同GPT4o baseline作者复跑"
+      },
+      {
+        "method": "ExpeL / Synapse",
+        "source": "本文§2，Zhao2023/Zheng2023；独立原文版本未固定"
+      },
+      {
+        "method": "AutoGuide / AutoManual / Agent Workflow Memory",
+        "source": "本文§2，Fu2024/Chen2024/Wang2024b；独立原文版本未固定"
+      }
+    ],
+    "closest_adjacent": [
+      "AutoManual的轨迹到规则",
+      "Agent Workflow Memory的workflow记忆",
+      "ExpeL的跨任务经验"
+    ],
+    "residue": "长轨迹冗长且任务绑定，页面知识与动作模板需求不同；奖励不可得时需从不可靠轨迹泛化",
+    "stakes": "每任务从零探索的失败率与调用开销",
+    "method_response": "子目标参数化、页面/技能分离、旧库去重和VLM相关性选择；在线/离线不同可用数据",
+    "remaining_gap": "与强经验方法等预算对比、真值外部gate、顺序效应、URL之外环境及持续失效清理",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004",
+      "E005",
+      "E006",
+      "E021",
+      "E024"
+    ],
+    "unresolved": [
+      "请求共享固定ExpeL/Synapse/AutoGuide/AutoManual/AWM原文核最近邻与奖励依赖，未联网或读取其他席结论。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [
+      "heterogeneous_decomposition"
+    ],
+    "outside_taxonomy": false,
+    "reason": "固定LLM从历史参考经验上下文适应；具体把事实/动作按不同结构与检索分治，而非泛指多模块。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "将新task表示为goal+相关参考经验conditioning",
+          "C03已检查：没有上游schema训练、embedding共享空间或整类别结构holdout，不硬配子卡"
+        ],
+        "success_checks": [
+          "offline任务不重叠且buffer冻结时仍有改善",
+          "有经验内容消融"
+        ],
+        "failure_checks": [
+          "缺raw长context/强memory邻居预算匹配",
+          "online ctSR不是未见模板split"
+        ],
+        "evidence_ids": [
+          "E005",
+          "E006",
+          "E009",
+          "E014",
+          "E016"
+        ],
+        "reason": "主卡操作清楚；C03更窄的reference schema/结构外推不完整对应。"
+      },
+      {
+        "main_id": "heterogeneous_decomposition",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "按state/page与action/subgoal的信息差异分区",
+          "分别设计输出schema与retriever并合并context",
+          "C04是差异压缩冗余模型，不适用此方法"
+        ],
+        "success_checks": [
+          "去skills和去dynamics各下降"
+        ],
+        "failure_checks": [
+          "没有等长度单路蒸馏对照，不证分区本身优于多信息"
+        ],
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E006",
+          "E016"
+        ],
+        "reason": "差异处理的对象与用途可观察，而非以两个模块数量匹配卡片。"
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00",
+        "version": "manifest-pinned",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "把每task重新探索转为持久页面/技能经验，固定对象具体",
+            "evidence_ids": [
+              "E004",
+              "E005",
+              "E007"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "unmet",
+            "reason": "主流程逐trajectory归纳，没有成功失败配对对比",
+            "evidence_ids": [
+              "E003",
+              "E018"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "执行状态/动作提供事实grounding，失败轨迹却可生成误导步骤",
+            "evidence_ids": [
+              "E018",
+              "E023"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "带旧库去重但无冲突/过期/删除和显式容量限制",
+            "evidence_ids": [
+              "E003",
+              "E006",
+              "E023"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "unmet",
+            "reason": "主方法不按外部成功验证入库；oracle过滤作为单独消融",
+            "evidence_ids": [
+              "E017",
+              "E018"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E004",
+          "E005",
+          "E007",
+          "E017",
+          "E018",
+          "E023"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00"
+      },
+      "operation_correspondence": "轨迹蒸馏为参数化指导并留在buffer，新任务检索注入冻结LLM",
+      "necessary_conditions": "经验确实绑定动作后果且新任务可读；无真值成功标记故反思质量有界，不是权重experience replay",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E007",
+        "E018"
+      ]
+    },
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00"
+      },
+      "operation_correspondence": "按页面state facts与action subgoal guidance分别抽取/检索，前者URL导航后者动作启发",
+      "necessary_conditions": "两类参考结构有不同作用；不声称更改记忆管理算法本身或生成可执行skills",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E016",
+        "E024"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "patterns/sub/H00.md"
+      ],
+      "applies_when": "从历史web轨迹写经验并声称改善新任务",
+      "applicable": true,
+      "status": "partial",
+      "reason": "实际观察grounding存在但distillation不判别正确性；oracle过滤更强且噪声有害",
+      "evidence_ids": [
+        "E017",
+        "E018",
+        "E023"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "patterns/sub/H00.md"
+      ],
+      "applies_when": "从历史web轨迹写经验并声称改善新任务",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "去重不是可信度gate，主方法无验证前写入",
+      "evidence_ids": [
+        "E003",
+        "E017",
+        "E023"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/H00",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H00.md"
+      ],
+      "applies_when": "从历史web轨迹写经验并声称改善新任务",
+      "applicable": true,
+      "status": "partial",
+      "reason": "offline与终测不重叠且库冻结；online测试流更新和ctSR不能作为全模板外推，需另报",
+      "evidence_ids": [
+        "E007",
+        "E009",
+        "E014"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2506.06698-1",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper §4.1",
+        "paper §5.7"
+      ],
+      "applies_when": "从历史web轨迹写经验并声称改善新任务",
+      "applicable": true,
+      "status": "partial",
+      "reason": "同base baseline和内容消融有，但缺同budget raw-memory/强邻居/store-off保留相同额外calls",
+      "evidence_ids": [
+        "E010",
+        "E016",
+        "E025"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2506.06698-2",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "paper Table3",
+        "paper Appendix A.4–A.5"
+      ],
+      "applies_when": "从历史web轨迹写经验并声称改善新任务",
+      "applicable": true,
+      "status": "partial",
+      "reason": "报告输入token但排除输出；人示范探索与全库检索增长成本需计",
+      "evidence_ids": [
+        "E006",
+        "E019",
+        "E020",
+        "E022"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "保留经验改善后续web任务且无需主循环真值奖励",
+      "setting": "GPT4o-2024-0513温度.1，BrowserGym，WA812/VWA910，retrieval最多5+5",
+      "baseline_control": "作者重跑同base BrowserGym；offline/online/hybrid；双内容消融；oracle text-only对照",
+      "selection_vs_test": "offline人工设计并过滤overlap，固定库终测；online/hybrid从已经做过的test任务持续学习，不是静态独立holdout",
+      "result_denominator": "WA24.3→33.4/33.2/36.7；VWA26.2→31.9%；成功过滤text-only31.4→33.5另协议",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009",
+        "E011",
+        "E012",
+        "E013",
+        "E016",
+        "E017",
+        "E018"
+      ],
+      "counterevidence": [
+        "E018",
+        "E021"
+      ],
+      "allowed_conclusion": "offline已保留经验对不同同域任务有作者报告收益，online序列收益成立于该流式协议；噪声可害，不是无监督经验质量保证"
+    },
+    {
+      "claim_id": "C2",
+      "text": "稳定、可塑且能跨模板推广",
+      "setting": "Forum split baseline vs CER",
+      "baseline_control": "原baseline模板解决集合交并及成功覆盖率",
+      "selection_vs_test": "同一online任务流的template覆盖；无先见模板整组排除",
+      "result_denominator": "ctSR44.7→60.0，stability93%，plasticity141%；未给多序列种子或CI",
+      "evidence_ids": [
+        "E014",
+        "E015"
+      ],
+      "counterevidence": [
+        "E021"
+      ],
+      "allowed_conclusion": "模板覆盖和保留baseline成功集合的静态比较较好；不证明长期抗遗忘、单调更新或未见模板迁移"
+    },
+    {
+      "claim_id": "C3",
+      "text": "较低额外token成本且与sampling兼容",
+      "setting": "WA input token统计；Forum3采样max20step",
+      "baseline_control": "BrowserGym/CER input；Sampling43.1 vs CER+Sampling52.6",
+      "selection_vs_test": "对检索/蒸馏附加输入成本是否各阶段全含未分解；offline人力与output忽略",
+      "result_denominator": "hybrid增加20631 input tokens/17.3%；Table3相对SR52.5与主表约51.0不完全一致",
+      "evidence_ids": [
+        "E019",
+        "E020",
+        "E022",
+        "E025"
+      ],
+      "counterevidence": [
+        "E006",
+        "E021"
+      ],
+      "allowed_conclusion": "作者报告输入增量与synergy，不能断言全生命周期公平预算下总成本优势"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "offline non-overlap构库后固定复用、同base后续任务SR24.3→33.4支持retained层；online/hybrid另有流式提升但不称sealed holdout，未改进蒸馏/检索器本身，不是improver。",
+    "unresolved": [
+      "online任务顺序/多run方差和基座预训练污染",
+      "外部gate、记忆冲突及长流退化未控制",
+      "缺等预算raw-memory及最近邻memory方法",
+      "成本输入口径与表中相对提升算术差异"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "具体定位冗长轨迹、groundtruth reward依赖与不同经验结构，最近邻有名称；二手谱系待共享原文，未核实优于全部既有方法",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "分路蒸馏/去重/检索/下一任务回放链清楚，offline/online条件合理；不能识别哪些失败步骤可保留",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "参数化模板和caps实际实现；去重非验证门，无冲突清理/回滚/长期库容量策略",
+      "evidence_ids": [
+        "E003",
+        "E006",
+        "E023"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "标准可交互WA/VWA成功率及完整分母直接测任务，模板覆盖指标定义清楚；stability只是集合保留非长流遗忘",
+      "evidence_ids": [
+        "E008",
+        "E011",
+        "E012",
+        "E013",
+        "E014",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "同base baseline、两类经验及数据源消融支持部分机制；未配平额外调用/人工示范，缺强raw memory与retriever-off控制",
+      "evidence_ids": [
+        "E009",
+        "E010",
+        "E016",
+        "E021",
+        "E025"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "offline构库任务显式不重叠，终测固定库；online/hybrid学test前缀，ctSR非未见模板外推，基座污染无审计",
+      "evidence_ids": [
+        "E007",
+        "E009",
+        "E014",
+        "E021"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "全812/910分母与负结果可见；无主表CI、多随机次序/种子重复或搜索方差，依A2只到1",
+      "evidence_ids": [
+        "E008",
+        "E015",
+        "E018",
+        "E021"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有输入token增量、动作/采样配置；排除输出且全库检索扩展、人示范/探索/失败累积成本不完整，非等budget证据",
+      "evidence_ids": [
+        "E006",
+        "E019",
+        "E020",
+        "E022",
+        "E025"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "§1–8",
+        "Tables1–9",
+        "full Appendix A.1–A.5"
+      ]
+    }
+  },
+  "score": {
+    "raw": 60.0,
+    "display": 60.0,
+    "lower": 60.0,
+    "upper": 60.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "固定完整正文和全部附录已读，材料可评分；缺控制/统计为作者报告边界。",
+  "rationale": "页面事实与子目标模板分路蒸馏检索，offline冻结库对不同任务有收益；在线同基准积累不等于结构留出，失败经验会误导，门控、等预算归因和运行方差仍不足。"
+}

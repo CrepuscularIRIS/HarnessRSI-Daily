@@ -1,0 +1,695 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r07a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2509.04439",
+    "paper_id": "2509.04439",
+    "title": "ArcMemo: Abstract Reasoning Composition with Lifelong LLM Memory",
+    "version": "2509.04439v3",
+    "claim_type": "system_method",
+    "central_claim": "抽象模块化concept memory及选择使冻结LLM在ARC上更好地跨题复用经验，动态更新随重试带来进一步自我改进。"
+  },
+  "provenance": {
+    "input_hash": "66fc4c6733ccce90380fbcc2ddf1e7583ddd766efc6e03b2daa725c4bfe3484b",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "配置声明agent_model=sonnet / actual_model=gpt-6.1-sol；无独立后端模型回执及会话标识，按模板置null；未探测模型。",
+    "timestamp": "2026-10-21T21:54:12.349393+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2509.04439.txt",
+      "url": "https://arxiv.org/html/2509.04439v3",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "sections_read": [
+        "Abstract",
+        "§1–6 including Algorithms and Tables 1–3",
+        "Appendix A–E including Tables 4–5 and Figure 4 caption"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.1",
+      "quote": "Our method’s novelty lies in the choices made to target (1) abstracting a memory to be less specific to the problem it was derived from (2) enabling memory selection, since greater abstraction makes standard retrieval approaches (embedding similarity thresholding) less effective.",
+      "support_explanation": "明确改变记忆抽象单位及检索，而非仅冻结权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.3 OE",
+      "quote": "These reconstructed traces are then used to extract situation-suggestion pairs, forming structured memory entries for guiding future analyses.",
+      "support_explanation": "反思由最终解的事后推导提取；非原始隐式CoT。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.3 PS",
+      "quote": "The main abstraction phase proceeds from the generated pseudocode, recording new concepts and revising existing concepts along with their various fields.",
+      "support_explanation": "PS把解转伪代码，再写入/修订概念。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.4",
+      "quote": "PS Selection instructs a reasoning model to systematically explore the problem: first identify initial concepts using relevance cue annotations, then attempt to “fill in the details” by determining values or routines to populate these initial concepts’ parameters using type annotations to identify which other concepts should be investigated.",
+      "support_explanation": "后续推理读取类型化概念及组合。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§4",
+      "quote": "We reuse these solutions to seed our memory rather than training data.",
+      "support_explanation": "160个train人工解种子，与100个val评测分开。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§4",
+      "quote": "Following\nAkyürek et al. (2025)\n, we evaluate a randomly selected 100-puzzle subset of the public val split.",
+      "support_explanation": "评测分母100；非全400亦非私有测试。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Table 1",
+      "quote": "ArcMemo-PS (ours, o4-mini (medium))\n\n49.33 (0.29)\n\n59.33 (0.29)",
+      "support_explanation": "作者报告官方oracle@2 59.33±0.29；baseline55.17±3.18。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Appendix B Table 4",
+      "quote": "baseline\n\n46.00\n\n45.50\n\n47.50\n\n46.33 (1.04)\n\n55.17 (3.18)",
+      "support_explanation": "no-memory同模型基线及三run得分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Appendix B",
+      "quote": "we sample 3 runs for each setting and report the average single run score, average oracle@2 score, and their standard deviation.",
+      "support_explanation": "统计有三次采样和标准差，非跨memory构建/顺序种子检验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§1",
+      "quote": "memory updates triggered from a previous pass over the test set may enable new solves in a subsequent pass.",
+      "support_explanation": "动态continual结果重复访问评测流，不能当独立留出。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§5.2",
+      "quote": "While we cannot definitively conclude ArcMemo changes directly induced each of the new solves (given the state of LLM interpretability), this seems to suggest new solves in the ArcMemo settings are potentially more attributable to the memory component compared to sampling variance.",
+      "support_explanation": "作者明确没有逐解的因果证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Appendix C Figure 4 caption",
+      "quote": "Token Efficiency Plot: Comparing various settings’ official score (oracle@2) on the public validation subset to the tokens used by the reasoning model for strictly puzzle solving.",
+      "support_explanation": "成本只覆盖解题token，不含整个抽象与筛选系统。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.3 OE",
+      "quote": "This minimal formulation does not consider the existing contents of memory while adding new entries for simplicity and scaling reasons.",
+      "support_explanation": "没有OE去重/维护，依赖读时处理。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.5",
+      "quote": "In other experiments, we used fixed memory to prioritize throughput and avoid the potentially confounding effect of order dependencies.",
+      "support_explanation": "主结果固定种子memory；与在线收益分开。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Table 2 caption",
+      "quote": "Ablating the reasoning-based selection mechanism from ArcMemo-PS reduces overall performance, showing selection is useful for downstream performance.",
+      "support_explanation": "selection on/off对照。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Table 3 two retries",
+      "quote": "+ continual memory update\n\n62.33 (3.51)\n\n70.00 (1.73)",
+      "support_explanation": "OE动态70.00 vs固定67.67；低重试不占优。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§2",
+      "quote": "In contrast, Dynamic Cheatsheet maintains a unified buffer that is adapted continuously.",
+      "support_explanation": "最近邻为整块重写而非模块化概念。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "§3.2",
+      "quote": "The organization of memory entries on a collective level is another design surface we leave for future exploration; we use a flat collection of entries for simplicity.",
+      "support_explanation": "库级维护/层次化仍待研究。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2509.04439.txt",
+      "sha256": "2ee2aaf70157d3d79cce84267a40764d4a509bd863fc218e074cd29fc58a5386",
+      "locator": "Appendix B Table 5",
+      "quote": "in contrast, the strict scoring regime only marks a puzzle as solved if a single attempt (generated program) solves all test cases.",
+      "support_explanation": "官方度量与严格全题程序度量均提供。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "OE situation-suggestion / PS typed parameterized concept memory",
+      "information": "train人工解种子；在线由grid示例执行反馈筛解；部分模型隐藏推理以事后推导替代",
+      "operation": "解→推导/伪代码→抽象新概念或修订已有字段",
+      "output": "外部平面concept store",
+      "conditions": "解的反馈可信且任务模式可重组",
+      "feedback": "ARC参考输入输出例执行",
+      "selection_rule": "成功解触发抽象；没有概念效用统计接受门",
+      "selection_data": "train种子；continual设置使用每10个val问题的经验",
+      "persistence": "外部memory；PS可修订，OE追加",
+      "later_use": "未来puzzle通过situations/top-k或reasoning exploration读取",
+      "claimed_effect": "固定PS 55.17→59.33；动态OE两retry 67.67→70.00",
+      "failure_boundary": "同流重试、顺序敏感、抽象过粗、检索干扰，治理未完成",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E007",
+        "E010",
+        "E013",
+        "E014",
+        "E016"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "memory selection",
+      "information": "新题、relevance cues、参数type与所有concept摘要",
+      "operation": "用推理探索和类型匹配而非embedding检索",
+      "output": "可组合概念子集",
+      "conditions": "固定模型能解释抽象concept",
+      "feedback": "下游ARC解题评测，非自适应学习选择器",
+      "selection_rule": "OE top-k / PS推理选择",
+      "selection_data": "当前新题",
+      "persistence": "选择规则固定，不演化权重或improver",
+      "later_use": "当前题及每个后续题都调用同一读操作",
+      "claimed_effect": "去selection使零重试official59.33降至55.17，token更多",
+      "failure_boundary": "某些高compute regimes无选择更好",
+      "evidence_ids": [
+        "E004",
+        "E015",
+        "E012"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "instance-bound memory难于跨表面差异复用，monolithic cheatsheet难扩展",
+    "checked_gap": "类型化参数concept和reasoning selection针对抽象与具体题匹配；不是首次memory reasoning",
+    "lineage": [
+      {
+        "name": "Buffer of Thoughts (Yang et al. 2024)",
+        "source": "2509.04439v3 §2; original fulltext not supplied"
+      },
+      {
+        "name": "Dynamic Cheatsheet (Suzgun et al. 2025)",
+        "source": "2509.04439v3 §2/4; original fulltext not supplied"
+      }
+    ],
+    "closest_adjacent": [
+      "Buffer of Thoughts: problem-specific templates",
+      "Dynamic Cheatsheet: entire buffer rewrite/read"
+    ],
+    "residue": "模块化概念可重组性与抽象检索",
+    "stakes": "减少重新发现同一推理步骤与库膨胀",
+    "method_response": "PS高阶参数/类型接口；OE触发条件；选择",
+    "remaining_gap": "长期治理、未见结构类别与跨领域迁移、真实在线部署",
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E004",
+      "E017",
+      "E018"
+    ],
+    "unresolved": [
+      "请求总控补固定Buffer of Thoughts与Dynamic Cheatsheet原文；现有gap仅由本文related work与本文实现差异支持。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "统一concept schema含参数、type、relevance cues",
+          "160 train解构造reference substrate",
+          "冻结模型检索/推理式选择后组合新题",
+          "100 public val实例，但无完整类别排除/污染审计",
+          "no-memory/cheatsheet/-selection同模型对照，非全系统等价预算"
+        ],
+        "success_checks": [
+          "无权重更新地读取概念并解决新puzzle",
+          "参数化类型接口是可重建的条件输入"
+        ],
+        "failure_checks": [
+          "评测类别与pretraining重叠未核验",
+          "动态结果重复评测流",
+          "全流程token未匹配"
+        ],
+        "evidence_ids": [
+          "E003",
+          "E004",
+          "E005",
+          "E006",
+          "E008",
+          "E010",
+          "E012"
+        ],
+        "reason": "C03 reference substrate+canonical format的无上游训练分支；不把训练conditioning channel当本篇必要条件。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "参数化concept作为reference substrate条件化冻结模型，C03中不需上游训练分支适配。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00",
+        "version": "manifest-frozen",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "改变instance-bound概念为可参数化模块。",
+            "evidence_ids": [
+              "E001",
+              "E003"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "输入输出示例可验证解，但抽象概念本身未独立执行验证。",
+            "evidence_ids": [
+              "E002",
+              "E003"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "PS修订字段、OE不感知已有库；没有清理退役机制。",
+            "evidence_ids": [
+              "E003",
+              "E013",
+              "E018"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "依据成功解写入，但无概念级边际效用/回退门。",
+            "evidence_ids": [
+              "E002",
+              "E003"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004",
+          "E013"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00"
+      },
+      "operation_correspondence": "把执行解抽成可组合concept，作为冻结求解器后续条件输入",
+      "conditions_and_differences": "H00主要反思追加；PS有H01式字段修订但无完整consolidation/retirement，不另强贴H01；也不是经执行验证注册到工具空间的H06。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E013"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+      ],
+      "applies_when": "声称抽象记忆回应可复用性瓶颈",
+      "applicable": true,
+      "status": "met",
+      "reason": "从instance-level到typed modular概念是明确对象变化。",
+      "evidence_ids": [
+        "E001",
+        "E003"
+      ],
+      "score_item": "G"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H00.md#step-by-step"
+      ],
+      "applies_when": "由解向外部记忆写入",
+      "applicable": true,
+      "status": "partial",
+      "reason": "解可用示例验证；概念抽象有效性未单独核验。",
+      "evidence_ids": [
+        "E002",
+        "E003"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+      ],
+      "applies_when": "声称可扩展lifelong memory",
+      "applicable": true,
+      "status": "partial",
+      "reason": "PS支持修订，但OE新增不读库且库级重构留作future work。",
+      "evidence_ids": [
+        "E003",
+        "E013",
+        "E018"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2509.04439-1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.04439v3 §3.5/4/5.3"
+      ],
+      "applies_when": "声称continual self-improvement",
+      "applicable": true,
+      "status": "partial",
+      "reason": "160 train→100 val支持固定记忆跨题；动态更新每10题并重跑同流，不支持严格独立未来流。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E010",
+        "E014"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2509.04439-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.04439v3 §5.1–5.2"
+      ],
+      "applies_when": "归因于抽象/选择而非额外推理",
+      "applicable": true,
+      "status": "partial",
+      "reason": "同o4-mini、retry网格、无库与去selection对照；未随机打乱概念/等全预算。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E011",
+        "E015"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2509.04439-3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.04439v3 Appendix B/D"
+      ],
+      "applies_when": "小幅增益需要不确定性",
+      "applicable": true,
+      "status": "partial",
+      "reason": "3 runs+SD，但未完整memory构建/流顺序方差、区间或检验。",
+      "evidence_ids": [
+        "E009"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2509.04439-4",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.04439v3 Appendix C"
+      ],
+      "applies_when": "声称token efficiency",
+      "applicable": true,
+      "status": "partial",
+      "reason": "提供解题token性能曲线，未包括建库和所有辅助调用成本。",
+      "evidence_ids": [
+        "E012"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "PS concept memory优于无记忆并随compute扩展",
+      "setting": "o4-mini medium、GPT-4.1辅助；100 public val ARC-AGI-1；160 train解seed",
+      "baseline/control": "同求解器no-memory/cheatsheet/OE、去selection，0/1/2 retry",
+      "selection_vs_test": "固定memory从train构造；公开val也用于小规模概念设计实验",
+      "result/denominator": "零retry官方55.17±3.18→59.33±0.29，3 runs/100题；两retry69.00→70.83",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E007",
+        "E008",
+        "E009",
+        "E015"
+      ],
+      "counterevidence": [
+        "全流程辅助token不匹配，绝对收益有限且不是全400或ARC2"
+      ],
+      "allowed_conclusion": "固定抽象memory跨train/val题的条件性收益；不可外推通用lifelong intelligence。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "动态更新在推理规模高时进一步自我改进",
+      "setting": "OE每10题更新，同val流多pass/retry",
+      "baseline/control": "固定OE",
+      "selection_vs_test": "测试流既产经验又再被重试，不是独立未来留出",
+      "result/denominator": "两retry67.67±2.52→70.00±1.73；0retry56.67→56.00、1retry65.67→65.00并非均改善",
+      "evidence_ids": [
+        "E010",
+        "E014",
+        "E016"
+      ],
+      "counterevidence": [
+        "顺序/多次访问影响且无跨顺序方差"
+      ],
+      "allowed_conclusion": "在线同流高retry改善；不证明改进机制自身变强。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "固定外部concept store在不同val问题中相对no-memory带来作者报告的收益；continual收益仅在重复评测流高retry出现，不达到improver。",
+    "unresolved": [
+      "邻居独立原文",
+      "全流程budget与pretraining污染审计",
+      "动态更新严格未来流迁移"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "具体定位实例绑定与整体cheatsheet缺模块性的瓶颈，本文有邻近方法比较；独立邻居原文未固定，不能最高档。",
+      "evidence_ids": [
+        "E001",
+        "E017"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "OE/PS格式、伪代码抽象、类型组合和reasoning selection对应抽象/匹配问题，可复述预测；缺概念独立验证。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "核心写入读取链可重建，但长期治理、冗余冲突、回退未实现，OE追加尤其无维护。",
+      "evidence_ids": [
+        "E003",
+        "E013",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 4,
+      "reason": "精确grid执行与官方oracle@2，另给严格单程序全部测试评分，度量和验证器对中心ARC主张明确；不因污染/小样本重复扣此项。",
+      "evidence_ids": [
+        "E007",
+        "E019"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "同模型无记忆、cheatsheet及去selection；没有等全token预算或随机内容对照，作者承认逐解归因不确定。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E011",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "固定train memory在val使用支持跨题；动态重访同一评测流，开发10题及pretraining重叠未审计，lifelong范围受限。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E010",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "3次采样和SD及完整各run结果，未跨memory/顺序重复、置信区间或显著性检验，按A2不足3。",
+      "evidence_ids": [
+        "E008",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有解题token效率图与选择消融，未覆盖建库/抽象/选择调用总量，不是全预算对等。",
+      "evidence_ids": [
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 63.75,
+    "display": "63.8",
+    "lower": 63.75,
+    "upper": 63.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整固定材料可判定，非权重concept memory在后续不同题读取；已把固定记忆跨题收益与在线同流重试主张分开。",
+  "rationale": "类型化模块concept和推理式选择可重建，固定种子记忆有跨题及消融结果。动态收益局限重复评测流，长期治理和全流程预算未闭合。"
+}

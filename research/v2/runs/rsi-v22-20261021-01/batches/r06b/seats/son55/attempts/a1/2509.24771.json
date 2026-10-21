@@ -1,0 +1,872 @@
+{
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "LatentEvolve, a self-evolving latent test-time scaling framework (daytime retrieval + self-supervised latent refinement, nighttime consolidation into a latent weaver), enables LLMs to learn how to scale test-time computation without labels, surpasses TTS methods such as LatentSeek and TTRL by up to 13.33% across eight benchmarks and five backbones, and generalizes across domains and backbones.",
+  "paper_key": "2509.24771",
+  "paper_id": "2509.24771",
+  "title": "LatentEvolve: Self-Evolving Test-Time Scaling in Latent Space",
+  "version": "2509.24771v1"
+ },
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Episodic buffer M of (query embedding, base latent z_base, refined latent z*) triplets plus the per-query latent soft-prefix z of a frozen LLM",
+   "information": "Frozen LLM final hidden state as query embedding; own sampled outputs scored by the same LLM (self-reward Q); no ground truth, no external verifier",
+   "operation": "Top-k cosine retrieval, z0 = z_base + sum_j alpha_j (z*_j - z_base,j), then up to K=10 REINFORCE-style updates on z with M=8 samples",
+   "output": "Refined z* used to produce the final answer; triplet archived",
+   "conditions": "Archive only if mean Q of last refinement >= tau=0.5",
+   "feedback": "Self-judged Q (correctness, comprehension, calculation, format x2, clarity x2)",
+   "selection_rule": "Self-confidence threshold tau=0.5; no external check; buffer growth/forgetting not described",
+   "persistence": "Buffer M of latent vectors on disk/memory across the test stream",
+   "later_use": "Retrieved for later queries in the same evolving stream",
+   "claimed_effect": "Daytime component improves accuracy (w/o Daytime SciBench -4.9)",
+   "failure_boundary": "Self-judge errors enter buffer unchecked; unfaithful/format-driven reward possible; sensitivity to L' and T reported",
+   "evidence_ids": [
+    "E004",
+    "E006",
+    "E007",
+    "E008",
+    "E017",
+    "E020"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Latent weaver W_psi (Qwen2.5-1.5B) that predicts z* from (embedding, z_base) and replaces the base initial latent",
+   "information": "Archived triplets only; trained every T=200 test instances",
+   "operation": "MSE regression distillation of buffer experience into auxiliary-model weights ('nighttime consolidation')",
+   "output": "z'_base = W_psi(e, z_base) feeding daytime scaling",
+   "conditions": "Triggered after enough admitted triplets accumulate",
+   "feedback": "Same self-scored admitted triplets",
+   "selection_rule": "None beyond tau gate; no validation of the updated weaver before use, no rollback",
+   "persistence": "Auxiliary-model weights (backbone frozen) -> boundary case: touches weights of a side component",
+   "later_use": "Every later query passes through the weaver first",
+   "claimed_effect": "w/o Nighttime SciBench -6.8; nighttime transfers better cross-domain (JAMA +4.5 vs +0.4)",
+   "failure_boundary": "Large T (1000) loses benefit; weaver only validated on frozen LLM; dimension mapping across backbones not described",
+   "evidence_ids": [
+    "E009",
+    "E017",
+    "E018"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "TTS methods treat queries as independent, so LLMs do not learn to scale test-time compute better with experience.",
+  "checked_gap": "Holds for latent TTS (LatentSeek, SoftCoT) where each query is optimized from scratch; overbroad for the family because parametric test-time training and explicit experience memories already accumulate across a stream.",
+  "lineage": "Coconut/SoftCoT -> LatentSeek (per-query latent optimisation via self-reward) -> LatentEvolve (adds retrieval buffer + distilled weaver); parallel line: Reflexion/Mind Evolution, TTT, experience databases (listed in related work).",
+  "closest_adjacent": [
+   "LatentSeek (same inner optimisation, no memory)",
+   "TTRL (test-time RL across stream; weight-updating, our_inference from external knowledge)",
+   "explicit-text experience databases named in Sec 2 but not run as baselines"
+  ],
+  "residue": "Latent-space accumulation avoids text context growth, but its advantage over explicit memories at equal compute is unmeasured.",
+  "stakes": "Per-query compute (K*M rollouts) is large; claimed benefit is accuracy and shorter answers (Table 5).",
+  "method_response": "Retrieval of past optimisation momentum plus a periodically distilled initializer.",
+  "remaining_gap": "No explicit-memory or compute-matched latent baseline; self-judge validity untested; stream-order sensitivity unknown.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E003",
+   "E022"
+  ],
+  "unresolved": [
+   "Whether TTRL/explicit-memory methods are the fairer nearest neighbors (not locally pinned; no external search allowed)"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": {
+     "1_constraint_is_supervision": "met (label-free by design)",
+     "2_generator_reaching_new_region": "partial (latent optimisation yields candidate latents; not new data beyond support)",
+     "3_one_load_bearing_filter": "partial (tau=0.5 self-score present but loosely motivated and not ablated)",
+     "4_retrain_on_filtered_and_iterate": "met (weaver retrained every T=200)",
+     "5_close_gap_with_cheaper_baselines": "partial (downstream metrics reported; no cheaper non-generative alternative such as retrieval-only or averaged latents)"
+    },
+    "success_checks": [
+     "explicit curation stage with removal shown to break method: not shown (no tau ablation)"
+    ],
+    "failure_checks": [
+     "thin wrapper on existing machinery: risk (LatentSeek + buffer + weaver)",
+     "gain too small for cost: unquantified vs TTRL"
+    ],
+    "evidence_ids": [
+     "E006",
+     "E008",
+     "E009",
+     "E012",
+     "E020"
+    ],
+    "reason": "Operation actually executed: self-scored candidates are filtered by a threshold and recycled into an iteratively retrained component; differs from C08 in that manufactured instances are latent vectors for an auxiliary model, not training data for the main model. Sibling C07 differs (internal-state readout, no generate-filter-retrain); C26 is a pretraining objective."
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": {
+     "conditioning_without_updating_main_model": "met (frozen backbone conditioned on latent prefix)",
+     "retrieved_reference_substrate": "met (episodic buffer)",
+     "category_holdout": "not done",
+     "cheaper_conditioning_baseline": "not done"
+    },
+    "success_checks": [
+     "mechanism-isolating conditioning ablation: partial (w/o Daytime)"
+    ],
+    "failure_checks": [
+     "no longer-context / nearest-neighbour baseline"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E016"
+    ],
+    "reason": "Retrieval of past latent traces conditions the frozen model per query; C03 not assigned because there is no unified schema/upstream tuning/category holdout and the weaver is trained on test-stream data."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "A main card fits; sub-card fit is partial.",
+  "executes_pattern": "partial",
+  "resolves_problem": "not_shown: no evidence that the self-judged signal tracks correctness or that gains survive without the format-heavy reward"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "unassigned": [],
+  "revision_proposals": [],
+  "matches": [
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "taxonomy.json@b115a69baefd",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "partial",
+      "reason": "Daytime triplets feed both the buffer and the weaver data, but there are no on-policy RL weight updates of the task model.",
+      "evidence_ids": [
+       "E009"
+      ]
+     },
+     {
+      "id": "S2",
+      "status": "partial",
+      "reason": "Episodic (buffer) vs procedural (weaver) split with lever ablations, but ablation numbers only partly readable.",
+      "evidence_ids": [
+       "E016",
+       "E017"
+      ]
+     },
+     {
+      "id": "S4",
+      "status": "partial",
+      "reason": "Weaver internalizes latents into a small model, yet the buffer keeps growing with no forgetting.",
+      "evidence_ids": [
+       "E009"
+      ]
+     },
+     {
+      "id": "F4",
+      "status": "unmet",
+      "reason": "Consolidated entries are admitted by self-confidence only; no verifiable-outcome anchor.",
+      "evidence_ids": [
+       "E007",
+       "E008"
+      ]
+     },
+     {
+      "id": "F5",
+      "status": "partial",
+      "reason": "Stream equals evaluation set per benchmark (declared setting, label-free); OOD transfer reported for one backbone.",
+      "evidence_ids": [
+       "E010",
+       "E019"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E009",
+     "E010",
+     "E017"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "taxonomy.json@b115a69baefd",
+    "fit": "low",
+    "condition_checks": [
+     {
+      "id": "F3",
+      "status": "unmet",
+      "reason": "Buffer is built from the stream that is scored.",
+      "evidence_ids": [
+       "E010"
+      ]
+     },
+     {
+      "id": "F4",
+      "status": "unmet",
+      "reason": "Model-scored latents enter memory without an external gate.",
+      "evidence_ids": [
+       "E008"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E008",
+     "E010"
+    ]
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28"
+   },
+   "operation_correspondence": "Self-scored generate-filter-retrain of a latent initializer corresponds to H28 variant (a): validated context (latent traces) internalized into a small learned component while the backbone stays frozen.",
+   "necessary_conditions_and_differences": "H28 expects externally grounded reward and a clean held-out split; here reward is self-judged and the stream is the test set. Weights touched are an auxiliary 1.5B model, not the task model.",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E010"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H03"
+   },
+   "operation_correspondence": "Retrieving prior latent traces as conditioning for a new query corresponds to retrieve-and-adapt of precedent (momentum transfer is the adaptation).",
+   "necessary_conditions_and_differences": "Precedents are latent vectors rather than raw cases; no store-off-with-loop comparison against simple retrieval.",
+   "evidence_ids": [
+    "E004",
+    "E016"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "a manufactured self-signal is claimed to cause the gain",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Day/night ablations exist, but no gate-off, plain latent-optimisation-at-matched-compute or averaged-latent control.",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card"
+   ],
+   "applies_when": "generality across models/datasets is claimed",
+   "applicable": true,
+   "status": "met",
+   "reason": "Five backbones and eight benchmarks in four domains reported.",
+   "evidence_ids": [
+    "E012",
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card"
+   ],
+   "applies_when": "a generate-score-update loop adds per-query compute",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "K=10 x M=8 rollouts per query and weaver training are not costed or matched.",
+   "evidence_ids": [
+    "E020",
+    "E021"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card"
+   ],
+   "applies_when": "label-free adaptation is claimed for deployment",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Label-free, but adaptation and scoring share the test stream and the signal is self-judged.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations"
+   ],
+   "applies_when": "retrieved conditioning is claimed to matter",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Simple averaging of refined latents is dismissed in text but never run; no longer-context/nearest-neighbour alternative.",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "test-time evolution accumulates on the incoming stream",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Stream equals scored set per benchmark by design; only one-backbone OOD study separates evaluation from adaptation.",
+   "evidence_ids": [
+    "E010",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "traces are consolidated into a learned component",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Admission is by self-confidence tau=0.5 with no verifiable-outcome anchor.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "two levers are claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Lever-wise ablation present, numbers mostly in figure.",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2509.24771-1",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#Reviewer expectations (pending): variance across stream orderings"
+   ],
+   "applies_when": "an accumulating store is evaluated on an ordered stream",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Single deterministic run; query order and variance not reported.",
+   "evidence_ids": [],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2509.24771-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "rubric_frozen.md A2 (metric satisfiable by non-target factors)"
+   ],
+   "applies_when": "self-reward or metric heavily weights format on format-sensitive benchmarks",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Q weights format+clarity 4/7; vanilla MMLU 55.3 vs CoT 69.1 shows format sensitivity; no analysis separating format repair from reasoning gain.",
+   "evidence_ids": [
+    "E006",
+    "E013"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "LatentEvolve surpasses SOTA TTS methods (LatentSeek, TTRL) by up to 13.33% and beats RL baselines.",
+   "setting": "Table 1: Qwen2.5-7b and Llama3.2-3b, 8 benchmarks, 13 baselines, Pass@1 at temperature 0, single run",
+   "baseline_control": "Vanilla, CoT, RL (trained on train splits), latent reasoning, TTS incl. TTRL",
+   "selection_vs_test": "Evolution on the scored test set (no split); RL baselines use train splits",
+   "result_denominator": "vs TTRL margins: Qwen +1.4,+0.18,+0.21,0,-3.33,+5.87,+1.25,+3.78; Llama +2.2,+0.49,+0.2,+3.34,-3.34,+1.32,+1.11,+3.64 (our arithmetic); 13.33 is the margin over LatentSeek",
+   "evidence_ids": [
+    "E012",
+    "E015",
+    "E023",
+    "E024"
+   ],
+   "counterevidence": [
+    "E013",
+    "E022"
+   ],
+   "allowed_conclusion": "On par with or slightly above TTRL on most cells (mostly <=2 points, two AIME cells below), clearly above weak latent baselines; stated 'up to 13.33% over TTRL' is not supported."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Daytime and nighttime scaling are both indispensable; nighttime yields more transferable knowledge.",
+   "setting": "w/o Daytime, w/o Nighttime (Fig 4, backbone unspecified in text); Fig 3 sequential MATH->MMLU study on Gemma-3-12b",
+   "baseline_control": "Full system; no alternative consolidator or gate-off",
+   "selection_vs_test": "Same stream; OOD tasks GPQA/JAMA held-out in domain",
+   "result_denominator": "SciBench -4.9 / -6.8; JAMA +4.5 vs +0.4 after first night",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Both components contribute in the shown ablation; one-backbone, single-run evidence that nighttime consolidation transfers to other domains."
+  },
+  {
+   "claim_id": "C3",
+   "text": "LatentEvolve evolves without labels or external signals.",
+   "setting": "Self-reward Q from the same LLM; tau=0.5 gate",
+   "baseline_control": "None for self-judge validity",
+   "selection_vs_test": "n/a",
+   "result_denominator": "no judge-accuracy or ground-truth-gated variant reported",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E008",
+    "E011"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Label-free operation is demonstrated; that the self-signal tracks correctness (rather than format) is not."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "Weak: the nighttime-consolidated weaver and buffer improve later and out-of-domain queries in one backbone's Fig 3 study; in-domain results are on the evolving stream itself, so they alone would be 'task'.",
+  "scope_note": "In scope as a boundary case: the retained non-weight store is the episodic latent buffer (plus latent soft-prefix optimisation on a frozen backbone); the nighttime weaver is an auxiliary 1.5B model trained on test-stream experience (rubric A3: evaluated object is non-weight store; H28 boundary pattern).",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Adding a latent episodic buffer and a periodically distilled initializer to LatentSeek-style self-rewarded latent optimisation raises accuracy over vanilla/CoT across 8 benchmarks, roughly matching TTRL (mostly <=2 points), with one-backbone evidence of cross-domain carry-over.",
+  "unresolved": [
+   "Compute-matched comparison; stream-order variance; validity of the self-reward; ablation backbone; effect without the format-heavy reward"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real gap for latent TTS (LatentSeek/SoftCoT are per-query), but 'TTS lacks evolution' is overbroad: weight-updating test-time methods are acknowledged (E003) and no explicit-memory self-evolving baseline is compared; residual bottleneck not measured.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Concrete two-timescale mechanism (momentum transfer from buffer, weaver distillation); the claim that momentum beats averaging final latents and that latent deltas transfer across queries is asserted, not tested.",
+   "evidence_ids": [
+    "E004",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Main steps and hyperparameters (L'=15, tau=0.5, T=200, K=10, M=8) are given, but top-k value, buffer size/forgetting, injection point of z, weaver-to-backbone dimension mapping and rollback are not; retention gate is self-score only.",
+   "evidence_ids": [
+    "E005",
+    "E008",
+    "E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Benchmarks are standard, but the self-reward puts 4/7 weight on format/clarity and vanilla MMLU is far below CoT; gains vs 'vanilla' mix format repair with learning; AIME vanilla=0.00 under 2048-token cap.",
+   "evidence_ids": [
+    "E006",
+    "E013",
+    "E014",
+    "E025"
+   ],
+   "counterevidence_ids": [
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Day/night component ablations exist (E016-17) and Qwen2.5-7b is compared to 13 baselines, but no gate-off, no averaging-vs-momentum control, no compute-matched latent-optimisation-only baseline; vs TTRL margins are mostly <=2 pts.",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E015"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "In-domain accuracy is measured on the stream the system evolves on (no declared split); a one-backbone OOD transfer study (E018-19) is the only held-out evidence; ablation backbone unspecified; no contamination analysis.",
+   "evidence_ids": [
+    "E010",
+    "E018",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample sizes stated (30-problem AIME, 1000-item MMLU subset) and several cells are ties/losses to TTRL, but single deterministic run, no seeds, intervals or stream-order variance.",
+   "evidence_ids": [
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Cost is limited to final answer length vs CoT; per-query K*M rollouts, weaver training and buffer retrieval are neither costed nor compute-matched against baselines.",
+   "evidence_ids": [
+    "E021",
+    "E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "潜空间自进化TTS，自评分门控；与TTRL差距多≤2分，来自vanilla的增益混有格式修复；单次运行、无算力对照。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r06b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "complete version-pinned HTML material incl. appendix read; all eight ratings determined (resolved/not_reported) with evidence or search scope; figure-only content listed in materials[].missing_sections",
+ "provenance": {
+  "input_hash": "cd236d8d2e204dd65670fb08213a68f8385c5880a50cc301ebe1d85d29946d2e",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "timestamp": "2026-10-21T21:49:11Z",
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to a runtime receipt; model type is as configured by the controller. rs expectation ids rs:<main>/RE-n use n = ordinal of the item in the card's 'Reviewer expectations' list."
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2509.24771v1",
+   "sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2509.24771.txt",
+   "chars": 53027,
+   "sections_read": [
+    "Abstract",
+    "Sec 1-6",
+    "App A.1-A.6",
+    "Tables 1-6"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 1-4 are images (only text descriptions/numbers quoted in the body are readable); ablation and sensitivity bars (Fig 4) and trajectories (Fig 3) not numerically available",
+    "Appendix prompts for evaluation read as token-per-line text"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Abstract",
+   "quote": "However, existing TTS methods are largely independent, implying that LLMs have not yet evolved to progressively learn how to scale more effectively.",
+   "support_explanation": "Author-stated gap: test-time scaling methods do not accumulate across queries.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 1 Introduction",
+   "quote": "fundamentally constrains the potential of TTS paradigms to progressively evolve through continual interaction with the environment.",
+   "support_explanation": "Author framing of inter-task independence as the bottleneck.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 2 Related Work",
+   "quote": "The former involves updating model parameters during the test phase in an unsupervised manner, as exemplified by TTT",
+   "support_explanation": "Authors acknowledge a parametric test-time-training branch that does evolve across the stream; the gap is therefore specific to non-parametric latent TTS.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 4.1 Informed Latent Initialization",
+   "quote": "Instead, we follow a more intuitive principle: it is not the final latent states that matter most, but the journey from the initial",
+   "support_explanation": "Rationale for weighted momentum transfer over simple averaging of refined latents; asserted, not ablated against averaging.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 3 Preliminary",
+   "quote": "can be introduced through various mechanisms, such as being prepended to input embeddings, directly augmenting the model’s internal key-value (KV) cache, or representing a latent thought process for subsequent decoding",
+   "support_explanation": "The exact injection point of z is left generic in the method text.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "App A.1",
+   "quote": "reflects the relative importance of the criteria, placing greater emphasis on answer format fidelity and clarity of presentation.",
+   "support_explanation": "Self-reward weights 1:1:1:2:2, so 4/7 of Q goes to format and clarity; correctness gets 1/7 and is judged by the LLM itself.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "App A.1",
+   "quote": "is formally defined as a weighted aggregation of numerical scores assigned by the LLM to distinct evaluation criteria. Following standard practices from",
+   "support_explanation": "Q(y) is produced by the same LLM, with no ground truth.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "App A.2",
+   "quote": "is a tunable threshold that governs the admission of latent experiences. We set",
+   "support_explanation": "Admission gate is a self-scored confidence threshold tau=0.5, fixed across all experiments; no gate-off ablation or tau sweep.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 4.2 Consolidation through Experience Replay",
+   "quote": "The training objective is to minimize the reconstruction error between the weaver’s prediction and the archived optimal latent sequence:",
+   "support_explanation": "Nighttime step is MSE regression of a 1.5B auxiliary LM onto archived refined latents (auxiliary weights updated; backbone frozen).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.1 Evaluation Setup",
+   "quote": "independently to each benchmark’s test set, except for AIME24/25 where the test size is limited, on which we evaluate after applying",
+   "support_explanation": "Evolution is run on the same test set that is scored; AIME24/25 are scored after evolving on MATH-500.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 1 Introduction",
+   "quote": "reliance on ground-truth labels or any other external signals.",
+   "support_explanation": "Process is stated to be label-free.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Table 1 (Qwen2.5-7b)",
+   "quote": "TTRL\n\n70.90\n\n92.80\n\n77.39\n\n23.33\n\n13.33\n\n13.92\n\n33.60\n\n49.16\n\nLatentEvolve\n\n72.30\n\n92.98\n\n77.60\n\n23.33\n\n10.00\n\n19.79\n\n34.85\n\n52.94",
+   "support_explanation": "TTRL vs LatentEvolve rows for Qwen2.5-7b (MMLU, GSM8K, MATH-500, AIME24, AIME25, SciBench, GPQA, JAMA): margins over TTRL are 1.4, 0.18, 0.21, 0.0, -3.33, 5.87, 1.25, 3.78 (our arithmetic).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Table 1 (Qwen2.5-7b)",
+   "quote": "Vanilla Model\n\n55.30\n\n87.72\n\n55.80\n\n0.00\n\n0.00\n\n11.27\n\n27.78\n\n47.72\n\nCoT\n\n69.10\n\n87.04\n\n68.80\n\n6.67\n\n3.33\n\n11.99\n\n30.81\n\n50.96",
+   "support_explanation": "Vanilla 55.30 vs CoT 69.10 on MMLU: most of the headline MMLU gain over 'vanilla' is a prompting effect (LatentEvolve 72.30).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Table 2 (Qwen2.5-7b)",
+   "quote": "+17.00\n\n+5.26\n\n+21.80\n\n+8.52\n\n+7.07\n\n+5.22\n\n+23.33\n\n+10.00",
+   "support_explanation": "Headline deltas are computed against the Vanilla row, not against CoT or TTRL; AIME24 vanilla is 0.00.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Abstract",
+   "quote": "surpasses state-of-the-art TTS methods such as LatentSeek and TTRL by up to",
+   "support_explanation": "Abstract headline margin '13.33%' follows; in Table 1 13.33 equals LatentEvolve minus LatentSeek on Qwen2.5-7b AIME24 (23.33-10.00), not minus TTRL.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.4 Ablation Study",
+   "quote": "removing either daytime or nighttime scaling leads to a substantial performance drop compared with the full",
+   "support_explanation": "Only component ablations reported: w/o Daytime and w/o Nighttime.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.4 Ablation Study",
+   "quote": "reduces performance on SciBench from\n33.4\n%\n33.4\\%\nto\n28.5\n%\n28.5\\%\n(\n−\n4.9\n%\n-4.9\\%\n), while\nw/o Nighttime\nresults in a larger decline of\n6.8",
+   "support_explanation": "Quantified ablation: w/o Daytime -4.9 and w/o Nighttime -6.8 on SciBench at L'=30; backbone not named in the text and the bars are in Figure 4 only.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.3 Obs. 3",
+   "quote": "Notably, nighttime scaling proves more conducive to such cross-domain generalization: the first nighttime scaling on MATH increases JAMA by",
+   "support_explanation": "Reports +4.5 on JAMA after first nighttime step vs +0.4 after daytime only (Gemma-3-12b).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.3 Figure 3 description",
+   "quote": ", sequentially processes test data from MATH and MMLU. In-domain evaluation is conducted on MATH and MMLU, while out-of-domain evaluation is performed on GPQA and JAMA",
+   "support_explanation": "Cross-domain/continual study: one backbone (Gemma-3-12b), sequential test-stream processing, OOD evaluation on GPQA/JAMA.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.1 Evaluation Setup",
+   "quote": "The learning rate\nη\n\\eta\nis\n0.3\n0.3\n, the number of iterations\nK\n=\n10\nK=10\n, and the sampling times",
+   "support_explanation": "Per-query refinement budget: eta=0.3 and K=10 iterations, each with M=8 sampled generations.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "App A.5 Table 5",
+   "quote": "We report the ratio of answer length (when equipped with",
+   "support_explanation": "The only cost-related result is final answer length vs CoT; the K*M refinement rollouts per query and weaver training are not costed.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.2 Obs. 1",
+   "quote": "LatentSeek and TTRL excel in mathematical reasoning yet fall short in other domains: for instance, LatentSeek with",
+   "support_explanation": "Text acknowledges LatentSeek underperforming vanilla on Llama3.2-3b MMLU (-11.3), i.e. part of the apparent gain is repairing a weak latent baseline.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.1 Baselines",
+   "quote": "The latter three baselines are trained independently on the training split of each dataset and evaluated on the corresponding test split.",
+   "support_explanation": "GRPO/Reinforce/Reinforce++ are trained on train splits while LatentEvolve adapts on the test stream; settings differ.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "App A.4",
+   "quote": "each consists of 30 problems.",
+   "support_explanation": "AIME24 and AIME25 each have 30 problems (23.33 = 7/30; 10.00 = 3/30).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M1",
+   "material_sha256": "7399f078885e2ea6bd2ae4c9418122ea279763106c66df62c25cf380530222f2",
+   "locator": "Sec 5.1 Evaluation Setup",
+   "quote": "We set the maximum generation length to\n2048\n2048\ntokens",
+   "support_explanation": "Maximum generation length is capped at 2048 tokens, which plausibly explains vanilla AIME scores of 0.00 (our_inference).",
+   "kind": "our_inference"
+  }
+ ],
+ "score": {
+  "raw": 45.0,
+  "display": 45.0,
+  "lower": 45.0,
+  "upper": 45.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

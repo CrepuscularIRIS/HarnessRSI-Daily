@@ -1,0 +1,367 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r07b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2510.24684",
+    "paper_id": "2510.24684",
+    "title": "SPICE: Self-Play In Corpus Environments Improves Reasoning",
+    "version": "2510.24684v1",
+    "claim_type": "component_training",
+    "central_claim": "通过语料 grounding、信息不对称和共同训练 Challenger/Reasoner 的自博弈 RL，产生自适应课程并提高数学和通用推理能力。"
+  },
+  "provenance": {
+    "input_hash": "0ddeb3a56a1a8157ea3de9d3d77ac835df6ecc096535a6fc7e0ee31c4bff3d7f",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T22:03:16.932359+00:00",
+    "notes": "派发配置 sonnet → gpt-6.1-sol；无可独立绑定的实际模型/会话 receipt，故三字段 null；未探测路由。"
+  },
+  "materials": [
+    {
+      "material_id": "2510.24684.txt",
+      "url": "https://arxiv.org/html/2510.24684v1",
+      "version": "2510.24684v1",
+      "sha256": "3e3f85c2ec1e347114ec6f2e2c1ff6153226a9d759e3528a235d4c5dff4f30fb",
+      "sections_read": [
+        "Abstract",
+        "1–6 main text",
+        "Appendix A evaluation",
+        "Appendix B training configuration",
+        "Appendix C full ablations",
+        "Appendix D reward functions",
+        "Appendix E all prompt templates"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2510.24684.txt",
+      "sha256": "3e3f85c2ec1e347114ec6f2e2c1ff6153226a9d759e3528a235d4c5dff4f30fb",
+      "locator": "text line 603",
+      "quote": "We optimize both roles jointly (shared weights) by maximizing expected rewards:",
+      "support_explanation": "方法明确更新共享模型权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2510.24684.txt",
+      "sha256": "3e3f85c2ec1e347114ec6f2e2c1ff6153226a9d759e3528a235d4c5dff4f30fb",
+      "locator": "text line 743",
+      "quote": ", we develop a self-play reinforcement learning system for finetuning LLMs. Our training framework builds on Oat",
+      "support_explanation": "实现定位是 LLM finetuning 系统。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2510.24684.txt",
+      "sha256": "3e3f85c2ec1e347114ec6f2e2c1ff6153226a9d759e3528a235d4c5dff4f30fb",
+      "locator": "text line 2723",
+      "quote": "All models are evaluated in a zero-shot setting to assess whether the reasoning capabilities developed through corpus-grounded self-play transfer to standard benchmarks without task-specific adaptation. We use greedy decoding (temperature 0) for most evaluations to ensure reproducibility, following the evaluation protocols from",
+      "support_explanation": "评估对象是 self-play 后模型的零样本推理能力，不是留存 harness 改动。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2510.24684.txt",
+      "sha256": "3e3f85c2ec1e347114ec6f2e2c1ff6153226a9d759e3528a235d4c5dff4f30fb",
+      "locator": "text line 2956",
+      "quote": "for efficient inference during both question generation and answer sampling phases. We employ Math-Verify for answer equivalence checking, which handles various mathematical formats including fractions, decimals, and algebraic expressions. Training is conducted on 8 H200 GPUs per experiment with a learning rate of 1e-6 using constant learning rate schedule, gradient checkpointing, flash attention, and ZeRO Stage 2 optimization for memory efficiency. We use DrGRPO without KL regularization (",
+      "support_explanation": "训练实现再次确认参数优化；非实际复现。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "共享 LLM 参数及训练课程",
+      "information": "自身生成问题、回答及奖励信号",
+      "operation": "从固定文档生成问题及答案→隐藏文档让 Reasoner 采样→正确性方差给 Challenger 奖励→DrGRPO 更新共享权重",
+      "output": "训练后模型",
+      "conditions": "基础模型能生成可学习的问题；奖励需可靠",
+      "feedback": "Math-Verify 正确性奖励和以 50% 成功率为峰值的方差 frontier 奖励",
+      "selection_rule": "按奖励进行 RL；不进行 harness 候选版本接受/拒绝",
+      "data": "自生成任务；详情以本文方法与附录为准",
+      "persistence": "训练后的共享 Challenger/Reasoner 模型权重；固定文档与提示模板未被反馈编辑",
+      "later_use": "后续 RL 轮次及标准基准推理评估",
+      "claimed_effect": "通过语料 grounding、信息不对称和共同训练 Challenger/Reasoner 的自博弈 RL，产生自适应课程并提高数学和通用推理能力。",
+      "failure_boundary": "语料支持答案不等同于独立验证生成问题的所有语义；不同算法/采样配置的比较不构成同预算 harness 留存实验。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "无语料 grounding 的自博弈易幻觉和信息对称；静态合成数据无法随学习者能力调整难度。",
+    "checked_gap": "本文训练目标与机制清楚；按 A3 不属于当前非权重 harness 评价域。最近邻只核本文自身对照，未扩张为外部原文核验。",
+    "lineage": [
+      "R-Zero（本文 §5 与 Appendix B 转述；邻居原文版本未独立核验）",
+      "Absolute Zero（本文 §5 与 Appendix B 转述；邻居原文版本未独立核验）",
+      "Strong Challenger（本文固定 Qwen3-32B-Instruct 对照，不是独立阅读的邻居全文）"
+    ],
+    "closest_adjacent": [
+      "R-Zero（本文 §5 与 Appendix B 转述；邻居原文版本未独立核验）",
+      "Absolute Zero（本文 §5 与 Appendix B 转述；邻居原文版本未独立核验）",
+      "Strong Challenger（本文固定 Qwen3-32B-Instruct 对照，不是独立阅读的邻居全文）"
+    ],
+    "residue": "本记录不对范围外论文计算质量残余分数。",
+    "stakes": "减少依赖人工监督的训练数据瓶颈",
+    "method_response": "从固定文档生成问题及答案→隐藏文档让 Reasoner 采样→正确性方差给 Challenger 奖励→DrGRPO 更新共享权重",
+    "remaining_gap": "未建立非权重 harness 留存改变的独立因果主张。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004"
+    ],
+    "unresolved": [
+      "邻居原文版本未独立阅读；非本篇范围裁定阻塞项，不请求外部检索。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "self_supervised_signal_engineering",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "self_supervised_signal_engineering",
+        "sub_id": "C26",
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": [
+          "自生成质量/正确性标量奖励",
+          "以 RL 消费奖励",
+          "未主张偏好对或细粒度 credit assignment，因此子卡仅部分适配"
+        ],
+        "success_checks": [
+          "有训练机制及消融，但本次不评分"
+        ],
+        "failure_checks": [
+          "仅凭自生成奖励不能证明非权重改进"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004"
+        ],
+        "reason": "制造非人工奖励供优化，符合原主卡；C26 的标量奖励支路部分对应。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原15+31描述性适配不改变 A3 范围排除。",
+    "executes_pattern": true,
+    "resolves_problem": "有作者训练结果，不判为 harness 问题已解决。"
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "self_generate_the_curriculum",
+        "sub": "H22",
+        "version": "manifest-bound",
+        "fit": "mechanistic_only_out_of_scope",
+        "condition_checks": [
+          {
+            "condition": "learned proposer–solver frontier coupling",
+            "status": "met",
+            "reason": "角色共同训练并由 Solver 能力反馈调整任务。",
+            "evidence_ids": [
+              "E001",
+              "E002",
+              "E003",
+              "E004"
+            ]
+          },
+          {
+            "condition": "non-weight retained object",
+            "status": "unmet",
+            "reason": "依冻结 A3 排除：两角色联合优化共享权重，Algorithm 1 返回 trained model，实验评价训练后模型的推理分数。外部文档、固定提示模板和在线合成问题是训练输入/框架，不是由执行反馈编辑并作为被评价对象留存的非权重 harness。",
+            "evidence_ids": [
+              "E001",
+              "E002",
+              "E003",
+              "E004"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E004"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "self_supervised_signal_engineering",
+      "rs_sub": "C26",
+      "domain": {
+        "namespace": "rsi",
+        "main": "self_generate_the_curriculum",
+        "sub": "H22"
+      },
+      "operation_correspondence": "制造奖励并训练自适应 proposer/solver 课程",
+      "necessary_conditions_and_differences": "领域卡是涉及权重更新的边界模式，卡片相似不能越过冻结 A3 的被评价对象门槛。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ]
+    }
+  ],
+  "expectations": [],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "通过语料 grounding、信息不对称和共同训练 Challenger/Reasoner 的自博弈 RL，产生自适应课程并提高数学和通用推理能力。",
+      "setting": "本文方法、标准基准与消融；无本地运行",
+      "baseline_control": "本文训练 baselines；未独立复现",
+      "selection_vs_test": "训练课程与基准评估不同，但被评对象仍为权重",
+      "result_denominator": "范围判定不复用作者效果为 harness 分数",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "可视为自生成课程/奖励的权重训练研究，不是本轮 harness RSI 得分论文。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "论文给出训练方法与模型能力评估；本记录仅裁定其被评价对象为权重，不否定训练科学价值。",
+    "unresolved": []
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用当前 harness 质量评分；不是论文未报告。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "依冻结 A3 排除：两角色联合优化共享权重，Algorithm 1 返回 trained model，实验评价训练后模型的推理分数。外部文档、固定提示模板和在线合成问题是训练输入/框架，不是由执行反馈编辑并作为被评价对象留存的非权重 harness。",
+  "rationale": "完整阅读固定版本及附录；共同更新与最终评估对象是模型权重。训练池/语料和角色反馈不等同于被评价的非权重 harness 留存变化，按冻结 A3 排除，不以低分替代。"
+}

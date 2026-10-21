@@ -1,0 +1,578 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r07a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2509.24726",
+    "paper_id": "2509.24726",
+    "title": "Socratic-Zero : Bootstrapping Reasoning via Data-Free Agent Co-evolution",
+    "version": "2509.24726v1",
+    "claim_type": "component_training",
+    "central_claim": "Socratic-Zero以100道seed、固定Teacher及共同演化的Solver/Generator自举推理，声称无需外部人标数据并平均提升20.2点；训练出的32B Generator合成数据达到大型商业模型水平。"
+  },
+  "provenance": {
+    "input_hash": "66fc4c6733ccce90380fbcc2ddf1e7583ddd766efc6e03b2daa725c4bfe3484b",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T22:08:58.788004+00:00",
+    "notes": [
+      "按已配置sonnet→gpt-6.1-sol席位执行；没有独立可核验的模型回执、session或receipt，相关字段为null；未探测或重配模型。",
+      "独立全文阅读；未查看另一席、其他attempt、聚合或前3篇记录。"
+    ]
+  },
+  "materials": [
+    {
+      "material_id": "2509.24726.txt",
+      "url": "https://arxiv.org/html/2509.24726v1",
+      "version": "2509.24726v1",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "sections_read": [
+        "全文主文、全部附录、表格与提示词（完整HTML文本）"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 328–328",
+      "quote": "Overview of the Socratic-Zero Framework. (a) Solver Evolving: The Solver attempts to solve problems and learns from preference pairs of correct and incorrect solutions via DPO, while the frozen Teacher strategically generates challenging problems based on Solver failures using fixed generation and evaluation functions. (b) Generator Evolving: The Generator distills the Teacher’s problem generation strategy using value-weighted supervised learning. Together, these create a self-improving loop where the curriculum dynamically evolves to maintain optimal challenge levels for the Solver’s current capabilities.",
+      "support_explanation": "图3说明Solver用DPO、Generator用value-weighted SFT，Teacher和生成/评估函数冻结。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 4250–4267",
+      "quote": "Output:\nTrained Solver policy\nπ\nθ\n𝒮\n(\nT\n)\n\\pi_{\\theta_{\\mathcal{S}}^{(T)}}\nand Generator policy\nπ\nθ\n𝒢\n(\nT\n)\n\\pi_{\\theta_{\\mathcal{G}}^{(T)}}\n.",
+      "support_explanation": "Algorithm 1输出trained Solver和Generator policies，即权重产物。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 1163–1173",
+      "quote": "contained 100 questions sampled from the MATH training set\n(\nHendrycks et al., 2021\n)\nfollowing specific diversity and difficulty criteria (detailed in Appendix\nF\n). All Solver models first underwent LoRA-based\n(\nHu et al., 2021\n)\nSFT on a 1,500-problem dataset of Level 5 difficulty. Key hyperparameters:",
+      "support_explanation": "100道MATH训练seed之外，全部Solver先在1500道Level5问题上LoRA SFT；data-free只可解释为后续增量合成，不是零人类来源训练。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 1188–1188",
+      "quote": ", and training batches combined 100% new problems with 25% historical curriculum for replay.",
+      "support_explanation": "100%新问题及25%历史回放说明有训练数据留存；这不是可部署非权重组件。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 1200–1216",
+      "quote": "We employed two strong baselines for comparison.\nStatic Augmentation (SA)\nfollows traditional approaches via MetaMath\n(\nYu et al., 2024\n)\nand WizardMath\n(\nLuo et al., 2023\n)\n, augmenting training data with fixed synthetic questions generated offline without adaptive curriculum evolution.\nLLM2LLM\n\n(\nLee et al., 2024\n)\nimplements iterative self-training where models generate questions based on current failures and retrain on augmented datasets. Both baselines use identical SFT initialization for fair comparison.",
+      "support_explanation": "Static Augmentation及LLM2LLM比较针对合成训练方法，均相同SFT初始化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 2054–2059",
+      "quote": "Step 1: Problem Generation.\nWe prompted each generator with 1,000 seed problems from SAND-Math\n(\nZhang et al., 2025\n)\nand tasked with producing five augmented variants per seed, resulting in 3,000 total generated problems per model.",
+      "support_explanation": "正文一处1000 seeds×five variants却称3000，与§4.1三variants不一致；生成分母应核清。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 2061–2068",
+      "quote": "Step 2: Quality Assessment.\nWe measured problem validity by prompting Qwen3-235B\n(\nYang et al., 2025\n)\n— selected for its state-of-the-art mathematical reasoning capability and its role as the teacher model in the distillation framework — to solve each generated problem under strict constraints: a 4,096-token limit and a 600-second timeout. The\nValidity Rate\nwas defined as the percentage of problems successfully solved within these bounds.",
+      "support_explanation": "问题有效性以同一Teacher在4096tokens/600s内解出为代理，不是独立真值证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 2149–2151",
+      "quote": "Table\n5\nreports the downstream utility of each generator, measured by the performance of the fine- student model. The output from our Socratic-Generator-32B leads to a final student accuracy of 37.72%. Notably, this performance not only rivals that achieved using data from significantly larger models but also marginally surpasses (+0.59 points) the result from its own Teacher (Qwen3-235B), despite being over 20x smaller.",
+      "support_explanation": "Generator效用通过fine-tuned student测量：37.72，Teacher数据37.13；终点仍为权重训练效用。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 3403–3408",
+      "quote": "As the Solver’s policy\nπ\nθ\n𝒮\n\\pi_{\\theta_{\\mathcal{S}}}\nis updated at each iteration, its performance on existing problems changes. Consequently, all problems in the curriculum are periodically re-evaluated and recategorized. This dynamic process ensures the curriculum remains perfectly attuned to the Solver’s evolving skill set. The typical transitions between zones are:",
+      "support_explanation": "课程随着Solver权重更新重新诊断和分类；不是静态合成，但被评价对象仍是trained policies。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2509.24726.txt",
+      "sha256": "04b81aa7b75d2ece347b65cb4a8f4ed693d4a5f53677c3a607e495d3c9fe3d9d",
+      "locator": "2509.24726v1 extracted text lines 4291–4299",
+      "quote": "Problem Filtering and Exclusion\n\nWe immediately flagged and excluded problems that fail the self-verification process from further curriculum evolution. Specifically, we discarded problems if: (1) The Teacher cannot reproduce its own reference solution, (2) Multiple valid interpretations of the problem statement exist, (3) Computational errors are detected in the reference solution, (4) The problem lacks sufficient information for a unique solution.\n\nWe removed discarded problems from the active curriculum\n𝒞\nt\n\\mathcal{C}_{t}\nand they do not contribute to subsequent Solver training or Generator learning. This prevents the accumulation of low-quality problems that could degrade training effectiveness or introduce systematic biases.",
+      "support_explanation": "Teacher自验证失败的问题从后续训练/Generator学习中排除；承认筛选存在，不误称完全无质量控制。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "Solver参数",
+      "information": "当前课程QA、每题8个解、固定Teacher正确/错误标签、参考解",
+      "operation": "构造赢家/输家偏好对→DPO更新Solver→下一轮重新诊断",
+      "output": "trained Solver policy",
+      "conditions": [
+        "Teacher/参考答案可靠",
+        "全部失败时以参考解补winning项；全对时losing集合为空，算法集合构造并非每题必有偏好对"
+      ],
+      "feedback": "Teacher评分和参考答案，Mean@32用于外部评测",
+      "selection_rule": "按成功/失败构造偏好对；异常问题自验证过滤",
+      "selection_data": "MATH seeds与合成课程、历史25%回放",
+      "persistence": "LoRA/model参数及训练课程数据",
+      "later_use": "新Solver在下一轮重估问题难度，最终零样本评测",
+      "claimed_effect": "数学推理与一般推理分数提升",
+      "failure_boundary": "强固定Teacher依赖；data-free不等于无需1500题SFT与MATH种子",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E009",
+        "E010"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "Generator参数与训练数据池",
+      "information": "Teacher对Solver失败的定向改题、新Solver成功率",
+      "operation": "固定Teacher生成问题→按目标成功率0.5的高斯效用加权→WSFT训练Generator→扩展课程",
+      "output": "trained Generator policy及下一轮QA训练集",
+      "conditions": [
+        "问题有效",
+        "难度代理与学习效用相关",
+        "Teacher的固定generation/evaluation函数不被更新"
+      ],
+      "feedback": "新Solver rollout成功率",
+      "selection_rule": "价值加权和Teacher自验证过滤",
+      "selection_data": "合成QA及失败轨迹",
+      "persistence": "Generator权重；QA池跨训练轮保留",
+      "later_use": "Generator合成新数据用于student微调；Algorithm 1课程扩展仍调用固定Teacher",
+      "claimed_effect": "32B Generator数据下游效用匹敌更大生成器",
+      "failure_boundary": "Generator训练不等于harness自修改；同Teacher生成与验收无法独立证明真值；是否在主课程真正替代Teacher不清",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004",
+        "E007",
+        "E008",
+        "E010"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "静态合成数据不能跟随学生能力，人工数据依赖限制自主推理进步。",
+    "checked_gap": "本文确实根据失败、学习区和掌握区重新生成训练课程；尚未建立可留存非权重harness改进。",
+    "lineage": [
+      {
+        "name": "LLM2LLM",
+        "source": "本文§2、§4.1与Table 1",
+        "version": "2509.24726v1中的对照和转述，邻居原文未提供",
+        "relationship": "失败驱动合成并重训的最近邻"
+      },
+      {
+        "name": "MetaMath / WizardMath",
+        "source": "本文§4.1",
+        "version": "2509.24726v1的static augmentation设定",
+        "relationship": "静态合成数据训练基线"
+      }
+    ],
+    "closest_adjacent": [
+      "LLM2LLM",
+      "static augmentation"
+    ],
+    "residue": "额外训练一个价值加权Generator及分阶段Solver更新；具体优势须排除预算差异和强Teacher监督。",
+    "stakes": "适配课程可降低后续数据收集依赖，但不解决本雷达非权重改动保留问题。",
+    "method_response": "DPO Solver、固定Teacher诊断改题、value-weighted SFT Generator、历史回放与再分类。",
+    "remaining_gap": "最终输出两套训练权重，未评价被执行反馈改写并留存的prompt/skill/tool/workflow；完全data-free表述受初始化与种子来源限制。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004",
+      "E005",
+      "E009"
+    ],
+    "unresolved": [
+      "缺LLM2LLM、MetaMath/WizardMath版本钉死原文，最近邻差异仅据本文。",
+      "生成数量§4.1为每seed三variants，§4.3.1为五variants但同称3000；摘要+20.2的比较分母对应SFT 35.9而非SA40.7或LLM2LLM40.9。",
+      "算法主课程由固定Teacher生成，训练后Generator究竟是否替代Teacher参与主闭环不明确；不据此断言harness部署改进。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "self_supervised_signal_engineering",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "self_supervised_signal_engineering",
+        "sub_id": "C26",
+        "role": "primary",
+        "fit": "strong",
+        "tactic_steps_checked": [
+          {
+            "step": "derive nonhuman feedback",
+            "status": "met",
+            "reason": "生成样本与模型判定制造奖励/偏好信号"
+          },
+          {
+            "step": "consume reward in optimization",
+            "status": "met",
+            "reason": "DPO Solver"
+          },
+          {
+            "step": "isolate feedback benefit",
+            "status": "partial",
+            "reason": "有训练组件对照，但不能证明冻结权重的harness留存"
+          }
+        ],
+        "success_checks": [
+          {
+            "condition": "训练实际消费反馈",
+            "status": "met"
+          }
+        ],
+        "failure_checks": [
+          {
+            "condition": "同源生成与验证可能有proxy偏差",
+            "status": "partial"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002"
+        ],
+        "reason": "先由生成→验证→权重优化操作识别，非由标题或既有分数识别。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原ResearchStudio模式覆盖权重训练，因此可匹配但不能用模式成员身份覆盖A3范围门槛。",
+    "executes_pattern": true,
+    "resolves_problem": "partial; author_report训练效用，不是本雷达非权重harness问题"
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "self_generate_the_curriculum",
+        "sub": "H23",
+        "version": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+        "fit": "strong_teacher_diagnostic_branch; H22-like_generator_training",
+        "condition_checks": [
+          {
+            "condition_id": "S1",
+            "status": "partial",
+            "reason": "固定Teacher自验证与MathRule比对；问题真值并不独立于Teacher"
+          },
+          {
+            "condition_id": "S2",
+            "status": "met",
+            "reason": "用当前Solver成功率估计学习难度"
+          },
+          {
+            "condition_id": "S3",
+            "status": "met",
+            "reason": "历史QA/失败诊断进入下一训练轮生成"
+          },
+          {
+            "condition_id": "S5",
+            "status": "partial",
+            "reason": "报告硬件和部分训练配置，未形成全成本预算公平证据"
+          },
+          {
+            "condition_id": "S6",
+            "status": "partial",
+            "reason": "独立基准报告训练后模型成绩，不是非权重组件保留收益"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E004"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": [],
+    "scope_note": "边界模式仅记录方法操作；不使用卡内成员结果、录用率或既有分数作证据/锚点。"
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "self_supervised_signal_engineering",
+      "rs_sub": "C26",
+      "domain_namespace": "rsi",
+      "domain_main": "self_generate_the_curriculum",
+      "domain_sub": "H23",
+      "operation_correspondence": "生成样本→非人类成功反馈→相对奖励/偏好→权重更新；领域层额外指出当前学习者诊断驱动课程再生成",
+      "necessary_conditions": [
+        "有效性不能由难度代理替代",
+        "需要当前Solver测量与下一轮实际读取",
+        "独立测试与训练反馈分离"
+      ],
+      "differences": "C26指监督信号类型；H22/H23指课程控制，匹配不是HarnessRSI纳入资格。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "local:2509.24726-1",
+      "version": "frozen-v1.0/A3",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "research/SCORE_SPEC.md §先确定比较对象",
+        "rubric_frozen.md A3"
+      ],
+      "applies_when": "声称自我改进/跨轮状态留存且拟进入HarnessRSI",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "被评价产物为权重；承认训练QA跨轮状态，但没有留存非权重部署harness的评价。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "score_item": "scope"
+    },
+    {
+      "id": "rsi:self_generate_the_curriculum/S1",
+      "version": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/self_generate_the_curriculum.md S1",
+        "patterns/sub/H23.md"
+      ],
+      "applies_when": "用学习者反馈生成训练任务",
+      "applicable": true,
+      "status": "partial",
+      "reason": "固定Teacher自验证与MathRule比对；问题真值并不独立于Teacher",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "rsi:self_generate_the_curriculum/S3",
+      "version": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/self_generate_the_curriculum.md S3",
+        "patterns/sub/H23.md"
+      ],
+      "applies_when": "声称动态课程",
+      "applicable": true,
+      "status": "met",
+      "reason": "下一训练轮确实读取历史/重新诊断，而非只宣布静态任务池。",
+      "evidence_ids": [
+        "E004"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2509.24726-2",
+      "version": "2509.24726v1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§4.1、§4.3.1、Appendix F"
+      ],
+      "applies_when": "声称data-free且按合成题数比较效用",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "需保留100 MATH seed与1500题SFT依赖；三/五variants和总3000的记载不一致。",
+      "evidence_ids": [
+        "E003",
+        "E006"
+      ],
+      "score_item": "E.measurement"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "Socratic-Zero以100道seed、固定Teacher及共同演化的Solver/Generator自举推理，声称无需外部人标数据并平均提升20.2点；训练出的32B Generator合成数据达到大型商业模型水平。",
+      "setting": "三个Solver架构；七个数学及三个一般推理基准",
+      "baseline_control": "SFT、static augmentation、LLM2LLM",
+      "selection_vs_test": "Teacher反馈来自训练课程；Mean@32来自基准题",
+      "result_denominator": "Table1 Qwen3-8B平均SFT35.9→56.1，差20.2；SA40.7/LLM2LLM40.9，对应差15.4/15.2，不能混用",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E005"
+      ],
+      "counterevidence": [
+        "100 seed来自MATH training，另有1500题SFT；因此完全无外部人类数据主张过宽。"
+      ],
+      "allowed_conclusion": "作者报告强Teacher指导下的权重训练进步；不是零数据或harness retained证明。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "Socratic-Generator-32B合成数据效用匹敌大模型",
+      "setting": "1000 SAND-Math seeds，合成QA微调DeepSeek-R1-Distill-Llama-8B",
+      "baseline_control": "Qwen3-32B、Qwen3-235B及商业Generator",
+      "selection_vs_test": "Teacher可解性筛选合成QA；七个数学基准测试student",
+      "result_denominator": "作者报告37.72 vs Teacher生成数据37.13；总体合成数量3000但variants描述矛盾",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008"
+      ],
+      "counterevidence": [
+        "同Teacher兼任生成源及有效性验证；未证明0.59差异跨完整训练重复稳定。"
+      ],
+      "allowed_conclusion": "训练Generator的下游训练数据效用有作者结果；不能升级为改进器本身非权重自修改证据。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告固定Teacher监督的Solver/Generator权重训练及生成数据student效用；不是本雷达retained/improver证据。",
+    "unresolved": [
+      "缺LLM2LLM、MetaMath/WizardMath版本钉死原文，最近邻差异仅据本文。",
+      "生成数量§4.1为每seed三variants，§4.3.1为五variants但同称3000；摘要+20.2的比较分母对应SFT 35.9而非SA40.7或LLM2LLM40.9。",
+      "算法主课程由固定Teacher生成，训练后Generator究竟是否替代Teacher参与主闭环不明确；不据此断言harness部署改进。"
+    ],
+    "scope_note": "task不代表范围内收录；没有运行作者代码或声称复现。"
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外：依冻结A3不进入质量评分，null并非材料不足或低质量结论。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文含附录；先按被评价产物完成范围判定"
+      ]
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "冻结A3：Solver由DPO、Generator由WSFT更新，Algorithm 1输出两套trained policies。Teacher及生成/评估函数和提示模板固定。QA池自适应扩展和回放确实跨训练轮留存，但效用以训练后Solver/Generator及微调student测量，不是被评价的非权重harness改动；故排除并保持score=null。",
+  "rationale": "DPO Solver与WSFT Generator是被评价产物；固定Teacher驱动课程、回放训练QA不构成已评价的非权重harness留存。按A3排除。"
+}

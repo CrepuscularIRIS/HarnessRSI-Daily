@@ -1,0 +1,795 @@
+{
+ "paper": {
+  "paper_id": "2507.17131",
+  "claim_type": "system_method",
+  "central_claim": "ARIA: an LLM agent that learns at test time by (i) assessing its own uncertainty through structured self-dialogue to decide when to ask a human expert, and (ii) integrating the expert guidance into a timestamped, status-flagged knowledge repository with conflict/outdated detection and clarification queries, giving significant accuracy/adaptability gains over offline fine-tuning, RAG, self-improving agents and active-learning baselines on TikTok Pay CDD name screening and CUAD, and is deployed in production.",
+  "paper_key": "2507.17131",
+  "version": "2507.17131v2",
+  "title": "Enabling Self-Improving Agents to Learn at Test Time With Human-In-The-Loop Guidance"
+ },
+ "status": "reviewed",
+ "reason": "Full text incl. appendices read. Non-weight, retained, versioned knowledge store edited from human-guidance feedback and read on later instances: in scope as system_method (human is the feedback source, not an execution verifier). Evidence is single-run, no store-off, held-out/drift not isolated.",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "ARIA assesses its own uncertainty through structured self-dialogue, proactively identifying knowledge gaps and requesting targeted explanations or corrections from human experts. It then systematically updates an internal, timestamped knowledge repository with provided human guidance, detecting and resolving conflicting or outdated knowledge through comparisons and clarification queries.",
+   "support_explanation": "States the object (timestamped KR), feedback source (human expert) and edit operations (conflict/outdated handling).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "4.3 Temporally-Informed Knowledge Retrieval",
+   "quote": "This multiplicative approach penalizes outdated, old, or irrelevant items.",
+   "support_explanation": "Next-round read path: retrieval score = status weight x recency x relevance; superseded items get weight 0 per Eq.3.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Table 1 caption",
+   "quote": "highly imbalanced with only 156 Match (Positive) cases and 11,690 Non-Match (Negative) cases",
+   "support_explanation": "Denominators: sensitivity rests on 156 positives, so 1 case = 0.64 pt; no uncertainty reported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Table 1 rows Simple Uncertainty / ARIA (GPT-4o)",
+   "quote": "Simple Uncertainty GPT-4o 0.7884 0.8013 0.8590 0.8718 0.6936 0.7218 0.7590 0.7853",
+   "support_explanation": "Equal-budget active-learning baseline at B=100: sens 0.8013, spec 0.7218.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Table 1 row ARIA (GPT-4o)",
+   "quote": "GPT-4o 0.8013 0.8333 0.8653 0.8910 0.7151 0.7423 0.7810 0.8026",
+   "support_explanation": "ARIA at B=100: sens 0.8333, spec 0.7423; margin over Simple Uncertainty about 5 positives.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Table 2",
+   "quote": "ARIA 0.8333 0.7423 Labels-Only ARIA 0.7949 0.7139 w/o Self-Dialogue 0.8141 0.7319 w/o KR Conflict Resolution 0.8012 0.7128 w/o Temporally-Informed KR 0.8333 0.7341",
+   "support_explanation": "Ablations differ by 0-5 positives; Labels-Only ARIA (0.7949/0.7139) is at or below the Simple Uncertainty baseline (0.8013/0.7218) in E004.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "5.4 Ablation text",
+   "quote": "vital for maintaining a coherent knowledge base, resulted in a substantial performance drop",
+   "support_explanation": "Author narrative; the underlying Table 2 drop is 0.032 sens / 0.0295 spec in one run.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "5.1 Baselines",
+   "quote": "For fair comparison, Offline Fine-tuning and RAG baselines are prepared before deployment using knowledge equivalent to budget",
+   "support_explanation": "Information-matched static KB baseline (RAG) is a real control for online KR management; still no KR-off variant of ARIA.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Table 1 self-improving rows",
+   "quote": "Self-Refine GPT-4o 0.7244 0.6821 Reflexion GPT-4o 0.7692 0.6902 Multi-Agent Debate GPT-4o 0.7628 0.6970",
+   "support_explanation": "Autonomous self-improvement baselines have no human feedback, so they do not control the information advantage.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "5.4 Efficiency",
+   "quote": "In real business, human experts typically take around 12 minutes for Average Handling Time (AHT) per case.",
+   "support_explanation": "Only efficiency/cost evidence is AHT vs humans; compute/token cost not reported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Limitations",
+   "quote": "The current study focuses more on the effectiveness of learning rather than a detailed analysis of computational performance under heavy load.",
+   "support_explanation": "Authors concede no compute cost analysis.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Table 3 last row",
+   "quote": "ARIA w/ Full Oracle Access (B=3121) 0.9428 0.8814 0.41min",
+   "support_explanation": "Paper never states whether expert-answered (queried) cases count as correct in sens/spec; with 26% of cases queried at B=3121 this denominators issue affects metric validity.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "6.1 Setup",
+   "quote": "Clauses are streamed chronologically, with simulated concept drifts introduced via shifting clause distributions and evolving oracle responses.",
+   "support_explanation": "Public-set drift is synthetic and the oracle is an LLM.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Limitations",
+   "quote": "the evaluation on the public CUAD dataset relied on an LLM-simulated human expert oracle",
+   "support_explanation": "Authors acknowledge simulated oracle on CUAD.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Abstract",
+   "quote": "ARIA is deployed within TikTok Pay serving over 150 million monthly active users",
+   "support_explanation": "Deployment asserted; no deployment-time metrics, rollout or drift-adaptation measurements provided beyond offline stream replay.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "3.3 Instantiation",
+   "quote": "Real human domain experts from the TikTok’s compliance teams provide responses",
+   "support_explanation": "Oracle on the proprietary stream is real experts; how ground-truth labels for sens/spec were produced is not described.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "6.2 Results",
+   "quote": "a substantial leap from the 0.4872 accuracy of the static GPT-4o agent",
+   "support_explanation": "CUAD gain over static agent; includes oracle labels taken directly from CUAD ground truth for label queries (D.5).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Per-agent knowledge repository KR of timestamped, status-flagged items (rules, explanations, case exemplars); base LLM fixed (GPT-4o or Qwen2.5-7B)",
+   "information": "Instance x_i, own prediction and reasoning, KR, expert feedback (labels, explanations, rules, clarifications); expert budget B; oracle sees agent self-dialogue",
+   "operation": "HGKA: parse feedback into assertions, add as Valid with timestamp, retrieve similar entries by embedding, LLM compares and marks old entries Superseded/PotentiallyOutdated, generate clarification queries when ambiguity",
+   "output": "Updated KR_{i+1}",
+   "conditions": "Human expert available and accurate; similarity threshold and status weights set (values not reported)",
+   "feedback": "Human-expert guidance on cases the agent chose to escalate",
+   "selection_rule/data": "No measured-utility gate; admission = expert assertion; conflict relation judged by LLM comparator, ambiguity sent back to expert",
+   "persistence": "KR persists across stream; superseded items retained with link; retrieval scoring W_S x exp(-lambda dt) x relevance, top-N or threshold",
+   "later_use": "Next instances prompt with retrieved KR subset",
+   "claimed_effect": "Higher sens/spec than equal-budget baselines on TikTok Pay and CUAD",
+   "failure_boundary": "Expert availability/quality, KR growth and subtle contradictions, simulated oracle on CUAD, compute overhead (Limitations)",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E004",
+    "E005",
+    "E008"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Query policy deciding when and what to ask the human (Intelligent Guidance Solicitation)",
+   "information": "Preliminary judgment, reasoning, KR, fixed list of reflective questions",
+   "operation": "Structured self-dialogue then verbal High/Moderate/Low confidence; query if Moderate/Low and budget remains; formulate query type from identified gap",
+   "output": "Decision predict_only vs query_expert and a query",
+   "conditions": "Verbal confidence from LLM assumed informative; query set Q predefined",
+   "feedback": "Self-assessed uncertainty (no external check)",
+   "selection_rule/data": "Confidence threshold + budget B",
+   "persistence": "Not retained (reflective questions fixed); only effect is which cases enter KR",
+   "later_use": "n/a",
+   "claimed_effect": "Better use of budget than simple uncertainty/random querying",
+   "failure_boundary": "Calibration of verbal confidence not evaluated",
+   "evidence_ids": [
+    "E001",
+    "E004",
+    "E005",
+    "E006"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "LLM agents struggle where rules and domain knowledge change frequently (regulatory compliance, risk screening); offline fine-tuning and standard prompting cannot adapt during operation.",
+  "checked_gap": "Real operational problem with a concrete instance (CDD name screening, watchlist/regulation updates). The static pieces are the knowledge store and when to ask for help. Drift itself is not measured in the TikTok stream (no rule-change annotation, no per-phase curves).",
+  "lineage/closest_adjacent": "Baselines named in paper: Reflexion (verbal reflection into episodic memory), static RAG with pre-populated KB, uncertainty-sampling active learning, Self-Refine, Multi-Agent Debate. Related Work (2.1) groups ICL/RAG/test-time fine-tuning/self-learning agents without engaging editable-memory agents with add/update/delete operations.",
+  "residue": "Stale and contradictory human-supplied rules accumulating in a store that is retrieved by similarity; budgeted human attention.",
+  "stakes": "Compliance errors (missed matches) and high manual handling time (12 min per case).",
+  "method_response": "Timestamps + status flags + LLM conflict comparison + clarification queries + recency-weighted retrieval; self-dialogue-triggered escalation.",
+  "remaining_gap": "No test that conflict handling beats simply retrieving recent entries; no evidence under real rule changes; human-expert dependency.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E009"
+  ],
+  "unresolved": [
+   "Editable-memory agent neighbors not in pinned materials; novelty of status-flag conflict handling vs those not verifiable here",
+   "Whether TikTok stream contains actual rule drift"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 steps 1-5 checked: ARIA solves shifted tasks purely by conditioning a frozen LLM on retrieved KR items (matches the retrieval-as-conditioning sub-move), but there is no upstream phase teaching a unified schema, no whole-category holdout (step 4) and the conditioning substrate is mutable, which C03 does not address; so sub_id left null.",
+    "success_failure_checks": "Success: toggle-the-conditioning-channel ablation not run (no KR-off); cheaper alternative (equal-information RAG) present. Failure: baselines not denied the same information (partially met via RAG/AL), single task family, ablations shallow for multi-module pipeline.",
+    "evidence_ids": [
+     "E001",
+     "E002",
+     "E008",
+     "E006"
+    ],
+    "reason": "Closest original card because no weights change and adaptation is by conditioning on retrieved items; the contribution (editing the conditioning store) is only weakly covered."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Weak-to-moderate match; recorded as partial instead of outside_taxonomy because the retrieved-instance conditioning operation is actually executed.",
+  "executes_pattern": "partial",
+  "resolves_problem": "unresolved: test-time adaptation under changing rules is claimed but drift adaptation is not isolated or measured"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "cards@domain_cards_hash",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "status": "met",
+      "evidence_ids": [
+       "E001",
+       "E002",
+       "E006"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "status": "partial",
+      "evidence_ids": [
+       "E001",
+       "E016"
+      ]
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "status": "partial",
+      "evidence_ids": [
+       "E001"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "E001",
+     "E002",
+     "E006"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H01",
+   "operation_correspondence": "RS conditioning substrate (retrieved instances) corresponds to the domain guidance store; ARIA adds status-flagged edit operations on that substrate (H01 add/update/supersede/clarify) that the RS card does not cover.",
+   "conditions_differences": "H01 requires an outcome gate on every edit: here gate is a human assertion; H01 asks for curator ablation: only w/o conflict resolution exists.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E006"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S1",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Paper claims learning from experience into a text store",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Names a concrete fixed thing (static offline-prepared knowledge and fixed query heuristic) but also leans on the 'learn at test time without retraining' framing.",
+   "evidence_ids": [
+    "E001"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "A store is written from outcomes",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Grounding signal is human guidance rather than execution outcome; reliable by assumption, simulated by an LLM on CUAD.",
+   "evidence_ids": [
+    "E016",
+    "E014"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md",
+    "patterns/sub/H01.md"
+   ],
+   "applies_when": "Store grows over time",
+   "applicable": true,
+   "status": "met",
+   "reason": "Explicit supersede/outdated flags, timestamps, active clarification, recency-weighted retrieval; conflict-resolution ablation gives -3.2 pt sens in one run.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Entries are admitted to a reusable store",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Admission is expert assertion plus LLM relation judgment; no measured marginal-utility or test-based gate, no demotion by outcome.",
+   "evidence_ids": [
+    "E001"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F2",
+   "version": "cards-hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "Loop applied to a new vertical",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Two verticals (CDD, legal clauses), but mechanism is domain-specific enough (timestamped rule status, escalation) that the domain is not the sole novelty.",
+   "evidence_ids": [
+    "E001",
+    "E017"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2507.17131-1",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Claim that the retained store drives the gain",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No ARIA variant with KR persistence off while keeping the query loop; ablations only remove sub-features.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2507.17131-2",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Budget-matched comparison with other learners",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Budget B and info-equivalent static KB are matched nominally; self-improving baselines get no human feedback; query-type cost set to 1 for TikTok so richer feedback per query is free relative to label-only baselines.",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E004",
+    "E006"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2507.17131-3",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Store accumulates over a stream (order matters)",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Single run, single stream order, no seeds or intervals.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2507.17131-4",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Repeated LLM calls per instance",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Self-dialogue, conflict comparison and retrieval costs not reported; authors state no compute analysis.",
+   "evidence_ids": [
+    "E011",
+    "E010"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2507.17131-5",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Store built from the same stream that is evaluated",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Predict-then-learn stream order gives a temporal split for non-queried cases, but queried-case scoring is unspecified and no frozen later-period test exists.",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2507.17131-6",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#reviewer-expectations-pending"
+   ],
+   "applies_when": "Claims a specific maintenance scheme",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No comparison with alternative editing/maintenance scheme or simply retrieving recent entries beyond removing recency weighting (null sens effect).",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Gain attributed to conditioning",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Conditioning channel (KR) never switched off in ARIA itself.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Retrieval-based conditioning claims",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Equal-information static RAG and uncertainty-sampling baselines present; longer-context baseline absent.",
+   "evidence_ids": [
+    "E008",
+    "E004"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+   ],
+   "applies_when": "Conditioning source quality may vary",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Sensitivity to wrong or inconsistent expert feedback not tested; only acknowledged in Limitations.",
+   "evidence_ids": [
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ARIA outperforms offline fine-tuning, RAG, self-improving and active-learning baselines at all budgets on TikTok Pay.",
+   "setting": "11,846 chronological cases, 156 positives, GPT-4o/Qwen2.5-7B, B in {50,100,500,1000}",
+   "baseline/control": "Static, FT, RAG (info-equivalent), Self-Refine/Reflexion/MAD (no human), random and uncertainty querying",
+   "selection_vs_test": "Predict-then-learn on a single stream; hyperparameters (tau, lambda, w_po, N_top) not reported as tuned or fixed; queried-case scoring unspecified",
+   "result/denominator": "B=100 sens 0.8333 vs 0.8013 (uncertainty), spec 0.7423 vs 0.7218; single run",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E009",
+    "E012"
+   ],
+   "counterevidence": [
+    "E006"
+   ],
+   "allowed_conclusion": "At nominally matched budget ARIA scored higher than listed baselines in one replay; margins of 3-5 positives without uncertainty."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Self-dialogue, conflict resolution, temporal KR and diverse guidance are each necessary (Table 2).",
+   "setting": "B=100 TikTok Pay",
+   "baseline/control": "ARIA variants",
+   "selection_vs_test": "same stream",
+   "result/denominator": "drops of 0-5 positives; temporal KR sens unchanged",
+   "evidence_ids": [
+    "E006",
+    "E007"
+   ],
+   "counterevidence": [
+    "E004"
+   ],
+   "allowed_conclusion": "Directional hints only; Labels-Only ARIA does not beat simple uncertainty sampling, so the benefit may come from richer feedback types, not the IGS/HGKA machinery."
+  },
+  {
+   "claim_id": "C3",
+   "text": "ARIA is far more efficient than human review.",
+   "setting": "AHT per case",
+   "baseline/control": "Human experts 12 min",
+   "selection_vs_test": "n/a",
+   "result/denominator": "0.13-0.41 min vs 12 min; accuracy lower (sens 0.80-0.94)",
+   "evidence_ids": [
+    "E010",
+    "E012"
+   ],
+   "counterevidence": [
+    "E011"
+   ],
+   "allowed_conclusion": "Handling time per case reduced, but human experts are defined as 1.0/1.0 and LLM compute cost unreported."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Public-data generalization on CUAD.",
+   "setting": "13,101 clauses, 41 types, LLM-simulated oracle, label queries return ground truth",
+   "baseline/control": "Static, FT, RAG, self-improving, AL",
+   "selection_vs_test": "Alphabetical stream with synthetic drift",
+   "result/denominator": "GPT-4o 0.6358 at B=2000 vs 0.4872 static",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E017"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Gain under simulated oracle and simulated drift only."
+  },
+  {
+   "claim_id": "C5",
+   "text": "Deployed in TikTok Pay.",
+   "setting": "production",
+   "baseline/control": "none",
+   "selection_vs_test": "n/a",
+   "result/denominator": "no production metrics",
+   "evidence_ids": [
+    "E015"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Deployment asserted by authors; not evidence for effect size."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "With human-guided feedback and a nominal query budget, ARIA's timestamped, status-flagged KR plus self-dialogue escalation scored higher than the listed equal-budget baselines in single replays of a proprietary compliance stream and a simulated-oracle CUAD stream; attribution to retention, conflict handling or self-dialogue is not isolated.",
+  "unresolved": [
+   "Retained-store effect (no KR-off)",
+   "Whether queried cases count as correct",
+   "Real drift adaptation",
+   "Run-to-run variance",
+   "Compute cost",
+   "Ground-truth label provenance for sens/spec"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real, concrete operational problem (rule/watchlist drift, human-attention budget) but nearest neighbors are only the stock baselines; editable-memory/curated-memory agents are not engaged and drift is not shown in data.",
+   "evidence_ids": [
+    "E001",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Mechanism is concrete and reconstructable (self-dialogue escalation, status transitions, Eq.3 retrieval) with a distinguishable prediction against simple-uncertainty and static RAG; verbal-confidence informativeness and LLM comparator accuracy are unverified assumptions.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E004",
+    "E005"
+   ],
+   "counterevidence_ids": [
+    "E006"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Write path (timestamp, supersede/outdated, clarification), versioning by status/link and next-round read scoring are explicit and illustrated; retention gate is human assertion not measured utility, hyperparameter values and failure handling of the comparator are unspecified.",
+   "evidence_ids": [
+    "E001",
+    "E002"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Sens/spec with explicit imbalance, but ground-truth provenance on proprietary stream is undocumented, treatment of expert-answered cases is unspecified, human experts defined as 1.0/1.0, CUAD oracle is an LLM and label queries leak ground truth by design.",
+   "evidence_ids": [
+    "E003",
+    "E012",
+    "E016",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Equal-information RAG, equal-budget active-learning baselines and four component ablations exist, but no KR-off variant, Labels-Only ARIA roughly equals simple uncertainty (feedback richness confound), autonomous baselines lack human feedback, ablation margins are 0-5 positives in one run, text overstates 'substantial' drop.",
+   "evidence_ids": [
+    "E004",
+    "E006",
+    "E008",
+    "E009"
+   ],
+   "counterevidence_ids": [
+    "E007"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "No fixed held-out later period or frozen KR evaluation; predict-then-learn on the same stream, queried-case scoring unspecified, drift on TikTok not demonstrated, CUAD drift synthetic with LLM oracle and possible base-model exposure to public CUAD unaddressed.",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample sizes and imbalance stated, but single run per cell, no intervals/seeds/tests, and sensitivity resolution is 0.64 pt per positive so many reported margins are a handful of cases (frozen ladder level 1).",
+   "evidence_ids": [
+    "E003",
+    "E006"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Query-count budget matched nominally and AHT vs humans reported, but LLM calls/tokens for self-dialogue, comparison and retrieval are not reported, authors disclaim compute analysis, and TikTok query costs set uniform.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "人类专家引导的时间戳/状态标记知识库在流上留存并复用；有同预算基线，但单次运行无方差、无store-off，Labels-Only约等于简单不确定性，归因弱。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r06a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "7fcdb70a5a9d9a6b66dbb34ed49e81286680e0f632d5cadd6da80e541135965c",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; model_type is configured type only",
+  "timestamp": "2026-10-21T21:34:04Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2507.17131v2",
+   "sha256": "bba988ab29471d3405891e7efd2d6986e963c1599c0891fc8dd3906e5a1be1aa",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Problem Definition",
+    "4 Methodology (IGS, HGKA, Eq.3)",
+    "5 Deployment (Tables 1-3)",
+    "6 CUAD (Table 4)",
+    "7 Conclusion/Limitations/Ethics",
+    "Appendix A baselines and reflective questions",
+    "Appendix B-C worked examples",
+    "Appendix D CUAD setup (D.1-D.6)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "score": {
+  "raw": 55.0,
+  "display": 55.0,
+  "lower": 55.0,
+  "upper": 55.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

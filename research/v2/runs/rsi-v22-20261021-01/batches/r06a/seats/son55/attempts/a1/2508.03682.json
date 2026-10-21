@@ -1,0 +1,239 @@
+{
+ "paper": {
+  "paper_id": "2508.03682",
+  "claim_type": "component_training",
+  "central_claim": "SQLM: a pre-trained LM given only a topic prompt improves its reasoning via asymmetric self-play in which a proposer generates questions and a solver answers them, both trained with RL (majority-vote reward for the solver, 'not too easy/hard' reward for the proposer; unit tests for code), improving 3-digit multiplication, OMEGA linear equations and Codeforces accuracy without curated data.",
+  "paper_key": "2508.03682",
+  "version": "2508.03682v4",
+  "title": "Self-Questioning Language Models"
+ },
+ "status": "out_of_scope",
+ "reason": "Self-play RL fine-tuning of model weights: both proposer and solver are the same weight-shared model updated by RL (verl). Generated questions are transient training data consumed by the weight update; no prompt/skill/tool/workflow/memory/evaluator/config is retained and reused. Per frozen rubric A3 and EVIDENCE.md exclusion (self-play fine-tuning) this is out of Harness-RSI scope.",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "Both the proposer and solver are trained via reinforcement learning.",
+   "support_explanation": "Improver operation is RL weight training.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "4.2 Reward Functions",
+   "quote": "In most self-play setups, both models are initialized from the same pre-trained language model (and in our experiments, also share weights).",
+   "support_explanation": "Single weight-shared model plays both roles; the product is updated weights.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Appendix A.1",
+   "quote": "We build our implementation on top of verl",
+   "support_explanation": "Standard RL weight-training framework; hyperparameters are RL training settings.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Appendix A.1",
+   "quote": "For all experiments, we report the best test accuracy achieved over 100 training steps, averaged over three training runs.",
+   "support_explanation": "Recorded for the controller: reported accuracy is best-over-steps on the test set (not rated here because out of scope).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Weights of Qwen2.5-3B-Instruct / Qwen2.5-Coder-3B-Instruct (shared by proposer and solver)",
+   "information": "Single topic prompt; self-generated questions; solver samples; model-generated unit tests for code",
+   "operation": "Proposer samples a question; solver samples N answers; majority vote (or unit-test pass fraction) yields solver reward; proposer rewarded if neither all-agree nor none-agree; RL update",
+   "output": "Updated weights",
+   "conditions": "Topic prompt with hand-tuned formatting",
+   "feedback": "Self-consistency or self-generated tests",
+   "selection_rule/data": "Reward-based RL; no retained non-weight artifact",
+   "persistence": "Weights only",
+   "later_use": "Next training steps",
+   "claimed_effect": "Multiplication 0.791 to 0.948, linear equations 0.440 to 0.600, Codeforces 0.320 to 0.391",
+   "failure_boundary": "Authors note reinforcement of systematic errors without ground-truth and residual prompt hand-engineering",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Unsupervised RL rewards still presuppose human-written questions; question curation remains the bottleneck.",
+  "checked_gap": "not assessed (out_of_scope)",
+  "lineage/closest_adjacent": "Asymmetric self-play (Sukhbaatar et al.), majority-vote RL (TTRL-style), Zhao et al. 2025a (per paper)",
+  "residue": "not assessed",
+  "stakes": "not assessed",
+  "method_response": "not assessed",
+  "remaining_gap": "not assessed",
+  "evidence_ids": [],
+  "unresolved": [
+   "Gap not scored because paper is out of scope"
+  ]
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": false,
+  "reason": "not assessed: paper excluded as out_of_scope before pattern identification",
+  "executes_pattern": null,
+  "resolves_problem": null
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [],
+  "unassigned": true,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [],
+ "expectations": [],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Self-generated questions and majority-vote/unit-test rewards improve a pre-trained LM's reasoning without curated data.",
+   "setting": "Qwen2.5-3B models, three tasks, three seeds",
+   "baseline/control": "Base model; format-reward baseline",
+   "selection_vs_test": "best test accuracy over 100 steps reported",
+   "result/denominator": "see Table 1 (test sets 4096 / 100 / 123 items)",
+   "evidence_ids": [
+    "E001",
+    "E004"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Not scored: weight-training method, out of scope."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "Not assessed beyond scope determination; author-reported weight-training gains only.",
+  "unresolved": [
+   "Not evaluated for Harness-RSI since out_of_scope"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope; not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "自博弈RL更新共享权重，生成题目仅作训练数据，无非权重组件留存；依 A3/EVIDENCE 排除，范围外不评分。",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r06a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "7fcdb70a5a9d9a6b66dbb34ed49e81286680e0f632d5cadd6da80e541135965c",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; model_type is configured type only",
+  "timestamp": "2026-10-21T21:41:02Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2508.03682v4",
+   "sha256": "9450f7ce508ef949b33dffef7be80018d79119c7d5d83263586e39cc98e6e886",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Preliminaries",
+    "4 Method (rewards)",
+    "5 Experiments (Tables 1-3, Figure 2 description, qualitative samples)",
+    "6 Limitations",
+    "7 Conclusion",
+    "Appendix A.1-A.4"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": null,
+  "upper": null,
+  "coverage": 0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

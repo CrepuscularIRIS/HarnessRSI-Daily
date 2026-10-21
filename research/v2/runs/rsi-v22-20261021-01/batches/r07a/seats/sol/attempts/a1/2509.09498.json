@@ -1,0 +1,967 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r07a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2509.09498",
+    "paper_id": "2509.09498",
+    "title": "SEDM: Selective Self-Evolving Distributed Memory for Agents",
+    "version": "2509.09498v4",
+    "claim_type": "system_method",
+    "central_claim": "SEDM用执行对照决定共享memory保留与当前使用，CMG利用ties与校准在降低输入成本时保留或恢复memory收益。"
+  },
+  "provenance": {
+    "input_hash": "66fc4c6733ccce90380fbcc2ddf1e7583ddd766efc6e03b2daa725c4bfe3484b",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "配置声明agent_model=sonnet / actual_model=gpt-6.1-sol；无独立后端模型回执及会话标识，按模板置null；未探测模型。",
+    "timestamp": "2026-10-21T22:00:31.235110+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2509.09498.txt",
+      "url": "https://arxiv.org/html/2509.09498v4",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "sections_read": [
+        "Abstract; §1–5, Tables1–5, Figure1–3 captions; Limitations",
+        "Appendix A–I including Tables6–9, Figure4 caption"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§1",
+      "quote": "Ties are 78% of our HotpotQA training pairs and most of our LoCoMo pairs, yet still carry information about success under both actions.",
+      "support_explanation": "赢家标签丢掉大多数paired outcomes，双头BCE保留难度信息。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.2",
+      "quote": "An SCEC stores the task input, the agent output, summaries of tool calls, random seeds, and hashes of the configuration.",
+      "support_explanation": "固定任务/配置/种子及工具摘要；不等于完整外部环境复现。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.2",
+      "quote": "is the source task itself, whose SCEC is replayed with and without",
+      "support_explanation": "原版准入测试源任务，不能当独立holdout。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.2",
+      "quote": "In the held-out configuration, two filters run before the test: a candidate is dropped if its source task was not solved, and if it contains the reference answer of a task it is tested on, since it would then pass only by leaking the answer.",
+      "support_explanation": "新配置有成功源与答案泄漏过滤。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.3",
+      "quote": "merges near-duplicate items from different SCECs, distills repeated patterns into new",
+      "support_explanation": "库合并/蒸馏/隔离/衰减为显式步骤，非只改变检索器。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.4",
+      "quote": "a rule-based abstraction replaces specific entities with typed placeholders and produces a general form,",
+      "support_explanation": "跨域抽象为规则式去实体；不是LLM独立创制通用理论。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.5",
+      "quote": "they need not sum to one, because both actions can succeed or both can fail.",
+      "support_explanation": "两独立成功概率可编码00与11，不是互斥winner softmax。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§3.5",
+      "quote": "After training, we fit one temperature per action on a separate calibration split by minimizing NLL",
+      "support_explanation": "校准与训练/测试角色分离。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.1",
+      "quote": "several of which are taken from prior work",
+      "support_explanation": "LoCoMo旧基线未全重跑，memory budgets可能不同。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.3",
+      "quote": "On HotpotQA, admission alone (37) is still below G-Memory (38); self-scheduling then adds 2 points on both tasks with only a small increase in prompt tokens",
+      "support_explanation": "累加消融非每项总是提升；存在负结果。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.4",
+      "quote": "All runs use cross-domain diffusion, so these results show that SEDM memories transfer, but they do not isolate how much of the transfer is due to abstraction.",
+      "support_explanation": "迁移有结果而抽象的因果贡献未隔离。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Table 4 caption",
+      "quote": "test split, 489 questions, seed 42",
+      "support_explanation": "主表n=489一个seed，其他种子附录。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.5",
+      "quote": "CMG reaches 0.329, within the confidence interval of always use, while injecting memory on 69% of the tasks and using 18% fewer agent input tokens.",
+      "support_explanation": "0.329 vs0.333接近而不是更高成功率，18%节省仅agent input。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.6",
+      "quote": "SEDM builds candidate memories from conversation 0 and admits them with held-out paired tests on conversation 1",
+      "support_explanation": "独立来源/准入；测试另conversation2。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.6",
+      "quote": "Single differences on 193 questions are within the noise of one conversation, but the direction holds for all three seeds, both memories, and both metrics.",
+      "support_explanation": "LoCoMo小差异不显著，方向跨seed非跨conversation。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.6",
+      "quote": "the memory comes from a single conversation and is frozen, so merged and distilled items become more general but may not fit a new conversation, and the controller cannot correct their weights during testing.",
+      "support_explanation": "准入/调度不保证转移；controller memory总注入反降。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Limitations / Admission protocol",
+      "quote": "We did not rerun them under the stricter held-out configuration",
+      "support_explanation": "旧主表没有严格准入重跑，范围限定必要。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Limitations / Frozen memory",
+      "quote": "We do not study a gate that keeps learning while the society memory keeps changing.",
+      "support_explanation": "不支持open-ended持续协同演化或improver进步。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Limitations / Memory construction",
+      "quote": "evidence memories use the gold supporting sentences of the memory-construction questions.",
+      "support_explanation": "Hotpot memory是过去任务被金标准验证后的乐观构造，不是test泄漏。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Limitations / Baselines",
+      "quote": "The CoT gate is a zero-shot reproduction with the same backbone, not the original trained checkpoint.",
+      "support_explanation": "强弱比较受到训练配置差异限制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix B / Data and splits",
+      "quote": "Questions are split into five disjoint sets: memory construction (2,962), gate training (2,962), validation (496), calibration (496), and test (489).",
+      "support_explanation": "冻结五分区角色明确，测试只最终用一次。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix B / execution",
+      "quote": "this is the only difference between the two runs.",
+      "support_explanation": "memory on/off同执行器与工具环境，控制CMG因果。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix B / Metrics",
+      "quote": "95% bootstrap confidence intervals (2,000 resamples over questions;",
+      "support_explanation": "测试bootstrap但非所有系统/流种子方差与显著性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix B / Training",
+      "quote": "CMG is trained with three seeds (42, 43, 44); other gates use seed 42.",
+      "support_explanation": "三训练种子有范围，比较基线非都重复。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E025",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix C / Metrics",
+      "quote": "a question counts as solved if the SBERT similarity between the answer and the reference is at least 0.7; we also report token F1.",
+      "support_explanation": "SBERT语义阈值可能接受错误关系/实体；辅以F1，无人工审计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E026",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix E / Cost",
+      "quote": "Collecting all paired runs used about 24.7M input and 1.3M output tokens of gpt-4o-mini (about US$4.5).",
+      "support_explanation": "有paired rollout采集成本；非全系统建库、准入、训练和GPU成本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E027",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix E / execution",
+      "quote": "Earlier versions of our pipeline executed such answers, so tool results were partly imagined.",
+      "support_explanation": "已知虚构Observation修复：stop at Observation并仅执行first action；旧表的独立重跑受限。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E028",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix I",
+      "quote": "Code for data preparation, paired collection, gate training, calibration, and evaluation will be released.",
+      "support_explanation": "仅承诺将发布代码，不虚称代码复现。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E029",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "§4.6",
+      "quote": "CMG injects this memory on only 33% of the questions, saves 31% of the tokens",
+      "support_explanation": "controller-managed冻结库门控可将总注入负收益转为小正收益。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E030",
+      "material_id": "2509.09498.txt",
+      "sha256": "01358ed0dc699f89e5ba78fbe29f3e6b29e9cf5c09ee991aa169c87daa9929b8",
+      "locator": "Appendix A / Admission settings",
+      "quote": "so that items that do not hurt the admission tasks are also kept.",
+      "support_explanation": "e=3/k=3/eta=0保留ties；不是统计保证不退化。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "SCEC candidate memory及权重/准入",
+      "information": "源任务输入、输出、工具摘要、种子、hash",
+      "operation": "paired memory-on/off replay→按平均reward delta准入→tier/merge/distill/isolate/decay",
+      "output": "外部持久memory item+utility/provenance",
+      "conditions": "相似准入题的边际效用可转移；判分可信",
+      "feedback": "任务reward，SBERT/F1/EM等",
+      "selection_rule": "原版源任务；新配置e=3、每arm k=3、eta=0和两前置过滤",
+      "selection_data": "LoCoMo source conv0/admit conv1；旧表源SCEC",
+      "persistence": "admitted外部条目、权重、tier；reject audit record不可检索",
+      "later_use": "新问题先相似检索并utility重排",
+      "claimed_effect": "旧表FEVER62→66/Hotpot38→39；严格冻结库总注入可反降",
+      "failure_boundary": "source selection bias、合并漂移、no硬size bound、持续society未验证",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E010",
+        "E014",
+        "E016",
+        "E030"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "recipient CMG memory injection policy",
+      "information": "当前question+retrieved text，无答案/ID/score/trace",
+      "operation": "Qwen3-4B LoRA双头BCE全部paired含ties→独立温度校准→gain>lambda*length才use",
+      "output": "每个后续任务的USE/SKIP，未改memory内容",
+      "conditions": "训练分布与memory稳定；预测增益在校准后可比较",
+      "feedback": "训练/校准由两个action的执行成功标签",
+      "selection_rule": "validation选择lambda；test不适应",
+      "selection_data": "Hotpot五split；LoCoMo按conversation分工",
+      "persistence": "训练gate参数+固定外部memory，评价期间冻结",
+      "later_use": "当前新任务单次gate后多步agent",
+      "claimed_effect": "Hotpot0.333→0.329/input -18%；LoCoMo小幅正益/input -19到31%",
+      "failure_boundary": "gate不学习写入；无证据证明改进程序自身越来越强；新memory分布失配",
+      "evidence_ids": [
+        "E001",
+        "E007",
+        "E008",
+        "E013",
+        "E014",
+        "E015",
+        "E018",
+        "E021",
+        "E022",
+        "E024",
+        "E029"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "相关/源任务有用不意味着当前memory增益；winner-only丢多数ties；LLM CoT门昂贵",
+    "checked_gap": "本文测到memory-on害对和大量ties，校准双action成功率比相似性代理更贴当前gain；原准入source leakage修正与旧结果分开",
+    "lineage": [
+      {
+        "name": "G-Memory (Zhang et al. 2025)",
+        "source": "2509.09498v4 §2/4; original fulltext not supplied"
+      },
+      {
+        "name": "Self-RAG (Asai et al. 2024), FLARE (Jiang et al. 2023), Adaptive-RAG (Jeong et al. 2024)",
+        "source": "2509.09498v4 §2; original fulltexts not supplied"
+      },
+      {
+        "name": "Temperature scaling (Guo et al. 2017)",
+        "source": "2509.09498v4 §2/3.5; original fulltext not supplied"
+      }
+    ],
+    "closest_adjacent": [
+      "G-Memory提供retrieval，缺本文paired admission/utilities和recipient CMG",
+      "adaptive retrieval决定何时找document；本篇先找到memory再按agent两个action结果决定是否注入"
+    ],
+    "residue": "跨task共享memory的相关性与接收方边际效用不一致；tie保留与成本校准",
+    "stakes": "避免盲注入损害和无益context开销",
+    "method_response": "sender paired entry tests/controller + recipient dual calibrated outcome heads",
+    "remaining_gap": "open-ended动态memory drift、可信语义判分、全成本与跨agent/backbone稳定性",
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E007",
+      "E013",
+      "E016",
+      "E018",
+      "E025",
+      "E026"
+    ],
+    "unresolved": [
+      "请求总控补G-Memory、Self-RAG/FLARE/Adaptive-RAG固定原文；当前谱系依据本篇related work，不能断言首次门控。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "assumption_audit_and_pivot",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "assumption_audit_and_pivot",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "识别相关/先前有用的记忆不必改善当前agent",
+          "测量01/10及00/11：注入会救错也会害对，ties占多数",
+          "以校准的两个action成功概率差取代相似性/赢家标签，按成本门控",
+          "相同paired runs上与always/never/random和winner gates比较"
+        ],
+        "success_checks": [
+          "真实数据存在 harmful memories，controller库总注入低于无库",
+          "结构性解释winner-only丢tie，双头概率非互斥"
+        ],
+        "failure_checks": [
+          "C11还需重新推导performance certificate，本篇无该理论，不选子卡",
+          "其余C01/05/19/28/29要求安全locus、identifiability或理论bound，也不适用",
+          "近邻独立原文未提供；仍只单执行器/单gate backbone"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E007",
+          "E013",
+          "E015",
+          "E016",
+          "E020",
+          "E021"
+        ],
+        "reason": "经验性反例推翻always-inject/relevance等于utility的默认假设并实现新行为。主卡适配，但六张子卡的特殊战术未完整执行，sub=null。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "以真实反例审计并改写记忆选择假设；不因缺子卡而outside_taxonomy。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "evidence_gated_retention",
+        "sub": "H29",
+        "version": "manifest-frozen",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "paired with/without memory的条目credit；但原版在源任务测试，外推另看holdout",
+            "evidence_ids": [
+              "E003",
+              "E004",
+              "E014",
+              "E030"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "partial",
+            "reason": "isolate/decay/remove有定义，未硬size bound或长期回归证据",
+            "evidence_ids": [
+              "E005",
+              "E016",
+              "E018"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "准入/调度累加消融；严格heldout新配置未完整重跑旧表",
+            "evidence_ids": [
+              "E010",
+              "E017"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "paired collection tokens与gate延迟报告；全建库/准入/训练预算不齐",
+            "evidence_ids": [
+              "E013",
+              "E026"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E004",
+          "E005",
+          "E010",
+          "E014",
+          "E030"
+        ]
+      },
+      {
+        "main": "index_experience_for_reuse",
+        "sub": "H05",
+        "version": "manifest-frozen",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S4",
+            "status": "met",
+            "reason": "retrieved后recipient使用门，不是省掉首次embedding检索，允许SKIP",
+            "evidence_ids": [
+              "E007",
+              "E008",
+              "E013",
+              "E029"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "met",
+            "reason": "相同冻结库、同一批paired execution上的always/never/random",
+            "evidence_ids": [
+              "E013",
+              "E021",
+              "E022"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "partial",
+            "reason": "SEDM有准入测试；controlled证据库是已解/金标准episode，不代表自动入库闭环",
+            "evidence_ids": [
+              "E004",
+              "E019",
+              "E021"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E007",
+          "E008",
+          "E013",
+          "E014",
+          "E018",
+          "E021",
+          "E022",
+          "E029"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "assumption_audit_and_pivot",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "evidence_gated_retention",
+        "sub": "H29"
+      },
+      "operation_correspondence": "不用相关性代替memory effect：paired delta给条目效用并调整留存/排名",
+      "conditions_and_differences": "H29 credit直接对应；部分H30式admit/isolate但缺hard size bound，未额外强配H30；H01有相似merge但此处是规则controller，不是LLM curator。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E030"
+      ]
+    },
+    {
+      "rs_main": "assumption_audit_and_pivot",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "index_experience_for_reuse",
+        "sub": "H05"
+      },
+      "operation_correspondence": "违反always-inject默认，按校准gain/cost选择USE/SKIP",
+      "conditions_and_differences": "gate在retrieval后，省agent-context不是首次检索；H04 tier是sender辅助操作，不以结构本身做主贡献；不把gate权重训练等同于memory写入improver递归。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E013",
+        "E018",
+        "E022",
+        "E029"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:evidence_gated_retention/S1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H29.md#step-by-step"
+      ],
+      "applies_when": "给条目utility并准入",
+      "applicable": true,
+      "status": "met",
+      "reason": "paired memory-on/off而非只有self-grade；同源测试的外推另评E.holdout",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E030"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:evidence_gated_retention/S2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/evidence_gated_retention.md#success-conditions"
+      ],
+      "applies_when": "声称memory随规模可持续",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有衰减、隔离、退役；无hard size bound和长期累积评测",
+      "evidence_ids": [
+        "E005",
+        "E016",
+        "E018"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:evidence_gated_retention/S4",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/evidence_gated_retention.md#success-conditions"
+      ],
+      "applies_when": "声称admission/controller带来收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "累加消融能拆两模块，但旧配置；strict配置两独立memory run不可直接因果比较；diffusion无消融",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E016",
+        "E017"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:index_experience_for_reuse/H05",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H05.md#step-by-step"
+      ],
+      "applies_when": "recipient gate声称挑对而非只挑少",
+      "applicable": true,
+      "status": "met",
+      "reason": "固定库/同paired runs、always/never/random、winner-head和calibration ablations，future tasks不读test outcome",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E013",
+        "E021",
+        "E022"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:evidence_gated_retention/S5",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/evidence_gated_retention.md#success-conditions"
+      ],
+      "applies_when": "声称降低memory总成本",
+      "applicable": true,
+      "status": "partial",
+      "reason": "API agent输入节省、gate latency和paired collection可见，未全计训练/准入/维护",
+      "evidence_ids": [
+        "E013",
+        "E026"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "local:2509.09498-1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.09498v4 §4.6 / Limitations / Appendix B–C"
+      ],
+      "applies_when": "把选择收益解释为future-memory收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "严格新配置五Hotpot disjoint splits、LoCoMo按conversation；旧主表仍源任务准入且strict只一test conversation",
+      "evidence_ids": [
+        "E003",
+        "E014",
+        "E017",
+        "E018",
+        "E021"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2509.09498-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.09498v4 Appendix B–C metrics"
+      ],
+      "applies_when": "success label替代真实正确性",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Hotpot F1>=0.5、LoCoMo SBERT>=0.7并给tokenF1；无人工/实体关系错答审计",
+      "evidence_ids": [
+        "E012",
+        "E025"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "local:2509.09498-3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2509.09498v4 §4.6 / Appendix B,G"
+      ],
+      "applies_when": "小差值被解释为稳健更好",
+      "applicable": true,
+      "status": "partial",
+      "reason": "bootstrap CI+3 gate seeds；无跨memory构建/测试conversation重复或显著性检验，作者承认噪声",
+      "evidence_ids": [
+        "E015",
+        "E023",
+        "E024"
+      ],
+      "score_item": "E.statistics"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "SEDM准入、调度、diffusion使共享memory更好/便宜",
+      "setting": "原配置LoCoMo/FEVER/HotpotQA；gpt-4o-mini",
+      "baseline/control": "G-Memory及no-memory；准入/调度累加",
+      "selection_vs_test": "旧版候选测试源SCEC；新版strict只§4.6，不能混写",
+      "result/denominator": "LoCoMo open F1 47.5 vs32.4；FEVER66 vs62/Hotpot39 vs38，input少32%/16%（Table1–2）；其他LoCoMo类型不是最优",
+      "evidence_ids": [
+        "E003",
+        "E009",
+        "E010",
+        "E011",
+        "E017"
+      ],
+      "counterevidence": [
+        "source-task准入可能过估；旧LoCoMo有引自其他论文的不等budget基线；diffusion未ablate"
+      ],
+      "allowed_conclusion": "作者旧配置上任务结果；不证明严格heldout持续society总体占优"
+    },
+    {
+      "claim_id": "C2",
+      "text": "CMG保留helpful memory收益、降低输入开销",
+      "setting": "controlled HotpotQA n489；固定gold-verified episode库及7step ReAct",
+      "baseline/control": "同cached paired runs always-skip/use、random、similarity、winner-head/SFT、zero-shot CoT",
+      "selection_vs_test": "2962memory/2962train/496val/496cal/489test；lambda由val选",
+      "result/denominator": "skip .249/use .333；val选lambda0 CMG .329、69% injection、3047 vs3736 agent-input/token (-18%)",
+      "evidence_ids": [
+        "E012",
+        "E013",
+        "E019",
+        "E020",
+        "E021",
+        "E022",
+        "E023",
+        "E024",
+        "E026"
+      ],
+      "counterevidence": [
+        ".329与.333区间重叠不是显著优效/非劣效证明",
+        "gold episode为乐观构造",
+        "CoT未使用原trained checkpoint；GPU latency shared load"
+      ],
+      "allowed_conclusion": "特定冻结库下接近always-use成功率的input节省；不是全成本节省18%"
+    },
+    {
+      "claim_id": "C3",
+      "text": "全SEDM内门控可从有害memory恢复价值",
+      "setting": "LoCoMo conv0造库/1准入/3–7训gate/8val/9cal/2test n193，3gate seeds",
+      "baseline/control": "两套分别冻结memory内部各自同paired runs：always/never/CMG；两个memory不可直接比",
+      "selection_vs_test": "test conversation与构造/准入/训练/校准disjoint，gate及memory测试时不更新",
+      "result/denominator": "admission only skip .544/use .539/CMG .556±.011, input -19%；controller skip .534/use .518/CMG .546, input -31%",
+      "evidence_ids": [
+        "E014",
+        "E015",
+        "E016",
+        "E018",
+        "E025",
+        "E029"
+      ],
+      "counterevidence": [
+        "单conversation统计小差值；合并后泛化可能损害；无持续演化",
+        "SBERT阈值不是精确正确率"
+      ],
+      "allowed_conclusion": "冻结非权重memory跨conversation后，recipient门控有条件收益；不支持开放society/improver越来越强"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "冻结shared non-weight memory由别的任务/对话构造与准入，后续不同任务可读取；CMG同库paired对照显示输入节省及条件性更好成功率。不是improver或开放持续society结果。",
+    "unresolved": [
+      "严格协议下旧主表重跑",
+      "独立邻居原文",
+      "跨conversation/agent重复、显著性与判分审计",
+      "完整训练+准入+维护成本"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "将relevance/过去utility与当前增益分开，并具体指出ties监督损失；与retrieval/calibration谱系有本文来源，缺独立最近邻原文。",
+      "evidence_ids": [
+        "E001",
+        "E007",
+        "E013",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 4,
+      "reason": "paired所有四种outcome、双独立头、单次编码、独立temperature及成本阈值可完整重建并预测winner-only/随机门差异；sender admission与recipient use角色清楚。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004",
+        "E007",
+        "E008",
+        "E021",
+        "E022"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "权重初始化/周期合并/隔离/衰减与冻结测试、split权限及gate训练接口详细；merge/distill细则和部分阈值仍不完备，无硬size cap/持续变库部署。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E005",
+        "E008",
+        "E018",
+        "E021",
+        "E028"
+      ],
+      "counterevidence_ids": [
+        "E016",
+        "E018"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "公开任务EM/F1、统一工具执行规则和独立paired结果明确；新版修复虚构Observation。LoCoMo SBERT>=.7及Hotpot宽松F1>=.5缺错误/人工审计，F1旁证可用但不足4。",
+      "evidence_ids": [
+        "E022",
+        "E025",
+        "E027"
+      ],
+      "counterevidence_ids": [
+        "E025",
+        "E027"
+      ],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "CMG同库同cached executions、always/never/random及winner/calibration对照有力；sender只有旧配置累加消融、diffusion未拆，CoT baseline零样本且训练不等。",
+      "evidence_ids": [
+        "E007",
+        "E010",
+        "E013",
+        "E021",
+        "E022"
+      ],
+      "counterevidence_ids": [
+        "E009",
+        "E011",
+        "E020"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "新配置LoCoMo按conversation五角色、Hotpot五disjoint split并使用heldout calibration，有跨题留存；原表在源任务准入未strict重跑，单test conversation且memory frozen，不推open-ended。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E014",
+        "E019",
+        "E021"
+      ],
+      "counterevidence_ids": [
+        "E003",
+        "E017",
+        "E018"
+      ],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有489/193分母、2000bootstrap置信区间、3 gate seeds及SD/全lambda曲线；无跨memory/测试conversation重复与显著性检验。A2 3+条件未齐，非从CI重叠声称非劣效。",
+      "evidence_ids": [
+        "E012",
+        "E015",
+        "E023",
+        "E024"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "测量agent input并给gate延迟和paired collection 24.7M+1.3M/$4.5；无全memory构造/多次准入/维护和LoRA训练GPU成本，shared latency也非稳定端到端。",
+      "evidence_ids": [
+        "E013",
+        "E026"
+      ],
+      "counterevidence_ids": [
+        "E020",
+        "E018"
+      ],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 77.5,
+    "display": "77.5",
+    "lower": 77.5,
+    "upper": 77.5,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "固定全文含A–I附录完整；外部memory通过paired准入并供独立任务使用，严格与旧源任务配置及训练gate范围分开。",
+  "rationale": "准入和接收方门控目标清楚；双头利用ties、独立校准与同运行对照支持条件性降输入成本。严格测试仅单对话、库冻结，不能外推持续society或全成本节省。"
+}

@@ -1,0 +1,337 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r06a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2507.16518",
+    "paper_id": "2507.16518",
+    "title": "SyncLoop: A Multimodal Dual-Loop Framework for Self-Improving Mathematical Reasoning",
+    "version": "2507.16518v3",
+    "claim_type": "component_training",
+    "central_claim": "联合演化多模态训练数据与模型，以样本错误率筛选课程并交替 SFT/GRPO 提高几何推理能力。"
+  },
+  "provenance": {
+    "input_hash": "7fcdb70a5a9d9a6b66dbb34ed49e81286680e0f632d5cadd6da80e541135965c",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按指定 sonnet 类型/gpt-6.1-sol 席执行；无独立运行回执与可导出会话标识，不探测模型。",
+    "timestamp": "2026-10-21T21:30:33.942763+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2507.16518.txt",
+      "url": "https://arxiv.org/html/2507.16518v3",
+      "sha256": "82062815a791cad04726bd0c78c724ea70221b5336a116af48dc2a2efc98ed6b",
+      "sections_read": [
+        "Abstract",
+        "1–5",
+        "A.1–A.4",
+        "NeurIPS checklist"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2507.16518.txt",
+      "sha256": "82062815a791cad04726bd0c78c724ea70221b5336a116af48dc2a2efc98ed6b",
+      "locator": "§3.1 lines 558–564",
+      "quote": ", respectively. Our goal is to improve the complex reasoning capability of\nπ\nθ\n\\pi_{\\theta}\nby optimizing its parameters\nθ\n\\theta",
+      "support_explanation": "形式目标是优化参数 θ；Algorithm 1 输出训练后模型和数据，不是可留存 harness 修改。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2507.16518.txt",
+      "sha256": "82062815a791cad04726bd0c78c724ea70221b5336a116af48dc2a2efc98ed6b",
+      "locator": "§3.3 lines 1439–1459",
+      "quote": "In the\nt\nt\n-th iteration, we perform SFT followed by RL training using all post-filtered data, resulting in an updated model\nπ\nθ\n,\nR\n​\nL\nt\n+\n1\n\\pi_{\\theta,RL}^{t+1}\nand a new dataset\n𝒟\nt\n+\n1\n\\mathcal{D}_{t+1}\nfor the next round.",
+      "support_explanation": "循环留存并评价的是 SFT/RL 后权重；数据筛选服务权重训练。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "几何图文训练集及 Qwen2-VL 参数",
+      "information": "模型答案与合成答案一致性、32 次采样错误率",
+      "operation": "图像加辅助线、生成复杂问题、筛选后 SFT/GRPO",
+      "output": "更新的训练集与模型权重",
+      "conditions": "外部教师和图像编辑工具可用",
+      "feedback": "错误率和答案奖励",
+      "selection_rule": "error rate >0.3",
+      "selection_data": "合成训练样本",
+      "persistence": "数据和权重检查点，非 harness 改动",
+      "later_use": "下一轮权重训练与模型评测",
+      "claimed_effect": "多轮提升几何推理",
+      "failure_boundary": "附录报告灾难遗忘，不能解释为非权重留存收益",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "图文复杂度不匹配和静态课程与模型能力错配",
+    "checked_gap": "本文明确定位训练数据和参数优化；非本项目 harness 残余问题",
+    "lineage": [
+      {
+        "name": "OpenVLThinker",
+        "version": "本文所引版本，邻文原文未固定",
+        "source": "§2 Self-Improvement"
+      }
+    ],
+    "closest_adjacent": [
+      "OpenVLThinker",
+      "STaR",
+      "ReST"
+    ],
+    "residue": "训练课程适配，不属非权重 harness 改进",
+    "stakes": "不应将权重训练收益纳入 Harness RSI",
+    "method_response": "合成图文并按模型错误率筛选训练",
+    "remaining_gap": "不证明可复用非权重组件更新",
+    "evidence_ids": [
+      "E001",
+      "E002"
+    ],
+    "unresolved": [
+      "邻文原文未纳入固定输入，未独立检验 novelty。范围裁定不依赖补材。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "把固定课程难度改为逐轮错误率条件化的设计变量",
+          "C15 是空间表征替换；C23/C24 overview 不足以支持具体子卡，不强贴"
+        ],
+        "success/failure_checks": [
+          "明确固定课程瓶颈",
+          "多训练组件收益不能等同单一非权重改动"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002"
+        ],
+        "reason": "在迭代生成训练过程中解放固定课程变量；不满足 C15 空间基底替换。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "可识别原模式但并不改变收录范围。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "self_generate_the_curriculum",
+        "sub": "H23",
+        "version": "manifest-fixed",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "错误率诊断指导合成训练集选择",
+            "evidence_ids": [
+              "E002"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "self_generate_the_curriculum",
+        "sub": "H23"
+      },
+      "operation_correspondence": "固定课程→按当前模型错误率筛选复杂样本",
+      "conditions_and_differences": "H23 为 touches-weights 边界卡；本篇实际被评价产物只有权重，A3 排除。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "local:2507.16518-1",
+      "version": "1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§3.1",
+        "Algorithm 1"
+      ],
+      "applies_when": "判定闭环被评价及留存对象",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "没有被评价的留存非权重 harness 改动；按冻结 A3 out_of_scope。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "score_item": "M"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "通过联合数据-模型演化提升数学推理",
+      "setting": "Qwen2-VL 2B/7B，Geometry3k/MathVista 等",
+      "baseline/control": "初始权重、数据及训练策略消融",
+      "selection_vs_test": "训练样本筛选与模型评测；非 harness 留存检验",
+      "result/denominator": "原始主张属于权重训练，本席不作范围内评分",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "论文研究训练闭环，不是非权重 Harness RSI。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "训练后的模型表现由作者报告；未证明非权重 harness 的留存收益。",
+    "unresolved": []
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结 A3，纯权重训练产物不评分。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文方法、实验与附录核实被评价对象"
+      ]
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "冻结 A3：被评价和留存的改进产物是模型参数；合成训练数据与工具代码只服务 SFT/GRPO，不是所评价的持久化非权重 harness 组件。",
+  "rationale": "全文含附录确认 SyncLoop 通过数据课程和 SFT/GRPO 更新权重；按冻结 A3 排除，不用低分替代范围裁定。"
+}
