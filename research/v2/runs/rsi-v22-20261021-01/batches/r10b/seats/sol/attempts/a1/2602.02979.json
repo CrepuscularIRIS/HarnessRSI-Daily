@@ -1,0 +1,275 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r10b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "status": "out_of_scope",
+  "reason": "冻结锚点A3：Coach用REINFORCE、Player用GRPO，评价并留存的是两模型的参数策略；生成数学题与多数投票伪标签用于权重训练。完整方法与附录未给独立评价、留存复用的非权重prompt/skill/tool/workflow/memory或评测器变化。",
+  "paper": {
+    "paper_key": "2602.02979",
+    "paper_id": "2602.02979",
+    "version": "2602.02979v3",
+    "title": "CPMobius: Iterative Coach-Player Reasoning for Data-Free Reinforcement Learning",
+    "claim_type": "component_training",
+    "central_claim": "合作式Coach–Player循环从多数投票伪标签和环境进步反馈训练两模型，提高无新外部数据阶段的数学推理。"
+  },
+  "provenance": {
+    "input_hash": "aeca7209de23ba8ec9b1f3e274508a8113501ffd9709824a60216d9634b6122d",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "派发sonnet→gpt-6.1-sol；无可核验模型/会话收据，字段保留null，不探测。",
+    "timestamp": "2026-10-21T23:09:35.927249+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2602.02979.txt",
+      "url": "https://arxiv.org/html/2602.02979v3",
+      "sha256": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+      "sections_read": [
+        "全文§1–6",
+        "Appendix A.1–A.8 complete，含所有表格、算法和例题"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2602.02979.txt",
+      "hash": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+      "locator": "§3 / Appendix A.1 Algorithm1",
+      "quote": "The Player is optimized using GRPO, which enables stable learning from the pseudo-labels generated through majority voting.",
+      "support_explanation": "Player留存的改进是参数训练，非工作流/技能编辑。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2602.02979.txt",
+      "hash": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+      "locator": "Appendix A.1 Algorithm1",
+      "quote": "Trained Coach and Player policies",
+      "support_explanation": "算法返回训练后的两模型策略；输出对象是权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2602.02979.txt",
+      "hash": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+      "locator": "Appendix A.3",
+      "quote": "both coach and solver train batch size: 16; both coach and solver number of rollouts: 16",
+      "support_explanation": "两主体均进行policy训练，同步预算配置非留存harness。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2602.02979.txt",
+      "hash": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+      "locator": "Appendix A.4",
+      "quote": "There may be concerns over potential data leakage in that we utilize reward signals from AMC. We conduct an experiment, training with only 20% AMC data and testing over the remaining data.",
+      "support_explanation": "验证环境确实提供外部反馈，但该反馈训练权重，不改变范围判定。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2602.02979.txt",
+      "hash": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+      "locator": "Appendix A.5",
+      "quote": "to compute the Coach’s reward signal",
+      "support_explanation": "环境信号用于Coach奖励。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "Coach/Player模型权重",
+      "information": "Coach生成题、Player多数答案，固定验证环境准确率变化",
+      "operation": "筛选.2–.8一致率任务→Player GRPO→验证集进步→Coach REINFORCE→重复",
+      "output": "训练后的Coach和Player参数策略",
+      "conditions": "预热Coach、rollout多数标签和带真值验证环境",
+      "feedback": "多数一致奖励及验证准确率差",
+      "selection_rule": "策略梯度更新；题目难度过滤",
+      "selection_data": "生成题与AMC/替代验证环境",
+      "persistence": "跨轮模型权重",
+      "later_use": "下一轮生成题和推理，再测试数学基准",
+      "claimed_effect": "数据生成与推理能力协同进步",
+      "failure_boundary": "无可分离非权重harness留存产物；不将生成训练数据自动算技能",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "固定题源/对抗生成器易偏离学习前沿，改为合作共同进步。",
+    "checked_gap": "方法是训练型共演化，非本项目非权重组件闭环。",
+    "lineage": [
+      {
+        "method": "R-Zero / RENT",
+        "version": "本文引用，邻居原文未固定",
+        "relation": "数学模型训练基线"
+      }
+    ],
+    "closest_adjacent": [
+      "R-Zero",
+      "RENT"
+    ],
+    "residue": "不进入harness质量评分。",
+    "stakes": "避免把模型权重自训练计为非权重RSI。",
+    "method_response": "伪标签GRPO和环境奖励REINFORCE",
+    "remaining_gap": "范围外；不以低分代替范围裁定。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E004"
+    ],
+    "unresolved": []
+  },
+  "rs_pattern": {
+    "primary": null,
+    "supporting": [],
+    "matches": [],
+    "outside_taxonomy": false,
+    "reason": "not_applicable：A3范围外，不用原卡匹配把权重训练重新纳入。",
+    "executes_pattern": false,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [],
+    "unassigned": [
+      "not_applicable: 训练型课程共演化不满足本项目非权重留存边界；H22标签不能覆盖冻结A3。"
+    ],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [],
+  "expectations": [],
+  "claims": [],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告训练后的数学模型优于初始模型，并有训练验证信号替换及20/80拆分；非harness留存改进证据。",
+    "unresolved": [
+      "scope disposition only; not a quality rating"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不适用本批质量评分；非材料未知。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–6及Appendix A.1–A.8排查非权重留存组件"
+      ]
+    }
+  },
+  "score": null,
+  "rationale": "Coach与Player均以策略梯度更新权重，生成题和多数伪标签服务训练；全文无独立评价的非权重留存组件。按冻结A3范围外，不以低分代替排除。"
+}

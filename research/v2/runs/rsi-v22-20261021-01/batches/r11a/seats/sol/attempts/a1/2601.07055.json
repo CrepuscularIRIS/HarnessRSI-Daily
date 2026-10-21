@@ -1,0 +1,386 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r11a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2601.07055",
+    "paper_id": "2601.07055",
+    "title": "Dr. Zero: Self-Evolving Search Agents without Training Data",
+    "version": "2601.07055v2",
+    "claim_type": "system_method",
+    "central_claim": "无需人工 QA 训练数据，交替训练 proposer/solver，并以 HRPO 降低多轮搜索训练开销，达到或超过监督搜索基线。"
+  },
+  "provenance": {
+    "input_hash": "6b8399b337703e43050eaa23d4b507aa6a634e965b8ff5bc59bfbcad90f0bd54",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T23:09:13.855480+00:00",
+    "notes": "由任务配置 sonnet → gpt-6.1-sol；无可独立核验的运行回执/会话标识，故 actual_model/session_id/receipt_ref 为 null；未探测模型。"
+  },
+  "materials": [
+    {
+      "material_id": "2601.07055.txt",
+      "url": "https://arxiv.org/html/2601.07055v2",
+      "sha256": "76ff914fee9a1e89950e6c59ec6c4a9ba83d763c5fe758e6cc99b0b3a4022934",
+      "sections_read": [
+        "Abstract",
+        "§1–5",
+        "Appendix .1 Implementation and Tables 5–10",
+        ".2 Additional Results",
+        ".3 Qualitative Examples and Figures 5–14",
+        "HTML end matter"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2601.07055.txt",
+      "sha256": "76ff914fee9a1e89950e6c59ec6c4a9ba83d763c5fe758e6cc99b0b3a4022934",
+      "locator": "§3.1 Setup, lines 331–342",
+      "quote": "are trained to maximize their respective expected rewards:",
+      "support_explanation": "被优化对象是 proposer 和 solver 模型参数。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2601.07055.txt",
+      "sha256": "76ff914fee9a1e89950e6c59ec6c4a9ba83d763c5fe758e6cc99b0b3a4022934",
+      "locator": "§3.4, lines 1031–1035",
+      "quote": "Utilizing solver feedback, the proposer is optimized via HRPO to produce verifiable, diverse and challenging queries. Meanwhile, the solver leverages the generated data through GRPO to refine its search and reasoning capabilities.",
+      "support_explanation": "交替优化改变模型权重而非留存 harness。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2601.07055.txt",
+      "sha256": "76ff914fee9a1e89950e6c59ec6c4a9ba83d763c5fe758e6cc99b0b3a4022934",
+      "locator": "Appendix .1, lines 1887–1889",
+      "quote": "we train the proposer for 50 steps, generate QA data on the corresponding prompts, and subsequently utilize this data to train the solver for 50 steps via GRPO",
+      "support_explanation": "生成数据用于权重训练，不是经验工具/技能库的持久复用。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2601.07055.txt",
+      "sha256": "76ff914fee9a1e89950e6c59ec6c4a9ba83d763c5fe758e6cc99b0b3a4022934",
+      "locator": "§4.2, lines 1693–1694",
+      "quote": "The 3B model shows a modest 2.2% increase, but the 7B model drops slightly from 0.372 to 0.360, indicating a performance plateau.",
+      "support_explanation": "作者报告训练迭代结果与边界，不外推 improver。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "proposer/solver model parameters",
+      "information": "外部 Wikipedia/E5 检索、生成 QA、solver 对 proposer 答案的 EM 成功率；无人工训练 QA",
+      "operation": "按 hop 分组计算 proposer 优势，以 HRPO 更新；用合成 QA 以 GRPO 更新 solver；交替三轮",
+      "output": "训练后的 proposer 与 solver checkpoint",
+      "conditions": "基座具备搜索和可验证短答案能力；生成答案可能有歧义",
+      "feedback": "solver pass rate 与 format reward",
+      "selection_rule": "0<k<n 时给难度奖励；format reward；训练步骤固定",
+      "selection_data": "生成 QA/solver rollouts",
+      "persistence": "模型权重；prompt、search interface 和 HRPO 算法保持设计固定",
+      "later_use": "之后训练轮与 QA 测试使用更新模型",
+      "claimed_effect": "短答案 QA 与训练效率提升",
+      "failure_boundary": "7B 第三轮退化、token ID 不一致、合成标签错误；非 harness 留存",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "无数据搜索 agent 的 proposer 生成单跳偏置与 GRPO 嵌套采样开销。",
+    "checked_gap": "正文对 SQLM*/R-Zero* 和 HRPO/GRPO 的比较支持作者限定问题；不构成 harness 改进缺口。",
+    "lineage": [
+      {
+        "name": "R-Zero (Huang et al. 2025a)",
+        "version": "本文 §2.3 引用；邻文原稿未固定",
+        "relation": "proposer-solver 交替权重训练"
+      },
+      {
+        "name": "SQLM (Chen et al. 2025)",
+        "version": "本文 §2.3 引用；邻文原稿未固定",
+        "relation": "自问与嵌套 rollouts"
+      }
+    ],
+    "closest_adjacent": [
+      "R-Zero*",
+      "SQLM*",
+      "Search-R1"
+    ],
+    "residue": "多跳结构覆盖与训练成本",
+    "stakes": "搜索 rollout 成本、合成标签有效性",
+    "method_response": "难度奖励与 hop-grouped baseline",
+    "remaining_gap": "训练稳定性与可靠验证；不评价非权重对象",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004"
+    ],
+    "unresolved": [
+      "最近邻原文未在输入包中，若需谱系独立核查请总控补固定原文；范围裁定不依赖该缺口。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "self_supervised_signal_engineering",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "self_supervised_signal_engineering",
+        "sub_id": "C26",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "solver pass rate 制造 scalar reward",
+          "HRPO/GRPO 用相对优势更新模型",
+          "下游 QA 与替代奖励消融；不是 DPO pairwise 专项"
+        ],
+        "success_checks": [
+          "缺人工 QA 时自产信号"
+        ],
+        "failure_checks": [
+          "solver agreement 非独立标签正确性保证",
+          "没有非权重改动留存"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003"
+        ],
+        "reason": "符合从非人工信号构造奖励并训练的原卡操作；C26 的 scalar reward 分支中等适配而非声称完整执行所有 preference 步骤。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原卡能描述研究操作，但匹配不改变 A3 范围裁定。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "self_generate_the_curriculum",
+        "sub": "H22",
+        "version": "manifest-fixed",
+        "fit": "high-mechanistic-boundary-only",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "partial",
+            "reason": "检索与 pass rate 减少但不消除标签错误；只作边界匹配"
+          },
+          {
+            "id": "S5",
+            "status": "met",
+            "reason": "HRPO 直接降低嵌套 rollout 成本"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "self_supervised_signal_engineering",
+      "rs_sub": "C26",
+      "domain": {
+        "namespace": "rsi",
+        "main": "self_generate_the_curriculum",
+        "sub": "H22"
+      },
+      "operation_correspondence": "solver 成功率构造 scalar reward、共同训练 proposer/solver。",
+      "necessary_conditions_and_differences": "领域边界卡覆盖该操作，但冻结 A3 优先：被评价留存对象全为权重，不能因 curriculum 是数据而视为 harness。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:self_generate_the_curriculum/S1",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/self_generate_the_curriculum.md: validity anchor"
+      ],
+      "applies_when": "对自生 QA 有效性作主张时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "检索/非零 solver 成功不独立保证生成答案正确；此处不评分范围外论文。",
+      "evidence_ids": [
+        "E002"
+      ],
+      "score_item": "E.measurement"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "交替训练搜索 proposer/solver 可改善 QA 且 HRPO 更高效。",
+      "setting": "Qwen2.5 3B/7B; English Wikipedia + E5; seven QA benchmarks",
+      "baseline_control": "SQLM*/R-Zero*/GRPO/Search-R1",
+      "selection_vs_test": "生成 QA 训练与外部 QA 测试；不独立审计 benchmark 污染",
+      "result_denominator": "作者 Table 1: 3B avg .326 / Search-R1 .327；7B .372 / .384；Table 9 proposer 33.28 vs 84.64 GPU-hours",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence": [
+        "7B 第三轮退化；不是所有 benchmark 或规模均超过最强监督基线。"
+      ],
+      "allowed_conclusion": "权重训练下的作者报告结果；不支持 retained harness improvement。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告无人工 QA 的权重训练搜索 agent 提升；非权重 harness 留存不成立，按 A3 排除。",
+    "unresolved": [
+      "未做复现或邻文全文独立核验"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：按冻结 A3 排除纯权重训练；不打分。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整固定全文含方法、实验、实现与定性附录"
+      ]
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "冻结 A3：proposer 与 solver 的保留变化均为 HRPO/GRPO 训练后的模型权重。生成 QA 是权重训练输入；未报告被执行反馈修改且留存供后续任务读取的 prompt/tool/workflow/memory 等对象。边界领域卡 H22 不覆盖此排除规则。",
+  "rationale": "完整阅读表明主要变化是 proposer/solver 权重；合成题目用于 RL 训练，检索与提示接口固定。按 A3 排除而非低分。"
+}

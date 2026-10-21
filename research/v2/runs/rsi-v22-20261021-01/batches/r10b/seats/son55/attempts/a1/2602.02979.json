@@ -1,0 +1,365 @@
+{
+ "status": "out_of_scope",
+ "reason": "Improver (Coach) and product (Player) are both weight updates by REINFORCE/GRPO; the only generated artifacts are ephemeral per-round training questions, with no retained prompt/skill/tool/workflow/memory/evaluator/code (frozen rubric A3: updated object and product both weights -> out_of_scope). Not scored; domain card H22 recorded for information only.",
+ "paper": {
+  "paper_key": "2602.02979",
+  "paper_id": "2602.02979",
+  "title": "CPMobius: Iterative Coach-Player Reasoning for Data-Free Reinforcement Learning",
+  "version": "2602.02979v3",
+  "claim_type": "component_training",
+  "central_claim": "A cooperative Coach-Player loop in which the Coach proposes tasks rewarded by the Player's held-out-accuracy gain and the Player is trained with GRPO on majority-vote pseudo-labels improves mathematical reasoning without external training data, beating RENT and R-Zero."
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2602.02979v3",
+   "sha256": "f4eb0c8f062eb8c9e7ec9b0ade572723581ab2dd91daa1035900f50c5128f0a7",
+   "sections_read": [
+    "abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Preliminaries",
+    "4 Framework (Coach, Player, rewards)",
+    "5 Experiments setup, main results, ablation (text and Table 1 first block)",
+    "Appendix prose: compute-aligned R-Zero comparison, leakage check, validation-set sensitivity, hyperparameter section header, example Coach problems (numeric tables after Table 1 skimmed, not transcribed)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "treats the Coach and Player as independent but cooperative roles",
+   "support_explanation": "Two separate LLM policies are trained in a cooperative RL loop.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Sec 4",
+   "quote": "The entire loop is trained end-to-end with separate policy optimization for Coach and Player using the REINFORCE and GRPO, respectively.",
+   "support_explanation": "Both the improver (Coach) and the improved object (Player) are updated by gradient steps on model weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 4 step 4",
+   "quote": "instruction-level REINFORCE steps update Coach parameters",
+   "support_explanation": "Coach weights are the update target of the improver signal.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Sec 4 step 2",
+   "quote": "are updated using GRPO method while keeping KL within a trust-region.",
+   "support_explanation": "Player parameters are updated with GRPO on majority-vote pseudo-labels; the retained improvement lives in Player weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Difficulty-Filtered Batching",
+   "quote": "Problems outside this range are immediately discarded and replaced through on-the-fly resampling.",
+   "support_explanation": "Coach-proposed tasks outside 0.2<=acc<=0.8 are dropped; accepted tasks form a per-round training batch, not a retained library.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "Sec 1",
+   "quote": "refers only to the co-evolution stage after Coach–Player collaboration begins, and does not count any one-time model initialization performed beforehand.",
+   "support_explanation": "Scope of 'data-free' is limited to the co-evolution stage; the Coach is warmed up on external RL data.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Coach Model Selection",
+   "quote": "This warm-up is mainly used to strengthen the Coach’s ability to pose constructive, diagnostically useful questions, which in turn improves the quality of the curriculum it generates and facilitates effective co-evolution with the Player.",
+   "support_explanation": "Coach warm-up uses 4K PRIME Eurus-2-RL data; ablation shows warm-up matters.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Table 1 (Qwen2.5-Math-1.5B)",
+   "quote": "CPMöbius 28.8 26.8 39.4 9.8 5.4 28.0 63.1 26.9",
+   "support_explanation": "Average 28.8, OOD average 26.8 against RENT 27.1/24.7; weight-updated Player evaluated on six math benchmarks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Evaluation",
+   "quote": "Since AMC is used as the validation set during training, we compute both the average score on all six datasets and the OOD average score on the other five datasets except for AMC.",
+   "support_explanation": "AMC is both the Coach's reward environment and a reported benchmark; OOD average excludes it.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "Sec 4.1",
+   "quote": "The Coach never observes ground-truth solutions",
+   "support_explanation": "Coach signal is the scalar accuracy gain on a fixed evaluation set.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "Sec 5.3 Ablation",
+   "quote": "Removing Coach updates degrades average accuracy from 28.8% to 25.3%",
+   "support_explanation": "Ablation of the Coach update (weight training of the improver); component_training evidence only.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "Weights of a Coach policy (task generator) and a Player policy (reasoner); no non-weight retained artifact",
+   "information": "Coach sees no ground truth, only the scalar validation-accuracy gain on a fixed set (AMC by default); Player sees majority-vote pseudo-labels",
+   "operation": "Coach proposes instructions; Player samples n answers, majority vote pseudo-labels, GRPO; Coach rewarded by R_player x delta_acc via REINFORCE",
+   "output": "Updated Coach and Player weights",
+   "conditions": "Difficulty filter 0.2-0.8 on Player self-consistency; Coach warm-up on external RL data",
+   "feedback": "Pseudo-label agreement and held-out accuracy delta",
+   "selection_rule_data": "Per-round difficulty filter only; no accept/reject of a retained component",
+   "persistence": "Model weights (not harness state)",
+   "later_use": "Subsequent rounds train from the updated weights",
+   "claimed_effect": "Math reasoning gains without external data, e.g. +4.9 average on Qwen2.5-Math-7B-Instruct",
+   "failure_boundary": "Out of scope for harness-level RSI: improver and product are weights",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E005"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Reasoning RL depends on human-curated labels; adversarial self-play (R-Zero, Absolute Zero) is unstable and prone to unlearnable tasks.",
+  "checked_gap": "Not evaluated in depth: paper judged out_of_scope on the retained-object test before gap scoring.",
+  "lineage_closest_adjacent": "R-Zero, Absolute Zero Reasoner, RENT (all weight-training data-free methods named in the text).",
+  "residue": "n/a (not scored)",
+  "stakes": "n/a",
+  "method_response": "Cooperative reward (accuracy-gain-weighted) instead of adversarial.",
+  "remaining_gap": "n/a",
+  "evidence_ids": [
+   "E001",
+   "E006"
+  ],
+  "unresolved": [
+   "Not assessed because out_of_scope"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "Generate candidate instances (Coach), score with a self-derived signal (majority-vote agreement) and keep only a band (0.2-0.8 accuracy) before training; iterate. C08's quality gate and retraining steps are executed; the 'binding constraint is the corpus' check is argued by assertion.",
+    "success_failure_checks": "Success: explicit filtering stage ablated (instruction filter removal 28.8 to 24.9). Failure: raw proxy signal (majority vote) with a warm-up on external data weakens the 'data-free' claim.",
+    "evidence_ids": [
+     "E005",
+     "E006",
+     "E007"
+    ],
+    "reason": "Manufactured supervision from the model's own generation plus consensus labels with a difficulty gate."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Recorded for pattern statistics; the paper is excluded from scoring on scope grounds.",
+  "executes_pattern": true,
+  "resolves_problem": "not assessed"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H22",
+    "version": "v2.2-cards",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "condition": "rsi:self_generate_the_curriculum/S2",
+      "status": "partial",
+      "reason": "Frontier signal is measured on a fixed held-out environment (AMC) but that environment is also a reported benchmark."
+     },
+     {
+      "condition": "rsi:self_generate_the_curriculum/S1",
+      "status": "unmet",
+      "reason": "Validity anchor is majority-vote consensus, not an execution or hidden-document check (not scored)."
+     }
+    ],
+    "evidence_ids": [
+     "E005",
+     "E009",
+     "E010"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H22",
+   "operation_correspondence": "RS: generate-filter-retrain with self-derived labels; domain: proposer co-trained against a solver with a frontier reward. Coach reward = Player accuracy gain, Player trained on consensus labels.",
+   "necessary_conditions_differences": "Domain card is a weight-touching boundary pattern; no harness-level artifact persists here, so the paper falls outside the corpus scope.",
+   "evidence_ids": [
+    "E002",
+    "E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "local:2602.02979-1",
+   "version": "v3",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 1 and Sec 5.1 scope statement of 'data-free'"
+   ],
+   "applies_when": "Claim of data-free training with a warm-up",
+   "applicable": false,
+   "status": "unknown",
+   "reason": "Not applied: paper is out of scope for scoring.",
+   "evidence_ids": [
+    "E006",
+    "E007"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "CPMobius improves Player accuracy without external data and beats RENT/R-Zero.",
+   "setting": "Qwen2.5-Math-1.5B/7B-Instruct, OpenMath-Nemotron-1.5B, OctoThinker-3B; six math benchmarks",
+   "baseline_control": "Base models, RENT, R-Zero",
+   "selection_vs_test": "AMC as reward environment; OOD average excludes it",
+   "result_denominator": "Table 1 first block: average 28.8 vs RENT 27.1 on Qwen2.5-Math-1.5B",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Weight-training result on math benchmarks; not assessed for harness-level RSI because out_of_scope."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "Not assessed: excluded as weight-only self-improvement.",
+  "unresolved": [
+   "All scoring items (excluded)"
+  ],
+  "level_reason": "Out of scope; EVIDENCE.md excludes weight updates (self-play fine-tuning)."
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not scored",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "Out of scope: Coach and Player are both RL-updated weights; only ephemeral per-round tasks, no retained non-weight component.",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r10b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "aeca7209de23ba8ec9b1f3e274508a8113501ffd9709824a60216d9634b6122d",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker subagent has no accessible run receipt; model type as dispatched by controller.",
+  "timestamp": "2026-10-21T23:07:38Z"
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": null,
+  "upper": null,
+  "coverage": null,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

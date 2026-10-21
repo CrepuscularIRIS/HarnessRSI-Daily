@@ -1,0 +1,1147 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r12b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full text incl. appendix prompts/templates read; non-weight retained object (skill library) in scope per A3.",
+ "paper": {
+  "paper_key": "2603.17187",
+  "paper_id": "2603.17187",
+  "title": "MetaClaw: Just Talk -- An Agent That Meta-Learns and Evolves in the Wild",
+  "version": "2603.17187v1",
+  "claim_type": "system_method",
+  "central_claim": "MetaClaw: continual meta-learning that jointly maintains a base LLM policy and an evolving skill library; gradient-free skill evolution from failures takes effect immediately, while opportunistic LoRA RL (during user-idle windows) with skill-generation versioning separates support and query data; improves accuracy on MetaClaw-Bench (Kimi-K2.5 21.4%->40.6%) and robustness on AutoResearchClaw."
+ },
+ "provenance": {
+  "input_hash": "14b0f98ce19936cd4f3ed62aa84e95b30948ec95cf7696dbbd51133650597330",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: claude-kimi worker run, no per-call receipt exposed to the worker; model type per template (haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-21T23:40:15Z"
+ },
+ "materials": [
+  {
+   "material_id": "mat:2603.17187",
+   "url": "https://arxiv.org/html/2603.17187v1",
+   "sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "sections_read": [
+    "Abstract",
+    "Sec.1-6",
+    "App.A.1-A.7 (prompts, templates, rules)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Fig.2/3 are images (per-day curves); only text description read"
+   ]
+  }
+ ],
+ "rationale": "技能库快速适应+LoRA慢适应，自建基准上有方向性收益；版本隔离、互促、OMLS均无消融，评测流即学习流，无方差，成本未量化。",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Abstract",
+   "quote": ", a continual meta-learning framework that jointly maintains a base LLM policy and an evolving skill library of reusable behavioral instructions, improving both through two complementary mechanisms.",
+   "support_explanation": "Central claim: two mechanisms (skill-driven fast adaptation, opportunistic policy optimization) over meta-model (theta, S).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.1 para 2",
+   "quote": "compress experience into reusable behavioral instructions, yet treat the resulting skill library as a static database never coordinated with weight optimization.",
+   "support_explanation": "Author gap on skill-based methods.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.1 para 2",
+   "quote": "once skills have evolved, trajectories collected under the old skill context carry stale rewards that contaminate gradient updates if reused without filtration.",
+   "support_explanation": "Author gap: RL data validity after skill change (motivates versioning). Never measured empirically.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.1 para 3",
+   "quote": "No existing system unifies these two forms of adaptation into a coherent framework that exploits this virtuous cycle.",
+   "support_explanation": "Absolute novelty claim; no neighbour (EvolveR, SkillRL etc.) is compared as a baseline.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.2",
+   "quote": "Skill-driven adaptation evolves the skill library via a gradient-free experience distillation process:",
+   "support_explanation": "Skill update path: S_{g+1}=S_g union E(S_g, D_sup).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.2",
+   "quote": "an LLM that analyzes failure trajectories and synthesizes new behavioral instructions",
+   "support_explanation": "Skill evolver is an LLM over failures; its identity/model is not stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Algorithm 1",
+   "quote": "// synthesize new skills from failures",
+   "support_explanation": "Library only grows by union with generated skills (no edit, merge, retire step in Algorithm 1).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.2",
+   "quote": "Because skill injection operates through the prompt rather than model parameters, fast adaptation incurs zero service downtime.",
+   "support_explanation": "New skills take effect immediately, with no validation or rollback stage described.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.2 Eq.2",
+   "quote": "selects the most relevant skills for the current task via embedding-based retrieval.",
+   "support_explanation": "Read path: embedding retrieval of skills; top-k and embedder unspecified (see Sec.4.1).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.1",
+   "quote": "retrieval via cosine similarity over sentence embeddings.",
+   "support_explanation": "Retrieval is cosine over sentence embeddings; k and encoder not given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.3",
+   "quote": "In practice, policy optimization is realized via cloud LoRA fine-tuning using GRPO, deferred to idle windows by the Opportunistic Meta-Learning Scheduler (Section",
+   "support_explanation": "Weight-update path (boundary component).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.3 Eq.4",
+   "quote": "is a process reward model (PRM) score.",
+   "support_explanation": "RL reward is a learned PRM score, not the benchmark's checker output.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.3",
+   "quote": "accumulates query trajectories across all post-adaptation generations, and policy optimization updates",
+   "support_explanation": "States the RL buffer accumulates across generations g' <= g*.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.4",
+   "quote": "the trainer flushes all samples with version",
+   "support_explanation": "Rule: when g advances to g+1 flush all samples with version <= g, which contradicts E013 (nothing older remains).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Algorithm 1 line 7",
+   "quote": "reveals failure",
+   "support_explanation": "Branch: failure trajectories go to the support set.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Algorithm 1 line 10",
+   "quote": "to RL buffer",
+   "support_explanation": "Else-branch: non-failure trajectories go to the RL buffer, so GRPO sees no failed trajectories, conflicting with Sec.2/3.4 where query data are all post-adaptation trajectories.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.5",
+   "quote": "(OMLS), a background daemon that defers policy optimization to periods when the user is not actively interacting with the agent.",
+   "support_explanation": "OMLS scheduling; no ablation of its effect.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.3.3",
+   "quote": "This means policy optimization naturally lags behind skill-driven adaptation by days or longer",
+   "support_explanation": "Two timescales; weights lag skills.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.1 MetaClaw-Bench",
+   "quote": "Because the benchmark tasks are authored to simulate realistic deployment rather than collected from actual user sessions, we view both parts as controlled stress tests of continual adaptation under increasing difficulty.",
+   "support_explanation": "Benchmark is self-authored; checkers and rules are known to the authors.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "App.A.3 Feedback",
+   "quote": "Time/date fields must use ISO 8601 with +08:00 timezone: YYYY-MM-DDTHH:MM:SS+08:00.",
+   "support_explanation": "Benchmark feedback text states the hidden rule verbatim, so skills can be copied from feedback; 'learning' is in-environment rule uptake.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "App.A.7",
+   "quote": "they must be inferred from task feedback and internalized through skill evolution or RL training.",
+   "support_explanation": "Five implicit preference rules introduced over 14 days; same rules drive evaluation later in the stream.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.1 Baselines",
+   "quote": "evaluated for Kimi-K2.5 only, as it requires a cloud LoRA training endpoint configured for the target backbone.",
+   "support_explanation": "Full pipeline (5-day RL run) exists for one model and one run; GPT-5.2 only has Skills arm.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.2",
+   "quote": "accuracy reaches 40.6% and task completion rises 8.25",
+   "support_explanation": "Headline: Kimi-K2.5 Part I accuracy 21.4% -> 28.3% (skills) -> 40.6% (full); completion 2.0% -> 16.5%.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.2",
+   "quote": "For GPT-5.2, MetaClaw (Skills) raises overall accuracy from 41.1% to 44.0% on Part I (+7.1% relative)",
+   "support_explanation": "Skills-only gain for the stronger model is +2.9 pts (Part I) and +4.2 pts (Part II); no uncertainty reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.2",
+   "quote": "The primary value of these results lies in the consistent directional trends: skill-driven adaptation reliably improves partial execution quality across both models, while weight-level optimization is necessary to unlock end-to-end task completion.",
+   "support_explanation": "Authors scope claims to directional trends on an authored simulation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.3",
+   "quote": "while multi-choice accuracy slightly decreases as the policy shifts toward file-execution behavior during training.",
+   "support_explanation": "Negative side effect of RL on multi-choice reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.3",
+   "quote": "directly validates the complementary timescale hypothesis underlying",
+   "support_explanation": "Claim that the two-phase pattern validates complementarity; no RL-only or versioning-off arm exists.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.1 AutoResearchClaw",
+   "quote": "We run controlled A/B experiments with the same research topic, backbone LLM, and pipeline configuration",
+   "support_explanation": "Cross-domain claim uses one topic; later runs reuse skills from earlier runs on that topic.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.2",
+   "quote": "Using skills-only adaptation (no RL), MetaClaw reduces the stage retry rate by 24.8% (from 10.5% to 7.9%)",
+   "support_explanation": "AutoResearchClaw: 18/19 -> 19/19 stages, composite 0.714 -> 0.845 (+18.3%), single A/B, no variance.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.1 AutoResearchClaw",
+   "quote": "(weighted average of stage completion rate at 40%, retry reduction at 30%, and refine cycle efficiency at 30%).",
+   "support_explanation": "Composite robustness metric is author-defined, process-level (not output quality).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "mat:2603.17187",
+   "material_sha256": "37a39048d8c6196b3d674985e9de3e7b141e6b8afc031c3faea7ed627a0b5666",
+   "locator": "Sec.4.1 Baselines",
+   "quote": "evaluated for Kimi-K2.5 only",
+   "support_explanation": "No weights-only (RL without skills) arm anywhere.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Skill library S (Claude-skill-format markdown: name, description, content, category) injected into system prompt",
+   "information": "Up to 6 failed conversations (last 600 chars context, first 500 chars response, reward=0.0) plus existing skill names; not the whole library text",
+   "operation": "LLM skill evolver generates 1..max_new_skills new skills; S_{g+1}=S_g union dS; counter g++",
+   "output": "New skills active for next tasks with zero downtime",
+   "conditions": "Failure count >= threshold (value unspecified); non-stationary CLI task stream",
+   "feedback": "Failed trajectory text and benchmark feedback (which, in the bench, states the violated rule: E020)",
+   "selection_rule_data": "None beyond 'do not duplicate existing names'; no validation set, regression check, or ranking",
+   "persistence": "Library persists over the 30/14-day stream; add-only (no retire/merge/rollback)",
+   "later_use": "Embedding top-k retrieval, appended as 'Active Skills' in system message",
+   "claimed_effect": "Skills-only: GPT-5.2 41.1->44.0 (Part I), 44.9->49.1 (Part II); Kimi 21.4->28.3, 21.1->26.9; AutoResearchClaw composite +18.3%",
+   "failure_boundary": "Part I file-check completion unchanged by skills (2.0%->2.0%); late hard days converge to low accuracy",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E020",
+    "E024",
+    "E025"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Base-model LoRA weights (boundary component of the system), trained opportunistically",
+   "information": "Post-adaptation query trajectories scored by a PRM, stamped with skill generation g",
+   "operation": "Cloud LoRA GRPO in OMLS idle windows (sleep window, 30-min input idle, calendar occupancy); pause/resume; hot-swap",
+   "output": "Updated policy weights",
+   "conditions": "Buffer >= batch size; RL endpoint available",
+   "feedback": "PRM reward (learned)",
+   "selection_rule_data": "Algorithm 1 routes only non-failure trajectories to buffer (E016)",
+   "persistence": "Weights (5-day RL run for Kimi-K2.5 Full)",
+   "later_use": "Subsequent tasks under latest skills",
+   "claimed_effect": "Kimi Part I 28.3->40.6 acc, completion 2.0->16.5; Part II completion 33.8->51.9",
+   "failure_boundary": "Multi-choice accuracy slightly decreases (E026)",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E016",
+    "E017",
+    "E018",
+    "E022",
+    "E023",
+    "E026"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "RL data-validity protocol: skill-generation version stamp and buffer flush",
+   "information": "Generation index g on every sample",
+   "operation": "Flush samples with version <= g when skills advance; keep post-adaptation (query) data only",
+   "output": "RL buffer free of pre-adaptation rewards (claimed)",
+   "conditions": "Online asynchronous skill evolution",
+   "feedback": "none",
+   "selection_rule_data": "version comparison",
+   "persistence": "Buffer metadata",
+   "later_use": "RL window",
+   "claimed_effect": "Prevents stale-reward contamination (never measured)",
+   "failure_boundary": "Rules in Sec.3.3/3.4/Algorithm 1 are mutually inconsistent about what the buffer contains",
+   "evidence_ids": [
+    "E003",
+    "E013",
+    "E014",
+    "E015",
+    "E016"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Skill libraries are treated as static databases uncoordinated with weight optimization; RL ignores stale rewards after skills evolve; retraining causes downtime (E002, E003).",
+  "checked_gap": "The stale-reward/data-validity point is concrete and plausible, but it is asserted, not measured; 'no existing system unifies' (E004) is untested because EvolveR/SkillRL-type co-evolution systems cited in related work are not compared.",
+  "lineage": {
+   "ancestors": [
+    "Reflexion/ExpeL/Agent-KB memory and rules",
+    "Voyager skill library",
+    "Meta-learning (MAML/RL^2/PEARL)",
+    "GRPO/DAPO"
+   ],
+   "frontier": "Xia et al. 2026 skill-based (SkillRL), EvolveR, Zhang 2025/2026 skill methods"
+  },
+  "closest_adjacent": [
+   {
+    "name": "Xia et al. 2026 (skill evolver source / SkillRL)",
+    "source_version": "cited in-paper only; original not fixed locally",
+    "solved": "distills experience into reusable skills",
+    "unsolved": "per MetaClaw: not coordinated with weights"
+   },
+   {
+    "name": "EvolveR (Wu 2025)",
+    "source_version": "cited in-paper only; original not fixed locally",
+    "solved": "co-evolving skill library during RL",
+    "unsolved": "unclear vs MetaClaw's claim; not compared"
+   }
+  ],
+  "residue": "Whether versioned support/query separation matters, and whether skills and weights reinforce each other, is untested.",
+  "stakes": "Deployed agents go stale under task drift; improvements without downtime would matter operationally.",
+  "method_response": "Two-timescale loop: instant skill injection; deferred RL on query data with generation stamps; OMLS scheduling.",
+  "remaining_gap": "No ablation of versioning, OMLS or retrieval; no RL-only arm; real-user data absent; no cost accounting.",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E004",
+   "E031"
+  ],
+  "unresolved": "Request controller to pin originals of Xia 2026 (SkillRL) and EvolveR to judge residual novelty."
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [
+   "heterogeneous_decomposition"
+  ],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "C03 step1 canonical schema: partial (Claude-skill markdown; no length/uniformity constraint)",
+     "C03 step3 upstream phase teaching to read conditioning: partial (RL on trajectories collected under skills, E013)",
+     "C03 step4 category holdout/contamination: missing (E020, E021)",
+     "C03 step5 cheaper conditioning baseline (raw trajectory memory): missing (E004)"
+    ],
+    "success_checks": [
+     "conditioning toggled against identical prompts: met for skills arm (E024)"
+    ],
+    "failure_checks": [
+     "multi-component system with shallow ablations: present (no versioning/OMLS/RL-only ablation)",
+     "single-task/one topic cross-domain demo: present (E028)"
+    ],
+    "evidence_ids": [
+     "E009",
+     "E010",
+     "E013",
+     "E024",
+     "E028"
+    ],
+    "reason": "Skills are retrieved text conditioning that adapt behavior without parameter updates, which is the card's operation; sub-card C03 not chosen because its schema/upstream-phase/category-holdout tactic is not what this system does."
+   },
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "partition trajectories into support (skill evolution) and query (RL) with different treatments: executed by version stamping",
+     "empirical characterization of the heterogeneity (stale-reward harm): missing"
+    ],
+    "success_checks": [],
+    "failure_checks": [
+     "heterogeneity asserted, not shown: present (E003)"
+    ],
+    "evidence_ids": [
+     "E003",
+     "E014",
+     "E016"
+    ],
+    "reason": "Data are partitioned by role and treated differently, a separate operation from conditioning; C04 (compression of artifacts) is a different tactic so sub is null."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "adapt_via_conditioning primary for gradient-free skill conditioning; heterogeneous_decomposition supports the support/query split; assumption_audit_and_pivot considered (stale-reward assumption) but no audit of a prior result is performed.",
+  "executes_pattern": true,
+  "executes_pattern_note": "Skill conditioning and support/query partition are implemented; their necessity checks are not.",
+  "resolves_problem": null,
+  "resolves_problem_note": "Unresolved: stale-reward contamination is never shown to occur or be fixed."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "rsi-assets@52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     "variant (c) arbitrate/two timescales: executed",
+     "version-tagged crossing (step 3): met",
+     "lever ablation (step 5): unmet",
+     "F5 declared adaptation/report split: unmet"
+    ],
+    "evidence_ids": [
+     "E013",
+     "E014",
+     "E018",
+     "E022",
+     "E027",
+     "E031"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "rsi-assets@52ff9657",
+    "fit": "medium",
+    "condition_checks": [
+     "grounding signal: partial (reward=0 failure; PRM)",
+     "contrast of success vs failure: unmet (failures only)",
+     "store maintenance: unmet (add-only)",
+     "store-off ablation: met (skills vs baseline)"
+    ],
+    "evidence_ids": [
+     "E005",
+     "E006",
+     "E007",
+     "E024"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "RS: retrieved reference substrate conditions inference without per-task updates. rsi: failure-derived lessons/skills appended to a store and retrieved into the prompt.",
+   "required_conditions_differences": "RS expects category holdout and cheap-baseline control; rsi H00 expects store-off ablation under budget match and success/failure contrast; only store-off is present.",
+   "evidence_ids": [
+    "E005",
+    "E009",
+    "E024"
+   ]
+  },
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "couple_context_and_weight_updates",
+   "domain_sub": "H28",
+   "operation_correspondence": "RS: partition a resource into components with distinct treatment. rsi: version-tag rollouts by context generation and use only post-adaptation data for the weight lever.",
+   "required_conditions_differences": "RS requires evidence the partition matters; H28 step 3 requires tagging by context version (met) but not harm evidence (missing).",
+   "evidence_ids": [
+    "E003",
+    "E014"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:couple_context_and_weight_updates/S1",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#success-conditions"
+   ],
+   "applies_when": "Context and weight levers combined",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Skill evolution and RL use disjoint streams by design (support vs query); the shared interface is the version-stamped data, not the same rollouts.",
+   "evidence_ids": [
+    "E013",
+    "E014"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S2",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#success-conditions"
+   ],
+   "applies_when": "Context and weight levers combined",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Typed roles are argued (skills = declarative format rules, RL = execution reliability, Case 2) and task-type breakdown is consistent, but there is no weights-only arm to isolate each lever.",
+   "evidence_ids": [
+    "E025",
+    "E026",
+    "E031"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S3",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#success-conditions"
+   ],
+   "applies_when": "Context and weight levers combined",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "met",
+   "reason": "RL is run on trajectories collected under the evolving skill context; skills come from failures.",
+   "evidence_ids": [
+    "E013",
+    "E005"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F3",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#failure-modes"
+   ],
+   "applies_when": "Context and weight levers combined",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "partial",
+   "reason": "Avoidance of 'sequenced, not coupled' rests only on version stamps; mutual reinforcement is asserted (E027) without a test.",
+   "evidence_ids": [
+    "E014",
+    "E027"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F4",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#failure-modes"
+   ],
+   "applies_when": "Weights trained on consolidated traces",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "unknown",
+   "reason": "Reward is a learned PRM and only non-failure trajectories reach the buffer; how failure and PRM scores are defined/calibrated is not given.",
+   "evidence_ids": [
+    "E012",
+    "E016"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#failure-modes"
+   ],
+   "applies_when": "Experience accumulates on reported stream",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "unmet",
+   "reason": "Adaptation stream and reported stream are the same 30/14-day stream with no declared split.",
+   "evidence_ids": [
+    "E019",
+    "E021"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/H28-step3",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H28.md#step-by-step"
+   ],
+   "applies_when": "Crossing from context to weights",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "met",
+   "reason": "Every sample carries its skill-generation index; stale samples are flushed.",
+   "evidence_ids": [
+    "E014"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/H28-step5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H28.md#step-by-step"
+   ],
+   "applies_when": "Coupled-lever claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No context-only/weights-only/coupled arms for both models; Full exists once for one model with no seeds or matched budget.",
+   "evidence_ids": [
+    "E022",
+    "E031"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Lessons from outcomes",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Skills are synthesized from failures only; no contrast with successes.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Store grows",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Add-only union; no consolidation, forgetting or conflict handling.",
+   "evidence_ids": [
+    "E007"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Entries gate reuse",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "New skills take effect immediately with no execution/marginal-gain gate.",
+   "evidence_ids": [
+    "E008"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Conditioning claimed to drive gain",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "met",
+   "reason": "Skills-on vs skills-off with identical prompts and tools is the direct toggle for the skill arm.",
+   "evidence_ids": [
+    "E024",
+    "E029"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Held-out generalization claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Benchmark feedback states the hidden rules; no overlap/contamination or held-out stream analysis.",
+   "evidence_ids": [
+    "E020",
+    "E021"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Retrieved-experience claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "The stated gap (raw-trajectory memory is verbose) is never tested against a raw-trajectory/Reflexion-type memory baseline.",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Generic recipe across domains",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "AutoResearchClaw is a second domain but skills-only, one topic, one A/B.",
+   "evidence_ids": [
+    "E028",
+    "E029"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/heterogeneous_decomposition.md#reviewer-expectations"
+   ],
+   "applies_when": "Support/query partition claimed essential",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No variant mixing support and query data (versioning off).",
+   "evidence_ids": [
+    "E003",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/heterogeneous_decomposition.md#reviewer-expectations"
+   ],
+   "applies_when": "Heterogeneity is the premise",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Stale-reward harm is described but never measured.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2603.17187-1",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Table 1, Table 2, Fig.2-3"
+   ],
+   "applies_when": "Small-n single-run stream results",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No seeds, CI or repeated runs; Full is one 5-day run.",
+   "evidence_ids": [
+    "E022",
+    "E024"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2603.17187-2",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec.4.1, App.A"
+   ],
+   "applies_when": "Self-authored benchmark with rule-revealing feedback",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Automated checkers are objective but the benchmark and rules are the authors' and the feedback states the rule.",
+   "evidence_ids": [
+    "E019",
+    "E020"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2603.17187-3",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec.3, 4"
+   ],
+   "applies_when": "RL buffer semantics",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unknown",
+   "reason": "Sec.3.3 (accumulate across generations), Sec.3.4 (flush <= g) and Algorithm 1 (failures excluded) disagree about buffer content.",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E016"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "local:2603.17187-4",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "whole paper"
+   ],
+   "applies_when": "System with RL + evolver + PRM + scheduler",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No cost for the 5-day RL, evolver/PRM calls or prompt-token overhead.",
+   "evidence_ids": [],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Skill-driven fast adaptation alone improves accuracy by up to 32% relative.",
+   "setting": "MetaClaw-Bench Part I (346 Q, 30 days) and II (588 Q, 14 days); GPT-5.2, Kimi-K2.5",
+   "baseline_control": "Same model and prompts without skills",
+   "selection_vs_test": "Online stream; skills learned from earlier days applied to later days; no separate held-out stream",
+   "result_denominator": "Accuracy: GPT 41.1->44.0, 44.9->49.1; Kimi 21.4->28.3, 21.1->26.9; completion unchanged on Part I",
+   "evidence_ids": [
+    "E024",
+    "E023"
+   ],
+   "counterevidence": [
+    "E019",
+    "E020",
+    "E021"
+   ],
+   "allowed_conclusion": "On this authored simulation, skills-on beats skills-off by roughly 3-7 accuracy points in single runs; Part I completion is not improved."
+  },
+  {
+   "claim_id": "C2",
+   "text": "The full pipeline (skills + opportunistic RL) lifts Kimi-K2.5 from 21.4% to 40.6% and completion 8.25x, nearly matching GPT-5.2.",
+   "setting": "Kimi-K2.5 only, 5-day cloud LoRA run",
+   "baseline_control": "Baseline and skills-only; no RL-only",
+   "selection_vs_test": "RL trained on the same stream it is evaluated on (continual)",
+   "result_denominator": "Part I acc 40.6, compl 16.5; Part II acc 39.6, compl 51.9; multi-choice declines",
+   "evidence_ids": [
+    "E022",
+    "E023",
+    "E026"
+   ],
+   "counterevidence": [
+    "E031",
+    "E016"
+   ],
+   "allowed_conclusion": "Full > skills-only > baseline for one model/run on this stream; RL's own contribution vs in-stream fine-tuning generally, and skills/weights mutual reinforcement, are not isolated."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Skill-generation versioning prevents stale-reward contamination and is essential; OMLS removes downtime.",
+   "setting": "Sec.3.4-3.5",
+   "baseline_control": "none",
+   "selection_vs_test": "n/a",
+   "result_denominator": "no experiment",
+   "evidence_ids": [
+    "E003",
+    "E014",
+    "E017"
+   ],
+   "counterevidence": [
+    "E013",
+    "E016"
+   ],
+   "allowed_conclusion": "Untested design claims; text on buffer contents is inconsistent."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Skill injection alone improves AutoResearchClaw composite robustness by 18.3% (cross-domain generalization).",
+   "setting": "23-stage pipeline, one topic",
+   "baseline_control": "same topic/LLM/config, skills off",
+   "selection_vs_test": "later runs reuse skills from earlier runs of the same topic",
+   "result_denominator": "retry 10.5->7.9%, refine 2.0->1.2, stages 18->19 of 19, composite 0.714->0.845",
+   "evidence_ids": [
+    "E028",
+    "E029",
+    "E030"
+   ],
+   "counterevidence": [
+    "E030"
+   ],
+   "allowed_conclusion": "One same-topic A/B with an author-defined process metric; supports plausibility only."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "On the authors' simulated 30/14-day CLI stream, failure-distilled prompt skills accumulated over the stream raise later-day accuracy by about 3-7 points over a no-skill run (single runs); a 5-day LoRA RL run on one model adds further gains whose attribution is not isolated.",
+  "unresolved": "Versioning/OMLS/retrieval necessity; weights-only control; real-user transfer; buffer semantics; cost; variance; nearest neighbours uncompared."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Concrete gap (static skill libs, stale RL rewards after skill change) with named related work categories, but the absolute 'no existing system' claim is untested and closest co-evolution neighbours are not compared.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004"
+   ],
+   "counterevidence_ids": [
+    "E031"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Two-timescale design is coherent and the support/query rationale is clear, but the 'meta-learning' framing is loose (evolver is not optimized), and RL-buffer rules conflict (accumulate across generations vs flush vs failures excluded).",
+   "evidence_ids": [
+    "E005",
+    "E011",
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E013",
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Algorithm, versioning rule, OMLS signals and evolver prompt are given, but k/embedder/failure threshold/evolver model/PRM are unspecified, the library is add-only without gate or rollback, and buffer semantics are inconsistent.",
+   "evidence_ids": [
+    "E005",
+    "E010",
+    "E014",
+    "E017"
+   ],
+   "counterevidence_ids": [
+    "E007",
+    "E008",
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Deterministic checkers and accuracy/completion metrics are usable, but the benchmark is self-authored with rule-revealing feedback, RL reward is a learned PRM, and the AutoResearchClaw composite is an author-defined process metric.",
+   "evidence_ids": [
+    "E019",
+    "E030"
+   ],
+   "counterevidence_ids": [
+    "E020",
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Skills-on/off is a valid toggle for the skill arm, but there is no weights-only arm, no versioning/OMLS/retrieval ablation, no cheaper-memory baseline, and Full is one run on one model.",
+   "evidence_ids": [
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E022",
+    "E031",
+    "E027"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Learning and reporting stream coincide with no declared split; rules are revealed in feedback; the second domain reuses a single topic across runs.",
+   "evidence_ids": [
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E020",
+    "E028"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample sizes (346/588 questions) and negative cells are reported, but no variance, seeds or tests; single Full run.",
+   "evidence_ids": [
+    "E026"
+   ],
+   "counterevidence_ids": [
+    "E022",
+    "E029"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Qualitative cost statements only (zero downtime, no local GPU, 5-day run); no GPU hours, API cost, evolver/PRM calls or prompt-token overhead.",
+   "evidence_ids": [
+    "E008",
+    "E022"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 41.25,
+  "display": 41.2,
+  "lower": 41.25,
+  "upper": 41.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

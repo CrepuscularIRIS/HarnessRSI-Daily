@@ -1,0 +1,900 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r10a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2512.17102",
+    "paper_id": "2512.17102",
+    "title": "Reinforcement Learning for Self-Improving Agent with Skill Library",
+    "version": "2512.17102v2",
+    "claim_type": "component_training",
+    "central_claim": "SAGE以同场景顺序任务链与技能奖励训练技能生成/使用策略；部署时留存函数技能，在AppWorld提高SGC并降低交互步数和生成token。"
+  },
+  "provenance": {
+    "input_hash": "fe2e232366fcbb8c0dfa55d8c22068261102d4f66b473bf912ffff941e7837d7",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T23:12:46.245956+00:00",
+    "notes": "Model type follows assigned configured route. No independent backend receipt/session identifier available; no extra model probing. Blind seat; no other seat/attempt/aggregate read. All results are author reports, not reproduction."
+  },
+  "materials": [
+    {
+      "material_id": "2512.17102.txt",
+      "url": "https://arxiv.org/html/2512.17102v2",
+      "version": "2512.17102v2",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "sections_read": [
+        "abstract",
+        "sections 1–5",
+        "references",
+        "appendices A–L; all supplied text"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "limitations": "Figure9 prompt and figures10–13 summarized execution diagrams are image-only in the extraction; manifest provides no page_images. No numerical or prompt content invented from those images. Method equations and relevant tables are textual and sufficient for this scoped assessment."
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 106-108",
+      "quote": "Large Language Model (LLM)-based agents have demonstrated remarkable capabilities in complex reasoning and multi-turn interactions but struggle to continuously improve and adapt when deployed in new environments. One promising approach is implementing skill libraries that allow agents to learn, validate, and apply new skills. However, current skill library approaches rely primarily on LLM prompting, making consistent skill library implementation challenging.\nTo overcome these challenges, we propose a Reinforcement Learning (RL)-based approach to enhance agents’ self-improvement capabilities with a skill library. Specifically, we introduce Skill Augmented GRPO for self-Evolution (SAGE), a novel RL framework that systematically incorporates skills into learning. The framework’s key component, Sequential Rollout, iteratively deploys agents across a chain of similar tasks for each rollout. As agents navigate through the task chain, skills generated from previous tasks accumulate in the library and become available for subsequent tasks. Additionally, the framework enhances skill generation and utilization through a Skill-integrated Reward that complements the original outcome-based rewards.\nExperimental results on AppWorld demonstrate that SAGE, when applied to supervised-finetuned model with expert experience, achieves 8.9% higher Scenario Goal Completion while requiring 26% fewer interaction steps and generating 59% fewer tokens, substantially outperforming existing approaches in both accuracy and efficiency. Our code is available at",
+      "support_explanation": "Original claim: train a skill-library improver, improve AppWorld accuracy and inference efficiency.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 318-324",
+      "quote": ", typically define reusable skills after completing entire tasks. While this approach allows agents to observe complete task trajectories before determining skill definitions, it limits the RL process in two ways: (1) In long-horizon tasks, the additional skill generation process further extends the context length, potentially exceeding the model’s limitations; (2) The separation between task execution and skill generation creates an inconsistency that may impact learning effectiveness.\n\nTo address these limitations, we follow the DynaSaur approach\nNguyen et al. (2024)\nand implement a unified format for both task solving and skill generation. Specifically, when the agent model interacts with the API environments, it first generates a skill function and then calls it to process, instead of using multiple APIs. An example of the format difference is presented in Appendix\nA\n.",
+      "support_explanation": "Authors distinguish post-task skills from DynaSaur-style unified solve-and-generate format; not independently verified prior art.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 368-383",
+      "quote": "Skill Generation\n: Define a skill function\na\n^\n\\hat{a}\ncomposed of multiple actions aimed at solving the task and then immediately call it to process the task; (3)\nSkill Update\n: If the skill\na\na\n, either from the skill library or newly defined, fails to execute, update the skill and recall it to process the task; (4)\nSkill Save\n: If the skill can be executed without error, add the new skill or update the existing skill in the skill library\nℳ\n\\mathcal{M}\n. Additionally, direct API calls are allowed for cases where defining a function skill is unnecessary for task processing.",
+      "support_explanation": "Non-weight functions are generated, repaired, and saved on execution without error; this is weaker than semantic correctness.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 638-642",
+      "quote": "A principled method to augment agents’ self-improving ability with skill library is through end-to-end RL. However, skill generation and usage processes often need multiple tasks to reveal the quality of skills. One potential solution to enabling the end-to-end RL is that instead of one task, we could give the agent a chain of tasks. Then a sequential rollout process is performed across these tasks, enabling the agent to progressively accumulate skills in its library throughout the task chain. Any skills learned in earlier tasks could be used in subsequent tasks. In this way, rewards signal from the successful usage of skills in later tasks can be back-propagated to the skill generation in the previous tasks. To ensure that the generated skills can be immediately applied to subsequent tasks, we construct the sequential tasks with examples under the same scenario, in which all tasks share similar instructions.\n\nWhile a longer task chain with multiple examples would better approximate practical sequential evaluation processes on the whole test set, it would significantly increase training costs. For simplicity, this paper focuses on task chains containing only two examples. A detailed discussion of Sequential Rollout with extended task chains is provided in Appendix\nB\n.",
+      "support_explanation": "Later-task successful reuse credits earlier generation; chains restricted to same scenario and length two for cost.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1190-1192",
+      "quote": ". AppWorld contains 750 tasks from 250 task scenarios. Each scenario consists of three tasks sharing similar instructions. The scenario-based structure of AppWorld makes it well-suited for Sequential Rollout, as tasks within the same scenario naturally form a task chain. We utilize the Train set for all training steps, including SFT and subsequent SAGE. The Dev set guides the best checkpoint selection during training. Evaluation is performed on both Test-Normal and Test-Challenge splits. More details about the dataset are presented in Appendix\nC\n.",
+      "support_explanation": "Train for SFT/RL, Dev checkpoint selection, two test splits.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1213-1215",
+      "quote": ", we implemented our skill library agent with a specifically designed in-context example and detailed instructions to guide the base model in using the skill library to perform complex tasks. The detailed prompt of our skill library agent is presented in Appendix\nD\n. Regarding skill retrieval, we employed an idealized case during sequential rollout where skills are retained and utilized only within the same scenario in the task chain. This approach eliminates the need for a retrieval model, significantly simplifying the RL rollout processes. While our default evaluation uses the ideal case (Same Scenario) with provided scenario labels from the test set, we conducted additional analysis on various retrieval methods to address real-world scenarios where such labels may not be available.",
+      "support_explanation": "Default test evaluation uses privileged scenario labels; text clearly discloses idealization.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1237-1245",
+      "quote": "We assessed performance using two primary metrics:\nTask Goal Completion (TGC)\nmeasures the accuracy of successfully completed individual tasks; and\nScenario Goal Completion (SGC)\ncalculates the proportion of scenarios where all three included tasks are successfully completed. To evaluate efficiency, we counted average interaction steps (\nAvg. Steps\n) and average generated tokens (\nAvg. Tokens\n) required for task completion, where fewer steps and tokens indicate more efficiency. All reported numbers in this paper represent the average of three agent evaluation runs using the same model.",
+      "support_explanation": "Task and scenario completion plus inference costs; three evaluations of the SAME trained model, not training seeds.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1382-1398",
+      "quote": "GRPO\n\n69.2 ± 2.7\n\n51.8 ± 5.8\n\n16.4 ± 0.2\n\n3,613 ± 200\n\n40.7 ± 1.5\n\n26.9 ± 1.5\n\n21.9 ± 0.1\n\n5,211 ± 65",
+      "support_explanation": "Baseline GRPO Normal and Challenge results.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1440-1456",
+      "quote": "+ SAGE\n\n72.0 ± 1.5\n\n60.7 ± 1.5\n\n12.1 ± 0.2\n\n1,475 ± 127\n\n50.1 ± 2.0\n\n32.4 ± 3.7\n\n17.3 ± 0.3\n\n1,807 ± 29",
+      "support_explanation": "SAGE Normal and Challenge results.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1562-1583",
+      "quote": "SAGE\n\n✓\n\n72.0 ± 1.5\n\n60.7 ± 1.5\n\n12.1 ± 0.2\n\n1,475 ± 127\n\n×\n\\bm{\\times}\n\n71.4 ± 0.5\n\n54.8 ± 0.8\n\n16.0 ± 0.2\n\n1,937 ± 81",
+      "support_explanation": "Same SAGE model store-on/off: direct retained-library contribution is 0.6 TGC and 5.9 SGC points; steps and tokens decrease.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1618-1646",
+      "quote": "Query N-gram\n\n72.0 ± 2.0\n\n60.1 ± 1.7\n\n12.7 ± 0.3\n\n1,466 ± 101\n\nQuery Embedding\n\n69.6 ± 1.6\n\n59.5 ± 2.2\n\n11.8 ± 0.2\n\n1,335 ± 63\n\nSkill Embedding\n\n66.3 ± 0.7\n\n56.0 ± 0.8\n\n14.5 ± 0.3\n\n1,692 ± 10",
+      "support_explanation": "Practical query/skill retrieval results constrain oracle concern but show retrieval sensitivity.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 1675-1703",
+      "quote": "Skill-integrated\n\n72.0 ± 1.5\n\n60.7 ± 1.5\n\n12.1 ± 0.2\n\n1,475 ± 127\n\nOutcome-based\n\n69.8 ± 1.0\n\n55.4 ± 1.4\n\n13.1 ± 0.2\n\n1,469 ± 61\n\nChain-based\n\n67.9 ± 2.1\n\n56.6 ± 1.6\n\n15.7 ± 0.3\n\n1,361 ± 58",
+      "support_explanation": "Reward controls: integrated reward improves completion but uses more tokens than simpler reward designs.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2548-2558",
+      "quote": "3\n\n70.6 ± 3.6\n\n54.8 ± 4.2\n\n14.3 ± 0.1\n\n2,585 ± 13\n\nThe results indicate that longer task chains do not necessarily improve the skill library agent’s performance. This may be attributed to two factors: (1) Reward Distribution Imbalance: Examples in the task chain are typically clustered by similar instructions, leading to most relevant skills being generated during the first example’s execution. Consequently, the first example predominantly receives rewards for skill generation, while subsequent examples mainly receive rewards for skill utilization, creating an asymmetric reward structure. (2) Gradient Variance: As the chain lengthens, later tasks begin with increasingly divergent skill libraries, deviating from standard GRPO settings. This deviation potentially leads to larger gradient variance, which may adversely affect the final performance. Besides, the iterative nature of Sequential Rollout process results in substantially increased computational costs as the number of tasks grows. Given these challenges and the empirically suboptimal performance, we ultimately chose a two-example task chain structure. This configuration allows the first example to focus on skill generation while the second emphasizes skill usage.",
+      "support_explanation": "Longer chain negative result and author explanations, not our causal proof.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2569-2571",
+      "quote": "To benchmark the agent model performance, AppWorld provides a suite of 750 natural, diverse, and challenging tasks, divided into four splits: Train (105), Dev (60), Test-Normal (168), and Test-Challenge (417). The Test-Challenge set not only contains more test examples but also requires APIs from applications (Amazon and Gmail) that are absent from the Train, Dev, and Test-Normal sets. This design specifically evaluates the models’ ability to generalize to unfamiliar APIs.\n\nFor accurate evaluation, each task incorporates a manually written program that evaluates the final environment state against predefined criteria, producing a completion rate (0-1) that serves as our outcome-based reward. The stage-based tests accommodate multiple solution paths, enabling more precise reward calculations.",
+      "support_explanation": "Split denominators and independent final-state program criteria; Challenge includes unseen application APIs.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2644-2644",
+      "quote": "To collect the expert experience dataset for SFT, we implemented a rejection sampling process under our skill library agent with the advanced model Claude Sonnet 3.5 V2 as the expert. Specifically, we conducted rejection sampling on the training set using the expert model with temperatures ranging from 0.05 to 1.0, with increments of 0.05 across 20 steps. The AppWorld dataset comprises 30 distinct scenarios, and we sequentially deployed the skill library agent through all three tasks within each scenario, allowing skills generated in previous tasks to be directly utilized for subsequent tasks within the same scenario. When processing each task, we implemented a maximum retry limit of 10 attempts, terminating sampling within the whole scenario when this limit is reached. Finally, we retained only those scenarios where either all three tasks or at least the first two tasks are successfully completed, as failures in the second task typically indicate potential issues with the skill generation process. This process finally yielded 1,129 valid examples.",
+      "support_explanation": "Teacher rejection sampling and training-data selection, with 1129 valid examples.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2663-2669",
+      "quote": "Rollout Settings.\nBecause the Sequential Rollout process requires iterative interactions within the task chain, the rollout completion time approximately doubles compared to the baseline if we maintain the same total number of rollouts. To accelerate the training process, we required a larger number of total rollouts. For each step of training, we decided to use all scenarios in the Train split of AppWorld with difficulty-1 and difficulty-2 tasks, which only contains 24 scenarios. Sampling two task examples from those scenarios resulted in 48 tasks. Under the same agent number\nG\n=\n8\nG=8\nfor each group, we finally obtained 384 rollouts for each step.",
+      "support_explanation": "SAGE uses 384 rollouts/step and acknowledges approximately doubled sequential completion time.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2674-2679",
+      "quote": "Training Details.\nWe present the training curve with average training reward per step in Figure\n5\n. During training, we saved model checkpoints every 5 steps and evaluated their performance on the Dev set. The checkpoint achieving the highest combined TGC and SGC scores on the Dev set was selected as our final model. Evaluation curve showing the TGC and SGC scores on the Dev set is illustrated in Figure\n6\n. The figure clearly demonstrates that the model achieves optimal performance in both TGC and SGC metrics at step 75. Thus, we selected the model checkpoint at step 75 as our final agent model.",
+      "support_explanation": "Dev-selected checkpoint at step75; test not checkpoint selection.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2748-2753",
+      "quote": "Among the three retrieval methods studied in our ablation study, Query N-gram achieves performance most similar to the ideal Same Scenario case. This is because tasks under the same scenario in AppWorld share the same query structure. Some tasks within the same scenario even use identical query under different simulated users. Queries within the same scenario naturally share high similarity under N-gram metric. With a proper threshold, the skill library can be effectively constrained to skills within the same scenario.\n\nQuery Embedding shows slightly lower performance in TGC and SGC but higher efficiency with fewer Avg. Steps and Tokens. Since text embedding models primarily focus on semantic meaning rather than structural patterns, and queries with different structures can convey similar semantic meanings, it is challenging for Query Embedding restricting queries to a single scenario.\nOn the other hand, with Query Embedding, most initial examples within each task scenario can retrieve similar queries from other scenarios. While this broader skill usage leads to fewer interaction steps and tokens, it doesn’t necessarily improve accuracy due to difficult cross-scenario skill adaptation.\n\nThe Skill Embedding method demonstrates lower performance compared to other approaches. This may be attributed to the inherent difficulty in retrieving useful skill functions based on queries, as it requires understanding tool usage rather than just text relevance. Future work could explore the development of skill/tool-specific retrievers to enhance skill library agent performance.",
+      "support_explanation": "N-gram exploits repeated query structure; semantic cross-scenario adaptation remains difficult.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2911-2913",
+      "quote": "The results reveal that while the agent model trained with Skill-integrated Reward exhibits significantly more skill usage behaviors (Skill Usage Rate, Skill Library Size and Used Skill Num), all three reward designs maintain similar Success Skill Usage Rate. This indicates that our reward design substantially enhances skill usage frequency, but successful skill application appears to be a general behavior achievable across different reward designs.\nFurthermore, the smaller Skill Library sizes and fewer Used Skill Nums in both Outcome-based and Chain-based Rewards explain their higher Avg. Steps but lower Avg. Tokens compared to Skill-integrated Reward.\nThis pattern emerges because while skill usage typically reduces interaction steps, the generation of skill functions generally requires more tokens. Interestingly, the Chain-based Reward shows notably lower skill usage behaviors compared to even the Outcome-based Reward. This phenomenon might be attributed to the early training stages where, despite successful task completion in the task chain, skill usage rates remain low. Consequently, the additional reward added in Chain-based Reward may inadvertently reinforce behavior patterns that exclude skill usage.",
+      "support_explanation": "Integrated reward increases frequency, not success-per-use versus reward alternatives; token/step tradeoff.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2932-2942",
+      "quote": "For the SFT initialized baseline GRPO, we used the same SFT model checkpoint as in SAGE. Unlike the original baseline GRPO settings described in Appendix\nE\n, this SFT-initialized version utilizes the skill library agent framework without engaging the skill library, rather than using the original ReAct framework. Specifically, we employed the skill library agent prompt illustrated in Figure\n9\nto guide the rollout process, wherein the model first generates a function and then executes it to process the task. Since the baseline GRPO operates without the skill library, we applied an empty skill library to the prompt placeholder for each task during rollout. The comparative results among this SFT initialized baseline GRPO, the original baseline GRPO, and SAGE are presented in Table\n7\n. To align with the training process, only SAGE in Table\n7\nperforms the evaluation with skill library involved.\n\nFrom the table, we observe that SFT may not benefit the baseline training, resulting in even worse performance than the original baseline. On the other hand, SFT initialized baseline GRPO demonstrates lower average generated tokens. This phenomenon may be attributed to the agent model remaining constrained by the initial patterns acquired through SFT.",
+      "support_explanation": "Same-SFT baseline uses same function prompt, but no library; has lower token cost.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2969-2987",
+      "quote": "SFT Initialized GRPO\n\n66.1 ± 1.3\n\n51.2 ± 0.8\n\n12.8 ± 0.1\n\n1,284 ± 18\n\nSAGE\n\n72.0 ± 1.5\n\n60.7 ± 1.5\n\n12.1 ± 0.2\n\n1,475 ± 127",
+      "support_explanation": "SFT-GRPO versus SAGE results preserve the stronger token-efficiency counterexample.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "2512.17102.txt",
+      "sha256": "dd13f07994f2226169a427de6589ca65e192044bd6456242c201b11a43c271c0",
+      "locator": "lines 2626-2639",
+      "quote": "Rollout Settings.\nFor each step of training, we performed the rollout process with 1.0 temperature for 36 random sampled examples with\nG\n=\n8\nG=8\nagents for each group, resulting in totally 288 rollout. During the agents interact with AppWorld environment, we allowed 40 maximum interaction turns with a limitation of 1,500 output tokens for each turn. Due to the GPU memory limitation, we set the context limitation as 28,048 during rollout. For each task, once its trajectory length tokens exceed the limitation during interaction, the rollout will be stopped and marked as completed. Besides, we observed that the code execution outputs returned by the AppWorld environment may be extremely long (e.g., print all examples in the list). Thus, we applied truncation for returned environment outputs exceeding 12,000 characters and append prompt “Observation truncated for display.” afterwards as a truncation notification. After each environment output, we also appended a reminder about the task related information before agents generate the next step. Last but not least, to improve the rollout efficiency, we make an early stop for the entire rollout process when at least 25 interaction steps for unfinished rollout, at least 6 rollouts for each task and 90% of the total number of rollouts have been collected.\n\nTraining Settings.\nWe performed the whole RL training process on 4xNVIDIA H100 8-GPU nodes. Due to the long-horizon trajectories, we utilized the ulysses sequence parallel\n(\nJacobs et al., 2023\n)\n, allocating each example on 4 GPUs. We kept the mini batch size the same as the 288 batch size of rollout. A constant learning rate of 1e-6 and clip the gradient norm to 1 were applied for policy gradient update.",
+      "support_explanation": "Baseline rollout count288 and 32 H100 hardware; inference limits and truncation explicit.",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "persistent executable skill library",
+      "information": "API docs, retrieved functions, execution outputs",
+      "operation": "retrieve→generate function→call→repair on error→save",
+      "output": "new or updated callable Python skill",
+      "conditions": "AppWorld code execution; sufficiently instruction-following policy",
+      "feedback": "execution exceptions; save requires no error",
+      "selection_rule": "execution-without-error, not independent semantic test",
+      "selection_data": "current task execution",
+      "persistence": "between tasks in scenario, or query-indexed library in retrieval variant",
+      "later_use": "subsequent task retrieves/invokes prior functions",
+      "claimed_effect": "higher scenario completion and shorter API action sequences",
+      "failure_boundary": "incorrect but executable skill may survive; no stated retirement/rollback policy",
+      "evidence_ids": [
+        "E003",
+        "E006",
+        "E010",
+        "E018"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "skill-writing and reading policy",
+      "information": "two related task rollouts and verifier rewards plus skill-use indicator",
+      "operation": "joint sequential GRPO; bonus on first successful task if second succeeds using first-task skill",
+      "output": "trained policy generating reusable non-weight functions",
+      "conditions": "same-scenario train chains, SFT expert initialization",
+      "feedback": "verifiable final state and successful cross-task invocation",
+      "selection_rule": "checkpoint maximizing Dev TGC+SGC",
+      "selection_data": "Train for learning; Dev for checkpoint",
+      "persistence": "policy weights persist; deployed outputs are non-weight skill artifacts",
+      "later_use": "new test chains create/reuse skills without per-task parameter update",
+      "claimed_effect": "amortize reliable skill generation and use",
+      "failure_boundary": "invocation plus success is not marginal skill utility; correlated chain tasks; chain3 worsens result",
+      "evidence_ids": [
+        "E001",
+        "E004",
+        "E005",
+        "E012",
+        "E013",
+        "E015",
+        "E017"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "Prompt-only skill libraries are constrained by base instruction following; independent task RL cannot assign delayed credit to skills.",
+    "checked_gap": "Prompt library has low TGC and SAGE/SFT/store controls show practical difficulty and partial remedy. Distinguish learned executor improvement from retained-library benefit.",
+    "lineage": [
+      {
+        "name": "CodeAct; DynaSaur (Nguyen et al.2024)",
+        "source_version": "2512.17102v2",
+        "source": "reviewed paper sections1–3 and references",
+        "relationship": "code execution and unified solve/generate format explicitly inherited; originals not in supplied packet"
+      },
+      {
+        "name": "Voyager; Agent Workflow Memory; Agent Skill Induction",
+        "source_version": "2512.17102v2",
+        "source": "reviewed paper sections2–3",
+        "relationship": "retained skills, commonly post-task creation; original comparison not independently audited"
+      },
+      {
+        "name": "GRPO; LOOP",
+        "source_version": "2512.17102v2",
+        "source": "sections3–4, appendixE/L",
+        "relationship": "GRPO baseline implementation differs from LOOP and SAGE uses additional SFT and rollout budget"
+      }
+    ],
+    "closest_adjacent": "DynaSaur for artifact generation; GRPO/LOOP for training. Authors add delayed chain credit and skill-use reward, not the first executable library.",
+    "residue": "Rewarding an earlier writer on successful later invocation is specific and testable; no counterfactual marginal credit or broad transfer established.",
+    "stakes": "Makes cross-task executable memory usable for an open-weight tool agent rather than treating prompt compliance as given.",
+    "method_response": "SFT teaches function format; two-task rollout keeps skills live; verifiable outcome+use reward trains writer and reader.",
+    "remaining_gap": "Cross-scenario retrieval, long-lived store maintenance, independent training-seed variance and total amortized budget remain open.",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E004",
+      "E010",
+      "E012",
+      "E013",
+      "E015",
+      "E016",
+      "E018",
+      "E020"
+    ],
+    "unresolved": [
+      "For a stronger novelty verdict, supply independently fixed full texts/versions of DynaSaur, Agent Skill Induction, and LOOP to both seats; current lineage is attributed to this paper, not independent neighbor verification."
+    ]
+  },
+  "rs_pattern": {
+    "primary": "self_supervised_signal_engineering",
+    "supporting": [
+      "adapt_via_conditioning"
+    ],
+    "outside_taxonomy": false,
+    "reason": "Closest original tactic is execution-derived reward engineering for missing skill-utility supervision (C26), with trained retrieval conditioning at deployment (C03). Partial fits: rewards depend on external task verifiers, not purely model self-labels; main novelty is trained delayed credit rather than training-free adaptation.",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "self_supervised_signal_engineering",
+        "sub_id": "C26",
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": {
+          "1": "missing downstream skill credit diagnosed",
+          "2": "execution outcomes + actual invocation construct scalar reward",
+          "3": "credit crosses task boundary, not minimally differing preference pair",
+          "4": "GRPO consumes reward",
+          "5": "reward alternatives and store-off tested; compute not fully matched"
+        },
+        "success_checks": [
+          "outcome-based versus integrated reward compared",
+          "actual downstream completion measured"
+        ],
+        "failure_checks": [
+          "budget attribution unresolved",
+          "one benchmark/model; no independent training seeds"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E004",
+          "E012",
+          "E016",
+          "E019"
+        ],
+        "reason": "Reward construction is concrete; C26 scalar-reward branch applies, but source is externally verified outcomes, not pure self-supervision."
+      },
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "supporting",
+        "fit": "partial",
+        "tactic_steps_checked": {
+          "1": "unified function + library prompt",
+          "2": "retrievable functions from earlier tasks",
+          "3": "SFT/RL explicitly teaches library conditioning",
+          "4": "Challenge excludes some app APIs; online scenario store not frozen holdout",
+          "5": "store-off and simpler n-gram retrieval tested"
+        },
+        "success_checks": [
+          "same-policy store ablation",
+          "learned input channel"
+        ],
+        "failure_checks": [
+          "single benchmark",
+          "oracle default grouping; n-gram exploits scenario syntax"
+        ],
+        "evidence_ids": [
+          "E005",
+          "E006",
+          "E010",
+          "E011",
+          "E014",
+          "E018"
+        ],
+        "reason": "At inference the frozen policy interprets retained skill context, but generic structural transfer is limited."
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "amortize_improver_into_trained_policy",
+        "sub": "H26",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "delayed writer/reader credit",
+            "status": "met",
+            "reason": "same policy writes task1 skills, task2 success/use credits task1",
+            "evidence_ids": [
+              "E004"
+            ]
+          },
+          {
+            "condition": "held-out store frozen / no privileged retrieval labels",
+            "status": "partial",
+            "reason": "policy train/dev/test separated; test library built online and default uses scenario labels; n-gram is a useful non-oracle control",
+            "evidence_ids": [
+              "E005",
+              "E006",
+              "E011",
+              "E018"
+            ]
+          },
+          {
+            "condition": "artifact vs policy ablation",
+            "status": "partial",
+            "reason": "store-off within SAGE plus prompt/SFT controls; no full equal-training-budget comparison",
+            "evidence_ids": [
+              "E010",
+              "E016",
+              "E020"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E010",
+          "E012"
+        ]
+      },
+      {
+        "main": "crystallize_executable_capability",
+        "sub": "H07",
+        "version": "manifest-bound",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "condition": "execution repair and reusable callable artifact",
+            "status": "met",
+            "reason": "live-task generation/update/save",
+            "evidence_ids": [
+              "E003"
+            ]
+          },
+          {
+            "condition": "abstraction semantically checked beyond source",
+            "status": "partial",
+            "reason": "later-task aggregate ablation; admission is merely error-free execution, no per-skill held-out acceptance test",
+            "evidence_ids": [
+              "E003",
+              "E010"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E010"
+        ]
+      },
+      {
+        "main": "couple_context_and_weight_updates",
+        "sub": "H28",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "shared rollouts train skill-conditioned policy",
+            "status": "met",
+            "reason": "same sequential experience shapes library and RL reward",
+            "evidence_ids": [
+              "E004"
+            ]
+          },
+          {
+            "condition": "clean lever attribution and matched budgets",
+            "status": "partial",
+            "reason": "store and SFT-GRPO arms exist, rollout counts differ and total expense absent",
+            "evidence_ids": [
+              "E010",
+              "E016",
+              "E020",
+              "E022"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E010",
+          "E016",
+          "E020"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "self_supervised_signal_engineering",
+      "rs_sub": "C26",
+      "domain": {
+        "namespace": "rsi",
+        "main": "amortize_improver_into_trained_policy",
+        "sub": "H26"
+      },
+      "operation_correspondence": "manufactured scalar reward→delayed task2 use/success credit→train task1 writer and shared reader",
+      "necessary_conditions": "later use must be observed and reward must track downstream value",
+      "differences": "external outcome verifier; success-conditioned invocation is not paired marginal utility",
+      "evidence_ids": [
+        "E004",
+        "E012",
+        "E019"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "couple_context_and_weight_updates",
+        "sub": "H28"
+      },
+      "operation_correspondence": "teach conditioning format upstream→frozen policy reads evolving skill context at deployment",
+      "necessary_conditions": "policy explicitly sees artifact context during training and testing",
+      "differences": "no generic cross-domain context-only alternative; deployed store grows within test chains",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E010",
+        "E020"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:self_supervised_signal_engineering/RE-2",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "original RS self_supervised_signal_engineering reviewer expectation 2"
+      ],
+      "applies_when": "reward engineering claims causal gain",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Reward alternatives and same-policy store toggle help isolate effect; no equal training rollout cost.",
+      "evidence_ids": [
+        "E010",
+        "E012",
+        "E016",
+        "E022"
+      ],
+      "score_item": [
+        "E.causality"
+      ]
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "original RS adapt_via_conditioning reviewer expectation 2"
+      ],
+      "applies_when": "genuine held-out transfer asserted",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Train/Dev/test separation and unseen APIs; online test stores and oracle scenario labels limit held-out artifact claim.",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E014",
+        "E018"
+      ],
+      "score_item": [
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "rsi:amortize_improver_into_trained_policy/H26",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "H26 steps2–5"
+      ],
+      "applies_when": "train curator for later use",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Delayed use credit and store-off control implemented; frozen-store independent transfer not demonstrated.",
+      "evidence_ids": [
+        "E004",
+        "E010",
+        "E018"
+      ],
+      "score_item": [
+        "M",
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/S3",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "domain main success condition3"
+      ],
+      "applies_when": "saved function presented as reusable capability",
+      "applicable": true,
+      "status": "partial",
+      "reason": "No-error gate insufficient for semantics; later related tasks provide aggregate evidence only.",
+      "evidence_ids": [
+        "E003",
+        "E010"
+      ],
+      "score_item": [
+        "M",
+        "E.measurement"
+      ]
+    },
+    {
+      "id": "local:2512.17102-1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "appendixL Table7"
+      ],
+      "applies_when": "claims fewer generated tokens than baselines",
+      "applicable": true,
+      "status": "partial",
+      "reason": "SAGE1475 exceeds same-SFT GRPO1284, although below original GRPO3613.",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E020",
+        "E021"
+      ],
+      "score_item": [
+        "E.cost"
+      ]
+    },
+    {
+      "id": "local:2512.17102-2",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "frozen A2; methods evaluation paragraph"
+      ],
+      "applies_when": "training improver is stochastic",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Three eval runs same model give spread, not training seed variance or significance.",
+      "evidence_ids": [
+        "E007",
+        "E013"
+      ],
+      "score_item": [
+        "E.statistics"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "SAGE improves accuracy and efficiency over baseline GRPO",
+      "setting": "AppWorld Normal168 tasks/56 scenarios and Challenge417/139; Qwen32B",
+      "baseline_control": "implemented no-library GRPO",
+      "selection_vs_test": "Train RL/SFT, Dev checkpoint, adaptive test-chain evaluation",
+      "result_denominator": "Normal69.2→72.0 TGC;51.8→60.7 SGC (+8.9pp, not relative8.9%);3613→1475 tokens. Challenge40.7→50.1 TGC;26.9→32.4 SGC.",
+      "evidence_ids": [
+        "E005",
+        "E007",
+        "E008",
+        "E009",
+        "E014",
+        "E016",
+        "E022"
+      ],
+      "counterevidence": "SFT teacher and rollout count differ; SFT-GRPO has lower tokens1284.",
+      "allowed_conclusion": "Comparative author result in declared protocol, not total-compute superiority."
+    },
+    {
+      "claim_id": "C2",
+      "text": "Retained library causes later-task gain",
+      "setting": "same SAGE model; Normal evaluation",
+      "baseline_control": "empty library each task",
+      "selection_vs_test": "new skills learned online within test chains, not sealed frozen-bank test",
+      "result_denominator": "TGC72.0 vs71.4;SGC60.7 vs54.8;steps12.1 vs16.0;tokens1475 vs1937.",
+      "evidence_ids": [
+        "E010"
+      ],
+      "counterevidence": "TGC increase small; test tasks share scenario structure and default labels.",
+      "allowed_conclusion": "Aggregate retained effect on related tasks; not all SAGE gains attributable to skills."
+    },
+    {
+      "claim_id": "C3",
+      "text": "Skill-integrated reward improves learning",
+      "setting": "Normal; same SAGE family",
+      "baseline_control": "outcome-only and chain rewards",
+      "selection_vs_test": "training reward variants; test completion",
+      "result_denominator": "SGC60.7 vs55.4/56.6;tokens1475 vs1469/1361.",
+      "evidence_ids": [
+        "E012",
+        "E019"
+      ],
+      "counterevidence": "Success-per-use similar among reward designs; larger library/frequency increases tokens.",
+      "allowed_conclusion": "Supports useful reward-shaping association/ablation, not marginal per-skill causal credit or uniform efficiency."
+    },
+    {
+      "claim_id": "C4",
+      "text": "Practical retrieval can replace oracle grouping",
+      "setting": "Normal query/skill retrieval",
+      "baseline_control": "Same Scenario oracle",
+      "selection_vs_test": "test-derived online library",
+      "result_denominator": "N-gram72.0/60.1 versus oracle72.0/60.7 TGC/SGC;skill embeddings66.3/56.0.",
+      "evidence_ids": [
+        "E006",
+        "E011",
+        "E018"
+      ],
+      "counterevidence": "Same scenario queries can be identical except user; cross-scenario skill adaptation remains difficult.",
+      "allowed_conclusion": "Non-oracle retrieval works for repeated template structure, not demonstrated open-domain transfer."
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "Author-reported SAGE learns a policy whose retained executable library improves SGC and inference efficiency on related AppWorld test tasks; same-policy removal drops SGC60.7→54.8 and TGC72.0→71.4. This does not establish a generally superior recursive improver at matched total training budget.",
+    "unresolved": [
+      "Training-seed/search variance absent; inference repeats use same model.",
+      "No sealed frozen-library transfer to unrelated task families.",
+      "Lifecycle GPU/teacher/retrieval expense and break-even missing.",
+      "No independent reproduction or external reviewer evidence used."
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Concrete delayed-credit and prompt-compliance bottleneck; lineage attributed, nearest-neighbor originals not independently audited.",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004",
+        "E010",
+        "E020"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Sequential chains, exact skill-use/outcome rewards and shared policy give reconstructable mechanism and testable contrasts; invocation credit is not marginal utility and no-error save not semantic validity.",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E012",
+        "E019"
+      ],
+      "counterevidence_ids": [
+        "E013"
+      ],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Skill operations, chain initialization, training/Dev selection, retrieval settings and limits specified; no retirement/rollback or long-stream maintenance, figure-only prompt unavailable.",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E016",
+        "E017",
+        "E018",
+        "E022"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Final-state program verifier, task/scenario completion and explicit denominators measure relevant outcomes; no independent verifier audit/adversarial correctness checks.",
+      "evidence_ids": [
+        "E007",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Same-policy store toggle and reward/initialization/SFT controls informative, but SAGE training differs in teacher initialization and384 vs288 rollouts; no matched total budget.",
+      "evidence_ids": [
+        "E010",
+        "E012",
+        "E020",
+        "E021"
+      ],
+      "counterevidence_ids": [
+        "E016",
+        "E022"
+      ],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Train/Dev/test policy separation and Challenge unseen APIs plus non-oracle retrieval; artifact grows on test chain, default privileged labels and near-duplicate query structures cap broad transfer.",
+      "evidence_ids": [
+        "E005",
+        "E011",
+        "E014"
+      ],
+      "counterevidence_ids": [
+        "E006",
+        "E018"
+      ],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Three inference evaluations with spread, negative chain3 and prompt-library failures; no multiple training seeds, confidence intervals or significance tests (A2).",
+      "evidence_ids": [
+        "E007",
+        "E010",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "Inference steps/tokens and training hardware/rollouts reported, but no full training/teacher/retrieval amortization; stronger SFT-GRPO is cheaper in tokens.",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009",
+        "E016",
+        "E021",
+        "E022"
+      ],
+      "counterevidence_ids": [
+        "E019",
+        "E020"
+      ],
+      "search_scope": [
+        "full supplied text sections1–5 and appendicesA–L, including tables1–7"
+      ]
+    }
+  },
+  "status": "reviewed",
+  "reason": "Complete supplied text supports an in-scope trained component producing and reusing non-weight executable skills (frozen A3); limitations are author/evaluation design issues, not missing-fulltext status.",
+  "rationale": "延迟技能信用与函数留存链条清楚，同策略移除技能降低SGC；总体增益仍混合权重训练和额外预算。默认场景标签、同模板迁移及单训练模型限制泛化；效率只覆盖推理且并非对所有强基线成立。",
+  "score": {
+    "raw": 65.0,
+    "display": 65.0,
+    "lower": 65.0,
+    "upper": 65.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}

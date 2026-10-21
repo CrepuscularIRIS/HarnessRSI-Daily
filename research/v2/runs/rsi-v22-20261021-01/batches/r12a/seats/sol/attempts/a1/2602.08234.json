@@ -1,0 +1,638 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r12a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2602.08234",
+    "paper_id": "2602.08234",
+    "title": "SkillRL: Evolving Agents via Recursive Skill-Augmented Reinforcement Learning",
+    "version": "2602.08234v2",
+    "claim_type": "system_method",
+    "central_claim": "从成功/失败轨迹抽象分层SkillBank，经SFT教会使用，并在RL验证失败后递归扩展，与策略共同演化，提升ALFWorld/WebShop及QA表现并节约上下文。"
+  },
+  "provenance": {
+    "input_hash": "f92b687b710e74957bbdcbf2224740f264f5c349d730eba51e9f1970841734c3",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T23:39:26.640167+00:00",
+    "notes": "按派发配置sonnet→gpt-6.1-sol；未提供可核验实际调用回执/session，不探测。仅固定全文，无独立邻居全文或运行。"
+  },
+  "materials": [
+    {
+      "material_id": "2602.08234.txt",
+      "url": "https://arxiv.org/html/2602.08234v2",
+      "version": "2602.08234v2",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "sections_read": [
+        "全文1–6",
+        "附录A–F",
+        "Checklist"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 153-173",
+      "quote": "The existing memory-based methods for LLM agents primarily involve saving raw trajectories directly into external databases during the sampling process to serve as references for similar future tasks\n[\n34\n,\n58\n]\n. While intuitive, these raw trajectories are often lengthy and contain significant redundancy and noise\n[\n4\n]\n, making it difficult for the model to extract critical information. Recent work has attempted to compress trajectories and update the memory bank via online training\n[\n56\n,\n57\n]\n, improving memory efficiency. However, these methods merely mimic past solutions and they fail to distill core principles or adapt the agent’s internal policy to leverage memory for guided decision-making. As depicted in the dashed flow of Figure\n1\n(a), such approaches often struggle with the trade-off between information density and noise, leading to sub-optimal performance or even degradation as shown in Figure\n1\n(b).",
+      "support_explanation": "作者把原轨迹噪声与原则抽象不足设为 gap；邻居比较来自本文而非独立核读。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 625-655",
+      "quote": "The teacher model identifies critical decision points, the reasoning behind correct actions, and generalizable patterns that transfer beyond the specific task instance.\n\nFor\nfailed trajectories\n\nτ\n−\n∈\n𝒯\n−\n\\tau^{-}\\in\\mathcal{T}^{-}\n, direct inclusion in context is infeasible due to their length and noise. Instead, we synthesize concise failure lessons:\n\ns\n−\n=\nℳ\nT\n​\n(\nτ\n−\n,\nd\n)\n.\ns^{-}=\\mathcal{M}_{T}(\\tau^{-},d).\n\n(3)\n\nThe analysis identifies: (1) the point of failure, (2) the flawed reasoning or action, (3) what should have been done, and (4) general principles to prevent similar failures. This transforms verbose failed episodes into counterfactuals.",
+      "support_explanation": "成功提取战略、失败分析反事实；非权重自然语言技能而非可执行工具。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 670-713",
+      "quote": "Skill Organization.\n\nWe structure\nSkillBank\ninto two levels:\n1)\nGeneral Skills\n\n𝒮\ng\n\\mathcal{S}_{g}\ncapture universal strategic principles applicable across all task types within an environment. These typically include exploration strategies (e.g., systematic search patterns, prioritizing unvisited locations), state management principles (e.g., verifying preconditions before actions), and goal-tracking heuristics (e.g., maintaining progress counters, terminating only upon verified completion). General skills provide foundational guidance that transfers across different task categories.\n2)\nTask-Specific Skills\n\n𝒮\nk\n\\mathcal{S}_{k}\nencode specialized knowledge for task category\nk\nk\n. These capture domain-specific action sequences, task-particular preconditions and constraints, common failure modes unique to the task type, and optimized procedures that exploit task structure. By organizing trajectories by task type during collection, we enable extraction of fine-grained, category-specific strategies that complement the broader general skills.\n\nThe complete skill library\nSkillBank\nis\n𝒮\ng\n∪\n⋃\nk\n=\n1\nK\n𝒮\nk\n\\mathcal{S}_{g}\\cup\\bigcup_{k=1}^{K}\\mathcal{S}_{k}\n.\nEach skill\ns\n∈\nSkillBank\ns\\in\\textsc{SkillBank}{}\nis structured with: a concise name (e.g., systematic exploration), a principle describing the strategy, and when_to_apply conditions specifying applicability. This format enables efficient retrieval while providing clear guidance for application.",
+      "support_explanation": "general/task-specific 分层、name/principle/when_to_apply 的持久化格式。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 888-972",
+      "quote": "Recursive Skill Evolution.\n\nA static skill library cannot anticipate all scenarios the agent will encounter. As the policy improves and explores new state regions, it faces situations where existing skills provide insufficient guidance. We introduce recursive skill evolution to address this limitation. The process begins with an initial skill library containing baseline task-action principles.\n\nAfter each validation epoch, we monitor the success rate\nA\n​\nc\n​\nc\n​\n(\nC\n)\nAcc(C)\nfor each task category\nC\nC\n. To ensure targeted growth, the evolution is triggered only for categories where\nA\n​\nc\n​\nc\n​\n(\nC\n)\n<\nδ\nAcc(C)<\\delta\n. We then collect failed trajectories\n𝒯\nval\n−\n=\n{\nτ\nj\n:\nr\n⁡\n(\nτ\nj\n)\n=\n0\n}\nj\n=\n1\nM\n\\mathcal{T}_{\\text{val}}^{-}=\\{\\tau_{j}:r(\\tau_{j})=0\\}_{j=1}^{M}\nusing a diversity-aware stratified sampling strategy: trajectories are grouped by category, prioritized by the severity of failure (negative rewards), and selected via round-robin sampling to maintain categorical entropy. Then we will analyze these samples to identify gaps:\n\n𝒮\nnew\n=\nℳ\nT\n​\n(\n𝒯\nval\n−\n,\nSkillBank\n)\n.\n\\mathcal{S}_{\\text{new}}=\\mathcal{M}_{T}(\\mathcal{T}_{\\text{val}}^{-},\\textsc{SkillBank}{}).\n\n(7)\n\nThe teacher model is prompted to: (1) identify failure patterns not addressed by current skills, (2) propose new skills to cover these gaps, and (3) suggest refinements to existing skills that proved ineffective. The library is then updated:\nSkillBank\n←\nSkillBank\n∪\n𝒮\nnew\n\\textsc{SkillBank}{}\\leftarrow\\textsc{SkillBank}{}\\cup\\mathcal{S}_{\\text{new}}\n.\n\nThis creates a virtuous cycle: as the agent improves, it encounters new challenges, which drive skill library expansion, which enables further improvement.",
+      "support_explanation": "验证失败触发教师增补，更新为并集；无逐技能测效准入、遗忘或回滚。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 2011-2058",
+      "quote": "Table 3\n:\nAblation study results. Average success rate (%) on ALFWorld and WebShop.\n\nMethod\n\nALFWorld\n\nWebShop\n\nSkillRL\n\n89.9\n\n72.7\n\nSkill Library Ablations\n\nw/o Hier.\n\n76.8\n\n61.4\n\nw/o Skill Lib.\n\n61.7\n\n50.2\n\nTraining Pipeline Ablations\n\nw/o SFT\n\n65.2\n\n46.5\n\nw/o Dyn.\n\n84.4\n\n70.3\n\nAblation Studies.\nWe conduct ablation experiments to evaluate each component’s contribution, with results in Table\n3\n. According to the results: (1) Removing hierarchical structure (i.e., task-specific skills only) decreases performance by 13.1% on ALFWorld and 11.3% on WebShop, indicating universal strategic principles provide essential foundational guidance. (2) Replacing the skill library with raw trajectories causes the largest degradation (up to 25%), which directly supports our motivation that abstraction is superior to memorization. Raw experiences introduce significant redundancy and noise that hinder effective knowledge transfer. (3) Cold-start SFT proves critical (20% drop without it), confirming that the base model requires an initial explicit demonstration phase to learn how to adaptively retrieve and utilize the abstracted skills before entering the RL stage. (4) Dynamic evolution contributes a 5.5% improvement by ensuring the skill library is a dynamic component rather than a static database. This co-evolution allows the agent to iteratively refine its internal policy by addressing emergent failure modes that were not covered by the initial skill set.",
+      "support_explanation": "表3：全文89.9/72.7，去层次76.8/61.4，raw replacement61.7/50.2，去SFT65.2/46.5，去动态84.4/70.3。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 1995-2004",
+      "quote": "Performance on Search-Augmented QA.\nAs shown in Table\n2\n,\nSkillRL\nachieves a state-of-the-art average score of 47.1%, significantly outperforming Search-R1 (38.5%) abd EvolveR (43.1%). Key observations include: 1) Superior multi-hop Reasoning:\nSkillRL\nexcels in complex tasks like Bamboogle, surpassing EvolveR by 19.4%. This demonstrates that hierarchical skills effectively guide multi-step information synthesis. 2) Strong generalization: Despite being trained on limited datasets (NQ, HotpotQA),\nSkillRL\nmaintains competitive performance on OOD tasks like TriviaQA and 2Wiki, confirming that distilled search strategies are task-agnostic.",
+      "support_explanation": "NQ/Hotpot训练后多QA外域表现；没有证明测试流参与技能更新。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 2088-2107",
+      "quote": "Context Efficiency.\n\nTo evaluate the impact of skill abstraction on inference overhead, we compare the average prompt length of\nSkillRL\nwith a memory-augmented baseline using raw trajectories (Qwen2.5-7B with Raw Memory) in Figure\n5\n.\nThe results reveal that while the raw memory approach suffers from a high and fluctuating token footprint (averaging\n∼\n\\sim\n1,450 tokens),\nSkillRL\nmaintains a significantly leaner prompt (averaging\n<\n<\n1,300 tokens), achieving approximately a 10.3% reduction in context length.\nThis efficiency stems from our distillation mechanism, which compresses verbose environment interactions into high-density, actionable skills.\nNotably,\nSkillRL\nrequires less context than the memory-based baseline to achieve superior performance, demonstrating that skill abstraction effectively mitigates the context-bloat problem common in traditional memory-based agents.",
+      "support_explanation": "总体prompt长度约1450到<1300，约10.3%；不等同于全文技能单位10–20倍压缩。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 3011-3029",
+      "quote": "All experiments were conducted on a cluster with 8 NVIDIA H100 80GB GPUs. Training times:\n\n•\n\nTrajectory collection: 3 hours\n\n•\n\nSkill distillation: 0.5 hours\n\n•\n\nCold-start SFT: 2 hour\n\n•\n\nRL training: 24 hours\n\nTotal wall-clock time: approximately 30 hours per experiment.",
+      "support_explanation": "8 H100、分阶段时间和每实验约30小时；未闭合教师API和基线总预算。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 3032-3110",
+      "quote": "Ablation study on teacher model capability\n\nThe Qwen2.5-7B model falls below the capability threshold required to simultaneously navigate complex environments and abstract high-quality skills. However, our claim on experience-based skill distillation holds completely true once the base model has sufficient capacity. To demonstrate this, we conducted new experiments using a much stronger base model, i.e., Kimi-K2.5\n[\n38\n]\n(1.1T parameters) on the Tinker platform\n[\n40\n]\n. As shown in Table\n5\n, Kimi-K2.5 successfully distills skills from its own trial-and-error experience, significantly boosting its own performance (e.g., 71.2 to 88.5 on ALFWorld, 45.9 to 73.4 on WebShop) entirely without the o3 teacher. The introduction of o3 simply pushes the upper bound even higher. We will explicitly discuss this “capability threshold for skill abstraction\" in the next version. We will clarify that it enables true autonomous experience-based skill discovery for stronger ones.\n\nTable 5\n:\nAblation study on teacher model capability.\n\nModel\n\nVariant\n\nALFWorld\n\nWebShop\n\nSearch\n\nQwen2.5-7B\n\nBase model\n\n14.8\n\n7.8\n\n15.2\n\nSkillRL (policy model)\n\n42.5\n\n19.6\n\n35.7\n\nSkillRL (o3)\n\n89.9\n\n72.7\n\n47.1\n\nKimi-K2.5\n\nBase Model\n\n71.2\n\n45.9\n\n23.6\n\nSkillRL (policy model)\n\n88.5\n\n73.4\n\n49.0\n\nSkillRL (o3)\n\n91.4\n\n77.6\n\n52.2",
+      "support_explanation": "教师能力消融揭示小模型自主抽象差，强模型可自蒸馏。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 4063-4072",
+      "quote": "7.\n\nExperiment statistical significance\n\nQuestion: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?\n\nAnswer:\n[No]\n\nJustification:",
+      "support_explanation": "作者明确未报告统计显著性；全文表格缺样本分母、重复种子与区间。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 1909-1935",
+      "quote": "Implementation Details.\nWe use Qwen2.5-7B-Instruct\n[\n3\n]\nas our base model and OpenAI o3\n[\n25\n]\nas the teacher model for skill distillation and SFT data generation. For RL training, we use GRPO with learning rate\n1\n×\n10\n−\n6\n1\\times 10^{-6}\n, batch size 16, group size 8, and 4 gradient accumulation steps. We set\nK\n=\n6\nK=6\nfor task-specific skill retrieval and\nδ\n=\n0.4\n\\delta=0.4\nfor the collection of failed trajectories. For more detailed information on training hyperparameters, please see Appendix",
+      "support_explanation": "基座Qwen2.5-7B与o3教师、主文训练超参。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2602.08234.txt",
+      "sha256": "f91297cb7a14c15bc1cc2a59f7b76a8ce0571da8a35801eddf6814ddec4f9dbd",
+      "locator": "lines 2278-2282",
+      "quote": "Appendix A\nLimitations\n\nSkillRL\ncurrently relies on a high-capability teacher model for the critical skill distillation and synthetic trajectory generation phases. Additionally, the reinforcement learning pipeline involves substantial computational resources. As the agent operates in increasingly open-ended environments, managing the scale of the growing SkillBank without introducing retrieval noise remains an insightful challenge. Future research could explore transitioning from periodic validation-triggered updates to a more fluid, real-time evolution of skills. Ultimately, expanding these principles to even broader domains like professional software engineering will further test and refine the framework’s generalizability.",
+      "support_explanation": "作者承认教师依赖、计算与不断增长检索噪声。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "SkillBank中的自然语言技能",
+      "information": "基座执行成功/失败与环境二元奖励，教师o3可见轨迹及现有库；未声明测试答案作技能来源。",
+      "operation": "差别提取战略和失败反事实，形成general/task-specific层次，top6相似度检索",
+      "output": "name/principle/when_to_apply技能文本",
+      "conditions": "需要可靠执行信号与有抽象能力教师",
+      "feedback": "环境任务成功",
+      "selection_rule": "教师生成并按类别验证失败定向补充，无逐条反事实准入",
+      "selection_data": "初始轨迹、后续验证失败",
+      "persistence": "外部SkillBank并集，从55到100；删除/冲突/回滚无协议",
+      "later_use": "后续RL轨迹与部署prompt读取通用技能及相关专用技能",
+      "claimed_effect": "任务成功和上下文效率",
+      "failure_boundary": "教师能力阈值、库规模检索噪声",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E012"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "技能上下文与训练策略的耦合",
+      "information": "o3技能示范、当前技能条件下rollout与验证失败",
+      "operation": "cold-start SFT训练技能读取，再GRPO与每5步库演化交替",
+      "output": "更新策略权重及独立技能库",
+      "conditions": "非权重库为实际部署输入，故符合A3而非纯权重排除",
+      "feedback": "轨迹成功奖励和类别验证准确率",
+      "selection_rule": "Acc<0.4定向更新；算法/附录对阈值以上失败抽取略有差异",
+      "selection_data": "训练/验证流；测试分离细节不足",
+      "persistence": "策略checkpoint及SkillBank",
+      "later_use": "最终策略+库在任务评测使用",
+      "claimed_effect": "更快收敛、提高终点",
+      "failure_boundary": "批大小主文16与附录64的关系未解释；缺独立冻结执行器动态库对照",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E011"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "raw-memory冗长噪声大，静态/压缩库不足以抽象技能并随策略成长",
+    "checked_gap": "raw替换、去SFT与去动态的实验支持具体设计有用；不能把ExpeL/EvolveR都概括为不抽象原则。",
+    "lineage": [
+      {
+        "name": "Reflexion/ExpeL → memory-RL/EvolveR/MemRL → SkillRL",
+        "source": "本文§1/§4/§5；邻居原文未固定",
+        "version": "本文2602.08234v2引用版本，邻居版本未核"
+      }
+    ],
+    "closest_adjacent": [
+      "ExpeL",
+      "EvolveR",
+      "MemRL",
+      "SimpleMem+GRPO"
+    ],
+    "residue": "技能表达/训练读取与动态补充如何优于既有经验抽象耦合",
+    "stakes": "上下文成本和多步任务失败",
+    "method_response": "两层抽象+SFT读取+验证失败增补",
+    "remaining_gap": "独立库质量因果、长期维护、无强教师的小模型路径",
+    "evidence_ids": [
+      "E001",
+      "E004",
+      "E005",
+      "E009"
+    ],
+    "unresolved": [
+      "请总控若需更强新颖性断言，统一固定ExpeL/EvolveR/MemRL原文；本席不联网补证。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "heterogeneous_decomposition",
+    "supporting": [
+      "adapt_via_conditioning"
+    ],
+    "matches": [
+      {
+        "main_id": "heterogeneous_decomposition",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "按成功/失败差别处理经验",
+          "通用技能总注入/专用技能选择检索"
+        ],
+        "success_checks": [
+          "分层移除消融"
+        ],
+        "failure_checks": [
+          "没有成功/失败统一处理对照"
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E005"
+        ],
+        "reason": "按结果与适用范围分解并差别处理；C04专指敏感少数/冗余bulk压缩，不符合故子卡null。"
+      },
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "统一技能schema",
+          "SFT训练读取",
+          "QA跨数据集迁移"
+        ],
+        "success_checks": [
+          "raw-memory替代对照"
+        ],
+        "failure_checks": [
+          "不是整体training-free；未严格排除整类任务"
+        ],
+        "evidence_ids": [
+          "E003",
+          "E005",
+          "E006"
+        ],
+        "reason": "部署阶段用结构化技能condition，无逐测试任务训练；训练期仍更新权重，限定此匹配。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "实际操作符合差别处理与部署conditioning；模式命中不加分。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "couple_context_and_weight_updates",
+        "sub": "H28",
+        "version": "manifest-fixed",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "策略SFT/RL读取技能，验证失败修改库"
+          },
+          {
+            "id": "S1",
+            "status": "partial",
+            "reason": "训练rollout与验证失败分流，未严格共享同一批用于两杠杆"
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E011"
+        ]
+      },
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00",
+        "version": "manifest-fixed",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "环境奖惩驱动轨迹抽象"
+          },
+          {
+            "id": "S4",
+            "status": "unmet",
+            "reason": "并集扩张，无明确遗忘冲突治理"
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E004",
+          "E012"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "couple_context_and_weight_updates",
+        "sub": "H28"
+      },
+      "operation_correspondence": "技能文本和程序能力权重分担角色；通用/专用上下文差别处理",
+      "conditions_and_differences": "原卡未要求RL；H28才覆盖上下文/权重交替",
+      "evidence_ids": [
+        "E003",
+        "E004"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00"
+      },
+      "operation_correspondence": "经验压成触发条件技能，在之后任务检索注入",
+      "conditions_and_differences": "H00冻结策略仅局部成立；本系统权重仍学，主要按H28解释",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E005"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:couple_context_and_weight_updates/S3",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H28.md",
+        "patterns/sub/H00.md",
+        "本文§4及附录A/D/Checklist"
+      ],
+      "applies_when": "对应技能留存、共同训练、泛化与成本主张时",
+      "applicable": true,
+      "status": "met",
+      "reason": "训练读取技能且失败更新库",
+      "evidence_ids": [
+        "E004",
+        "E011"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H28.md",
+        "patterns/sub/H00.md",
+        "本文§4及附录A/D/Checklist"
+      ],
+      "applies_when": "对应技能留存、共同训练、泛化与成本主张时",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "无bounded store/冲突合并/遗忘协议；作者承认规模风险",
+      "evidence_ids": [
+        "E004",
+        "E012"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2602.08234-1",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H28.md",
+        "patterns/sub/H00.md",
+        "本文§4及附录A/D/Checklist"
+      ],
+      "applies_when": "对应技能留存、共同训练、泛化与成本主张时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有raw替代和静态库消融，但缺同训练策略推理store-off及预算匹配",
+      "evidence_ids": [
+        "E005"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2602.08234-2",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H28.md",
+        "patterns/sub/H00.md",
+        "本文§4及附录A/D/Checklist"
+      ],
+      "applies_when": "对应技能留存、共同训练、泛化与成本主张时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "QA跨域结果；ALF/WebShop样本、库来源与独立测试边界未具体给足，validation曲线不能当留出",
+      "evidence_ids": [
+        "E004",
+        "E006"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2602.08234-3",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H28.md",
+        "patterns/sub/H00.md",
+        "本文§4及附录A/D/Checklist"
+      ],
+      "applies_when": "对应技能留存、共同训练、泛化与成本主张时",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "主表无分母、区间、种子；Checklist明确No",
+      "evidence_ids": [
+        "E010"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2602.08234-4",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H28.md",
+        "patterns/sub/H00.md",
+        "本文§4及附录A/D/Checklist"
+      ],
+      "applies_when": "对应技能留存、共同训练、泛化与成本主张时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "报告GPU/阶段时间与prompt token；未列o3调用及基线总耗",
+      "evidence_ids": [
+        "E007",
+        "E008"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "技能抽象与共同演化提高任务表现",
+      "setting": "Qwen2.5-7B+o3，ALFWorld/WebShop",
+      "baseline_control": "GRPO77.6/66.1；static-skill84.4/70.3；raw replacement61.7/50.2",
+      "selection_vs_test": "验证失败用于更新，主表测试split细节不足，曲线明确validation",
+      "result": "完整89.9/72.7；动态相对static+5.5/+2.4个百分点",
+      "denominator": "未给主表具体评测实例数",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E011"
+      ],
+      "counterevidence": [
+        "权重与教师示范同时改变；无推理store-off"
+      ],
+      "allowed_conclusion": "作者报告完整系统优于这些对照；不能把差值全部归于独立技能留存"
+    },
+    {
+      "claim_id": "C2",
+      "text": "压缩并跨任务泛化",
+      "setting": "QA与prompt长度",
+      "baseline_control": "raw-memory prompt约1450tokens",
+      "selection_vs_test": "训练NQ/Hotpot，其他QA数据集为域外；未做重叠审计",
+      "result": "平均QA47.1；总体上下文<1300，约10.3%降幅",
+      "denominator": "7数据集平均，具体主表实例分母未报告",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "counterevidence": [
+        "10–20倍指技能相对原轨迹，不是整个prompt"
+      ],
+      "allowed_conclusion": "有跨数据集端到端和适度总体token下降；非普遍无教师自进化"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "固定基座加教师、技能与RL的完整系统，作者报告在多任务上提升；动态技能相对静态库有增益，但未充分隔离留存库对独立后续任务的作用。",
+    "unresolved": [
+      "测试/技能构建边界细节",
+      "库与权重收益分离",
+      "教师/基线总成本",
+      "跨种子方差"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "具体噪声/读取/静态库瓶颈且对照相关；最近邻原文及剩余新意核查不足",
+      "evidence_ids": [
+        "E001",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "抽象、类型分层、SFT教使用及失败增补针对gap；缺有效性准入假设",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "主链和schema可重建；库并集缺维护/回滚，阈值/超参存在不清",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E011",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "环境成功与QA指标适合任务，分项结果清楚；不把10–20倍误当总体下降",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "多模块与静态库消融有信息；缺完整公平预算与库单独消融",
+      "evidence_ids": [
+        "E005",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "QA外域提供一定覆盖；验证触发技能更新且ALF/WebShop测试split不充分",
+      "evidence_ids": [
+        "E004",
+        "E006"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "not_reported",
+      "rating": 0,
+      "reason": "全文无主表样本分母/种子区间，Checklist明确No",
+      "evidence_ids": [
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§4主表/消融/曲线，附录A–F及Checklist§7；未发现样本分母/种子/区间"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "给8H100和阶段时间，教师调用与公平总预算缺口",
+      "evidence_ids": [
+        "E007",
+        "E008"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 55.0,
+    "display": 55.0,
+    "lower": 55.0,
+    "upper": 55.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整固定全文已读；A3非权重SkillBank为评价对象，在范围；证据缺口按项降档而非材料缺失。",
+  "rationale": "技能/策略耦合主链清楚，静态库与raw对照有用；库准入维护和独立测试边界不足，统计缺失，教师成本未闭合，支持完整系统端到端提升而非纯留存因果。"
+}

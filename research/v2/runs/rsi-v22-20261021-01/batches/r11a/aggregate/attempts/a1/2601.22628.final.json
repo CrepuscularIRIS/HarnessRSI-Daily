@@ -1,0 +1,581 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r11a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2601.22628",
+  "paper_id": "2601.22628",
+  "title": "TTCS: Test-Time Curriculum Synthesis for Self-Evolving",
+  "version": "2601.22628v1",
+  "claim_type": "component_training",
+  "central_claim": "TTCS co-evolves a question synthesizer and a reasoning solver, both initialized from the same pretrained model and trained online with GRPO at test time: the synthesizer generates question variants near the solver's capability frontier, and the solver trains on a mixture of test and synthetic questions with self-consistency rewards, yielding more reliable pseudo-labels and stabler test-time training than TTRL and R-Zero on competition math and transfer to general-domain reasoning."
+ },
+ "provenance": {
+  "input_hash": "6b8399b337703e43050eaa23d4b507aa6a634e965b8ff5bc59bfbcad90f0bd54",
+  "input_package": "batches/r11a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-21T23:41:34Z"
+ },
+ "materials": [
+  {
+   "material_id": "2601.22628.txt",
+   "url": "https://arxiv.org/html/2601.22628v1",
+   "version": "2601.22628v1",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2601.22628.txt",
+   "sections_read": [
+    "Opus: pinned text read before opening seat records (abstract, method, experiments, all tables, appendices; long proof derivations skimmed) ; targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E01",
+   "material_id": "2601.22628.txt",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "fixed text lines 1985-1986",
+   "quote": "Without Synthesizer Training.\nWe freeze the synthesizer and use a static pretrained model to generate questions while allowing only the solver to evolve. Performance drops consistently across benchmarks, with accuracy on AMC23 decreasing from 62.50 points to 55.00 points. This shows that static question synthesis cannot adapt to the solver’s evolving capabilities, leading to questions that are either too easy or too difficult and thus provide ineffective learning signals.",
+   "support_explanation": "冻结合成器的消融进一步确认训练对象是生成模型而非可编辑prompt。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E02",
+   "material_id": "2601.22628.txt",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "fixed text lines 2735-2743",
+   "quote": "In this section, we elaborate on the detailed experimental settings and hyperparameter configurations used to train the TTCS framework. Table\n5\nsummarizes the standard training parameters for both the synthesizer and solver agents. Notably, for challenging benchmarks such as\nAIME24\n,\nAIME25\n, and\nAMC23\n, we specifically adjust the batch size to 16 and the solver’s rollout group size to 16 to ensure training stability and efficient resource utilization.",
+   "support_explanation": "实施明确是两代理训练与batch配置。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E03",
+   "material_id": "2601.22628.txt",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "fixed text lines 4119-4142",
+   "quote": "Update Synthesizer by GRPO:\n\n15:\n\nϕ\nt\n←\nϕ\nt\n−\n1\n+\nη\nϕ\n​\n∇\nϕ\n𝒥\nGRPO\n​\n(\nϕ\n)\n\\displaystyle\\phi^{t}\\leftarrow\\phi^{t-1}+\\eta_{\\phi}\\,\\nabla_{\\phi}\\,\\mathcal{J}_{\\mathrm{GRPO}}(\\phi)",
+   "support_explanation": "算法更新Synthesizer参数φ。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E04",
+   "material_id": "2601.22628.txt",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "fixed text lines 4364-4387",
+   "quote": "Update Solver by GRPO:\n\n29:\n\nθ\nt\n←\nθ\nt\n−\n1\n+\nη\nθ\n​\n∇\nθ\n𝒥\nGRPO\n​\n(\nθ\n)\n\\displaystyle\\theta^{t}\\leftarrow\\theta^{t-1}+\\eta_{\\theta}\\,\\nabla_{\\theta}\\,\\mathcal{J}_{\\mathrm{GRPO}}(\\theta)",
+   "support_explanation": "算法更新Solver参数θ。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E05",
+   "material_id": "2601.22628.txt",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "fixed text lines 4395-4406",
+   "quote": "31:\n\nreturn\n\nπ\nϕ\nT\n,\nπ\nθ\nT\n\\pi_{\\phi}^{T},\\pi_{\\theta}^{T}",
+   "support_explanation": "返回训练后的两套策略，而非编辑的harness资产。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E06",
+   "material_id": "2601.22628.txt",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "fixed text lines 4408-4419",
+   "quote": "Appendix D\nSynthetic Prompt Template\n\nHere we present the full prompt template used for the self-evolution process.\n\nPrompt Template: Isomorphic Problem Generator\n\nYou are an expert mathematics problem setter. Your task is to generate a\n**Structurally Isomorphic**\nbut\n**Surface-Distinct**\nproblem based on a provided \"Reference Question.\"",
+   "support_explanation": "附录给出固定合成提示词；未展示执行反馈改写并评价留存该提示词。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "the solver updates itself using self-consistency rewards computed from multiple sampled responses on both original test and synthetic questions",
+   "support_explanation": "Solver is updated by RL on majority-vote pseudo-label rewards; the update is to model parameters.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "M1",
+   "locator": "1 Introduction",
+   "quote": "enables dynamic parameter adaptation on unlabeled test instances by optimizing a self-supervised objective, which is typically constructed via majority voting",
+   "support_explanation": "TTRL/TTCS family adapts parameters at test time.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "M1",
+   "locator": "1 Introduction",
+   "quote": "Both agents are optimized online via Group Relative Policy Optimization (GRPO)",
+   "support_explanation": "Both synthesizer and solver are trained by RL on weights; no non-weight artifact is retained.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "M1",
+   "locator": "3 Preliminary",
+   "quote": "Unlike standard inference with fixed parameters, TTT enables the model to dynamically adapt its parameters only using test questions.",
+   "support_explanation": "Confirms the persistent change is in parameters, and that the adaptation set is the test questions (transductive setting).",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "M1",
+   "locator": "5.2 Main results",
+   "quote": "TTCS elevates the average points from 17.30 to 41.49",
+   "support_explanation": "Qwen2.5-Math-1.5B average; author-reported gain of the weight-trained model on the same test benchmarks used for adaptation.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "M1",
+   "locator": "App. A Metrics",
+   "quote": "we additionally use GPT-4o-mini to assist in judging whether the predicted answer matches the ground truth.",
+   "support_explanation": "Answer matching partly LLM-assisted.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "M1",
+   "locator": "5.3 Q3",
+   "quote": "the static 14B synthesizer yields only a limited improvement of +2.66 points",
+   "support_explanation": "Co-evolving synthesizer vs frozen stronger synthesizer comparison on the 1.5B model.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "M1",
+   "locator": "5.3 Q2",
+   "quote": "we train the solver on a single test dataset and directly evaluate it on the other unseen benchmarks.",
+   "support_explanation": "Cross-benchmark transfer after test-time training on a different test set.",
+   "kind": "author_report",
+   "material_sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2601.22628.txt",
+   "material_hash": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "Abstract",
+   "quote": "the solver updates itself using self-consistency rewards computed from multiple sampled responses on both original test and synthetic questions",
+   "support_explanation": "Weight adaptation uses the test questions themselves (transductive).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2601.22628.txt",
+   "material_hash": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "§1 Introduction",
+   "quote": "Both agents are optimized online via Group Relative Policy Optimization (GRPO)",
+   "support_explanation": "Both persisted objects are policies updated by RL.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2601.22628.txt",
+   "material_hash": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "sha256": "b6d8a72ddc7c8bdda85350fba53992843ab10174e621e50295dd2d245c88cda2",
+   "locator": "§3 Preliminaries (Test-Time Training)",
+   "quote": "TTT enables the model to dynamically adapt its parameters only using test questions.",
+   "support_explanation": "The adaptation target is the parameters.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Synthesizer and solver LLM policies (Qwen2.5-Math-1.5B/7B and a third backbone) initialized from one pretrained model",
+   "information": "Unlabeled test questions; solver's own sampled answers (K samples) for self-consistency; no ground-truth labels at training time",
+   "operation": "Synthesizer generates variants of each test question and is rewarded for solver self-consistency near 0.5 (variance-driven capability reward) minus similarity penalties; solver trains on test plus synthetic questions with majority-vote pseudo-label rewards and a consistency-based online filter; both by GRPO",
+   "output": "Updated synthesizer and solver weights per iteration",
+   "conditions": "Verifiable-answer math; small test sets; strong enough base for majority votes on variants",
+   "feedback": "Self-consistency of the solver",
+   "selection_rule_data": "Capability-band reward and online data filter on the solver's rollout agreement",
+   "persistence": "Model weights",
+   "later_use": "Next iteration's policies; evaluation of the adapted solver",
+   "claimed_effect": "Average 17.30 to 41.49 (1.5B); beats TTRL/R-Zero/Self-Consistency",
+   "failure_boundary": "Adaptation on the same test questions that are evaluated (transductive); R-Zero instability; collapse risk handled by similarity penalties and test-question resampling",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003",
+    "son55:E004",
+    "son55:E005"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "TTRL on difficult test questions yields wrong majority-vote consensus (unreliable pseudo-labels) and lacks learnable intermediate samples.",
+  "checked_gap": "Not evaluated: harness-scope gap check is not applicable because the contribution is a weight-training procedure.",
+  "lineage_closest_adjacent": "TTRL, R-Zero, SPIN, self-play co-evolution, self-consistency; AlphaProof as a TTT neighbor.",
+  "residue": "n/a for harness scope.",
+  "stakes": "n/a",
+  "method_response": "Capability-aware synthesized variants.",
+  "remaining_gap": "n/a",
+  "evidence_ids": [
+   "son55:E002",
+   "son55:E004"
+  ],
+  "unresolved": []
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "C08 steps executed: a generator (synthesizer) produces candidate training instances, a self-consistency/confidence gate filters them, the learner retrains iteratively, and learner uncertainty is fed back to the generator (dynamic closure). C08's step-1 data-defect check and step-5 cheaper-alternative benchmark are only partly present (self-consistency and TTRL are compared; frozen synthesizer ablation).",
+    "success_failure_checks": "Success: filter ablated (w/o online filter drops Olympiad 36.05 to 33.68); causal test of synthesizer adaptivity via frozen-synthesizer and strong-static-synthesizer comparisons. Failure risk: majority-vote pseudo-labels remain model-derived; no external check on synthetic-question validity.",
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E003",
+     "son55:E007"
+    ],
+    "reason": "The manufactured object is a training distribution of self-generated variants filtered by solver consistency, with learner-to-generator feedback."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Informational (out_of_scope). Opus confirms son55: the synthesizer generates question variants, self-consistency filters them, both policies retrain iteratively, and the solver's capability steers the synthesizer. This is the C08 closed-loop variant, the run convention for generator–solver co-training (r09b GenEnv, r05b R-Zero). sol's null primary with outside_taxonomy=false is not a valid shape and is replaced.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H22",
+    "version": "taxonomy-sha b115a69b",
+    "fit": "high (informational; out_of_scope weight-level member)",
+    "condition_checks": "rsi:self_generate_the_curriculum/S2 partial (difficulty band measured on solver's own samples, not a fixed held-out env); S1 unmet (no external validity anchor for variants); F1 partly mitigated by similarity penalties but no independent validity check; F3 pseudo-label by majority vote is a learned proxy certificate",
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E003",
+     "son55:E007"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H22",
+   "operation_correspondence": "Generator of filtered synthetic instances steered by the learner's uncertainty corresponds to a proposer co-trained against a solver with a difficulty-band reward.",
+   "necessary_conditions_and_differences": "Domain card is marked 'touches weights': the retained object is weights, which places the paper outside harness scope.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:self_generate_the_curriculum/S1",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json self_generate_the_curriculum S1"
+   ],
+   "applies_when": "synthetic tasks train a learner",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Validity of synthetic variants rests on solver consistency; no execution or external anchor.",
+   "evidence_ids": [
+    "son55:E001"
+   ],
+   "score_item": "not scored (out_of_scope)",
+   "origin": "son55:rsi:self_generate_the_curriculum/S1"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S2",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json self_generate_the_curriculum S2"
+   ],
+   "applies_when": "difficulty-band reward",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Frontier is measured on the solver's own rollouts for each variant, not on a fixed held-out environment.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E007"
+   ],
+   "score_item": "not scored (out_of_scope)",
+   "origin": "son55:rsi:self_generate_the_curriculum/S2"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "TTCS outperforms TTRL, R-Zero and Self-Consistency on math benchmarks and transfers to general-domain tasks",
+   "setting": "Qwen2.5-Math 1.5B/7B and another backbone; AIME mean@32, others greedy",
+   "baseline_control": "base model, Self-Consistency, TTRL, R-Zero",
+   "selection_vs_test": "Adaptation uses the test questions themselves (transductive); transfer tests train on one test set and evaluate others",
+   "result_denominator": "Average 17.30 to 41.49 (1.5B)",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E008"
+   ],
+   "counterevidence": "Not scored; transductive adaptation on evaluated questions",
+   "allowed_conclusion": "Author-reported gains of a weight-trained solver in a test-time training setting."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "evidence_level_note": "No harness evidence label for an out-of-scope weight-level paper (run precedent r05b–r09b).",
+  "claim_support": null,
+  "claim_support_note": "Not assessed under this rubric; gains are author-reported results of test-time-trained checkpoints in a transductive setting.",
+  "strongest_supported_claim": null,
+  "unresolved": [
+   "Out-of-scope disposition is not a judgment that the weight-training results are wrong."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "out_of_scope",
+ "reason": "out_of_scope (rubric A3; EVIDENCE.md excludes weight-updating self-improvement). Independently checked: the synthesizer and the solver are both optimised online with GRPO (opus:O02). The solver updates its parameters with self-consistency rewards on the original test questions and on synthetic variants of them (opus:O01, opus:O03), so the scored test items are also the adaptation data. No prompt, tool, workflow, memory or evaluator is edited and retained. Not scored; null is not a zero-quality rating.",
+ "resolutions": [
+  {
+   "field_path": "paper.claim_type",
+   "sol_value": "system_method",
+   "son55_value": "component_training",
+   "decision": "son55",
+   "final_value": "component_training",
+   "reason": "Informational. The evaluated product is a test-time-trained checkpoint; run convention for out-of-scope weight-level papers.",
+   "evidence_ids": [
+    "opus:O02",
+    "opus:O03"
+   ],
+   "score_impact": "none (out_of_scope row; claim_type is identification only)"
+  },
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": null,
+   "son55_value": "self_supervised_signal_engineering",
+   "decision": "son55",
+   "final_value": "self_supervised_signal_engineering",
+   "reason": "Identification is still recorded for excluded rows (run convention). Exclusion settles scope, not whether a card describes the operation; the generator → filter → retrain loop is C08.",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "son55:E001"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [],
+   "son55_value": [
+    [
+     "self_supervised_signal_engineering",
+     "C08"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "self_supervised_signal_engineering",
+     "C08"
+    ]
+   ],
+   "reason": "Follows primary.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [],
+   "son55_value": [
+    [
+     "self_generate_the_curriculum",
+     "H22"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "self_generate_the_curriculum",
+     "H22"
+    ]
+   ],
+   "reason": "Informational H22 (proposer co-trained against a solver, with a capability-band signal). As with r09b GenEnv, an H22 match on a weight-level member does not bring the paper into scope.",
+   "evidence_ids": [
+    "opus:O02",
+    "son55:E001"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[rsi:self_generate_the_curriculum/S1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Informational. Similarity penalties prevent copying, but nothing independently checks that a variant is valid or that its majority-vote pseudo-label is right.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:self_generate_the_curriculum/S2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Informational. The capability signal is measured on the solver's own samples of the test-derived variants, not on a fixed held-out validation environment.",
+   "evidence_ids": [
+    "son55:E001",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "assessment.evidence_level",
+   "sol_value": "task",
+   "son55_value": "task",
+   "final_value": null,
+   "reason": "Both seats wrote 'task'. For out_of_scope rows the canonical value is null: the task/retained/improver ladder in EVIDENCE.md grades retained non-weight changes, and this paper has none (precedent r05b–r09b).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02"
+   ],
+   "score_impact": "none (evidence_level is not scored; row is unscored)"
+  },
+  {
+   "field_path": "assessment.claim_support",
+   "sol_value": "scoped",
+   "son55_value": "scoped",
+   "final_value": null,
+   "reason": "Both seats wrote 'scoped'. Claim support is not assessed under this rubric for an excluded row; null is canonical (precedent r09b GenEnv).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the abstract, §1, §3 (TTT definition) and §4 (synthesizer and solver updates) first: GRPO on both policies, using the test questions themselves → out_of_scope (A3).",
+  "integrity_checks": "Both seats a1 on 2601.22628v1, material sha b6d8a72d…; canonical seat hashes equal conflicts.json; both out_of_scope independently.",
+  "core_claim_check": "A3 basis confirmed with opus:O01–O03; the transductive use of test items is noted.",
+  "rating_agreement": "All eight unknown in both seats; kept."
+ },
+ "input_seat_hashes": {
+  "sol": "e0de2c5194e379c4a4ab11f64420136e39a54fa8084e21048cb750ecca08350e",
+  "son55": "e49b0d2a0ae6b95a6fc8f11efd8022b2ae7e5395024dabc5021de461e87d6992"
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "79ef5db3e8cce9ed5b7fc0dd6521fcd5effb44666258fc106e02667a662624d7"
+}

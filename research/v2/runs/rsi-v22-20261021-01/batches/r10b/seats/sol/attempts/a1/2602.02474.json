@@ -1,0 +1,641 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r10b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "status": "reviewed",
+  "reason": "完整v2含A–F附录已通读；被评价共享技能库是非权重文本操作程序，虽训练选择MLP仍按A3入范围。",
+  "paper": {
+    "paper_key": "2602.02474",
+    "paper_id": "2602.02474",
+    "version": "2602.02474v2",
+    "title": "MemSkill: Learning and Evolving Memory Skills for Self-Evolving Agents",
+    "claim_type": "system_method",
+    "central_claim": "从固定手工记忆原语转为可学习选择并由失败驱动进化的技能库，提升多域任务并跨模型/数据泛化。"
+  },
+  "provenance": {
+    "input_hash": "aeca7209de23ba8ec9b1f3e274508a8113501ffd9709824a60216d9634b6122d",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "派发sonnet→gpt-6.1-sol；无可核验模型/会话收据，字段保留null，不探测。",
+    "timestamp": "2026-10-21T23:04:18.088243+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2602.02474.txt",
+      "url": "https://arxiv.org/html/2602.02474v2",
+      "sha256": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "sections_read": [
+        "§1–5",
+        "Tables1–7",
+        "Appendix A–F complete",
+        "全部技能与提示词"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "manifest无page_images；HotpotQA图只读题注与作者描述，不估图内数值。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§3.1",
+      "quote": "In contrast, the\nskill bank\nis shared across traces and contains reusable memory skills.",
+      "support_explanation": "共享技能与单轨迹事实记忆分开，非权重产物可保留。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§3.3.2",
+      "quote": "The executor produces structured memory updates, which are parsed and applied to the trace’s memory bank.",
+      "support_explanation": "技能文本被固定执行器解释为实际操作，不只是回答反思。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§3.3.3",
+      "quote": "After construction, we evaluate the resulting memory bank on the trace’s memory-dependent training queries and use the resulting task performance as the reward (e.g., F1 or success rate).",
+      "support_explanation": "控制器以构建后记忆的任务效果训练。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§3.4",
+      "quote": "The designer updates the skill bank in two stages. First, it employs an LLM to analyze the selected hard cases and identify what memory behaviors are missing or mis-specified. Second, it uses the resulting analysis to propose concrete edits to existing skills and to introduce new skills.",
+      "support_explanation": "固定designer基于训练失败改进非权重操作技能。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "Appendix B.2",
+      "quote": "If the current cycle does not improve this criterion, then before performing the next skill evolution step, we roll back the skill bank to the previously best-performing snapshot and restart evolution from that snapshot.",
+      "support_explanation": "尾部训练奖励门控，非独立提交测试；快照回滚存在。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§4.1",
+      "quote": "Unless otherwise specified, we train MemSkill on LLaMA and use Qwen only for transfer experiments. LongMemEval is also evaluated in a transfer setting, where we directly apply the skills learned on LoCoMo without further training.",
+      "support_explanation": "留存技能跨模型及数据集部署，不等于零配置验证集。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "Appendix B.1 LoCoMo",
+      "quote": "LoCoMo contains 10 long interaction samples, each paired with roughly 200 training queries on average. We split the dataset by sample into train, validation, and test sets with a 6/2/2 ratio.",
+      "support_explanation": "按轨迹划分避免同对话泄漏，但测试仅2独立长样本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "Appendix B.1 LongMemEval",
+      "quote": "Although the training split is not used for learning in this transfer setting, the validation split is used to tune dataset-specific configurations.",
+      "support_explanation": "目标域配置验证参与调优，应限定无训练迁移结论。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "Appendix B.1 ALFWorld",
+      "quote": "We first collect expert trajectories from the training split and use them as the corpus for memory or experience construction. We then evaluate on the official ALF-Seen and ALF-Unseen splits.",
+      "support_explanation": "专家经验来源与官方测试分开。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§4.4",
+      "quote": "disables the designer and fixes the skill bank to the four initial primitives.",
+      "support_explanation": "w/o designer反事实分离技能演化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "§4.5 cost",
+      "quote": "We report L-J, input/output tokens, and LLM calls, accounting for all inference-time LLM calls from memory extraction and query answering, excluding LLM-judge calls used only for evaluation.",
+      "support_explanation": "报告部署全调用但非准备优化成本；不等预算总生命周期。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "Appendix D Designer Refinement",
+      "quote": "For new operations, ‘update_type‘ must be either “insert” or “update” (delete and noop operations are not evolved at this time)",
+      "support_explanation": "实际可编辑范围仅insert/update；不能称四种原语全进化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2602.02474.txt",
+      "hash": "59deea69a7c3c803ed8a2da2e3c4c7c9ce3240a4ad4ba093966784db3d1455be",
+      "locator": "Appendix D LLM Judge",
+      "quote": "- Score = 0.5 if the answer is partially correct but incomplete or slightly inaccurate.",
+      "support_explanation": "judge有0/0.5/1标准，但没有人工一致性核验。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "共享memory技能库S，独立于每条轨迹memory bank",
+      "information": "训练轨迹、训练问题/真值、PPO任务奖励与失败缓冲",
+      "operation": "嵌入状态/技能→共享MLP打分Gumbel无放回TopK→固定executor单次生成结构更新→任务奖励训练selector",
+      "output": "非权重技能条件下的记忆及MLP参数",
+      "conditions": "有可评分的记忆依赖训练问题，固定嵌入/执行器",
+      "feedback": "构建完记忆后的F1/环境成功",
+      "selection_rule": "PPO优化有序TopK联合概率；技能内容另由designer改",
+      "selection_data": "训练轨迹/问题；ALF同模板不重叠经验和奖励轨迹",
+      "persistence": "技能库跨轨迹共享，参数部署冻结",
+      "later_use": "新轨迹span选择技能生成记忆",
+      "claimed_effect": "降低手工记忆假设并适应可变技能数",
+      "failure_boundary": "PPO超参/epoch总步数不全；语义均值可能丢信息",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "技能描述及详细执行模板",
+      "information": "近期训练难例含问题真值、预测、检索记忆和失败次数",
+      "operation": "KMeans分簇代表难例→固定designer两阶段诊断/修订或加技能→继续训练100步；50步新技能探索偏置",
+      "output": "精化和新增的insert/update技能",
+      "conditions": "designer/外层规则固定，训练奖励可得到",
+      "feedback": "每轮尾部25步平均任务奖励",
+      "selection_rule": "不超过3编辑，训练尾均值不升回滚最佳技能库；patience早停",
+      "selection_data": "训练流，非密封晋升集",
+      "persistence": "最佳技能快照跨后续训练和测试部署",
+      "later_use": "LoCoMo→LongMemEval/HotpotQA及LLaMA→Qwen/8B",
+      "claimed_effect": "改善生成后续记忆的机制",
+      "failure_boundary": "回滚MLP是否一致恢复/总轮数及patience数值未完整给；delete/noop不进化；无等预算后代改进对照",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E012"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "静态手工记忆操作硬编码人类先验，长历史和异质互动下脆弱。",
+    "checked_gap": "相关工作区分Memory-R1/Mem-alpha控制固定操作、MemEvolve架构搜索、ReasoningBank经验总结；有固定技能和新增/仅精化消融，邻居原文尚未固定。",
+    "lineage": [
+      {
+        "method": "Memory-R1 / Mem-alpha",
+        "version": "本文引用版本，原文未固定",
+        "relation": "RL选择固定记忆原语"
+      },
+      {
+        "method": "MemEvolve",
+        "version": "Zhang et al.2025b，原文未固定",
+        "relation": "记忆机制搜索近邻"
+      },
+      {
+        "method": "ReasoningBank / ExpeL",
+        "version": "本文引用版本，原文未固定",
+        "relation": "轨迹到复用经验前驱"
+      }
+    ],
+    "closest_adjacent": [
+      "MemEvolve",
+      "Memory-R1",
+      "Mem-alpha"
+    ],
+    "residue": "可增长文本操作集合与选择策略如何协同，能否独立迁移。",
+    "stakes": "固定粒度/原语不覆盖反复丢失的时间、实体、动作条件。",
+    "method_response": "hard-case designer扩展技能，PPO适应变长库，span并行解释。",
+    "remaining_gap": "无法确定相对记忆架构搜索的首创边界；总优化成本和改进方差欠缺。",
+    "evidence_ids": [
+      "E004",
+      "E006",
+      "E010"
+    ],
+    "unresolved": [
+      "请求总控固定MemEvolve、Memory-R1、Mem-alpha邻居原文供双席一致核谱系。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [
+      "adapt_via_conditioning"
+    ],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "partial",
+        "tactic_steps_checked": "把分阶段记忆生成所用固定原语内容/粒度变成可编辑变量，外层designer修订后重新生成记忆；C15/C23/C24不符几何/扩散链等必要操作，均不挂。",
+        "success_checks": "固定技能、仅精化、完整扩展三臂，span成本/质量曲线。",
+        "failure_checks": "原语是否瓶颈有消融；训练准备预算未同控。",
+        "evidence_ids": [
+          "E002",
+          "E004",
+          "E010",
+          "E011"
+        ],
+        "reason": "原主卡自由化固定生成组件的局部泛化，不宣称其典型子战术。"
+      },
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "partial",
+        "tactic_steps_checked": "固定LLM读技能在目标数据集/模型推理使用；selector曾PPO训练，不能称全系统无训练。",
+        "success_checks": "异模型和异数据集迁移；目标验证配置允许。",
+        "failure_checks": "最终目标测试是否无调参审计未给。",
+        "evidence_ids": [
+          "E006",
+          "E008"
+        ],
+        "reason": "部署局部条件化符合，C03无整类规范框架不选。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原卡仅局部映射，领域H21更贴机制。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "make_the_improver_editable",
+        "sub": "H21",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "designer、executor及外层规则固定"
+          },
+          {
+            "id": "S2",
+            "status": "met",
+            "reason": "技能按其生成记忆的下游任务效果打分"
+          },
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "固定四原语w/o designer及refine-only对照"
+          },
+          {
+            "id": "S4",
+            "status": "unmet",
+            "reason": "只给runtime非搜索准备总成本"
+          },
+          {
+            "id": "S6",
+            "status": "partial",
+            "reason": "可安装文本操作模板，有执行语义；未把完整检索/代码都重写"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E004",
+          "E005",
+          "E010",
+          "E012"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "make_the_improver_editable",
+        "sub": "H21"
+      },
+      "operation_correspondence": "将固定记忆生成规则自由化为能重写/扩展的技能模板，通过生成记忆后的QA来选择。",
+      "necessary_conditions_and_differences": "不是外层designer自写代码(H19)，H21匹配内层学习机制；模板运行而非典型扩散自由组件。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:generative_process_redesign/RE-3",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "partial",
+      "reason": "selector/固定库/只精化消融分开，但同生命周期预算未控。",
+      "evidence_ids": [
+        "E010"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/S1",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "met",
+      "reason": "固定designer解释硬例，修改的是内层技能库，不是评价器。",
+      "evidence_ids": [
+        "E004"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/S2",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "met",
+      "reason": "在记忆生成后的下游问题评分，不用技能自评分。",
+      "evidence_ids": [
+        "E003"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/S3",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "met",
+      "reason": "w/o designer保留四初始原语，确认演化对象贡献。",
+      "evidence_ids": [
+        "E010"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/S4",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "partial",
+      "reason": "部署token/calls和span质量曲线存在，训练/演化开销被摊销口头排除。",
+      "evidence_ids": [
+        "E011"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/F3",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "partial",
+      "reason": "LoCoMo按样本6/2/2；LongMemEval目标验证调配置，非无目标信息的迁移。",
+      "evidence_ids": [
+        "E007"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/F4",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/make_the_improver_editable.md"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "测试仅2对话，未提供独立搜索种子及区间；不从卡中借成员失败率。",
+      "evidence_ids": [
+        "E007"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2602.02474-1",
+      "version": "frozen-v1.0/manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2602.02474.txt"
+      ],
+      "applies_when": "声称学习记忆机制本身及其可复用迁移/效率",
+      "applicable": true,
+      "status": "partial",
+      "reason": "模板编辑范围只允许INSERT/UPDATE，固定DELETE/NOOP；回滚控制器状态/超参仍不全。",
+      "evidence_ids": [
+        "E012"
+      ],
+      "score_item": "X"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "学习和进化技能库使记忆构造跨数据/模型更好，且推理成本更低。",
+      "setting": "LoCoMo按对话6/2/2，LongMemEval-S约100测试(去abstention)，ALF官方seen/unseen，Hotpot长上下文；AppWorld扩展",
+      "baseline/control": "CoN/ReadAgent/MemoryBank/A-MEM/Mem0/LangMem/MemoryOS/LightMem/AWM/ExpeL；w/o Ctrl、w/o Des、Refine-only；有无ICL",
+      "selection_vs_test": "训练难例+训练尾均值回滚；LoCoMo对话级留出；LongMemEval验证调配置后测试；ALF训练专家经验/奖励轨迹不重叠，再官方测试。",
+      "result/denominator": "Table1 LLaMA LoCoMo L-J53.82 vs A-MEM49.71；LongMemEval60.89 vs CoN56.44；ALF平均80.36。Table2 full53.82/54.14，w/oCtrl48.43/42.84，w/oDes46.50/36.15，Ref-only47.45/48.88。Table3 SS512 In249K/Out18K/215calls vs A-MEM2850K/362K/1548；SS1024质量48.11下降。Table5无demo平均SR57.71/63.83；Table6有demo AppWorld LLaMA full47.32 vs AWM47.11仅小差，非所有域大幅增益。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008",
+        "E009",
+        "E010",
+        "E011"
+      ],
+      "counterevidence": [
+        "LongMemEval验证调配置、去abstention；LoCoMo去adversarial，结论不覆盖完整原基准。",
+        "主指标LLM judge未给人工校准/一致性；F1和环境SR可交叉参照但不是同一指标。",
+        "Table3不含准备/设计器PPO优化开销；没有跨种子演化不确定性。"
+      ],
+      "allowed_conclusion": "作者报告演化非权重技能比固定原语更有效，并有跨模型和选定异域测试迁移；总生命周期更省和稳定递归改进机制证据不足。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "最佳非权重技能库在独立轨迹和异数据/模型部署有效，固定库反事实支持其作用；没有等预算后代改动效率比较，不达improver证据标准。",
+    "unresolved": [
+      "训练步数/学习率/早停patience及designer模型等配置不足",
+      "judge独立校准缺失",
+      "两对话测试与跨演化种子区间",
+      "准备成本与ICL示例来源审计",
+      "Hotpot图内数值无页图不猜测"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "静态操作瓶颈具体，比较学习式近邻且有固定技能对照，原文谱系仍待固定。",
+      "evidence_ids": [
+        "E004",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "技能/selector分离与变长库共享打分可重建，训练/执行及难例修订逻辑明确；回滚共同适应假设不足。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "技能与完整提示词、TopK PPO、100步周期/尾25步、50步探索和回滚可重建；总轮数/超参及selector同步恢复欠缺。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "F1与gpt-oss-120b judge标准及环境成功/步骤相互支持；无judge人工核验。",
+      "evidence_ids": [
+        "E003",
+        "E009",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "random controller/固定库/refine-only与无demo控制良好，但PPO和设计总预算未等控，缺直接最近机制搜索对照。",
+      "evidence_ids": [
+        "E010",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "对话级划分和官方/异域/异模型测试支撑留存泛化；目标验证配置、删问题和缺污染审计限定范围。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "分母与负向span质量现象存在，LoCoMo仅2独立测试对话，无运行方差/区间/显著性。",
+      "evidence_ids": [
+        "E007",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "给推理全tokens/calls及span质量成本曲线；优化准备与失败候选成本明确排除，生命周期与预算公平不足。",
+      "evidence_ids": [
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5，Tables1–7，Appendix A–F全部"
+      ]
+    }
+  },
+  "score": {
+    "raw": 67.5,
+    "display": 67.5,
+    "lower": 67.5,
+    "upper": 67.5,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "rationale": "失败驱动的可复用记忆技能确为非权重留存对象，固定库/选择器消融及跨模型、异数据测试支持其价值；但仅两对话测试且无搜索方差，目标域调配置与剔题限定迁移，准备成本未计，不达improver证据。"
+}

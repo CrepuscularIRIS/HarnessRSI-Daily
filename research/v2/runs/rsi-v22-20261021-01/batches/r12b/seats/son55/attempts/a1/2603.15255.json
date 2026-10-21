@@ -1,0 +1,239 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r12b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Improver (RL self-play) updates and outputs model weights only; retained question pool is RL training data, not a prompt/skill/tool/workflow/memory/evaluator harness component (rubric A3).",
+ "paper": {
+  "paper_key": "2603.15255",
+  "paper_id": "2603.15255",
+  "title": "SAGE: Multi-Agent Self-Evolution for LLM Reasoning",
+  "version": "2603.15255v2",
+  "claim_type": "component_training",
+  "central_claim": "A closed-loop framework where Challenger, Planner, Solver and Critic co-evolve from a shared LLM backbone using only a small seed set; Critic filters questions/plans; improves reasoning benchmarks across model scales."
+ },
+ "provenance": {
+  "input_hash": "14b0f98ce19936cd4f3ed62aa84e95b30948ec95cf7696dbbd51133650597330",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: claude-kimi worker run, no per-call receipt exposed to the worker; model type per template (haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-21T23:37:06Z"
+ },
+ "materials": [
+  {
+   "material_id": "mat:2603.15255",
+   "url": "https://arxiv.org/html/2603.15255v2",
+   "sha256": "6b0504915d06dffa8fe90baabb02e9f5ab9548f7812e20dad729097eb18a9ff7",
+   "sections_read": [
+    "Abstract",
+    "Sec.1-2",
+    "Sec.3",
+    "Sec.4.1-4.6",
+    "Sec.5.1-5.3",
+    "Sec.6-7",
+    "App.A-C (prompts are figures, not in text)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Fig.5-10 agent prompts are images, absent from text (does not affect scope decision)"
+   ]
+  }
+ ],
+ "rationale": "改进对象与产物均为模型权重（共享LoRA骨干RL训练），自生成题池仅作训练数据，按A3判范围外，不打分。",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "mat:2603.15255",
+   "material_sha256": "6b0504915d06dffa8fe90baabb02e9f5ab9548f7812e20dad729097eb18a9ff7",
+   "locator": "Sec.1 para after Fig.1",
+   "quote": "forming a self-rewarding cycle trained end-to-end using task-relative policy gradients.",
+   "support_explanation": "The self-evolution loop is closed by policy-gradient training.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "mat:2603.15255",
+   "material_sha256": "6b0504915d06dffa8fe90baabb02e9f5ab9548f7812e20dad729097eb18a9ff7",
+   "locator": "Sec.4.6 item (4)",
+   "quote": "jointly updates the shared backbone using Task-Relative REINFORCE++ with per-role advantage normalization",
+   "support_explanation": "All four roles share one backbone; the update step modifies model weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "mat:2603.15255",
+   "material_sha256": "6b0504915d06dffa8fe90baabb02e9f5ab9548f7812e20dad729097eb18a9ff7",
+   "locator": "Sec.5.1 Training details",
+   "quote": "All agents are initialized from their corresponding base models.",
+   "support_explanation": "Roles are weight copies of one LLM (LoRA rank 128 per Sec.5.1); no prompt/skill/tool/memory artifact is the retained object.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "mat:2603.15255",
+   "material_sha256": "6b0504915d06dffa8fe90baabb02e9f5ab9548f7812e20dad729097eb18a9ff7",
+   "locator": "Fig.2 caption",
+   "quote": "(4) all agents are jointly updated using Task-Relative REINFORCE++ with per-role advantage normalization.",
+   "support_explanation": "Confirms the retained output of each iteration is updated weights; the question pool D is training data for those weights.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Shared LLM backbone weights (LoRA) acting as Challenger/Planner/Solver/Critic; self-generated question pool D as training data",
+   "information": "~500 seed (question, verifier) items; Solver pass rate under external verifier; Critic scalar scores",
+   "operation": "Challenger generates (q,v); Critic filters (alpha=0.7); Planner/Solver answer; verifier reward",
+   "output": "Updated model weights; expanded verified question pool",
+   "conditions": "Verifiable domains (math, code)",
+   "feedback": "Verifier pass rate, Critic score",
+   "selection_rule_data": "Critic threshold on generated questions and plans; verifier validity",
+   "persistence": "Weights (LoRA) and growing question pool used as RL training data",
+   "later_use": "Later RL steps train on pool; reported model is the trained backbone",
+   "claimed_effect": "Gains on LiveCodeBench/OlympiadBench for Qwen-2.5-7B",
+   "failure_boundary": "Authors note over-specialization after step ~120 and need for early stopping",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Existing self-play methods lack explicit planning and strong quality control, limiting stability in long-horizon multi-step reasoning.",
+  "checked_gap": null,
+  "lineage": null,
+  "closest_adjacent": [],
+  "residue": null,
+  "stakes": null,
+  "method_response": null,
+  "remaining_gap": null,
+  "evidence_ids": [],
+  "unresolved": "Not assessed: excluded by scope (rubric A3) before gap/lineage analysis."
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": false,
+  "reason": "Not assessed: out_of_scope rows skip pattern identification.",
+  "executes_pattern": null,
+  "resolves_problem": null
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [],
+  "unassigned": true,
+  "revision_proposals": [
+   "Candidate domain-card boundary case (self_generate_the_curriculum, touches weights); no revision proposed in-batch."
+  ]
+ },
+ "pattern_mapping": [],
+ "expectations": [],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Multi-agent self-evolution (Challenger/Planner/Solver/Critic) improves reasoning benchmarks via self-play RL.",
+   "setting": "Qwen2.5-3B/7B-Instruct, Qwen3-4B-Base; math+code",
+   "baseline_control": "Base model, AZR, MAE",
+   "selection_vs_test": "not assessed",
+   "result_denominator": "not assessed",
+   "evidence_ids": [
+    "E001",
+    "E002"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Not evaluated (out of scope)."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": null,
+  "strongest_supported_claim": null,
+  "unresolved": "Scope exclusion only; no scientific judgment on the weight-training claim."
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: no score by rubric A3 (improver update object and product are both model weights).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0,
+  "upper": 100,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -1,0 +1,1085 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r12b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full text incl. appendices read; non-weight retained object (skill library) in scope per A3 even though the policy is RL-trained.",
+ "paper": {
+  "paper_key": "2603.16060",
+  "paper_id": "2603.16060",
+  "title": "ARISE: Agent Reasoning with Intrinsic Skill Evolution in Hierarchical Reinforcement Learning",
+  "version": "2603.16060v2",
+  "claim_type": "system_method",
+  "central_claim": "ARISE: a hierarchical RL framework where a shared policy is both Skills Manager and Worker; it selects skills by log-prob scoring, distills successful traces into a two-tier skill library, and a hierarchical reward co-evolves reasoning and library; outperforms GRPO-family and memory-augmented baselines, especially out of distribution, and each component contributes."
+ },
+ "provenance": {
+  "input_hash": "14b0f98ce19936cd4f3ed62aa84e95b30948ec95cf7696dbbd51133650597330",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: claude-kimi worker run, no per-call receipt exposed to the worker; model type per template (haiku slot -> claude-sonnet-5-5[1m]). Baseline named in text (SkillRL) has no row in Table 1.",
+  "timestamp": "2026-10-21T23:38:31Z"
+ },
+ "materials": [
+  {
+   "material_id": "mat:2603.16060",
+   "url": "https://arxiv.org/html/2603.16060v2",
+   "sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "sections_read": [
+    "Abstract",
+    "Sec.1-5",
+    "App.A (config, pipeline, eval)",
+    "App.B (ES-MDP)",
+    "App.C (library architecture)",
+    "App.D (skill generation, reward, IG)",
+    "App.E (sensitivity, library evolution, phases, token/compute cost)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "rationale": "技能库与策略联训，数学基准较GRPO约+1.8~3.5分；但选择/生成动作无梯度、无方差、AIME24调参、缺外部检索器与记忆开关对照，留存因果弱。",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Abstract",
+   "quote": "a hierarchical reinforcement learning framework in which a shared policy operates both as a high-level Skills Manager and a low-level Worker",
+   "support_explanation": "Central system claim: one shared policy manages skill selection/generation and solves tasks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.1 para 3",
+   "quote": "skill management, including both skill selection before execution and skill summarization after execution, is delegated to an external retriever, preventing the policy gradient from directly shaping skill selection.",
+   "support_explanation": "Author gap 1: external retriever decoupled from the policy gradient.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.1 para 3",
+   "quote": "Furthermore, the skill library is updated independently of the RL objective, breaking the feedback loop between policy improvement and library enrichment",
+   "support_explanation": "Author gap 2: library updated independently of RL.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.3.1 Skill Selection",
+   "quote": "govern both selection and generation, the advantage signal from the hierarchical reward propagates end-to-end through the selection mechanism.",
+   "support_explanation": "Mechanism claim that the policy gradient shapes selection.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.3.2 Eq.6 / Phase II",
+   "quote": "The policy is updated via the clipped surrogate objective:",
+   "support_explanation": "Eq.6 is a per-token ratio over solution-trajectory tokens x_{i,l} of the G rollouts only; there is no term for the selection draw z_t or for the O_{G+1} skill-generation tokens, so the 'end-to-end' claim in E004 is not carried by the written loss (our reading of Eq.5-6, App.A.2 step 7).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.3.2 Phase II",
+   "quote": "and the importance sampling ratio now reflects skill-conditioned generation:",
+   "support_explanation": "Phase II ratio conditions solution tokens on the injected skill; gradient reaches selection only indirectly through shared parameters.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.C.2",
+   "quote": "Five management operations govern the library dynamics, executed in the order listed below at the end of each training step:",
+   "support_explanation": "Lifecycle: Update (utility EMA), Add, Evict (lowest utility cache->reservoir), Load, Delete.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.C.2 Delete",
+   "quote": "conditions—utility below the 10th percentile of all reservoir utilities, and zero cumulative usage—are permanently removed.",
+   "support_explanation": "Retirement rule is utility/usage based, no held-out marginal-gain or regression test.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.D.1",
+   "quote": "The generated output undergoes a four-stage validation pipeline before entering the library:",
+   "support_explanation": "Admission gate = extraction/parsing/truncation/insertion (format validity only); no utility test before use.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.D.3",
+   "quote": "Skills with high utility but low or negative IG are likely correlated with easy problems",
+   "support_explanation": "Authors concede EMA utility is confounded by problem difficulty; IG diagnostic is not used for retention and no IG results are reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.D.3",
+   "quote": "The proxy IG serves primarily as a diagnostic tool rather than a training signal.",
+   "support_explanation": "The causal-contribution measure does not gate admission or eviction.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.A.3",
+   "quote": "At evaluation time the full ARISE pipeline is active: the manager selects a skill from the cache via Eq.",
+   "support_explanation": "Eval uses cache selection with eps=0; whether the library is frozen or still updated during evaluation is not stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.1",
+   "quote": "under the same computational budget.",
+   "support_explanation": "Baseline fairness statement; unit of matching (steps vs wall-clock) is not defined.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.1",
+   "quote": "each integrated with GRPO and adapted to our mathematical reasoning setting.",
+   "support_explanation": "EvolveR/SimpleMem/SkillRL are re-implemented adaptations; tuning of baselines not described.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.2",
+   "quote": "further incorporates skill augmentation into GRPO through sequential rollouts, coupling skill generation with policy optimization in a unified framework.",
+   "support_explanation": "Closest neighbour (Wang et al. 2025 'SAGE') already couples skill generation and GRPO; it is not a baseline in Table 1.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.2",
+   "quote": "More recent work integrates skill structures directly into the training loop: EvolveR",
+   "support_explanation": "EvolveR/SkillRL already put skills inside training; residual vs ARISE is policy-driven selection.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.2",
+   "quote": "outperforming the strongest GRPO-family methods by over one point on in-distribution tasks",
+   "support_explanation": "Main result for Qwen3-4B: ARISE+GRPO above DAPO/GSPO/EvolveR/SimpleMem on every column (Table 1).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.2",
+   "quote": "On Omni-MATH, ARISE improves over GRPO by 2.9 and 1.9 points in average accuracy on the two base models respectively, with gains observed across all four sub-domains.",
+   "support_explanation": "OOD claim; magnitude (+2.9) is similar to in-distribution gains (+1.8 to +2.5).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Table 1 caption",
+   "quote": "We report average Pass@1 accuracy (%) over 32 independent runs. All methods use",
+   "support_explanation": "Averaging protocol; no std/CI reported anywhere in Table 1.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.A.3",
+   "quote": "In each run the model generates a single solution per problem with greedy decoding (temperature",
+   "support_explanation": "Greedy decoding (temperature 0) makes the 32 'independent runs' near-identical, so they do not estimate variance.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.3",
+   "quote": "As shown in Ablation Table, using binary reward causes the largest accuracy drop and reduces skill utilization from 73% to 31%, confirming that the hierarchical signal is the primary driver of skill adoption.",
+   "support_explanation": "Ablation (a): Table 2 binary-reward variant 54.7 AIME24 vs GRPO 54.1 vs full 56.4, i.e. skill machinery without the shaped reward adds ~0.6.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.3",
+   "quote": "freezes the library at 24 seed skills",
+   "support_explanation": "Ablation (c) text says 24 seed skills; Table 3 / App.C.1 list 5 seed skills (internal inconsistency).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.C.1 Table 5",
+   "quote": "Seed skills used to initialize the cache at the beginning of training.",
+   "support_explanation": "Table 5 lists five seed skills (equation_setup, modular_arithmetic_check, case_enumeration, symmetry_exploitation, extremal_principle).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.E.1",
+   "quote": "We study the sensitivity of ARISE to four key hyperparameters on Qwen3-4B-Instruct-2507, evaluating Pass@1 accuracy on AIME 2024 with all other settings fixed at their defaults.",
+   "support_explanation": "Sensitivity grid is scored on AIME 2024, which is also a headline test set; the default (delta .35, eps .10, Cc 10, Nw 500) is the best cell of each row; no separate validation set is described.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.A.1",
+   "quote": "comprising approximately 40K problem-answer pairs from AMC, AIME, MATH, and OlympiadBench, for 2,000 optimization steps.",
+   "support_explanation": "Training sources are competition-math pools; Omni-MATH ('OOD', Sec.4.1) is also olympiad-level and no overlap audit is reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.1",
+   "quote": "Out-of-distribution Omni-MATH",
+   "support_explanation": "Omni-MATH is declared OOD without a contamination or overlap check.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.E.4",
+   "quote": "ARISE adds an average of 66 prompt tokens per problem (the injected skill document), a direct consequence of the 220-character hard cap on skill length.",
+   "support_explanation": "Token overhead reported (+3.0% total vs GRPO).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "App.E.5",
+   "quote": "The total per-step overhead of 16.6% is modest given the consistent accuracy gains observed across all benchmarks, and could be further reduced by batching the scoring passes or caching log-probabilities for skills that remain unchanged between consecutive steps.",
+   "support_explanation": "Training wall-clock overhead +16.6% vs GRPO reported with component breakdown.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.3",
+   "quote": "widens in tandem with library growth, providing direct evidence that",
+   "support_explanation": "Co-evolution claim rests on training-curve co-movement (Fig.3b), not an intervention.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.5",
+   "quote": "The current framework is evaluated exclusively on mathematical reasoning",
+   "support_explanation": "Scope limit: single domain, heuristic (non-executable) skills.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "mat:2603.16060",
+   "material_sha256": "666e62b4e28ff26f439399a24fb49fc0cddcfd175e7a0cc8127109308158ddcc",
+   "locator": "Sec.4.1",
+   "quote": "SkillRL",
+   "support_explanation": "Text lists SkillRL as a baseline, but Table 1 contains only EvolveR and SimpleMem rows (our reading of the table text).",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Tiered skill library: cache (Cc=10) + reservoir (Cr=100) of 220-char JSON skill documents (name, problem_type, key_insight, 2-3 method steps, check), each with EMA utility",
+   "information": "Query + positive-advantage solution traces (<=2, clipped 400 chars) from the same GRPO group, ground-truth correctness reward; no access to test problems",
+   "operation": "Dedicated rollout O_{G+1} by the same policy summarizes successes into one skill; four-stage format validation; Add -> Evict/Load/Delete by utility",
+   "output": "Updated cache/reservoir; fallback 'trace_abstract' skill if JSON invalid (<15% of attempts after warm-up)",
+   "conditions": "tau+ non-empty; verifiable math rewards",
+   "feedback": "r_task correctness and r_skill bonus -> hierarchical reward R in {0,1,2}; utility u<-0.9u+0.1R for selected skill",
+   "selection_rule_data": "Admission = format validity only (no marginal-gain/regression test); retention = lowest-utility eviction, reservoir deletion if bottom-10% utility and zero usage; utility is raw reward EMA (confounded by difficulty per App.D.3)",
+   "persistence": "Library persists across training steps (state of ES-MDP); no versioning, rollback or dedup/merge of content",
+   "later_use": "Cache entries scored for every later query in Phase II",
+   "claimed_effect": "Library grows to ~50-80 skills before Phase II and specializes (App.E.2); ablation without O_{G+1} lowers AIME24 56.4->55.0",
+   "failure_boundary": "Duplicate/conflicting skills never merged; evaluation-time library state unspecified; math-only",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E011",
+    "E012",
+    "E022",
+    "E023"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Skill selection/injection read path (not a separate learned retriever)",
+   "information": "Query and cache skill texts (truncated to 128 tokens); policy conditional log-prob s_k",
+   "operation": "softmax(s_k/sigma) with epsilon-greedy (0.1) and confidence gate delta=0.35; selected skill prepended with 'SKILL:' prefix",
+   "output": "Skill-conditioned rollouts (73% utilization) or unaided rollouts",
+   "conditions": "Phase II only (after 500 warm-up steps)",
+   "feedback": "Hierarchical reward gives correct-with-skill advantage over correct-unaided",
+   "selection_rule_data": "Selection draw z_t has no loss term in Eq.6; bonus shapes worker's use of injected skills, not an explicitly credited selection action",
+   "persistence": "Not persistent per se; depends on S1 library and on policy weights",
+   "later_use": "Every Phase II rollout and evaluation",
+   "claimed_effect": "Policy gradient directly shapes selection; random selection ablation 55.1 vs 56.4 AIME24",
+   "failure_boundary": "Low delta over-injects (89% use, -1.2 AIME24); high delta suppresses use",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E021",
+    "E024"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "Model weights trained with GRPO jointly with S1/S2 (boundary component, not itself the retained harness object)",
+   "information": "Group-relative advantages over G=8 rollouts with DAPO dynamic sampling",
+   "operation": "500-step warm-up with binary reward, then 1,500 steps with skill-augmented hierarchical reward",
+   "output": "Policy that conditions on SKILL: prefix",
+   "conditions": "Verifiable rewards; A100 x8",
+   "feedback": "Answer correctness",
+   "selection_rule_data": "GRPO clipping",
+   "persistence": "Weights",
+   "later_use": "Evaluation with skill pipeline active",
+   "claimed_effect": "+1.8~3.5 points over GRPO on 7 benchmarks across 2 backbones",
+   "failure_boundary": "Gain for binary-reward variant is ~0.6 AIME24 over GRPO (E021)",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E021",
+    "E025"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Skill selection/summarization is delegated to an external retriever decoupled from the policy gradient, and the library is updated independently of the RL objective (E002, E003).",
+  "checked_gap": "Real but narrower: neighbours EvolveR, SkillRL and Wang-2025 SAGE already move skills into the training loop (E015, E016); the residual is policy-driven (log-prob) selection and a reward bonus for skill use. Whether decoupling from an external retriever is the binding bottleneck is not tested (no embedding-retriever + same RL control).",
+  "lineage": {
+   "ancestors": [
+    "Reflexion/ExpeL/SimpleMem inference-time memory",
+    "Voyager-style skill libraries",
+    "GRPO/DAPO/GSPO RLVR"
+   ],
+   "frontier": "EvolveR (co-evolving library), SkillRL (hierarchical skill bank), Wang et al. 2025 'SAGE' (skill-augmented GRPO)"
+  },
+  "closest_adjacent": [
+   {
+    "name": "Wang et al. 2025 'SAGE' skill-augmented GRPO",
+    "source_version": "cited in-paper only; original not fixed in local inputs",
+    "solved": "couples skill generation with GRPO via sequential rollouts",
+    "unsolved": "per ARISE: external/non-policy selection; but not compared"
+   },
+   {
+    "name": "EvolveR (Wu 2025)",
+    "source_version": "cited in-paper only; baseline re-implemented by authors",
+    "solved": "co-evolving experience library in training",
+    "unsolved": "per ARISE: retriever decoupled"
+   },
+   {
+    "name": "SkillRL (Xia 2026)",
+    "source_version": "cited in-paper only; listed as baseline in text but no Table 1 row",
+    "solved": "hierarchical skill bank via trajectory distillation",
+    "unsolved": "per ARISE: external retrieval"
+   }
+  ],
+  "residue": "Gain from library vs reward shaping vs extra prompt tokens is not separated; selection is not shown to be shaped by the gradient.",
+  "stakes": "Reusable strategies discarded after each rollout in RLVR (author claim); measurable as +2-3 points on olympiad math.",
+  "method_response": "Single-policy manager/worker, log-prob selection, hierarchical reward, two-tier library with five operations.",
+  "remaining_gap": "No retriever-vs-policy-selection control, no variance, no held-out library-freeze test, math-only, heuristic (non-executable) skills.",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E015",
+   "E016",
+   "E031"
+  ],
+  "unresolved": "Originals of Wang-2025 SAGE, EvolveR, SkillRL are not fixed locally; request controller to pin them to settle residual novelty."
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "step1 canonical schema: executed (uniform 5-field JSON skill, 220-char cap so log-prob scores reflect relevance; E009, App.C.1)",
+     "step2 reference substrate: executed but single-domain math, self-generated pool (E030)",
+     "step3 upstream phase teaching to read the conditioning: partial (Phase II RL with SKILL: prefix; not a held-out-format meta-learning phase)",
+     "step4 category-level holdout + contamination audit: missing (E025, E026)",
+     "step5 cheaper conditioning baseline under equal budget (nearest-neighbour/longer context/embedding retriever): missing (E014)"
+    ],
+    "success_checks": [
+     "conditioning channel trained as first-class input: partial-met",
+     "mechanism-isolating ablation toggling the conditioning: partial (random-selection, frozen-seed library; no skill-off at inference)"
+    ],
+    "failure_checks": [
+     "no cheaper-baseline comparison: present",
+     "multi-component pipeline with shallow ablations: partly present (single-run ablations)"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E009",
+     "E014",
+     "E021",
+     "E025",
+     "E026"
+    ],
+    "reason": "Retrieved skill text conditions rollouts and the policy is trained to read it, but conditioning is dynamic, self-generated and paired with weight updates, so only the conditioning-channel parts of the card apply; sibling-free parent so C03 is the only sub."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Closest original-15 main is adapt_via_conditioning (retrieved skills as conditioning, trained as input); generative_process_redesign (liberate fixed retriever) and self_supervised_signal_engineering considered and rejected: no iterative generative procedure; ground-truth rewards exist.",
+  "executes_pattern": true,
+  "executes_pattern_note": "Retrieval-conditioned inputs are used and trained on; category holdout and cheap-baseline steps are not executed.",
+  "resolves_problem": null,
+  "resolves_problem_note": "Unresolved: decoupling from external retriever is not shown to be the bottleneck."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "rsi-assets@52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     "S1 one rollout stream: met",
+     "S2 typed roles: partial",
+     "S3 policy trained to condition on artifact: met (revised from successes only)",
+     "F2 recall-store-only: avoided",
+     "F5 declared eval split: unknown (E012)"
+    ],
+    "evidence_ids": [
+     "E001",
+     "E005",
+     "E006",
+     "E012"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "rsi-assets@52ff9657",
+    "fit": "medium",
+    "condition_checks": [
+     "S3 grounding signal: met",
+     "S4 explicit maintenance: partial (add/evict/load/delete by utility; content never merged/edited)",
+     "S5 gate on kept entries: partial (format only)"
+    ],
+    "evidence_ids": [
+     "E007",
+     "E008",
+     "E009"
+    ]
+   },
+   {
+    "main": "amortize_improver_into_trained_policy",
+    "sub": "H26",
+    "version": "rsi-assets@52ff9657",
+    "fit": "low",
+    "condition_checks": [
+     "S2 credit through downstream use: unmet (manager actions carry no loss term)",
+     "S3 co-train writer/reader: partial"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E005"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain_namespace": "rsi",
+   "domain_main": "couple_context_and_weight_updates",
+   "domain_sub": "H28",
+   "operation_correspondence": "RS: retrieved reference substrate as conditioning input read by the model. rsi: skill library injected into rollouts the policy is trained on, with library built from same rollouts.",
+   "required_conditions_differences": "RS requires category holdout and cheap baselines; rsi H28 requires lever ablation (context-only/weights-only/coupled) and clean split; neither is satisfied here.",
+   "evidence_ids": [
+    "E004",
+    "E021",
+    "E025"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:couple_context_and_weight_updates/S1",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#success-conditions"
+   ],
+   "applies_when": "Context and weights co-trained",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "met",
+   "reason": "Skill generation uses the positive traces of the same GRPO group that updates the weights (App.A.2 steps 4-9).",
+   "evidence_ids": [
+    "E001",
+    "E005"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S2",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#success-conditions"
+   ],
+   "applies_when": "Context and weights co-trained",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Skill text is declarative guidance, weights procedural, but roles are not separated experimentally (no context-only vs weights-only vs coupled arms).",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S3",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#success-conditions"
+   ],
+   "applies_when": "Context and weights co-trained",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Policy trained on SKILL:-prefixed prompts; library revised only from successes (tau+), not diagnosed failures.",
+   "evidence_ids": [
+    "E007",
+    "E012"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F2",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#failure-modes"
+   ],
+   "applies_when": "Context and weights co-trained",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "met",
+   "reason": "Failure avoided: the policy is trained on the injected artifact, not a recall bank beside it.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md#failure-modes"
+   ],
+   "applies_when": "Experience accumulates during evaluation",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "unknown",
+   "reason": "Whether the library freezes at test time and whether the adaptation stream differs from reported benchmarks is not stated.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/H28-step5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H28.md#step-by-step"
+   ],
+   "applies_when": "Coupled-lever claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No context-only / weights-only / coupled arms with seeds; only GRPO baseline and three single-run ablations.",
+   "evidence_ids": [
+    "E021",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/H28-step1",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H28.md#step-by-step"
+   ],
+   "applies_when": "Coupled-lever claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Plateau of context-only adaptation and sample-inefficiency of weights-only RL are not demonstrated as motivation.",
+   "evidence_ids": [
+    "E002",
+    "E003"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Store grows",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Add/Update(utility)/Evict/Load/Delete with caps; no content merge, conflict resolution or dedup.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Entries gate reuse",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Admission is a format-validation pipeline; no execution/marginal-gain test before an entry can be selected.",
+   "evidence_ids": [
+    "E009"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F4",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#failure-modes"
+   ],
+   "applies_when": "Retrieval change presented as learning",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "partial",
+   "reason": "Selection is a log-prob retrieval score; learning-by-gradient is asserted (E004) but not carried by the loss (E005).",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md#success-conditions"
+   ],
+   "applies_when": "Entry credit drives retention",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Eviction uses raw reward EMA, no memory-on/off counterfactual; authors admit utility is difficulty-confounded and IG results are not reported.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S2",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/amortize_improver_into_trained_policy.md#success-conditions"
+   ],
+   "applies_when": "Manager actions are trained",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Selection and skill-generation tokens receive no advantage in Eq.6; only worker tokens are optimized.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Conditioning claimed to drive gain",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Random-selection and frozen-seed-library ablations exist (single run); no skill-off-at-inference test of the trained policy.",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Held-out/OOD claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No overlap analysis between DeepScaleR sources and the declared OOD Omni-MATH set.",
+   "evidence_ids": [
+    "E025",
+    "E026"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Retrieval-conditioning claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No embedding-retriever or longer-context baseline under the same RL budget; compared methods are different re-implemented systems.",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Conditioning source quality matters",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Gate, epsilon, cache size and warm-up sensitivity given, on AIME24 only; no library-coverage analysis.",
+   "evidence_ids": [
+    "E024"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2603.16060-1",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec.4.1, App.E.5"
+   ],
+   "applies_when": "Baselines should match rollouts/steps/compute",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "'Same computational budget' stated but undefined; ARISE costs +16.6% per step (reported) and +3% tokens.",
+   "evidence_ids": [
+    "E013",
+    "E027",
+    "E028"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2603.16060-2",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Table 1, Table 2"
+   ],
+   "applies_when": "Small deltas (0.4-3 pts) on 30-problem AIME sets",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No seed variance or CI; 32 greedy runs are not independent.",
+   "evidence_ids": [
+    "E019",
+    "E020"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2603.16060-3",
+   "version": "local-1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "App.E.1"
+   ],
+   "applies_when": "Hyperparameters tuned on a reported benchmark",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unknown",
+   "reason": "Sweep scored on AIME24 with defaults at each row's peak; selection protocol undisclosed.",
+   "evidence_ids": [
+    "E024"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ARISE+GRPO beats vanilla GRPO family and memory-augmented baselines on AMC23/AIME24/25 and Omni-MATH for two backbones.",
+   "setting": "DeepScaleR (~40K) training, 2,000 steps, G=8; Qwen3-4B-Instruct-2507 and Phi-4-mini; Pass@1 greedy x32",
+   "baseline_control": "GRPO, Dr.GRPO, DAPO, GSPO, EvolveR+GRPO, SimpleMem+GRPO (adapted); SkillRL named but not tabulated",
+   "selection_vs_test": "Train DeepScaleR; test AMC23/AIME24/25/Omni-MATH; hyperparameter sweep on AIME24 (a test set)",
+   "result_denominator": "Single reported numbers; Qwen3-4B: +2.5/+2.3/+1.8 competition, +2.9 Omni vs GRPO; Phi-4: +2.6/+2.3/+1.2, +2.0",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "counterevidence": [
+    "E014",
+    "E020",
+    "E024",
+    "E031"
+   ],
+   "allowed_conclusion": "In single-number results, ARISE+GRPO is 1-3 points above the compared baselines on math pass@1 for both backbones; effect size is within plausible noise for 30-problem AIME sets and unreplicated."
+  },
+  {
+   "claim_id": "C2",
+   "text": "The policy gradient directly shapes skill selection end-to-end, so the library and policy co-evolve.",
+   "setting": "Sec.3.1, Fig.3b",
+   "baseline_control": "Random selection ablation (55.1 vs 56.4 AIME24)",
+   "selection_vs_test": "n/a",
+   "result_denominator": "single run per ablation",
+   "evidence_ids": [
+    "E004",
+    "E021",
+    "E029"
+   ],
+   "counterevidence": [
+    "E005",
+    "E006",
+    "E010"
+   ],
+   "allowed_conclusion": "Not supported as stated: Eq.6 has no selection/generation term; co-movement of library size and accuracy is correlational."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Each component (hierarchical reward, policy selection, skill-generation rollout, confidence gate) contributes.",
+   "setting": "Table 2 on Qwen3-4B AIME24/25/Omni",
+   "baseline_control": "four ablated variants",
+   "selection_vs_test": "same test sets as headline",
+   "result_denominator": "single run",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "counterevidence": [
+    "E019",
+    "E024",
+    "E023"
+   ],
+   "allowed_conclusion": "Ablation deltas of 0.4-2.3 points point the same way but are unreplicated; binary-reward variant is only ~0.6 above GRPO on AIME24."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Reported single-run gains of about 2-3 points over GRPO on olympiad math with a self-built skill library retained across training; ablations suggest hierarchical reward, skill generation and policy-scored selection each add ~1-2 points.",
+  "unresolved": "Library vs reward-shaping vs extra-prompt attribution; end-to-end selection learning; test-time library state; Omni-MATH overlap; variance; nearest neighbours not compared."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real limitation (external retriever, independent library update) with neighbours named, but nearest neighbours (Wang-2025 SAGE, SkillRL) are not compared and decoupling is not shown to be the bottleneck.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E015",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E031"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Concrete manager/worker mechanism and reward design, but the key assumption that the policy gradient shapes selection/generation is not carried by the written objective (Eq.6 covers worker tokens only); utility is difficulty-confounded by the authors' own account.",
+   "evidence_ids": [
+    "E004",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E005",
+    "E006",
+    "E010"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Read path, write path, five lifecycle operations, validation pipeline and hyperparameters are reconstructable; admission is format-only, no versioning/rollback/dedup, and eval-time library state is unstated.",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E010"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Exact-match / symbolic-equivalence verifiers on AMC/AIME/Omni-MATH are trustworthy; minor internal inconsistencies (24 vs 5 seed skills; AIME25 49.1 in ablation vs 48.3 in Table 1).",
+   "evidence_ids": [
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Relevant ablations exist (binary reward, random selection, no O_{G+1}, no gate) but are single-run, no external-retriever control, no skill-off inference test, binary-reward variant barely beats GRPO, compute/prompt-length confounds only partly addressed.",
+   "evidence_ids": [
+    "E021",
+    "E022",
+    "E027",
+    "E028"
+   ],
+   "counterevidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Test sets are distinct from training pools, but hyperparameters appear tuned on AIME24 with no validation split, 'OOD' Omni-MATH has no overlap audit, and test-time library state is unspecified.",
+   "evidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E024",
+    "E025",
+    "E026",
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Counts and several negative cells are reported, but no std/CI or training-seed variation; 32 greedy runs are non-independent (A2 ladder level 1).",
+   "evidence_ids": [
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Per-step wall-clock (+16.6%) with breakdown and token overhead (+3.0%) are reported; budget-matching unit for baselines is undefined.",
+   "evidence_ids": [
+    "E027",
+    "E028"
+   ],
+   "counterevidence_ids": [
+    "E013"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 57.5,
+  "display": 57.5,
+  "lower": 57.5,
+  "upper": 57.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -1,0 +1,630 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r11a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full text read including appendices A-D (operators, logic blocks, Judge and optimizer prompts). All eight rating items resolved.",
+ "paper": {
+  "paper_key": "2601.07477",
+  "paper_id": "2601.07477",
+  "title": "JudgeFlow: Agentic Workflow Optimization via Block Judge",
+  "version": "2601.07477v2",
+  "claim_type": "system_method",
+  "central_claim": "A block-level Judge that ranks logic blocks by responsibility for failed runs lets an LLM optimizer focus edits on the most problematic block, improving sample efficiency and final performance of automatically optimized agentic workflows on math reasoning and code generation benchmarks versus existing methods."
+ },
+ "provenance": {
+  "input_hash": "6b8399b337703e43050eaa23d4b507aa6a634e965b8ff5bc59bfbcad90f0bd54",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; configured type recorded only.",
+  "timestamp": "2026-10-21T23:11:55Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "sections_read": [
+    "abstract",
+    "1 intro",
+    "2 related work",
+    "3.1 problem formulation",
+    "3.2 Evaluation-Judge + Algorithm 1",
+    "3.2.2 Optimization-Update",
+    "4.1-4.4 experiments, analysis, case study",
+    "5 conclusion",
+    "Appendix A operators",
+    "Appendix B logic blocks",
+    "Appendix C Judge prompt",
+    "Appendix D optimization prompt"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "url": "https://arxiv.org/html/2601.07477v2",
+   "sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "a dedicated Judge module that inspects execution traces particularly failed runs and assigns rank-based responsibility scores to problematic blocks",
+   "support_explanation": "Central operation: trace-level failure attribution to a workflow block.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "3.2 JudgeFlow",
+   "quote": "Existing methods largely rely on coarse, end-to-end evaluation signals, making it difficult to perform targeted modifications.",
+   "support_explanation": "Author-stated gap (credit assignment in code-represented workflows).",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "3.2.1 Evaluation-Judge",
+   "quote": "the block deemed the most consistently problematic over the whole dataset. This statistical filtering mechanism is designed to ensure robustness against noisy outputs.",
+   "support_explanation": "Rank vectors are summed across failures and the min-sum block is selected, so one edit targets a failure family rather than one trajectory; robustness is asserted by citation, not tested.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "3.2.2 Optimization-Update",
+   "quote": "is then added to the candidate pool",
+   "support_explanation": "Refined workflow W' and its score enter a top-K pool (K=3); next parent is softmax-sampled from the pool. This is the retention rule: score-based, no per-instance regression guard.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "App. C Judge prompt",
+   "quote": "the problem, the correct answer, the incorrect answer, the workflow execution trace",
+   "support_explanation": "Judge receives ground-truth answer, so blame is privileged-information attribution; works only where answers are available.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "App. D optimization prompt",
+   "quote": "CRITICAL: Maximum 3 blocks per workflow - DO NOT EXCEED this limit",
+   "support_explanation": "Search space is capped at 3 blocks, so random blame would already hit the right block 1/3 of the time; limits what localization can add.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "4.1 Baselines/setup",
+   "quote": "each dataset is divided into training and test sets.",
+   "support_explanation": "A train/test split exists but sizes and the rule for choosing the final reported workflow are not given.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Table 1 caption",
+   "quote": "The results are evaluated averaged over three independent runs.",
+   "support_explanation": "Table 1 reports means only; no standard deviation or interval.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "4.1 Implementation Details",
+   "quote": "The number of iteration rounds is set to 20.",
+   "support_explanation": "Fixed iteration count; total budget comparison with baselines not given.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "4.2 Results",
+   "quote": "achieves the average score of 82.2, representing a +1.4(1.7%) increase.",
+   "support_explanation": "Main claim: avg 82.2 vs MermaidFlow 80.8 over GSM8K/MATH/MBPP/HumanEval (Table 1).",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "4.2 Results",
+   "quote": "AIME benchmark, JudgeFlow achieves an average score of 44.67.",
+   "support_explanation": "Fig. 4 AIME 2025: 44.67 vs AFlow 42.00, 5-run mean, no variance shown, ~30-problem set.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "4.3 Ablation",
+   "quote": "and AFlow which lacks Judge on the block-level abstraction as shown in",
+   "support_explanation": "The only 'ablation' compares against AFlow, which also differs in search procedure (MCTS vs pool/softmax) and lacks logic blocks; there is no Judge-off or random-blame variant on the same blocks.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "4.3 Ablation",
+   "quote": "exhibits performance gains within the first five optimization iterations, with both the training and testing curves showing rapid improvements.",
+   "support_explanation": "Sample-efficiency claim rests on a single MBPP curve vs AFlow.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "4.3 Cross-benchmark Generalization",
+   "quote": "by optimizing the workflow using the MATH(MBPP) dataset and zero-shot evaluating on the GSM8K(HumanEval) dataset.",
+   "support_explanation": "Two transfer pairs vs AFlow only (92.89 vs 91.95; 93.89 vs 90.84); single run counts not stated.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "4.3 Optimization Cost",
+   "quote": "the Evaluation cost ($0.45) is considerably higher than the Judge cost ($0.01).",
+   "support_explanation": "One-round, one-dataset cost split; no end-to-end optimization budget comparison with AFlow/MaAS/MermaidFlow.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "5 Conclusion",
+   "quote": "Future work may include exploring more robust Judge for agentic systems optimization.",
+   "support_explanation": "Authors leave Judge robustness open; no Judge-accuracy experiment exists.",
+   "kind": "author_report",
+   "material_sha256": "e528c8deae23a67a6365aa32ee4654a49b1a9263c7d2f525a0d7c7567422e943"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Code-represented agentic workflow decomposed into <=3 logic blocks (seq/for/cond) of configured LLM operators (operator prompts, backbone, parameters)",
+   "information": "Judge sees problem, ground-truth answer, wrong answer, execution trace and per-block I/O of failed runs (threshold eps=1); optimizer sees selected block, workflow, action set, few-shot failure logs for that block, and banned prior workflows",
+   "operation": "Evaluate W on data D; for each failure a Judge LLM ranks blocks by responsibility; min-sum of ranks across failures picks B_sel; optimizer LLM applies one of Add/Remove/Modify to B_sel",
+   "output": "Refined workflow W'",
+   "conditions": "Tasks with ground-truth answers and executable evaluator (GSM8K, MATH, AIME, MBPP, HumanEval)",
+   "feedback": "Pass/fail score plus LLM Judge blame",
+   "selection_rule_data": "W' scored and inserted in top-K=3 pool; start workflow softmax-sampled from pool; selection on the training split",
+   "persistence": "Workflow code/config in the candidate pool across 20 rounds; best workflow deployed",
+   "later_use": "Next round's parent workflow and 'previous optimization' ban list",
+   "claimed_effect": "Avg 82.2 vs 80.8 best baseline; faster early gains than AFlow on MBPP",
+   "failure_boundary": "Judge reliability untested; <=3-block space; no cross-model transfer; one tie to AFlow-style infrastructure",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E010",
+    "E013"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Reused operator library and fixed optimizer (not itself edited)",
+   "information": "n/a",
+   "operation": "Improver is held fixed; only the task workflow changes",
+   "output": "n/a",
+   "conditions": "n/a",
+   "feedback": "n/a",
+   "selection_rule_data": "n/a",
+   "persistence": "n/a",
+   "later_use": "n/a",
+   "claimed_effect": "No improver-level claim",
+   "failure_boundary": "Improver-level evidence level cannot be reached",
+   "evidence_ids": [
+    "E004"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Workflow optimizers rely on coarse end-to-end evaluation signals and lack fine-grained signals on where to refine, giving inefficient or low-impact modifications; MCTS expansion/evaluation is expensive.",
+  "checked_gap": "Real limitation cited from AFlow-style MCTS search and from failure-attribution work (Zhang et al. 2025c); the paper provides no measurement of how often coarse-signal search wastes evaluations beyond one AFlow curve.",
+  "lineage_closest_adjacent": "AFlow (MCTS over operator code, Zhang 2025b), MaAS, MermaidFlow, ADAS, GPTSwarm; prompt-level textual gradients (TextGrad, Pryzant 2023); automated failure attribution (Zhang 2025c). Versions as cited in paper.",
+  "residue": "Block-level localization inside code workflows with control flow; unaddressed: whether LLM blame is accurate, and whether localization helps beyond 3 blocks.",
+  "stakes": "Search cost of workflow optimization; stated qualitatively (evaluation is the dominant per-round cost).",
+  "method_response": "Introduce logic-block abstraction and Judge ranking so one block is edited per round.",
+  "remaining_gap": "Judge accuracy, comparison with textual-backprop style methods on the same blocks, larger workflows, tasks without ground-truth answers.",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E006",
+   "E016"
+  ],
+  "unresolved": [
+   "Whether Judge blame beats random block choice or end-to-end signal under the same optimizer and pool."
+  ]
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": true,
+  "reason": "Checked heterogeneous_decomposition (card read: its operation is differentiated compression of a resource by a measured property, with load-bearing partition ablation; JudgeFlow's blocks are not partitioned by a measured property and no uniform-treatment ablation exists) and decompose_and_delegate (no external solver routing). The operation is credit assignment to one component of an optimized workflow and a localized edit; no original card defines it. Recorded as outside_taxonomy, still fully scored.",
+  "executes_pattern": false,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "taxonomy-sha b115a69b",
+    "fit": "medium",
+    "condition_checks": "S1 met (block scope); S3 partial (top-K pool, no earlier-win guard); S4 met (rank aggregation over failures); S5 partial (Judge sees traces, optimizer sees few-shot failure logs); F2 at risk (added blame signal, selection/certification unchanged from AFlow-style pool)",
+    "evidence_ids": [
+     "E001",
+     "E003",
+     "E004",
+     "E005"
+    ]
+   },
+   {
+    "main": "search_agent_architecture",
+    "sub": "H17",
+    "version": "taxonomy-sha b115a69b",
+    "fit": "medium",
+    "condition_checks": "offline search over workflow code; F2 'incremental refinement of an existing search' applies and is only partially answered; S6 partial (held-out split + 2 transfer pairs)",
+    "evidence_ids": [
+     "E004",
+     "E012",
+     "E014"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": null,
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "attribute_and_patch_incumbent",
+   "domain_sub": "H12",
+   "operation_correspondence": "Trace-level failure attribution to a workflow component followed by a scoped edit and score-gated replacement.",
+   "necessary_conditions_and_differences": "Attribution is by an LLM ranking rather than code-level localization with falsifiable predictions; replacement uses a top-K pool rather than replay/regression checks; patched object is an operator-composed workflow rather than harness source.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent S1"
+   ],
+   "applies_when": "artifact decomposes into units with identifiable execution subgraph",
+   "applicable": true,
+   "status": "met",
+   "reason": "Edits are restricted to the selected logic block.",
+   "evidence_ids": [
+    "E001",
+    "E003"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent S3"
+   ],
+   "applies_when": "candidate edits replace an incumbent",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Top-K pool by aggregate score protects against worse averages, but Judge/optimizer see only failures and no regression check on previously passing instances is described.",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S4",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent S4"
+   ],
+   "applies_when": "multiple failure instances available",
+   "applicable": true,
+   "status": "met",
+   "reason": "Ranks aggregated over all failures before choosing the block.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F2",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent F2"
+   ],
+   "applies_when": "contribution is one more signal in an existing loop",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Blame signal is the contribution while pool/selection resemble AFlow; no matched control isolates the signal.",
+   "evidence_ids": [
+    "E004",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:search_agent_architecture/F2",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json search_agent_architecture F2"
+   ],
+   "applies_when": "method refines blame granularity of an existing workflow search",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Must show blame beats the end-to-end score; only an AFlow comparison confounded by MCTS vs pool and blocks vs no blocks. Executed-validity of designs not separately reported.",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:search_agent_architecture/S6",
+   "version": "conditions.json 8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json search_agent_architecture S6"
+   ],
+   "applies_when": "a design is frozen after search",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Held-out test split plus two cross-benchmark pairs; single executor model family and no variance.",
+   "evidence_ids": [
+    "E007",
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2601.07477-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Zhang et al. 2025c cited in 3.2.1 on noisy LLM failure attribution"
+   ],
+   "applies_when": "claim depends on LLM Judge blame being informative",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No Judge-accuracy or Judge-off/random-block control; authors list robust Judge as future work.",
+   "evidence_ids": [
+    "E012",
+    "E016"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2601.07477-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "standard for stochastic LLM-driven search"
+   ],
+   "applies_when": "comparing stochastic optimizers by small mean gaps",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Means over 3 runs without spread; 1.4 average-point margin.",
+   "evidence_ids": [
+    "E008",
+    "E010"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "JudgeFlow outperforms hand-crafted and autonomous multi-agent baselines on GSM8K/MATH/MBPP/HumanEval (avg 82.2) and AIME 2025",
+   "setting": "gpt-4o-mini-0718 (and gpt-4.1-mini for AIME), 20 rounds, test split, 3 runs (5 for AIME)",
+   "baseline_control": "IO, CoT, CoT-SC, Self-Refine, LLM-Debate, LLM-Blender, DyLAN, GPTSwarm, ADAS, AFlow, MaAS, MermaidFlow",
+   "selection_vs_test": "train/test split stated; final-workflow selection rule unstated",
+   "result_denominator": "Table 1 means; MATH +3.1 over best baseline; no variance",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E010",
+    "E011"
+   ],
+   "counterevidence": "Baseline numbers appear to follow prior literature; budgets not matched or reported",
+   "allowed_conclusion": "Higher mean test scores for JudgeFlow-found workflows under author-reported settings."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Block-level Judge improves sample efficiency and final accuracy relative to optimization without it",
+   "setting": "MBPP curve vs AFlow",
+   "baseline_control": "AFlow only",
+   "selection_vs_test": "train and test curves shown",
+   "result_denominator": "single dataset, curve",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "counterevidence": "AFlow differs in search and abstraction; no Judge-off control",
+   "allowed_conclusion": "JudgeFlow pipeline converges faster than AFlow on MBPP; Judge's own contribution not isolated."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Better cross-benchmark transfer than AFlow",
+   "setting": "MATH->GSM8K, MBPP->HumanEval",
+   "baseline_control": "AFlow",
+   "selection_vs_test": "zero-shot on other benchmark",
+   "result_denominator": "two pairs, no variance",
+   "evidence_ids": [
+    "E014"
+   ],
+   "counterevidence": "Same-domain transfer only",
+   "allowed_conclusion": "Within-domain transfer favours JudgeFlow in two author-reported pairs."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Judge adds marginal overhead (about 2% of evaluation cost)",
+   "setting": "single round, GSM8K",
+   "baseline_control": "evaluation cost",
+   "selection_vs_test": "n/a",
+   "result_denominator": "one round",
+   "evidence_ids": [
+    "E015"
+   ],
+   "counterevidence": "Total-budget parity with baselines not shown",
+   "allowed_conclusion": "Judge LLM call cost is small relative to evaluation in one measured round."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Workflows found by JudgeFlow score higher than listed baselines on held-out test splits (author report, 3-run means), and the pipeline converges faster than AFlow on MBPP; the contribution of block-level blame itself is not isolated.",
+  "unresolved": [
+   "Judge vs random/no-Judge on identical blocks and pool",
+   "Variance and matched budgets",
+   "Selection-rule for reported workflow"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Credit-assignment gap in code workflow search is real and has named neighbors (AFlow, MaAS, MermaidFlow, textual gradients, failure attribution), but the residual cost of coarse signals is not quantified and TextGrad-style block-level attribution is not compared.",
+   "evidence_ids": [
+    "E002",
+    "E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Trace to ranked blame to one-block edit chain is reconstructable and aggregation across failures is sensible, but the key assumption (LLM Judge blame is informative) is unvalidated and the <=3-block space makes the localization advantage small; no distinguishing prediction against random block choice.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E006"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Algorithm 1, action set, pool/softmax parent selection and both prompts are given; retention is score-based top-K with banned prior workflows. Missing: softmax temperature, pool scoring split, regression guard and failure/transfer boundary.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Standard ground-truth-checked metrics (solve rate, pass@1) with executable tests; the Judge uses answers but evaluation does not rely on the Judge. Test-set sizes and contamination of public math sets for gpt-4o-mini not discussed.",
+   "evidence_ids": [
+    "E007",
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Only control is AFlow, which also lacks logic blocks and uses MCTS; no Judge-off, random-blame, or end-to-end-signal variant on the same blocks; no Judge accuracy check. Causal attribution to the Judge is unsupported.",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Train/test split and two cross-benchmark pairs, but split sizes, the rule for picking the reported workflow, and per-iteration test monitoring are unspecified, so selection/test separation cannot be verified.",
+   "evidence_ids": [
+    "E007",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Run counts stated (3, 5) but no spread or significance; margins over MermaidFlow (1.4 avg) and AFlow on AIME (2.7) are small relative to likely LLM-search variance.",
+   "evidence_ids": [
+    "E008",
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Reports Judge vs evaluation cost for one round and an iteration-count curve; no total optimization cost or call counts versus AFlow/MaAS/MermaidFlow despite an efficiency claim.",
+   "evidence_ids": [
+    "E009",
+    "E013",
+    "E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 51.25,
+  "display": 51.3,
+  "lower": 51.25,
+  "upper": 51.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "Block-level LLM-judge blame for workflow edits; sensible mechanism, test gains, but Judge not isolated (only vs AFlow), no variance."
+}

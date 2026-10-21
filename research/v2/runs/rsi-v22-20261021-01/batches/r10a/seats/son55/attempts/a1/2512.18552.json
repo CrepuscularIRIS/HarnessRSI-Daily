@@ -1,0 +1,449 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r10a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+ "paper": {
+  "paper_key": "2512.18552",
+  "paper_id": "2512.18552",
+  "title": "Toward Training Superintelligent Software Agents through Self-Play SWE-RL",
+  "version": "2512.18552v3",
+  "claim_type": "component_training",
+  "central_claim": "Self-play SWE-RL (SSR): a single LLM agent trained by RL to inject and repair increasingly complex bugs grounded in sandboxed repositories, without human-labeled issues or tests, achieves self-improvement on SWE-bench Verified (+10.4) and SWE-Bench Pro (+7.8) and outperforms a human-data baseline."
+ },
+ "provenance": {
+  "input_hash": "fe2e232366fcbb8c0dfa55d8c22068261102d4f66b473bf912ffff941e7837d7",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; worker read full text incl. appendices A-E and prompt templates; no page images provided. Not scored.",
+  "timestamp": "2026-10-21T23:09:28Z"
+ },
+ "materials": [
+  {
+   "material_id": "2512.18552:v3:text",
+   "url": "https://arxiv.org/html/2512.18552v3",
+   "sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "chars": 82452,
+   "sections_read": [
+    "abstract",
+    "1 Introduction",
+    "2 Self-Play SWE-RL",
+    "3 Evaluation",
+    "4 Related Work",
+    "5 Conclusion",
+    "Appendix A-E"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "rationale": "范围外：自博弈RL更新并留存的只有模型权重，生成的bug制品仅作训练课程，脚手架固定，无留存的非权重组件（A3/EVIDENCE排除项）。",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Abstract",
+   "quote": "a single LLM agent is trained via RL in a self-play setting to inject and repair increasingly complex bugs",
+   "support_explanation": "Improver is an RL-trained policy; the self-play loop updates weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 1",
+   "quote": "Both roles share parameters and are trained jointly with RL.",
+   "support_explanation": "Injector and solver are one set of weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 3.1",
+   "quote": "We use the same LLM for bug generation and repair, where the shared policy weights are updated continuously during RL.",
+   "support_explanation": "Only persistent, evaluated object is the weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 2.1",
+   "quote": "The same underlying policy LLM is jointly updated on both signals.",
+   "support_explanation": "Update target = weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 1",
+   "quote": "Through comprehensive self-play, the model itself can generate an evolving curriculum of diverse, challenging bugs that naturally reflects its online and changing policy, which static bug-generation pipelines cannot provide.",
+   "support_explanation": "Generated bug artifacts are a training curriculum consumed by RL, not retained harness components.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "App C",
+   "quote": "Our implementation employs the same tool-based scaffold as CWM with minor prompt adjustments, incorporating Bash and a search-replace editor.",
+   "support_explanation": "Agent scaffold is fixed; no harness edit is retained.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Abstract",
+   "quote": "SSR achieves clear self-improvement (+10.4 and +7.8 points) and consistently outperforms the human-data baseline throughout training",
+   "support_explanation": "Reported gains on SWE-bench Verified / SWE-Bench Pro (weight training).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "App C",
+   "quote": "While our method demonstrates consistent self-improvements across the training steps, we acknowledge the presence of evaluation noise, typically around 2% paired standard error on SWE-bench Verified.",
+   "support_explanation": "Authors acknowledge evaluation noise.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 3.5",
+   "quote": "solver feedback provides only a slight and largely negligible advantage over the consistency baseline",
+   "support_explanation": "Solve-rate frontier reward adds little over consistency-only reward.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 1",
+   "quote": "However, both the data and the environments used to train these agents, such as the issue descriptions and test cases, are heavily based on human knowledge or annotations.",
+   "support_explanation": "Author gap: human-curated training data/environments.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2512.18552:v3:text",
+   "material_sha256": "a1a36dbf0f8961aca99936e6e63c90e7c8cecb7527da556d89a14c434a4cf23c",
+   "locator": "Sec 2.3",
+   "quote": "We do not go beyond the second order to prevent a higher likelihood of overlapping with existing bugs.",
+   "support_explanation": "Higher-order bugs capped at second order.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "policy weights of one LLM in two roles (bug injector / solver); curriculum = generated bug artifacts (bug_inject.diff, test_weaken.diff, test_script.sh, parser, test files)",
+   "information": "raw Docker repos only; injector discovers tests, builds artifact; solver sees reversed test-weakening patch as spec; execution-based consistency checks and test results",
+   "operation": "inject bugs (removal / history reversion), validate by 7 execution checks, solver repairs, failed repairs become higher-order bugs (<=2nd order); RL on both roles",
+   "output": "updated weights",
+   "conditions": "bug-injection reward -1 invalid / -alpha at solve rate 0 or 1 / 1-(1+alpha)s otherwise; solver +-1 on all tests passing",
+   "feedback": "executed tests",
+   "selection_rule_data": "consistency validation as gate; solve rate over G=8 attempts",
+   "persistence": "weights only (curriculum is consumed during training)",
+   "later_use": "evaluation on SWE-bench Verified / Pro with natural-language issues",
+   "claimed_effect": "+10.4 Verified, +7.8 Pro over start; > human-data baseline",
+   "failure_boundary": "unit-test-only oracle, single model for both roles, training instability at scale; solver feedback negligible in reward ablation",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E005",
+    "E007",
+    "E009"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Software agents trained with RL still depend on human-curated issues, tests and environments, a barrier to open-ended improvement; static synthetic bug pipelines ignore the model being trained.",
+  "checked_gap": "Real gap for weight-training pipelines (SWE-smith, BugPilot, SWE-RL); not a harness-level gap. Not scored.",
+  "lineage": {
+   "ancestors": [
+    "SWE-RL",
+    "Absolute Zero / R-Zero / SPICE (self-play)"
+   ],
+   "frontier": "SWE-smith, BugPilot synthetic bug generation",
+   "this_paper_changes": "bug injection + test weakening as the specification, trained jointly with repair"
+  },
+  "closest_adjacent": [
+   {
+    "name": "SWE-smith / BugPilot",
+    "source_version": "as described in 2512.18552v3 Sec 1",
+    "solves": "large-scale synthetic bug tasks",
+    "remains": "stronger human-data assumptions, static generation"
+   }
+  ],
+  "residue": "n/a for scope",
+  "stakes": "scalable training data for software agents",
+  "method_response": "self-play RL with execution-validated bug artifacts",
+  "remaining_gap": "outside harness-level RSI scope",
+  "evidence_ids": [
+   "E010",
+   "E005"
+  ],
+  "unresolved": []
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "controllable generator of training instances: bug-injection agent (executed)",
+     "quality gate on every candidate: 7 execution consistency checks (executed)",
+     "iterate with learner feedback to steer generation: solve-rate reward and higher-order bugs (executed; solver-feedback ablation negligible)"
+    ],
+    "success_failure_checks": [
+     "gate removal shown to break method: not ablated",
+     "downstream-objective comparison vs human-data baseline: executed"
+    ],
+    "evidence_ids": [
+     "E005",
+     "E009",
+     "E011"
+    ],
+    "reason": "Generate-gate-recycle of training instances matches C08; the parent's 'no labels' premise is replaced by execution verification, so fit is partial."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "primary assigned; scope exclusion is independent of pattern recognition",
+  "executes_pattern": "yes",
+  "resolves_problem": "unresolved (not assessed: out_of_scope)"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H22",
+    "version": "research/patterns/taxonomy.json@b115a69",
+    "fit": "strong",
+    "condition_checks": [
+     "rsi:self_generate_the_curriculum/S1",
+     "rsi:self_generate_the_curriculum/S2",
+     "rsi:self_generate_the_curriculum/S6"
+    ],
+    "evidence_ids": [
+     "E002",
+     "E005",
+     "E009"
+    ],
+    "reason": "proposer and solver share weights, validity anchored by execution; boundary pattern (touches weights) - no harness-level retained component."
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "self_generate_the_curriculum",
+    "sub": "H22"
+   },
+   "operation_correspondence": "generator + validity gate + learner-feedback loop <-> proposer co-trained against solver with validity anchor",
+   "necessary_conditions_and_differences": "H22 requires a validity anchor and frontier signal on a fixed held-out environment; here the anchor is execution consistency but the frontier signal is the generator's own solver attempts.",
+   "evidence_ids": [
+    "E005",
+    "E009"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:self_generate_the_curriculum/S1",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#self_generate_the_curriculum.S1"
+   ],
+   "applies_when": "curriculum is generated",
+   "applicable": true,
+   "check": "Validity anchor the generator cannot game?",
+   "status": "met",
+   "reason": "Seven execution consistency checks incl. inverse mutation testing; theoretical analysis of dominant challenger strategies in App A.",
+   "evidence_ids": [
+    "E005"
+   ],
+   "score_item": null
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S2",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#self_generate_the_curriculum.S2"
+   ],
+   "applies_when": "frontier signal used",
+   "applicable": true,
+   "check": "Frontier signal measured on a fixed held-out environment?",
+   "status": "partial",
+   "reason": "Solve rate comes from the solver's own attempts; reward ablation shows it adds little.",
+   "evidence_ids": [
+    "E009"
+   ],
+   "score_item": null
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S6",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#self_generate_the_curriculum.S6"
+   ],
+   "applies_when": "gains claimed beyond generated tasks",
+   "applicable": true,
+   "check": "Certification outside the loop against a static/human-data baseline?",
+   "status": "met",
+   "reason": "SWE-bench Verified and SWE-Bench Pro vs a human-data baseline over the training trajectory; ~2% evaluation noise acknowledged.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "score_item": null
+  },
+  {
+   "id": "local:2512.18552-1",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2512.18552v3 Sec 2, App C"
+   ],
+   "applies_when": "scope decision",
+   "applicable": true,
+   "check": "Is any non-weight harness component retained and evaluated?",
+   "status": "unmet",
+   "reason": "Only weights persist; scaffold identical to CWM; bug artifacts are training data.",
+   "evidence_ids": [
+    "E003",
+    "E006"
+   ],
+   "score_item": null
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Self-play yields self-improvement on SWE-bench Verified (+10.4) and SWE-Bench Pro (+7.8) and beats a human-data baseline.",
+   "setting": "CWM-sft 32B, 150 steps, single attempt per problem",
+   "baseline_control": "baseline RL with human issues/tests",
+   "selection_vs_test": "not assessed (out_of_scope)",
+   "result_denominator": "not assessed",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [],
+   "allowed_conclusion": "Not assessed for RSI scope; author_report of weight-training gains."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": null,
+  "strongest_supported_claim": "not assessed: out_of_scope under A3 (weights are both the updated object and the product).",
+  "cannot_say": [
+   "any harness-level retained improvement"
+  ],
+  "unresolved": [],
+  "note": "If the aggregator/controller decides environment-generator artifacts count as evaluator components, a new scoring attempt is needed; this record deliberately supplies no ratings."
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: Scope per rubric A3 / EVIDENCE.md: self-play RL whose updated object and product are model weights; generated bug artifacts (test scripts, parsers, patches) are ephemeral training curriculum, the agent scaffold is fixed, and no non-weight harness component is retained and evaluated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

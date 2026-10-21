@@ -1,0 +1,1027 @@
+{
+ "status": "reviewed",
+ "reason": "Full HTML text incl. appendix (cost, case study) read; Figures 3-5 values are images not available as text (recorded in materials). In scope A-class: self-modifying coding agents retained in an archive and edited by framework-level patches (tools, workflow, prompts).",
+ "paper": {
+  "paper_key": "2602.04837",
+  "paper_id": "2602.04837",
+  "title": "Group-Evolving Agents: Open-Ended Self-Improvement via Experience Sharing",
+  "version": "2602.04837v1",
+  "claim_type": "system_method",
+  "central_claim": "Treating a group of agents as the evolutionary unit - selecting a parent group by a performance-novelty score and letting every member reflect on the pooled evolutionary traces of the group - consolidates exploratory diversity better than tree-structured evolution (DGM), reaching 71.0% on SWE-bench Verified and 88.3% on Polyglot, matching or exceeding human-designed frameworks, transferring across coding models and repairing injected framework bugs faster."
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2602.04837v1",
+   "sha256": "d7c45c776081d123fad69eac80906b0833920105182738d4ff5c72c02cc97942",
+   "sections_read": [
+    "abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Method incl. Algorithms 1-2",
+    "4 Experiments (benchmarks, settings, baselines)",
+    "5 Results and analysis (Tables 1-2)",
+    "6 Conclusion",
+    "Impact statement",
+    "Appendix A.1 cost estimate",
+    "Appendix A.2 case study Table 3"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure 3 (performance curves)",
+    "Figure 4 (tool discovery matrix)",
+    "Figure 5 (model-transfer bars)"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "GEA overcomes the limitation of inefficient utilization of exploratory diversity caused by isolated evolutionary branches",
+   "support_explanation": "Author gap: branch isolation in tree-structured open-ended evolution wastes exploratory diversity.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Sec 1",
+   "quote": "although such systems often exhibit substantial exploratory diversity, this diversity rarely serves as effective stepping stones",
+   "support_explanation": "Stated residual: diversity does not compound; cited to prior open-endedness literature, tested here through Fig 4 (tool propagation) and Table 1 (ancestor counts).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 3",
+   "quote": "GEA maintains an archive that stores all discovered agents throughout the evolutionary process.",
+   "support_explanation": "Archive of agents is the persistent store; parents are selected from it each iteration.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Sec 3.1",
+   "quote": "Performance serves as the primary selection criterion, while novelty is incorporated as a mild bias without dominating performance, enabling a balanced trade-off between exploitation and exploration.",
+   "support_explanation": "Parent score = alpha_i x sqrt(nov(i)), top-K agents become the parent group.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Sec 3.1",
+   "quote": "where each dimension indicates whether the agent successfully solves a corresponding probe task",
+   "support_explanation": "Novelty uses a binary task-success vector; the probe task set (dimension D) and its relation to the evolution/test sets are not specified.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "Sec 3.1",
+   "quote": "denotes the performance of agent i i on downstream coding tasks",
+   "support_explanation": "alpha_i is performance 'on downstream coding tasks' without naming the set; selection data therefore cannot be separated from reporting data.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "Sec 3.2",
+   "quote": "for a randomly sampled unsolved task during evaluation",
+   "support_explanation": "Evolutionary traces include a predicted patch for an unsolved task of the benchmark plus logs and the evaluation outcome of that task, so benchmark tasks and their outcomes feed back into the improver.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Sec 3.2",
+   "quote": "The aggregated traces from all agents in the parent group are provided as shared input to every agent.",
+   "support_explanation": "Core operation: pooled patches, predicted task patches, execution logs and outcomes of all parents condition every member's reflection.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Sec 3.2",
+   "quote": "Agents that compile successfully and exhibit basic coding functionality are retained and added to the archive for future evolution.",
+   "support_explanation": "Archive admission gate is only 'compiles and basic functionality' (staged sanity check of 10 tasks); no performance gate, regression test or rollback.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "Sec 4.2",
+   "quote": "The reflection module is consistently powered by GPT-o1",
+   "support_explanation": "Reflection (trace analysis producing evolution directives) is a fixed external model distinct from the Claude acting/evolving model: part of the improver is outsourced and held constant.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "Sec 4.1 SWE-bench",
+   "quote": "which is designed to preserve a similar difficulty and pass-rate distribution as the full benchmark with fewer samples",
+   "support_explanation": "Selection uses a 50-task Verified-Mini (a small subset in the same benchmark family as the reporting set) after a 10-task sanity check; per-agent scores are therefore on about 60 tasks (cost table also lists 60 tasks).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "Sec 4.1 SWE-bench",
+   "quote": "Finally, the top-2 performing agents from this stage are evaluated on the full SWE-bench Verified dataset.",
+   "support_explanation": "Only top-2 agents get a full-benchmark run, yet the headline comparison appears to use the staged numbers (Table 1 values 56.7/48.3/45.0/63.3/58.3 are all multiples of 1/60).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Polyglot",
+   "quote": "group-level evolution is conducted exclusively on a 10-task small set. Agents achieving a success rate above 40% are subsequently evaluated on a separate, unseen 50-task medium set, ensuring that the larger set remains a strict out-of-distribution test for generalization.",
+   "support_explanation": "Polyglot design separates a 10-task evolution set from a 50-task unseen set, but best-agent picking uses the unseen-set scores and the 88.3% equals 53/60, i.e. it looks like a pooled 60-task figure.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "Sec 4.1 SWE-bench",
+   "quote": "to discard those with framework-level failures (i.e., cannot compile or solve 0 out of 10 tasks)",
+   "support_explanation": "Sanity gate definition for archive admission.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "Sec 4.1 settings",
+   "quote": "we set the group size to K = 2 K=2 and use M = 4 M=4 nearest neighbors in the KNN-based parent group selection.",
+   "support_explanation": "Group size is 2 in all experiments; no group-size sweep.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "Sec 4.2",
+   "quote": "Due to computational budget constraints, during the first 20 iterations, the evolving and acting modules are powered by Claude Haiku 4.5",
+   "support_explanation": "Acting/evolving model changes inside the run (SWE-bench: Haiku 4.5 for iterations 1-20, Sonnet 4.5 for 21-30; Polyglot 1-10 vs 11-20).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "locator": "Sec 4.2",
+   "quote": "while the final 10 iterations use Claude Sonnet 4.5",
+   "support_explanation": "Late-run agents are scored with a stronger acting model than early ones, so archive scores used for parent ranking are not comparable across iterations and the reported rise from the iteration-0 score includes the model upgrade; only the transfer figure (Fig 5) controls the model.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "locator": "Sec 4.3 baseline",
+   "quote": "implemented following DGM",
+   "support_explanation": "The baseline is the authors' re-implementation of DGM (single parent per iteration, one child, no sharing), not DGM's published run; parent-selection rule of the baseline is not described, so novelty-based selection and experience sharing are confounded.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "locator": "Sec 4.3 baseline",
+   "quote": "we intentionally run the baseline for twice as many iterations as GEA so that the total number of evolved agents is comparable across methods",
+   "support_explanation": "Budget parity by number of evolved agents (60 each on SWE-bench) with matched Haiku-to-Sonnet schedules; reflection input size differs.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "locator": "Sec 5.1",
+   "quote": "On SWE-bench Verified, GEA improves performance from 20.0% to 71.0%, while under the same number of evolved agents, the DGM baseline achieves only 56.7%.",
+   "support_explanation": "Headline; 20.0% = 12/60 and 56.7% = 34/60 imply 60-task denominators, while 71.0% is not a multiple of 1/60.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "locator": "Sec 5.1",
+   "quote": "On Polyglot, GEA boosts performance from 38.2% to 88.3%, significantly outperforming the DGM baseline (68.3%).",
+   "support_explanation": "Polyglot headline: 88.3% = 53/60 and 68.3% = 41/60.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "locator": "Sec 5.1",
+   "quote": "GEA achieves performance comparable to or exceeding state-of-the-art human-designed agents on both benchmarks: 71.0% vs. 71.8% on SWE-bench Verified, and 88.3% vs. 52.0% on Polyglot.",
+   "support_explanation": "Human-designed entries are full-benchmark leaderboard results with GPT-5 backbones (OpenHands, Aider); GEA numbers come from a 60-task staged evaluation with Claude models, so the comparison mixes subsets and backbones.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "locator": "Table 1",
+   "quote": "Top-1 56.7% 71.0% 9 (15.0%) 17 (28.3%) Top-3 48.3% 63.3% 13 (21.7%) 17 (28.3%) Top-5 45.0% 58.3% 16 (26.7%) 18 (30.0%)",
+   "support_explanation": "Worst-case success of the top-k and unique-ancestor counts: GEA's top-5 floor (58.3%) exceeds DGM's single best (56.7%); denominators are 60 (ancestor counts 17/60 = 28.3%); single run per method.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M1",
+   "locator": "Sec 5.2",
+   "quote": "GEA integrated eight of these functionalities into its best agent, whereas the best DGM agent integrated only five.",
+   "support_explanation": "Observational evidence (nine tool-level modifications in Fig 4) that sharing propagates tools across branches in one GEA run versus one DGM run.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M1",
+   "locator": "Sec 5.1",
+   "quote": "Notably, GEA exhibits faster and more pronounced improvement in the mid-to-late stages of evolution compared to DGM",
+   "support_explanation": "Mid-to-late stages coincide with the switch to Sonnet 4.5; claim of enhanced self-improvement ability is inferred from curves, not from a descendant-productivity measurement.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "M1",
+   "locator": "Sec 5.3",
+   "quote": "GEA’s best-discovered agent driven by GPT-series and Claude-series models consistently achieve higher performance than their corresponding initial agents on both SWE-bench and Polyglot benchmarks.",
+   "support_explanation": "Model-transfer control against the iteration-0 agent per backbone; effect sizes are only in Fig 5 (not readable), and tasks are the same benchmark.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "M1",
+   "locator": "Table 2",
+   "quote": "DGM 5 4 5 6 5 5.0 GEA (Ours) 1 1 2 1 2 1.4",
+   "support_explanation": "Iterations to repair an injected framework bug in five trials; per-trial values reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "M1",
+   "locator": "Sec 5.4",
+   "quote": "For comparison, under the self-evolution setting, the bugged agent evolves independently without access to external experience sharing.",
+   "support_explanation": "Baseline has no access to a bug-free agent's traces while GEA's group contains one: the experiment tests information access by construction and does not control for it (a DGM variant allowed to read a better agent's traces is absent).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "M1",
+   "locator": "Appendix A.1",
+   "quote": "the estimated cost of completing a full run is approximately USD 13,000 per method on SWE-bench and USD 1,500 on Polyglot",
+   "support_explanation": "Cost estimate with per-model per-task breakdown; dominated by benchmark evaluation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "M1",
+   "locator": "Appendix A.1",
+   "quote": "Since we generate the same number of agents for both methods, their overall costs are very similar.",
+   "support_explanation": "Cost parity argued from equal agent counts; extra reflection tokens from pooled traces and the o1 reflection spend are not itemised.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "M1",
+   "locator": "Appendix Table 3",
+   "quote": "docutils_debug +0.10 Modified core agent logic +0.10 Updated tests logic +0.22 Add snippet_extract tool +0.10",
+   "support_explanation": "Top-1 lineage: the three largest gains (+0.10, +0.10, +0.22) come from a debugging patch, core-logic and test-running changes; deltas for the whole lineage sum to about +0.60 although the reported rise is 0.20 to 0.71, so deltas are not additive or are measured under different models.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E032",
+   "material_id": "M1",
+   "locator": "Appendix Table 3 caption",
+   "quote": "Across all three agents, the performance-improving patches primarily focus on enhancing the agents’ workflows and tool usage, rather than relying on model-specific prompting strategies.",
+   "support_explanation": "Classification of patches by description is the evidence for model-agnostic gains.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E033",
+   "material_id": "M1",
+   "locator": "Sec 5.1 evolutionary patterns",
+   "quote": "reaching 88.3% in just 4 iterations with a total of 8,677 lines of code added",
+   "support_explanation": "Several thousand lines of added code per run; no audit of benchmark-specific content.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E034",
+   "material_id": "M1",
+   "locator": "Impact Statement",
+   "quote": "the evolutionary process may inadvertently introduce directions misaligned with human intent while consuming substantial computational resources",
+   "support_explanation": "Authors acknowledge cost/alignment risks; sandboxed experiments.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "The agent's own framework code (tools, workflows, prompting strategy) as an archive of agents; baseline = single-lineage DGM-style evolution",
+   "information": "Per parent: its applied patches, a predicted patch for a sampled unsolved benchmark task, full tool-invocation logs and the evaluation outcome; GEA pools these across the parent group and shows the union to each member's reflection",
+   "operation": "Reflect (GPT-o1) turns shared traces into evolution directives; the agent's evolve module writes framework-level patches; patched agent is run on tasks",
+   "output": "K offspring agents per iteration (K=2), each with its own code diverged by patches",
+   "conditions": "Benchmark tasks and their pass/fail outcomes visible to the improver; group size 2; Haiku-to-Sonnet schedule",
+   "feedback": "Coding-benchmark pass/fail on staged evaluation sets",
+   "selection_rule_data": "Archive admission: compiles and basic function (non-zero on 10 sanity tasks); no performance or regression gate",
+   "persistence": "Agent archive with ancestry (ancestor counts tracked)",
+   "later_use": "Archived agents are sampled as parents and their traces pooled in later iterations",
+   "claimed_effect": "Faster improvement and more tool consolidation than single-lineage evolution at equal agent count",
+   "failure_boundary": "Single run per method; benchmark tasks double as evolution feedback; model upgrade mid-run; K=2 only",
+   "evidence_ids": [
+    "E003",
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E014",
+    "E015"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "Parent-group selection rule over the archive",
+   "information": "Per-agent benchmark performance alpha_i and binary task-success vectors z_i over probe tasks",
+   "operation": "score(i) = alpha_i x sqrt(nov(i)), nov = mean cosine distance to M=4 nearest neighbours; take top-K",
+   "output": "Parent group G of size K",
+   "conditions": "Probe task set and the set used for alpha_i not specified; scores from Haiku-era and Sonnet-era agents are mixed",
+   "feedback": "Staged benchmark evaluation",
+   "selection_rule_data": "Same benchmark sets drive both parent choice and reported results",
+   "persistence": "Archive is append-only for qualifying agents",
+   "later_use": "Chosen parents are edited and their traces shared",
+   "claimed_effect": "Balances exploitation and exploration so diverse branches are available to share",
+   "failure_boundary": "Not ablated against DGM's selection; novelty weight fixed",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E016",
+    "E017",
+    "E018"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Open-ended self-evolving agents evolve individual lineages in strictly isolated tree branches, so early exploratory discoveries are rarely consolidated into the best agent.",
+  "checked_gap": "Specific and partly measured in the paper: four of nine key tools found in isolated DGM branches never reached its best agent (Fig 4, in text), and ancestors per best agent are 9 vs 17. The causal role of isolation versus selection rule or sample count is not separated.",
+  "lineage_closest_adjacent": "Ancestors: DGM (open-ended archive, the re-implemented baseline), quality-diversity novelty search (Mouret and Clune, Pugh et al., cited for the selection rule), reflection-based and chain-based self-improvers. Other population methods that already share information across candidates (cross-over, shared program database, group reflections) are not discussed or compared in the package text; neighbour originals absent.",
+  "residue": "Whether cross-lineage experience sharing, rather than larger parent group or novelty selection, drives consolidation; whether benefits persist beyond a single run and beyond K=2.",
+  "stakes": "Cumulative progress of self-modifying coding agents under a fixed evaluation budget (about USD 13,000 per run).",
+  "method_response": "Pool traces of a performance-novelty-selected parent group and let each member reflect on all of them.",
+  "remaining_gap": "Ablation of sharing vs selection, variance across runs, held-out evaluation of the best agent, and improver-level evidence.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E018",
+   "E023",
+   "E024"
+  ],
+  "unresolved": [
+   "Closest alternatives' originals not in package",
+   "Whether DGM baseline uses its original selection rule"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "Definition match: the conventionally fixed unit of an iterative evolutionary procedure (an individual parent with isolated lineage) is treated as a free design variable (a group with pooled experience). Sub-cards C15/C23/C24 concern 3D representation, diffusion-chain internals and diffusion conditioning interfaces, so none applies (sub null).",
+    "success_failure_checks": "Success: liberated component named with reason (met: 'AI agents are not biological individuals'); load-bearing mechanism isolated by ablation (unmet: sharing and novelty selection are changed together, no K sweep); order-of-magnitude or incumbent-matching payoff (partial: matches DGM-style budget, comparison to humans is confounded). Failure: strongest baselines missing and several changes at once (present).",
+    "evidence_ids": [
+     "E001",
+     "E008",
+     "E018",
+     "E023"
+    ],
+    "reason": "Core move is relaxing the individual-lineage assumption of the evolution loop; the diffusion/3D sub-cards do not describe it."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Single primary assigned; no distinct second operation needing another main card.",
+  "executes_pattern": true,
+  "resolves_problem": "partial: more tools reach the best agent and the top-5 floor exceeds DGM's best in one run, but the isolation bottleneck is not separated from selection or sampling effects."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H20",
+    "version": "v2.2-cards",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "condition": "rsi:make_the_improver_editable/S5",
+      "status": "met",
+      "reason": "Offspring are archived regardless of improvement; progress can route through non-incumbent ancestors."
+     },
+     {
+      "condition": "rsi:make_the_improver_editable/S4",
+      "status": "met",
+      "reason": "Cost per run is estimated with a per-model breakdown."
+     },
+     {
+      "condition": "rsi:make_the_improver_editable/S1",
+      "status": "partial",
+      "reason": "Fixed anchors are implicit (benchmark evaluators and the GPT-o1 reflection model); promotion rule is not stated as an immutable anchor."
+     },
+     {
+      "condition": "rsi:make_the_improver_editable/S2",
+      "status": "partial",
+      "reason": "Parents ranked by own performance and novelty, not by descendant productivity."
+     },
+     {
+      "condition": "rsi:make_the_improver_editable/F3",
+      "status": "unmet",
+      "reason": "Failure mode present: repeated evaluation on small fixed subsets drives both selection and reporting."
+     },
+     {
+      "condition": "rsi:make_the_improver_editable/F4",
+      "status": "unmet",
+      "reason": "Failure mode present: a single evolution run per method; two systems are not repeated seeds."
+     },
+     {
+      "condition": "rsi:make_the_improver_editable/F5",
+      "status": "partial",
+      "reason": "Anchor leak risk: reflection by a stronger external model (GPT-o1) and a mid-run model upgrade."
+     }
+    ],
+    "evidence_ids": [
+     "E003",
+     "E010",
+     "E011",
+     "E016",
+     "E017",
+     "E029"
+    ]
+   },
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H15",
+    "version": "v2.2-cards",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "condition": "rsi:population_search_executable_fitness/S5",
+      "status": "partial",
+      "reason": "Shared traces earn their place by being those of high-scoring agents, but items are not credited by child-vs-parent fitness change and no matched-budget no-sharing ablation exists."
+     },
+     {
+      "condition": "rsi:population_search_executable_fitness/H15-step4",
+      "status": "partial",
+      "reason": "Sharing scope (parent group of 2) is declared; transfer across campaigns is not tested."
+     }
+    ],
+    "evidence_ids": [
+     "E008",
+     "E015"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "v2.2-cards",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "condition": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "met",
+      "reason": "Proposer sees raw evidence: complete tool invocation history, patches and outcomes."
+     },
+     {
+      "condition": "rsi:attribute_and_patch_incumbent/S3",
+      "status": "unmet",
+      "reason": "No replay/regression check or rollback; a functional-sanity gate only."
+     },
+     {
+      "condition": "rsi:attribute_and_patch_incumbent/H12-step4",
+      "status": "unmet",
+      "reason": "Promotion/selection uses the scored benchmark batch rather than a separate split."
+     }
+    ],
+    "evidence_ids": [
+     "E007",
+     "E009",
+     "E011"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": [
+   "Group-pooled experience traces in archive-based evolution are described inside H20 step 2; no card change proposed."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "make_the_improver_editable",
+   "domain_sub": "H20",
+   "operation_correspondence": "RS: free a conventionally fixed component of an iterative procedure (unit of evolution); domain: branch self-modifying agents from an archive with a parent-selection rule. GEA changes the parent-selection/experience-input unit from one lineage to a pooled group.",
+   "necessary_conditions_differences": "RS expects an ablation reverting the redesign (absent); H20 expects held-out certification with independent search seeds (absent).",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E008",
+    "E018"
+   ]
+  },
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "attribute_and_patch_incumbent",
+   "domain_sub": "H12",
+   "operation_correspondence": "Reflection over raw traces yields framework-level patches to the agent's own code (tools, workflow); this is the proposal step inside each evolution iteration.",
+   "necessary_conditions_differences": "H12 requires replay/regression promotion and a closed test split; GEA admits on compile/basic function only.",
+   "evidence_ids": [
+    "E007",
+    "E009"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/generative_process_redesign.md Reviewer expectations #1 (both)"
+   ],
+   "applies_when": "A conventionally fixed component is redesigned",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Isolated branches are shown to lose tools (4 of 9) in one DGM run, but no ablation removes sharing alone while keeping the selection rule and group size.",
+   "evidence_ids": [
+    "E024",
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-2",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card #2 (reject_reviews)"
+   ],
+   "applies_when": "Strong obvious baselines exist",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Only a re-implemented DGM baseline; no cross-over/pooled-archive variant of single-lineage evolution.",
+   "evidence_ids": [
+    "E018",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-3",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card #3 (both)"
+   ],
+   "applies_when": "Several changes introduced together",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Novelty-based group selection, sharing, group size and the baseline's selection rule are not separately ablated.",
+   "evidence_ids": [
+    "E004",
+    "E008",
+    "E015",
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-5",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card #5 (reject_reviews)"
+   ],
+   "applies_when": "Gains could stem from scale or compute",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Equal numbers of evolved agents and matched model schedules, but pooled traces enlarge reflection input and the model upgrade mid-run confounds raw curves.",
+   "evidence_ids": [
+    "E017",
+    "E019",
+    "E030"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S3",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json make_the_improver_editable S3"
+   ],
+   "applies_when": "Claim that the editable improver beats the fixed one",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Compared with an individual-lineage evolver (DGM re-implementation) and with human frameworks, but no fixed hand-designed improver baseline for the group mechanism.",
+   "evidence_ids": [
+    "E018",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F3",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json make_the_improver_editable F3"
+   ],
+   "applies_when": "Repeated evaluation on small fixed subsets",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Failure mode present: roughly 60-task staged sets drive parent selection and are the reported scores.",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E020"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F4",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json make_the_improver_editable F4"
+   ],
+   "applies_when": "Noisy evaluations across generations",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "One evolution run per method; no repeated seeds for the headline comparison.",
+   "evidence_ids": [
+    "E020",
+    "E023"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/H20-step5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H20.md Step-by-Step 5"
+   ],
+   "applies_when": "Certification of descendants",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Model transfer to GPT/Claude backbones is shown against the iteration-0 agent; held-out tasks and independent seeds are not.",
+   "evidence_ids": [
+    "E013",
+    "E026"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json attribute_and_patch_incumbent S3"
+   ],
+   "applies_when": "Patches replace or extend an incumbent",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No regression replay or rollback; archive admission is by compile/basic function.",
+   "evidence_ids": [
+    "E009",
+    "E014"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json attribute_and_patch_incumbent S5"
+   ],
+   "applies_when": "Diagnosis of failures needs full evidence",
+   "applicable": true,
+   "status": "met",
+   "reason": "Complete tool invocation history, patches and outcomes are given to reflection.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2602.04837-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 4.2 model schedule; Sec 5.1 mid-to-late-stage claim"
+   ],
+   "applies_when": "Backbone changes within an evolution run",
+   "applicable": true,
+   "status": "challenged_with_evidence",
+   "reason": "Acting model switches from Haiku to Sonnet in the last third; archive scores and the iteration-0 to final comparison mix scaffold evolution with the model upgrade.",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2602.04837-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 4.1 benchmarks vs Sec 4.3 human frameworks"
+   ],
+   "applies_when": "Comparing with leaderboard systems",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Human entries are full-benchmark GPT-5 results; GEA figures are 60-task staged results with Claude models; the Polyglot 88.3% vs 52.0% comparison is not like-for-like.",
+   "evidence_ids": [
+    "E011",
+    "E013",
+    "E022"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2602.04837-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 5.4 robustness design"
+   ],
+   "applies_when": "Robustness claim from bug-repair iterations",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Five per-trial counts are given, but the baseline lacks access to a bug-free peer's traces by design.",
+   "evidence_ids": [
+    "E027",
+    "E028"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2602.04837-4",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 5.1 headline numbers; Table 1"
+   ],
+   "applies_when": "Headline percentages are multiples of the evaluation size",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "71.0% is not a multiple of 1/60 while other Table 1 entries are; the evaluation set behind each headline figure is not unambiguous.",
+   "evidence_ids": [
+    "E012",
+    "E020",
+    "E023"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "GEA significantly outperforms state-of-the-art self-evolving methods under the same number of evolved agents.",
+   "setting": "SWE-bench Verified (about 60 tasks per agent in staging) and Polyglot (10 + 50 tasks), K=2, Claude Haiku/Sonnet 4.5 with GPT-o1 reflection",
+   "baseline_control": "Re-implemented DGM with 2x iterations (60 agents each)",
+   "selection_vs_test": "Same staged sets drive parent selection and reporting; only top-2 get a full-benchmark run; Polyglot has a 10-task evolution set and a 50-task unseen set whose scores are used to pick agents",
+   "result_denominator": "SWE 71.0% vs 56.7%; Polyglot 88.3% vs 68.3%; single run each; 1 task = 1.7 points",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013",
+    "E019",
+    "E020",
+    "E021",
+    "E023"
+   ],
+   "counterevidence": [
+    "E017",
+    "E018",
+    "E012"
+   ],
+   "allowed_conclusion": "In one run per method on staged benchmark subsets, the group-sharing system reached higher scores than a DGM re-implementation at equal agent count; effect size and attribution to sharing are uncertain."
+  },
+  {
+   "claim_id": "C2",
+   "text": "GEA converts exploratory diversity into sustained progress by consolidating tools across branches.",
+   "setting": "Fig 4 tool-level analysis, Table 1 ancestor counts",
+   "baseline_control": "DGM run",
+   "selection_vs_test": "n/a (descriptive)",
+   "result_denominator": "8 of 9 tools integrated vs 5; 17 vs 9 ancestors",
+   "evidence_ids": [
+    "E023",
+    "E024"
+   ],
+   "counterevidence": [
+    "E018"
+   ],
+   "allowed_conclusion": "Descriptively, more discovered tools reach GEA's best agent in this run; no ablation shows sharing is the cause."
+  },
+  {
+   "claim_id": "C3",
+   "text": "GEA matches or exceeds top human-designed agent frameworks without human intervention.",
+   "setting": "Comparison with OpenHands + GPT-5 (71.8%) and Aider + GPT-5 (52.0%)",
+   "baseline_control": "leaderboard entries",
+   "selection_vs_test": "different subsets and backbones",
+   "result_denominator": "71.0% vs 71.8%; 88.3% vs 52.0%",
+   "evidence_ids": [
+    "E022"
+   ],
+   "counterevidence": [
+    "E011",
+    "E013"
+   ],
+   "allowed_conclusion": "Not supported as stated: the comparison mixes evaluation subsets and model backbones."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Improvements transfer across coding models and are more robust to framework bugs.",
+   "setting": "Fig 5 transfer; Table 2 injected bugs",
+   "baseline_control": "iteration-0 agent per backbone; independently evolving DGM agent",
+   "selection_vs_test": "same benchmark tasks for transfer",
+   "result_denominator": "bug repair 1.4 vs 5.0 iterations over 5 trials",
+   "evidence_ids": [
+    "E026",
+    "E027",
+    "E028"
+   ],
+   "counterevidence": [
+    "E028"
+   ],
+   "allowed_conclusion": "Best agent beats its initial agent under several backbones (effect sizes unreadable); faster repair is expected from the added information access."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "In a single evolution run per method with equal numbers of evolved agents, a group-pooled-experience evolver reached higher staged-benchmark scores and integrated more distinct tools into its best agent than a re-implemented DGM; transfer of the best agent across several coding backbones is reported against the initial agent.",
+  "unresolved": [
+   "Contribution of experience sharing vs novelty selection vs K",
+   "Held-out performance of the best agent",
+   "Seeds/variance",
+   "Effect of the mid-run Haiku-to-Sonnet switch",
+   "Improver-level evidence"
+  ],
+  "level_reason": "Improvements are shown on the sets that drive parent selection (EVIDENCE rule 2); model-transfer is on the same benchmark, so the level stays task."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete bottleneck (branch isolation leaves discovered tools unused) with a partial in-paper measurement of lost tools; DGM is the clear nearest neighbour, but other mechanisms that already share information across candidates are not examined.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E023",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E018"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Pooling patches, task-level logs and outcomes across a parent group and reflecting on them is a clear, reconstructable operation that predicts faster cross-branch propagation and bug repair; alternative explanations (selection rule, more tokens, K) are not separated.",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E004"
+   ],
+   "counterevidence_ids": [
+    "E018"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Algorithms 1-2 give the loop and archive reading, but admission is compile/basic function only with no regression check, rollback or conflict handling between pooled directives, K fixed at 2, and the probe-task and performance sets are unspecified.",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E006",
+    "E009",
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E009",
+    "E006"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Test-based pass rates on SWE-bench/Polyglot are valid, but headline numbers use roughly 60-task staged sets with ambiguous denominators, and the human-framework comparison mixes subsets and backbones.",
+   "evidence_ids": [
+    "E011",
+    "E020",
+    "E022"
+   ],
+   "counterevidence_ids": [
+    "E012",
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "One baseline (re-implemented DGM) with matched agent counts and a model-transfer control, plus observational tool-propagation data; no ablation of sharing vs selection vs K, the mid-run model upgrade confounds curves, and the bug-repair test gives the treatment extra information.",
+   "evidence_ids": [
+    "E019",
+    "E024",
+    "E026",
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E017",
+    "E018",
+    "E028"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Selection and reporting share the same small staged sets and benchmark outcomes feed the improver; only Polyglot's 10-task evolution set vs 50-task set and a top-2 full-benchmark run (not clearly reported) give partial separation, and best-agent picking uses the unseen-set scores.",
+   "evidence_ids": [
+    "E007",
+    "E011",
+    "E012",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E006",
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Task counts are inferable and per-trial values are given for the bug test (n=5), but headline results come from one run per method with one task worth 1.7 points and no intervals.",
+   "evidence_ids": [
+    "E020",
+    "E023",
+    "E027"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Run cost estimated (about USD 13,000 SWE-bench, 1,500 Polyglot) with per-model/task breakdown and parity argued by equal agent counts and model schedules; reflection token overhead of pooled traces is not itemised.",
+   "evidence_ids": [
+    "E019",
+    "E029",
+    "E030"
+   ],
+   "counterevidence_ids": [
+    "E030"
+   ],
+   "search_scope": []
+  }
+ },
+ "rationale": "Plausible group-experience evolver; matched-agent baseline but single run, shared selection/report sets, model switch, no sharing ablation.",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r10b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "aeca7209de23ba8ec9b1f3e274508a8113501ffd9709824a60216d9634b6122d",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker subagent has no accessible run receipt; model type as dispatched by controller.",
+  "timestamp": "2026-10-21T23:12:02Z"
+ },
+ "score": {
+  "raw": 56.25,
+  "display": 56.3,
+  "lower": 56.25,
+  "upper": 56.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

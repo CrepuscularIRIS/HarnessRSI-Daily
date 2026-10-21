@@ -1,0 +1,1150 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r10a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整正文+附录已读；闭环为 A 类（经验池写回→后续任务读取），评测含固定池与在线更新两种变体。",
+ "paper": {
+  "paper_key": "2512.10696",
+  "paper_id": "2512.10696",
+  "title": "Remember Me, Refine Me: A Dynamic Procedural Memory Framework for Experience-Driven Agent Evolution",
+  "version": "2512.10696v2",
+  "claim_type": "system_method",
+  "central_claim": "ReMe, a three-phase procedural memory framework (multi-faceted distillation, context-adaptive reuse, utility-based refinement), establishes a new state of the art in agent memory on BFCL-V3 and AppWorld, and shows a memory-scaling effect: Qwen3-8B with ReMe outperforms larger memoryless Qwen3-14B."
+ },
+ "provenance": {
+  "input_hash": "fe2e232366fcbb8c0dfa55d8c22068261102d4f66b473bf912ffff941e7837d7",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; worker read full text incl. appendices A-E and prompt tables; no page images provided.",
+  "timestamp": "2026-10-21T23:06:27Z"
+ },
+ "materials": [
+  {
+   "material_id": "2512.10696:v2:text",
+   "url": "https://arxiv.org/html/2512.10696v2",
+   "sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "chars": 62531,
+   "sections_read": [
+    "abstract",
+    "1 Introduction",
+    "2 Related Works",
+    "3 Methodology",
+    "4 Experiments (4.1-4.4)",
+    "5 Conclusion",
+    "Limitations",
+    "Appendix A-E incl. Tables 7-15"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "rationale": "闭环记忆框架，固定池有训练/测试分离且消融较全；dynamic 变体在评测流上更新、预算与顺序不清，8B>14B 主张仅 Pass@4 微弱成立。",
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Abstract",
+   "quote": "Qwen3-8B equipped with ReMe outperforms larger, memoryless Qwen3-14B",
+   "support_explanation": "Headline memory-scaling claim.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 1",
+   "quote": "Qwen3-8B No Memory 40.33 ±0.94 59.55 ±0.83 14.97 ±0.24 32.85 ±2.11 27.65 46.20",
+   "support_explanation": "8B no-memory control: avg Avg@4 27.65, avg Pass@4 46.20.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 1",
+   "quote": "ReMe (dynamic) 45.17 ±0.36 68.00 ±0.55 24.70 ±1.04 42.06 ±0.74 34.94 55.03",
+   "support_explanation": "8B + ReMe(dynamic): avg Avg@4 34.94, avg Pass@4 55.03.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 1",
+   "quote": "Qwen3-14B No Memory 48.66 ±1.51 68.22 ±0.63 22.57 ±0.19 41.07 ±0.84 35.62 54.65",
+   "support_explanation": "14B no-memory: avg Avg@4 35.62 (> 34.94 of 8B+ReMe dynamic), avg Pass@4 54.65.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 1",
+   "quote": "ReMe (fixed) 44.50 ±0.85 65.77 ±0.63 17.06 ±0.25 36.31 ±1.29 30.78 51.04",
+   "support_explanation": "8B + ReMe(fixed) pool built on training split: +4.17 BFCL Avg@4, +2.09 AppWorld Avg@4 over no-memory.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 1",
+   "quote": "A-Mem 41.22 ±0.61 62.00 ±2.37 12.95 ±0.37 29.76 ±2.80 27.09 45.88",
+   "support_explanation": "A-Mem baseline falls below No Memory on AppWorld (12.95 vs 14.97) - baseline strength is uncertain.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.2",
+   "quote": "Qwen3-14B + ReMe (dynamic) exceeds the overall performance of Qwen3 - 32B without memory (Avg@4: 44.66% vs. 40.89%; Pass@4: 63.71% vs. 61.52%)",
+   "support_explanation": "14B+ReMe beats 32B none on both averaged metrics.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.1 Datasets",
+   "quote": "The remaining 150 tasks serve as the evaluation set.",
+   "support_explanation": "BFCL-V3: 50 random tasks build the pool, 150 evaluate (same category, in-distribution).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.1 Datasets",
+   "quote": "we use 90 training tasks for the initial experience acquisition stage and evaluate agents on 168 test-normal tasks",
+   "support_explanation": "AppWorld: official train/test-normal split separates pool construction from evaluation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.1 Baselines",
+   "quote": "For fair comparison, all methods perform experience retrieval only once at the beginning of each task.",
+   "support_explanation": "Baselines share the retrieve-once protocol; addition only on success for all.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.1 Implementation",
+   "quote": "lies in whether the experience pool is dynamically updated during agent execution",
+   "support_explanation": "ReMe(dynamic) updates the pool during evaluation, i.e. on the test stream; task order/trial structure not specified.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 3.4",
+   "quote": "selective addition, where only trajectories that lead to success are distilled into experiences and stored",
+   "support_explanation": "Selective-addition gate for new entries.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 3.4",
+   "quote": "we limit the maximum number of self-reflections to 3",
+   "support_explanation": "Failure-aware reflection retries up to 3 extra trials per failed task.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 3.4",
+   "quote": "which increments by 1 each time its recall contributes to a successful task completion",
+   "support_explanation": "Utility credit: any recall in a successful task adds 1, regardless of co-retrieved entries.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 3.4",
+   "quote": "removes any experience whose average utility across all its past recalls falls below a predefined threshold",
+   "support_explanation": "Utility-based deletion rule (retrieved >= alpha=5 times, u/f <= beta=0.5).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 3",
+   "quote": "– ✓ ✓ – 45.00% 64.66% – ✓ ✓ ✓ 45.17% 68.00%",
+   "support_explanation": "Adding deletion: +0.17 Avg@4, +3.34 Pass@4 (8B, BFCL only, no std reported).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 3",
+   "quote": "✓ – – – 40.83% 62.00% – ✓ – – 44.33% 64.66%",
+   "support_explanation": "Full addition 40.83/62.00 vs selective addition 44.33/64.66.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 2",
+   "quote": "Trajectory-level 43.00 +2.67 60.00 +0.45 49.66 +1.00 69.33 +1.11 Keypoint-level 44.50 +4.17 65.77 +6.22 51.89 +4.23 72.44 +4.22",
+   "support_explanation": "Granularity ablation (8B/14B, ReMe fixed, BFCL).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 4",
+   "quote": "No Memory – – 24.41% 28.50% + ReMe – – 27.17% 34.66% ✓ – 28.91% 36.67% – ✓ 28.67% 37.33% ✓ ✓ 29.00% 40.67%",
+   "support_explanation": "Rerank and rewrite ablation (8B, thinking off, single numbers).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.4",
+   "quote": "stronger summarization capability yields clear performance improvements in both Avg@4 and Pass@4 metrics",
+   "support_explanation": "Gain depends on summarizer strength; main runs use the executor as summarizer.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 6",
+   "quote": "Qwen3-8B No Memory 21.42 + ReMe 23.96 +2.54",
+   "support_explanation": "Only inference latency per task is reported (+2.54 s).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Limitations",
+   "quote": "relying primarily on an LLM-as-judge approach may overlook nuanced aspects of experience quality and relevance",
+   "support_explanation": "Admission gate relies on LLM judge; authors acknowledge.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Limitations",
+   "quote": "currently employs a fixed retrieval strategy, where experiences are retrieved once at the beginning of each task",
+   "support_explanation": "Retrieval is once per task.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.2",
+   "quote": "surpasses the No Memory baseline by an improvement of 7.29% Pass@4 and 8.83% Avg@4 on average",
+   "support_explanation": "Text swaps the Table 1 numbers (Avg@4 gain is 7.29, Pass@4 gain is 8.83).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "App D.2",
+   "quote": "Using the experience pool constructed from 50 tasks in base multi-turn category",
+   "support_explanation": "Pool from 50 base tasks evaluated on 600 tasks from other BFCL categories (Table 8: +5.24 overall for 8B).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.4 Error analysis",
+   "quote": "corrects 17 baseline-specific errors while introduces only 2 new ones",
+   "support_explanation": "Failure counts 62->47 on BFCL (8B).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "App B.2",
+   "quote": "we reproduce A-Mem using its open-source code, with slight prompt modifications to extract procedural memories",
+   "support_explanation": "Baselines are adapted re-implementations by the authors.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Abstract",
+   "quote": "treating memory as a static append-only archive",
+   "support_explanation": "Author gap: passive accumulation of append-only memory.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 1",
+   "quote": "Crucially, lack of timely update strategies causes the experience pool to degrade into a mixture of valid insights and toxic noise",
+   "support_explanation": "Cited stale-noise failure of unmanaged pools (external citation, not re-tested).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 2",
+   "quote": "These methods neglect strategic experience removal mechanism",
+   "support_explanation": "Claimed gap vs Agent KB/CER-type methods; other prior systems with pruning not discussed.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 1 caption",
+   "quote": "All results are computed as the average over three independent runs, with the superscript showing the standard deviation.",
+   "support_explanation": "Main results carry run std over three runs.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E032",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 13",
+   "quote": "Mark as invalid if score is below 0.3 or if there are fundamental issues with the experience.",
+   "support_explanation": "LLM-as-judge validation threshold.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E033",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Table 7",
+   "quote": "GPT-4.1 48.25% 53.33% +5.08% 54.67% +6.42%",
+   "support_explanation": "Cross-backbone gains on BFCL (Avg@4), six LLMs.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E034",
+   "material_id": "2512.10696:v2:text",
+   "material_sha256": "2acae485d9006339652e44e6a4044d34a3e6faf10c17729d66ba4a870a9d520e",
+   "locator": "Sec 4.4",
+   "quote": "Beyond the saturation point, retrieving more may degrade performance, primarily due to the higher chance of incorporating noisy experiences.",
+   "support_explanation": "Retrieval count K sensitivity; K=5 chosen.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "procedural experience pool (vector DB of experiences <when_to_use, content, tags, confidence, tools>)",
+   "information": "8 sampled trajectories per training task (temp 0.9); highest/lowest reward trajectories; environment success reward (threshold 1.0); summarizer = executor LLM",
+   "operation": "success-pattern recognition, failure analysis and comparative-insight generation -> LLM-as-judge validity check -> similarity dedup",
+   "output": "validated step-level experiences indexed by embedded usage scenario",
+   "conditions": "judge score < 0.3 rejected; dedup by cosine threshold (value not given)",
+   "feedback": "benchmark task reward; LLM judge",
+   "selection_rule_data": "LLM-judge validity + dedup on training-split trajectories",
+   "persistence": "vector DB (Elasticsearch)",
+   "later_use": "top-K=5 retrieved at task start",
+   "claimed_effect": "ReMe(fixed) > No Memory/A-Mem/LangMem",
+   "failure_boundary": "judge errors acknowledged; dedup threshold unreported; pool size not reported",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E032",
+    "E022",
+    "E018"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "retrieved guidance injected into the executor context",
+   "information": "current task query, retrieved experiences",
+   "operation": "embedding retrieval by usage-scenario key, optional LLM rerank, LLM rewrite into task-specific guidance",
+   "output": "rewritten guidance in context",
+   "conditions": "retrieval once per task",
+   "feedback": "none at inference",
+   "selection_rule_data": "top-K=5",
+   "persistence": "not_applicable (per task)",
+   "later_use": "same task",
+   "claimed_effect": "rerank+rewrite 27.17->29.00 Avg@4, 34.66->40.67 Pass@4 (8B, thinking off)",
+   "failure_boundary": "retrieval fixed at start; noisy extra experiences degrade",
+   "evidence_ids": [
+    "E019",
+    "E023",
+    "E034"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "experience pool contents over time (dynamic variant)",
+   "information": "outcome of each new task; retrieval counts f and successful-recall counts u per entry",
+   "operation": "add only successful-trajectory experiences; on failure retry with reflection (<=3) and keep lessons only if the retrial succeeds; delete entries with f>=5 and u/f<=0.5",
+   "output": "refined pool",
+   "conditions": "alpha=5, beta=0.5",
+   "feedback": "task success",
+   "selection_rule_data": "utility counters on the evaluation stream",
+   "persistence": "pool updated during execution",
+   "later_use": "subsequent tasks in the stream",
+   "claimed_effect": "dynamic > fixed (AppWorld 8B Avg@4 17.06->24.70; BFCL 44.50->45.17)",
+   "failure_boundary": "stream order/trials unspecified; credit shared across co-retrieved entries; no pool-size/deletion statistics",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013",
+    "E014",
+    "E015",
+    "E016"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Procedural memory is treated as passive append-only storage: coarse trajectory-level entries, retrieved experiences applied without adaptation, and no timely update/removal so pools degrade into valid insights plus toxic noise.",
+  "checked_gap": "Plausible and partly evidenced by this paper's own ablations (trajectory- vs keypoint-level; full vs selective addition). The statement that prior methods neglect removal is overstated: other contemporaneous memory systems with pruning/consolidation are not discussed.",
+  "lineage": {
+   "ancestors": [
+    "Synapse / HiAgent (raw trajectory memory)"
+   ],
+   "frontier": "AWM, Agent KB, CER (summarised workflows / skills), A-Mem, LangMem",
+   "this_paper_changes": "step-level multi-faceted distillation + scenario-indexed retrieval with rerank/rewrite + success-gated addition and utility-based deletion"
+  },
+  "closest_adjacent": [
+   {
+    "name": "Agent KB",
+    "source_version": "as described in 2512.10696v2 Sec 2",
+    "solves": "generalizable experience units with teacher-student retrieval",
+    "remains": "no strategic removal per authors"
+   },
+   {
+    "name": "A-Mem / LangMem",
+    "source_version": "baselines re-implemented in 2512.10696v2 App B.2",
+    "solves": "agentic / LangChain long-term memory",
+    "remains": "re-implementations with prompt changes; A-Mem below No Memory on AppWorld"
+   }
+  ],
+  "residue": "No isolating evidence that deletion (vs selective addition) fixes degradation: effect is +0.17 Avg@4 in a single-model ablation; pool growth and deletions are not reported.",
+  "stakes": "Compact, high-quality experience pools for lifelong agents",
+  "method_response": "three-phase lifecycle with explicit gating and pruning",
+  "remaining_gap": "retrieval-once limitation; LLM-judge reliability; stale/conflict handling beyond usage statistics",
+  "evidence_ids": [
+   "E028",
+   "E029",
+   "E030"
+  ],
+  "unresolved": [
+   "whether concurrent systems with pruning (not cited) already close the gap"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "conditioning substrate = retrievable bank embedded in shared space: executed",
+     "unified conditioning schema (when_to_use/content) : executed",
+     "upstream tuning to read the schema: not_applicable (frozen executors)",
+     "category-level holdout: not executed (BFCL random 50/150; AppWorld official split)",
+     "contamination audit: not reported",
+     "cheaper-baseline isolation: partial (trajectory-level, A-Mem, LangMem; no longer-context)"
+    ],
+    "success_failure_checks": [
+     "RE-1 conditioning toggle (No Memory vs ReMe): met",
+     "RE-2 contamination analysis: unknown",
+     "RE-3 cheaper alternative: partial",
+     "RE-6 sensitivity to conditioning source: met"
+    ],
+    "evidence_ids": [
+     "E002",
+     "E005",
+     "E018",
+     "E020",
+     "E025"
+    ],
+    "reason": "Retrieval of self-distilled experiences into context to solve new tasks without parameter updates matches the definition; C03 not assigned: no upstream tuning or held-out task-category design, and the load-bearing artifact is a maintained store rather than a unified format."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "primary assigned; sub null with differences stated",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: fixed-pool retained gains are evidenced; claim that utility deletion resolves pool degradation is not isolated"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "research/patterns/taxonomy.json@b115a69",
+    "fit": "strong",
+    "condition_checks": [
+     "rsi:abstract_experience_into_guidance/S2",
+     "rsi:abstract_experience_into_guidance/S3",
+     "rsi:abstract_experience_into_guidance/F5"
+    ],
+    "evidence_ids": [
+     "E012",
+     "E018",
+     "E032"
+    ],
+    "reason": "attempt -> success/failure/contrast reflection -> store -> retrieve into later tasks; construction stream (training split) separated from evaluation in the fixed variant."
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "research/patterns/taxonomy.json@b115a69",
+    "fit": "partial",
+    "condition_checks": [
+     "rsi:abstract_experience_into_guidance/S4",
+     "rsi:abstract_experience_into_guidance/S5"
+    ],
+    "evidence_ids": [
+     "E013",
+     "E014",
+     "E015"
+    ],
+    "reason": "dedup + utility deletion + success-gated add are explicit maintenance, but no update/merge/conflict operators and the editing policy is not ablated apart from addition/deletion."
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "version": "research/patterns/taxonomy.json@b115a69",
+    "fit": "partial",
+    "condition_checks": [
+     "rsi:evidence_gated_retention/S1",
+     "rsi:evidence_gated_retention/S2",
+     "rsi:evidence_gated_retention/S4",
+     "rsi:evidence_gated_retention/S5"
+    ],
+    "evidence_ids": [
+     "E014",
+     "E015",
+     "E016"
+    ],
+    "reason": "entries carry outcome-derived utility used for deletion, but credit is a recall-success count without a memory-off counterfactual or co-retrieval credit sharing."
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00"
+   },
+   "operation_correspondence": "retrieved experiences injected as conditioning without weight updates <-> H00 lessons retrieved into later contexts",
+   "necessary_conditions_and_differences": "rs card stresses unified-format training and held-out task categories; H00 stresses outcome grounding and separated streams. Paper meets the latter better (fixed pool, AppWorld split) and does not execute the former.",
+   "evidence_ids": [
+    "E005",
+    "E009",
+    "E018"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "evidence_gated_retention",
+    "sub": "H29"
+   },
+   "operation_correspondence": "no rs-card counterpart for retention gating; mapped only as the maintenance step of the conditioning substrate",
+   "necessary_conditions_and_differences": "H29 needs counterfactual credit; utility counter is correlational.",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "researchstudio-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md#Reviewer expectations (1st)"
+   ],
+   "applies_when": "gain attributed to retrieved conditioning",
+   "applicable": true,
+   "check": "Ablation that toggles the conditioning signal against the same system without it?",
+   "status": "met",
+   "reason": "No Memory vs ReMe with identical executor/prompt; also granularity and retrieval-key toggles.",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "researchstudio-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md#Reviewer expectations (2nd)"
+   ],
+   "applies_when": "held-out generalization claim",
+   "applicable": true,
+   "check": "Contamination/data-overlap analysis between adaptation tasks and evaluation set?",
+   "status": "unknown",
+   "reason": "No overlap analysis; BFCL pool and eval are random splits of one category; AppWorld uses official splits.",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "researchstudio-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md#Reviewer expectations (3rd)"
+   ],
+   "applies_when": "retrieval-conditioning method vs simpler conditioning",
+   "applicable": true,
+   "check": "Compared against longer context / nearest-neighbour / simpler retrieval under equal budget?",
+   "status": "partial",
+   "reason": "Trajectory-level retrieval and two memory baselines compared; no longer-context or equal-budget control.",
+   "evidence_ids": [
+    "E018",
+    "E006",
+    "E010"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "researchstudio-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md#Reviewer expectations (4th)"
+   ],
+   "applies_when": "multi-module pipeline",
+   "applicable": true,
+   "check": "Each component justified with its own ablation?",
+   "status": "partial",
+   "reason": "Addition, reflection, deletion, rerank, rewrite, granularity and retrieval key ablated; dedup and LLM-judge validation not; ablations are single-model, mostly no std.",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "researchstudio-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md#Reviewer expectations (5th)"
+   ],
+   "applies_when": "method claimed generic",
+   "applicable": true,
+   "check": "Generic across multiple tasks/domains without per-task search?",
+   "status": "partial",
+   "reason": "Two benchmarks (function calling, app control), three Qwen3 sizes, six extra LLMs on BFCL only.",
+   "evidence_ids": [
+    "E033",
+    "E025"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "researchstudio-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md#Reviewer expectations (6th)"
+   ],
+   "applies_when": "conditioning source is a built bank",
+   "applicable": true,
+   "check": "Sensitivity to quality/coverage of the conditioning source characterised?",
+   "status": "met",
+   "reason": "Summarizer capability, K sweep, retrieval key, 50-task pool transferred to 600 tasks.",
+   "evidence_ids": [
+    "E020",
+    "E034",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#abstract_experience_into_guidance.S2"
+   ],
+   "applies_when": "lessons extracted from outcomes",
+   "applicable": true,
+   "check": "Contrast (success vs failure) rather than narration?",
+   "status": "partial",
+   "reason": "Comparative-insight generation exists; its separate contribution is not ablated.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#abstract_experience_into_guidance.S3"
+   ],
+   "applies_when": "store content decided by outcomes",
+   "applicable": true,
+   "check": "Does a grounding signal decide what becomes a lesson?",
+   "status": "met",
+   "reason": "Benchmark reward defines success/failure trajectories; LLM judge acknowledged as imperfect.",
+   "evidence_ids": [
+    "E032",
+    "E022"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#abstract_experience_into_guidance.S4"
+   ],
+   "applies_when": "pool grows with use",
+   "applicable": true,
+   "check": "Explicit maintenance (dedup, consolidation, forgetting) with bounded growth shown?",
+   "status": "partial",
+   "reason": "Dedup and utility deletion exist; no merge/update operators; pool size and deletion counts not reported.",
+   "evidence_ids": [
+    "E015",
+    "E016"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "entries reused",
+   "applicable": true,
+   "check": "Gate on what is kept (tests/quality filter)?",
+   "status": "partial",
+   "reason": "LLM-judge + dedup + success-only addition; no execution/replay test of an entry.",
+   "evidence_ids": [
+    "E012",
+    "E032"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S1"
+   ],
+   "applies_when": "retention decided by measured utility",
+   "applicable": true,
+   "check": "Is there an explicit counterfactual (memory-on vs memory-off) behind each credit?",
+   "status": "unmet",
+   "reason": "u increments on any recall in a successful task; K=5 entries co-retrieved share credit implicitly; no paired memory-off run.",
+   "evidence_ids": [
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S4"
+   ],
+   "applies_when": "gate is a component",
+   "applicable": true,
+   "check": "Can the gate be stripped for a clean ablation?",
+   "status": "met",
+   "reason": "Table 3 toggles selective addition, reflection and deletion independently.",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S5"
+   ],
+   "applies_when": "gate has costs",
+   "applicable": true,
+   "check": "Cost of the gate stated openly?",
+   "status": "partial",
+   "reason": "Latency reported; reflection retrials and judge/rerank/rewrite calls not costed.",
+   "evidence_ids": [
+    "E021",
+    "E013"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "research/patterns/taxonomy.json@b115a69",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#index_experience_for_reuse.F3"
+   ],
+   "applies_when": "dynamic variant updates the store while evaluating",
+   "applicable": true,
+   "check": "Is the store kept apart from the evaluation stream?",
+   "status": "partial",
+   "reason": "True for ReMe(fixed); ReMe(dynamic) updates on the evaluation stream by design.",
+   "evidence_ids": [
+    "E011",
+    "E009"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2512.10696-1",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2512.10696v2 Sec 3.4"
+   ],
+   "applies_when": "progressive-optimization claim via deletion",
+   "applicable": true,
+   "check": "Pool size trajectory and number of additions/deletions reported to show refinement acts?",
+   "status": "unknown",
+   "reason": "Not reported in text or appendix.",
+   "evidence_ids": [
+    "E015",
+    "E016"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2512.10696-2",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2512.10696v2 Sec 4.1"
+   ],
+   "applies_when": "dynamic variant evaluated with Avg@4/Pass@4",
+   "applicable": true,
+   "check": "Task order fixed and trials prevented from sharing same-task experience across the four trials?",
+   "status": "unknown",
+   "reason": "Order and trial-pool sharing not described.",
+   "evidence_ids": [
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2512.10696-3",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2512.10696v2 Abstract, Table 1"
+   ],
+   "applies_when": "memory-scaling claim",
+   "applicable": true,
+   "check": "Is the 8B-with-memory > 14B-without claim consistent on Avg@4 and Pass@4?",
+   "status": "challenged_with_evidence",
+   "reason": "Table 1 averages: Avg@4 34.94 < 35.62; Pass@4 55.03 > 54.65 by 0.38; text also swaps the 7.29/8.83 gains.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E024",
+    "E001"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2512.10696-4",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2512.10696v2 Sec 3.4, 4.1"
+   ],
+   "applies_when": "dynamic variant compared with baselines without reflection",
+   "applicable": true,
+   "check": "Budget parity for reflection retrials and LLM calls (judge, rerank, rewrite)?",
+   "status": "unknown",
+   "reason": "Baselines add memory only upon success; extra attempts and calls are not accounted.",
+   "evidence_ids": [
+    "E013",
+    "E010"
+   ],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ReMe establishes a new state of the art in agent memory systems on BFCL-V3 and AppWorld.",
+   "setting": "Qwen3-8B/14B/32B, three runs; BFCL 150 eval tasks, AppWorld test-normal 168",
+   "baseline_control": "No Memory, A-Mem, LangMem (author re-implementations with prompt modifications, retrieve-once protocol)",
+   "selection_vs_test": "fixed pool built from training split; dynamic pool updated on the evaluation stream",
+   "result_denominator": "8B avg Avg@4 27.65 (none) / 27.09 / 27.79 / 30.78 (fixed) / 34.94 (dynamic); similar ordering for 14B and 32B",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E005",
+    "E006",
+    "E010",
+    "E031"
+   ],
+   "counterevidence_ids": [
+    "E027",
+    "E011"
+   ],
+   "allowed_conclusion": "Against these re-implemented baselines ReMe(fixed) and ReMe(dynamic) are best on both benchmarks with Qwen3 sizes; baseline fidelity and dynamic-stream protocol limit the SOTA wording."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Memory-scaling effect: Qwen3-8B with ReMe outperforms memoryless Qwen3-14B.",
+   "setting": "Table 1 averages over BFCL and AppWorld",
+   "baseline_control": "Qwen3-14B No Memory",
+   "selection_vs_test": "uses ReMe(dynamic)",
+   "result_denominator": "Pass@4 avg 55.03 vs 54.65 (+0.38); Avg@4 avg 34.94 vs 35.62 (-0.68); BFCL Avg@4 45.17 vs 48.66 (lower), AppWorld Avg@4 24.70 vs 22.57 (higher)",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E007"
+   ],
+   "counterevidence_ids": [
+    "E001",
+    "E024"
+   ],
+   "allowed_conclusion": "Only 14B+ReMe over 32B-none holds on both averaged metrics; 8B>14B holds on AppWorld and on averaged Pass@4 by 0.38, not on Avg@4 or on BFCL."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Each refinement component (selective addition, failure-aware reflection, utility-based deletion, rerank, rewrite) contributes.",
+   "setting": "Qwen3-8B, BFCL-V3 only",
+   "baseline_control": "stepwise ablation",
+   "selection_vs_test": "same eval set, no pool-evolution split reported",
+   "result_denominator": "full add 40.83/62.00 -> selective 44.33/64.66 -> +reflection 45.00/64.66 -> +deletion 45.17/68.00; rerank/rewrite 27.17/34.66 -> 29.00/40.67 (thinking off)",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E011"
+   ],
+   "allowed_conclusion": "Selective addition is clearly better than full addition; reflection/deletion effects are small or noise-level on Avg@4 and shown on one model/benchmark without std."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Keypoint-level experiences beat trajectory-level experiences.",
+   "setting": "ReMe(fixed), 8B/14B, BFCL",
+   "baseline_control": "trajectory-level pool",
+   "selection_vs_test": "pool from training split",
+   "result_denominator": "8B 44.50 vs 43.00 Avg@4; Pass@4 65.77 vs 60.00; 14B 51.89 vs 49.66",
+   "evidence_ids": [
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "allowed_conclusion": "Fine-grained extraction helps in this setting; Avg@4 gaps are small relative to run std."
+  },
+  {
+   "claim_id": "C5",
+   "text": "ReMe generalises across backbones and BFCL categories.",
+   "setting": "six additional LLMs on BFCL; other BFCL categories with pool from 50 base tasks",
+   "baseline_control": "No Memory",
+   "selection_vs_test": "pool from base category tasks",
+   "result_denominator": "e.g. GPT-4.1 48.25->53.33 (fixed)/54.67 (dynamic); overall 600+150 tasks 8B +5.24",
+   "evidence_ids": [
+    "E033",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "allowed_conclusion": "Consistent gains over no-memory on BFCL with several backbones/categories (single benchmark family)."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A pool built from separate training tasks (ReMe-fixed) improves Qwen3-8/14/32B over no-memory and two re-implemented memory baselines on BFCL-V3 (150 tasks) and AppWorld test-normal (168), with 3-run std; granularity and addition-strategy choices matter; online refinement helps further but is entangled with test-stream exposure (author_report).",
+  "cannot_say": [
+   "8B+ReMe > 14B in general (holds only on averaged Pass@4 by 0.38)",
+   "utility-based deletion is critical (Avg@4 +0.17 within noise, no std)",
+   "gains survive matched budget incl. reflection retrials",
+   "improver-level evidence"
+  ],
+  "unresolved": [
+   "dynamic-variant task order and trial sharing",
+   "pool size and deletion statistics",
+   "dedup threshold"
+  ],
+  "note": "author_report only; no reproduction or our_run."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "具体局限（被动累积、轨迹粒度粗、检索后不适配、无剔除）与最近邻（Synapse/HiAgent/AWM/Agent KB/CER/A-Mem/LangMem）清晰，且粒度与全量添加消融间接印证；但“忽略剔除机制”表述偏强（未讨论带剪枝的同期系统），残余瓶颈界定不完整。",
+   "evidence_ids": [
+    "E028",
+    "E029",
+    "E030"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "机制与问题对齐且有可检验预测：多面蒸馏（成功/失败/对比）、仅成功添加（单条失败轨迹信息不足）、使用情景索引+重排+重写、效用阈值删除；与朴素替代（轨迹级、全量添加）有可区分结果；但效用记账对共检索条目不分摊、缺反事实。",
+   "evidence_ids": [
+    "E012",
+    "E014",
+    "E015",
+    "E018",
+    "E017"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "操作链可重建：N=8采样、成功阈1.0、LLM-judge 0.3阈、相似度去重、top-K=5、反思≤3、α=5/β=0.5删除，下轮读取明确（任务开始一次检索）；缺去重阈值数值、版本/回退、池规模与删除计数、冲突/合并处理。",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014",
+    "E015",
+    "E032",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "BFCL-V3（AST+可执行）与 AppWorld 状态单元测试，指标与验证器可信，三次运行；Pass@4 偏宽松但与 Avg@4 并报；评测集较小（150/168），BFCL 自划分，记忆准入使用 LLM judge 但不在指标内。",
+   "evidence_ids": [
+    "E031",
+    "E009",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "有 store-off（No Memory）、两类记忆基线、颗粒度/添加策略/反思/删除/重排/重写/检索键/摘要模型/K 的多项消融，并有错误类别分析；缺口：消融多为 8B+BFCL 单配置且无 std、删除增益 Avg@4 仅+0.17、A-Mem 在 AppWorld 低于无记忆提示基线偏弱、缺等预算对照。",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E016",
+    "E017",
+    "E018",
+    "E019",
+    "E020",
+    "E034",
+    "E026"
+   ],
+   "counterevidence_ids": [
+    "E006",
+    "E027",
+    "E011"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "ReMe(fixed) 的池取自训练划分、AppWorld 用官方 train/test-normal、并有 BFCL 其他类别迁移（E025），较干净；但头条的 dynamic 变体在评测流上持续更新，任务顺序与 Avg@4 各次是否共享演进池未说明，BFCL 自划分同分布，无污染分析。",
+   "evidence_ids": [
+    "E009",
+    "E025"
+   ],
+   "counterevidence_ids": [
+    "E011",
+    "E008"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "主表给出三次独立运行均值±std；但消融（Tab 2-5）无 std、无显著性检验、无池重建方差；8B>14B 的 Pass@4 差仅0.38且小于 std 量级，删除的 Avg@4 增益+0.17在噪声内。",
+   "evidence_ids": [
+    "E031"
+   ],
+   "counterevidence_ids": [
+    "E016",
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "仅报告 AppWorld 推理延迟 +2.54s；未报告池构建成本（N=8采样、摘要/judge/重排/重写调用）、反思最多3次额外尝试是否计入预算、池规模；基线无反思重试，预算对等不清。",
+   "evidence_ids": [
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E013",
+    "E010"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 65.0,
+  "display": 65.0,
+  "lower": 65.0,
+  "upper": 65.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}
