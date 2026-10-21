@@ -116,7 +116,18 @@ def main(argv: list[str]) -> int:
     main_of, cond = context()
 
     if "--apply-arb" in argv:
-        decisions = json.loads((R / f"judgments/passes/{batch}.arb.jsonl").read_text())["decisions"]
+        raw = (R / f"judgments/passes/{batch}.arb.jsonl").read_text()
+        try:
+            decisions = json.loads(raw)["decisions"]
+        except (json.JSONDecodeError, KeyError, TypeError):  # subagent format: one JSON line per decision
+            decisions = []
+            for line in raw.splitlines():
+                if not line.strip():
+                    continue
+                d = json.loads(line)
+                if "items" not in d:  # flat line: one field per line
+                    d = {"arxiv": d["arxiv"], "items": [{"field": d["field"], "value": d["value"], "quote": d.get("quote")}]}
+                decisions.append(d)
         records = {r["arxiv"]: r for r in (json.loads(l) for l in final_path.read_text(encoding="utf-8").splitlines() if l.strip())}
         conflicted = json.loads(conflicts_path.read_text())["conflicts"]
         by_aid = {}
