@@ -1,0 +1,229 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r09a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Improver (RL with an adaptive difficulty schedule) updates and delivers model weights; the evaluated object is the trained policy. Environments are human-engineered and static; the difficulty range is a within-run scalar scheduler, not a persisted harness component improved from feedback. Per frozen rubric A3 this is out of scope. Not scored.",
+ "paper": {
+  "paper_key": "2511.07317",
+  "paper_id": "arXiv:2511.07317",
+  "version": "2511.07317v2",
+  "title": "RLVE: Scaling Up Reinforcement Learning for Language Models with Adaptive Verifiable Environments",
+  "claim_type": "component_training",
+  "central_claim": "Training LMs with RL on procedurally generated verifiable environments whose difficulty adapts to the policy (RLVE), using 400 hand-engineered environments (RLVE-Gym), scales RL: environment scaling improves generalization to unseen environments and joint training on all 400 yields +3.37% average over six reasoning benchmarks from ProRL-1.5B-v2 versus +0.49% for continued RLVR with over 3x compute."
+ },
+ "provenance": {
+  "input_hash": "99ea0141399f5e68330e4b4a72a7701317fa4234bc661f0387e69f7092e1085c",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; configured model type only",
+  "timestamp": "2026-10-21T22:37:31Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2511.07317",
+   "url": "https://arxiv.org/html/2511.07317v2",
+   "sha256": "b44c6710cd4fad441602d67e211dc3584d934c90106cf5b68c1aba5524af57e5",
+   "sections_read": [
+    "abstract",
+    "1 intro",
+    "2 method (2.1-2.3)",
+    "3 RLVE-Gym principles",
+    "4 component analysis",
+    "5 scaling experiments",
+    "6 related work",
+    "7 future work",
+    "Appendix A/B/C/D/E headings and evaluation-setup passages (skimmed, environment catalogue not read line by line)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2511.07317",
+   "locator": "Abstract",
+   "quote": "yields a 3.37% absolute average improvement across six reasoning benchmarks, starting from one of the strongest 1.5B reasoning LMs.",
+   "support_explanation": "The reported retained improvement is in the policy model's benchmark performance, i.e. the product is trained weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2511.07317",
+   "locator": "2.3 RL Algorithm",
+   "quote": "Any algorithm applicable to RLVR can be directly applied to RLVE",
+   "support_explanation": "Learning update is a standard weight-updating RL algorithm (DAPO/GRPO variant); RLVE is an environment/data layer for it.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2511.07317",
+   "locator": "2.2 RL with Adaptive Verifiable Environments",
+   "quote": "is considered proficient at this difficulty level, and the upper bound is incremented by one",
+   "support_explanation": "The only feedback-driven non-weight state is a per-environment difficulty upper bound incremented when rollout accuracy passes a threshold; it is reset-free scalar training state inside one run, not a retained prompt/skill/tool/workflow/memory/evaluator.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2511.07317",
+   "locator": "7 Future Work",
+   "quote": "In our preliminary explorations, we tried employing frontier LMs to perform automatic environment engineering.",
+   "support_explanation": "Environment construction is not performed by the system from execution feedback; automatic environment engineering was tried and not adopted.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M-2511.07317",
+   "locator": "6 Related Work",
+   "quote": "In contrast, RLVE grounds environment adaptation in controllable manual construction, avoiding potentially incorrect LM-generated problems or verifiers.",
+   "support_explanation": "Author explicitly separates RLVE from LM-generated (self-evolving) environments; the 400 environments are static human-written programs.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Policy model weights (trained by DAPO) over a fixed human-engineered environment suite; auxiliary object: per-environment difficulty range [l, h]",
+   "information": "Rollout correctness from algorithmic verifiers; accuracy at the current upper difficulty",
+   "operation": "Sample environment uniformly, sample difficulty in a sliding window, generate problem, verify rollouts, update weights; increment h when accuracy over a minimum sample count exceeds the threshold",
+   "output": "Updated policy weights; updated scalar difficulty bounds",
+   "conditions": "Verifiable environments with configurable difficulty",
+   "feedback": "Verifier reward and per-level accuracy",
+   "selection_rule_data": "Threshold rule on training rollouts; held-out environments for evaluation",
+   "persistence": "Weights persist; difficulty bounds exist only inside the training run",
+   "later_use": "Weights evaluated on six benchmarks; difficulty state not reused afterwards",
+   "claimed_effect": "Gain on six reasoning benchmarks and on 50 held-out environments",
+   "failure_boundary": "Applies to verifiable tasks; non-verifiable tasks left to future work",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E005"
+   ]
+  }
+ ],
+ "gap": null,
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Adaptive difficulty prevents stalled learning and raises effective prompt ratio versus static difficulty",
+   "setting": "Qwen2.5-7B-Base on Sorting and Multiplication; joint training on 256 environments",
+   "baseline_control": "Static difficulty ranges [0,1], [0,20], [0,100]",
+   "selection_vs_test": "ID held-out problems and 50 held-out environments",
+   "result_denominator": "Reported in figures only (not in text)",
+   "evidence_ids": [
+    "E003"
+   ],
+   "counterevidence": "n/a (not scored)",
+   "allowed_conclusion": "Not assessed (out of scope)."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Joint RLVE on 400 environments gives +3.37% average across six benchmarks from ProRL-1.5B-v2 versus +0.49% for continued RLVR",
+   "setting": "1.5B models, about 1,100 vs 3,600 H100 hours",
+   "baseline_control": "Continued RLVR on ProRL dataset",
+   "selection_vs_test": "Six public benchmarks, curves over training steps",
+   "result_denominator": "Weight-trained policy",
+   "evidence_ids": [
+    "E001",
+    "E002"
+   ],
+   "counterevidence": "n/a (not scored)",
+   "allowed_conclusion": "Not assessed (out of scope)."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "n/a: excluded by scope; no harness-level claim to assess.",
+  "unresolved": [
+   "Boundary question for aggregator: whether transient adaptive-difficulty controllers in weight-training curricula should ever count as harness-level components."
+  ]
+ },
+ "scope_analysis": "Under SCORE_SPEC/EVIDENCE, weight-updating self-improvement and methods without a retained non-weight change are not included. The adaptive difficulty controller is a non-weight state derived from execution feedback, but it is transient within a single training run and is not claimed or measured as a retained artifact; RLVE-Gym is a static, hand-written resource. Domain card self_generate_the_curriculum is flagged as a boundary case touching weights; per rubric A3 the evaluated object here (policy weights) governs the scope decision. If the aggregator rules this boundary case in scope, it would be claim_type component_training with RS candidates around self_supervised_signal_engineering / generative_process_redesign; this seat has not scored it.",
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0,
+  "upper": 100,
+  "coverage": 0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "Weight-updating RL on static hand-built environments; transient difficulty scheduler; no retained non-weight component. Out of scope (rubric A3)."
+}

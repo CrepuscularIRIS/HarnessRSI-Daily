@@ -1,0 +1,278 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r08a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2510.14253",
+    "paper_id": "2510.14253",
+    "title": "Towards Agentic Self-Learning LLMs in Search Environment",
+    "version": "2510.14253v2",
+    "claim_type": "component_training",
+    "central_claim": "通过共享LLM骨干上的任务生成器、搜索policy与生成式reward模型三角色交替RL训练，以自生成任务与共演化验证器提升搜索问答能力并减轻reward hacking。"
+  },
+  "provenance": {
+    "input_hash": "148cbaa6dc8736a9740273ab3937d02f3ec4cc3114cd68b65855125c285d86d0",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-21T22:30:43.515882+00:00",
+    "notes": "按派发模型类型；无可独立核验的实际模型receipt/session，置null且不探测。全文含附录静态读完，未运行代码。"
+  },
+  "materials": [
+    {
+      "material_id": "M1",
+      "url": "https://arxiv.org/html/2510.14253v2",
+      "sha256": "11543e97c4003eeb3fd088ce73d17b7ffc0a6e6ae5433287755084320e86ce80",
+      "sections_read": [
+        "Abstract",
+        "1 Introduction",
+        "2 Related Work",
+        "3 Agentic Self-Learning (3.1–3.4)",
+        "4 Experiments (4.1–4.4), all figure captions and associated text",
+        "5 Conclusion and limitations",
+        "Ethics/Reproducibility",
+        "Appendix A all prompts",
+        "Appendix B all three role examples",
+        "Appendix C LLM-use statement"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "M1",
+      "sha256": "11543e97c4003eeb3fd088ce73d17b7ffc0a6e6ae5433287755084320e86ce80",
+      "locator": "§3.3 Phase1",
+      "quote": "and use it as the reward signal to update the Prompt Generator’s parameters. Intuitively, higher entropy indicates that the task elicits diverse performance from the Policy Model, reflecting informative and discriminative task design.",
+      "support_explanation": "Prompt Generator 是生成训练任务的权重模型，不是被搜索/写回的prompt模板。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "M1",
+      "sha256": "11543e97c4003eeb3fd088ce73d17b7ffc0a6e6ae5433287755084320e86ce80",
+      "locator": "§3.3 Phase2",
+      "quote": "and used to update the GRM’s parameters via reinforcement learning, following the RLVR (Reinforcement Learning with Verifiable Rewards) paradigm. By grounding its learning signal in rule-based verification, the GRM incrementally improves its ability to assign precise and reliable scores to diverse model outputs, which in turn strengthens downstream policy optimization.",
+      "support_explanation": "更新评价器权重，不是留存非权重rubric。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "M1",
+      "sha256": "11543e97c4003eeb3fd088ce73d17b7ffc0a6e6ae5433287755084320e86ce80",
+      "locator": "§3.4",
+      "quote": "Through the cyclic optimization of these three roles, ASL implements a self-reinforcing curriculum: the Prompt Generator gradually proposes more challenging tasks, the Policy Model adapts to solve them more effectively, and the Generative Reward Model continuously refines its evaluation criteria. Since all roles share parameters, skill improvements in one role naturally benefit the others, accelerating overall capability enhancement. Over time, ASL enables the LLM to autonomously expand both its problem-solving range and evaluation robustness without any direct human supervision.",
+      "support_explanation": "共同参数训练是中心自学习机制；没有独立评估的非权重harness改进对象。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "M1",
+      "sha256": "11543e97c4003eeb3fd088ce73d17b7ffc0a6e6ae5433287755084320e86ce80",
+      "locator": "§3.2 Policy Model",
+      "quote": "This role essentially models the problem-solving capability of the system and is the primary target for performance improvement. Its outputs are subsequently evaluated by the Generative Reward Model to obtain scalar feedback signals.",
+      "support_explanation": "被评价对象是训练后policy能力。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "M1",
+      "sha256": "11543e97c4003eeb3fd088ce73d17b7ffc0a6e6ae5433287755084320e86ce80",
+      "locator": "§4.4",
+      "quote": "However, by the third cycle a failure mode emerges. Because the GRM is not explictly trained and therefore has limited verification ability, the PG learns to generate problems that are excessively difficult or even unsolvable.",
+      "support_explanation": "确有训练反馈与reward hacking分析，但闭环存在不改变权重范围裁定。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "共享骨干的Prompt Generator/GRM/Policy模型参数",
+      "information": "生成问题答案、搜索执行、GRM二元判断、得分熵与难度标志",
+      "operation": "按生成器→GRM→policy交替RL，任务入训练集，下一轮继续训练",
+      "output": "更新后的共享模型权重及训练样本",
+      "conditions": "GRM可验证生成任务；搜索环境提供文本证据",
+      "feedback": "GRM多rollout得分、得分熵、规则标签比对与可选真实verification数据",
+      "selection_rule": "GRM平均分超过C保留任务；policy平均得分0.5分界构造harder/easier训练条件",
+      "selection_data": "本轮合成QA和下一轮训练集；晚期可加入1%Search-R1真实数据",
+      "persistence": "权重checkpoint与用于训练的数据集；未独立评价非权重harness组件的留存改善",
+      "later_use": "后续轮次训练及搜索QA测试",
+      "claimed_effect": "多轮提高policy/生成/验证能力",
+      "failure_boundary": "GRM校准不足可被熵reward利用；主要机制为权重学习，非本雷达的harness RSI",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E005"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "开放域缺少人工标签与规则可验证奖励，固定GRM被对抗性生成任务利用。",
+    "checked_gap": "论文在搜索QA中研究reward来源与任务规模，并联训三个共享参数角色；是权重训练范式问题。",
+    "lineage": [
+      {
+        "name": "Search-R1; Absolute Zero; R-Zero",
+        "source_version": "仅2510.14253v2正文引用；邻居原文未独立获取",
+        "relation": "RLVR、合成任务与共演化权重训练对照"
+      }
+    ],
+    "closest_adjacent": "Search-R1搜索环境与R-Zero生成/求解共训练",
+    "residue": "固定验证器在动态生成分布中失准。",
+    "stakes": "开放域训练可扩展性，但不属于非权重harness留存问题。",
+    "method_response": "联训GRM与任务生成/解答角色，晚期真实验证数据校准。",
+    "remaining_gap": "权重机制效果不作本雷达打分；全文没有独立非权重harness效果主张可替代被评价对象。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E005"
+    ],
+    "unresolved": []
+  },
+  "rs_pattern": {
+    "primary": null,
+    "supporting": [],
+    "matches": [],
+    "outside_taxonomy": false,
+    "reason": "范围排除先于模式评分；不声称原15+31无法容纳（可见manufacture supervisory signal操作），本行不作域内模式判定。",
+    "executes_pattern": "模型自身得分与合成任务制造RL训练信号。",
+    "resolves_problem": "权重训练结果不外推为非权重harness改进。"
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [],
+    "unassigned": true,
+    "revision_proposals": [],
+    "reason": "按冻结A3排除；不能因为GRM被训练就强配co-evolve evaluator非权重卡。"
+  },
+  "pattern_mapping": [],
+  "expectations": [
+    {
+      "id": "local:2510.14253-1",
+      "version": "1",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "rubric_frozen.md A3",
+        "SCORE_SPEC scope"
+      ],
+      "applies_when": "自学习/生成器/评价器论文需判定被评价的留存对象",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "中心更新对象与评测产物均为共享LLM权重；task数据与固定prompt模板仅为训练输入，不是独立被评价的留存harness。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "score_item": "scope"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "通过共享LLM骨干上的任务生成器、搜索policy与生成式reward模型三角色交替RL训练，以自生成任务与共演化验证器提升搜索问答能力并减轻reward hacking。",
+      "setting": "Qwen2.5-7B-Instruct，2018 Wikipedia/E5检索，七QA数据集",
+      "baseline/control": "Search-R1及迁移到搜索QA的Absolute Zero/R-Zero；固定GRM vs联训GRM",
+      "selection_vs_test": "训练与测试曲线及验证集；图内数值未在本文HTML文本中提取，本范围裁定不依赖该数值",
+      "result/denominator": "作者报告多轮改善、固定GRM第三轮reward hacking、晚期1%真实验证数据提高上限；不编造图中精确准确率",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "中心主张关于训练后模型能力，不能证明非权重harness的保留收益。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "unresolved",
+    "strongest_supported_claim": "有共享参数三角色交替RL及搜索QA测试的作者报告；范围外，未作域内科学质量结论。",
+    "unresolved": [
+      "out_of_scope，不评分；非声称论文无价值或无闭环。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "范围外，不将权重训练强制转成非权重harness评分。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "冻结rubric A3：Prompt Generator名称中的prompt不代表被改写的prompt artifact；正文明确三个角色共享参数并交替RL，留存与评测对象为模型权重。训练QA/难度标志是下一轮权重学习数据，无独立评价的非权重harness改进。",
+  "rationale": "三角色共享骨干并交替更新参数；生成题与验证分数服务RL训练。依冻结A3排除纯权重自学习，不因出现prompt generator或GRM而改判非权重闭环。"
+}

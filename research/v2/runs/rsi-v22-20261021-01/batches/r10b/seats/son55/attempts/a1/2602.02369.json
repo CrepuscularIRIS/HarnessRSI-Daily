@@ -1,0 +1,955 @@
+{
+ "status": "reviewed",
+ "reason": "Full HTML text incl. appendix read; figure plots (Fig 3 curves, Fig 4 case study image) not present as text. In scope A-class: experience bank with feedback-updated weights, meta-guideline bank and gated write-back are non-weight, retained components.",
+ "paper": {
+  "paper_key": "2602.02369",
+  "paper_id": "2602.02369",
+  "title": "Live-Evo: Online Evolution of Agentic Memory from Continuous Feedback",
+  "version": "2602.02369v1",
+  "claim_type": "system_method",
+  "central_claim": "Live-Evo, an online self-evolving memory (Experience Bank with feedback-updated weights + Meta-Guideline Bank + verify-before-update write-back) learns from a stream of tasks, improving Brier score 20.8% and market return 12.9% on a 10-week Prophet Arena horizon and transferring to deep-research benchmarks with consistent gains."
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2602.02369v1",
+   "sha256": "4aecd66f809b40e4b791450635695b8407e519bb7f24c7e45251fcff58936a68",
+   "sections_read": [
+    "abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Method incl. Algorithm 1",
+    "4 Experiment (setup, Tables 1-4, analysis, ablation, case study)",
+    "5 Conclusion",
+    "6 Limitations",
+    "Appendix A.1 implementation, A.2 example case, A.3 prompts"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure 3 (cumulative return and weekly Brier plot) values",
+    "Figure 4 case-study image content"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "most existing evolution pipelines are developed for static train/test splits and only approximate online learning by folding static benchmarks, making them brittle under true distribution shift and continuous feedback",
+   "support_explanation": "Author gap: existing memory evolution is built on static splits and approximates online learning.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Sec 2.1",
+   "quote": "However, none of them focus on evolving on live benchmarks.",
+   "support_explanation": "Related-work novelty claim over BoT, ExpeL, AWM, A-Mem, forgetting-based memories.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 1 loop description",
+   "quote": "by producing and comparing two independent predictions, one guided by the compiled guideline and one as a memory-free baseline, to quantify the contribution of the guideline",
+   "support_explanation": "ContrastiveEval: paired memory-on / memory-off run per task as the credit signal.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Sec 3.4",
+   "quote": "when the guideline improves performance, the corresponding experience weights are increased; when it harms performance, the weights are decreased.",
+   "support_explanation": "Weight update from the paired gain, applied to all selected experiences.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Appendix A.1",
+   "quote": "Weight_{new}=Weight_{old}+(score_{noexp}-score_{exp})",
+   "support_explanation": "Additive, unbounded update from one pair of single stochastic runs (temperature 0.2); no clipping or normalisation is described, and the credit is shared equally by every retrieved experience.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "Sec 3.1",
+   "quote": "we not only consider the similarity between experiences and queries, but also multiply it by an experience weight that is updated during the evolution cycle.",
+   "support_explanation": "Next-task reading: retrieval score = weight x similarity, so down-weighted entries drop below the similarity threshold.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "Sec 1 loop description",
+   "quote": "if the guideline underperforms, the agent generates a new entry for the Meta-Guideline Bank.",
+   "support_explanation": "Meta-guideline (how to compile experience) added on non-positive gain, with no verification step analogous to the experience commit gate.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Sec 3.4",
+   "quote": "We then re-evaluate the task with this candidate experience, and commit it to the experience bank only if it yields a statistically significant improvement over the original memory-on score.",
+   "support_explanation": "Verify-before-update gate. The candidate is built from the stored trajectory of the same task and re-evaluated on that same task, so a candidate that encodes the answer can pass; no significance test is specified beyond a min_brier_improvement threshold.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Setup",
+   "quote": "We enforce strict time-based retrieval on google-search tool to prevent information leakage past the close time.",
+   "support_explanation": "Authors' leakage guard for the live-prediction benchmark (500 tasks over the latest 10 weeks).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "Appendix A.1",
+   "quote": "We use serper api as the google-search api and apply the time filter by editing the queries.",
+   "support_explanation": "The time guard is implemented by editing the query, not by verifying result publication dates.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "Appendix A.2 Table 5 (showcase task, Oct 16 2025 NFL game)",
+   "quote": "Identified close 33-31 victory conditions.",
+   "support_explanation": "The memory-on agent's reasoning cites the final score of a game it is supposed to forecast before kick-off: post-close information leaked through search despite the guard.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "Appendix A.2.4 Observation 3",
+   "quote": "Results confirm the game conclusion",
+   "support_explanation": "Search observation in the showcase trajectory states the game outcome, corroborating that the time filter is leaky; the memory-off baseline shares the tool, so the leak may affect both arms differently.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Setup",
+   "quote": "All experiments use a temperature =0.2, with bad_case_percentile =0.3, min_brier_improvement =0.05, and experience _similarity_threshold =0.5.",
+   "support_explanation": "Hyperparameters stated (single configuration, tuning protocol absent); appendix gives a minimum weighted similarity of 0.3, inconsistent with 0.5 here.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Setup",
+   "quote": "a future-prediction benchmark spanning the latest 10 weeks with 500 tasks in total",
+   "support_explanation": "Evaluation size: about 50 tasks per week, processed sequentially.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "Table 1 Live-Evo row",
+   "quote": "Live-Evo (ours) 0.19 0.17 0.16 0.10 0.17 0.12 0.19 0.15 0.13 0.10 0.14",
+   "support_explanation": "Weekly Brier W1-W10 and average for the full system.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "Table 1 Live-Evo (w/o Experience) row",
+   "quote": "Live-Evo (w/o Experience) 0.18 0.24 0.20 0.13 0.27 0.19 0.22 0.22 0.13 0.11 0.19",
+   "support_explanation": "Memory-off control with the same search agent; W1 is worse for Live-Evo (0.19 vs 0.18), W9 ties and W10 differs by 0.01.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "locator": "Table 1 ReMem row",
+   "quote": "ReMem 0.19 0.23 0.14 0.11 0.21 0.18 0.19 0.17 0.15 0.11 0.16",
+   "support_explanation": "Only memory baseline; ReMem beats Live-Evo in W3 and W4/W10 are within 0.01; implementation and budget parity unspecified.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "locator": "Sec 4.2 Performance Comparison",
+   "quote": "Live-Evo consistently outperforms the base agent across all weeks.",
+   "support_explanation": "Contradicted by Table 1 W1 (0.19 vs 0.18) and W9 (equal 0.13).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "locator": "Sec 4.2 Performance Comparison",
+   "quote": "Notably, the performance gap between the two agents widens over time, indicating that",
+   "support_explanation": "Table 1 gaps are largest in W5-W6 (0.10, 0.07) and shrink to 0.00/0.01 in W9-W10, so 'widens over time' is not clear from the table (Fig 3a values not readable).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "locator": "Table 2 GPT-4.1-mini rows",
+   "quote": "GPT-4.1-mini Base (w/o Mem) 0.19 – 1.24 – Live-Evo 0.14 20.8% 1.46 12.9%",
+   "support_explanation": "Headline numbers; reported relative improvements (20.8%, 12.9%) do not follow from the shown values (0.19 to 0.14 is -26%; 1.24 to 1.46 is +17.7%), so the aggregation is unclear.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "locator": "Table 2 Qwen3-8B rows",
+   "quote": "Qwen3-8B Base (w/o Mem) 0.19 – 1.20 – Live-Evo 0.18 3.5% 1.21 0.5%",
+   "support_explanation": "Gains shrink sharply on other backbones (GPT-4.1 3.0%/4.4%, GPT-5-mini 4.5%/1.6%, Qwen3-8B 3.5%/0.5%); the headline is the GPT-4.1-mini configuration.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "locator": "Table 3 (Xbench-DeepResearch)",
+   "quote": "Qwen-DeepResearch 0.43 MiroFlow 0.45 ReMem 0.40 Live-Evo (ours) 0.46",
+   "support_explanation": "Transfer table has no memory-off Live-Evo/base row, so the memory contribution is not isolated; margin over MiroFlow is 0.01 and no variance is given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Setup",
+   "quote": "We split the benchmark into 10 folds, learn experience sequentially across folds, and report the overall average accuracy.",
+   "support_explanation": "Xbench is a static benchmark folded into pseudo-streams, the very practice the paper criticises in prior work (E001).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M1",
+   "locator": "Table 4 ablation",
+   "quote": "w/o weight-update 0.17 +17.01% 1.34 -8.01% w/o meta-guideline 0.16 +10.88% 1.41 -3.42% w/o guideline-compile 0.16 +11.56% 1.16 -20.40% w/o active-retrieve 0.17 +14.97% 1.22 -16.77%",
+   "support_explanation": "Four components ablated, each degrading Brier and return; single run, no variance, and the verify-before-update gate and meta-guideline verification are not ablated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M1",
+   "locator": "Sec 4.5 Ablation Study",
+   "quote": "Removing any single module consistently degrades performance in both Brier Score and market return, indicating that each component is non-trivial",
+   "support_explanation": "Author reading of Table 4; the w/o meta-guideline change in return (-3.42%) is small.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "M1",
+   "locator": "Sec 6 Limitations",
+   "quote": "its reliance on the dense environment feedback ensures robust calibration but may limit applicability in settings with sparse or subjective feedback",
+   "support_explanation": "Stated boundary: dense feedback is required.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "M1",
+   "locator": "Sec 4.6 Case Study",
+   "quote": "Such mismatches lead to consistently poor downstream performance and are therefore downweighted over time.",
+   "support_explanation": "Anecdotal evidence that a hallucinated experience was down-weighted; only two entries shown.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "M1",
+   "locator": "Appendix A.2 example meta guideline",
+   "quote": "Over-generalization of domain-specific lessons across fundamentally different task types and contexts.",
+   "support_explanation": "Shows a generated meta-guideline entry (applicability check) produced from a failure.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "M1",
+   "locator": "Sec 3.3 Act",
+   "quote": "Concretely, we execute the agent again without the compiled guideline.",
+   "support_explanation": "Credit signal requires a second full agent run for every task; cost is not quantified anywhere and baselines are not given the equivalent budget.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "M1",
+   "locator": "Conclusion",
+   "quote": "Live-Evo, the first online-evolving agentic memory system specifically designed for benchmarks with continuous, real-world feedback",
+   "support_explanation": "Priority claim; closest online-memory baseline ReMem is only compared empirically, and AWM/ExpeL/A-Mem are named only in text.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "Experience Bank entries (question-experience pairs) with scalar weights; baseline = similarity-only retrieval (ReMem-style)",
+   "information": "Per task: retrieved top-k experiences, compiled guideline, memory-on and memory-off predictions and the realised outcome/Brier score after the event resolves",
+   "operation": "Contrastive paired run; add (score_noexp - score_exp) to the weight of every selected experience; worst rho=30% memory-on tasks produce candidate experiences by summarising the stored trajectory",
+   "output": "Updated weights; new experience entries",
+   "conditions": "Dense continuous environment feedback (Brier); within-batch ordering and the point at which outcomes are revealed relative to later tasks are not specified",
+   "feedback": "Realised event outcome via Brier score",
+   "selection_rule_data": "Weights: no gate beyond the additive rule. Write-back: re-evaluate the candidate on the same task and commit if the improvement exceeds min_brier_improvement=0.05 (text says 'statistically significant')",
+   "persistence": "Experience Bank in memory across weekly batches; low-weight entries fall below the weighted-similarity threshold (no explicit deletion or size bound)",
+   "later_use": "Retrieval score = weight x similarity for every later task",
+   "claimed_effect": "Reinforce helpful entries, down-weight misleading or stale ones; Brier 0.19 to 0.14 over 10 weeks",
+   "failure_boundary": "Equal credit to co-retrieved entries; noisy single-sample difference; same-task commit test; no size bound or rollback",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E008",
+    "E013",
+    "E029"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "Meta-Guideline Bank (instructions on how to compile experiences into a task guideline) and the CompileGuideline step",
+   "information": "Failed tasks (r_on - r_off <= 0), the compiled guideline and retrieved experiences",
+   "operation": "Reflect on the failure and append a meta-guideline entry; a retrieved meta-guideline conditions future compilation",
+   "output": "New meta-guideline entries (e.g. domain-congruence applicability check)",
+   "conditions": "Triggered by non-positive paired gain including ties",
+   "feedback": "Same paired gain as SIG1",
+   "selection_rule_data": "None: entries are appended on failure without re-evaluation or weighting",
+   "persistence": "Meta-Guideline Bank",
+   "later_use": "Retrieved and applied inside CompileGuideline for later tasks",
+   "claimed_effect": "Improves how experience is used; ablation w/o meta-guideline +10.9% Brier, -3.4% return",
+   "failure_boundary": "Unverified, ungated and potentially noisy entries; effect smaller than other components",
+   "evidence_ids": [
+    "E007",
+    "E024",
+    "E028"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Memory-evolution pipelines assume static train/test splits and approximate online learning by folding; under true streaming and shift, stored experience becomes stale or misleading and must be actively curated.",
+  "checked_gap": "Plausible and specific (staleness under drift, when and how to use experience), but the paper does not measure drift or staleness directly; evidence is the aggregate gain, a two-entry weight case study and an ablation of weights.",
+  "lineage_closest_adjacent": "Ancestors in local text: ExpeL, BoT, Agent Workflow Memory, A-Mem, forgetting memories (MemoryBank), ReMem (Wei et al. 2025b) as the online-fold baseline. Only ReMem is compared experimentally; the paper's own priority claim is 'first'.",
+  "residue": "Online memory still lacks a statistically sound commit (same-task test), a size bound/retirement, and noise-robust credit across co-retrieved entries.",
+  "stakes": "Live forecasting where stale experience degrades calibration and market returns.",
+  "method_response": "Per-task paired counterfactual credits weights; meta-guidelines make the compile step learnable; gated write-back controls growth.",
+  "remaining_gap": "Whether the weight decay handles drift beyond 10 weeks and whether gains survive leak-free retrieval remain open.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E026",
+   "E030"
+  ],
+  "unresolved": [
+   "Direct evidence of distribution shift or stale-experience harm",
+   "Closest neighbours' original texts (ReMem, ExpeL) are not in the package; difference rests on authors' description"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [
+   "controlled_diagnostic_design"
+  ],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "Frozen backbone is conditioned on retrieved experiences compiled into a task guideline (definition match). C03 steps on a canonical schema, upstream format-parsing training and category-level holdout are not executed.",
+    "success_failure_checks": "Failure mode 'obvious cheaper alternative not tested' partly applies (no summarise-all or longer-context baseline); multi-module ablation present (Table 4); sensitivity to conditioning source quality only by anecdote (E027).",
+    "evidence_ids": [
+     "E006",
+     "E024",
+     "E027"
+    ],
+    "reason": "Adaptation happens purely by conditioning (experience + guideline) with no backbone update; C03 is a format-parsing training sub-card and does not fit, so sub_id null."
+   },
+   {
+    "main_id": "controlled_diagnostic_design",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "Per-task matched pair (memory-on vs memory-off) holds the task and model fixed and varies only the guideline, used as an in-loop measurement of memory's causal effect; C02 (controlled instance sets with an independent oracle) is not matched.",
+    "success_failure_checks": "Matched-condition construction met; compute-matched baseline unmet (E029).",
+    "evidence_ids": [
+     "E003",
+     "E029"
+    ],
+    "reason": "Different operation from conditioning: an internal causal-effect probe that drives credit assignment; used as signal not as reported diagnostic, hence weak."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Both main cards assigned with sub-cards null and stated differences.",
+  "executes_pattern": true,
+  "resolves_problem": "partial: gains over memory-off control reported, but leakage evidence and missing variance prevent concluding the staleness problem is closed."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "version": "v2.2-cards",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "condition": "rsi:evidence_gated_retention/S1",
+      "status": "met",
+      "reason": "Memory-on vs memory-off pair behind every weight update."
+     },
+     {
+      "condition": "rsi:evidence_gated_retention/S4",
+      "status": "partial",
+      "reason": "Weight update is separately ablated, but the commit gate is not."
+     },
+     {
+      "condition": "rsi:evidence_gated_retention/S5",
+      "status": "unmet",
+      "reason": "Cost of the extra run is not stated or quantified."
+     },
+     {
+      "condition": "rsi:evidence_gated_retention/F4",
+      "status": "unmet",
+      "reason": "Failure mode present: credit requires paired rollouts, doubling execution."
+     },
+     {
+      "condition": "rsi:evidence_gated_retention/H29-step3",
+      "status": "unmet",
+      "reason": "Equal credit to all co-retrieved entries; no sharing rule."
+     }
+    ],
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E024",
+     "E029"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "v2.2-cards",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "condition": "rsi:evidence_gated_retention/S2",
+      "status": "partial",
+      "reason": "Admission gate exists (verify-before-update) and weights act as soft retirement, but there is no hard size bound or explicit retirement/versioning."
+     },
+     {
+      "condition": "rsi:evidence_gated_retention/H30-step2",
+      "status": "partial",
+      "reason": "Candidate replayed before commit but on the generating task only, with no regression probe on earlier cases."
+     }
+    ],
+    "evidence_ids": [
+     "E008",
+     "E013"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "v2.2-cards",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "condition": "rsi:abstract_experience_into_guidance/S3",
+      "status": "met",
+      "reason": "Realised outcome via Brier grounds what is stored."
+     },
+     {
+      "condition": "rsi:abstract_experience_into_guidance/H00-step4",
+      "status": "unmet",
+      "reason": "Memory keeps evolving on the very stream that is reported; no frozen-store evaluation."
+     }
+    ],
+    "evidence_ids": [
+     "E007",
+     "E014"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": [
+   "Meta-guideline bank (how to use experience) sits between H00 and make_the_improver_editable/H21 but is neither evaluated as an improver nor gated; no card change proposed from one paper."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "evidence_gated_retention",
+   "domain_sub": "H29",
+   "operation_correspondence": "RS: conditioning inputs (retrieved instances) substitute retraining; domain: retrieval ranked by measured utility. Live-Evo weights the retrieval score by feedback-derived utility and compiles a guideline from the retrieved set.",
+   "necessary_conditions_differences": "RS card wants a conditioning-source quality/coverage analysis (partial); domain card wants held-out value-stripped ablation (value-strip ablation present, held-out separation absent).",
+   "evidence_ids": [
+    "E004",
+    "E006",
+    "E024"
+   ]
+  },
+  {
+   "rs_main": "controlled_diagnostic_design",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "evidence_gated_retention",
+   "domain_sub": "H29",
+   "operation_correspondence": "RS: matched conditions isolate a hidden axis; domain: counterfactual memory-on/off baseline behind each credit. Both rely on a paired run where only the memory guideline differs.",
+   "necessary_conditions_differences": "RS expects compute-matched/null baselines and an independent anchor; here the anchor is the realised outcome (independent) but the second run doubles cost and noise is unmeasured.",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E029"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md Reviewer expectations #3 (reject_reviews)"
+   ],
+   "applies_when": "Retrieval/conditioning method claims superiority over simpler conditioning",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Memory-off control and ReMem included; no longer-context / summarise-all / nearest-neighbour variant at matched budget.",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card, #4 (both)"
+   ],
+   "applies_when": "Multi-module pipeline",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Four modules ablated in Table 4; commit gate and meta-guideline verification not ablated; single run.",
+   "evidence_ids": [
+    "E024",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card, #6 (both)"
+   ],
+   "applies_when": "Conditioning source quality varies",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Quality of the experience source is probed only through a two-entry high/low-weight case study; no sensitivity to bank size or noise.",
+   "evidence_ids": [
+    "E027"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:controlled_diagnostic_design/RE-3",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/controlled_diagnostic_design.md Reviewer expectations #3 (reject_reviews)"
+   ],
+   "applies_when": "A paired/counterfactual measurement is used as evidence",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "The second (memory-free) run is an extra-compute control used for training signal; baselines are not compute-matched and noise of the single-sample difference is unmeasured.",
+   "evidence_ids": [
+    "E005",
+    "E029"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json evidence_gated_retention S1"
+   ],
+   "applies_when": "Credit assigned to memory entries",
+   "applicable": true,
+   "status": "met",
+   "reason": "Memory-on vs memory-off contrast is the counterfactual behind the credit.",
+   "evidence_ids": [
+    "E003",
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json evidence_gated_retention S2"
+   ],
+   "applies_when": "A library accumulates entries over time",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Admission gate plus soft retirement through weights, but no hard bound, quarantine or versioned rollback.",
+   "evidence_ids": [
+    "E006",
+    "E008"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json evidence_gated_retention S5"
+   ],
+   "applies_when": "Gate requires extra runs",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Extra contrastive and re-evaluation runs are described but their cost is never reported.",
+   "evidence_ids": [
+    "E029"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H29-step5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H29.md Step-by-Step 5"
+   ],
+   "applies_when": "Claims value-ranked memory beats similarity-only retrieval",
+   "applicable": true,
+   "status": "partial",
+   "reason": "w/o weight-update ablation approximates value-stripped retrieval, but memory evolves on the evaluation stream and no held-out frozen-bank test is given.",
+   "evidence_ids": [
+    "E024",
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/F4",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json evidence_gated_retention F4"
+   ],
+   "applies_when": "Credit needs paired rollouts",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Failure mode present: paired rollouts double execution and credit is spread over all retrieved entries.",
+   "evidence_ids": [
+    "E005",
+    "E029"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00-step4",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md Step-by-Step 4"
+   ],
+   "applies_when": "Memory updated during evaluation",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Reported weeks are produced while memory updates; prospective ordering helps but there is no frozen-store test.",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2602.02369-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Prophet Arena / FutureX style live forecasting requires leak-free retrieval (paper Sec 4.1)"
+   ],
+   "applies_when": "Forecasting with a web-search tool",
+   "applicable": true,
+   "status": "challenged_with_evidence",
+   "reason": "Authors claim strict time-based retrieval, but the guard is a query edit and the showcase trajectory shows post-game information (final score, 'game conclusion').",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E012"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2602.02369-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 3 vs Sec 4.4 claim of consistent gains over strong baselines"
+   ],
+   "applies_when": "Transfer claim to Xbench-DeepResearch",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No memory-off baseline on Xbench; margins 0.01-0.03 on a folded static benchmark with no variance.",
+   "evidence_ids": [
+    "E022",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2602.02369-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 4.2 narrative vs Table 1; Table 2 improvement arithmetic"
+   ],
+   "applies_when": "Narrative claims about all-week superiority and relative gains",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "'Across all weeks' and 'gap widens' conflict with Table 1 (W1 worse, W9 tied) and the headline percentages do not follow from the table values.",
+   "evidence_ids": [
+    "E016",
+    "E018",
+    "E019",
+    "E020"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Live-Evo improves Brier by 20.8% and market return by 12.9% on a 10-week Prophet Arena stream over a memory-free agent.",
+   "setting": "500 resolved tasks processed weekly, GPT-4.1-mini, serper search with query-edit time filter",
+   "baseline_control": "Live-Evo w/o Experience (same agent), Base Model, MiroFlow, Qwen Deep Research, ReMem",
+   "selection_vs_test": "Memory evolves on the reported stream; later weeks evaluated with earlier-week memory; no frozen-bank or independent stream; hyperparameter tuning protocol not described",
+   "result_denominator": "Avg Brier 0.14 vs 0.19 (w/o Experience) vs 0.16 (ReMem); weeks where Live-Evo is not better: W1, W9 (tie); single run",
+   "evidence_ids": [
+    "E015",
+    "E016",
+    "E017",
+    "E020"
+   ],
+   "counterevidence": [
+    "E011",
+    "E012",
+    "E018",
+    "E019"
+   ],
+   "allowed_conclusion": "On this stream, Live-Evo's Brier is lower on average than a memory-free agent and ReMem; absolute and relative gains are uncertain because of search leakage evidence, single-run variance and unclear percentage arithmetic."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Each component (weight update, meta-guideline, compile, active retrieval) is essential.",
+   "setting": "Table 4 ablation on Prophet Arena",
+   "baseline_control": "Full system",
+   "selection_vs_test": "same stream",
+   "result_denominator": "Brier +10.9% to +17.0% worse, return -3.4% to -20.4%; single run",
+   "evidence_ids": [
+    "E024",
+    "E025"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Removing any of four components worsens both metrics in a single run; gate and meta-guideline verification untested; meta-guideline effect on return is small."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Experience weights down-weight misleading entries and keep helpful ones.",
+   "setting": "Case study of lowest/highest weight entries",
+   "baseline_control": "none",
+   "selection_vs_test": "n/a",
+   "result_denominator": "two entries",
+   "evidence_ids": [
+    "E027",
+    "E004"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Illustrative anecdote; no systematic precision of weight ranking against entry harm."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Gains transfer across backbones and to deep research benchmarks.",
+   "setting": "Table 2 (4 backbones), Table 3 (Xbench-DeepResearch)",
+   "baseline_control": "w/o Mem per backbone; no memory-off row for Xbench",
+   "selection_vs_test": "same-stream sequential / folded static",
+   "result_denominator": "Brier gains 3.0-20.8%, return gains 0.5-12.9%; Xbench 0.46 vs 0.45/0.43/0.40",
+   "evidence_ids": [
+    "E020",
+    "E021",
+    "E022",
+    "E023"
+   ],
+   "counterevidence": [
+    "E022"
+   ],
+   "allowed_conclusion": "Directionally positive on four backbones in Prophet Arena; the Xbench claim of consistent gains is unsupported without a memory-off control and variance."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "In a sequential 10-week forecasting stream, a memory with feedback-updated retrieval weights, compile-time meta-guidelines and gated write-back yielded lower average Brier than the same agent without experience and than ReMem, with component ablations pointing the same way; leakage evidence in the showcase and absent variance limit the size and certainty of the gain.",
+  "unresolved": [
+   "Magnitude after leak-free retrieval",
+   "Run-to-run variance and weekly noise",
+   "Effect of the commit gate and of meta-guidelines as an improver",
+   "Compute parity with baselines",
+   "Xbench memory-off control"
+  ],
+  "level_reason": "Memory-off control and prospectively later weeks support retained gains (EVIDENCE: retained), but no independent held-out stream and no improver-level comparison, so not improver."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Specific, plausible online/staleness gap with named neighbours (ExpeL, BoT, AWM, A-Mem, ReMem), but staleness is not measured and only ReMem is run.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E030"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Paired memory-on/off credit, weighted retrieval, learnable compile instructions and gated write-back form a coherent, reconstructable mechanism; weaknesses are uniform credit over co-retrieved entries, noisy single-sample gain and ungated meta-guidelines.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E005"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Next-task reading (weight x similarity), admission test and soft retirement are described with parameters; missing hard size bound, versioning, rollback, ordering within a batch, and the commit test uses the generating task; thresholds inconsistent (0.5 vs 0.3).",
+   "evidence_ids": [
+    "E006",
+    "E008",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E008",
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Brier and market return are suitable, but the showcase trajectory exposes post-close information through a query-edit time filter, and the percentage improvements do not follow from table values.",
+   "evidence_ids": [
+    "E009",
+    "E014",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E010",
+    "E011",
+    "E012",
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Memory-off control, ReMem baseline, four-component ablation and four backbones are present; the commit gate and meta-guideline verification are unablated, ReMem parity and Xbench control are missing, single run.",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E024",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Forward-in-time weekly stream with strict-time intent is stronger than random splits, but memory keeps updating on the reported stream, leakage evidence undermines temporal separation, and the write-back test reuses the generating task.",
+   "evidence_ids": [
+    "E009",
+    "E014",
+    "E015"
+   ],
+   "counterevidence_ids": [
+    "E008",
+    "E011",
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample size and per-week table given (including weeks where it loses), but no seeds, intervals or tests despite 0.01-0.03 margins and temperature 0.2; text overclaims 'all weeks'.",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E016",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E018",
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "The doubled execution per task and re-evaluation are disclosed in the method but never quantified, and baselines get no matched budget.",
+   "evidence_ids": [
+    "E029"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "Coherent paired-credit memory with gated write-back; gains plausible but search leakage, single run, ungated meta-guidelines, no cost.",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r10b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "aeca7209de23ba8ec9b1f3e274508a8113501ffd9709824a60216d9634b6122d",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker subagent has no accessible run receipt; model type as dispatched by controller.",
+  "timestamp": "2026-10-21T23:02:09Z"
+ },
+ "score": {
+  "raw": 65.0,
+  "display": 65.0,
+  "lower": 65.0,
+  "upper": 65.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -1,0 +1,247 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r08b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Rubric A3 / docs/EVIDENCE.md scope: self-play fine-tuning (both Challenger and Solver updated by RL); the retained artifact is model weights. In-context anchor sampling is only an input to the weight-training loop, not a retained non-weight harness component.",
+ "paper": {
+  "paper_key": "2512.02472",
+  "paper_id": "arXiv:2512.02472",
+  "title": "Guided Self-Evolving LLMs with Minimal Human Supervision",
+  "version": "2512.02472v1",
+  "claim_type": null,
+  "claim_type_note": "Not assigned: scope exclusion precedes claim-type scoring.",
+  "central_claim": "R-Few is a guided Challenger-Solver self-play framework: the Challenger uses a few human-labeled anchor examples as in-context grounding and the Solver trains on mixed human+synthetic data under an online difficulty curriculum, improving Qwen3-8B-Base by +3.0 math points over R-Zero."
+ },
+ "provenance": {
+  "input_hash": "c83742677a71bb679717a815981af89dbefe114b74bdea5003ea13caf10f6a1b",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to runtime receipt; model type as configured by controller.",
+  "timestamp": "2026-10-21T22:19:41Z"
+ },
+ "rationale": "R-Few为挑战者-求解者自博弈，对两者做GRPO权重更新，少量人工锚点仅作输入；保留物为权重，范围外。",
+ "materials": [
+  {
+   "material_id": "2512.02472.txt",
+   "url": "https://arxiv.org/html/2512.02472v1",
+   "version": "2512.02472v1",
+   "sha256": "30c31857a7d1be9ed68a2b8afb8e53637a00aa40e3bf8e2038700a518eac50dc",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Preliminaries (self-play formulation)",
+    "3 Method",
+    "4 Experiments (results, ablations, analysis)",
+    "Related work",
+    "Conclusion",
+    "Appendix (training curves, hyperparameters, prompts)"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "notes": "Equation-heavy sections read in text form; prompt appendix skimmed."
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2512.02472.txt",
+   "material_sha256": "30c31857a7d1be9ed68a2b8afb8e53637a00aa40e3bf8e2038700a518eac50dc",
+   "locator": "Abstract",
+   "quote": "while the Solver jointly trains on human and synthetic examples under an online, difficulty-based curriculum",
+   "support_explanation": "The Solver is trained (weights) on mixed human and synthetic data.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2512.02472.txt",
+   "material_sha256": "30c31857a7d1be9ed68a2b8afb8e53637a00aa40e3bf8e2038700a518eac50dc",
+   "locator": "Sec 2 Preliminaries",
+   "quote": "which guides the policy updates of both agents via reinforcement learning, typically using Group Relative Policy Optimization (GRPO)",
+   "support_explanation": "Both Challenger and Solver are updated by RL; this is the loop R-Few modifies.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2512.02472.txt",
+   "material_sha256": "30c31857a7d1be9ed68a2b8afb8e53637a00aa40e3bf8e2038700a518eac50dc",
+   "locator": "Sec 3 Method",
+   "quote": "the Challenger dynamically samples zero to five anchor examples as in-context example to guide synthetic question generation",
+   "support_explanation": "The only non-weight element (in-context anchor sampling) is an input to the weight-updating Challenger, not a retained improved component.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2512.02472.txt",
+   "material_sha256": "30c31857a7d1be9ed68a2b8afb8e53637a00aa40e3bf8e2038700a518eac50dc",
+   "locator": "Appendix training details",
+   "quote": "The challenger and solver are trained iteratively, with the challenger updated for 5 steps followed by 10 steps of solver training.",
+   "support_explanation": "Alternating weight updates of both models.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Weights of the Challenger (question generator) and Solver models, with a small anchor pool of human-labeled data as in-context grounding",
+   "information": "1-5% of WebInstruct labeled examples; Solver self-consistency success rates; pseudo-labels from majority vote",
+   "operation": "GRPO-train the Challenger on a difficulty-shaped reward with repetition penalty; GRPO-train the Solver on curriculum-selected (mid-uncertainty) synthetic and human examples",
+   "output": "Updated Challenger and Solver weights per iteration",
+   "conditions": "Qwen3-4B/8B-Base; small human anchor set",
+   "feedback": "Solver pass rates and answer agreement",
+   "selection_rule": "Keep questions whose estimated success rate lies in [tau_low, tau_high]",
+   "selection_data": "Solver rollouts on generated and human questions",
+   "persistence": "Model weights",
+   "later_use": "Subsequent iterations use updated models",
+   "claimed_effect": "+3.0 math points over R-Zero at 8B; parity with General-Reasoner on 1-5% human data",
+   "failure_boundary": "not_assessed",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Unguided self-play suffers concept drift and diversity collapse; need lightweight human grounding with minimal supervision.",
+  "checked_gap": "not_assessed (out_of_scope)",
+  "lineage": null,
+  "closest_adjacent": null,
+  "residue": null,
+  "stakes": null,
+  "method_response": null,
+  "remaining_gap": null,
+  "evidence_ids": [
+   "E001"
+  ],
+  "unresolved": "Not assessed because the paper is excluded by scope."
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": false,
+  "not_assessed": true,
+  "reason": "Original 15+31 identification not performed for out_of_scope rows; this is not an outside_taxonomy judgement.",
+  "executes_pattern": null,
+  "resolves_problem": null
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "domain_cards_hash:52ff96577c9c",
+  "matches": [],
+  "unassigned": [
+   "Closest domain card self_generate_the_curriculum (H22) is a 'touches weights' boundary card; frozen rubric A3 excludes weight-updating self-play. Not assigned."
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [],
+ "expectations": [],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "R-Few is a guided Challenger-Solver self-play framework: the Challenger uses a few human-labeled anchor examples as in-context grounding and the Solver trains on mixed human+synthetic data under an online difficulty curriculum, improving Qwen3-8B-Base by +3.0 math points over R-Zero.",
+   "setting": "see paper",
+   "baseline_control": "not_assessed",
+   "selection_vs_test": "not_assessed",
+   "result_denominator": "not_assessed",
+   "evidence_ids": [
+    "E001"
+   ],
+   "counterevidence": "not_assessed",
+   "allowed_conclusion": "No scoring conclusion is drawn; excluded by scope."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": null,
+  "strongest_supported_claim": null,
+  "unresolved": "Scope exclusion; no evidence-level judgement.",
+  "reproduction_note": "Nothing re-run by us."
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: item not rated (scope exclusion, see top-level reason).",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": null,
+  "upper": null,
+  "coverage": null,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "note": "out_of_scope: score=null; not an unknown-rating row (no L/U interval, not counted as scored or blocked)."
+ }
+}

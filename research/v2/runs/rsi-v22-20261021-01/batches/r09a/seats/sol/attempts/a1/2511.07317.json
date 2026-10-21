@@ -1,0 +1,265 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r09a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2511.07317",
+    "paper_id": "2511.07317",
+    "title": "RLVE: Scaling Up Reinforcement Learning for Language Models with Adaptive Verifiable Environments",
+    "version": "2511.07317v2",
+    "claim_type": "component_training",
+    "central_claim": "使用400个手工设计的可验证环境和按policy能力自适应的难度课程，改善RL训练效率与训练后语言模型的跨环境推理能力。"
+  },
+  "provenance": {
+    "input_hash": "99ea0141399f5e68330e4b4a72a7701317fa4234bc661f0387e69f7092e1085c",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "派发配置为sonnet→gpt-6.1-sol；未暴露可独立核验的模型回执或稳定session ID，不额外探测。",
+    "timestamp": "2026-10-21T22:46:45.011490+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2511.07317.txt",
+      "url": "https://arxiv.org/html/2511.07317v2",
+      "sha256": "b44c6710cd4fad441602d67e211dc3584d934c90106cf5b68c1aba5524af57e5",
+      "sections_read": [
+        "全文 lines 1–6762：摘要、Sections 1–6、参考文献、Appendices A–E（算法、六环境示例、400环境列表、训练、评估与训练集合明细）"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E01",
+      "material_id": "2511.07317.txt",
+      "sha256": "b44c6710cd4fad441602d67e211dc3584d934c90106cf5b68c1aba5524af57e5",
+      "locator": "Abstract, adaptive difficulty and evaluated outcome",
+      "quote": "enables each verifiable environment to dynamically adapt its problem difficulty distribution to the policy model’s capabilities as training progresses.",
+      "support_explanation": "反馈调整训练题目难度；被改善对象是 RL policy，不是持久化部署 harness。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E02",
+      "material_id": "2511.07317.txt",
+      "sha256": "b44c6710cd4fad441602d67e211dc3584d934c90106cf5b68c1aba5524af57e5",
+      "locator": "Appendix C, RL Training Details",
+      "quote": "We perform one parameter update after each rollout step.",
+      "support_explanation": "实际更新政策模型参数。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E03",
+      "material_id": "2511.07317.txt",
+      "sha256": "b44c6710cd4fad441602d67e211dc3584d934c90106cf5b68c1aba5524af57e5",
+      "locator": "Section 6, Model-based automatic environment engineering",
+      "quote": "We therefore consider the substantial human effort our authors devoted to manually engineering all 400 environments to be worthwhile.",
+      "support_explanation": "生成器/验证器由人手工开发，并非执行反馈闭环编辑。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E04",
+      "material_id": "2511.07317.txt",
+      "sha256": "b44c6710cd4fad441602d67e211dc3584d934c90106cf5b68c1aba5524af57e5",
+      "locator": "Section 6, future work",
+      "quote": "can serve as a prototype for future research on automatic environment engineering, analogous to how prior studies employed LMs for automatic data generation starting from a seed dataset",
+      "support_explanation": "非权重环境代码自动演化是未来研究而非本文已评估留存对象。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "训练环境难度区间和语言模型policy权重",
+      "information": "每环境当前上界难度的rollout正确率、样本计数",
+      "operation": "达到最小采样数且正确率达阈值则增加上界、按窗口移动下界；按区间采样问题，运行DAPO参数更新",
+      "output": "训练后policy及训练内课程状态",
+      "conditions": "固定人工编写的generator/verifier；正确率阈值0.9、窗口4；RL训练",
+      "feedback": "程序化reward/正确率",
+      "selection_rule": "上界正确率阈值控制课程；梯度更新policy",
+      "selection_data": "训练rollouts",
+      "persistence": "课程难度范围在训练步骤之间保留；未报告将反馈编辑的非权重harness作为独立部署和评估产物",
+      "later_use": "后续RL步骤继续生成题目，最终评估训练后权重",
+      "claimed_effect": "推理泛化与RL效率提升",
+      "failure_boundary": "固定环境课程调节与权重训练不等于已实现非权重组件自演化；自动环境工程是未来工作",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E04"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "静态题目分布过易/过难使学习信号消失；可验证RL数据有限。",
+    "checked_gap": "论文确实评估自适应课程对权重训练的作用，但不回答本雷达非权重留存对象问题。",
+    "lineage": [],
+    "closest_adjacent": [],
+    "residue": "自适应环境课程训练，不是harness演化证据。",
+    "stakes": "RL训练效率与泛化；不在本次范围内评分。",
+    "method_response": "按policy成功率调整生成难度与多环境训练。",
+    "remaining_gap": "未实现/评估自动保留环境代码修改。",
+    "evidence_ids": [
+      "E01",
+      "E02",
+      "E03",
+      "E04"
+    ],
+    "unresolved": []
+  },
+  "rs_pattern": {
+    "primary": null,
+    "supporting": [],
+    "matches": [],
+    "outside_taxonomy": false,
+    "reason": "范围先决条件不满足，不进入15+31机制适配与评分；此处非outside_taxonomy结论。",
+    "executes_pattern": false,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [],
+    "unassigned": true,
+    "revision_proposals": [],
+    "reason": "out_of_scope；不将训练课程硬映射为非权重harness闭环。"
+  },
+  "pattern_mapping": [],
+  "expectations": [],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "自适应可验证环境改善RL后的LM推理能力",
+      "setting": "400固定手工环境；DAPO训练与外部推理基准",
+      "baseline/control": "静态课程、原RL训练延续（作者报告）",
+      "selection_vs_test": "课程由训练rollout反馈更新，最终测量训练后policy",
+      "result/denominator": "范围排除，不在此复评其数值主张",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "有反馈驱动课程，并不单独证明非权重harness留存收益。"
+    }
+  ],
+  "assessment": {
+    "scope_class": null,
+    "evidence_level": "task",
+    "claim_support": "unresolved",
+    "strongest_supported_claim": "完整材料确认这是固定可验证环境上的自适应课程RL及训练后policy评估；范围外，不对科学质量作评分裁决。",
+    "unresolved": [
+      "范围外，训练收益主张不在本次rubric下判定supported/unsupported。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "unknown",
+      "rating": null,
+      "reason": "out_of_scope：冻结A3范围排除，不产生质量档位。",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": null,
+  "status": "out_of_scope",
+  "reason": "按冻结 A3，以被评价对象判范围：RLVE 依据 rollout 正确率调整固定手工环境的难度区间，目的是 DAPO/GRPO 更新并输出 LM 权重。部署性能改善由训练后 policy 衡量；未评估反馈编辑并跨任务留存的 prompt/skill/tool/workflow/memory/评测器。训练内课程标量的跨步状态不单独构成本文所评价的 harness 留存产物；自动环境代码工程明确为未来工作。故不以低分替代范围排除，也不将 RLVE-Gym 仅凭可供未来使用泛化为本范围 B 类。",
+  "rationale": "反馈用于调节固定环境的训练难度并更新policy权重；未评估留存非权重harness，自动环境工程是未来工作。按冻结A3排除，不以低分代替范围判定。"
+}

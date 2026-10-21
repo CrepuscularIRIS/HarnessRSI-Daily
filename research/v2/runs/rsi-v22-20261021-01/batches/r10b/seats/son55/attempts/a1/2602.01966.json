@@ -1,0 +1,761 @@
+{
+ "status": "reviewed",
+ "reason": "Full HTML text incl. appendix text read; prompt figures 7-12 and plots 2/5/6 are images not present as text (recorded in materials.missing_sections). In scope as A-class borderline: text insight queues (non-weight) plus a learned soft prompt P_theta; LLM weights are not stated to be updated.",
+ "paper": {
+  "paper_key": "2602.01966",
+  "paper_id": "2602.01966",
+  "title": "Self-Consolidation for Self-Evolving Agents",
+  "version": "2602.01966v1",
+  "claim_type": "system_method",
+  "central_claim": "EvoSC, a model-agnostic test-time learning framework combining contrastive error-prone/success insight extraction (text, FIFO queues) with parametric trajectory consolidation into learnable prompt tokens, significantly outperforms static agents and conventional experience replay (AWM, TER, SCM, A-MEM) on LifelongAgentBench (DB/OS/KG) and stays context-efficient where replay baselines go OOM."
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2602.01966v1",
+   "sha256": "27abc6dc6b1cc7428f6638c7ab0f7cd2f0a8546bc9008707a4ed523177b37f55",
+   "sections_read": [
+    "abstract",
+    "1 Introduction",
+    "2 Related Works",
+    "3 Problem Formulation",
+    "4 Method incl. Algorithm 1",
+    "5 Experiments (setup, Tables 1-3, analysis, ablation)",
+    "6 Conclusion",
+    "7 Limitations",
+    "Appendix A text (Tables 4-5 dialogue cases, figure captions)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 2, 5, 6 plot values (images, no page_images in manifest)",
+    "Figures 4, 7-12 prompt templates and knowledge examples (images)"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "First, by focusing solely on success, agents overlook the rich pedagogical value embedded in failed attempts",
+   "support_explanation": "Author gap 1: prior replay methods use only successful trajectories.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "continually accumulating textual experiences not only increases the time consumption during retrieval but also inevitably introduces noise and exhausts the largest context window of current LLMs",
+   "support_explanation": "Author gap 2: textual experience accumulation costs time, adds noise and exhausts context.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Error-Prone Experience Extraction",
+   "quote": "failed interactions tend to diverge at critical decision points",
+   "support_explanation": "Rationale for contrasting one failed and one successful dialog to extract error-prone insights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Sec 4.1",
+   "quote": "these extracted insights are stored in a first-in-first-out (FIFO) queue, ensuring the agent prioritizes recent lessons while automatically pruning outdated error information",
+   "support_explanation": "Only maintenance rule for the textual insight store is recency eviction; no utility test, merge, conflict handling, or rollback.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Sec 4.2",
+   "quote": "we propose parametric trajectory consolidation that internalizes the knowledge embedded in many long-term multi-round interaction trajectories into compact, learnable prompt tokens",
+   "support_explanation": "Defines the persistent parametric object: learnable prompt tokens P_theta distilled from many trajectories.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "Sec 4.2 after Table 1",
+   "quote": "The consolidation process aims to synchronize the student’s parametric response with the expert’s contextual reasoning at every decision point.",
+   "support_explanation": "Context-distillation objective: teacher (LLM with many trajectories in context) generates expert action A*, student (few trajectories + P_theta) is trained with token cross-entropy.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Implement Details",
+   "quote": "the length of the learnable prompt is set to 20",
+   "support_explanation": "Size of the consolidated parametric memory.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Implement Details",
+   "quote": "we run each experiment three times with random seeds and report the averaged results",
+   "support_explanation": "Three seeds averaged; no variance, interval or test is reported anywhere in the text.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Implement Details",
+   "quote": "the teacher model uses 20 trajectories for reasoning, whereas the student model uses 8 trajectories",
+   "support_explanation": "Teacher/student context asymmetry at Exp=32; the same LLM plays both roles (two A40 GPUs); consolidation frequency/steps/lr are not given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "Sec 4.3",
+   "quote": "EvoSC adopts a hybrid injection strategy that combines explicit textual retrieval with consolidated parametric guidance",
+   "support_explanation": "Next-task reading: P_theta, Exp_c, Exp_s and retrieved successful dialogs are all prepended to the task input.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Benchmark",
+   "quote": "Database (DB, 500 tasks), Operating System (OS, 500 tasks), and Knowledge Graph (KG, 396 tasks)",
+   "support_explanation": "Evaluation sets are the sequential streams of LifelongAgentBench; the same stream both feeds the memory and is reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "Table 1 (Llama 3.1-8B, DB)",
+   "quote": "EvoSC (ours) 24.8 71.2 74.4 77.2 77.8 65.1 (+6.7)",
+   "support_explanation": "EvoSC DB average 65.1 vs best baseline gap +6.7.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "Table 1 (Llama 3.1-8B, DB)",
+   "quote": "A-MEM ( Xu et al., 2025 ) 19.8 57.0 67.0 74.8 73.4 58.4",
+   "support_explanation": "Strongest DB/Llama baseline average is 58.4 (A-MEM), so the margin over the best baseline is 6.7, not 9.7.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "Sec 5.2 Performance on DB and OS Tasks",
+   "quote": "EvoSC achieves a substantial average performance boost of +9.7% on Llama 3.1-8B compared to the best-performing baselines",
+   "support_explanation": "Text says +9.7 vs best baselines but Table 1 shows +6.7 vs best baseline (+9.7 only vs AWM 55.4); headline margin is overstated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "Table 1 (Qwen 2.5-7B, DB)",
+   "quote": "EvoSC (ours) 75.4 75.0 76.8 75.2 76.2 75.7 (+0.7)",
+   "support_explanation": "Qwen DB margin is +0.7 on a 500-task stream with 3-seed mean and no variance: within plausible noise.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "Table 2 (Qwen 2.5-7B, KG)",
+   "quote": "EvoSC (ours) 29.3 39.4 39.6 45.2 38.4 (+10.6)",
+   "support_explanation": "Largest margin; KG baselines on Qwen are weak (A-MEM avg 15.1 below its own Exp=0 value 16.4), EvoSC gains with more experience.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "locator": "Table 3 ablation (Llama 3.1-8B, DB)",
+   "quote": "24.8 74.0 73.8 75.6 77.8 65.2 ✓ ✓ ✓ 24.8 71.2 74.4 77.2 77.8 65.1",
+   "support_explanation": "Row with two ticks (EE+SE) averages 65.2 and the full model with PTC 65.1: parametric consolidation adds nothing on DB/Llama; tick-column alignment is lost in the text extraction, so which flags the earlier rows use is inferred.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "locator": "Table 3 ablation (Qwen 2.5-7B, OS)",
+   "quote": "✓ ✓ 48.4 53.8 56.2 58.8 OOM 54.4 ✓ ✓ ✓ 48.4 57.4 56.2 59.4 56.4 55.6",
+   "support_explanation": "Without PTC the Exp=32 cell is OOM so the 54.4 average covers four settings while the full model's 55.6 covers five: averages are not like-for-like; the matched cells differ by 0 to 3.6 points.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "locator": "Sec 5.2.1 Ablation Study",
+   "quote": "The exclusion of the parametric trajectory consolidation results in the most significant performance bottleneck, particularly in long-horizon tasks.",
+   "support_explanation": "Author narrative claims PTC is the most important component; Table 3 DB/OS rows do not show this, and KG ablation is only in an image (Fig. 6).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "locator": "Sec 5.2 Overcoming Context Limitations",
+   "quote": "baseline methods frequently encounter OOM errors as the number of experiences increases",
+   "support_explanation": "Supports the context-scalability claim: baselines OOM at Exp=32 (DB/OS) and Exp=16 (KG) on Qwen; EvoSC runs.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "locator": "Sec 7 Limitations",
+   "quote": "the relatively simplistic experience retrieval mechanism inevitably constrains the reasoning capabilities of agents",
+   "support_explanation": "Authors concede simplistic retrieval; only 7B/8B models were tested.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "locator": "Algorithm 1 Step 4",
+   "quote": "Step 4: Update Experience Repository",
+   "support_explanation": "Algorithm 1 pushes the Exp_c / Exp_s computed in Step 1 (before the task is executed, from recent stored dialogs) rather than insights derived from the just-finished trajectory, contradicting Sec 4.1 where insights come from the new success/failure pair; the consolidation trigger ('periodic intervals') has no schedule.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "locator": "Sec 2.2 closing",
+   "quote": "existing methods often lack effective strategies for long-term memory consolidation and knowledge reinforcement across extended interaction histories",
+   "support_explanation": "Related work compares AWM, TER, SCM, A-MEM, MemoryBank but cites no method that already contrasts success with failure (e.g. Reflexion/ExpeL-style) or distils context into soft prompts; closest-neighbour coverage is therefore incomplete.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "Two FIFO queues of natural-language insights (error-prone Q_err, success Q_succ) plus the pool R_succ of successful dialogs; baseline = replay of recent successful trajectories (TER)",
+   "information": "Complete interaction dialogs of tasks with binary environment verdict R in {0,1}; no test-time hidden labels beyond the benchmark's own success check",
+   "operation": "LLM contrasts a failed dialog with a successful one to emit error-prone points and avoidance strategies; abstracts two successful dialogs into reusable patterns",
+   "output": "Exp_c and Exp_s text snippets injected with recent successful dialogs into the task prompt",
+   "conditions": "Needs per-task success/failure verdicts and at least one stored success to contrast with",
+   "feedback": "Environment verification EnvVerify(t_k) after each task",
+   "selection_rule_data": "No admission test: every failure yields an error insight, every success a success insight; eviction by FIFO recency only",
+   "persistence": "In-memory queues, grown across the task stream",
+   "later_use": "Top-K entries retrieved and prepended to subsequent task inputs (Eq. 7)",
+   "claimed_effect": "Higher success rate than replay-only baselines and stable gains as Exp grows",
+   "failure_boundary": "Insights never verified for correctness or utility; algorithm text inconsistent about which dialogs feed Exp_c; retrieval described as simplistic",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004",
+    "E010",
+    "E021",
+    "E022"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "A 20-token learnable soft prompt P_theta prepended to the input",
+   "information": "Teacher sees many successful trajectories (E_many) in context; student sees only a few (E_few) plus P_theta; hidden-state/weight access of the frozen LLM not stated",
+   "operation": "Context distillation: minimise token-level cross-entropy of teacher-generated actions A* given student context, updating only P_theta",
+   "output": "Updated P_theta replacing part of the textual replay",
+   "conditions": "Triggered 'at periodic intervals' (frequency, steps, lr, init/continuation undisclosed); successful-trajectory histories used as the rollout prefix",
+   "feedback": "Teacher outputs conditioned on environment-verified successful trajectories; teacher action A* is LLM-generated and not itself verified against the environment",
+   "selection_rule_data": "No held-out check, no accept/reject of a consolidation round, no rollback",
+   "persistence": "P_theta parameters carried across the stream",
+   "later_use": "Prepended in every later task prompt (Eq. 7)",
+   "claimed_effect": "Constant prompt length while absorbing history, enabling Exp=16/32 where baselines OOM",
+   "failure_boundary": "Stale or wrong consolidated behaviour cannot be detected or retired; PTC ablation shows ~0 gain on DB/Llama",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E007",
+    "E009",
+    "E010",
+    "E017",
+    "E018"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Replay methods use only successes and, as raw trajectories accumulate, retrieval cost, noise and the context window become limits.",
+  "checked_gap": "Context exhaustion is real and demonstrated (baselines OOM at large Exp, Qwen). The 'ignores failures' premise is overbroad: failure reflection is an established move, and the paper compares only against AWM/TER/SCM/A-MEM.",
+  "lineage_closest_adjacent": "Ancestors: textual experience replay (TER, LifelongAgentBench baseline), AWM workflow memory, SCM, A-MEM (all in local paper text, v1). Closest unlisted neighbours not in the package: Reflexion/ExpeL-style success-vs-failure insight extraction, context distillation / soft-prompt tuning for memory (our_inference, no local source; requested in batch notes).",
+  "residue": "Memory that is non-text still has no admission gate, conflict handling or retirement; constant-size soft prompt may overwrite earlier consolidation.",
+  "stakes": "Long-horizon agents cannot keep replaying full dialogs; small models OOM at Exp>=16 (KG) or 32 (DB/OS).",
+  "method_response": "Contrast-based text insights cover the failure gap; soft-prompt distillation covers the context gap.",
+  "remaining_gap": "No evidence PTC beats simply using fewer/shorter retained trajectories, a summary, or the insights alone on DB/OS; no cost accounting; same-stream evaluation.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E020",
+   "E023"
+  ],
+  "unresolved": [
+   "Whether prior failure-aware reflection methods already deliver the contrastive gain (neighbour originals absent)",
+   "Training cost and frequency of consolidation"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [
+   "self_supervised_signal_engineering"
+  ],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "Conditioning of a frozen-weights LLM on retrieved instances, textual insights and learned prompt tokens (definition match). C03 step 1-3 (canonical schema, upstream phase teaching format parsing, category-level holdout) are not executed: no unified schema, the 'training' is a soft-prompt distillation for the same stream, no held-out category.",
+    "success_failure_checks": "Failure mode 'obvious cheaper alternative (longer raw context / nearest neighbour) not isolated' partly applies: raw replay is the baseline, but a matched-budget summary or longer-context baseline is absent; ablation of conditioning channels exists (Table 3).",
+    "evidence_ids": [
+     "E005",
+     "E010",
+     "E017"
+    ],
+    "reason": "Operation is adapting to the task stream by conditioning (text + soft prompt) without updating the LLM; sub-card C03 is a singleton about format-parsing training and does not fit, so sub_id is null."
+   },
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "Supervisory target for P_theta is generated by the same LLM with a richer context (teacher A*), a manufactured signal; no confidence/consistency filtering stage (C08 filter) and not preference-based (C26).",
+    "success_failure_checks": "Success condition 'curation stage on self-generated signal is load-bearing' is unmet (no filter); failure mode 'gain too small for cost' possibly applies on DB/OS (cost unreported).",
+    "evidence_ids": [
+     "E006",
+     "E017"
+    ],
+    "reason": "Kept as supporting only because the distillation target is model-generated rather than env labels; sub-cards C07/C08/C26 differ in mechanism."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Primary and supporting assigned; match is moderate/weak and sub-cards are null with stated differences.",
+  "executes_pattern": true,
+  "resolves_problem": "partial: context overflow resolved (baselines OOM, EvoSC runs); accumulation noise and failure reuse only weakly isolated."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "v2.2-cards",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "condition": "rsi:abstract_experience_into_guidance/S2",
+      "status": "met",
+      "reason": "Success-vs-failure contrast is the stated extraction method."
+     },
+     {
+      "condition": "rsi:abstract_experience_into_guidance/S3",
+      "status": "met",
+      "reason": "Binary environment verdict decides which queue receives the insight."
+     },
+     {
+      "condition": "rsi:abstract_experience_into_guidance/S4",
+      "status": "partial",
+      "reason": "FIFO pruning only; no consolidation of text entries or edits."
+     },
+     {
+      "condition": "rsi:abstract_experience_into_guidance/S5",
+      "status": "unmet",
+      "reason": "No gate on which insights/consolidations are kept."
+     }
+    ],
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E010"
+    ]
+   },
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "v2.2-cards",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "condition": "rsi:couple_context_and_weight_updates/S4",
+      "status": "partial",
+      "reason": "Experience is compressed into a few learnable tokens on a (presumably) frozen backbone with recent insights kept as text; backbone freezing is not explicitly stated."
+     },
+     {
+      "condition": "rsi:couple_context_and_weight_updates/F5",
+      "status": "unmet",
+      "reason": "Test-time evolution on the incoming stream with no declared adaptation/report split (failure mode is present)."
+     }
+    ],
+    "evidence_ids": [
+     "E005",
+     "E006",
+     "E011"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": [
+   "Soft-prompt consolidation of retrieved experience sits between H00 and H28; consider whether 'learned prompt tokens' count as harness state or weights (A3 scope boundary)."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "RS: express new task as conditioning (retrieved instances, examples) without parameter updates; domain: reflect on outcomes into lessons and inject into later tasks. EvoSC injects contrast-derived insights plus retrieved dialogs as conditioning for later tasks.",
+   "necessary_conditions_differences": "Domain card requires grounding signal (met) and separate construction/evaluation streams (unmet); RS card requires structural holdout (unmet).",
+   "evidence_ids": [
+    "E003",
+    "E010",
+    "E011"
+   ]
+  },
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "couple_context_and_weight_updates",
+   "domain_sub": "H28",
+   "operation_correspondence": "RS: derive adaptation signal from model's own outputs; domain: internalize context into learnable tokens. P_theta is trained on teacher-LLM actions generated with a larger context.",
+   "necessary_conditions_differences": "Domain S1 (one rollout stream for both levers) partially holds; weights of backbone not trained, so the weight-lever of H28 is only the soft prompt.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md Reviewer expectations #3 (source: reject_reviews)"
+   ],
+   "applies_when": "A conditioning/retrieval method claims advantage over simpler conditioning",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Raw replay baselines at equal Exp are compared, but no matched-budget longer-context, summary, or nearest-neighbour variant; baselines OOM, so the cheaper alternative cannot run at large Exp.",
+   "evidence_ids": [
+    "E020",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "rs-card-bullet-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "same card, Reviewer expectations #4 (source: both)"
+   ],
+   "applies_when": "Multi-module conditioning pipeline",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Three modules ablated on DB/OS (Table 3) but the ablation shows PTC adds ~0 on DB/Llama and mixed gains elsewhere; KG ablation only in a figure.",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00-step4",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md Step-by-Step 4 (leakage gap recurs across cluster)"
+   ],
+   "applies_when": "Memory is updated while the evaluation stream runs",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Lessons accumulate on the same stream that is reported; no frozen-store or held-out test.",
+   "evidence_ids": [
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00-step5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md Step-by-Step 5"
+   ],
+   "applies_when": "Claims that stored lessons carry the gain",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Store-off style rows exist (Table 3 EE/SE/PTC) but no budget-matched baseline, no variance, extraction/consolidation call cost not reported.",
+   "evidence_ids": [
+    "E008",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json abstract_experience_into_guidance F5"
+   ],
+   "applies_when": "Store claims to be experience-grounded",
+   "applicable": true,
+   "status": "met",
+   "reason": "Store is outcome-grounded (env verdict), so the failure mode of an ungrounded store is avoided.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "v2.2-cards",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json couple_context_and_weight_updates F5"
+   ],
+   "applies_when": "Test-time evolution on the incoming stream",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No declared split between the adaptation stream and the reported stream.",
+   "evidence_ids": [
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2602.01966-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 5.1: three seeds averaged, no variance; Sec 5.2 margins of 0.7-1.7 points"
+   ],
+   "applies_when": "Small margins on 500-task streams",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No seed variance, interval or significance despite sub-2-point margins on DB/OS.",
+   "evidence_ids": [
+    "E008",
+    "E015"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2602.01966-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Abstract names time consumption as motivation"
+   ],
+   "applies_when": "Cost/time claims motivate the method",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Neither wall-clock, token, nor GPU-hour cost of extraction, consolidation or inference is reported; only 'two A40' hardware.",
+   "evidence_ids": [
+    "E002",
+    "E009"
+   ],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "EvoSC outperforms replay/memory baselines across DB/OS/KG on Llama 3.1-8B and Qwen 2.5-7B.",
+   "setting": "LifelongAgentBench sequential streams, Exp in {0,1,4,16,(32)}, avg over Exp settings",
+   "baseline_control": "AWM, TER, SCM, A-MEM (implementations unspecified; same Exp budget)",
+   "selection_vs_test": "Same stream learns and reports; sequential (each task sees only earlier tasks); no separate held-out stream",
+   "result_denominator": "Avg gains vs best baseline: DB +6.7 / +0.7, OS +1.7 / +4.4, KG +5.7 / +10.6 (Llama/Qwen); 500/500/396 tasks, 3 seeds, no variance",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E015",
+    "E016"
+   ],
+   "counterevidence": [
+    "E014",
+    "E015"
+   ],
+   "allowed_conclusion": "Modest-to-large average margins over replay baselines on this benchmark with two small models; DB/Qwen and OS/Llama margins within plausible noise."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Both error-prone and successful experience extraction are vital.",
+   "setting": "Table 3 / Fig 6 ablation",
+   "baseline_control": "single-component and EE+SE rows vs full",
+   "selection_vs_test": "same stream",
+   "result_denominator": "DB Llama: single-component rows 61.7/62.2 vs EE+SE 65.2",
+   "evidence_ids": [
+    "E017"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Combining EE and SE gives ~3 points over single components on DB/Llama (column assignment inferred); no variance."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Parametric trajectory consolidation internalises experience, removes context limits, and is the most significant component.",
+   "setting": "Soft prompt of length 20 distilled from teacher with many trajectories",
+   "baseline_control": "EE+SE without PTC; baselines OOM at large Exp",
+   "selection_vs_test": "same stream",
+   "result_denominator": "PTC effect: DB/Llama -0.1 (65.2 vs 65.1); OS/Llama +0.6; DB/Qwen +0.3; OS/Qwen avg 54.4 (4 settings) vs 55.6 (5 settings)",
+   "evidence_ids": [
+    "E005",
+    "E017",
+    "E018",
+    "E020"
+   ],
+   "counterevidence": [
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "allowed_conclusion": "PTC makes Exp=16/32 runnable where raw replay OOMs; accuracy contribution of PTC beyond EE+SE is small and not shown to be significant on DB/OS."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "On LifelongAgentBench with 7-8B models, combining recency-queued contrastive/success insights with a distilled soft prompt gives equal or higher success than replay/memory baselines and avoids OOM at large Exp; the improvement is measured on the same stream that builds the memory and the soft-prompt part adds little accuracy on DB/OS.",
+  "unresolved": [
+   "Whether gains are retained on an independent held-out stream",
+   "Variance across seeds and stream order",
+   "Cost of insight extraction and consolidation",
+   "KG ablation values (image only)"
+  ],
+  "level_reason": "Same-stream sequential evaluation without a frozen-store held-out stream (EVIDENCE rule 2) caps this at task; store-off is not isolated except through Table 3."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real limitation (context exhaustion shown by OOM) but 'ignores failures' is overbroad and closest failure-aware/soft-prompt memory neighbours are not compared.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E020",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E023"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Clear two-part mechanism with an outcome signal and a distillation objective, but teacher targets are unverified, Algorithm 1 contradicts Sec 4.1, and no argument or test distinguishes soft-prompt consolidation from simply keeping fewer trajectories.",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E006",
+    "E022"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Next-task reading is explicit (Eq. 7) but retention is FIFO only: no admission gate, versioning, rollback, staleness or conflict handling; consolidation schedule, steps and init unspecified; prompts are figures.",
+   "evidence_ids": [
+    "E004",
+    "E009",
+    "E010",
+    "E022"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Established environment-verified benchmark with binary task success; averaging over Exp settings that include OOM-truncated cells in ablation weakens comparability (E018).",
+   "evidence_ids": [
+    "E011",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E018"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Component ablation and Exp sweep exist, but PTC shows no accuracy gain on DB/Llama, text overstates it, no cheaper conditioning alternative (summary/longer window/insights-only at matched budget) and no budget match.",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E017",
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Memory is built and reported on the same stream, hyperparameters not shown to be set elsewhere, no contamination analysis; sequential prospective use of earlier tasks is the only separation.",
+   "evidence_ids": [
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample sizes and three-seed averages stated but no variance/interval/test; margins of 0.7-1.7 points on 500 tasks cannot be judged.",
+   "evidence_ids": [
+    "E008",
+    "E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No cost of LLM-based extraction, teacher passes, or soft-prompt training, nor wall-clock/token comparison, despite time cost being a stated motivation.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Sec 5.1 implement details",
+    "Sec 5.2 analysis",
+    "Sec 7 limitations",
+    "Appendix A text",
+    "Table 1-3 captions"
+   ]
+  }
+ },
+ "rationale": "Moderate two-part memory method; same-stream gains modest, PTC adds little on DB/OS, no variance or cost; E-weak.",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r10b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "aeca7209de23ba8ec9b1f3e274508a8113501ffd9709824a60216d9634b6122d",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker subagent has no accessible run receipt; model type as dispatched by controller.",
+  "timestamp": "2026-10-21T22:58:37Z"
+ },
+ "score": {
+  "raw": 46.25,
+  "display": 46.3,
+  "lower": 46.25,
+  "upper": 46.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

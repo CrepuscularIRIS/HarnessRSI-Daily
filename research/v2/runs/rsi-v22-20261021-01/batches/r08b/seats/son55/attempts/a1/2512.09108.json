@@ -1,0 +1,780 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r08b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Complete HTML full text read (appendix = before/after config and code listings, skimmed structurally); in scope as B-class component (prompt/config optimizer with retained optimized configs).",
+ "paper": {
+  "paper_key": "2512.09108",
+  "paper_id": "arXiv:2512.09108",
+  "title": "Evolving Excellence: Automated Optimization of LLM-based Agents",
+  "version": "2512.09108v2",
+  "claim_type": "system_method",
+  "central_claim": "Artemis, a no-code evolutionary platform with semantically-aware genetic operators, jointly optimizes LLM-agent configurations (prompts, tool descriptions, parameters) without architectural changes, improving four agents (ALE +13.6% acceptance, Mini-SWE +10.1%, CrewAI -39.1% tokens, MathTales +37.3% accuracy)."
+ },
+ "provenance": {
+  "input_hash": "c83742677a71bb679717a815981af89dbefe114b74bdea5003ea13caf10f6a1b",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to runtime receipt; model type as configured by controller.",
+  "timestamp": "2026-10-21T22:18:48Z"
+ },
+ "rationale": "黑盒演化优化平台，四个智能体前后对比有提升；无组件消融、无对照优化器，多数选择集即报告集，核心算子未公开。",
+ "materials": [
+  {
+   "material_id": "2512.09108.txt",
+   "url": "https://arxiv.org/html/2512.09108v2",
+   "version": "2512.09108v2",
+   "sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Problem Formulation",
+    "4 The Artemis Platform",
+    "5 Experimental Setup",
+    "6 Results",
+    "7 Discussion",
+    "8 Conclusion",
+    "Appendix A (supplementary results; code listings skimmed)"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "notes": "Figures 1-14 are images (captions and surrounding text read); appendix is long config/code listings."
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Abstract",
+   "quote": "treat components in isolation, missing critical interdependencies",
+   "support_explanation": "Author gap: existing optimizers treat components in isolation; the joint-interdependence claim is the stated motivation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Abstract",
+   "quote": "Given only a benchmark script and natural language goals, Artemis automatically discovers configurable components, extracts performance signals from execution logs, and evolves configurations without requiring architectural modifications.",
+   "support_explanation": "Defines the object (agent configuration) and the feedback (benchmark script + logs); black-box, architecture-agnostic.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 3 Problem Formulation",
+   "quote": "the platform uses LLM-based semantic understanding to evaluate fitness based on benchmark results",
+   "support_explanation": "Fitness is partly produced by an LLM from natural-language goals rather than a fixed formula; the exact scoring function is not given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 4 The Artemis Platform",
+   "quote": "using heuristics refined through extensive optimization runs",
+   "support_explanation": "Key orchestration heuristics (when to run expensive evaluations, confidence calibration, operator design) are proprietary and not specified.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 4 Optimization Strategies",
+   "quote": "Evolves individual components independently using genetic algorithms (GA).",
+   "support_explanation": "Local optimization: per-component GA with LLM mutation/crossover, for components without strong interdependencies.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 4 Optimization Strategies",
+   "quote": "Uses Bayesian optimization to find optimal combinations when components interact.",
+   "support_explanation": "Global optimization over component versions; the 'interdependence' premise is operationalised here but not ablated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 5.1 ALE Agent",
+   "quote": "However, optimization was performed exclusively for acceptance rate; performance and rank metrics were automatically calculated by the benchmark but never used in optimization logic, improving only indirectly through better algorithmic choices for correctness.",
+   "support_explanation": "ALE configuration is optimized on the acceptance rate of the same 40-problem benchmark on which it is reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 5.4 MathTales",
+   "quote": "During the optimisation process, we extract a subset of 50 problems from the benchmark as the validation set, select the configuration achieving the best metric performance, and then evaluate this selected version against the baseline on a larger set of 300 problems",
+   "support_explanation": "Only validation/evaluation split in the paper; overlap between the 50 and the 300 problems is not stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 5.4 MathTales",
+   "quote": "Genetic algorithm with two generations and a population size of 3.",
+   "support_explanation": "The MathTales evolutionary search is tiny (2 generations x 3 candidates), so improvement likely comes from replacing a very simplistic prompt rather than from search.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.1 ALE results",
+   "quote": "While neither reached statistical significance at α = 0.05 \\alpha=0.05 ( p = 0.10 p=0.10 for both)",
+   "support_explanation": "ALE gains (0.660 -> 0.750 prompt, 0.722 search) are not statistically significant; 95% CIs overlap.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.1",
+   "quote": "The optimization process required 411.2 hours for prompt optimization and 260.5 hours for search optimization",
+   "support_explanation": "Wall-clock optimization cost for ALE (671.7 h in total, see Sec 7).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.2 Mini-SWE",
+   "quote": "The Mini-SWE Agent demonstrated a statistically significant 10.1% performance improvement (p < 0.05) using the Mann-Whitney U test",
+   "support_explanation": "Mini-SWE improvement is significant by the authors' test (0.891 -> 0.981 in Table 3), single optimization run.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.2",
+   "quote": "The optimization completed in 9 hours across three generations with a population size of 3.",
+   "support_explanation": "Mini-SWE evolutionary search is likewise tiny (3 generations x 3 candidates).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.3 CrewAI",
+   "quote": "This came with a small but statistically significant 7.3% decrease in the average rate of correct problems (0.82 → \\rightarrow 0.76, p = 0.027 =0.027 ).",
+   "support_explanation": "The 39.1% token reduction was bought with an accuracy decrease (0.82 -> 0.76, p=0.027); in the 50x6 design the decrease is n.s. (p=0.277).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.3",
+   "quote": "intentionally failed at zero expense",
+   "support_explanation": "Cost reduction is partly obtained by token limits that fail expensive problems at no cost: the cost metric is satisfied through a trade, not through efficiency alone.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 6.4 MathTales",
+   "quote": "Across three repeated runs on the evaluation set, the optimised agent achieves an average completion rate of 0.917 versus 0.796 for the baseline (+15.2%) and an average accuracy of 0.81 versus 0.59 (+37.3%).",
+   "support_explanation": "Largest effect: Qwen2.5-7B agent, 3 repeated evaluation runs on 300 problems, p<0.001; baseline prompt was 'simplistic'.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 7 Discussion",
+   "quote": "optimizations may be specific to evaluation datasets rather than universally applicable",
+   "support_explanation": "Authors concede that gains may be benchmark-specific (project-level Mini-SWE results from +7.2 to -0.1 points).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 8 Limitations",
+   "quote": "establishing robust validation setups that avoid overfitting to specific benchmarks remains challenging",
+   "support_explanation": "Authors acknowledge the overfitting/validation risk.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 2 Table 1 caption",
+   "quote": "Comparative analysis of LLM agent optimization frameworks",
+   "support_explanation": "Comparison with APE, PromptBreeder, ADAS, AFlow, AlphaCodium, GEPA, ShinkaEvolve is a qualitative table (Scope/Generality/Semantic/Scalable ratings assigned by the authors); no method was run as a baseline.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 7 Discussion",
+   "quote": "The most striking pattern is the relationship between initial configuration quality and optimization success.",
+   "support_explanation": "Authors attribute gains to weak, generic starting prompts; the baseline is not a tuned human prompt.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 7 Reproducibility",
+   "quote": "While the complete Artemis platform setup cannot be shared, the provided code allows practitioners to examine our agent implementations and verify the reported performance improvements.",
+   "support_explanation": "The optimizer itself (Artemis, TurinTech) is not released; only the four target agents are.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 7 Discussion",
+   "quote": "The ALE Agent required 671.7 total hours across all optimization experiments, representing substantial resource investment.",
+   "support_explanation": "Cost of optimization reported in hours; monetary or token cost of the evolution runs is not reported.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2512.09108.txt",
+   "material_sha256": "96e1de0e2035c1efbeec7fbf9956e9366befb387b752c6671cc724b32a314b35",
+   "locator": "Sec 4 Optimization Strategies",
+   "quote": "cheap evaluators (LLM-based scoring, static analysis) filter candidates quickly, while expensive evaluators (full benchmark runs) validate only promising configurations.",
+   "support_explanation": "Hierarchical evaluation: LLM-scored proxy filters before benchmark execution; proxy-to-real rank transfer is not checked.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Black-box agent configuration: system prompts, tool descriptions, YAML parameters/templates, search-strategy code (ALE), model/temperature settings",
+   "information": "Benchmark script and results, execution logs, natural-language optimization goals; agent internals are not modified",
+   "operation": "Discover configurable components by semantic search; evolve them with LLM-ensemble mutation/crossover (local GA per component) or Bayesian optimization over component-version combinations (global)",
+   "output": "An optimized configuration file that replaces the baseline",
+   "conditions": "A runnable benchmark with an objective metric; headroom in the baseline prompts; budget of tens to hundreds of hours",
+   "feedback": "Benchmark outcomes/logs; LLM-based scoring as a cheap proxy before full benchmark runs",
+   "selection_rule": "Highest fitness (LLM-interpreted from natural-language goals) after hierarchical evaluation; exact rule and operators not disclosed (E003, E004)",
+   "selection_data": "Same benchmark as reported for ALE and (apparently) Mini-SWE/CrewAI; 50-problem validation vs 300-problem evaluation for MathTales (E007, E008)",
+   "persistence": "Final configuration file reused in deployment ('persist across future deployments')",
+   "later_use": "Deployed agent uses the new configuration; no further evolution read-back",
+   "claimed_effect": "ALE +13.6% acceptance (n.s.), Mini-SWE +10.1% (sig.), CrewAI -39.1% tokens with -7.3% accuracy, MathTales +37.3% accuracy",
+   "failure_boundary": "Little headroom if the baseline is already tuned; benchmark-specific gains (project-level range +7.2 to -0.1); expensive for large evaluations",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E010",
+    "E012",
+    "E014",
+    "E016",
+    "E017"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Fitness signal and evaluation schedule of the optimizer",
+   "information": "Natural-language goals; benchmark metrics; LLM judgements",
+   "operation": "LLM interprets benchmark results against goals to produce fitness; cheap LLM/static filters precede full benchmark runs",
+   "output": "Scores that rank candidates",
+   "conditions": "Proxy must rank-correlate with true benchmark score (unchecked)",
+   "feedback": "Same as S1",
+   "selection_rule": "See S1",
+   "selection_data": "See S1",
+   "persistence": "not_applicable",
+   "later_use": "not_applicable",
+   "claimed_effect": "Reduces expensive benchmark executions",
+   "failure_boundary": "Cost metric can be satisfied by failing expensive problems (E015)",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E015",
+    "E023"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Agent optimization methods optimize isolated components (prompts, workflows) or need architectural access; few unified, architecture-agnostic end-to-end frameworks exploit execution logs.",
+  "checked_gap": "Isolated-component optimizers exist (APE, PromptBreeder, GEPA, DSPy) and joint prompt+tool+parameter tuning is plausibly useful, but the paper gives no measurement that component interdependence limits isolated optimization, and its comparison with neighbours is a self-rated qualitative table (E019).",
+  "lineage": "APE/PromptBreeder (prompt evolution) -> GEPA (Pareto reflective prompt evolution), DSPy (prompt/pipeline compilation), ADAS/AFlow (workflow code search) -> Artemis (proprietary semantic GA + Bayesian optimization over agent configuration).",
+  "closest_adjacent": "GEPA and DSPy (closest in object and feedback), ADAS/AFlow (agent structure), ShinkaEvolve (LLM evolutionary code); none re-run here and none fixed locally as source text.",
+  "residue": "Whether joint optimization beats isolated or simple LLM-rewrite baselines; transfer of tuned configurations across tasks and LLMs; held-out validity of gains.",
+  "stakes": "Weeks of manual configuration effort per agent.",
+  "method_response": "Black-box platform with semantic mutation/crossover, local and global search, hierarchical evaluation.",
+  "remaining_gap": "No ablation of joint vs isolated or semantic vs plain operators, no comparison with another optimizer, no held-out split for most agents, proprietary operators.",
+  "evidence_ids": [
+   "E001",
+   "E019",
+   "E004",
+   "E021"
+  ],
+  "unresolved": "Neighbour papers' reported numbers and claims not fixed as local sources."
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": true,
+  "reason": "The executed operation is an LLM-operator evolutionary + Bayesian search over mixed-type agent configurations scored by benchmark fitness. None of the 15 main cards defines a population generate-evaluate-select loop over artifacts. Considered and rejected: heterogeneous_decomposition (the local/global split chooses an optimizer by component interdependence, but no heterogeneity is measured or exploited in the card's sense), relax_discrete_search_to_continuous (Bayesian optimization over component versions is not a differentiable/amortized relaxation), decompose_and_delegate (cheap vs expensive evaluators is an evaluation schedule, not sub-problem routing).",
+  "executes_pattern": null,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "domain_cards_hash:52ff96577c9c",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H13",
+    "version": "52ff96577c9c",
+    "fit": "medium",
+    "condition_checks": "step1 genome and neighbourhood fixed: met (prompts, tool descriptions, parameters; search-strategy code for ALE); step2 fitness defined before searching: partial (benchmark metrics chosen per agent, but fitness is LLM-interpreted from natural-language goals); step3 scoring vs reporting separation: unmet for ALE/Mini-SWE/CrewAI as described, partial for MathTales (50 vs 300, overlap unstated); step4 explicit budget and cost: partial (hours, $24-26 per ALE run, no total tokens or $ for evolution); step5 show what the search adds against greedy/random/no-search: unmet. F1 generic loop on new domains: present as the contribution is platform application.",
+    "evidence_ids": [
+     "E002",
+     "E003",
+     "E007",
+     "E008",
+     "E009",
+     "E011",
+     "E013",
+     "E022"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [],
+ "expectations": [
+  {
+   "id": "rsi:population_search_executable_fitness/S1",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S1"
+   ],
+   "applies_when": "A search-level novelty is claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Claimed novelty is semantic operators, joint tuning and hierarchical evaluation, but none is isolated or ablated; the contribution reads as platform application to four agents.",
+   "evidence_ids": [
+    "E002",
+    "E019",
+    "E023"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S2"
+   ],
+   "applies_when": "Selection by executable evaluator",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Benchmark metrics are executable for ALE and SWE-Perf, but fitness is LLM-interpreted (E003), CrewAI correctness uses an agent judge, and the cost metric was met partly by failing expensive problems (E015); proxy rank-transfer is not checked (E023).",
+   "evidence_ids": [
+    "E003",
+    "E015",
+    "E023"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S4",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S4"
+   ],
+   "applies_when": "Mutations should be grounded in evaluator observations",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Execution logs are said to be mined for signals (E002) but no example, format or ablation shows how they steer mutation.",
+   "evidence_ids": [
+    "E002"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S6",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S6"
+   ],
+   "applies_when": "Genome enlarged from prompts to full configurations",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Joint configuration genome is adopted from the outset without showing a ceiling of prompt-only search.",
+   "evidence_ids": [
+    "E001",
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F1",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.F1"
+   ],
+   "applies_when": "Generic evolution loop applied to new targets",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Failure mode is present: four agents/benchmarks are optimized with a standard LLM-evolution loop; the search-level novelty is asserted not shown.",
+   "evidence_ids": [
+    "E002",
+    "E019"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F4",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.F4"
+   ],
+   "applies_when": "Proxy fitness",
+   "applicable": true,
+   "status": "partial",
+   "reason": "LLM-based proxy scoring and token-limit gaming (E015, E023) are used with only partial tie to the stated goal.",
+   "evidence_ids": [
+    "E015",
+    "E023"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H13-step3",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H13.md#step-by-step"
+   ],
+   "applies_when": "Prompt/config evolution with reported gains",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "ALE optimized and reported on the same benchmark; Mini-SWE and CrewAI split not described; MathTales has a validation/evaluation split with unstated overlap.",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E018"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H13-step4",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H13.md#step-by-step"
+   ],
+   "applies_when": "Budgeted evaluation",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Wall-clock hours and per-run dollar cost given; evolution token/dollar cost and matched-budget baselines are not.",
+   "evidence_ids": [
+    "E011",
+    "E013",
+    "E022"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H13-step5",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H13.md#step-by-step"
+   ],
+   "applies_when": "Search claimed to add value",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No random/greedy/no-search or single LLM-rewrite baseline; with 2-3 generations of 3 candidates the effect of search vs a better initial prompt is untested.",
+   "evidence_ids": [
+    "E009",
+    "E013",
+    "E020"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2512.09108-1",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "optimizer-comparison convention for prompt/agent optimization papers"
+   ],
+   "applies_when": "A new optimizer is claimed to be effective/general",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No comparison with GEPA, DSPy, ADAS/AFlow or a simple LLM-rewrite baseline; Table 1 is self-rated.",
+   "evidence_ids": [
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2512.09108-2",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "stochastic optimizer reproducibility"
+   ],
+   "applies_when": "Results come from one evolutionary run per agent",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Statistics cover evaluation repeats of the final configuration (10 runs x 30, 3 x 300) but not repeated optimization runs.",
+   "evidence_ids": [
+    "E012",
+    "E016"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2512.09108-3",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 6.3 trade-off disclosure"
+   ],
+   "applies_when": "Multi-objective accuracy/cost optimization",
+   "applicable": true,
+   "status": "partial",
+   "reason": "The accuracy loss is disclosed with p-values (credit), but the optimizer accepted a significant accuracy drop for cost without a stated constraint or Pareto presentation.",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ALE Agent acceptance rate improves 13.6% (0.660 -> 0.750) through prompt optimization; 9.3% through search optimization.",
+   "setting": "40 ALE-Bench problems",
+   "baseline_control": "original prompt/search",
+   "selection_vs_test": "optimized and reported on the same benchmark",
+   "result_denominator": "40 problems, 95% CI [0.594,0.726] vs [0.689,0.811], p=0.10",
+   "evidence_ids": [
+    "E007",
+    "E010",
+    "E011"
+   ],
+   "counterevidence": "not significant; CIs overlap; 411 h cost",
+   "allowed_conclusion": "A rewritten prompt shows a larger point estimate on the optimization benchmark; not statistically supported."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Mini-SWE gains 10.1% on SWE-Perf (0.891 -> 0.981), p<0.005.",
+   "setting": "140 instances, 9 projects, Claude 3.5 Sonnet",
+   "baseline_control": "generic YAML optimization instructions",
+   "selection_vs_test": "not described as separate",
+   "result_denominator": "140; per-project range +7.2 to -0.1 points",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E017"
+   ],
+   "counterevidence": "project-level heterogeneity; split unstated",
+   "allowed_conclusion": "On this benchmark the optimized YAML scores higher; generalization beyond it is unshown."
+  },
+  {
+   "claim_id": "C3",
+   "text": "CrewAI token use -39.1% (12033 -> 7330) at -7.3% accuracy.",
+   "setting": "Math Odyssey, 10 runs x 30 problems and 6 x 50",
+   "baseline_control": "original YAML (10 runs)",
+   "selection_vs_test": "15 'test cases' for optimization; evaluation samples overlap unspecified",
+   "result_denominator": "per-run problems; accuracy decrease significant at 30x10 (p=0.027), n.s. at 50x6 (p=0.277)",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "counterevidence": "cost reduced partly by failing expensive items",
+   "allowed_conclusion": "Cost-accuracy trade, not a Pareto improvement."
+  },
+  {
+   "claim_id": "C4",
+   "text": "MathTales (Qwen2.5-7B) accuracy +37.3% (0.59 -> 0.81), completeness +15.2%.",
+   "setting": "50 validation, 300 evaluation GSM8K problems, 3 runs",
+   "baseline_control": "five simplistic prompts",
+   "selection_vs_test": "validation 50 vs evaluation 300; overlap unstated",
+   "result_denominator": "300 problems x 3 runs",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E016"
+   ],
+   "counterevidence": "population 3 x 2 generations; baseline weak",
+   "allowed_conclusion": "Rewritten prompts help this small-model agent on GSM8K; the evolutionary component's role is not isolated."
+  },
+  {
+   "claim_id": "C5",
+   "text": "Joint, interdependence-aware optimization with semantic operators outperforms isolated component optimization and generalizes across agents (framing).",
+   "setting": "n/a",
+   "baseline_control": "none run",
+   "selection_vs_test": "n/a",
+   "result_denominator": "n/a",
+   "evidence_ids": [
+    "E001",
+    "E019",
+    "E021"
+   ],
+   "counterevidence": "no ablation, no baseline optimizer, proprietary core",
+   "allowed_conclusion": "Not tested."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "For three of four agents, configurations produced by the Artemis platform score higher than the authors' original configurations on the benchmarks they were tuned on (significantly for Mini-SWE and MathTales; not for ALE; CrewAI trades accuracy for tokens).",
+  "cannot_say": "That joint optimization or the semantic operators cause the gains; that Artemis outperforms any other optimizer or a plain LLM rewrite; held-out or cross-task validity; reproducibility of the optimizer.",
+  "unresolved": "Selection/test overlap for Mini-SWE/CrewAI/MathTales; mutation prompts and operator design; evolution token cost.",
+  "reproduction_note": "All results are author-reported; nothing re-run by us."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real but generic limitation (isolated vs joint tuning; manual tuning effort). Neighbours (GEPA, DSPy, ADAS, AFlow) are named but compared only through a self-rated table; no measurement that interdependence is the bottleneck.",
+   "evidence_ids": [
+    "E001",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "High-level mechanism (LLM-ensemble mutation/crossover, local GA vs global Bayesian, cheap-then-expensive evaluation) with generic justification; core heuristics are proprietary and the premise that joint search beats isolated search gives no distinguishing prediction that is tested.",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Platform workflow and the local/global split are described, boundaries are discussed (headroom, metric clarity, cost), but operators, fitness function, selection rule, population sizes (mostly 3 x 2-3), log use and retention/rollback are unspecified or proprietary.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E009",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Standard benchmarks and official metrics for ALE-Bench, SWE-Perf, GSM8K; but fitness is LLM-interpreted, CrewAI correctness judged by an agent, and the cost objective was partly reached by failing expensive problems.",
+   "evidence_ids": [
+    "E003",
+    "E012",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E015",
+    "E023"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Only before/after comparisons with the authors' own weak initial configs; no ablation of any Artemis component, no random/greedy/no-search or other-optimizer baseline, no budget-matched alternative; baseline prompts described as generic or simplistic.",
+   "evidence_ids": [
+    "E012",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E020",
+    "E009"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "ALE tuned and reported on the same 40 problems; no split described for Mini-SWE and CrewAI; MathTales has 50-validation vs 300-evaluation with unstated overlap; authors themselves flag overfitting to benchmarks.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "CIs, Mann-Whitney tests, repeated evaluation runs, and disclosure of non-significant (ALE p=0.10) and negative (CrewAI accuracy) results; but one optimization run per agent, small n (40), no multiple-comparison care.",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E014",
+    "E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Optimization hours (671.7 for ALE, 9 for Mini-SWE) and per-run dollar cost are reported and discussed; evolution token/$ cost, baseline-matched budgets and the cost of cheap proxy evaluations are missing.",
+   "evidence_ids": [
+    "E011",
+    "E013",
+    "E022"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 38.75,
+  "display": 38.8,
+  "lower": 38.75,
+  "upper": 38.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

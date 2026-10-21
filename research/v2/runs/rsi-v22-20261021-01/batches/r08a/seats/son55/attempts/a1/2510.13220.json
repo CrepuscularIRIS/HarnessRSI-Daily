@@ -1,0 +1,685 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r08a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full text read incl. appendices; in scope A-class gradient-free harness evolution.",
+ "paper": {
+  "paper_key": "2510.13220",
+  "paper_id": "2510.13220",
+  "title": "EvoTest: Evolutionary Test-Time Learning for Self-Improving Agentic Systems",
+  "version": "2510.13220v2",
+  "claim_type": "system_method",
+  "central_claim": "EvoTest evolves the whole agentic configuration (prompt, memory, hyperparameters, tool-use routines) from episode transcripts without gradients, giving faster test-time learning on J-TTL than reflection, memory, prompt-evolution and online RL baselines."
+ },
+ "provenance": {
+  "input_hash": "148cbaa6dc8736a9740273ab3937d02f3ec4cc3114cd68b65855125c285d86d0",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker; model_type is the controller-assigned type.",
+  "timestamp": "2026-10-21T22:18:30Z"
+ },
+ "rationale": "In-scope A-class loop with UCB gate and rollback; strong baselines and 5 seeds, but single replayed task, instance overfitting, table inconsistencies.",
+ "materials": [
+  {
+   "material_id": "2510.13220.txt",
+   "url": "https://arxiv.org/html/2510.13220v2",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-5",
+    "Conclusion",
+    "Appendix A-N (limitations, baselines, complexity, multi-seed, Evolver master prompt, case studies, qwen3 and scaling experiments)",
+    "Tables 1-10"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2510.13220.txt",
+   "locator": "Abstract",
+   "quote": "an evolutionary test-time learning framework that improves an agent without any fine-tuning or gradients—by evolving the entire agentic system after every episode.",
+   "support_explanation": "Central claim: whole-system gradient-free evolution between episodes.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2510.13220.txt",
+   "locator": "Abstract",
+   "quote": "we find that existing adaptation methods like reflection, memory, or reinforcement learning struggle.",
+   "support_explanation": "Author gap: existing adapters fail on J-TTL.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 2 Related Work",
+   "quote": "EvoTest generalizes prompt evolution to whole-system evolution, optimizing the entire agentic configuration—including the prompt, memory, hyperparameters, and tool-use routines.",
+   "support_explanation": "Delta vs EvoPrompt/Promptbreeder/TextGrad: more channels evolved.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 4.1",
+   "quote": "A system prompt that provides high-level strategic guidance, heuristics, and behavioral guardrails to the backbone LLM.",
+   "support_explanation": "Retained object 1: policy prompt.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 4.1",
+   "quote": "Active components executed at each decision-making step to operationalize knowledge and create useful state abstractions.",
+   "support_explanation": "Retained object 4: tool-use routines (memory logic + evolvable Python state extractor).",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 4.2",
+   "quote": "It also identifies sequences of interactions that led to no progress and records them in a \"failure\" table.",
+   "support_explanation": "Memory update by the Evolver from the transcript.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 4.3",
+   "quote": "At the start of each new episode, the UCB algorithm selects a single configuration, which is then used for the entire duration of that episode.",
+   "support_explanation": "Selection rule: UCB over parent+children, scored by one-episode returns.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 4.3",
+   "quote": "The UCB rule can then naturally \"fall back\" to the time-tested parent, which retains its high score.",
+   "support_explanation": "Rollback mechanism: parent stays in pool.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 3",
+   "quote": "This ensures that any performance improvement is solely attributable to the agent's internal learning process.",
+   "support_explanation": "Same game reset to identical initial state every episode.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 5.1 Baselines",
+   "quote": "All methods are evaluated under the same step budget and use the same backbone LLMs for their respective roles to ensure a fair comparison.",
+   "support_explanation": "Budget-matched in steps; Evolver compute not matched explicitly.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 5.2 RQ2",
+   "quote": "EvoTest achieves the highest AUC score on all six games, with an average score of 0.47/0.50",
+   "support_explanation": "Headline Table 1 result vs next best EvoPrompt 0.34/0.36.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 5.3 Ablation",
+   "quote": "confirming that evolving the high-level policy is the primary driver of strategic adaptation.",
+   "support_explanation": "Component ablation on 3 games; prompt evolution biggest.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 5.3 Prompt-structure ablation",
+   "quote": "it significantly underperforms our system, with the AUC score on Detective dropping from 0.94 to 0.65.",
+   "support_explanation": "Generic 'improve the prompt' Evolver instruction equals EvoPrompt level; structured Evolver prompt is a major factor.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2510.13220.txt",
+   "locator": "Appendix F",
+   "quote": "reports the mean Area Under the Curve (AUC) and standard deviation over 5 random seeds for all methods using the",
+   "support_explanation": "5-seed mean+-std exists for the main comparison only.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2510.13220.txt",
+   "locator": "Appendix A",
+   "quote": "are a form of strategic overfitting to the current task instance.",
+   "support_explanation": "Authors concede learned strategies are instance-specific.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2510.13220.txt",
+   "locator": "Appendix A",
+   "quote": "The J-TTL benchmark and our method are designed for rapid improvement on a single task.",
+   "support_explanation": "Scope is single-task replay.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2510.13220.txt",
+   "locator": "Appendix K / Ep 49",
+   "quote": "Follow this exact sequence to score 330 / 360 and win",
+   "support_explanation": "Evolved prompt becomes a full walkthrough of the replayed game.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 5.3 Efficiency",
+   "quote": "A fine-tuning pass on one episode's data took 5 to 10 minutes on 4 H100 GPUs.",
+   "support_explanation": "Cost comparison vs weight update; Evolver (o3) API cost not reported.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2510.13220.txt",
+   "locator": "Appendix A",
+   "quote": "This means that the success of the entire system hinges on access to a capable-and potentially expensive-\"optimizer\" model.",
+   "support_explanation": "Authors concede dependence on a strong Evolver.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2510.13220.txt",
+   "locator": "Appendix J.2",
+   "quote": "Unlike the Success Memory, this insight is not stored in a database to be queried.",
+   "support_explanation": "Contradicts Sec 4.2, which says failures go to a failure table; description inconsistent.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2510.13220.txt",
+   "locator": "Reproducibility Statement",
+   "quote": "All key hyperparameters and random seeds will be included in our public code release to ensure deterministic replication.",
+   "support_explanation": "UCB beta and number of children m not in the paper text.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2510.13220.txt",
+   "locator": "Table 1 vs Table 8",
+   "quote": "Memory 0.25 0.26 0.18 0.20",
+   "support_explanation": "Table 1 (gemini) Memory Detective 0.25; Table 8 multi-seed Memory Detective is 0.56 and its average does not match Table 1 (0.13): reporting inconsistency.",
+   "kind": "our_inference",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2510.13220.txt",
+   "locator": "Sec 5.3 Table 6 text",
+   "quote": "EvoTest (Avg. AUC 0.35) outperforms the strongest weight-update baseline, GRPO (0.31).",
+   "support_explanation": "Same-backbone comparison margin is small; stronger o3 Evolver variant gives 0.40.",
+   "kind": "author_report",
+   "sha256": "d6016bafe2e2c4b1e393472f2f0a67b7b95f8a6e6944913212c6e384191bd2a9"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Agent configuration chi=(prompt, success-memory table, hyperparameters, tool-use routines incl. Python state extractor)",
+   "information": "Evolver sees full previous-episode transcript and parent config; actor sees observation, memory hints",
+   "operation": "Evolver (o3) rewrites prompt, appends state-action successes to memory, tunes temperature, rewrites extractor/memory-use rule, producing children",
+   "output": "Child configurations",
+   "conditions": "After every episode of a 50-episode session",
+   "feedback": "Narrative transcript plus score deltas",
+   "selection_rule": "UCB over parent+children using mean episode score",
+   "persistence": "Configuration carried to next episode within a session; parent kept in pool",
+   "later_use": "Next episodes run with the selected config",
+   "claimed_effect": "AUC 0.47/0.50 vs 0.34/0.36 best baseline; wins Detective and Library",
+   "failure_boundary": "Instance-specific; Evolver-model dependent; single-game replay",
+   "evidence_ids": [
+    "E001",
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E008"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Agents cannot learn complex skills on the fly; reflection/memory/RL adapt only one channel or lack credit assignment in sparse reward.",
+  "checked_gap": "Reasonable: prompt-only evolvers leave decoding and memory-use logic fixed; ablation shows non-prompt channels add measurable but smaller gains.",
+  "lineage": "Reflexion -> TextGrad/Promptbreeder/EvoPrompt (prompt evolution) -> EvoTest (whole configuration)",
+  "closest_adjacent": "EvoPrompt/Promptbreeder (population of prompts), Reflexion; EvoAgent/MASS cited but not compared",
+  "residue": "Whether gains come from multi-channel evolution or from the engineered Evolver prompt",
+  "stakes": "Within-session adaptation without GPUs",
+  "method_response": "Whole-system evolution with UCB",
+  "remaining_gap": "Generalization beyond replayed instance; cost of strong Evolver",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E013"
+  ],
+  "unresolved": [
+   "ADAS/AFlow/ExpeL full text not in package"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 not executed (no unified schema/upstream tuning); the executed part is solving later episodes by conditioning a frozen model on an evolved prompt/memory with no weight updates.",
+    "success_checks": "Conditioning-channel ablations present; no category-level holdout; no contamination audit.",
+    "failure_checks": "Single task recipe; own-method ablations plus literature baselines.",
+    "evidence_ids": [
+     "E001",
+     "E012"
+    ],
+    "reason": "Closest RS card captures weight-free adaptation by conditioning; the evolutionary rewriting of the conditioning itself and UCB retention are outside the card, so partial."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Partial primary; sub-card null.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "taxonomy.json@b115a69b",
+    "fit": "medium",
+    "condition_checks": [
+     "S3 met (parent fallback, UCB)",
+     "S5 met (proposer sees raw transcript)",
+     "S4 unmet (single-transcript diagnosis, no cross-task clustering)",
+     "F1 partial (loop evaluated on one benchmark family)"
+    ],
+    "evidence_ids": [
+     "E006",
+     "E007",
+     "E008"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "taxonomy.json@b115a69b",
+    "fit": "medium",
+    "condition_checks": [
+     "S3 met (game score grounds lessons)",
+     "F1 partial (frozen-weights framing is background, delta is multi-channel)"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E017"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12"
+   },
+   "operation_correspondence": "Conditioning artifacts (prompt, memory, extractor) are the patched incumbent; patches derived from trace diagnosis and promoted by UCB.",
+   "necessary_conditions": "Regression gate is a bandit on single-episode returns, not paired held-out test.",
+   "differences": "RS card has no feedback-driven editing of the conditioning.",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E007"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Claim that conditioning drives gain",
+   "applicable": true,
+   "status": "met",
+   "reason": "w/o Prompt/Memory/Tool-use ablations isolate each conditioning channel.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Held-out/zero-shot claim",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Public Jericho games, no overlap check with backbone knowledge or walkthroughs.",
+   "evidence_ids": [
+    "E016"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Retrieval/conditioning value claimed",
+   "applicable": true,
+   "status": "met",
+   "reason": "Full-history Memory, RAG, Summary baselines under same step budget.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Recipe claimed generic",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Six games and several backbones but one benchmark family and environment type.",
+   "evidence_ids": [
+    "E016"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Incumbent patched and replaced",
+   "applicable": true,
+   "status": "met",
+   "reason": "Parent remains selectable; UCB falls back; w/o UCB shows collapses.",
+   "evidence_ids": [
+    "E008",
+    "E012"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Multiple failures to diagnose",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "One transcript per update, no clustering across episodes.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Store claimed outcome-grounded",
+   "applicable": true,
+   "status": "met",
+   "reason": "Success/failure derived from game score deltas.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2510.13220-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Appendix A"
+   ],
+   "applies_when": "Instance-replay test-time learning",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No variation of the replayed task to test brittleness; authors state strategic overfitting.",
+   "evidence_ids": [
+    "E015",
+    "E017"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2510.13220-2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec 5.3"
+   ],
+   "applies_when": "Optimizer-LLM-driven comparison against weight-update baselines",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Same-backbone variant reported (0.35 vs 0.31) but strongest result uses o3 Evolver; Evolver cost not budget-matched.",
+   "evidence_ids": [
+    "E023",
+    "E019"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2510.13220-3",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Appendix F"
+   ],
+   "applies_when": "Multi-seed claims",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Seeds only for main table; Table 1 and Table 8 disagree.",
+   "evidence_ids": [
+    "E014",
+    "E022"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "EvoTest yields steeper and higher within-session learning than reflection, memory, prompt-optimization and online fine-tuning baselines.",
+   "setting": "Six Jericho games, 50 episodes, T=110, gemini-2.5-flash/claude-4-sonnet actors, o3 Evolver",
+   "baseline_control": "Static, Memory, RAG, Summary, Reflexion, TextGrad, Promptbreeder, EvoPrompt, SFT, GRPO",
+   "selection_vs_test": "Online: UCB uses the same episodes that are scored; identical task replayed",
+   "result_denominator": "AUC normalized by max score; 5 seeds mean+-std (Table 8); all episodes counted",
+   "evidence_ids": [
+    "E011",
+    "E014",
+    "E010"
+   ],
+   "counterevidence": [
+    "E022",
+    "E015",
+    "E019"
+   ],
+   "allowed_conclusion": "On repeated replay of the same six games, EvoTest's retained configuration raises later-episode score more than the tested baselines; not shown for task variants or with matched optimizer cost."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Within-session, the evolved configuration (esp. prompt walkthrough) is retained and raises later episode scores on identical replays of six games.",
+  "unresolved": [
+   "transfer to task variants",
+   "Evolver compute parity",
+   "reconciliation of Table 1 vs 8",
+   "pretraining knowledge of public walkthroughs"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete gap: single-channel adaptation (prompt-only, memory-only) and sparse-reward RL fail within-session; neighbors Reflexion/EvoPrompt/Promptbreeder/TextGrad/MemGPT named; missing ADAS/AFlow-style whole-system search and ExpeL-type memory neighbors.",
+   "evidence_ids": [
+    "E002",
+    "E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Transcript-narrative credit assignment + multi-channel edits + UCB with parent fallback gives distinguishable predictions (stability, ablations), though why four channels jointly is argued by example.",
+   "evidence_ids": [
+    "E001",
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Config tuple, Evolver master prompt, selection rule, rollback via parent pool all reconstructable; beta and m deferred to code, memory growth/staleness and execution safety of evolved Python not treated, Sec 4.2 vs App J.2 inconsistency on failure memory.",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E020",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Native game score from a deterministic engine, normalized AUC; trustworthy verifier, but Table 1 vs Table 8 numbers conflict.",
+   "evidence_ids": [
+    "E009",
+    "E011"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Eight literature baselines, five component ablations, Evolver-LLM and structured-prompt ablations, same-backbone GRPO/SFT comparison; ablations on 3 of 6 games, Evolver (o3) stronger than baseline optimizers' unspecified model, gain partly attributable to Evolver prompt engineering.",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E013",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Same game from identical reset every episode; no held-out variants or contamination check against public Jericho walkthroughs; scope honestly single-task.",
+   "evidence_ids": [
+    "E009",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E015",
+    "E017"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "5-seed mean+-std for main table; ablations and cost without variance, no significance tests, conflicting numbers across tables.",
+   "evidence_ids": [
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Per-update wall-time table and complexity analysis vs weight update, but no dollar/token cost of o3 Evolver or children count; search cost partially accounted.",
+   "evidence_ids": [
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E021"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 67.5,
+  "display": 67.5,
+  "lower": 67.5,
+  "upper": 67.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

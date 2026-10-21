@@ -1,0 +1,254 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r09a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Central claim and all headline results are for a policy whose weights are updated by GRPO (veRL); evaluation is run without experience guidance. Synthetic tasks, the experience pool and the LLM judge are training-time aids produced by stronger external LLMs. The only retained non-weight effect (experience injection at inference, Table 4 '+ exp.') is a minor dev-set side result, not the claim. Per frozen rubric A3 (evaluated object = weights) this is out of scope; boundary case flagged for the aggregator. Not scored.",
+ "paper": {
+  "paper_key": "2511.10395",
+  "paper_id": "arXiv:2511.10395",
+  "version": "2511.10395v1",
+  "title": "AgentEvolver: Towards Efficient Self-Evolving Agent System",
+  "claim_type": "system_method",
+  "central_claim": "AgentEvolver, an RL-based self-evolving agent training system with three mechanisms (self-questioning: LLM-synthesised tasks; self-navigating: experience pool, experience-mixed rollouts and experience stripping/selective boosting; self-attributing: LLM step-wise credit assignment) improves Qwen2.5-7B/14B on AppWorld and BFCL-v3 with higher exploration efficiency and sample utilisation than vanilla GRPO."
+ },
+ "provenance": {
+  "input_hash": "99ea0141399f5e68330e4b4a72a7701317fa4234bc661f0387e69f7092e1085c",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; configured model type only",
+  "timestamp": "2026-10-21T22:43:03Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2511.10395",
+   "url": "https://arxiv.org/html/2511.10395v1",
+   "sha256": "ba3c99d3d1be6f1f04a6458827233073790d3aac063774b20f3ac6236cd1c9ec",
+   "sections_read": [
+    "abstract",
+    "1 intro",
+    "2 problem formulation",
+    "3 self-questioning",
+    "4 self-navigating",
+    "5 self-attributing",
+    "6 framework / context manager / environment service",
+    "7.1 settings",
+    "7.2 main results (Table 1)",
+    "7.3 self-questioning results (Tables 2-3, judge ablation)",
+    "7.4 self-navigating results (Table 4, eta, epsilon)",
+    "8 conclusion and next steps",
+    "7.5-7.6 attribution / context-template results (skimmed, not needed for scope ruling)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2511.10395",
+   "locator": "Abstract",
+   "quote": ", a self-evolving agent system that leverages the semantic understanding and reasoning capabilities of LLMs to drive autonomous agent learning.",
+   "support_explanation": "The system is framed as agent learning (policy training), driven by LLM-based task/reward/experience components.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2511.10395",
+   "locator": "6.1 Overall Architecture and Data Flow",
+   "quote": "Finally, Sample Construction & Model Optimization applies self-attributing to convert trajectories and intermediate states into training samples with fine-grained credit assignment (e.g., step-level attribution) and updates the policy parameters accordingly.",
+   "support_explanation": "The improver terminates in a parameter update of the policy; the reported products are trained weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2511.10395",
+   "locator": "7.1.3 Self-Navigating",
+   "quote": "we report only the results without experience guidance to provide a fair assessment of the impact of experience incorporation.",
+   "support_explanation": "Reported gains are for the trained policy evaluated without the retained experience pool; the pool is not part of the evaluated artifact.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2511.10395",
+   "locator": "4.3 Experience Stripping",
+   "quote": "prior to policy gradient computation, retrieved experience tokens are removed from the training samples.",
+   "support_explanation": "By design the experience is stripped so that learning is internalised in weights rather than carried by the retained store.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M-2511.10395",
+   "locator": "Table 4 (Qwen2.5-14B dev set)",
+   "quote": "w/o RL zero-shot 17.3 37.4 33.0 50.6 25.2 44.0 + exp. 20.2 41.6 41.5 61.9 30.9 51.8 w/ RL baseline 51.5 69.8 62.8 73.0 57.2 71.4",
+   "support_explanation": "The only non-weight retained effect: inference-time experience injection raises zero-shot avg@4 from 25.2 to 30.9 on the dev set; the RL baseline (57.2) dwarfs it and the headline path is weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M-2511.10395",
+   "locator": "Table 1 (Qwen2.5-7B)",
+   "quote": "Qwen2.5-7B 7B 1.8 5.6 29.8 42.4 15.8 24.0 +Questioning 7B 23.2 40.3 49.0 60.6 36.1 50.5",
+   "support_explanation": "Headline table compares zero-shot vs progressively trained policies; there is no vanilla-GRPO-on-original-tasks row in Table 1.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M-2511.10395",
+   "locator": "7.1.3 Self-Questioning",
+   "quote": "We create environment profiles for the Appworld and BFCL benchmarks, as well as user preferences.",
+   "support_explanation": "Environment profiles and user preferences are hand-authored inputs to task synthesis.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M-2511.10395",
+   "locator": "7.4.1",
+   "quote": "even without training, contextualized guidance allows the model to explore more effectively and produce superior outcomes.",
+   "support_explanation": "Author's reading of the zero-shot experience-injection result, the single in-scope-flavoured side finding.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M-2511.10395",
+   "locator": "8 Next Steps",
+   "quote": "We aim to unify exploration, experience abstraction, self-attribution, and inference within a single model",
+   "support_explanation": "Current system relies on separate stronger LLMs (Qwen-Plus, Qwen3-235B judge, Qwen-Max) for tasks, judging and attribution; single-model self-evolution is stated as future work.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Policy weights of Qwen2.5-7B/14B, trained by GRPO on LLM-synthesised tasks with LLM-judged and LLM-attributed rewards and an experience-mixed rollout strategy; auxiliary non-weight artifacts: synthetic task set, experience pool, judge prompts",
+   "information": "Environment profiles and user preferences (human-written); exploration by Qwen-Plus; reference solutions from exploration trajectories; experience pool built from policy rollouts; judge LLMs (Qwen3-235B, Qwen-Max)",
+   "operation": "Explore -> synthesise and filter tasks -> rollouts (half experience-guided) -> LLM judge reward and step-wise GOOD/BAD attribution -> GRPO update with experience tokens stripped and selective boosting",
+   "output": "Updated policy weights",
+   "conditions": "AppWorld and BFCL-v3 multi-turn",
+   "feedback": "LLM judge + environment/reference-based scores",
+   "selection_rule_data": "Lexical/semantic dedup, reference-solution executability check for tasks; experience validation by an LLM evaluator",
+   "persistence": "Weights persist; experience pool and task set are training-time assets, not evaluated artifacts",
+   "later_use": "Trained policy evaluated without experience on avg@8 / best@8",
+   "claimed_effect": "Avg@8 +29.4% (7B) and +27.8% (14B) relative to zero-shot",
+   "failure_boundary": "Only two benchmarks, two model sizes, 'preliminary experiments'",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E006",
+    "E007",
+    "E009"
+   ]
+  }
+ ],
+ "gap": null,
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Combining self-questioning, self-navigating and self-attributing improves policy performance on AppWorld and BFCL-v3 over zero-shot Qwen2.5 and over the cumulative ablations",
+   "setting": "GRPO with veRL, 8x A100, avg@8 and best@8",
+   "baseline_control": "Zero-shot model; cumulative ablations (+Questioning etc.); 'Vanilla GRPO' defined but reported in Table 4 dev ablation",
+   "selection_vs_test": "Not assessed (out of scope)",
+   "result_denominator": "7B overall avg 45.2 vs zero-shot 15.8; 14B 57.6 vs 29.8",
+   "evidence_ids": [
+    "E003",
+    "E006"
+   ],
+   "counterevidence": "n/a (not scored)",
+   "allowed_conclusion": "Not assessed (out of scope)."
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "n/a: excluded by scope; no harness-level claim assessed.",
+  "unresolved": [
+   "Boundary question: whether the experience-pool inference result (Table 4) should make this a B-class component paper"
+  ]
+ },
+ "scope_analysis": "Excluded: weight-updating self-improvement whose reported product is a trained policy (rubric A3). Non-weight components (synthetic task set, experience pool, LLM judge) are produced from execution feedback and retained during training, but they are not evaluated as retained artifacts for later tasks; evaluation is done without experience (E003) and experience is deliberately stripped before the gradient step (E004). Boundary note for the aggregator: Table 4 shows inference-time experience injection (+5.7 avg@4 on the 14B dev set, E005) and the pool is built by the shared ReMe pipeline, so an in-scope B-type reading would be a narrow experience-retrieval component with a dev-set-only effect; that would not change the central claim. If the aggregator rules the boundary in scope, plausible RS candidates are self_supervised_signal_engineering and generative_process_redesign, and plausible domain cards are self_generate_the_curriculum (H23) and abstract_experience_into_guidance (H00); this seat has not scored the paper.",
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "Out of scope; not scored.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0,
+  "upper": 100,
+  "coverage": 0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "Evaluated product is a GRPO-trained policy; experience pool and tasks are training aids, eval runs without experience. Out of scope (A3, boundary)."
+}

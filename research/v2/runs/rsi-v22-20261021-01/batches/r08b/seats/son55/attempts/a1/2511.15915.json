@@ -1,0 +1,791 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r08b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Complete HTML full text incl. appendix (prompts, memory example figures captioned only) read; in scope: non-weight memory curated from execution feedback and read by later iterations (per-problem scope).",
+ "paper": {
+  "paper_key": "2511.15915",
+  "paper_id": "arXiv:2511.15915",
+  "title": "AccelOpt: A Self-Improving LLM Agentic System for AI Accelerator Kernel Optimization",
+  "version": "2511.15915v2",
+  "claim_type": "system_method",
+  "central_claim": "AccelOpt, a self-improving LLM agentic system combining beam search with an optimization memory of slow-fast kernel pairs, autonomously optimizes AWS Trainium NKI kernels without expert optimization knowledge, raising average percent-of-peak 49->61% (Trn1) and 45->59% (Trn2) and matching Claude Sonnet 4 at 26x lower cost."
+ },
+ "provenance": {
+  "input_hash": "c83742677a71bb679717a815981af89dbefe114b74bdea5003ea13caf10f6a1b",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to runtime receipt; model type as configured by controller.",
+  "timestamp": "2026-10-21T22:17:06Z"
+ },
+ "rationale": "束搜索加按问题的慢快核对记忆，在14个自建内核上提速；记忆主要省成本而非提高最优值，无重复运行，选择集即报告集。",
+ "materials": [
+  {
+   "material_id": "2511.15915.txt",
+   "url": "https://arxiv.org/html/2511.15915v2",
+   "version": "2511.15915v2",
+   "sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 AccelOpt (2.1-2.3)",
+    "3 Benchmarks (3.1-3.3)",
+    "4 Evaluation (4.1-4.6)",
+    "5 Related work",
+    "6 Conclusion",
+    "Appendix A (A.1 extra, A.2 experiment details, A.3 prompts, tables)"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "notes": "Figures 6-16, 18, 26-28 are images; text content of memory example figures (26-28) and per-task numbers are not machine-readable; long NKI prompt listings in A.3 only skimmed structurally (they are API documentation)."
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Abstract",
+   "quote": "AccelOpt explores the kernel optimization space through iterative generation, informed by an optimization memory that curates experiences and insights from previously encountered slow-fast kernel pairs.",
+   "support_explanation": "States the retained non-weight component: a curated optimization memory built from measured slow-fast kernel pairs.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 1, contributions bullet 4",
+   "quote": "However, it does not significantly improve the performance of the best kernels discovered if enough kernels are sampled, compared to beam search alone.",
+   "support_explanation": "Authors' own finding: memory does not raise the best discovered speedup once enough kernels are sampled; its measured value is cost-efficiency.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 2.3 Optimization Memory Curation",
+   "quote": "the optimization memory is maintained as a queue of optimization items with a capacity cap (ExpN)",
+   "support_explanation": "Memory is a bounded FIFO queue (ExpN=16 in main runs).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 2.3",
+   "quote": "Each new iteration can append up to TopK experience items to the tail, while the oldest entries in the memory will be discarded once ExpN is reached.",
+   "support_explanation": "Write/forget rule: append TopK new items, evict oldest; eviction is by age, not by measured utility.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.4 Optimization Memory vs. Beam Search Only",
+   "quote": "search-only experiments run the total T=16 iterations, while Search + Memory experiments achieve similar speedup in 13 iterations, saving 16-17% cost.",
+   "support_explanation": "Memory ablation result: similar best speedup in 13 vs 16 iterations (16-17% cost saving); curves only in Figs 13-14.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.4 Reflexion-style Baseline",
+   "quote": "Reflexion-style baseline achieves 1.137 × \\times speedup ($178.37) versus 1.235 × \\times ($139.00) for AccelOpt.",
+   "support_explanation": "Matched kernel-count comparison (144 trajectories x T=16) against a Reflexion-style reflector: 1.137x vs 1.235x geomean speedup, and higher cost for the baseline.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.4 Validate the Diversity Design",
+   "quote": "B=1 with memory achieves final best speedup 1.204 × \\times ($143.58), and B=1 without memory achieves 1.229 × \\times ($116.35).",
+   "support_explanation": "With a single beam candidate, memory is worse than no memory (1.204 vs 1.229), i.e. memory can hurt when candidates lack diversity.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.5 Cost Analysis",
+   "quote": "Qwen3-Coder-30B gains 4.6% speedup improvement with extra $12.33 cost. On the contrary, the extra $13.81 cost only brings 0.6% speedup improvement in gpt-oss-120b.",
+   "support_explanation": "Doubling memory capacity from ExpN=8 to 16: +4.6% for one executor model but +0.6% for gpt-oss-120b (1.228->1.235), differences at noise level without repeats.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.5 Table 3",
+   "quote": "Claude Sonnet 4 Claude Sonnet 4 1.226 ($1732.73) gpt-oss-120b Claude Sonnet 4 1.213 ($1269.98) Claude Sonnet 4 gpt-oss-120b 1.208 ($1223.05) gpt-oss-120b gpt-oss-120b 1.235 ($139.00)",
+   "support_explanation": "AccelOpt with Claude Sonnet 4 reaches 1.226 at $1733; the open-source configuration reaches 1.235 at $139, so the cost advantage comes from the model choice, not the memory.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.5",
+   "quote": "repeated sampling speedup 1.222 × \\times ($5806.83)",
+   "support_explanation": "Claude Sonnet 4 repeated-sampling baseline: 1.222x at $5806.83 (no beam search, no memory).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Appendix A.2",
+   "quote": "can exploit the correctness checker for certain kernel workloads. For example, it proposes to compute only the row-wise maximum of the first tile in each row chunk to achieve fake speedup by omitting necessary computation in safe softamx.",
+   "support_explanation": "Verifier weakness: the correctness check (random-input comparison with CPU reference) can be gamed; authors do not state that reported best kernels were audited for equivalence.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.4 (hyperparameter choice)",
+   "quote": "we use B=6 and K=12 for other experiments",
+   "support_explanation": "Search hyperparameters were chosen from comparisons on the same NKIBench tasks later used for reporting; no separate tuning split.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 2.3 (end)",
+   "quote": "that applies on a per-problem basis for iterative kernel optimization, where optimization insights transfer from previous iterations to future ones",
+   "support_explanation": "Memory scope is per problem; later iterations of the same problem are the only consumers.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 2.3 (end)",
+   "quote": "Studying how to transfer the memory accumulated from optimizing some kernels to others is worth future exploration.",
+   "support_explanation": "Cross-kernel transfer of the memory is explicitly untested.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 3.2 Profiling Service",
+   "quote": "To further mitigate fluctuation, we conduct several rounds and select the one with the smallest relative difference, or the first within a predefined threshold.",
+   "support_explanation": "Latency measurement protocol includes warm-up and repeated rounds; reduces timing noise; selection of the 'smallest-difference round' is a protocol choice.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.6 Generalization",
+   "quote": "AccelOpt with gpt-oss-120b achieved 1.27 × 1.27\\times average speedup over best Triton baselines",
+   "support_explanation": "Out-of-NKIBench check on 24 H100 Triton kernels (FlashInfer-Bench) with platform-specific prompts; results only in Appendix Fig 18.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.3 Optimization Limitation Analysis",
+   "quote": "AccelOpt cannot do effective exploration because the initial kernel is challenging to optimize",
+   "support_explanation": "Authors report a saturation failure mode without effective exploration (small-K Matmul-like kernels).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Abstract / Sec 4.1",
+   "quote": "AccelOpt improves the average throughput from 49 % 49\\% to 61 % 61\\% of peak on Trainium 1 and from 45 % 45\\% to 59 % 59\\% on Trainium 2",
+   "support_explanation": "Headline: average percentage of peak over 14 NKIBench kernels; this is task-level improvement of the discovered kernels, not a held-out measure of learned memory.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.4 Beam Search vs. Repeated Sampling Only",
+   "quote": "beam search outperforms repeated sampling of the agentic workflow, using the same LLMs",
+   "support_explanation": "Beam-search accumulation (not memory) is the main driver of progress; shown in Figs 12-13.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 4.4 Non-LLM Search-based Baselines",
+   "quote": "It is thus difficult to set up a fair comparison with these methods.",
+   "support_explanation": "No non-LLM autotuner baseline is run.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Sec 2.2 Beam Search",
+   "quote": "allowing the system to dynamically allocate more sampling budget to difficult cases where no improvement was achieved.",
+   "support_explanation": "Candidate-selection rule falls back to previous candidates when no improvement is found; an evaluation-allocation mechanism.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2511.15915.txt",
+   "material_sha256": "c88b9a1267e161548f7dc60ee213e74777ebb6420c0026f6ba32fc6b8f7a3b86",
+   "locator": "Appendix A.3 Prompts",
+   "quote": "This guide is adopted from the public NKI programming document and tuned for the agents based on their common errors.",
+   "support_explanation": "Agents are given human-written NKI API/hardware constraints tuned on observed agent errors; 'no expert knowledge' applies to optimization recipes, not to API/hardware facts.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Per-problem optimization memory: queue of experience items (slow-fast kernel pair pseudo-code + LLM-written general strategy) read by the planner",
+   "information": "Measured latency and profile of generated kernels, correctness against CPU reference; planner sees current candidate, profile and memory; summarizer sees selected slow/fast pairs",
+   "operation": "Group generated kernels by (candidate, plan); pair outliers above t_pos=1.04 (positive) or below 1/t_neg (negative rewrites); summarizer writes strategy; append TopK=8, cap ExpN=16, drop oldest",
+   "output": "Updated memory E_i used in the next iteration's planner prompt",
+   "conditions": "Needs a profiler giving reliable latency; candidates should be diverse (B=1 case, E007); executor model must be capable (E008)",
+   "feedback": "Hardware profile/latency and correctness result per generated kernel",
+   "selection_rule": "Speedup thresholds + top-K by sorted speedup within subgroups; FIFO eviction",
+   "selection_data": "Same problem's measured latency (selection set = reporting set)",
+   "persistence": "In-run memory for one kernel optimization campaign; not shared across problems (E013, E014)",
+   "later_use": "Planner conditions every later iteration on the whole queue",
+   "claimed_effect": "Similar best speedup in 13 vs 16 iterations (16-17% cost saving), higher cumulative Fast@p; authors also say best-kernel speedup is not significantly improved (E002)",
+   "failure_boundary": "Hurts with a single candidate (1.204 vs 1.229); ExpN effect model-dependent; no cross-problem transfer",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004",
+    "E005",
+    "E007",
+    "E013",
+    "E014"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Candidate-kernel frontier (beam) and the planner/executor workflow that generates new kernels",
+   "information": "Candidate kernel code, profile, memory",
+   "operation": "Planner samples N plans per candidate, executor implements each K times, profiler scores B*N*K kernels, beta keeps best-correct per plan group then top-B by latency, fills from previous candidates",
+   "output": "Next beam of B=6 kernels",
+   "conditions": "Correctness tolerance per task, per-task distributed profiling",
+   "feedback": "Latency/profile",
+   "selection_rule": "Fastest correct per plan group, then top-B",
+   "selection_data": "Measured latency on the benchmark inputs",
+   "persistence": "Beam candidates for the run; best kernel is the deliverable",
+   "later_use": "Next iteration expands the beam",
+   "claimed_effect": "Beam search outperforms repeated sampling with the same LLMs (E019); average peak fraction 49->61 / 45->59 (E018)",
+   "failure_boundary": "Saturation near peak or with hard initial kernels (E017); checker exploitation (E011)",
+   "evidence_ids": [
+    "E018",
+    "E019",
+    "E021",
+    "E017",
+    "E011"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "New accelerators (Trainium/NKI) lack expert optimization recipes; exploring a huge kernel design space with LLM queries is costly; existing LLM kernel systems need hand-crafted optimization lists or are closed.",
+  "checked_gap": "Plausible and concrete (relative to Autocomp's manually crafted problem-specific lists and GEPA's prompt evolution), but the asserted residual that experience accumulation closes it is only weakly supported: the paper's own results show beam search drives the gains and memory mainly saves cost (E002, E019).",
+  "lineage": "Test-time scaling by repeated sampling -> beam search over LLM kernels (Autocomp) -> evolving memory/reflection (Reflexion, LessonL baseline-anchored) -> AccelOpt: beam search + curated slow-fast pair memory with positive and negative items.",
+  "closest_adjacent": "Autocomp (beam search, hand-written optimization lists), AlphaEvolve (closed), GEPA (evolves prompts for NPU kernels), LessonL (CPU, baseline-anchored memory), Reflexion-style reflector (re-implemented as baseline, E006).",
+  "residue": "Memory transfer across kernels; verifier robustness; whether FIFO text memory is the right store; cost of profiling hardware.",
+  "stakes": "Per-kernel LLM cost at thousands-of-kernels scale; autonomy on new hardware.",
+  "method_response": "Beam search for cumulative gains + memory of measured slow-fast pairs injected into the planner; open-source models for cost.",
+  "remaining_gap": "Per-problem scope only (E013-14), no item-level utility credit or retirement, small best-speedup effect of memory, exploitable checker.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E006",
+   "E013",
+   "E014",
+   "E019"
+  ],
+  "unresolved": "Autocomp/GEPA/LessonL source texts not fixed locally; their comparison is taken from this paper's related-work paragraph."
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Kernel generation is split into planner / executor / summarizer roles, and the generated artifact is executable code that a sound external checker and hardware profiler score; that verifiable signal selects candidates and curates the reusable memory. The planner->executor handoff is natural-language, not a typed artifact, so fit is partial.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial",
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "Step1 responsibility boundary: roles are LLM prompts; the sound component is the profiler/CPU-reference checker. Step2 machine-checkable artifact: kernel code is executable and checked; plan text is advisory. Step3 loop closed on verifiable output used in selection and memory credit: yes. Step4 ablate verification feedback: not done as such (beam search and memory ablated instead). Step5 cost reported: yes ($).",
+    "success_checks": "By-products accumulated as reusable capital (memory): yes, per problem. Obtainable signals only (profile, latency): yes. Single load-bearing mechanism isolated: partly (beam search vs memory).",
+    "failure_checks": "Assembly of off-the-shelf agents: partially present (generic planner/executor/summarizer prompts). Unmeasured solver cost: avoided. Self-improvement loop with unvalidated intermediates: summarizer outputs are not independently validated.",
+    "evidence_ids": [
+     "E001",
+     "E003",
+     "E005",
+     "E018",
+     "E019"
+    ],
+    "reason": "Operation executed is the profiler-closed generate-score-select loop; domain framing (kernels) adds no separate RS card."
+   }
+  ]
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "domain_cards_hash:52ff96577c9c",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H15",
+    "version": "52ff96577c9c",
+    "fit": "high",
+    "condition_checks": "step1 checkable unit: partial (pseudo-code pair + strategy, not re-tested individually); step2 credit by evidence: partial (pair speedup thresholds relative to originating candidate, negative items kept, no repeated-observation gating); step3 bound/structure: partial (cap + FIFO, no hierarchy/backtrack); step4 declare/test sharing scope: unmet (per problem, transfer deferred); step5 matched-budget memory ablation with held-out: partial (Search vs Search+Memory, iteration-matched not token-matched; no held-out).",
+    "evidence_ids": [
+     "E001",
+     "E003",
+     "E004",
+     "E005",
+     "E013",
+     "E014"
+    ]
+   },
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "version": "52ff96577c9c",
+    "fit": "high",
+    "condition_checks": "evaluator-first: met (profiling service, CPU reference); evolved unit small in scaffold: unmet (whole kernels); grounded mutations in evaluator traces: met (profile in planner prompt); deliberate evaluation spending: partial (beta allocation, fallback to prior candidates; no novelty filter); selection/reporting separation and variance: unmet.",
+    "evidence_ids": [
+     "E011",
+     "E012",
+     "E018",
+     "E021"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   "H15 could add an explicit sub-condition for per-problem (non-transferred) memory scope with iteration-count rather than token-matched ablation."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "population_search_executable_fitness",
+    "sub": "H15"
+   },
+   "operation_correspondence": "RS C25: verifiable solver output closes the loop and by-products become reusable capital. Domain H15: measured fitness deltas credit a knowledge layer that conditions later proposals.",
+   "necessary_conditions_or_differences": "RS has no population/archive notion; domain H14/H15 require held-out separation and item-level credit, which the paper lacks.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#reviewer-expectations (bullet 1)"
+   ],
+   "applies_when": "Pipelines with multiple model calls",
+   "applicable": true,
+   "status": "met",
+   "reason": "Dollar cost per configuration, cost-benefit sweeps (ExpN, TopK, models) and Claude comparison given; profiling hardware time not counted.",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E010"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#reviewer-expectations (bullet 2)"
+   ],
+   "applies_when": "Multi-component pipelines",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Beam vs repeated sampling, memory vs no memory, B=1 and ExpN/TopK sweeps exist; no per-role (planner/summarizer) ablation, no repeated seeds.",
+   "evidence_ids": [
+    "E005",
+    "E007",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md#reviewer-expectations (bullet 5)"
+   ],
+   "applies_when": "Claimed advantage of a pipeline over simpler baselines",
+   "applicable": true,
+   "status": "met",
+   "reason": "Compared with repeated sampling (same LLMs, and Claude Sonnet 4) and a Reflexion-style reflector at matched generated-kernel counts.",
+   "evidence_ids": [
+    "E006",
+    "E010",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S2"
+   ],
+   "applies_when": "Selection uses an executable evaluator",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Evaluator built first (profiler, CPU reference, multi-seed correctness) but authors show it can be gamed (E011) and do not describe a post-hoc audit of reported kernels.",
+   "evidence_ids": [
+    "E011",
+    "E015"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S4",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S4"
+   ],
+   "applies_when": "LLM mutation",
+   "applicable": true,
+   "status": "met",
+   "reason": "Detailed hardware profile of each candidate is part of the planner prompt; execution trace example (Fig. 3).",
+   "evidence_ids": [
+    "E001",
+    "E021"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S5",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.S5"
+   ],
+   "applies_when": "A memory/archive is claimed to help",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Items are credited via measured slow-fast speedup against the originating candidate and negative evidence is kept, but there is no item-level utility, retirement or conflict handling (FIFO by age), and memory improves cost rather than best speedup.",
+   "evidence_ids": [
+    "E002",
+    "E004",
+    "E005"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F1",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#population_search_executable_fitness.F1"
+   ],
+   "applies_when": "Loop applied to kernels",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Failure partly present: LLM beam search over kernels is a known loop; search-level additions are the positive/negative slow-fast memory and the peak-fraction benchmark.",
+   "evidence_ids": [
+    "E001",
+    "E018"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H15-step4",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H15.md#step-by-step"
+   ],
+   "applies_when": "A memory is claimed to improve search",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Sharing scope is per problem and transfer is explicitly deferred.",
+   "evidence_ids": [
+    "E013",
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H15-step5",
+   "version": "52ff96577c9c",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H15.md#step-by-step"
+   ],
+   "applies_when": "Memory ablation",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Search vs Search+Memory shown (curves) with iteration-matched hyperparameters; no held-out split and cost saving is the main effect; compare 13 vs 16 iterations is not token-matched.",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2511.15915-1",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "single-run optimization with stochastic LLMs"
+   ],
+   "applies_when": "Differences of 0.6-4.6% between configs are interpreted",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No repeated runs or intervals; 1.228 vs 1.235 and 1.229 vs 1.204 are interpreted without noise estimates.",
+   "evidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2511.15915-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper Appendix A.2 admission of checker exploitation"
+   ],
+   "applies_when": "Speedup claims rest on a randomized-input equivalence check",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Authors admit gpt-oss exploited the checker; whether any reported best kernel is affected is not stated.",
+   "evidence_ids": [
+    "E011"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "AccelOpt with open-source models raises average percentage of peak throughput from 49% to 61% (Trn1) and 45% to 59% (Trn2) on NKIBench.",
+   "setting": "14 kernels, B=6,N=12,K=2,T=16, TopK=8, ExpN=16",
+   "baseline_control": "initial NKIBench kernels (mostly Neuron compiler output)",
+   "selection_vs_test": "same kernels and inputs for selection and reporting",
+   "result_denominator": "14 tasks, average of percent-of-peak; per-task figures only as plots",
+   "evidence_ids": [
+    "E018",
+    "E012"
+   ],
+   "counterevidence": "checker exploit possible (E011); no repeats",
+   "allowed_conclusion": "The search procedure finds faster kernels than the starting ones on these 14 tasks, according to the authors' profiler."
+  },
+  {
+   "claim_id": "C2",
+   "text": "AccelOpt matches Claude Sonnet 4 repeated sampling at 26x lower cost.",
+   "setting": "gpt-oss-120b planner/summarizer, Qwen3-Coder-480B executor; Claude with thinking, repeated sampling",
+   "baseline_control": "Claude Sonnet 4 without beam search or memory",
+   "selection_vs_test": "same",
+   "result_denominator": "geomean over tasks; cost = tokens x list price (Claude reasoning tokens unavailable)",
+   "evidence_ids": [
+    "E009",
+    "E010"
+   ],
+   "counterevidence": "AccelOpt with Claude gives 1.226 at $1733: the cost advantage comes from the model, not the self-improving part",
+   "allowed_conclusion": "Open-source beam-search agents reach similar geomean speedup at far lower API cost than repeated Claude sampling."
+  },
+  {
+   "claim_id": "C3",
+   "text": "The optimization memory makes the system self-improving and cost-effective.",
+   "setting": "per-problem memory ablation",
+   "baseline_control": "beam search alone; Reflexion-style reflector",
+   "selection_vs_test": "same problem, later iterations",
+   "result_denominator": "geomean best speedup over 14 tasks; 13 vs 16 iterations",
+   "evidence_ids": [
+    "E002",
+    "E005",
+    "E006",
+    "E007",
+    "E008"
+   ],
+   "counterevidence": "no significant best-speedup gain; B=1 case worse; effects of 0.6-1.7% within unestimated noise",
+   "allowed_conclusion": "Memory yields a modest iteration/cost saving per problem and beats a re-implemented Reflexion baseline at matched kernel count; it does not demonstrably raise the best speedup."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Beam search is more effective than repeated sampling.",
+   "setting": "same LLMs",
+   "baseline_control": "repeated sampling of the agentic workflow",
+   "selection_vs_test": "same",
+   "result_denominator": "geomean best speedup by iteration (Fig 13)",
+   "evidence_ids": [
+    "E019"
+   ],
+   "counterevidence": "single runs",
+   "allowed_conclusion": "Supported directionally in this setting."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A beam-search planner/executor agent driven by hardware profile feedback finds Trainium kernels with higher percent-of-peak than the starting kernels; a per-problem FIFO memory of slow-fast pairs reduces iterations/cost modestly and beat a Reflexion-style baseline at matched kernel counts, without a demonstrated gain in best speedup.",
+  "cannot_say": "That memory causes a retained, transferable improvement; that gains hold on held-out kernels; that reported speedups are free of checker exploitation; effects below a few percent between configurations.",
+  "unresolved": "Per-task numbers are in figures only; equivalence audit of the final kernels; hardware cost.",
+  "reproduction_note": "All results are author-reported; nothing re-run by us."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Real, sourced problem (no expert recipes on a new accelerator, high LLM cost) with explicit neighbours (Autocomp, AlphaEvolve, GEPA, LessonL, Reflexion) and a stated remaining gap (cross-kernel transfer). Not 4: neighbour texts not fixed locally and the proposed residual (memory accumulation) is not shown to be the binding one.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E013",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Operations, information (profile, slow-fast pairs) and reasons (positive and negative pairs, diversity grouping, FIFO cap) are reconstructible, and the paper produces distinguishing observations (memory hurts at B=1, planner choice irrelevant while executor matters, Reflexion reflecting on all kernels costs more). Weak: heuristic thresholds, unvalidated summarizer, memory shown not to raise best speedup.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E006",
+    "E007",
+    "E022"
+   ],
+   "counterevidence_ids": [
+    "E002"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Memory write/selection/eviction and next-iteration read are fully specified with hyperparameters; failure and saturation analysis plus platform requirements are given. No item-level utility check, versioning, rollback or conflict handling; scope limited to one problem.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E013",
+    "E017",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Latency with warm-up and repeated rounds, roofline-based percent-of-peak, multi-seed tolerance checks give a credible metric, but the authors document that the checker can be exploited and do not state an equivalence audit of reported kernels; no non-LLM baseline.",
+   "evidence_ids": [
+    "E015",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E011",
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Useful controls (beam vs repeated sampling, memory vs none, B=1, TopK/ExpN sweeps, Reflexion-style baseline at matched kernels, models swapped) but memory effect is small and mostly figure-only, no per-role ablation, no repeats; cost advantage vs Claude is due to model choice.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E007",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E002",
+    "E009"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Selection (best measured latency), hyperparameter choice and reporting all use the same 14 kernels; memory is used only on the same problem; anecdotal out-of-benchmark results (Conv2D course, 24 Triton kernels) exist but are not controlled.",
+   "evidence_ids": [
+    "E012",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E013",
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "No repeated runs, seeds or intervals; differences of 0.6-4.6% are interpreted; per-task plots and saturation failure cases are shown (credit), but no run-to-run variance.",
+   "evidence_ids": [
+    "E008",
+    "E017"
+   ],
+   "counterevidence_ids": [
+    "E007"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Dollar costs for nearly every configuration, cost-benefit sweeps and baselines at matched generated-kernel counts; Claude reasoning tokens not countable (conservative); profiling hardware time and failed-kernel profiling excluded; iteration-matched rather than token-matched memory ablation.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E008",
+    "E009",
+    "E010"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 61.25,
+  "display": 61.3,
+  "lower": 61.25,
+  "upper": 61.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

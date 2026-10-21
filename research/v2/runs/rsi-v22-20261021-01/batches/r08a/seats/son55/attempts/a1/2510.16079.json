@@ -1,0 +1,691 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r08a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full text read; in scope via non-weight principle base despite concurrent GRPO weight updates (A3).",
+ "paper": {
+  "paper_key": "2510.16079",
+  "paper_id": "2510.16079",
+  "title": "EvolveR: Self-Evolving LLM Agents through an Experience-Driven Lifecycle",
+  "version": "2510.16079v3",
+  "claim_type": "system_method",
+  "central_claim": "EvolveR's closed-loop lifecycle (offline self-distillation of trajectories into a scored principle base, online retrieval, and GRPO policy update) outperforms strong agentic baselines on multi-hop QA, with self-distillation beating teacher distillation at 3B."
+ },
+ "provenance": {
+  "input_hash": "148cbaa6dc8736a9740273ab3937d02f3ec4cc3114cd68b65855125c285d86d0",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker; model_type is the controller-assigned type.",
+  "timestamp": "2026-10-21T22:20:23Z"
+ },
+ "rationale": "In scope via retained principle base (weights also trained). Good split and ablation set; raw-memory/gate-off controls, stats and cost parity missing.",
+ "materials": [
+  {
+   "material_id": "2510.16079.txt",
+   "url": "https://arxiv.org/html/2510.16079v3",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-6",
+    "Appendix A.1-A.6 (hyperparameters, cost, SFT vs RL, sensitivity, dynamics, absorb, prompts, cases, limitations)",
+    "Tables 1-18"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2510.16079.txt",
+   "locator": "Abstract",
+   "quote": "This loop employs a policy reinforcement mechanism to iteratively update the agent based on its performance.",
+   "support_explanation": "Weights are also updated (GRPO) alongside the non-weight experience base.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 1",
+   "quote": "However, this reliance on raw cases struggles to generalize and, more importantly, fails to abstract.",
+   "support_explanation": "Author gap vs raw-trajectory memories.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 1",
+   "quote": "While resource-efficient, this approach treats such reflections as a transient hint, leaving the agent's intrinsic policy unchanged.",
+   "support_explanation": "Author gap vs external-scribe reflection memories.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 3.2.1",
+   "quote": "the model reviews each trajectory and, based on its outcome, distills the core strategic insight into a concise natural language statement.",
+   "support_explanation": "Principle distillation from success and failure.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 3.2.1",
+   "quote": "then prompt the agent model to provide a binary semantic equivalence judgment.",
+   "support_explanation": "Dedup/merge via embedding prefilter plus LLM equivalence check.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 3.2.1",
+   "quote": "each principle tracks its usage and success counts, enabling the computation of an empirical score that reflects historical performance.",
+   "support_explanation": "Utility score is usage-success ratio (not counterfactual).",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 4.1.1",
+   "quote": "whose training splits are used to build the experience base",
+   "support_explanation": "Experience base built on NQ/HotpotQA train; evaluation on test and 5 OOD sets.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 3.3",
+   "quote": "it is determined by an exact match with the ground truth",
+   "support_explanation": "Outcome reward / success label is gold exact match.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 4.2",
+   "quote": "EvolveR achieves superior average scores 0.382 for 3B and 0.417 for 7B, outperforming all baselines, including strong RL agents like Searcher-R1.",
+   "support_explanation": "Headline result.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 5.2.3 Table 4",
+   "quote": "No No No 0.134 No No Yes 0.325 Yes Yes No 0.357 Yes No Yes 0.340 Yes Yes Yes 0.382",
+   "support_explanation": "Component attribution at 3B.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 5.2.2",
+   "quote": "the average performance drops significantly from 0.382 to 0.340.",
+   "support_explanation": "Store-off at inference (model trained with retrieval), 3B.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 5.2.1",
+   "quote": "However, as the model scales to 3B, a reversal occurs:",
+   "support_explanation": "Self-distill 0.382 vs teacher-distill 0.370 at 3B, reversal at 0.5B; margins small.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2510.16079.txt",
+   "locator": "Appendix A.2.2",
+   "quote": "The results confirm that performance remains robust across different thresholds.",
+   "support_explanation": "Pruning threshold sweep is flat (0.265-0.276), so the pruning gate is not shown load-bearing.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 5.3",
+   "quote": "the data confirms that the utility-based scoring-and-pruning mechanism effectively filters out misleading or incorrect principles (reducing them from 24% to 8%)",
+   "support_explanation": "Manual annotation of 100 principles by score tier.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 5.3",
+   "quote": "Evaluations were conducted on a 10% validation subset randomly sampled across the six benchmarks.",
+   "support_explanation": "Scalability analysis uses a benchmark-derived subset; checkpoint/test selection not described for main numbers.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 4.1.4",
+   "quote": "we construct this dataset from approximately 700 samples from the NQ and HotpotQA training sets.",
+   "support_explanation": "Cold-start SFT stage (weights) precedes the loop.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2510.16079.txt",
+   "locator": "Appendix A.4.1",
+   "quote": "This prompt guides a powerful LLM (we used GPT-4o) to act as an expert problem-solver, producing a small dataset with right format trajectories to cold start.",
+   "support_explanation": "Cold-start uses GPT-4o trajectories; baselines' parity not stated.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2510.16079.txt",
+   "locator": "Appendix A.1",
+   "quote": "requires approximately 39.4 hours on a server equipped with 8 NVIDIA A100 (80GB) GPUs.",
+   "support_explanation": "Training cost; distill/dedup LLM-call cost not reported.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2510.16079.txt",
+   "locator": "Sec 5.2.3",
+   "quote": "Second, experience retrieval contributes a substantial direct gain, improving the RL-only baseline from 0.340 to 0.382.",
+   "support_explanation": "Text says RL-only 0.340 but Table 4 RL-only is 0.325 (0.340 is distill+RL without retrieval): minor text error.",
+   "kind": "our_inference",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2510.16079.txt",
+   "locator": "Appendix A.6",
+   "quote": "The efficacy of our self-distillation mechanism is inherently bounded by the capabilities of the agent's own model",
+   "support_explanation": "Authors state limitation.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2510.16079.txt",
+   "locator": "Appendix A.2.1",
+   "quote": "the RL-based variant substantially outperforms the SFT-only version on the 3B model, achieving a 7% relative improvement.",
+   "support_explanation": "Weight-update alternative on identical trajectories.",
+   "kind": "author_report",
+   "sha256": "7b5662723ae14c19f84f1f6db56e37706f820a3ed8b87fb6cd7ebd06db045023"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Experience base of scored natural-language principles with triples (non-weight), plus policy weights via GRPO",
+   "information": "Agent's own trajectories with gold-EM outcome; gold labels used for success/failure",
+   "operation": "Self-distill guiding/cautionary principle per trajectory, embedding+LLM dedup/merge, usage-success score, prune below 0.3, retrieve top-3 at test",
+   "output": "Updated principle base",
+   "conditions": "Offline phase alternating with online RL phase",
+   "feedback": "Trajectory outcome (EM) and usage/success counts",
+   "selection_rule": "Novelty via sim<0.85 or LLM inequivalence; periodic prune by score",
+   "persistence": "Milvus vector base with provenance links to trajectories",
+   "later_use": "search_experience action in later episodes and at test",
+   "claimed_effect": "Avg 0.382 (3B) / 0.417 (7B); 0.340 without retrieval at 3B",
+   "failure_boundary": "Self-distill bounded by agent capability; 0.5B worse than teacher; noise at 50k entries (0.410->0.387)",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E009",
+    "E011"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Agents do not systematically learn from consequences of own interactions; raw-case recall does not abstract; external scribes leave the policy unchanged.",
+  "checked_gap": "Specific and plausible, but no ExpeL/raw-trajectory or Reflexion baseline to show the residual.",
+  "lineage": "Reflexion/ExpeL (stored reflections/cases) and Mem0/G-Memory (structure) -> Search-R1 (RL) -> EvolveR (distilled principles + RL that uses them)",
+  "closest_adjacent": "ExpeL, Reflexion, Search-R1; not fully read here",
+  "residue": "Whether abstraction (vs raw cases) and self (vs teacher) distillation are what produce the gain",
+  "stakes": "Reusable strategy across multi-hop tasks",
+  "method_response": "Scored principle base used by an RL-trained policy",
+  "remaining_gap": "Raw-memory comparison, compute-matched baselines",
+  "evidence_ids": [
+   "E002",
+   "E003"
+  ],
+  "unresolved": [
+   "ExpeL and Search-R1 originals not in package"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 not executed (no unified schema/upstream multi-task tuning; weights trained with RL); executed half: retrieved principles condition inference without per-task updates.",
+    "success_checks": "Conditioning-channel ablation (w/o exp-retrieve); trained to read retrieved content (loss masking, RL) ; held-out OOD sets.",
+    "failure_checks": "No contamination audit; no longer-context/NN baseline.",
+    "evidence_ids": [
+     "E004",
+     "E011",
+     "E007"
+    ],
+    "reason": "Conditioning on retrieved principles is real; the lifecycle (self-written, scored, pruned store plus RL) goes beyond the card."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Partial primary, sub null.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "taxonomy.json@b115a69b",
+    "fit": "high",
+    "condition_checks": [
+     "S2 contrast: success and failure principles but no paired contrast",
+     "S3 met (gold EM grounds lessons)",
+     "S4 met (dedup/merge/prune)",
+     "S5 partial (usage-score gate)",
+     "F1 not present (store-specific delta)",
+     "F5 not present"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E005",
+     "E006"
+    ]
+   },
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "taxonomy.json@b115a69b",
+    "fit": "medium",
+    "condition_checks": [
+     "S1 met (same rollouts feed GRPO and distillation)",
+     "S3 met (policy trained to condition on retrieved principles)",
+     "F1 partial (GRPO is standard)",
+     "F5 not applicable (train/test split declared)"
+    ],
+    "evidence_ids": [
+     "E001",
+     "E011"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "version": "taxonomy.json@b115a69b",
+    "fit": "low",
+    "condition_checks": [
+     "S1 unmet (usage-success ratio is not a with/without counterfactual)",
+     "S4 partial (score separable) but sweep flat"
+    ],
+    "evidence_ids": [
+     "E006",
+     "E013"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00"
+   },
+   "operation_correspondence": "Distilled principle texts injected via search_experience action as conditioning of a frozen-at-test policy.",
+   "necessary_conditions": "Outcome-grounded store with maintenance operations present.",
+   "differences": "The conditioning is self-authored, curated and RL-trained-on, unlike the RS card.",
+   "evidence_ids": [
+    "E004",
+    "E011"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Conditioning claimed to drive gain",
+   "applicable": true,
+   "status": "met",
+   "reason": "w/o exp-retrieve and Table 4 attribution isolate the conditioning channel, though the w/o variant is trained with retrieval.",
+   "evidence_ids": [
+    "E010",
+    "E011"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Generalization claim",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Train-built base and OOD tests, but no contamination or overlap analysis.",
+   "evidence_ids": [
+    "E007"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Retrieval/memory value claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "RAG and Search-R1 baselines exist; raw-trajectory retrieval and longer context absent.",
+   "evidence_ids": [
+    "E009",
+    "E002"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "RS card"
+   ],
+   "applies_when": "Conditioning source quality varies",
+   "applicable": true,
+   "status": "met",
+   "reason": "Quality by score tier, scalability to 50k, teacher vs self sources.",
+   "evidence_ids": [
+    "E014",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Store grows",
+   "applicable": true,
+   "status": "met",
+   "reason": "Dedup/merge/prune, scale table to 50k.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Entries gated before reuse",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Usage-success threshold; effect not isolated (flat sweep).",
+   "evidence_ids": [
+    "E006",
+    "E013"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Policy trained with a context artifact",
+   "applicable": true,
+   "status": "met",
+   "reason": "RL trajectories contain retrieved principles; loss masked on them.",
+   "evidence_ids": [
+    "E001",
+    "E011"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json"
+   ],
+   "applies_when": "Utility credit claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Counts success when used, no counterfactual contrast.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2510.16079-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec 5.2, App A.2"
+   ],
+   "applies_when": "Component gains separated by <=0.02",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No repeats or intervals for 0.382 vs 0.370 and threshold sweep.",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2510.16079-2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "App A.1/A.4"
+   ],
+   "applies_when": "Compared with RL baselines lacking cold-start",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Cold-start GPT-4o trajectories used; Search-R1 baseline parity not stated.",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "The distill-retrieve-RL lifecycle improves QA over Search-R1 and prompting baselines.",
+   "setting": "Qwen2.5 0.5B-7B; NQ/HotpotQA train-built base; 7 QA sets",
+   "baseline_control": "RAG, Search-R1, SFT, rejection sampling, ablations",
+   "selection_vs_test": "Base built on train splits; OOD sets evaluation-only",
+   "result_denominator": "EM per dataset, average; single run",
+   "evidence_ids": [
+    "E007",
+    "E009",
+    "E010"
+   ],
+   "counterevidence": [
+    "E013",
+    "E017"
+   ],
+   "allowed_conclusion": "Combined distilled-principle retrieval plus RL beats the tested baselines at 3B/7B on held-out QA; store contribution about 0.04 EM at 3B when retrieval removed."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Self-distillation beats a stronger external teacher at 3B.",
+   "setting": "Qwen2.5-3B",
+   "baseline_control": "GPT-4o-mini distillation",
+   "selection_vs_test": "as above",
+   "result_denominator": "avg EM 0.382 vs 0.370",
+   "evidence_ids": [
+    "E012"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Small difference without variance; reversal at 0.5B and mixed at 1.5B."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A self-built, pruned principle base built on train data improves later held-out QA when retrieved by an RL-trained 3B/7B policy; improver-level not shown.",
+  "unresolved": [
+   "raw-case memory baseline",
+   "gate-off",
+   "baseline cold-start parity",
+   "variance"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Specific gap (raw-case recall does not abstract; external scribing leaves policy unchanged) with Reflexion/ExpeL/Mem0/G-Memory named, but neither raw-case memory nor ExpeL is a baseline so residual is not demonstrated.",
+   "evidence_ids": [
+    "E002",
+    "E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Success/failure distillation, dedup-merge, usage-score pruning and RL that trains the policy to call and use retrieved principles form a coherent chain with predictions (self vs teacher distill, retrieval ablation).",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E001"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Prompts, thresholds (0.85 sim, 0.3 prune, k=3), loss masking and loop phases are given; unclear is offline-phase cadence versus RL steps, whether the base is frozen at test, staleness of principles from old policies, and credit in usage counts.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E004"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Exact-match (and F1 in part) on seven standard QA benchmarks against gold answers; strict and trustworthy, EM-defined reward.",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Store-off at inference, distillation/retrieval/RL attribution grid, self vs teacher distiller, SFT vs RL updater, absorb variant; missing raw-trajectory-memory baseline (core contrast), gate-off ablation (threshold sweep is flat), cold-start/baseline parity.",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E012",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E013",
+    "E017"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Experience base from NQ/HotpotQA train, in-domain test plus five out-of-domain sets evaluated exclusively; no contamination audit and checkpoint/selection protocol for reported numbers not given.",
+   "evidence_ids": [
+    "E007"
+   ],
+   "counterevidence_ids": [
+    "E015"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Single run per setting, no seeds or intervals; conclusions rest on gaps of 0.01-0.02 (0.382 vs 0.370, flat pruning sweep); sample sizes for Bamboogle not stated; negative variants (absorb, 0.5B teacher reversal) are reported.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Training hours and retrieval latency with base size reported; no cost of LLM distill/dedup calls or compute-matched comparison to Search-R1 and teacher-distill (GPT-4o-mini) variants.",
+   "evidence_ids": [
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E017"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 67.5,
+  "display": 67.5,
+  "lower": 67.5,
+  "upper": 67.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}
