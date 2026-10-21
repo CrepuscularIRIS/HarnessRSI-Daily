@@ -4,11 +4,6 @@ Quote verification needs research/fulltext/ (local only). Once a batch file has 
 sha256 in research/judgments/VERIFIED.json; later builds re-check only structure for unchanged batches, so a fresh
 clone without full texts can still publish. A changed or new batch is always quote-verified again.
 
-Dual-model batches (since 2026-10-21): a batch judged by two blind models is stored as
-`research/judgments/<batch>.<model>.jsonl` (one file per model in DUAL_MODELS). `build` quote-checks each file,
-scores each independently, and the board row is the average; |Δtotal| > 10 or a band mismatch is written to
-research/judgments/DUAL_FLAGS.md. A dual group sorts after any single batch of the same name (later wins).
-
 Usage:
   python research/score.py check <judgments.jsonl> [<ids.txt>]   # validate only, exit 1 on problems
   python research/score.py build                                  # all research/judgments/*.jsonl → research/scores.jsonl
@@ -31,9 +26,6 @@ EV_POINTS = {
 LEVEL_POINTS = {"improver": 10, "retained": 6, "task": 2, "unclear": 0}
 CODE_POINTS = {"yes": 10, "announced": 3}
 assert sum(max(v.values()) for v in EV_POINTS.values()) == 50
-
-DUAL_MODELS = ("opus", "sol")  # first = primary (descriptive fields); add a model here to widen the panel
-DUAL_STEM = re.compile(r"^(.+)\.(opus|sol)$")  # "<batch>.<model>" — gpt-6.1-sol = sol, claude-opus-5-5 = opus
 
 
 def jl(p: Path) -> list[dict]:
@@ -116,10 +108,6 @@ def code_sources() -> dict[str, dict]:
     return out
 
 
-def band(total: float) -> str:
-    return "★★★" if total >= 70 else "★★" if total >= 50 else "★" if total >= 30 else "—"
-
-
 def score(rec: dict, main: str, cond: dict, code_found: bool = False) -> dict:
     ev = rec["evidence"]
     evidence = sum(EV_POINTS.get(k, {}).get(ev[k]["value"], 0) for k in EV_POINTS)
@@ -132,8 +120,9 @@ def score(rec: dict, main: str, cond: dict, code_found: bool = False) -> dict:
     level = LEVEL_POINTS[rec["evidence_level"]["value"]]
     code = 10 if code_found else CODE_POINTS.get(ev["code"]["value"], 0)
     total = round(evidence + execution + level + code)
+    band = "★★★" if total >= 70 else "★★" if total >= 50 else "★" if total >= 30 else "—"
     return {"evidence": evidence, "execution": round(execution, 1), "level": level, "code": code, "total": total,
-            "band": band(total), "s_yes": s_yes, "s_n": len(s), "f_yes": f_yes, "f_n": len(f)}
+            "band": band, "s_yes": s_yes, "s_n": len(s), "f_yes": f_yes, "f_n": len(f)}
 
 
 def main(argv: list[str]) -> int:
@@ -148,86 +137,31 @@ def main(argv: list[str]) -> int:
         print("\n".join(errs) + ("\n" if errs else "") + f"{len(recs)} records, {len(errs)} problems")
         return 1 if errs else 0
     if argv[:1] == ["build"]:
-        out, bad, flags, srcs = {}, 0, [], code_sources()
+        out, bad, srcs = {}, 0, code_sources()
         ledger_path = R / "judgments/VERIFIED.json"
         ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {}
-
-        def publish(r: dict) -> None:
-            sub, main = main_of[r["arxiv"]]
-            url = code_url(r["evidence"]["code"].get("quote") or "") or srcs.get(r["arxiv"], {}).get("url")
-            out[r["arxiv"]] = {"arxiv": r["arxiv"], "sub_pattern": sub, "main_pattern": main,
-                               **{k: r[k] for k in ("title_zh", "one_line", "one_line_zh")},
-                               "evidence_level": r["evidence_level"]["value"], "code": r["evidence"]["code"]["value"],
-                               "code_url": url, "stars": srcs.get(r["arxiv"], {}).get("stars"),
-                               **score(r, main, cond, code_found=bool(url))}
-
-        # legacy batches (pilot, bNN) first, then dated batches in date order: a later re-judgment of a paper wins.
-        # A dual group ("<batch>.<model>.jsonl" per model) sorts just after a same-named single batch.
-        singles, groups = [], {}
-        for p in (R / "judgments").glob("*.jsonl"):
-            m = DUAL_STEM.match(p.stem)
-            if m:
-                groups.setdefault(m.group(1), {})[m.group(2)] = p
-            else:
-                singles.append(p)
-        units = [((p.stem[:1].isdigit(), p.name), [p]) for p in singles]
-        units += [((b[:1].isdigit(), b + "~"), [groups[b].get(m) for m in DUAL_MODELS]) for b in groups]
-        for _, files in sorted(units, key=lambda u: u[0]):
-            if None in files:  # dual group missing a model file — still being written
-                print(f"skip {files[0].name.rsplit('.', 2)[0]}: dual group incomplete (need {'+'.join(DUAL_MODELS)})")
+        # legacy batches (pilot, bNN) first, then dated batches in date order: a later re-judgment of a paper wins
+        for p in sorted((R / "judgments").glob("*.jsonl"), key=lambda p: (p.stem[:1].isdigit(), p.name)):
+            recs, ids_file = jl(p), p.with_name(f"ids_{p.stem}.txt")
+            digest = hashlib.sha256(p.read_bytes()).hexdigest()
+            verified = ledger.get(p.name) == digest
+            want = set(ids_file.read_text().split()) if ids_file.exists() else {r["arxiv"] for r in recs}
+            if {r["arxiv"] for r in recs} != want or any(check(r, main_of, cond, verify_quotes=not verified) for r in recs):
+                print(f"skip {p.name}: incomplete or invalid batch ({len(recs)}/{len(want)})")  # still being written
                 bad += 1
                 continue
-            p0 = files[0]
-            stem = DUAL_STEM.match(p0.stem)
-            batch = stem.group(1) if stem else p0.stem
-            ids_file = p0.with_name(f"ids_{batch}.txt")
-            recs = {p: jl(p) for p in files}
-            want = set(ids_file.read_text().split()) if ids_file.exists() else {r["arxiv"] for rs in recs.values() for r in rs}
-            for p in files:
-                digest = hashlib.sha256(p.read_bytes()).hexdigest()
-                if {r["arxiv"] for r in recs[p]} != want or any(check(r, main_of, cond, verify_quotes=ledger.get(p.name) != digest) for r in recs[p]):
-                    print(f"skip {p.name}: incomplete or invalid batch ({len(recs[p])}/{len(want)})")  # still being written
-                    bad += 1
-                    recs = {}
-                    break
-                ledger[p.name] = digest
-            if not recs:
-                continue
-            if len(files) == 1:
-                for r in recs[p0]:
-                    publish(r)
-                continue
-            by = {p.name.rsplit(".", 2)[1]: {r["arxiv"]: r for r in recs[p]} for p in files}
-            for aid in sorted(want):
-                scored = {}
-                for m in DUAL_MODELS:
-                    r = by[m][aid]
-                    url = code_url(r["evidence"]["code"].get("quote") or "") or srcs.get(aid, {}).get("url")
-                    scored[m] = (score(r, main_of[aid][1], cond, code_found=bool(url)), r, url)
-                mean = {k: round(sum(scored[m][0][k] for m in DUAL_MODELS) / len(DUAL_MODELS), 1)
-                        for k in ("evidence", "execution", "level", "code")}
-                total = round(sum(scored[m][0]["total"] for m in DUAL_MODELS) / len(DUAL_MODELS))
-                r, url0 = scored[DUAL_MODELS[0]][1], scored[DUAL_MODELS[0]][2]
-                sub, main = main_of[aid]
-                out[aid] = {"arxiv": aid, "sub_pattern": sub, "main_pattern": main,
+            ledger[p.name] = digest
+            for r in recs:
+                sub, main = main_of[r["arxiv"]]
+                url = code_url(r["evidence"]["code"].get("quote") or "") or srcs.get(r["arxiv"], {}).get("url")
+                out[r["arxiv"]] = ({"arxiv": r["arxiv"], "sub_pattern": sub, "main_pattern": main,
                             **{k: r[k] for k in ("title_zh", "one_line", "one_line_zh")},
                             "evidence_level": r["evidence_level"]["value"], "code": r["evidence"]["code"]["value"],
-                            "code_url": url0 or next((u for _, _, u in scored.values() if u), None),
-                            "stars": srcs.get(aid, {}).get("stars"), **mean, "total": total, "band": band(total),
-                            "s_yes": scored[DUAL_MODELS[0]][0]["s_yes"], "s_n": scored[DUAL_MODELS[0]][0]["s_n"],
-                            "f_yes": scored[DUAL_MODELS[0]][0]["f_yes"], "f_n": scored[DUAL_MODELS[0]][0]["f_n"]}
-                totals = [scored[m][0]["total"] for m in DUAL_MODELS]
-                if max(totals) - min(totals) > 10 or len({scored[m][0]["band"] for m in DUAL_MODELS}) > 1:
-                    flags.append(f"{batch} {aid}: " + " ".join(f"{m}={scored[m][0]['total']}{scored[m][0]['band']}"
-                                                               for m in DUAL_MODELS) + f" → avg {total}")
+                            "code_url": url, "stars": srcs.get(r["arxiv"], {}).get("stars"),
+                            **score(r, main, cond, code_found=bool(url))})
         (R / "scores.jsonl").write_text("".join(json.dumps(o, ensure_ascii=False) + "\n" for o in out.values()))
         ledger_path.write_text(json.dumps(dict(sorted(ledger.items())), indent=1) + "\n")
-        (R / "judgments/DUAL_FLAGS.md").write_text(
-            "# Dual-model flags — regenerated by `score.py build`; do not edit by hand\n\n"
-            "Papers whose blind judgments disagree by >10 points or by band. Review the paper, then re-judge it into a\n"
-            "NEW dated dual batch (the later batch wins); the average stays on the board until then.\n\n"
-            + ("\n".join(flags) + "\n" if flags else "(none)\n"))
-        print(f"scored {len(out)} papers ({bad} batches skipped, {len(flags)} dual flags) → research/scores.jsonl")
+        print(f"scored {len(out)} papers ({bad} batches skipped) → research/scores.jsonl")
         return 1 if bad else 0
     print(__doc__)
     return 2

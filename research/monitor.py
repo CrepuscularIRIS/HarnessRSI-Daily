@@ -6,7 +6,8 @@ Checks every commit since the last run (state in .git/monitor_last):
   - no agent touches the judging standards; nobody commits full texts, reviews, bundles or .env;
   - the scoring session edits README.md only inside the board and poster-gallery blocks;
   - new reel/<id>/ directories pass research/check_reel.py;
-  - new judgment files re-verified here (quotes checked against freshly fetched full text) and scores.jsonl reproducible;
+  - new final judgment batches re-verified here (quotes checked against freshly fetched full text; seat passes in
+    judgments/passes/ are audit trail, verified by the scoring session itself) and scores.jsonl reproducible;
   - card checks, latest CI run, open issues, queue backlog.
 Prints a report ending in "STATUS OK" or "STATUS ATTENTION".
 
@@ -34,7 +35,8 @@ OWN = {
 ROLE = {"collect": "grok", "ingest": "grok", "maintenance": "grok", "triage": "local", "score": "local", "cards": "local"}
 PROTECTED = ["docs/EVIDENCE.md", "cards/_TEMPLATE.md", "check_cards.py", ".github/*", "research/*_SPEC.md",
              "research/*_SCHEMA.md", "research/SCREEN_RUBRIC.md", "research/score.py", "research/check_*.py",
-             "research/calibrate.py", "research/patterns/taxonomy*.json", "research/patterns/conditions.json", "patterns/*",
+             "research/calibrate.py", "research/judge.py", "research/merge_judgments.py",
+             "research/patterns/taxonomy*.json", "research/patterns/conditions.json", "patterns/*",
              "research/setup_reel.sh"]
 FORBIDDEN = ["research/fulltext/*", "research/reviews/*", "research/patterns/bundles/*", "research/paper_text/*", "*.env", ".env",
              "*.pptx", "*.mp3", "*.docx", "*/poster.html"]
@@ -92,11 +94,8 @@ def main(argv: list[str]) -> int:
 
     # independent re-verification of new judgments
     changed = {f for c, _ in commits for f in sh("git", "show", "--name-only", "--format=", c).split()}
-    for jf in sorted(f for f in changed if re.fullmatch(r"research/judgments/(?!ids_).+\.jsonl", f) and Path(f).exists()):
-        stem = Path(jf).stem
-        if stem.endswith((".sol", ".opus")):  # dual-model file: ids file is shared per batch
-            stem = stem.rsplit(".", 1)[0]
-        ids = Path(jf).with_name(f"ids_{stem}.txt")
+    for jf in sorted(f for f in changed if re.fullmatch(r"research/judgments/(?!ids_)(?!passes/).+\.jsonl", f) and Path(f).exists()):
+        ids = Path(jf).with_name(f"ids_{Path(jf).stem}.txt")
         if ids.exists():
             sh(sys.executable, "research/fetch_fulltext.py", "--ids", str(ids), check=False)
             r = subprocess.run([sys.executable, "research/score.py", "check", jf, str(ids)], capture_output=True, text=True,
