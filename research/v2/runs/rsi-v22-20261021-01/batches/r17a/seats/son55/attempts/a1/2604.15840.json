@@ -1,0 +1,869 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r17a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Complete HTML full text incl. appendices read; claim in scope as boundary case (evolving retained object is the non-weight task set; agent weights trained by GRPO).",
+ "paper": {
+  "paper_key": "2604.15840",
+  "paper_id": "2604.15840",
+  "title": "CoEvolve: Training LLM Agents via Agent-Data Mutual Evolution",
+  "version": "2604.15840v1",
+  "claim_type": "system_method",
+  "central_claim": "Rollout-derived forgetting/boundary/rare signals guide LLM task synthesis; execution-validated tasks are appended to the training distribution, so agent (GRPO) and data co-evolve and improve AppWorld/BFCL (reported average gains 19.43/15.58/18.14 over zero-shot on Qwen2.5-7B/Qwen3-4B/Qwen3-30B-A3B)."
+ },
+ "provenance": {
+  "input_hash": "5523ec4cfb11dc4c101ccd397ae80559dd9b4782285ef68e424f562340f29c27",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; model_type is the configured slot only",
+  "timestamp": "2026-10-22T01:05:45Z"
+ },
+ "rationale": "边界案例：训练任务集由失败信号驱动演化。消融链有信息量，但选择集即报告集、单次运行无方差、预算未匹配，强外部探索器相当于教师。",
+ "materials": [
+  {
+   "material_id": "M-2604.15840",
+   "url": "https://arxiv.org/html/2604.15840v1",
+   "sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e",
+   "sections_read": [
+    "Abstract",
+    "1-5",
+    "Limitations",
+    "App A.1-A.8 incl. Tables 9-16 and prompt Figs 9-13"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "kind": "author_report",
+   "quote": "Specifically, CoEvolve extracts feedback signals such as forgetting and uncertainty from rollout trajectories to identify failure-prone interaction patterns, and utilizes them to guide LLM-based task synthesis.",
+   "support_explanation": "Central claim: training-time rollout signals steer LLM task synthesis; validated tasks update the data distribution.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Sec 1 para 3",
+   "kind": "author_report",
+   "quote": "without any feedback from the agent’s actual performance or interaction signals",
+   "support_explanation": "Author gap: static/open-loop synthetic data not coupled to the agent's performance.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 2 Related Work",
+   "kind": "author_report",
+   "quote": "Conceptually, CoEvolve also differs from recent self-improving or curriculum-style frameworks that refine trajectories for a fixed pool of queries or generate variants around seed tasks.",
+   "support_explanation": "Closest neighbours (curriculum / self-improving data frameworks) are described generically and not named or compared except ReST/Reflexion/'Curriculum Learning' in App Table 10.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 3.1 Forgetting signals",
+   "kind": "author_report",
+   "quote": "we use forgetting signals to detect cases where the agent previously succeeded on a task but now fails under the current policy",
+   "support_explanation": "Signal 1 (score>=0.5 in recent window, now <0.5). Window size W, N_min unspecified in text.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Sec 3.1 Boundary signals",
+   "kind": "author_report",
+   "quote": "A boundary signal is triggered if the sampled trajectories include both successful and failed outcomes",
+   "support_explanation": "Signal 2 (mixed outcomes among K sampled rollouts, thresholds 0.5); signal 3 rare action patterns with frequency < theta%.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Sec 3.2",
+   "kind": "author_report",
+   "quote": "the LLM summarizes the underlying failure cause or behavioral instability that triggered the signal and produces a structured exploration context",
+   "support_explanation": "Candidate generation: LLM (Qwen3-Max per App A.2) reads full trajectory, summarizes failure, then re-explores the environment multi-round/multi-step.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Sec 3.3 Environment Validation",
+   "kind": "author_report",
+   "quote": "If execution fails but the environment returns a positive reward, the task is also retained.",
+   "support_explanation": "Acceptance rule: executes task-solution pair, accepts on success OR failed-but-positive-reward, discards otherwise; unusual rule and the identity of the executing agent and the reward source for synthetic tasks are not specified.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Sec 3.3",
+   "kind": "author_report",
+   "quote": "Validated tasks are appended to the current task set",
+   "support_explanation": "Retention is append-only; no retirement, dedup, versioning or rollback is described.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "App A.2",
+   "kind": "author_report",
+   "quote": "we initialize the synthetic task set with 100 tasks, train for a total of 120 steps, and regenerate feedback data every 10 training steps",
+   "support_explanation": "Default config: N=100, F=10, 120 steps; exploration LLM is Qwen3-Max (stronger than the Qwen2.5-7B/Qwen3-4B students).",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 4.1",
+   "kind": "author_report",
+   "quote": "For BFCL-V3, we follow the standard Multi-Turn Base protocol and evaluate on the provided validation set, reporting multi-turn success rate.",
+   "support_explanation": "BFCL has one evaluation set used for reporting, ablations and hyperparameter tuning; no separate selection split.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 4.3 / Table 2",
+   "kind": "author_report",
+   "quote": "CoEvolve extends standard GRPO by introducing feedback-guided data evolution during RL training.",
+   "support_explanation": "Table 2: AppWorld TestN TGC GRPO->CoEvolve 26.78->27.98, 28.57->35.71, 48.81->54.76; BFCL 56.00->61.50, 58.00->63.00, 64.00->67.00 (single runs).",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Sec 4.4 Effect of Closed-loop CoEvolve / Table 3",
+   "kind": "author_report",
+   "quote": "Adding random exploration brings further gains (45.43), indicating that online trajectory generation can help.",
+   "support_explanation": "Table 3 (Qwen3-4B): zero-shot 21.59 avg; +synthetic 43.29; +random exploration 45.43 (AppWorld 30.36, BFCL 60.50); +feedback 49.36 (35.71, 63.00). Feedback vs random: +5.35 AppWorld TGC, +2.5 BFCL.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Sec 4.4 Hyperparameter Sensitivity / Table 4",
+   "kind": "author_report",
+   "quote": "These results suggest that moderate initialization and sufficiently frequent updates are important for feedback-driven training.",
+   "support_explanation": "Table 4 values on the same TestN/BFCL sets used for reporting: F=5 gives AppWorld 35.71 (BFCL 58.00), F=10 gives 35.12 (BFCL 63.00); reported main-table AppWorld 35.71 and BFCL 63.00 therefore come from different configurations.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Sec 4.4 Ablation and Distribution of Feedback Signals / Table 5",
+   "kind": "author_report",
+   "quote": "Table 5 further shows that removing any single signal leads to performance degradation, confirming their complementary value.",
+   "support_explanation": "Avg 49.36 -> 45.18 (w/o forgetting), 47.21 (w/o rare), 47.17 (w/o boundary); single run; removal also reduces data volume.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "App A.3 Table 11",
+   "kind": "author_report",
+   "quote": "Removing task validation leads to a clear and consistent performance degradation across both benchmarks.",
+   "support_explanation": "Validation ablation: BFCL 63.00->58.50, AppWorld 35.71->27.38; shows the execution gate is load-bearing.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "App A.3 Table 12",
+   "kind": "author_report",
+   "quote": "Each row uses the same external model for the “Synthesis Only” baseline and the full CoEvolve variant, so the gap isolates the contribution of feedback-guided data evolution rather than model substitution alone.",
+   "support_explanation": "Matched explorer control on BFCL: Qwen3-4B 53.0->56.5, Qwen-Plus 54.0->59.5, Qwen-Max 58.0->63.0 (single runs); stronger explorer raises the ceiling.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Sec 4.4 Cost-Efficiency / Table 7",
+   "kind": "author_report",
+   "quote": "yet leads to clear absolute gains (+6.53 on AppWorld, +5.00 on BFCL) and substantial relative improvements (+22.92%, +8.62%).",
+   "support_explanation": "Table 7: feedback time ratio 9.67% (AppWorld, 811 s per feedback, 100,596 s total) and 12.76% (BFCL, 480 s, 45,144 s); compared to GRPO without closed-loop generation, wall-clock only; Qwen3-Max API calls and the initial synthesis cost are not itemised; no random-exploration cost.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Sec 4.4 Cross-domain Generalization / Table 6",
+   "kind": "author_report",
+   "quote": "Training on AppWorld improves zero-shot performance on BFCL from 26.50 to 45.00, and vice versa from 16.67 to 19.04.",
+   "support_explanation": "Cross-environment transfer evidence, but no comparison to GRPO/static-trained cross-domain control.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "App A.3 Table 10",
+   "kind": "author_report",
+   "quote": "Under the same Qwen3-4B-Instruct backbone, it consistently outperforms all baselines across ALFWorld, BFCL, AppWorld, and WebShop.",
+   "support_explanation": "Table 10 (Qwen3-4B): CoEvolve ALFWorld 82.86/BFCL 63.00/AppWorld 35.71/WebShop 80.60 vs GRPO 77.85/58.00/28.57/75.00, ReST 77.94/52.00/32.74/77.20, Curriculum 78.57/54.50/29.17/78.60; baselines' configuration (e.g., what 'Curriculum Learning' is) not described.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 4.4 Analysis of Data Diversity",
+   "kind": "author_report",
+   "quote": "with only a small fraction approaching 1.0",
+   "support_explanation": "Max cosine similarity between synthesized tasks and the (BFCL/AppWorld) validation tasks; non-zero fraction near 1.0 and no decontamination of synthesized tasks against evaluation tasks is reported.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Sec 4.1",
+   "kind": "author_report",
+   "quote": "For AppWorld, we report results on the official Test-Normal (TestN) and Test-Challenge (TestC) splits",
+   "support_explanation": "Official splits; ablations/hyperparameters use TestN TGC (Sec 4.4), TestC appears only in Table 1.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Sec 4.3",
+   "kind": "author_report",
+   "quote": "Notably, all improvements are achieved without any human annotation or handcrafted task design",
+   "support_explanation": "'No human supervision' claim; exploration LLM Qwen3-Max (stronger external model) generates tasks and solutions, which acts as a teacher; headline gains (19.43/15.58/18.14) are vs zero-shot, not vs GRPO.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Limitations",
+   "kind": "author_report",
+   "quote": "At early stages of training, when the agent’s behavior is still immature, the resulting signals may be noisy or incomplete",
+   "support_explanation": "Author-stated failure boundary: signal quality depends on current policy.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "App A.7 / Fig 13",
+   "kind": "author_report",
+   "quote": "You are a strict task evaluation expert",
+   "support_explanation": "Task validation prompt is an LLM judge over trajectory summary + expected outcome; so synthetic-task acceptance/reward partly rests on a model judgment (plus environment reward).",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Tables 2-3 (derived)",
+   "kind": "our_inference",
+   "quote": null,
+   "support_explanation": "Reported values are multiples of ~0.595 (AppWorld TestN, e.g. 35.71=60/168) and 0.5 (BFCL); Table 3 feedback-vs-random is about 9 tasks on AppWorld and 5 on BFCL; no seeds, intervals or set sizes are reported.",
+   "material_id": "M-2604.15840",
+   "material_sha256": "65836b795dd576db2305b7ef8c2604445c6018147e8904ce5910075536dd5e4e"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "synthetic training task set D_t (executable tasks) feeding GRPO training of the agent; baseline: static D_0 from unguided exploration",
+   "information": "agent rollouts during training (task scores, K sampled outcomes, action-pattern counts), full interaction histories of signal-annotated trajectories; exploration LLM Qwen3-Max sees these; evaluation tasks not intended to be visible (similarity analysed only)",
+   "operation": "detect forgetting/boundary/rare signals -> LLM failure summary -> multi-round multi-step re-exploration of the environment -> aggregate triplets -> LLM abstracts task-solution pairs -> execute/validate in environment (+LLM judge) -> append",
+   "output": "D_{t+1} used by GRPO for the next 10 steps",
+   "conditions": "regenerate every F=10 steps; N=100 initial tasks; 120 steps; signals noisy at low competence",
+   "feedback": "policy's own training rollouts (rewards), no human labels",
+   "selection_rule_data": "accept if execution completes objective OR fails with positive env reward; discard otherwise; no usefulness/learnability test",
+   "persistence": "task set grows monotonically (append-only); weights trained on it",
+   "later_use": "next GRPO phase samples from D_t",
+   "claimed_effect": "AppWorld/BFCL gains vs zero-shot, GRPO and random-exploration variants",
+   "failure_boundary": "signal noise early; adversarial/safety settings need oversight (authors); no retirement or drift control",
+   "evidence_ids": [
+    "E001",
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E009"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "RL for agents uses static expert or open-loop synthetic data that neither covers long-tail interactions nor adapts to the agent's weaknesses.",
+  "checked_gap": "Plausible; static-synthetic already gives most of the gain in Table 3 (21.59->43.29), so the residual attributable to closed-loop evolution is the +2 to +6 points over random exploration. Neighbour texts (closed-loop curricula, self-evolving task generation) are not in the pinned package.",
+  "lineage": "expert-trajectory imitation -> offline LLM trajectory synthesis (open-loop) -> random-exploration online synthesis -> feedback-guided re-exploration with RL (this paper); signals borrowed from forgetting-events literature (Toneva et al.)",
+  "closest_adjacent": "ReST/Reflexion/Curriculum Learning baselines (App Table 10) and unnamed curriculum-style frameworks",
+  "residue": "whether targeted evolution beats volume-matched untargeted synthesis; contamination vs evaluation environments",
+  "stakes": "agent RL data coverage and cost",
+  "method_response": "closed-loop signal-conditioned task synthesis with execution validation",
+  "remaining_gap": "no budget-matched untargeted control; selection set equals reporting set; strong external teacher",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E012",
+   "E019"
+  ],
+  "unresolved": [
+   "closest neighbours not read; volume/compute match to random exploration unknown"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": [
+     "1 binding constraint is the corpus (static data): stated; cheaper non-generative remedy partly checked via static-synthetic/GRPO baseline",
+     "2 controllable generator with native steering handle: signal-conditioned LLM re-exploration; extends support beyond D_0 shown only by similarity/turn-count analyses",
+     "3 one load-bearing filter: execution validation, ablated (Table 11) but also LLM judge",
+     "4 retrain and iterate, learner error fed back to generator: yes (the paper's core)",
+     "5 transfer to real target and cheaper alternatives: partial (static/random baselines, cross-domain)"
+    ],
+    "success_failure_checks": [
+     "gate removal shown to break method: met (Table 11)",
+     "intermediate property vs downstream objective: downstream metrics reported, met",
+     "strong isolating baselines: partial (volume-matched untargeted not shown)",
+     "artificial setup / test info: partial (synthesis from evaluation environments)"
+    ],
+    "evidence_ids": [
+     "E001",
+     "E006",
+     "E007",
+     "E015",
+     "E012"
+    ],
+    "reason": "Generator + single quality gate + retrain loop with learner failure fed back to the generator is exactly C08's advanced variant; rejected siblings: C07 (process tuning) and C26 (objective design) do not apply."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Matched.",
+  "executes_pattern": true,
+  "resolves_problem": "partial: gains over static data shown on selection-contaminated sets; budget-matched untargeted comparison missing"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version_ref": "domain_cards_hash",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H23",
+    "version": "domain_cards_hash",
+    "fit": "high",
+    "condition_checks": [
+     "S1 partial",
+     "S2 partial",
+     "S3 met",
+     "S4 unmet",
+     "S5 partial",
+     "S6 partial",
+     "F2 avoided",
+     "F3 partial",
+     "F4 avoided"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E005",
+     "E007",
+     "E015",
+     "E017"
+    ],
+    "reason": "Learner-state signals (forgetting/boundary/rare) steer a prompted generator to create tasks, verified by execution and fed to RL with re-diagnosis every 10 steps; boundary pattern: weights are trained, retained non-weight object is the task set."
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H23",
+   "operation_correspondence": "C08's generator+gate+retrain with learner-failure feedback corresponds to H23's diagnostic->generator->verifier->train->re-diagnose loop",
+   "necessary_conditions": "independent verifier; matched-budget untargeted control; held-out evaluation",
+   "differences": "H23 requires independent verification of each task (here partly LLM judge); C08 requires extending support beyond corpus (evidenced indirectly)",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E012"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "generalisation claim",
+   "applicable": true,
+   "status": "partial",
+   "reason": "3 backbones, 2 main benchmarks plus ALFWorld/WebShop in appendix, but each trained in-domain and single runs.",
+   "evidence_ids": [
+    "E018",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "gain attributed to manufactured signal",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Static, random-exploration and matched-explorer controls exist; data volume and compute not matched or reported.",
+   "evidence_ids": [
+    "E012",
+    "E016"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "always",
+   "applicable": true,
+   "status": "met",
+   "reason": "Reported on downstream AppWorld/BFCL success metrics, not just diversity proxies.",
+   "evidence_ids": [
+    "E011",
+    "E021"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-4",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "delta from prior art",
+   "applicable": true,
+   "status": "partial",
+   "reason": "ReST/Reflexion/Curriculum compared; their implementations are not described.",
+   "evidence_ids": [
+    "E003",
+    "E019"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "loop adds compute",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Wall-clock share reported; API/exploration cost and untargeted comparator cost omitted.",
+   "evidence_ids": [
+    "E017"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md#Reviewer expectations"
+   ],
+   "applies_when": "always",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Realistic interactive environments, but synthesis uses the evaluation environments and a stronger external model.",
+   "evidence_ids": [
+    "E020",
+    "E022"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S1",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "generated tasks must be valid",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Execution validation is load-bearing (Table 11) but includes an LLM judge and a failed-but-positive-reward acceptance clause.",
+   "evidence_ids": [
+    "E007",
+    "E015",
+    "E024"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S2",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "frontier signal",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Boundary signal measured on the learner's own rollouts, not on a fixed held-out validation environment.",
+   "evidence_ids": [
+    "E005"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S3",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "per-instance diagnostic",
+   "applicable": true,
+   "status": "met",
+   "reason": "Per-task forgetting/boundary and per-pattern rarity signals, regenerated every 10 steps.",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E009"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S4",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "harder tasks built from verified atomic ones",
+   "applicable": false,
+   "status": "unknown",
+   "reason": "Tasks are abstracted from exploration interactions, not composed from verified atoms; condition not claimed.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S5",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "cost of diagnosis/synthesis",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Table 7 wall-clock only.",
+   "evidence_ids": [
+    "E017"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S6",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "certification outside the loop",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Gains over static-synthetic and random-exploration, cross-domain transfer; but evaluation sets double as tuning sets.",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E018"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/F3",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "avoidance check: learned proxy as only certificate (status = degree avoided)",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Environment execution plus an LLM judge certify tasks.",
+   "evidence_ids": [
+    "E007",
+    "E024"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "local:2604.15840-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "H23 Step 5 (budget-matched untargeted control)"
+   ],
+   "applies_when": "claim that targeting, not volume, drives the gain",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Number of tasks added/trained on in random-exploration vs feedback conditions not reported.",
+   "evidence_ids": [
+    "E012",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2604.15840-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "selection/test separation (docs/EVIDENCE.md rule 2)"
+   ],
+   "applies_when": "hyperparameters and variants tuned on reported sets",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "TestN and BFCL are used for tuning and reporting; main-table cells come from different configurations.",
+   "evidence_ids": [
+    "E010",
+    "E013"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2604.15840-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper's own similarity analysis (Fig 5, Table 13)"
+   ],
+   "applies_when": "synthesis performed inside evaluation environments",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Similarity analysed, no decontamination or exclusion threshold reported.",
+   "evidence_ids": [
+    "E020"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "CoEvolve improves AppWorld/BFCL over zero-shot on three backbones (avg +19.43/+15.58/+18.14).",
+   "setting": "Qwen2.5-7B, Qwen3-4B, Qwen3-30B-A3B; GRPO, 120 steps, Qwen3-Max explorer",
+   "baseline_control": "zero-shot instruct models",
+   "selection_vs_test": "configs tuned on TestN/BFCL",
+   "result_denominator": "Table 1 avg of TestN TGC/SGC, TestC TGC/SGC, BFCL; single run",
+   "evidence_ids": [
+    "E011",
+    "E022"
+   ],
+   "counterevidence": [
+    "E013"
+   ],
+   "allowed_conclusion": "Large gains over zero-shot are mostly attributable to RL on synthetic tasks (Table 3 static synthetic already +21.7 avg)"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Closed-loop feedback-guided evolution adds gains over static GRPO and random exploration.",
+   "setting": "Qwen3-4B; AppWorld TestN TGC, BFCL",
+   "baseline_control": "GRPO on D_0; +random exploration; matched explorer synthesis-only",
+   "selection_vs_test": "same sets used for tuning",
+   "result_denominator": "+7.14/+5.00 over GRPO; +5.35/+2.5 over random; single run (~9 and ~5 tasks)",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E016",
+    "E025"
+   ],
+   "counterevidence": [
+    "E013",
+    "E025"
+   ],
+   "allowed_conclusion": "Directional support; magnitude uncertain, volume match unknown"
+  },
+  {
+   "claim_id": "C3",
+   "text": "Gains transfer across environments and are efficient (~10% extra time).",
+   "setting": "AppWorld<->BFCL zero-shot transfer; ALFWorld/WebShop in-domain",
+   "baseline_control": "zero-shot; GRPO/ReST/Curriculum in-domain",
+   "selection_vs_test": "n/a",
+   "result_denominator": "Table 6/10/7",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Suggestive transfer; cost counts wall-clock only"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Feedback-guided, execution-validated task evolution plus GRPO outperforms zero-shot, static-synthetic GRPO and random-exploration variants on AppWorld TestN and BFCL by small single-run margins, with design variants chosen on the reported sets.",
+  "author_claim_vs_supported": "'Consistent and significant improvements' over strong base models is supported only against zero-shot; the specific benefit of mutual evolution is directionally supported but not statistically or volume-controlled.",
+  "unresolved": [
+   "volume/compute match vs random exploration",
+   "variance across seeds",
+   "held-out test separate from tuning",
+   "reward source for synthetic tasks",
+   "teacher effect of Qwen3-Max"
+  ],
+  "note": "level capped at task: selection set equals reported set for BFCL and AppWorld TestN; weights (not only the task set) carry the gain; no improver-level evidence."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real limitation (static/open-loop synthetic data not coupled to learner failures) with a changed object (the training-task distribution), but nearest neighbours are covered only generically (curriculum/self-improving frameworks unnamed; closed-loop task-evolution methods not compared); residual bottleneck and 'long-tail coverage' claim not evidenced beyond Table 3.",
+   "evidence_ids": [
+    "E002",
+    "E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Chain signal detection -> LLM failure summary -> signal-conditioned re-exploration -> abstraction to task-solution -> execution validation -> append -> GRPO is reconstructable; forgetting/boundary/rare map to rehearsal/frontier/coverage with testable predictions (per-signal ablation, validation ablation, matched-explorer control). Weak: thresholds heuristic, link from a failed trajectory to new tasks relies on LLM exploration, strong external explorer is a teacher.",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E015",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Main steps and prompts (Figs 9-13) are given, but key execution conditions are missing or odd: window W, N_min, K, tasks added per round, reward source for synthetic tasks, which agent executes validation, acceptance of failed-but-positive-reward tasks; append-only task set with no retirement/dedup/rollback or drift control; signals noisy at low competence (author limitation).",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009",
+    "E023",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E007",
+    "E008"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Official AppWorld (TGC/SGC) and BFCL multi-turn metrics from environment execution; strict task success. Deductions: headline gains are vs zero-shot (weak) rather than the GRPO baseline; Table 1 values for AppWorld/BFCL come from different configurations; gains quoted as 'significant' without tests.",
+   "evidence_ids": [
+    "E010",
+    "E021",
+    "E022"
+   ],
+   "counterevidence_ids": [
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Informative chain: static synthetic -> +random exploration -> +feedback (Table 3), per-signal removal (Table 5), validation removal (Table 11), matched-explorer 'synthesis only' vs CoEvolve (Table 12), adaptive baselines (Table 10). Weaknesses: task volume/compute between random exploration and feedback conditions not stated, signal removal confounds volume, strong external explorer acts as teacher (partly controlled by Table 12), single runs.",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E014",
+    "E015",
+    "E016",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E022",
+    "E025"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Hyperparameters and design variants (N, F, similarity settings) are chosen on TestN TGC and the single BFCL set that are then reported; main numbers combine best cells from different configurations; synthesized tasks come from the evaluation environments and similarity to evaluation tasks approaches 1.0 for some, with no decontamination. Some independent evidence: AppWorld TestC in Table 1 (untuned, but without a GRPO baseline) and cross-domain/ALFWorld/WebShop runs.",
+   "evidence_ids": [
+    "E021",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E010",
+    "E013",
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No seeds, intervals, run counts, test-set sizes or significance tests anywhere; differences that drive the causal claims are a handful of tasks (about 9 on AppWorld, 5 on BFCL for feedback vs random).",
+   "evidence_ids": [],
+   "counterevidence_ids": [
+    "E025"
+   ],
+   "search_scope": [
+    "main text Secs 4.1-4.4",
+    "Tables 1-15",
+    "App A.1-A.7",
+    "Limitations"
+   ]
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Reports wall-clock feedback share (about 10-13% of training time) vs a no-loop GRPO baseline, with per-feedback time. Missing: explorer API/token cost, initial synthesis cost, cost-matched comparison against the random-exploration variant, task volume.",
+   "evidence_ids": [
+    "E017"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 56.25,
+  "display": 56.3,
+  "lower": 56.25,
+  "upper": 56.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

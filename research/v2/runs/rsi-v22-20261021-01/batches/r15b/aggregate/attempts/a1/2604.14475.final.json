@@ -1,0 +1,1523 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r15b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.14475",
+  "paper_id": "2604.14475",
+  "title": "Evo-MedAgent: Beyond One-Shot Diagnosis with Agents That Remember, Reflect, and Improve",
+  "version": "2604.14475v1",
+  "claim_type": "system_method",
+  "central_claim": "无需训练的自进化测试时记忆（情景库+程序性启发式库+工具可靠性控制器）让冻结的胸片工具增强智能体跨病例累积经验；在ChestAgentBench上MCQ准确率GPT-5-mini 0.68->0.79、Gemini-3 Flash 0.76->0.87，且对定性诊断任务比编排外部工具提升更大。"
+ },
+ "provenance": {
+  "input_hash": "25c1b8936cd51dd460ec242fbcc74e82112163a4d8d21596989e2e64ccc766be",
+  "input_package": "batches/r15b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:17:24Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.14475.txt",
+   "url": "https://arxiv.org/html/2604.14475v1",
+   "version": "2604.14475v1",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.14475.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§1, lines 179–197",
+   "quote": "Our central claim is that cross-case experience can be operationalized in a medically meaningful way: prior episodes provide precedent, distilled procedural memory carries reusable diagnostic policies, and tool-governance memory reshapes how the agent allocates trust across its toolset.",
+   "support_explanation": "保留作者三种记忆的中心主张，不能事后删除未消融的governance主张。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§2, lines 250–256",
+   "quote": "proposes a three-store (episodic, semantic, procedural) architecture and evaluates it on general-purpose sequential tasks; we adopt a similar factorization but ground each store in radiological content",
+   "support_explanation": "作者承认Evo-Memory多store谱系；新医学领域并不独自证明机制残余问题被解决。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§2, lines 253–256",
+   "quote": "maintains a single editable text block that an LLM rewrites after each task; we instead decompose this into priority-tagged procedural rules whose utility is tracked individually.",
+   "support_explanation": "与Dynamic Cheatsheet差异为按规则优先级/效用维护，而非全块重写；邻居原文未固定。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§3.1, lines 410–501",
+   "quote": "The episodic store maintains compressed records of prior diagnostic episodes:",
+   "support_explanation": "case描述、轨迹、答案与反馈、摘要及guideline保存为episode；top-K相关案例作为后续先例。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§3.1, lines 542–553",
+   "quote": "denotes highest clinical urgency. The system tracks per-rule usage statistics (e.g., how often a rule was selected and whether the agent answered correctly when it was active) from which it derives a utility estimate",
+   "support_explanation": "规则效用以活跃时的正确性关联和探索bonus估计，未给出反事实credit或完整公式。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§3.2, lines 637–641",
+   "quote": "is revealed, the agent performs multimodal reflection over the original images, question, response, tool traces, and ground truth to propose patch-style procedural edits and governance updates.",
+   "support_explanation": "每case揭露真值后才反思，将非权重补丁与governance保留供后续case使用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§3.1, lines 600–617",
+   "quote": "otherwise. Although tool governance is integral to Evo-MedAgent, we defer quantitative ablation of this component to future work and focus here on the episodic and procedural stores.",
+   "support_explanation": "Tool-governance有helpful>0.70/至少6次/无伤害和bad>0.60/至少10次阈值，但效应未量化验证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§4.1, lines 766–768",
+   "quote": "a comprehensive benchmark containing 2,500 multiple-choice CXR questions across 675 expert-curated cases from the Eurorad database, spanning seven diagnostic categories: detection, classification, localization, comparison, relationship, characterization, and diagnosis.",
+   "support_explanation": "数据总体分母可读，但未明确每个配置的实际完成量及多问题/患者分组隔离。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§4.2, lines 781–785",
+   "quote": "For instance, on GPT-5-mini, the tool-free full-memory configuration achieves 0.79 mean accuracy, substantially outperforming the tool-enabled baseline (0.68).",
+   "support_explanation": "作者报告memory增益；表1同模型tool-free无memory也0.68，memory有开关与单store消融。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§4.2, lines 799–811",
+   "quote": "Across three random permutations, GPT-5-mini full-memory accuracy was 0.82, 0.76, and 0.79",
+   "support_explanation": "三次顺序重复有均值0.79/std0.025；并非所有模型和消融的配对重复/CI。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§5, lines 854–856",
+   "quote": "Second, the present study focuses on an initial chest X-ray setting and assumes ground-truth feedback after each episode, whereas real clinical deployment often involves delayed, partial, or noisy supervision.",
+   "support_explanation": "承认oracle反馈前提；不能把benchmark的及时真值反馈收益外推到真实部署。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§1 Contributions, lines 213–215",
+   "quote": "each case adds only one retrieval pass and one reflection call, enabling practical deployment on top of any frozen LLM.",
+   "support_explanation": "提供操作级开销，但无tokens/dollars/latency测量或匹配额外调用的非memory控制。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§4.1 Table 1 caption, lines 656–666",
+   "quote": "). Dashes indicate incomplete runs. Best scores are marked in bold.",
+   "support_explanation": "表中破折号是未完成而非零；未报告这些runs退出原因和完整分母。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2604.14475.txt",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§4.3, lines 819–838",
+   "quote": "With memory, the retrieved pleural-priority rules redirect attention to the meniscus sign and costophrenic blunting, while the absence of air bronchograms argues against pneumonia—leading to the correct answer of",
+   "support_explanation": "跨case定性示例展示规则读取行为，但不是单独的全局因果/独立临床验证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Abstract",
+   "quote": "they fail to accumulate experience across cases, correct recurrent reasoning mistakes, or adapt their tool-use behavior without expensive reinforcement learning",
+   "support_explanation": "作者的 gap：智能体逐案独立求解，无跨案经验",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Abstract",
+   "quote": "On ChestAgentBench, Evo-MedAgent raises multiple-choice question (MCQ) accuracy from 0.68 to 0.79 on GPT-5-mini, and from 0.76 to 0.87 on Gemini-3 Flash.",
+   "support_explanation": "摘要主结果（作者报告）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Fig. 1 caption",
+   "quote": "After receiving ground-truth feedback, it reflects and refines all three memory stores.",
+   "support_explanation": "每案后用真值反馈做反思并更新三个存储",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 1",
+   "quote": "Our central claim is that cross-case experience can be operationalized in a medically meaningful way: prior episodes provide precedent, distilled procedural memory carries reusable diagnostic policies, and tool-governance memory reshapes how the agent allocates trust across its toolset.",
+   "support_explanation": "作者中心主张",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 2",
+   "quote": "we adopt a similar factorization but ground each store in radiological content",
+   "support_explanation": "三库结构沿用 Evo-Memory，新意在领域落地",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 2",
+   "quote": "we similarly employ utility-driven selection but additionally separate tool governance into its own store",
+   "support_explanation": "效用选择沿用 ReMe；差异是单独的工具治理库",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 2",
+   "quote": "To our knowledge, self-evolving test-time memory has not previously been evaluated in a tool-augmented medical imaging agent",
+   "support_explanation": "新颖性来自应用域",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3.1 Procedural memory",
+   "quote": "The system tracks per-rule usage statistics (e.g., how often a rule was selected and whether the agent answered correctly when it was active) from which it derives a utility estimate",
+   "support_explanation": "规则效用来自“规则启用时答对与否”的使用统计，是相关而非配对反事实",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3.1 Procedural memory",
+   "quote": "that favors rules with demonstrated benefit while providing an exploration bonus for under-tested ones. At inference time, up to",
+   "support_explanation": "效用用于选择排序并带探索加成；未见淘汰/合并/遗忘规则",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3.1 Tool-governance",
+   "quote": "Although tool governance is integral to Evo-MedAgent, we defer quantitative ablation of this component to future work and focus here on the episodic and procedural stores.",
+   "support_explanation": "作者承认工具治理库未做消融",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3.1 Tool-governance",
+   "quote": "We derive trust labels from fixed thresholds over accumulated interaction counts: a tool is labeled",
+   "support_explanation": "治理标签为手设固定阈值",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3.2",
+   "quote": "the agent performs multimodal reflection over the original images, question, response, tool traces, and ground truth to propose patch-style procedural edits and governance updates.",
+   "support_explanation": "反思使用真值，提出补丁式程序性编辑；无接受前的验证试跑",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 4.1",
+   "quote": "a comprehensive benchmark containing 2,500 multiple-choice CXR questions across 675 expert-curated cases from the Eurorad database",
+   "support_explanation": "2500题/675病例，平均每病例约3.7题；若按题流式输入，同病例的其他题答案可能经真值反馈进入记忆",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3",
+   "quote": "We consider an ordered sequence of benchmark cases",
+   "support_explanation": "评测流=基准本身的顺序序列，记忆在同一流内构建",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Table 1 caption",
+   "quote": "Full-memory GPT-5-mini MCQ is reported as mean (range) across three case-order permutations (",
+   "support_explanation": "仅 GPT-5-mini 全记忆配置有3种顺序的重复",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 4.2 Robustness",
+   "quote": "Across three random permutations, GPT-5-mini full-memory accuracy was 0.82, 0.76, and 0.79 (",
+   "support_explanation": "三次顺序：0.82/0.76/0.79；基线0.68在范围外",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 4.2",
+   "quote": "on GPT-5-mini, the tool-free full-memory configuration achieves 0.79 mean accuracy, substantially outperforming the tool-enabled baseline (0.68).",
+   "support_explanation": "“记忆优于工具”的比较；GPT-5-mini 无记忆下有无工具均为0.68（Table 1），故该对比实质是有无记忆",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 4.2",
+   "quote": "episodic retrieval, which surfaces similar past failures, dominates on recurring pathology patterns, while procedural heuristics generalize to novel pathology combinations unseen in recent episodes",
+   "support_explanation": "“分工”论断没有按病理类别的分解数据",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 5 Limitations",
+   "quote": "the present study focuses on an initial chest X-ray setting and assumes ground-truth feedback after each episode, whereas real clinical deployment often involves delayed, partial, or noisy supervision",
+   "support_explanation": "作者承认真值反馈假设",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Abstract",
+   "quote": "Because Evo-MedAgent requires no training, its per-case overhead is bounded by one additional retrieval pass and a single reflection call",
+   "support_explanation": "开销仅为定性断言，无token/时延数据",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 4.2",
+   "quote": "widening the gap to the no-memory baseline after approximately 20 cases",
+   "support_explanation": "曲线显示约20案后拉开差距",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Table 1",
+   "quote": "Ablation results on ChestAgentBench (tool-free).",
+   "support_explanation": "Table 1：GPT-5-mini 0.68/+S 0.71/+E 0.78/全 0.79；Gemini 0.76/0.81/0.84/0.87；GPT-5.2 0.69/–/–/0.81；开放题 0.29->0.40, 0.21->0.38。仅episodic已接近全记忆",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 1",
+   "quote": "Each case is evaluated anew, with no mechanism to retain reusable lessons from prior successes and failures.",
+   "support_explanation": "作者 gap 陈述",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Sec 3.1 Episodic memory",
+   "quote": "scores relevance between the current case and each stored episode.",
+   "support_explanation": "相似度函数 s_epi 与 K、K_S 未具体给出",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "material_id": "2604.14475",
+   "material_sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Table 1 caption",
+   "quote": "Dashes indicate incomplete runs.",
+   "support_explanation": "Table 1 多个配置未完成；评测样本数N与失败/缺失运行的处理未交代",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.14475.txt",
+   "material_hash": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "§4.2 Division of Memory Labor",
+   "quote": "configuration consistently outperforms either component alone (Table",
+   "support_explanation": "Table 1 GPT-5-mini: episodic-only 0.78 vs full 0.79, whose own permutation range is 0.76–0.82. The 'consistently outperforms' claim does not hold for that backbone, and the episodic/procedural 'division of labor' has no per-category breakdown.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.14475.txt",
+   "material_hash": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Table 1 caption",
+   "quote": "Full-memory GPT-5-mini MCQ is reported as mean (range) across three case-order permutations",
+   "support_explanation": "This is the only uncertainty in the paper. The number of evaluated questions is never given (the benchmark has 2,500 questions over 675 cases), so the three accuracies cannot be turned into counts or intervals.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.14475.txt",
+   "material_hash": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "sha256": "11d4edde6c15fd62e49d834d750e13a311d45d99b5e11715ae683436e994eb05",
+   "locator": "Table 1 caption",
+   "quote": "Dashes indicate incomplete runs.",
+   "support_explanation": "Configurations with dashes (GPT-5.2 ablations, the open-ended ablations, the tool-enabled open rows) are incomplete runs with no failure accounting.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "情景记忆E（病例描述符+工具轨迹+回答/真值+一句复盘+指导语）与程序性记忆S（优先级0/1/2的诊断规则），基线为无记忆的冻结智能体",
+   "information": "每案作答后获知真值答案y；反思可见图像、问题、回答、工具轨迹与真值；作答时仅可见检索到的记忆",
+   "operation": "作答前Top-K检索情景、按相关性x效用选≤K_S条规则；作答后多模态反思，提出补丁式规则编辑并追加情景",
+   "output": "更新后的E与S，下一案注入前缀",
+   "conditions": "顺序流式处理；真值反馈在每案后立即可得",
+   "feedback": "真值答案与自身轨迹；规则被启用时答对与否的使用统计",
+   "selection_rule/data": "规则选择依相关性+效用+探索加成；写入/接受无独立验证或回归检查",
+   "persistence": "记忆库在流内持续累积；未描述遗忘、合并、版本、回滚",
+   "later_use": "后续病例的上下文前缀（治理指引+规则+情景）",
+   "claimed_effect": "MCQ 0.68->0.79 (GPT-5-mini)、0.76->0.87 (Gemini-3 Flash)、0.69->0.81 (GPT-5.2)；开放题 0.29->0.40、0.21->0.38",
+   "failure_boundary": "需要真值反馈；定量测量类任务仍依赖专用工具；治理库未消融",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E008",
+    "son55:E009",
+    "son55:E012",
+    "son55:E019",
+    "son55:E022"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "工具治理库G：每个工具的Trusted/Caution/Avoid标签及helpful/harm/misuse计数",
+   "information": "每次工具使用后的结局标注（来源与判据未交代）",
+   "operation": "以固定阈值（helpful率>0.70且无直接伤害且≥6次→Trusted；有效不良率>0.60且≥10次→Avoid；其余Caution）更新标签并注入提示",
+   "output": "工具信任指引",
+   "conditions": "阈值手设",
+   "feedback": "工具交互计数",
+   "selection_rule/data": "固定阈值",
+   "persistence": "计数与标签持续",
+   "later_use": "注入后续提示",
+   "claimed_effect": "未量化（作者推迟消融）",
+   "failure_boundary": "本文主要实验在无工具配置，治理库实际生效范围不清",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "工具增强的医疗智能体逐案独立求解，无法累积经验、纠正反复出现的程序性错误。",
+  "checked_gap": "真实但已被通用智能体记忆文献部分覆盖：Reflexion、Evo-Memory（同一三库分解）、Dynamic Cheatsheet、ReMe（效用驱动）被作者自述为沿用；本文剩余新意是医学影像应用与独立的工具治理库。",
+  "lineage": "Reflexion -> Generative Agents/Evo-Memory 三库 -> ReMe 效用选择/Dynamic Cheatsheet 单块文本 -> 本文（胸片领域化+治理库）；版本取自本文引用，未获原文",
+  "closest_adjacent": "Evo-Memory、ReMe、Dynamic Cheatsheet；本文未与之在同一基准上比较",
+  "residue": "没有与其他记忆方案的对比；治理库贡献未知；真值反馈在临床不现实",
+  "stakes": "临床上重复的程序性错误；价值未量化",
+  "method_response": "三库记忆+补丁式规则编辑+工具信任标签",
+  "remaining_gap": "同一流内构建与评测；真值反馈；无成本数据；无治理消融",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E005",
+   "son55:E006",
+   "son55:E007",
+   "son55:E023"
+  ],
+  "unresolved": [
+   "2025-26年医学智能体记忆相关工作未固定，无法核对其是否已有跨病例记忆"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Both seats: adapt_via_conditioning, sub null. Retrieved episodes, rules and governance labels condition a frozen VLM. There is no upstream schema training and no category holdout, so not C03.",
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "读 C03 全文：C03 需要统一条件格式+上游训练+整类留出；本文为推理时检索+手写提示前缀，无上游训练，不挂C03。",
+    "success_checks": {
+     "整类留出": "unmet（同一流）",
+     "条件信号消融": "partial（记忆关闭基线+S/E单独配置）",
+     "更简单替代": "partial（仅episodic即近似最近邻检索，0.78 vs 全0.79）"
+    },
+    "failure_checks": [
+     "单任务/单模态演示：命中（仅CXR一个基准）",
+     "训练/评测域重叠未审计：命中"
+    ],
+    "evidence_ids": [
+     "son55:E012",
+     "son55:E014",
+     "son55:E022"
+    ],
+    "reason": "检索式条件化是实际操作；学习（反思写入）部分不在该主卡范围内，由领域卡承担。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "fit": "medium",
+    "condition_checks": {
+     "S3": "met",
+     "S4": "unmet",
+     "S5": "unmet",
+     "H01-step5": "unmet"
+    },
+    "operation_mapping": "反思产出补丁式规则编辑（优先级+效用）；缺少合并/删除/遗忘与门控消融。",
+    "evidence_ids": [
+     "son55:E008",
+     "son55:E009",
+     "son55:E012"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "fit": "low",
+    "condition_checks": {
+     "H29-step2 反事实": "partial",
+     "H29-step5 去价值消融": "unmet"
+    },
+    "operation_mapping": "规则效用来自启用时的正确率统计并用于排序，不是记忆开/关配对反事实，也未用于准入或淘汰。",
+    "evidence_ids": [
+     "son55:E008",
+     "son55:E009"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "fit": "medium",
+    "condition_checks": {
+     "H03-step2 写入门控": "unmet",
+     "H03-step3 选择性检索": "partial",
+     "H03-step5 构建/评测分流": "unmet"
+    },
+    "operation_mapping": "病例记录追加+相似度检索作先例；无实例值剥离；无执行/结局门控即写入。",
+    "evidence_ids": [
+     "son55:E012",
+     "son55:E014",
+     "son55:E024"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H03"
+   },
+   "operation_correspondence": "情景库中的先例案例被检索并注入（rs 的“检索实例作条件”）= H03 的取回先例；追加新案例使库随使用增长。",
+   "necessary_conditions_and_differences": "rs 要求整类留出与更简单替代对照；H03 要求写入门控与构建/评测分流；本文均未满足。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E014",
+    "son55:E022"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01"
+   },
+   "operation_correspondence": "真值反馈后反思patch诊断规则，后续case作为冻结模型条件输入。",
+   "necessary_conditions": "规则grounding、可靠编辑、先答后更新与之后读取；编辑治理和恢复欠详。",
+   "differences": "H01细化维护规则；原C03的广泛schema/类别级泛化程序未实施。",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006",
+    "sol:E011"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "evidence_gated_retention",
+    "sub": "H29"
+   },
+   "operation_correspondence": "Each procedural rule carries usage statistics (times selected, correct when active). Selection uses a utility estimate with an exploration bonus, and tool trust labels come from interaction counts.",
+   "necessary_conditions_and_differences": "H29 needs a counterfactual behind the credit (unmet: correctness while active is a correlation). The utility term is never ablated.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009",
+    "son55:E011"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json#abstract_experience_into_guidance/S3",
+    "paper §3.2"
+   ],
+   "applies_when": "经验必须有grounding",
+   "applicable": true,
+   "status": "met",
+   "reason": "先例真值反馈提供具体错误信号；临床可获得性在holdout/范围项单列。",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E011",
+    "son55:E003",
+    "son55:E012"
+   ],
+   "score_item": "M",
+   "origin": "sol:rsi:abstract_experience_into_guidance/S3; son55:rsi:abstract_experience_into_guidance/S3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H01.md#Step-by-Step",
+    "paper §3.1–3.2"
+   ],
+   "applies_when": "声称规则维护优于单块重写",
+   "applicable": true,
+   "status": "partial",
+   "reason": "patch编辑、优先级和usage utility描述，但没有精确打分、维护规模与冲突/删除协议。",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E005",
+    "sol:E006",
+    "son55:E009"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:abstract_experience_into_guidance/S4; son55:rsi:abstract_experience_into_guidance/S4"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json#index_experience_for_reuse/S5",
+    "paper Table1"
+   ],
+   "applies_when": "归因于病例库",
+   "applicable": true,
+   "status": "met",
+   "reason": "无memory、episodic、procedural和full分开比较；并未由此证明budget匹配。",
+   "evidence_ids": [
+    "sol:E009"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:index_experience_for_reuse/S5"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json#index_experience_for_reuse/F3",
+    "paper §3–4"
+   ],
+   "applies_when": "声称跨case可迁移",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (revised from partial): the store is written continually from the evaluated stream using its labels, and no frozen-store evaluation exists. Prequential order stops same-item leakage only. The sibling-question channel (≈3.7 questions per case) is unaudited.",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E008",
+    "sol:E011"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:index_experience_for_reuse/F3"
+  },
+  {
+   "id": "local:2604.14475-5",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper §3.1 governance",
+    "paper §5"
+   ],
+   "applies_when": "主张tool governance提高信任分配",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus: verified. Tool governance is deferred, and in the tool-free Table 1 runs it has no tools to govern, so the three-store claim is tested as a two-store system.",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E007"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:local:2604.14475-1",
+   "note": "Renumbered from sol:local:2604.14475-1 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "local:2604.14475-1",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper Table1",
+    "paper §4.2 Robustness"
+   ],
+   "applies_when": "顺序记忆稳健性与完整分母",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus: repeats exist only for GPT-5-mini full memory. The evaluated N is not stated and incomplete runs are not accounted for (opus:O02, opus:O03).",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E010",
+    "sol:E013",
+    "son55:E015",
+    "son55:E016"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2604.14475-2; son55:local:2604.14475-1",
+   "note": "Merged here from sol:local:2604.14475-2 (statistics). A4 collision: sol's local-1 (governance) moved to local-5."
+  },
+  {
+   "id": "local:2604.14475-3",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper Contributions",
+    "paper §4"
+   ],
+   "applies_when": "低开销部署主张",
+   "applicable": true,
+   "status": "partial",
+   "reason": "一检索一反思是操作级声明，无token/latency/dollar测量或运行尺度账单。",
+   "evidence_ids": [
+    "sol:E012"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:local:2604.14475-3"
+  },
+  {
+   "id": "local:2604.14475-4",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper §4.1 Table1"
+   ],
+   "applies_when": "准确率含open-ended评分",
+   "applicable": true,
+   "status": "partial",
+   "reason": "MCQ expert-curated真值明确，open-ended评判器和错判分析不详，实际完成分母不全。",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E013"
+   ],
+   "score_item": "E.measurement",
+   "origin": "sol:local:2604.14475-4"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #1"
+   ],
+   "applies_when": "主张增益来自条件信号",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有无记忆基线与S/E单独配置；除全记忆外均为单次运行",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E022"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-1"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #2"
+   ],
+   "applies_when": "主张在评测集上泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有对同病例多题、骨干预训练数据（Eurorad公开）的重叠审计",
+   "evidence_ids": [
+    "son55:E013",
+    "son55:E014"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:adapt_via_conditioning/RE-2"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "主张记忆优于更简单检索",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅episodic近似最近邻检索，已达0.78（全0.79），规则库增益在运行噪声范围内；无长上下文对照",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E022"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-3"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #5"
+   ],
+   "applies_when": "主张方法通用",
+   "applicable": true,
+   "status": "partial",
+   "reason": "三种骨干但仅一个基准/一个模态；作者称v2将扩展",
+   "evidence_ids": [
+    "son55:E019"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:adapt_via_conditioning/RE-5"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S1",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:abstract_experience_into_guidance.S1"
+   ],
+   "applies_when": "以反思存储为贡献",
+   "applicable": true,
+   "status": "partial",
+   "reason": "点名“程序性错误无法系统纠正”，但回路本身通用，新意主要是新领域",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E005",
+    "son55:E007"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S1"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "写入内容影响后续行为",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "规则编辑未经验证试跑即写入",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S5"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:abstract_experience_into_guidance.F2"
+   ],
+   "applies_when": "新颖性依赖新垂直领域",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "作者自述新颖性是“首个在工具增强医学影像智能体上评估”",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:abstract_experience_into_guidance/F2"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00-step4",
+   "version": "cards v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md Step-by-Step 4"
+   ],
+   "applies_when": "记忆在评测流中更新",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "构建流即评测流（逐案先作答后更新，属逐步预测式评估），无冻结记忆的留出测试",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E003"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:abstract_experience_into_guidance/H00-step4"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/H03-step5",
+   "version": "cards v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H03.md Step-by-Step 5"
+   ],
+   "applies_when": "病例库在评测基准上构建",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "2500题/675病例，是否按病例隔离未说明",
+   "evidence_ids": [
+    "son55:E013"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:index_experience_for_reuse/H03-step5"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H29-step5",
+   "version": "cards v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H29.md Step-by-Step 5"
+   ],
+   "applies_when": "主张按效用选择规则",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有去掉效用/探索项的消融",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:evidence_gated_retention/H29-step5"
+  },
+  {
+   "id": "local:2604.14475-2",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 5 Limitations: ground-truth feedback assumed"
+   ],
+   "applies_when": "主张可在真实部署中持续改进",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "特权真值每案反馈；噪声/延迟监督未测试",
+   "evidence_ids": [
+    "son55:E019"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2604.14475-2"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "自进化记忆使MCQ与开放题准确率显著提升",
+   "setting": "ChestAgentBench，GPT-5-mini/Gemini-3 Flash/GPT-5.2，无工具配置为主",
+   "baseline_control": "同一骨干无记忆基线（tool-free）；全记忆有3次顺序重复，其余单次",
+   "selection_vs_test": "记忆在同一评测流内构建，逐案先作答后更新；无冻结记忆的留出集",
+   "result_denominator": "MCQ 0.68->0.79(0.76-0.82)；0.76->0.87；0.69->0.81；开放0.29->0.40，0.21->0.38；评测N与未完成运行的处理未交代",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E014",
+    "son55:E015",
+    "son55:E016",
+    "son55:E022",
+    "son55:E025"
+   ],
+   "counterevidence": [
+    "同病例多题、真值反馈、仅episodic已近全记忆",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "allowed_conclusion": "在该基准的顺序流上，开启记忆的在线准确率高于无记忆基线；增益是否可迁移到未见病例/真实监督未知。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "对定性诊断任务，进化记忆比编排外部工具提升更大",
+   "setting": "GPT-5-mini，MedRAX类工具集",
+   "baseline_control": "工具开启基线0.68 vs 无工具基线0.68",
+   "selection_vs_test": "同C1",
+   "result_denominator": "0.79 vs 0.68",
+   "evidence_ids": [
+    "son55:E017",
+    "son55:E022"
+   ],
+   "counterevidence": "无“工具+记忆”配置结果（缺项），工具本身在基线下无增益，比较等价于有无记忆",
+   "allowed_conclusion": "只能说在该工具集下工具未提升GPT-5-mini基线；不能推出“记忆比工具编排更有效”的一般结论。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "情景与程序性记忆分工互补",
+   "setting": "Table 1 单独配置",
+   "baseline_control": "无",
+   "selection_vs_test": "同C1",
+   "result_denominator": "E 0.78/0.84，S 0.71/0.81，全 0.79/0.87",
+   "evidence_ids": [
+    "son55:E018",
+    "son55:E022",
+    "son55:E016"
+   ],
+   "counterevidence": [
+    "无按病理类别分解；GPT-5-mini 全比仅E的差0.01，小于顺序标准差0.025",
+    "opus:O01"
+   ],
+   "allowed_conclusion": "情景检索贡献主要增益；程序性规则的增量在GPT-5-mini上未与噪声区分。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "每案仅增加一次检索和一次反思调用",
+   "setting": "推理开销",
+   "baseline_control": "无",
+   "selection_vs_test": "not_applicable",
+   "result_denominator": "无数值",
+   "evidence_ids": [
+    "son55:E020"
+   ],
+   "counterevidence": "多模态反思含图像输入；无token/时延/记忆规模数据",
+   "allowed_conclusion": "未得到数据支持。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_reason": "有记忆关闭基线且改动（记忆库）在后续病例上带来提升，并含S/E单独配置；但无独立留出、同流构建、真值反馈、同病例泄漏未排查，故为弱的retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在ChestAgentBench按序处理时，用真值反馈构建的情景+规则记忆使三种骨干的在线MCQ准确率较无记忆基线高约11-12个点（GPT-5-mini含3次顺序重复）。",
+  "cannot_claim": [
+   "记忆优于工具编排",
+   "工具治理库有效",
+   "规则库的增量独立于情景库",
+   "在无真值/噪声监督下有效",
+   "improver级别改进"
+  ],
+  "unresolved": [
+   "评测流N、是否按病例隔离、K/K_S/相似度函数、反思提示均未给出",
+   "Opus: the 'consistently outperforms either component alone' claim fails for GPT-5-mini (opus:O01).",
+   "Opus: evaluated N and incomplete-run accounting are missing (opus:O02, opus:O03)."
+  ],
+  "evidence_level_note": "Retained, scoped. Memory written from earlier cases is read on later ones, and same-backbone store-off and single-store arms isolate the stores (r04b/r10b/r11b convention: held-out preferred, not required). The weak points are scored in E.holdout = 1: the store is built from the evaluated stream with ground-truth feedback, and sibling questions of the same case may leak. Unlike r02a 2411.13941, a same-actor store-off arm exists."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Isolated per-case solving is a real limitation. The three-store factorisation and utility selection come from Evo-Memory and ReMe, and no neighbour is compared on this benchmark. The residual is mainly the application domain.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E005",
+    "son55:E006",
+    "sol:E002",
+    "sol:E003"
+   ],
+   "counterevidence_ids": [
+    "son55:E007"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Precedent retrieval plus outcome-grounded rule edits fits recurrent mistakes. Rule edits are unvalidated, governance is untested, and the 'memory beats tools' reasoning rests on a confounded comparison.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E012",
+    "sol:E004",
+    "sol:E005",
+    "sol:E006"
+   ],
+   "counterevidence_ids": [
+    "son55:E017"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. The read/write cycle and governance thresholds are given. K, K_S, s_epi, the utility formula and the reflection prompt are missing, and there is no forgetting, merging, versioning or admission check.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E011",
+    "son55:E012",
+    "sol:E005",
+    "sol:E007"
+   ],
+   "counterevidence_ids": [
+    "son55:E024"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. MCQ accuracy on an expert-curated public benchmark is reliable. The open-ended scorer is unspecified, the evaluated N is unstated, and incomplete runs are unexplained (opus:O03).",
+   "evidence_ids": [
+    "son55:E002",
+    "sol:E008",
+    "sol:E013"
+   ],
+   "counterevidence_ids": [
+    "son55:E025",
+    "opus:O03"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Same-backbone store-off and episodic-only / procedural-only arms isolate memory as a whole. Missing: comparison with the cited nearest neighbours (Evo-Memory, Dynamic Cheatsheet, ReMe), a governance or utility ablation, and a budget-matched reflection-only arm. The rule-store increment is within noise (opus:O01). The 'memory beats tools' comparison is memory vs no memory (tool-free = tool-enabled = 0.68).",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E022",
+    "sol:E009"
+   ],
+   "counterevidence_ids": [
+    "son55:E010",
+    "son55:E017",
+    "opus:O01"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked. The construction stream is the evaluation stream, with ground-truth feedback after every item. There is no frozen-store test and no case-level isolation audit (2,500 questions over 675 cases).",
+   "evidence_ids": [
+    "son55:E014",
+    "sol:E006",
+    "sol:E011"
+   ],
+   "counterevidence_ids": [
+    "son55:E013",
+    "son55:E019"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Shared correction 2 → 1 (A2 ladder). The only uncertainty is a three-permutation range for one configuration (GPT-5-mini full memory, 0.76–0.82). The evaluated N is never stated, so accuracies cannot become counts or intervals (opus:O02). 'Incomplete runs' carry no failure accounting (opus:O03). The 'consistently outperforms' claim sits inside that range (opus:O01). Tier 2 needs a usable denominator; here the denominator itself is missing.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E016",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "counterevidence_ids": [
+    "sol:E010"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked. The marginal call budget is explicit (one extra retrieval and one multimodal reflection call per case), so a reader can bound the call ratio. No tokens, latency, memory size or matched-budget arm are given.",
+   "evidence_ids": [
+    "son55:E020",
+    "sol:E012"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 HTML text read (no appendix). In scope (system_method): an episodic, procedural and governance memory is written from execution plus ground-truth feedback and read on later cases, with a store-off control. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "assessment.evidence_level",
+   "sol_value": "task",
+   "son55_value": "retained",
+   "decision": "son55",
+   "final_value": "retained",
+   "reason": "See assessment.evidence_level_note. A same-backbone store-off arm and single-store arms on later stream items meet the run's retained convention (r04b, r10b, r11b). sol's concerns (shared construction/evaluation stream, case isolation) are real and scored in E.holdout = 1. They do not trigger EVIDENCE rule 2: no selection set is reused as a test set.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E022",
+    "sol:E009"
+   ],
+   "score_impact": "none (label only)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "son55_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "evidence_gated_retention",
+     "H29"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "evidence_gated_retention",
+     "H29"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H03"
+    ]
+   ],
+   "reason": "H29 applies: per-rule utility from usage outcomes with an exploration bonus drives selection (§3.1), the bandit-statistics case named in H29. Its condition checks fail (correlational credit, no utility ablation), and patterns never score.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.14475-1].status",
+   "sol_value": "unmet",
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "A4 collision: sol's local-1 (governance not ablated) and son55's local-1 (statistics) differ. Final local-1 is the statistics question, partial. sol's statistics question (local-2) is merged here; sol's governance question moves to local-5 (unmet).",
+   "evidence_ids": [
+    "son55:E015",
+    "opus:O02"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.14475-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "A4 collision: sol's local-2 (statistics) moves to local-1. Final local-2 is son55's privileged-feedback question, unmet (verified: ground truth after every case; noisy or delayed supervision untested).",
+   "evidence_ids": [
+    "son55:E019",
+    "sol:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.14475-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Cost (sol only). Verified: operation-level overhead only.",
+   "evidence_ids": [
+    "sol:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.14475-4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Measurement (sol only). Verified: MCQ truth is clear; the open-ended judge and N are unspecified.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E013"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: store-off and single-store arms exist; they are single runs except full memory.",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no overlap audit for same-case questions or for Eurorad exposure during pre-training.",
+   "evidence_ids": [
+    "son55:E013"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: episodic nearest-neighbour retrieval alone reaches 0.78 of 0.79; there is no long-context control.",
+   "evidence_ids": [
+    "son55:E022",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: three backbones, one benchmark, one modality.",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/F2].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: the stated novelty is the first evaluation in a tool-augmented medical imaging agent (failure mode present).",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/H00-step4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: prequential evaluation on the construction stream, with no frozen-store holdout.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: names uncorrected procedural errors, but the loop is generic.",
+   "evidence_ids": [
+    "son55:E001"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S4].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "S4 asks for explicit maintenance. 'Patch-style procedural edits' with priority tags are localized deltas (partial). No consolidation, forgetting or bound is described. son55's unmet overlooked the patch edits.",
+   "evidence_ids": [
+    "sol:E006",
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: edits are written without trial or test. Utility affects selection, not admission.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/H29-step5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no ablation of the utility or exploration term.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/F3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "revised",
+   "final_value": "unmet",
+   "reason": "F3 ('store built from the test stream') holds fully: the store is updated continually from evaluated items with their labels. sol's partial credited the prequential order, which prevents same-item leakage only.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E013",
+    "sol:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/H03-step5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: case-level isolation of the 2,500 questions is unstated.",
+   "evidence_ids": [
+    "son55:E013"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S5].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "Verified: store-off, episodic-only, procedural-only and full configurations are compared (S5: the store is certified by removing it).",
+   "evidence_ids": [
+    "sol:E009",
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.statistics",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "Both seats credited the three-permutation σ as tier 2 while each noted that N is unknown and that runs are incomplete. Under the frozen A2 ladder, a failure denominator comes before uncertainty. The evaluated question count is never given, so neither counts nor intervals can be formed (opus:O02). Incomplete runs are unaccounted (opus:O03). The paper's complementarity claim lies inside the only reported range (opus:O01).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "son55:E025",
+    "sol:E013"
+   ],
+   "score_impact": "−1.25 (5×1/4); 46.25 → 45.0"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v1 text first. Initial view: in scope; retained (store-off on later stream items) but weak. Concerns: N never stated, sibling questions per case, 'consistently outperforms' within noise, memory-vs-tools confounded, governance untested in tool-free runs. G 2, M 2, X 2, Em 2, Ec 2, Eh 1, Es 1, cost 1.",
+  "integrity_checks": "Both seats a1 on 2604.14475v1, material sha 11d4edde…; canonical seat hashes equal conflicts.json; RS/domain ids valid; both claim_type system_method.",
+  "core_claim_check": "Strongest supported claim: on the ChestAgentBench stream with ground-truth feedback, episodic plus procedural memory lifts online MCQ accuracy by about 11 points over no-memory on three backbones. Episodic retrieval carries most of the gain. Governance, complementarity and 'memory beats tools' are unsupported. claim_support scoped.",
+  "shared_error_review": "Same total 46.25 in both seats; every item was re-checked against the text. One shared error (E.statistics) was corrected. Other agreements were confirmed: E.cost 1 (the marginal call budget is explicit), E.causality 2 (store-off arms) and E.holdout 1.",
+  "rating_agreement": "All eight ratings agree; E.statistics corrected 2 → 1. Final 45.0."
+ },
+ "input_seat_hashes": {
+  "sol": "bdaa93b59c0d295d876a1ad9edfd062b67d6305e793a2bbd8e9634a0657b8b18",
+  "son55": "5c1ad036c0642928aec470035693d1e5fd489e4cdc32b7017087bc805a09518f"
+ },
+ "score": {
+  "raw": 45.0,
+  "display": 45.0,
+  "lower": 45.0,
+  "upper": 45.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "36be9de8bce8b193f2b3036b90013a439f82ba2fe3f3aae201bb432c20a8d359"
+}

@@ -1,0 +1,936 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r16b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "全文含附录A-N完整；终端观测压缩规则池在无标签交互信号下演化并写回、跨任务复用，非权重组件闭环，属A类，范围内。",
+ "rationale": "规则池无标签自演化，机制清楚、令牌核算较好；但规则在被评测任务上多轮演化、无独立留出、演化轮数成本未计，增益仅1-4点且多在1个标准差内。",
+ "paper": {
+  "paper_key": "2604.19572",
+  "paper_id": "2604.19572",
+  "title": "A Self-Evolving Framework for Efficient Terminal Agents via Observational Context Compression",
+  "version": "2604.19572v3",
+  "claim_type": "system_method",
+  "central_claim": "TACO把终端观测压缩规则当作可复用、保全证据的知识：LLM从交互轨迹提出结构化规则，保守执行器应用，任务内按智能体的隐式抱怨演化规则，跨任务经全局规则池累积复用；无需微调与人工规则，在六个基准上保持或提升成功率并降低12%-27%令牌，TerminalBench上+1%-4%准确率、匹配令牌预算下+2%-3%。"
+ },
+ "provenance": {
+  "input_hash": "bed8c93a9a4fb2708abe5c9433460c6c5b3239bdcfa0c3cca55b0782a9b71abd",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref: worker 子代理无可读取的运行回执，按模板置 null。",
+  "timestamp": "2026-10-22T01:40:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2604.19572v3",
+   "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Framework (2.1-2.7)",
+    "3 Setup",
+    "4 Results (4.1-4.8)",
+    "5 Related Work",
+    "6 Conclusion",
+    "Appendix A-N (limitations, statistics, hyperparameters, best-of-K, leakage table, token overhead, case study, rule schema, quality eval, prompts)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "autonomously discovers, refines, and reuses structured compression rules from agent interaction trajectories",
+   "support_explanation": "中心操作：规则(非权重组件)的发现-修订-复用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Sec 1 / Fig 1",
+   "quote": "manually extracting effective text from 50 sampled TB 2.0 trajectories removes",
+   "support_explanation": "问题量化：50条TB2.0轨迹中人工抽取有效文本可去掉24.6%-44.1%的提示令牌，证明冗余真实存在；但这是手工上界而非规则可达量。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 2.6 Global Rule Pool Updating",
+   "quote": "only if it has been successfully applied at least once and remains reliable",
+   "support_explanation": "写回规则：Δn>=1且任务级置信度c>=τ；被抱怨的规则c=0不写回，已有规则的全局置信度进一步衰减。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Sec 2.5 Updating Rules",
+   "quote": "Behaviors such as requesting the full output, indicating missing critical details, or repeating the same command to recover more information are treated as over-compression complaints.",
+   "support_explanation": "任务内的反馈信号=智能体行为中的隐式抱怨，非任务成败标签；据此压制触发规则并让LLM生成更保守的替换变体。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Sec 2.7 Algorithm Convergence",
+   "quote": "evolution terminates when the metric Retention stabilizes",
+   "support_explanation": "停止规则为无奖励的Top-K规则保留率；作者用准确率滑动标准差(Fig 4)事后验证该指标。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "Sec 2.7 Reward-Free Rule Evolution and Leakage Prevention",
+   "quote": "TACO evolves compression rules solely from terminal observations, without accessing benchmark answers, hidden tests, verifier outcomes, task success labels, or leaderboard feedback.",
+   "support_explanation": "规则演化不使用任务成败/验证器信号(Appendix I Table 11)，无标签泄漏；但演化所用观测来自被评测任务本身。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "Sec 2.6 Multi-round Evolution",
+   "quote": "Moreover, we run multiple evolution rounds on the same dataset until convergence is reached.",
+   "support_explanation": "规则池在被评测的同一数据集上多轮演化直至收敛，演化轮数未在文中给出。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Table 2, TACO plugin rows",
+   "quote": "MiniMax-M2.5 230B TACO+Terminus-2 45.25 ↑2.95 44.16 ↑1.36",
+   "support_explanation": "MiniMax-M2.5 TB1.0 +2.95、TB2.0 +1.36(基线42.30/42.80)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Appendix E Table 8",
+   "quote": "Baseline 42.30 ± 3.94",
+   "support_explanation": "Table 8 MiniMax-M2.5 TB1.0基线run级标准差3.94(TACO 45.25±1.76)；+2.95小于基线标准差；TACO方差更小。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "Table 1",
+   "quote": "CompileBench 75.00 75.00 14.55 11.41 ↓21.6%",
+   "support_explanation": "CompileBench准确率不变(标准差7.8-8.7)，令牌-21.6%。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "Table 1",
+   "quote": "TB 2.0 42.80 44.16 ↑1.36 113.74 110.63 ↓2.7%",
+   "support_explanation": "摘要称‘12%-27%令牌降幅’针对下游基准；TB2.0上MiniMax仅-2.7%。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "Table 4 (static baselines, Qwen3-Coder-480B, TB 2.0)",
+   "quote": "+ HQ Rule 24.3 ± \\pm 2.2",
+   "support_explanation": "Table 4(Qwen3-Coder-480B,TB2.0)：基线23.9±2.9，200条人工规则24.3±2.2(令牌-17.9%)，LLM静态规则19.71±1.6，LLM摘要20.3±3.2(令牌-21.3%)，TACO 25.9±1.5(令牌-10.78%)；TACO与人工规则之差在标准差内，摘要和静态LLM规则低于基线。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "Table 7 ablation (DeepSeek-V3.2, TB 2.0)",
+   "quote": "Baseline 40.6% 99.60 TACO w/o GRPE 40.4% 81.57 TACO w/o ITRSE 38.9% 69.02 TACO (Full) 42.7% 81.45",
+   "support_explanation": "去掉任一进化成分都不优于基线(40.4/38.9 vs 40.6)，完整42.7；单模型、单值、无标准差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "Appendix, Sec 4.8 variant definition",
+   "quote": "For the variant without Intra-Task Rule Set Evolution, we use the final Global Rule Pool from TACO on TB 2.0 as a fixed initialization source for each task.",
+   "support_explanation": "w/o ITRSE使用的正是在TB2.0上学成的最终规则池，却低于基线，说明冻结规则池本身并不带来收益，增益依赖任务内演化。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "Sec 4.7 Table 6",
+   "quote": "DeepSeek-V3.2 Baseline 40.62 TACO (Online) 42.77 TACO (Reuse) 42.69",
+   "support_explanation": "冻结规则池重用与在线演化相当，但重用评测仍在构建规则池的同一TB2.0任务上。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "Sec 4.7",
+   "quote": "Although TACO requires multiple cold-start iterations to reach rule convergence, this cost is incurred only once.",
+   "support_explanation": "多轮冷启动演化的令牌/时间未量化，仅定性称可摊销；Table 1/12令牌核算只含收敛后运行的辅助调用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "locator": "Appendix J",
+   "quote": "the auxiliary rule-evolution overhead remains below 2% across all benchmarks",
+   "support_explanation": "辅助LLM调用(规则选择/生成/修订)计入总令牌且<2%，核算诚实。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "locator": "Appendix G",
+   "quote": "To examine their effects, we perform an ablation study on TB 2.0 with Qwen3-Coder-480B.",
+   "support_explanation": "k=30与批大小N=4在TB2.0(评测基准)上调参选择，再用于主实验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "locator": "Appendix G",
+   "quote": "smaller batch sizes tend to yield higher accuracy, since newly learned rules can be written back more frequently and reused by subsequent tasks sooner",
+   "support_explanation": "批大小越小(回写越早)准确率越高，间接支持‘跨任务复用’在起作用，也提示任务顺序/并行度是混淆因素。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "locator": "Appendix K.1",
+   "quote": "aggressively filters all output from /app/ executables except lines matching FLAG{.*}, tracebacks, segmentation faults, and error signals",
+   "support_explanation": "案例中的secret_key_extractor规则把输出过滤成TB2.0 vulnerable-secret任务的FLAG格式，是强任务特化规则；与‘可迁移的终端输出模式’的主张存在张力。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "locator": "Sec 4.6",
+   "quote": "TACO preserves potentially critical information in 96.0% of cases",
+   "support_explanation": "200条随机压缩事件由GPT-5.5判官评估，96.0%保留关键信息；8个潜在损失被人工检查，仅1个触发抱怨。判官可靠性未单独校验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "locator": "Sec 4.6 Table 5",
+   "quote": "Qwen3-Coder-480B 5 2 DeepSeek-V3.2 8 4 MiniMax-M2.5 4 3",
+   "support_explanation": "TB2.0上救回/退步任务数(各模型救回>=退步)，计数小，任务级以>=50%运行判定。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "locator": "Sec 4.3 Fig 3",
+   "quote": "TACO consistently improves performance across all six models under the same token budgets, ranging from 14 million to 120 million tokens.",
+   "support_explanation": "匹配令牌预算曲线，增益1%-3%，是对‘仅靠省令牌’替代解释的直接对照；图中无区间。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M1",
+   "locator": "Appendix M.2",
+   "quote": "the agent emits the intended [Compression Complaint] need_full_output signal",
+   "support_explanation": "抱怨信号由智能体显式输出，说明宿主脚手架的提示/接口被修改以支持抱怨协议；基线智能体不具备该接口。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M1",
+   "locator": "Sec 1",
+   "quote": "Training-based methods such as SWE-Pruner (Wang et al., 2026) provide more adaptive pruning, but they require additional training data",
+   "support_explanation": "最近邻(SWE-Pruner、LongCodeZip、上下文折叠/观测遮蔽)被讨论但未作为基线比较。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "M1",
+   "locator": "Sec 2.6",
+   "quote": "is a small confidence threshold.",
+   "support_explanation": "写回门限τ与衰减系数在正文/附录均无数值。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "M1",
+   "locator": "Appendix L.2",
+   "quote": "We construct 200 structured rules from multiple complete TB 2.0 trajectories using LLM-assisted drafting followed by manual review.",
+   "support_explanation": "人工静态规则同样由TB2.0轨迹构建，故TACO与它的对比在‘看过同一任务’这一点上基本对等。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "M1",
+   "locator": "Sec 4.5",
+   "quote": "Across all three models, it drops from above 2.0 before convergence to around 1.0 afterward",
+   "support_explanation": "Retention指标与准确率稳定性的关联仅3个模型、同一基准。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "M1",
+   "locator": "Appendix A",
+   "quote": "It does not modify the backbone model or improve its intrinsic capability",
+   "support_explanation": "作者自限：组件在观测压缩层，不改变模型能力；符合非权重组件范围。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "M1",
+   "locator": "Appendix E Table 8",
+   "quote": "42.80 ± 2.54",
+   "support_explanation": "MiniMax-M2.5 TB2.0基线标准差2.54(TACO 44.16±0.86)；+1.36小于基线标准差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "M1",
+   "locator": "Table 4",
+   "quote": "+ TACO 25.9 ± \\pm 1.5",
+   "support_explanation": "TACO 25.9±1.5，高于人工规则24.3±2.2和基线23.9±2.9。",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "终端观测压缩规则(触发正则+保留/剥离模式+保守边界)的任务内活动集R_t与全局规则池R_g",
+   "information": "可见：任务描述、执行命令、原始终端输出、智能体后续行为(抱怨)；不可见：任务成败标签、验证器结果、答案(Table 11)。",
+   "operation": "未被覆盖的长输出→LLM生成新规则加入R_t；被抱怨的规则→抑制并由LLM生成更保守变体；含显式错误的输出(Critical)绕过压缩。",
+   "output": "压缩后的观测，进入智能体上下文。",
+   "conditions": "规则触发匹配、保守执行器；错误输出不压缩。",
+   "feedback": "规则触发/应用计数+智能体隐式抱怨。",
+   "selection_rule": "任务内：抱怨→抑制+替换；任务间写回：Δn>=1且c>=τ；排序分R=c·(n+1)取top-k后由LLM按任务选择。",
+   "selection_data": "同一基准的任务流及多轮重复，无独立留出。",
+   "persistence": "全局规则池，带置信度与累计使用次数；抱怨使全局置信度衰减，无显式删除/容量上界/回放测试。",
+   "later_use": "新任务初始化时检索top-k规则、LLM选择与改写后作为R_t。",
+   "claimed_effect": "TB上+1%-4%准确率、匹配预算+2%-3%；其他基准维持或提升并省12%-27%令牌。",
+   "failure_boundary": "过压缩导致信息丢失(被抱怨机制部分兜底)；任务特化规则；评测基准上多轮演化。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E007",
+    "E020",
+    "E026"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "宿主智能体的上下文预算分配(观测压缩适配器，随基座/脚手架即插即用)",
+   "information": "可见：每步原始观测；规则执行器限制在保守的规则空间。",
+   "operation": "在观测进入历史前应用R_t过滤，再把压缩结果返回给智能体。",
+   "output": "更短但保留精确证据的历史，从而降低每步令牌并(据称)减少稀释。",
+   "conditions": "仅对非Critical输出压缩。",
+   "feedback": "令牌核算(含辅助调用)与任务成功率。",
+   "selection_rule": "不适用(静态算子)",
+   "selection_data": "不适用",
+   "persistence": "不适用(规则池见S1)",
+   "later_use": "不适用",
+   "claimed_effect": "每步令牌下降约8%-12%(>200B模型)，小模型反而因更长成功轨迹使总令牌上升。",
+   "failure_boundary": "小模型令牌未下降；TB2.0 MiniMax仅-2.7%。",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E017",
+    "E023"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "终端观测信息密度极不均匀，精确证据与冗余输出交织；LLM摘要会改写/丢失精确字符串，静态启发式和专家规则跨命令/仓库脆弱，训练型压缩器(SWE-Pruner)需额外数据且偏SWE-bench。",
+  "checked_gap": "冗余量化(Fig 1，手工抽取可去24.6%-44.1%)有数据支持；‘LLM摘要会丢失精确证据’得到Table 4的间接支持(摘要20.3 vs基线23.9)；但最近邻上下文管理方法(观测遮蔽、上下文折叠)与SWE-Pruner均无比较。",
+  "lineage": [
+   "通用提示压缩(LLMLingua类、选择性上下文)→代码压缩(LongCodeZip、SWE-Pruner，训练型)→智能体上下文管理(摘要/遮蔽/折叠)→本文：在观测入历史之前、以可演化的规则库做保全式压缩。训练无关自演化智能体(记忆/技能/工具)为背景。"
+  ],
+  "closest_adjacent": "SWE-Pruner、LongCodeZip、observation masking/context folding(均仅引用，无本地原文、无实测比较)；自演化记忆/技能库(沉淀任务求解策略而非压缩规则)。",
+  "residue": "TACO只比较了静态规则/摘要，未与训练型或结构化遮蔽的最近邻对比，故‘自演化比最强替代更好’仍未验证。",
+  "stakes": "长程CLI智能体的上下文令牌成本与证据稀释；Table 1中TB 2.0基线总令牌为113.74M(整个基准的端到端总量)。",
+  "method_response": "把压缩操作表示为结构化规则并让LLM提出/修订，规则池跨任务累积，用抱怨信号保守回退。",
+  "remaining_gap": "与最强近邻的对比、独立留出上的迁移、演化成本、规则池长期维护(退役/容量)。",
+  "evidence_ids": [
+   "E002",
+   "E012",
+   "E025"
+  ],
+  "unresolved": [
+   "SWE-Pruner、LongCodeZip、上下文折叠/遮蔽方法原文缺失，近邻比较不完整；空检索不证明新颖。"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "heterogeneous_decomposition"
+  ],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "moderate",
+    "tactic_steps_checked": "Step1(约束是缺少可用监督而非学习器：无标签/无验证器，满足)；Step2(可控生成器=LLM提出规则，覆盖未被现有规则覆盖的输出，部分满足)；Step3(单一load-bearing过滤：写回门Δn>=1∧c>=τ，且被抱怨清零，满足但门限未给值)；Step4(迭代：多轮演化直至Retention收敛，满足)；Step5(在真实目标上验证迁移：任务准确率+令牌，满足但在同一基准上)。C08的‘训练实例’在此被替换为‘规则对象’，属类比而非原样。",
+    "success_failure_checks": "成功条件‘移除过滤器会破坏方法’部分验证(w/o GRPE/ITRSE)；失败模式‘缺少隔离的强基线’较轻(有HQ规则/LLM摘要)；‘代价与收益’部分报告。",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E013"
+    ],
+    "reason": "实际执行的是无标签下自生成对象(规则)经单一门控过滤并回灌、迭代到收敛；对象不是训练数据，故仅moderate。"
+   },
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "把观测划分为Critical(含显式错误，原样保留)与非Critical(规则压缩)并按命令类型施以不同规则，对应‘划分后差异化处理’；但缺少对划分依据的经验刻画(除Fig 1外)与误差分解，C04针对模型权重/激活压缩，故不挂子卡。",
+    "success_failure_checks": "未验证‘差异化处理优于统一处理’的直接对比(无统一规则消融)。",
+    "evidence_ids": [
+     "E002",
+     "E006"
+    ],
+    "reason": "Critical/非Critical的分治是设计的一个独立操作，但只是辅助。"
+   }
+  ],
+  "sub_pattern": "C08",
+  "outside_taxonomy": false,
+  "reason": "无标签的自生成规则-单一门控-迭代回灌结构对应自监督信号工程；分治为辅。",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "crystallize_executable_capability",
+    "sub": "H07",
+    "version": "2026-10-21-cards",
+    "fit": "moderate",
+    "condition_checks": "能力缺口(未被规则覆盖的长输出)出现时由LLM锻造可执行规则(正则+保留/剥离)；准入门控是使用成功计数与置信度而非保留任务回放(S1部分)；用obtainable signals修复(抱怨→更保守变体，S4满足)；保留库消融w/o GRPE(S5部分)；抽象是否在未见输入上验证(S3)未做。",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E013",
+     "E020"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "2026-10-21-cards",
+    "fit": "moderate",
+    "condition_checks": "写回门控与置信度衰减构成准入+软退役(S2部分)；无容量上界、无回放回归预算；抱怨使被害规则被抑制并降权；命名的静默失败(过压缩)有案例但无‘无治理会退化’的对照。",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E021"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H11",
+    "version": "2026-10-21-cards",
+    "fit": "weak",
+    "condition_checks": "抱怨触发→追溯被触发规则→抑制并生成保守替换，近似按失败归因修订技能(S1局部性满足)；无‘修订后需个体改进才接受’的回放验证(S3未满足)。",
+    "evidence_ids": [
+     "E004",
+     "E024"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "evidence_gated_retention",
+    "sub": "H30"
+   },
+   "operation_correspondence": "RS层‘单一load-bearing质量门控过滤自生成对象再回灌’对应领域层‘写回前准入+降权退役’：写回门Δn>=1∧c>=τ与抱怨清零即为该过滤器。",
+   "necessary_conditions_differences": "H30要求隔离/回放/回归预算与容量上界，TACO仅有基于使用计数和抱怨的软门控；RS的C08要求过滤器可摘除后方法崩塌，仅有w/o GRPE的粗消融。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E013"
+   ]
+  },
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "crystallize_executable_capability",
+    "sub": "H07"
+   },
+   "operation_correspondence": "‘受控生成器覆盖空白区域’对应‘遇到能力缺口时锻造可执行工具’：未被覆盖的输出触发LLM生成可执行规则。",
+   "necessary_conditions_differences": "H07要求执行为准入而非判断，并在未见输入上验证抽象；此处准入依赖运行统计，未见输入验证缺失。",
+   "evidence_ids": [
+    "E003",
+    "E007",
+    "E020"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card self_supervised_signal_engineering: Reviewer expectations #1(跨模型族/数据集/任务族泛化)"
+   ],
+   "applies_when": "声称适配多种模型与基准",
+   "applicable": true,
+   "status": "partial",
+   "reason": "六个基准、六个开源模型，但每个设置各自演化规则池，无跨基准迁移；且主要为同类终端任务。",
+   "evidence_ids": [
+    "E008",
+    "E010"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card self_supervised_signal_engineering: Reviewer expectations #2(消融使收益可归因于信号而非额外计算)"
+   ],
+   "applies_when": "声称无标签信号带来增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有静态规则/摘要基线、w/o GRPE/ITRSE、匹配令牌预算；但缺少等量多轮演化算力的基线，且消融仅单模型单值。",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card self_supervised_signal_engineering: Reviewer expectations #3(下游目标上的并排对比)"
+   ],
+   "applies_when": "声称改进下游任务",
+   "applicable": true,
+   "status": "met",
+   "reason": "直接报告TB/SWE-bench等任务准确率与总令牌，而不只是压缩质量。",
+   "evidence_ids": [
+    "E008",
+    "E010"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card self_supervised_signal_engineering: Reviewer expectations #5(生成/过滤/反馈环路成本相对收益)"
+   ],
+   "applies_when": "引入多轮生成与过滤",
+   "applicable": true,
+   "status": "partial",
+   "reason": "辅助调用<2%已计入，但多轮冷启动演化成本未量化。",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card self_supervised_signal_engineering: Reviewer expectations #6(部署现实性)"
+   ],
+   "applies_when": "无标签测试时适配",
+   "applicable": true,
+   "status": "partial",
+   "reason": "宣称即插即用的测试时适配，但规则在评测任务上多轮演化，部署时第一次见到的任务不享有该预热；需修改脚手架以支持抱怨接口。",
+   "evidence_ids": [
+    "E007",
+    "E024"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json crystallize_executable_capability S1"
+   ],
+   "applies_when": "规则/工具作为可执行产物入库",
+   "applicable": true,
+   "status": "partial",
+   "reason": "准入基于使用成功计数与置信度而非回放任务成功；无重放保留任务检查。",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json crystallize_executable_capability S3"
+   ],
+   "applies_when": "声称抽象可复用",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "冻结规则池重用在构建它的同一TB2.0任务上评测；无未见任务/基准上的重用验证；案例规则高度任务特化(FLAG格式)。",
+   "evidence_ids": [
+    "E015",
+    "E020"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json crystallize_executable_capability S4"
+   ],
+   "applies_when": "规则需要修复",
+   "applicable": true,
+   "status": "met",
+   "reason": "修复由智能体抱怨这一可得信号驱动，且只生成同触发器的更保守局部替换。",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json crystallize_executable_capability S5"
+   ],
+   "applies_when": "声称留存库承载增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "w/o GRPE消融与Reuse对比存在，但冻结池本身(w/o ITRSE)低于基线，保留库单独承载增益的证据矛盾。",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E015"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S1"
+   ],
+   "applies_when": "按效用保留/排序",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "规则价值=置信度×使用次数，不含规则关闭的反事实对照(无‘有此规则vs无此规则’的任务结果差)。",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S2"
+   ],
+   "applies_when": "累积库增长",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有准入门与置信度衰减降权，但无硬容量上界或显式删除。",
+   "evidence_ids": [
+    "E003",
+    "E026"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S3"
+   ],
+   "applies_when": "声称治理修复了静默失败",
+   "applicable": true,
+   "status": "partial",
+   "reason": "命名了‘过压缩丢失证据’并给出96.0%保留与8个潜在损失检查，但没有‘无治理累积则退化’的对照。",
+   "evidence_ids": [
+    "E021"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S5"
+   ],
+   "applies_when": "引入门控",
+   "applicable": true,
+   "status": "partial",
+   "reason": "辅助调用开销<2%计入；门控本身(及多轮演化)的成本未单列。",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2604.19572-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "上下文压缩/智能体上下文管理文献实践(论文自引的Related Work: 观测遮蔽、上下文折叠、SWE-Pruner)"
+   ],
+   "applies_when": "声称优于现有压缩/上下文管理",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无观测遮蔽/上下文折叠/SWE-Pruner/LongCodeZip对比，只比静态规则与LLM摘要。",
+   "evidence_ids": [
+    "E025",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2604.19572-2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "论文自述‘test-time adaptation’+‘multiple evolution rounds on same dataset’"
+   ],
+   "applies_when": "规则在评测任务上演化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未报告在独立任务集上学习规则池、再于另一批任务评测的结果；超参在TB2.0调选。",
+   "evidence_ids": [
+    "E007",
+    "E015",
+    "E018"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "TACO在TerminalBench 1.0/2.0上稳定带来1%-4%绝对准确率增益。",
+   "setting": "Terminus-2脚手架+6个开源骨干(8B-685B)；每组5次评测均值；规则池在被评测基准上多轮演化至收敛。",
+   "baseline_control": "同骨干无TACO的Terminus-2；另有静态规则/摘要基线(仅Qwen3-Coder-480B)。",
+   "selection_vs_test": "k、N在TB2.0调选；规则池在TB2.0任务上演化；无独立留出。",
+   "result_denominator": "12个模型×基准格子全为正(+0.36~+6.02)；MiniMax TB1.0 +2.95/TB2.0 +1.36，小于基线run标准差3.94/2.54；基线与TACO标准差仅在附录；无显著性检验。",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E007",
+    "E018",
+    "E030"
+   ],
+   "counterevidence": [
+    "E009"
+   ],
+   "allowed_conclusion": "作者报告：在自身演化过的基准上，加TACO后准确率点估计一致上升且多在单个标准差内；不能外推到未见任务。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "匹配令牌预算下TACO提升2%-3%，且在下游基准上降低12%-27%令牌同时维持或提升成功率。",
+   "setting": "Fig 3(TB2.0六个模型14M-120M令牌预算)；Table 1 MiniMax-M2.5六基准。",
+   "baseline_control": "同预算下无TACO的Terminus-2/Mini-SWE-Agent。",
+   "selection_vs_test": "同上。",
+   "result_denominator": "令牌降幅：SWE-Lite 12.1%、CompileBench 21.6%、DevEval 27.0%、CRUST 17.5%、TB1.0 21.2%、TB2.0 2.7%；准确率变化0~+2.95；总令牌含辅助调用<2%但不含多轮演化。",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E017",
+    "E023",
+    "E016"
+   ],
+   "counterevidence": [
+    "E011",
+    "E016"
+   ],
+   "allowed_conclusion": "作者报告：收敛后的TACO运行节省令牌且不降低成功率；演化阶段的成本未计。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "自演化(任务内演化+全局规则池)是必要的，静态规则或LLM摘要不能达到同样效果。",
+   "setting": "Table 4(Qwen3-Coder-480B)；Table 7(DeepSeek-V3.2)。",
+   "baseline_control": "200条人工规则、LLM一次性生成规则、LLM摘要；去ITRSE/去GRPE。",
+   "selection_vs_test": "人工规则同样由TB2.0轨迹构建。",
+   "result_denominator": "TACO 25.9±1.5 vs HQ规则 24.3±2.2 vs 基线23.9±2.9；Table 7: 去任一成分40.4/38.9 vs 基线40.6 vs 完整42.7(无方差)。",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014",
+    "E027",
+    "E031"
+   ],
+   "counterevidence": [
+    "E014"
+   ],
+   "allowed_conclusion": "作者报告：在TB2.0上完整TACO高于静态变体；TACO与人工规则差在标准差内；冻结规则池不带来收益。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "学到的规则捕获可泛化的终端输出模式而非基准特定产物，可冻结后复用并摊销冷启动成本。",
+   "setting": "Table 6：冻结全局规则池在TB2.0复用；Appendix K案例。",
+   "baseline_control": "在线演化。",
+   "selection_vs_test": "复用在构建规则池的同一基准上。",
+   "result_denominator": "DeepSeek 42.77(在线)/42.69(复用)；Qwen3-480B 25.86/26.96；MiniMax 44.16/44.94。",
+   "evidence_ids": [
+    "E015",
+    "E016",
+    "E020"
+   ],
+   "counterevidence": [
+    "E020",
+    "E014"
+   ],
+   "allowed_conclusion": "同一基准上冻结池与在线演化持平；‘泛化到未见任务/基准’不被支持。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "作者报告：在其演化所用的终端基准上，保守的规则式观测压缩使总令牌下降且准确率点估计不低于基线，匹配令牌预算下有小幅领先；演化规则池在同基准上冻结重用不退化。",
+  "unresolved": [
+   "规则池在独立任务集/未见基准上的迁移",
+   "多轮演化的令牌与时间成本",
+   "与SWE-Pruner/观测遮蔽/上下文折叠的对比",
+   "准确率增益相对run方差的显著性",
+   "冻结规则池本身为何不优于基线(w/o ITRSE)"
+  ],
+  "not_claimed": "我们没有复现任何结果；所有数值为作者报告。"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "瓶颈具体可量化(Fig 1: 手工抽取可去24.6%-44.1%提示令牌，且精确证据不可被摘要改写)，被改变的非权重对象清晰(压缩规则由固定/手写变为可演化)，并与训练型压缩器、LLM摘要、记忆/技能自演化划清界限；但最近邻中的上下文折叠/遮蔽/SWE-Pruner/LongCodeZip无实测比较，残余缺口未完全封闭。",
+   "evidence_ids": [
+    "E002",
+    "E012",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "规则表示(触发+保留/剥离+保守边界)使保全证据成为设计约束，Critical绕过、抱怨→抑制+保守变体、置信度×使用计数排序、LLM按任务选择构成可复述的因果解释，并给出可区分预测(批越小越好、小模型总令牌上升、冻结池需任务内演化)；关键假设(抱怨能覆盖所有关键丢失；LLM生成规则安全)仍靠案例与判官支撑，且需改脚手架提供抱怨接口。",
+   "evidence_ids": [
+    "E004",
+    "E019",
+    "E021",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "操作链、规则schema、全部四类提示、写回条件、衰减方向、收敛指标与泄漏边界表均给出，可重建；缺口：τ、衰减系数、演化轮数未给数值；规则池无容量上界/显式退役/回放测试，版本主要靠_v2命名；冻结池在w/o ITRSE下低于基线说明规则池读取路径的行为条件不清。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E026",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "主指标为TerminalBench/SWE-bench Lite等确定性验证器的任务成功率；总令牌端到端含辅助LLM调用；压缩质量用200事件GPT-5.5判官+人工复核8个潜在损失；有Retention指标与准确率稳定性的对照。弱点：压缩质量判官未做人工一致性校验，小基准(TB 80/89任务)粒度粗，基线使用‘in-house’结果。",
+   "evidence_ids": [
+    "E006",
+    "E010",
+    "E017",
+    "E021",
+    "E028"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有静态人工规则/LLM静态规则/LLM摘要对照、w/o ITRSE/GRPE消融和匹配令牌预算曲线，直接处理‘只是省令牌’的替代解释；缺口：消融仅DeepSeek-V3.2单值无方差，且去掉任一成分都不优于基线，冻结规则池(w/o ITRSE)低于基线使‘留存规则承载增益’的因果链矛盾；无写回门控关闭的对照，无与上下文折叠/观测遮蔽/SWE-Pruner比较，无等演化算力对照；脚手架的抱怨接口是TACO特有的额外变量。",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014",
+    "E023",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "无标签(Table 11)避免了标签泄漏，是真实优点；但规则池在被评测的同一基准任务上多轮演化至收敛，k/N在TB2.0调选，冻结重用也在TB2.0上评测，没有在独立任务集上学规则再评另一批任务的结果；案例规则含FLAG格式等强任务特化。按EVIDENCE规则选择集不能当留出集，仅1。",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E015",
+    "E018",
+    "E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "主结果为5次评测均值，附录E给run级标准差，Table 4含±，另有救回/退步计数与Fig 4滑动标准差；但正文主表无方差，无显著性检验或区间，MiniMax TB1.0/TB2.0增益小于基线标准差，Table 7消融无方差，规则演化本身的随机性(跨演化种子)未报。",
+   "evidence_ids": [
+    "E009",
+    "E012",
+    "E022",
+    "E013",
+    "E030"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "令牌核算较诚实：总令牌含辅助调用(<2%)，每步令牌、匹配预算曲线、k/N对自演化令牌与运行时的影响均有报告；但多轮冷启动演化(数轮完整遍历基准)的令牌/时间与GPU(20×H800)成本未量化，仅定性称‘一次性可摊销’，而这正是搜索/失败候选成本不应漏计的部分。",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

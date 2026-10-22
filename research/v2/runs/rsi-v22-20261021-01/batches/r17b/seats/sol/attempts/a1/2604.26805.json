@@ -1,0 +1,600 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r17b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.26805",
+    "paper_id": "2604.26805",
+    "title": "Bian Que: An Agentic Framework with Flexible Skill Arrangement for Online System Operations",
+    "version": "2604.26805v2",
+    "claim_type": "system_method",
+    "central_claim": "通过事件到数据/知识的可演化 Skill 映射及统一的人类反馈双通道，改善线上运维覆盖、诊断与效率，并使知识和 Skill 协同进化。"
+  },
+  "provenance": {
+    "input_hash": "98ac945e7c4bbbda444afedffc531319beeec87430d3819722daa02b558134d0",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T01:01:43.467255+00:00",
+    "notes": "派发 model type=sonnet，声明映射 gpt-6.1-sol；未独立探测模型，工具未提供可核验 actual_model/session/receipt，故为 null。未读另一席或其他 attempt；未运行收录代码。"
+  },
+  "materials": [
+    {
+      "material_id": "2604.26805.txt",
+      "url": "https://arxiv.org/html/2604.26805v2",
+      "version": "2604.26805v2",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee",
+      "sections_read": [
+        "Abstract",
+        "1 Introduction",
+        "2.1–2.4.3 Method",
+        "3.1–3.4 all experiments and Tables 1–7",
+        "4 Conclusion",
+        "Appendices A–C and Table 8"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "status": "reviewed",
+  "reason": "完整版本及附录已读；非权重技能/知识留存闭环在范围内，证据可判定，但协同增益与广泛迁移仅部分支持。",
+  "rationale": "事件数据路由与知识双通道具体；线上反馈开关支持后续覆盖收益，但离线99%含同例专家纠正，不能当独立泛化。缺独立谱系原文、统计及总成本。",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "locator": "§2.3.1–2.3.2",
+      "quote": "All cases follow the same validate-and-retry loop (up to three iterations) and require no code changes.",
+      "support_explanation": "Skill 的 schema/prompt 均可针对反馈更新；验证重试不是独立效用门。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E002",
+      "locator": "§2.4.1",
+      "quote": "A daily offline process deduplicates and prunes the knowledge base to resolve accumulated contradictions and prevent unbounded growth; corrections take effect immediately through the short-term case memory and need not wait for this cycle.",
+      "support_explanation": "知识写入、纠错、每日整合及后续读取可重建。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E003",
+      "locator": "§2.4.2",
+      "quote": "inadequate retrieval",
+      "support_explanation": "归因区分检索不足、推理错误及知识内容错误，分发给不同可编辑对象。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E004",
+      "locator": "§2.4.3",
+      "quote": "We qualitatively observe this compounding effect in deployment; a controlled quantitative measurement is left to future work, as it requires a longer horizon than our current six-month deployment permits.",
+      "support_explanation": "作者未量化两个通道的协同复利，限制中心外推。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E005",
+      "locator": "§3.1",
+      "quote": "For each pass@\nk\nk\nevaluation, the Skill directory is reset to a clean seed state before the run, so that Skills from prior evaluation runs do not leak into the current run.",
+      "support_explanation": "评估运行间技能清零，但不证明知识库与104事件解耦。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E006",
+      "locator": "§3.3",
+      "quote": "we curate 104 real operational events sampled from production logs—44 alerts and 60 inspections—each annotated with a ground-truth diagnosis by senior site reliability engineers (SREs).",
+      "support_explanation": "离线分母与人工诊断真值明确。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E007",
+      "locator": "§3.3 Table 5 caption",
+      "quote": "additional correction rounds applied to the still-failing cases.",
+      "support_explanation": "99%是失败同例再纠正后的结果，不是未见任务率。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E008",
+      "locator": "§3.4",
+      "quote": "disabling knowledge retrieval lowers pass@5 from 94.2% to 86.5%",
+      "support_explanation": "知识关闭控制为知识有效性提供支持，但混合短期/长期/初始手册知识。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E009",
+      "locator": "§3.4 online feedback experiment",
+      "quote": "Without feedback, the system steadily loses coverage as production traffic drifts",
+      "support_explanation": "13天反馈关闭对照支持后续留存更新有用，组间匹配、分母与区间未详述。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E010",
+      "locator": "§3.4 Static discussion",
+      "quote": "overall pass@5 falls from 94.2% to 83.7%",
+      "support_explanation": "固定Skill控制支持生成/更新整体价值，未分离单项修改和预算。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E011",
+      "locator": "§3.2 Table 2 and text",
+      "quote": "The 75% drop in fired alerts is primarily driven by release interception and proactive inspection",
+      "support_explanation": "线上前后对照为系统部署效果，非单独自演化因果估计。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    },
+    {
+      "evidence_id": "E012",
+      "locator": "§3.1 implementation",
+      "quote": "The default LLM backbone is Qwen3.5-35B-FP8 deployed on a single NVIDIA Tesla L20 GPU.",
+      "support_explanation": "部署资源明确但未报告纠错、蒸馏、重试总开销。",
+      "kind": "author_report",
+      "material_id": "2604.26805.txt",
+      "sha256": "9c1839a972deb608245623ca3e101b1b0b55e76d79012fe94d913d6dfa542cee"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "LoadDataSchema + Prompt in versioned YAML skill",
+      "information": "事件元数据、运行信号、知识与工程师纠正；离线失败纠正可见诊断真值",
+      "operation": "无匹配时生成；错误归因后编辑对应schema或prompt并执行校验，最多三次重试",
+      "output": "更新后的可重用Skill",
+      "conditions": "已有数据源描述及能力描述；keyword Match有效",
+      "feedback": "SRE自然语言纠正和数据schema执行错误",
+      "selection_rule/data": "字段返回正确性与validate/retry；未述独立成功率晋升门",
+      "persistence": "YAML目录，Meta带version；回滚策略未详述",
+      "later_use": "后续事件按tags匹配并装配数据/知识",
+      "claimed_effect": "减少静态配置盲点与漂移覆盖损失",
+      "failure_boundary": "新服务知识不足；检索匹配和人工反馈依赖",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E009",
+        "E010"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "案例记忆和蒸馏知识库",
+      "information": "每次执行记录及可得的SRE反馈",
+      "operation": "写短期记忆并提炼长周期知识，日常去重剪枝",
+      "output": "Redis KV/KKV与ANN知识条目",
+      "conditions": "纠正反馈可信且知识能跨事件重用",
+      "feedback": "相同实践者纠错信号",
+      "selection_rule/data": "LLM提炼与整合；无独立条目效用门",
+      "persistence": "滚动案例窗口及持久知识；每日合并",
+      "later_use": "下一次推理前取最近相关案例，由Skill查询长期知识",
+      "claimed_effect": "知识覆盖随使用增长",
+      "failure_boundary": "双通道协同效应未量化；错知识可自我传播",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E008"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "已有AIOps偏重已整理上下文上的诊断，缺少快速变化事件的数据/知识路由维护。",
+    "checked_gap": "本文具体暴露人工事件配置的组合增长和服务漂移；已有记忆与自修复祖先来自本文附录，未获得原文交叉核查。",
+    "lineage": [
+      {
+        "method": "RCAgent; RAG; Reflexion/Self-Refine; self-evolving memories",
+        "source": "Appendix A, paper-local related work",
+        "version": "cited versions; original texts not supplied"
+      }
+    ],
+    "closest_adjacent": "RCAgent为诊断器；RAG/自演化记忆覆盖部分检索/更新路径，本文联动双通道。",
+    "residue": "是否现有技能/记忆编排已经可完成同样联动未独立验证。",
+    "stakes": "线上频繁发布、信号稀释及服务漂移",
+    "method_response": "可编辑Skill显式指定检索与推理，统一反馈维护记忆和技能。",
+    "remaining_gap": "未测双路径交互，单业务与人工反馈可迁移性待证。",
+    "evidence_ids": [
+      "E002",
+      "E003",
+      "E004",
+      "E011"
+    ],
+    "unresolved": [
+      "请总控共同固定 RCAgent 与最近 self-evolving memory/skill 邻居原文，非单席补读。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [
+      "generative_process_redesign"
+    ],
+    "outside_taxonomy": false,
+    "reason": "经验知识及技能模板成为后续事件的conditioning；固定路由文档被放入可修改对象空间。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "固定模型以检索知识和技能完成新事件",
+          "C03要求的统一跨类训练/共享空间及整类留出未执行，故子卡null"
+        ],
+        "success/failure_checks": [
+          "知识off控制存在",
+          "类别隔离和原始上下文廉价基线缺失"
+        ],
+        "evidence_ids": [
+          "E002",
+          "E008"
+        ],
+        "reason": "主卡信息通道匹配，C03细粒度战术不强贴。"
+      },
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "将固定事件数据路由和推理模板开放给反馈编辑",
+          "C15几何、C23身份中立条件、C24扩散均不符"
+        ],
+        "success/failure_checks": [
+          "Static对照存在",
+          "双通道复利未证明"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E004",
+          "E010"
+        ],
+        "reason": "释放具体固定组件，非同类生成子卡。"
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H11",
+        "version": "frozen-input",
+        "fit": "medium",
+        "condition_checks": {
+          "S1": "met:区分schema/prompt/knowledge",
+          "S3": "partial:执行校验但无效用回退",
+          "S4": "partial:未述跨案例聚类归因"
+        },
+        "evidence_ids": [
+          "E001",
+          "E003"
+        ]
+      },
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01",
+        "version": "frozen-input",
+        "fit": "high",
+        "condition_checks": {
+          "S3": "met:工程师反馈",
+          "S4": "met:日常去重修剪",
+          "S5": "partial:无边际贡献门"
+        },
+        "evidence_ids": [
+          "E002",
+          "E004"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01"
+      },
+      "operation_correspondence": "反馈提炼维护知识→后来推理读取，知识是conditioning输入",
+      "conditions/differences": "无需训练conditioning通道，未给C03跨类隔离",
+      "evidence_ids": [
+        "E002",
+        "E008"
+      ]
+    },
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H11"
+      },
+      "operation_correspondence": "固定Skill变为可按错误位置编辑的文档",
+      "conditions/differences": "验证字段可用不等于效用提升/缺陷与执行失误严格分离",
+      "evidence_ids": [
+        "E001",
+        "E003"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md"
+      ],
+      "applies_when": "持续积累知识",
+      "applicable": true,
+      "status": "met",
+      "reason": "显式每日去重剪枝及短期纠错。",
+      "evidence_ids": [
+        "E002"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md"
+      ],
+      "applies_when": "用修订替换技能",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有执行验证重试但未述对历史成功的回归及回滚。",
+      "evidence_ids": [
+        "E001"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2604.26805-1",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§3.1/§3.3 protocol"
+      ],
+      "applies_when": "声称后续复用或泛化",
+      "applicable": true,
+      "status": "partial",
+      "reason": "运行间Skill清零；99%含同例人工纠正，知识构建与事件抽样交叠未审计。",
+      "evidence_ids": [
+        "E005",
+        "E007"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2604.26805-2",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§2.4.3/§3.4"
+      ],
+      "applies_when": "声称双通道协同改进",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Static/NoKnow及13天feedback对照支持组件价值，未量化两个路径交互。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E009",
+        "E010"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2604.26805-3",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§3 experiments"
+      ],
+      "applies_when": "报告准确率及反馈趋势",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "有104事件与失败数，但无主结果区间及跨run方差。",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "score_item": "E.statistics"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "离线端到端99%通过率",
+      "setting": "Qwen3.5-35B-FP8,104生产事件",
+      "baseline/control": "初始化pass@5=98/104；Static=87/104、NoKnow=90/104",
+      "selection_vs_test": "初始化失败6例提供SRE纠正，在原104例再评分",
+      "result/denominator": "103/104在3轮额外纠正后通过；初始化82/104 first sample",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008",
+        "E010"
+      ],
+      "counterevidence": [
+        "不能把纠正后的同例通过率作为独立泛化；Table6总体first-pass计数67与分组26+42=68不一致"
+      ],
+      "allowed_conclusion": "在该104例重试/人工修复协议下高覆盖；非盲测99%成功。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "反馈使长期准确率持续",
+      "setting": "13天生产流",
+      "baseline/control": "feedback enabled vs disabled, comparable initial state",
+      "selection_vs_test": "随流更新再测后来事件，但未披露分组分配/泄漏审计",
+      "result/denominator": "作者描述开反馈>80%，关闭约75%降32%；逐日分母未报",
+      "evidence_ids": [
+        "E009",
+        "E004"
+      ],
+      "counterevidence": [
+        "图内逐日精确点数未在固定文本提供，不外推精确增益；仍可能受流量与工程师投入差异影响"
+      ],
+      "allowed_conclusion": "后续事件留存收益的有限作者报告证据；不能称improver或协同因果证明。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "告警减少75%且MTTR减少50%以上",
+      "setting": "部署前1个月与部署后6个月",
+      "baseline/control": "线上前后观测",
+      "selection_vs_test": "非随机生产比较",
+      "result/denominator": "相对告警25%、MTTR<50%；原始告警数未报",
+      "evidence_ids": [
+        "E011"
+      ],
+      "counterevidence": [
+        "期间变化及完整框架混杂"
+      ],
+      "allowed_conclusion": "系统部署的关联性改善，非单独留存机制效应。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "知识/技能被维护并在后续事件使用；13天反馈开关和知识关闭控制为保留收益提供有限支持。",
+    "unresolved": [
+      "无原始线上分母/误差区间、分配协议",
+      "双路径协同没有受控量化",
+      "不支持improver提升或自主修复动作执行"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "运维上下文路由缺口具体，近邻主要是作者自述未独立核查。",
+      "evidence_ids": [
+        "E003",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "三字段Skill、错误类型路由、统一反馈双通道可重建，交互效应仍是假设。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [
+        "E004"
+      ],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "持久化与实际检索、日常整合清楚，独立效用门、回退与严格缺陷/失误判别不清。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "SRE真值与指标定义相关；线上判定盲法欠详、Table6 first-pass分组和总体不一致。",
+      "evidence_ids": [
+        "E006",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Static/NoKnow和在线反馈开关有效但未分离两通道、预算或六个月前后混杂。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E010"
+      ],
+      "counterevidence_ids": [
+        "E004"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "13天后来事件提供弱时间泛化；离线纠正在同例进行，仅Skill清零不能完成隔离。",
+      "evidence_ids": [
+        "E005",
+        "E007",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "104例、残余失败与条件边界有报，未给主结果CI或多次运行方差，按A2=1。",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "硬件、模型、重试上限可见，但人工修复、日常整合与总token/时间成本缺失。",
+      "evidence_ids": [
+        "E001",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 50.0,
+    "display": 50.0,
+    "lower": 50.0,
+    "upper": 50.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}

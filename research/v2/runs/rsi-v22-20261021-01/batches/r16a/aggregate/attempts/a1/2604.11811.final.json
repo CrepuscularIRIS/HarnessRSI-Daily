@@ -1,0 +1,1652 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r16a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.11811",
+  "claim_type": "system_method",
+  "central_claim": "M-star automatically discovers task-optimized memory harnesses by representing a memory harness as an executable Python program (Schema, Logic, Instruction) optimized jointly through reflective code evolution with population-based search; it improves over existing static memory harnesses across all evaluated tasks, and the evolved programs are structurally distinct per task, so every task benefits from its own memory harness.",
+  "paper_id": "2604.11811",
+  "title": "M$^\\star$: Every Task Deserves Its Own Memory Harness",
+  "version": "2604.11811v2"
+ },
+ "provenance": {
+  "input_hash": "211a176e5d9e4b370e048216751f3e4277298b7195cf125261d2bfcb1f7f07ec",
+  "input_package": "batches/r16a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:24:33Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.11811.txt",
+   "url": "https://arxiv.org/html/2604.11811v2",
+   "version": "2604.11811v2",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.11811.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E01",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 162-187",
+   "quote": "To answer this question, we propose\nMstar\n, an evolutionary method that automatically discovers task-optimized memory harnesses for LLM agents.\nSpecifically,\nMstar\nrepresents a memory harness as a\nmemory program\n: a Python module with a fixed interface consisting of three components,\nSchema\n,\nLogic\n, and\nInstruction\n.\nThe\nSchema\ndefines the data formats for storage and retrieval, the\nLogic\nimplements the\nread\nand\nwrite\noperations, and the\nInstruction\nguides the agent’s interaction with the knowledge base.\nThese components are jointly optimized through reflective code evolution.",
+   "support_explanation": "Executable memory schema, logic and instruction jointly searched, not model weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E02",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 540-565",
+   "quote": "Sampling feedback from the validation loop.\n\nWe use a set of episodes and validation queries to evaluate a memory program.\nThe validation queries are partitioned into a\nstatic\nset, which remains constant across all iterations, and a\nrotating\nset, which changes in each iteration similar to mini-batches in training.\nDuring validation, the agent initiates a query to the knowledge base for each sample in both the rotating and static sets and uses the returned information to generate a response or take an action.\nThe aggregated score on the static validation set serves as the performance metric for the current memory program.\nMeanwhile, the generated trajectories on the rotating set are used as feedback to improve the program later.\n\nCoding agent iteration.\n\nWe employ a coding agent to iteratively update the current memory program to improve performance and fix potential bugs.\nWe provide the coding agent the execution trajectories from the read and write processes, underperforming samples from the rotating validation set, and the change logs from prior iterations along with their corresponding scores.\nBased on this information, the coding agent analyzes whether the read and write operations function as expected, identifies the root causes of underperforming cases, and determines which past improvements were effective.\nConsequently, the coding agent generates a code patch to apply to the current program and produces a new change log to guide future iterations.\nThe complete prompt template is provided in Appendix\nG\n.\n\nConstraint checks and automated repair.\n\nBefore applying the updated memory program, the code evolution process executes a set of runtime checks to ensure its quality.\nIf any check fails, the memory program and its corresponding error messages are resubmitted to the coding agent for repair. These checks prevent low-quality programs from consuming excessive computational resources, and any program that still fails after a fixed number of repair attempts is discarded.",
+   "support_explanation": "Separate static fitness and rotating diagnostic data, code patches and bounded repairs.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E03",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 576-580",
+   "quote": "Instead of continuously updating a single program, which can cause the evolution algorithm to fall into local optima, we maintain a program pool.\nWe initialize the search with a small set of simple seed programs (Appendix\nE\n).\nIn each iteration, we sample a parent program from the pool with probability biased toward higher validation scores.",
+   "support_explanation": "Archive keeps multiple parents rather than overwriting a single incumbent.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E04",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 886-890",
+   "quote": "We evaluate\nMstar\non four benchmark families with seven domain configurations, covering long-term conversational question answering, embodied task completion, medical question answering, and professional legal and financial reasoning.\nFor each configuration, we run 20 evolution iterations, select the best memory program on validation, and report performance on a held-out test split.\nWe use GPT-5.4 Mini as the task agent and GPT-5.3-Codex as the coding agent in reflective code evolution",
+   "support_explanation": "Twenty search steps, validation selection and held-out reporting with a fixed model pair.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E05",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 1093-1098",
+   "quote": "To further test whether these structures are task-specific, we evaluate the best evolved program from each source task on other target tasks (Figure\n5\n).\nIn all three targets, the native evolved program outperforms transferred programs from other benchmarks.\nFive of six transferred programs perform worse than the universal seed baseline.\nThis pattern suggests that memory program structure should be optimized together with the target task.",
+   "support_explanation": "Native-task benefit and explicit negative transfer: five of six transfers lose to universal seed.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E06",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 1102-1139",
+   "quote": "Table\n2\nisolates key design choices on LoCoMo.\nEach variant removes one component of\nMstar\n:\n−\n-\nInstruction\nlets only the code evolve and keeps the prompt instructions fixed;\n−\n-\nCode\ndoes the opposite, evolving only the prompt instructions while keeping the code at the Vector Search seed;\nMax parent selection\nalways picks the highest-scoring parent instead of sampling by softmax; and\n−\n-\nDiversity\ndrops the population pool and mutates only the current best program at each iteration.\n\n−\n-\nCode\ngives the largest drop, reducing F1 by 0.203.\n\n−\n-\nInstruction\nreduces F1 by 0.106.\nThe full system also scores above\nMax parent selection\nand\n−\n-\nDiversity\n.\nThese results indicate that joint optimization of program Logic and Instruction gives the strongest LoCoMo result.",
+   "support_explanation": "LoCoMo code/instruction and population ablations identify useful components, not all possible compute confounds.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E07",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 1239-1247",
+   "quote": "A practical concern for evolutionary methods is sensitivity to random seeds, especially under a 20-iteration budget in which discovery quality can depend on early mutations.\nTo evaluate this effect, Table\n3\nreports test scores from five independent runs on three benchmarks.\nAcross all benchmarks, the coefficient of variation remains at or below 10%, which indicates stable outcomes with moderate variance.\nAcross the 15 runs, 14 outperform the strongest baseline, supporting consistent gains across initializations.\nAppendix\nI.2\nprovides full per-seed scores and validation trajectories.",
+   "support_explanation": "Five whole-search seeds on three configurations; 14/15 beats fixed baseline; no confidence/significance claims inferred.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E08",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 2464-2478",
+   "quote": "For LoCoMo, we exclude category 5 (adversarial and unanswerable questions), which tests refusal capability rather than memory retrieval, retaining 1,540 QA pairs across four categories\n[\n14\n]\n.\nWe reserve 100 QA pairs for the held-out test split and use the remaining 1,440 QA pairs as validation data.\nFor PRBench, hard items (\nfinance_hard\nand\nlegal_hard\n) are excluded before train, validation, and held-out test construction to avoid distortion of the fitness signal\n[\n2\n]\n.",
+   "support_explanation": "LoCoMo excludes unanswerables and PRBench excludes hard subsets; restricts claim coverage.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E09",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 2510-2527",
+   "quote": "Each sample includes a multi-turn clinical dialogue, an ideal completion, and structured pass or fail criteria written by medical professionals.\nWe evaluate two categories: health data interpretation and emergency referral recognition.\nBecause HealthBench does not provide a training split, we construct episode pools from a held-out portion of the benchmark data and keep evaluation queries disjoint from episode construction.\nWe filter by category first, then use 54% of the category data for episode construction and reserve 100 examples for held-out testing.\nWe report rubric score, computed as the fraction of criteria marked positive by an LLM judge.\n\nB.5\nPRBench\n\nPRBench\n[\n2\n]\nevaluates professional reasoning in legal analysis and financial valuation.\nEach sample contains a task prompt, an expert reference, and an importance-weighted rubric.\nSimilar to HealthBench, PRBench does not provide a training split, so we construct episodes from a held-out portion and evaluate on disjoint query sets.\nWe filter out the hard subsets before splitting, use 40% of the remaining data for episode construction, and reserve 50 examples for held-out testing.\nFor consistency, we apply the same rubric-based scoring protocol used for HealthBench to both PRBench splits in our evaluation.",
+   "support_explanation": "HealthBench and PRBench memory episode construction and queries are declared disjoint.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E10",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 3131-3145",
+   "quote": "Call counts include recorded API attempts.\nToken totals sum provider usage fields when available; failed attempts without usage metadata contribute to call counts only.\n\nThe total evolution cost ranges from $12–90 per benchmark over 20 iterations, depending primarily on the evaluation protocol.\nRubric-graded benchmarks (HealthBench and PRBench) are substantially more expensive because each validation item requires multiple LLM judge calls for per-criterion scoring, making the judge the dominant cost component (60–80% of total calls).\nToken-F1 benchmarks (LoCoMo) and binary-success benchmarks (ALFWorld) avoid judge calls entirely, keeping evolution under $26.\nALFWorld’s long wall-clock time (100h) is dominated by TextWorld environment interaction; API latency contributes less.\nAlthough the reflector makes only 24–48 calls per run, it uses the more expensive\ngpt-5.3-codex\nmodel ($14/1M output tokens vs. $4.50 for\ngpt-5.4-mini\n) and produces long code patches, so it accounts for 7–24% of total cost depending on the benchmark.\n\nCompared to baselines, the evolution overhead is a one-time cost: once the best program is found, inference uses the same number of calls as any baseline.\nThe per-query inference cost of an evolved program equals that of the corresponding baseline configuration (No Memory or Vector Search) plus any toolkit calls the evolved program makes, typically 0–2 additional LLM calls per query.",
+   "support_explanation": "Cost includes attempts, token metadata caveat, overhead and extra read-time calls.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E11",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 3252-3258",
+   "quote": "with a fixed seed, and select the sample closest to each cluster centroid to form the fixed static validation set.\nThis procedure covers diverse regions of the validation distribution more effectively than random sampling under the same evaluation budget.\nFor the rotating validation subset used as reflection context, we re-cluster the remaining validation pool at each iteration with a different\nk\nk\n-means seed (the iteration index added to a base seed), and select the sample closest to each new cluster centroid; varying the seed perturbs the cluster boundaries, so the chosen samples differ across iterations even though both clustering and centroid selection are deterministic given a seed.\nThe static subset determines fitness, while the rotating subset supplies diverse examples for mutation.",
+   "support_explanation": "Static and rotating validation differ in role; neither is final held-out test.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E12",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 4185-4204",
+   "quote": "The best ALFWorld program (\n4\n,\n5\n) constructs a deterministic action cache using SQLite.\nIt stores structured fields extracted from expert demonstrations—target object, destination, required state change (clean/cool/heat/examine/toggle), action hints, and failure modes—and retrieves them via a weighted scoring function that combines token overlap with exact-match bonuses for object, location, and state.\nThe program includes a\n_canonical_state()\nnormalizer that maps diverse surface forms (“rinse”, “wash”\n→\n\\to\n“clean”; “chill”, “cold”\n→\n\\to\n“cool”) to canonical labels, and a fallback parser that extracts task metadata from raw text when the LLM’s structured extraction is sparse.\nA single LLM call at read time synthesizes the top-6 retrieved memories into concise step-by-step guidance for the task agent to follow.\nThis description corresponds to the best ALFWorld Unseen program.\nThe best ALFWorld Seen program uses the same SQLite-backed design family, but its\nread()\nmethod returns deterministic ranked guidance without a toolkit LLM call.",
+   "support_explanation": "Persisted concrete executable design and later read-time guidance.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E13",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 9469-9484",
+   "quote": "has three main limitations.\nFirst, evaluating each candidate memory program requires re-ingesting episodes and re-scoring on the validation set, so the per-iteration cost grows with episode length and rubric complexity (Appendix\nD.1\n); rubric-graded benchmarks reach $90 and ALFWorld reaches 100 wall-clock hours per 20-iteration run.\nSecond, our experiments use a fixed task agent and reflector model pair (GPT-5.4-mini and GPT-5.3-Codex); we have not measured how strongly the discovered programs depend on this choice.\nThird, evolution can drift toward task-specific heuristics encoded directly in the program logic (e.g., the synonym table in the ALFWorld action cache, Appendix\nF.1\n), which improves in-task performance but limits transfer to other tasks (Figure\n5\n); designing search procedures that prefer reusable structure remains open.\n\nAppendix K\nBroader Impact\n\nThis work studies agent memory as a research object in controlled benchmark settings.\nIts main positive impact is to make memory programs more reproducible and inspectable: the discovered program is executable code that can be read, tested, and released with the artifacts.",
+   "support_explanation": "Explicit search cost, single model pair and heuristic over-specialization limits.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E14",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 657-710",
+   "quote": "Table 1:\nMain results across four task families.\n\nColumns report LoCoMo token F1 and LLM-judge score (L-J), ALFWorld success rate, HealthBench rubric score, and PRBench rubric score.\nBaselines are grouped by memory paradigm.\nBest per column in\nbold\n, second best in\ngreen\n.\n\nLoCoMo\n\nALFWorld\n\nHealthBench\n\nPRBench\n\nMethod\n\nF1\n\nL-J\n\nUnseen\n\nSeen\n\nData\n\nEmerg.\n\nLegal\n\nFinance\n\nNo Memory\n\n0.036\n\n0.030\n\n0.738\n\n0.640\n\n0.242\n\n0.429\n\n0.431\n\n0.269",
+   "support_explanation": "Table 1 headings and no-memory results; full table read for comparative values.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E15",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 865-881",
+   "quote": "Mstar\n\n0.459\n\n0.610\n\n0.881\n\n0.700\n\n0.390\n\n0.493\n\n0.660\n\n0.586",
+   "support_explanation": "Mstar main metrics: LoCoMo .459/.610, ALFWorld .881/.700, HealthBench .390/.493, PRBench .660/.586.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E16",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 9088-9120",
+   "quote": "1.00\n\n1.00\n\n0.29\n\n0.80\n\n0.820\n\nMstar\n\n1.00\n\n0.42\n\n1.00\n\n0.75\n\n0.57\n\n0.80\n\n0.700\n\nBold\nmarks the best per category; GEPA+VS has the highest overall score (0.820).\n\nTable 12:\nComplete per-category results for LoCoMo.\n\nColumns report token F1 by question category: single-hop recall, temporal reasoning, causal reasoning, and open-domain.",
+   "support_explanation": "Seen ALFWorld full-system .700 versus GEPA+VS .820; author notes baseline wins overall.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E17",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 8652-8721",
+   "quote": "Table 10:\nComplete per-category results for ALFWorld Unseen.\n\nColumns report success rate by task type.\nBest per column appears in\nbold\nfor each reported task category.\n\nSimple\n\nMovable\n\nClean\n\nLight\n\nCool\n\nHeat\n\n2-Obj\n\n(\nn\n=\n8\n)\n(n{=}8)\n\n(\nn\n=\n1\n)\n(n{=}1)\n\n(\nn\n=\n11\n)\n(n{=}11)\n\n(\nn\n=\n1\n)\n(n{=}1)\n\n(\nn\n=\n7\n)\n(n{=}7)\n\n(\nn\n=\n6\n)\n(n{=}6)\n\n(\nn\n=\n8\n)\n(n{=}8)",
+   "support_explanation": "Table10 Unseen denominators 8+1+11+1+7+6+8=42; compare E18 nominal50. No correction or missing-failure count inferred.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E18",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "lines 2385-2418",
+   "quote": "Table 5:\nDataset split sizes.\n\nRows report train, validation, and test sizes for every benchmark split used by the evaluation pipeline.\n\nBenchmark\n\nSplit\n\nTrain\n\nVal\n\nTest\n\nLoCoMo\n\n—\n\n272 sessions\n\n1,440 QA\n\n100 QA\n\nALFWorld\n\nUnseen\n\n4,652 trajectories\n\n145 ep.\n\n50 ep.",
+   "support_explanation": "Table5 explicitly reports nominal ALFWorld Unseen test50, contrasting with E17 category total42.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "automatically discovers task-optimized memory programs through reflective code evolution.",
+   "support_explanation": "Central claim: the edited non-weight object is the memory program (code).",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "Abstract",
+   "quote": "improves performance over existing static memory harnesses across all evaluated tasks",
+   "support_explanation": "Broad claim of improvement on every task.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "Table 1, Mstar row",
+   "quote": "Mstar 0.459 0.610 0.881 0.700 0.390 0.493 0.660 0.586",
+   "support_explanation": "Columns: LoCoMo F1, L-J, ALFWorld Unseen, Seen, HB Data, Emergency, PR Legal, Finance.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "Table 1, GEPA + Vector Search row",
+   "quote": "GEPA + Vector Search 0.300 0.390 0.810 0.820 0.327 0.484 0.554 0.411",
+   "support_explanation": "On ALFWorld Seen GEPA+VS 0.820 exceeds M-star 0.700 (also Trajectory Retrieval 0.780): the 'all tasks' claim has a counterexample.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "Sec 5",
+   "quote": "Table 1 shows that Mstar achieves the highest score on seven of eight reported metrics.",
+   "support_explanation": "Authors concede 7 of 8.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "Sec 3.2",
+   "quote": "The aggregated score on the static validation set serves as the performance metric for the current memory program.",
+   "support_explanation": "Fitness signal: static validation subset (32-60 k-means representative items).",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "Sec 3.2",
+   "quote": "the generated trajectories on the rotating set are used as feedback to improve the program later.",
+   "support_explanation": "Feedback to the coding agent: read/write trajectories and underperforming rotating-set samples.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "Sec 3.3",
+   "quote": "we sample a parent program from the pool with probability biased toward higher validation scores.",
+   "support_explanation": "Softmax parent selection over a program pool (tau=0.15 per Table 7).",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "Sec 4",
+   "quote": "For each configuration, we run 20 evolution iterations, select the best memory program on validation, and report performance on a held-out test split.",
+   "support_explanation": "Retention rule: best-on-validation program reported on held-out test.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "App B.1",
+   "quote": "We reserve 100 QA pairs for the held-out test split and use the remaining 1,440 QA pairs as validation data.",
+   "support_explanation": "LoCoMo split: test 100, validation pool 1,440; other test sets are 50-100 items (Table 5).",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "App B.4",
+   "quote": "we construct episode pools from a held-out portion of the benchmark data and keep evaluation queries disjoint from episode construction.",
+   "support_explanation": "HealthBench/PRBench episode construction disjoint from evaluation queries.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "Sec 5 / Table 2",
+   "quote": "gives the largest drop, reducing F1 by 0.203",
+   "support_explanation": "Ablation: evolving only instructions (code stays at Vector Search seed) loses 0.203 F1, to 0.256, identical to the Vector Search baseline F1 in Table 1.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "Sec 6",
+   "quote": "reduces test F1 from 0.459 to 0.318, and Max parent selection reaches 0.381",
+   "support_explanation": "Diversity/pool ablation and max-parent ablation on LoCoMo.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "Table 2 caption",
+   "quote": "Ablation study on LoCoMo",
+   "support_explanation": "All ablations are on one benchmark (LoCoMo) and appear to be single runs.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "Sec 5 cross-task",
+   "quote": "Five of six transferred programs perform worse than the universal seed baseline.",
+   "support_explanation": "Evolved programs do not transfer; supports task-specificity claim and is also an honest negative result.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "Sec 6",
+   "quote": "Across the 15 runs, 14 outperform the strongest baseline, supporting consistent gains across initializations.",
+   "support_explanation": "Five-seed stability on three benchmarks only.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "Table 13",
+   "quote": "LoCoMo 0.459 0.463 0.364 0.394 0.423 0.421 0.042 10.0% 0.373",
+   "support_explanation": "Seed 0 (=Table 1 headline 0.459) is above the five-seed mean 0.421; one seed (0.364) falls below Mem0 0.373.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Table 13",
+   "quote": "PR-Finance 0.586 0.544 0.582 0.582 0.513 0.561 0.032 5.7% 0.449",
+   "support_explanation": "Seed 0 again equals Table 1 PR-Finance 0.586, the best of five seeds.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "App D.1",
+   "quote": "The total evolution cost ranges from $12–90 per benchmark over 20 iterations",
+   "support_explanation": "Explicit cost: $12-90 per run, up to 100 h wall-clock on ALFWorld.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "Table 6 caption",
+   "quote": "Computational cost of evolution runs and representative baselines.",
+   "support_explanation": "Baseline costs given only for Vector Search and No Memory; the strongest baselines (GEPA, GEPA+VS) are not costed.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "App J",
+   "quote": "evolution can drift toward task-specific heuristics encoded directly in the program logic",
+   "support_explanation": "Author-stated limitation; transfer limited.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "App J",
+   "quote": "we have not measured how strongly the discovered programs depend on this choice",
+   "support_explanation": "Single task-agent/reflector model pair; dependence unmeasured.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "App H.3 / B.4",
+   "quote": "We report rubric score, computed as the fraction of criteria marked positive by an LLM judge.",
+   "support_explanation": "HealthBench/PRBench scoring uses an LLM judge.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "App D.1",
+   "quote": "All experiments use gpt-5.4-mini as the task agent, judge, and toolkit model",
+   "support_explanation": "Judge and task agent are the same model; reflector is a stronger GPT-5.3-Codex.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "Sec 7",
+   "quote": "MemEvolve [ 31 ] searches over four predefined modules (encode, store, retrieve, manage)",
+   "support_explanation": "Closest self-evolving-memory neighbor described but not run as a baseline; paper claims to subsume it.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "Sec 1",
+   "quote": "their search is typically confined to a narrow, designer-specified space",
+   "support_explanation": "Author gap about prior memory-harness search.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "Sec 6",
+   "quote": "the gains are less uniform: Mstar is strongest on open-domain questions and tied on single-hop recall, while Mem0 and GEPA+Vector Search remain stronger on temporal and causal questions.",
+   "support_explanation": "Category-level losses on LoCoMo.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "App C.4",
+   "quote": "adds a vector database to GEPA because the original GEPA setup does not include a persistent knowledge base",
+   "support_explanation": "GEPA+VS is a constructed baseline; GEPA iteration/model budget is not stated.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "Sec 3.2",
+   "quote": "any program that still fails after a fixed number of repair attempts is discarded",
+   "support_explanation": "Candidate filtering: compile/runtime checks with up to 3 repair attempts (Table 7).",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "Sec 3.1",
+   "quote": "We provide a set of whitelisted components, including lists, heaps, relational databases, vector databases, and LLM endpoints.",
+   "support_explanation": "Search space is bounded by a fixed toolkit; interface Schema/Logic/Instruction is fixed.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "locator": "App B.1",
+   "quote": "hard items ( finance_hard and legal_hard ) are excluded before train, validation, and held-out test construction to avoid distortion of the fitness signal",
+   "support_explanation": "Scope restriction on PRBench; LoCoMo category 5 also excluded.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "locator": "Checklist",
+   "quote": "The supplementary material includes the anonymized code, experiment scripts, and generated artifacts needed to reproduce the results.",
+   "support_explanation": "Code and evolved artifacts in supplement (not inspected).",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "locator": "Sec 4",
+   "quote": "We use GPT-5.4 Mini as the task agent and GPT-5.3-Codex as the coding agent in reflective code evolution",
+   "support_explanation": "Model pair fixed across experiments.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "son55:E034",
+   "locator": "App D.3",
+   "quote": "The static subset determines fitness, while the rotating subset supplies diverse examples for mutation.",
+   "support_explanation": "Static/rotating validation roles.",
+   "kind": "author_report",
+   "material_id": "2604.11811.txt",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix B.1 Table 5",
+   "quote": "Unseen 4,652 trajectories 145 ep. 50 ep.",
+   "support_explanation": "Table 5 states 50 ALFWorld Unseen test episodes.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix I.1 Table 10",
+   "quote": "Table 10: Complete per-category results for ALFWorld Unseen.",
+   "support_explanation": "Table 10's category sizes sum to 42 (8+1+11+1+7+6+8), and every Unseen rate in Table 1 is a multiple of 1/42 (e.g. 0.881 = 37/42, 0.738 = 31/42, 0.619 = 26/42). None is a multiple of 1/50. Eight stated test episodes are unaccounted for.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Abstract",
+   "quote": "Mstar improves performance over existing static memory harnesses across all evaluated tasks.",
+   "support_explanation": "Contradicted for ALFWorld Seen: M* 0.700 vs GEPA+VS 0.820, Trajectory Retrieval 0.780 and Vector Search 0.720 (Table 1).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "§5",
+   "quote": "Table 1 shows that Mstar achieves the highest score on seven of eight reported metrics.",
+   "support_explanation": "The body states the narrower 7-of-8 result.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix D.2 Table 7",
+   "quote": "Toolkit LLM call budget 1 call per read / write invocation",
+   "support_explanation": "The runtime budget is specified; App. G.1 lists allowed imports, a 3,000-char read limit and 60 s timeouts.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix F.1",
+   "quote": "Listing 4: [Revised] ALFWorld evolved write() — canonical state extraction and fallback parsing.",
+   "support_explanation": "The evolved program listings are present as text in the pinned material, contrary to son55's note that they are not in text form.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O07",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix D.1",
+   "quote": "All experiments use gpt-5.4-mini as the task agent, judge, and toolkit model",
+   "support_explanation": "The rubric judge for HealthBench/PRBench (4 of 7 configurations) and the LoCoMo L-J judge are the same model as the task agent. The same judge supplies the search fitness on the static validation subset.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O08",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix I.2",
+   "quote": "Table 14: Best validation score during evolution by seed.",
+   "support_explanation": "LoCoMo best-validation scores by seed are 0.333/0.273/0.289/0.312/0.333, while test scores are 0.459/0.463/0.364/0.394/0.423 (Table 13). The lowest-validation seed has the highest test score, so the static-subset fitness ranks programs loosely.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O09",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "Appendix I.2 Table 13",
+   "quote": "LoCoMo 0.459 0.463 0.364 0.394 0.423 0.421 0.042 10.0% 0.373",
+   "support_explanation": "Table 1's LoCoMo value (0.459) is seed 0, above the five-seed mean (0.421).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O10",
+   "material_id": "2604.11811.txt",
+   "material_hash": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "sha256": "d14eea275aad1bc5f47699e0eeff785e9c462cd3f6ace45f6b8714ec1fb846dc",
+   "locator": "§3.2",
+   "quote": "The aggregated score on the static validation set serves as the performance metric for the current memory program.",
+   "support_explanation": "Selection is on a static validation subset (32–60 items); reporting is on a disjoint test split.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Memory harness as one executable Python program (Schema dataclasses, Logic read/write, Instruction prompt constants) over a whitelisted toolkit",
+   "information": "Coding agent sees current program, read/write execution trajectories, underperforming rotating-validation samples and prior change logs with scores; no test data",
+   "operation": "Coding agent emits a code patch plus a new change log; compile/runtime checks with up to 3 automated repair attempts, else discard",
+   "output": "Child memory program",
+   "conditions": "Fixed interface; task agent GPT-5.4-mini, reflector GPT-5.3-Codex",
+   "feedback": "Per-sample scores/trajectories from the validation loop",
+   "selection_rule_data": "Child scored on static validation subset (32-60 k-means representatives); rotating subset of 5 supplies mutation context",
+   "persistence": "Program pool within the run; best-on-validation program reported and released as code",
+   "later_use": "Held-out test queries (and, for memory content, episode ingestion) within the same task domain",
+   "claimed_effect": "Best on 7 of 8 metrics over nine baselines; seeds mostly above best baseline",
+   "failure_boundary": "ALFWorld Seen below GEPA+VS; temporal/causal LoCoMo categories; no cross-task transfer; reflector/agent dependence unmeasured",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003",
+    "son55:E004",
+    "son55:E006",
+    "son55:E007",
+    "son55:E009",
+    "son55:E015",
+    "son55:E022",
+    "son55:E029",
+    "son55:E030"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Population of memory programs (search procedure)",
+   "information": "Validation scores only",
+   "operation": "Softmax (tau=0.15) parent sampling so lower scorers keep non-zero probability; child appended to pool",
+   "output": "Pool of programs; argmax on static validation returned",
+   "conditions": "20 iterations, 3 seed programs",
+   "feedback": "Static validation score",
+   "selection_rule_data": "static validation score; reporting on disjoint test",
+   "persistence": "pool kept for run; no cross-run reuse",
+   "later_use": "not_applicable beyond final program",
+   "claimed_effect": "Diversity ablation 0.459 -> 0.318; max-parent 0.381 (LoCoMo only)",
+   "failure_boundary": "Ablations single-run on one benchmark",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E013",
+    "son55:E014"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "A memory harness that works for one task fails on another, and prior memory-harness search is confined to narrow designer-specified spaces.",
+  "checked_gap": "Partly supported: the strongest baseline varies by task (Table 1) and M-star's own cross-task transfer fails; but evidence that existing evolvers are limited by their search space (as opposed to budget) is not tested because MemEvolve-style closed-space evolution is not run.",
+  "lineage": "ReasoningBank/Mem0/G-Memory fixed designs -> GEPA prompt evolution (+vector DB) -> MemEvolve four-module search -> executable memory-program search (this paper); program-evolution lineage via FunSearch/AlphaEvolve-style LLM mutation.",
+  "closest_adjacent": "MemEvolve (closed four-module space, described, not compared), GEPA (compared, prompt only), ADAS (agent-design search, cited). Another batch paper describes ALMA as meta-learning memory designs as executable code; this paper does not cite it (possible missing nearest neighbor, unverified here).",
+  "residue": "Per-task schema/retrieval/instruction mismatch of fixed harnesses.",
+  "stakes": "Strongest fixed baseline differs per task; Mem0 F1 0.373 vs M-star 0.459 on LoCoMo; GEPA 0.449 vs 0.586 on PR-Finance.",
+  "method_response": "Make schema, logic and instruction a single searchable program and evolve it per task from validation feedback.",
+  "remaining_gap": "Cross-task transfer, per-iteration cost, dependence on model pair, temporal/causal categories.",
+  "evidence_ids": [
+   "son55:E004",
+   "son55:E015",
+   "son55:E025",
+   "son55:E026",
+   "son55:E027"
+  ],
+  "unresolved": [
+   "Whether a MemEvolve-style evolver at matched budget would match M-star",
+   "Whether GEPA baselines received comparable iteration budget"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Both seats agree: the conventionally fixed, hand-designed memory harness becomes a jointly searched variable. Sub null (C15/C23/C24 are geometry/diffusion/conditioning tactics).",
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium-low",
+    "tactic_steps_checked": "Signature steps: identify fixed component (memory harness) executed; treat as free variable (program search) executed; redesign for quality (7/8 metrics) executed. C15/C23/C24 not applicable (diffusion/3D conditioning).",
+    "success_failure_checks": "Success 'fixed component named and reason held fixed': met. 'Load-bearing mechanism ablated': partial (Code vs Instruction, LoCoMo only). Failure 'fixed component never shown to be bottleneck': partial (Table 1/Fig. 5 suggest, no direct bottleneck test). Failure 'obvious strong baseline omitted': partial (MemEvolve-type evolvers omitted).",
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E012",
+     "son55:E015",
+     "son55:E025",
+     "son55:E026"
+    ],
+    "reason": "Operation (free the harness design) matches the main signature; domain is agent memory not generative sampling."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H21",
+    "version": "conditions.json current",
+    "fit": "high",
+    "condition_checks": "S6 reified swappable learning mechanism with held-out separation and retained-design ablation: met (ablation LoCoMo only). S4 search cost on the table: met. S3 comparison against fixed hand-designed mechanism: partial. F3 benchmark reuse: avoided (disjoint test). F4 noise across runs: partial (5 seeds on 3 of 7 configs). F6 local mechanisms sold as general: avoided (cross-task failure disclosed). S1 named immutable anchor: partial (outer loop and evaluator fixed but not discussed as anchor). Note: the improver itself (reflector, search) is not edited; H21 targets the inner learning mechanism.",
+    "evidence_ids": [
+     "son55:E012",
+     "son55:E015",
+     "son55:E016",
+     "son55:E019",
+     "son55:E021",
+     "son55:E022"
+    ]
+   },
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "version": "conditions.json current",
+    "fit": "medium",
+    "condition_checks": "S2 evaluator built before loop and hard to game: partial (deterministic F1/success for two benchmarks, LLM-judge rubrics for others). S5 archive/pool earns its place: partial (single-run ablation). F1 generic loop at new domain: partial (search-level additions: compile-fix, softmax pool, subset selection).",
+    "evidence_ids": [
+     "son55:E008",
+     "son55:E013",
+     "son55:E023",
+     "son55:E029"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "make_the_improver_editable",
+   "domain_sub": "H21",
+   "operation_correspondence": "Fixed hand-designed memory harness freed as a searchable executable program evolved by an outer loop and scored by downstream task performance = redesign of the inner learning mechanism.",
+   "necessary_conditions_and_differences": "H21 scores a design by how well the agent learns with it; here by validation performance after ingesting episodes; the outer improver is fixed (no recursion).",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E006",
+    "son55:E009",
+    "son55:E026"
+   ]
+  },
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "population_search_executable_fitness",
+   "domain_sub": "H14",
+   "operation_correspondence": "The liberated harness is searched as executable code: softmax-sampled parents, LLM code mutation, compile-fix gate, validation fitness, pool archive.",
+   "necessary_conditions_and_differences": "H14 expects an automated, hard-to-game evaluator. That holds for LoCoMo F1 and ALFWorld success, while the rubric configs use a same-model LLM judge (opus:O07). The archive's value is tested only on LoCoMo (−Diversity, Max parent).",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E013",
+    "opus:O07",
+    "opus:O10"
+   ],
+   "origin": "opus"
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:make_the_improver_editable/S1",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Outer algorithm, task model and metric fixed.",
+   "evidence_ids": [
+    "sol:E02",
+    "sol:E04"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:make_the_improver_editable/S1"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S2",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Memory program fitness is measured downstream.",
+   "evidence_ids": [
+    "sol:E01",
+    "sol:E02"
+   ],
+   "score_item": "M",
+   "origin": "sol:rsi:make_the_improver_editable/S2"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S3",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Strong static baselines but no matched-dollar improver.",
+   "evidence_ids": [
+    "sol:E06",
+    "sol:E10",
+    "son55:E003",
+    "son55:E025"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:make_the_improver_editable/S3; son55:rsi:make_the_improver_editable/S3"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S4",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Attempt costs and inference overhead reported.",
+   "evidence_ids": [
+    "sol:E10",
+    "son55:E019"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rsi:make_the_improver_editable/S4; son55:rsi:make_the_improver_editable/S4"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F3",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Opus (son55): fitness uses the static validation subset and reporting uses a disjoint held-out test split (opus:O10), so benchmark reuse does not pass for improvement. Subset-fitness noise (opus:O08) is a selection-quality issue, not F3.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "sol:E04",
+    "opus:O10"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:make_the_improver_editable/F3; son55:rsi:make_the_improver_editable/F3"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F4",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Five whole-search seeds for three tasks without intervals or significance.",
+   "evidence_ids": [
+    "sol:E07",
+    "son55:E016",
+    "son55:E017",
+    "son55:E018"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:rsi:make_the_improver_editable/F4; son55:rsi:make_the_improver_editable/F4"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F6",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H21.md",
+    "2604.11811v2"
+   ],
+   "applies_when": "An outer search changes the memory learning mechanism.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Negative transfer explicitly measured and acknowledged.",
+   "evidence_ids": [
+    "sol:E05",
+    "sol:E13",
+    "son55:E015",
+    "son55:E021"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:make_the_improver_editable/F6; son55:rsi:make_the_improver_editable/F6"
+  },
+  {
+   "id": "local:2604.11811-1",
+   "version": "2604.11811v2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.11811v2 Table5/Table10"
+   ],
+   "applies_when": "Report ALFWorld success fraction.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (sol, verified): Table 5 says 50 Unseen test episodes (opus:O01), but the category sizes sum to 42 and every Unseen rate is k/42 (opus:O02). Under A2 this failure-denominator defect is charged once, in E.statistics (moved from sol's E.measurement).",
+   "evidence_ids": [
+    "sol:E17",
+    "sol:E18",
+    "opus:O01",
+    "opus:O02"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2604.11811-1"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "generative_process_redesign.md reviewer expectations #1"
+   ],
+   "applies_when": "a conventionally fixed component is redesigned",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Code-vs-Instruction ablation on LoCoMo shows joint evolution matters, but there is no direct test that the schema/retrieval design is the bottleneck on the other benchmarks.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E014"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:generative_process_redesign/RE-1"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "generative_process_redesign.md reviewer expectations #2"
+   ],
+   "applies_when": "baselines claimed strong",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Eight baselines incl. GEPA and Mem0, but no MemEvolve/ADAS-type evolver and GEPA budget unspecified.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E025",
+    "son55:E028"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:generative_process_redesign/RE-2"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "generative_process_redesign.md reviewer expectations #3"
+   ],
+   "applies_when": "multiple components added",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Instruction, Code, parent selection and population ablated on LoCoMo only; compile-fix, rotating subset and Schema separately not ablated.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E014"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:generative_process_redesign/RE-3"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "generative_process_redesign.md reviewer expectations #5"
+   ],
+   "applies_when": "gain could be due to compute",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "M-star spends 20 iterations with thousands of task calls ($12-90) plus a stronger reflector model; baseline costs for GEPA/GEPA+VS not reported and no equal-compute search baseline is given.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "son55:E024",
+    "son55:E028"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:generative_process_redesign/RE-5"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "generative_process_redesign.md reviewer expectations #6"
+   ],
+   "applies_when": "any redesign claim",
+   "applicable": true,
+   "status": "met",
+   "reason": "Per-category breakdown, cost table, cross-task transfer failure and limitations are reported.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E019",
+    "son55:E021",
+    "son55:E027"
+   ],
+   "score_item": "X",
+   "origin": "son55:rs:generative_process_redesign/RE-6"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S6",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json make_the_improver_editable S6"
+   ],
+   "applies_when": "inner learning mechanism evolved as code (H21)",
+   "applicable": true,
+   "status": "met",
+   "reason": "Memory is a reified Schema/Logic/Instruction program; held-out test split and retained-design ablation (LoCoMo) are present.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E009",
+    "son55:E012"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:make_the_improver_editable/S6"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json make_the_improver_editable F5"
+   ],
+   "applies_when": "LLM judge or unrestricted agent in loop",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Rubric benchmarks are LLM-judged by the same model as the task agent; reflector is a stronger model than any baseline setting disclosed.",
+   "evidence_ids": [
+    "son55:E023",
+    "son55:E024"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rsi:make_the_improver_editable/F5"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness S2"
+   ],
+   "applies_when": "executable fitness",
+   "applicable": true,
+   "status": "partial",
+   "reason": "LoCoMo token-F1 and ALFWorld success are executable; HealthBench/PRBench use LLM-judged rubrics; fitness subsets are small.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E023",
+    "son55:E034"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rsi:population_search_executable_fitness/S2"
+  },
+  {
+   "id": "local:2604.11811-3",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "claim-scope practice: 'all tasks' claims need all-task support"
+   ],
+   "applies_when": "abstract claims improvement across all evaluated tasks",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "ALFWorld Seen: M-star 0.700 vs GEPA+VS 0.820 and Trajectory Retrieval 0.780; LoCoMo temporal/causal categories also lower. Authors state 7 of 8 in the body.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E004",
+    "son55:E005",
+    "son55:E027",
+    "opus:O03"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2604.11811-1",
+   "note": "Renumbered from local:2604.11811-1 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "local:2604.11811-2",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "reporting practice: headline run vs multi-seed mean"
+   ],
+   "applies_when": "Table 1 headline number comes from one evolution run",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Headline values equal seed 0, which is above the five-seed mean on LoCoMo (0.459 vs 0.421) and highest on PR-Finance; the multi-seed table is reported separately.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E017",
+    "son55:E018"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2604.11811-2"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "M-star improves over static memory harnesses across all evaluated tasks",
+   "setting": "LoCoMo, ALFWorld (Unseen/Seen), HealthBench (Data/Emergency), PRBench (Legal/Finance); GPT-5.4-mini task agent; test sets 50-100 items",
+   "baseline_control": "No-memory, Vector Search, G-Memory, Mem0, Trajectory Retrieval, ReasoningBank, Dynamic Cheatsheet, GEPA, GEPA+VS",
+   "selection_vs_test": "best-on-validation program (20 iterations); disjoint held-out test",
+   "result_denominator": "best on 7 of 8 metrics; ALFWorld Seen 0.700 vs GEPA+VS 0.820",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E005",
+    "son55:E009",
+    "son55:E010"
+   ],
+   "counterevidence": "ALFWorld Seen loss; per-category losses; single baseline run; evolution budget unmatched.",
+   "allowed_conclusion": "On 7 of 8 headline metrics the evolved program beats the compared baselines on small held-out test sets."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Joint evolution of Logic and Instruction and population search are necessary",
+   "setting": "LoCoMo ablation",
+   "baseline_control": "-Instruction, -Code, max-parent, -Diversity",
+   "selection_vs_test": "test F1 after the same protocol",
+   "result_denominator": "0.459 vs 0.353 / 0.256 / 0.381 / 0.318",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E014"
+   ],
+   "counterevidence": "One benchmark, no repeats; -Code equals Vector Search seed F1; no no-reflection (random-mutation) control.",
+   "allowed_conclusion": "On LoCoMo, removing each component lowers F1 in the single reported run."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Evolution is stable across random seeds",
+   "setting": "5 seeds, 3 benchmarks",
+   "baseline_control": "strongest fixed baseline (single run)",
+   "selection_vs_test": "same protocol",
+   "result_denominator": "14 of 15 runs above best baseline; CV 5.7-10.0%",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E017",
+    "son55:E018"
+   ],
+   "counterevidence": "Only 3 of 7 configurations; no significance test; baselines not repeated.",
+   "allowed_conclusion": "Supported for the three tested benchmarks."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Every task benefits from its own memory harness (task-optimized programs are structurally distinct and do not transfer)",
+   "setting": "Cross-task transfer of evolved programs; t-SNE of program embeddings; structural summaries",
+   "baseline_control": "Universal seed program",
+   "selection_vs_test": "native vs transferred on target tests",
+   "result_denominator": "native best in all three targets; 5 of 6 transfers worse than seed",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E021"
+   ],
+   "counterevidence": "Confounded: native programs were selected on the target validation set; no per-task baseline search against a tuned generalist.",
+   "allowed_conclusion": "Evolved programs are task-specific and do not generalize across the tested benchmarks."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "An LLM-evolved executable memory program selected on a validation subset outperforms the compared fixed memory harnesses on 7 of 8 held-out test metrics, and on three benchmarks is stable across five seeds; the programs are task-specific and the advantage over equal-compute alternative searches is not shown.",
+  "unresolved": [
+   "equal-budget comparison with another automated memory-design or prompt-evolution search",
+   "ablations on benchmarks other than LoCoMo and with repeated runs",
+   "dependence on the reflector/task-agent model pair",
+   "judge validity for rubric benchmarks",
+   "Opus: ALFWorld Unseen denominator 42 vs stated 50 (opus:O01, opus:O02).",
+   "Opus: abstract 'all evaluated tasks' contradicted by ALFWorld Seen (opus:O03)."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. A concrete fixed object (hand-designed memory schema, logic and instructions), a measured residual (best baseline varies by task; transfer fails) and named neighbours (MemEvolve, GEPA, ADAS). The closest closed-space evolver is not run, and 'subsumes closed spaces' is asserted.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E025",
+    "son55:E026",
+    "sol:E01",
+    "sol:E05"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with son55. Jointly editing Schema/Logic/Instruction from execution traces with population selection targets per-task mismatch and makes distinguishable predictions (task-specific programs, diversity matters, instruction-only is insufficient). Not 4: the premise that reflective diagnosis rather than plain mutation drives the gains is untested, and the selection signal is weak. Best-on-validation over a 32–60-item static subset ranks programs loosely: LoCoMo's lowest-validation seed has the highest test score (opus:O08).",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E012",
+    "son55:E013",
+    "sol:E02",
+    "sol:E03",
+    "opus:O10"
+   ],
+   "counterevidence_ids": [
+    "opus:O08"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 4,
+   "reason": "Opus sides with son55. The search space and toolkit whitelist, runtime constraints (opus:O05), the compile-fix gate (k=3), softmax parent sampling (τ=0.15), static/rotating subset construction, the best-on-validation → disjoint-test retention rule, the reflector prompt and the evolved program listings (opus:O06) are all in text, and code is released. Failure and transfer boundaries (drift to task-specific heuristics, negative transfer, category losses, model-pair dependence) are stated. sol's missing 'security certificate' is not an X condition here.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E009",
+    "son55:E021",
+    "son55:E029",
+    "son55:E030",
+    "son55:E034",
+    "opus:O05",
+    "opus:O06"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with sol on the value, with revised grounds. LoCoMo token F1 and ALFWorld success are credible. But 4 of 7 configurations (HealthBench, PRBench), which carry the largest gains, are scored by gpt-5.4-mini rubric judging. That model is also the task agent and the search fitness (opus:O07), so the search optimises against an unvalidated same-model judge (Goodhart risk). LoCoMo L-J uses the same model. sol's denominator point is moved to E.statistics (A2).",
+   "evidence_ids": [
+    "son55:E023",
+    "son55:E024",
+    "son55:E031",
+    "sol:E15",
+    "opus:O07"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Instruction/code/parent/population ablations run on LoCoMo only, single run. No no-reflection or random-mutation control, no other memory evolver, and evolution compute plus a stronger reflector are not matched.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E014",
+    "son55:E028",
+    "sol:E06"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Fitness on static validation and reporting on a disjoint test split with episode/query disjointness. Cross-task transfer failure is reported. Tests are small, there is no contamination check, and the abstract's 'all tasks' claim is contradicted on ALFWorld Seen (opus:O03).",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "son55:E015",
+    "sol:E05",
+    "opus:O03"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with sol. Five full-search seeds with SD on 3 of 7 configurations exceed the A2 2-step, but there are no intervals or tests, baselines and ablations are single runs, Table 1 reports seed 0 (above the mean on LoCoMo: 0.459 vs 0.421) (opus:O09), and the ALFWorld Unseen denominator is 42 rather than the stated 50 (opus:O01, opus:O02). Not 3.",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E017",
+    "son55:E018",
+    "sol:E07",
+    "opus:O01",
+    "opus:O02",
+    "opus:O09"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Calls by role, tokens, dollars and wall-clock per benchmark for M* and Vector Search/No Memory, plus the one-time vs inference split. GEPA costs and a matched-budget comparison are missing.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "sol:E10"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v2 text with Appendices A–L (including the evolved program listings and the reflector prompt) read. In scope (system_method, H21): an executable non-weight memory harness is searched from execution feedback, retained and evaluated on held-out splits. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "make_the_improver_editable",
+     "H21"
+    ]
+   ],
+   "son55_value": [
+    [
+     "make_the_improver_editable",
+     "H21"
+    ],
+    [
+     "population_search_executable_fitness",
+     "H14"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "make_the_improver_editable",
+     "H21"
+    ],
+    [
+     "population_search_executable_fitness",
+     "H14"
+    ]
+   ],
+   "reason": "H21 agreed. son55's H14 is kept as supporting: executable programs are evolved by LLM mutation from softmax-sampled parents in a pool against an automated fitness, and the pool is load-bearing (−Diversity ablation). Fit is medium because half the configs use a same-model LLM-judge fitness.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E013",
+    "opus:O10"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.11811-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: Table 1 = seed 0, above the LoCoMo mean (opus:O09); the multi-seed table is separate.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E017",
+    "opus:O09"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: the −Code ablation (LoCoMo) supports the bottleneck premise for one benchmark only.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: eight baselines incl. GEPA, but no closed-space memory evolver.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E025",
+    "son55:E028"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: four ablations on LoCoMo only; Schema, compile-fix and rotating subset not separated.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: $12–90 of evolution with a stronger reflector, against baselines with no search; no equal-compute search baseline.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "son55:E024"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-6].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: per-category breakdown, cost table, transfer failure and limitations reported.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E019",
+    "son55:E021",
+    "son55:E027"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F3].status",
+   "sol_value": "partial",
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Selection on validation, reporting on a disjoint test split. sol's 'partial' charges scope limits that are not F3.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "opus:O10"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: same-model rubric judge as fitness, and a stronger reflector model (opus:O07).",
+   "evidence_ids": [
+    "son55:E023",
+    "son55:E024",
+    "opus:O07"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S1].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "Verified: outer algorithm, task model and metric fixed.",
+   "evidence_ids": [
+    "sol:E02",
+    "sol:E04"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S2].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "Verified: program fitness is the downstream task score with rebuilt memory.",
+   "evidence_ids": [
+    "sol:E01",
+    "sol:E02"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S6].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: memory reified as one executable program; held-out split; retained-design ablation (LoCoMo).",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E009",
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/S2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: executable fitness for LoCoMo F1/ALFWorld; LLM-judged rubrics elsewhere; small subsets.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E023",
+    "son55:E034"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.M",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 4
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": 3,
+   "reason": "See ratings.M: the reflection-vs-plain-mutation premise is untested, and the static-subset fitness is loose (opus:O08).",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "opus:O08"
+   ],
+   "score_impact": "−5 vs sol (20×1/4)"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 4
+   },
+   "decision": "son55",
+   "final_value": 4,
+   "reason": "See ratings.X: every operation, constraint and retention rule is reconstructable, with listings in text.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E029",
+    "opus:O05",
+    "opus:O06"
+   ],
+   "score_impact": "+5 vs sol (20×1/4)"
+  },
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": 2,
+   "reason": "See ratings.E.measurement: the same-model judge is the fitness and the metric for the largest-gain configs. The denominator issue is moved to E.statistics.",
+   "evidence_ids": [
+    "son55:E024",
+    "opus:O07"
+   ],
+   "score_impact": "−2.5 vs son55 (10×1/4)"
+  },
+  {
+   "field_path": "ratings.E.statistics",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": 2,
+   "reason": "See ratings.E.statistics: seeds on 3/7 configs with no intervals or tests, a seed-0 headline, and the 42-vs-50 denominator.",
+   "evidence_ids": [
+    "son55:E017",
+    "opus:O02",
+    "opus:O09"
+   ],
+   "score_impact": "−1.25 vs son55 (5×1/4)"
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the full v2 text first. Initial view: in scope, retained (evolved program selected on validation, tested on disjoint split). G 3, M 3, X 3–4, Em 2, Ec 2, Eh 3, Es 2, E.cost 3. Abstract's 'all tasks' contradicted by ALFWorld Seen.",
+  "integrity_checks": "Both seats a1 on 2604.11811v2, material sha d14eea27…; canonical seat hashes equal conflicts.json; both claim_type system_method; RS/domain ids valid. son55's 'evolved listings not in text' is a reading error (opus:O06).",
+  "core_claim_check": "Strongest supported claim: an evolved executable memory program beats the compared fixed harnesses on 7 of 8 held-out metrics and is stable over five search seeds on three configs. The advantage over an equal-compute alternative search, and judge validity for the rubric configs, are not shown. claim_support scoped.",
+  "rating_agreement": "G, Ec, Eh, E.cost agree and were re-checked. M, X → son55; Em, Es → sol. Final 72.5."
+ },
+ "input_seat_hashes": {
+  "sol": "3ba5c2f92e9380472d39ae4534cb78e0b5ff7b7759cc1c596532e51292e9cfe2",
+  "son55": "4224272c00d28fd4d3e752d463f589d37990d4246404a3fa7fecfa275e5b86bf"
+ },
+ "score": {
+  "raw": 72.5,
+  "display": 72.5,
+  "lower": 72.5,
+  "upper": 72.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "b9390230015b52c487d365707dcd966c2f69ed3090659dd848729a44124ff741"
+}

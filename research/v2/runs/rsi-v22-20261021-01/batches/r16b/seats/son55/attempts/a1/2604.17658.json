@@ -1,0 +1,806 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r16b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "全文含附录A/B完整；多智能体失败归因框架+执行验证写入的情景记忆，属B类/弱A类系统方法，范围内。",
+ "rationale": "归因框架+执行验证记忆；步级定位提升明显，但记忆门控与各组件无消融、样本小、无保留/回退机制，agent级未稳定提升。",
+ "paper": {
+  "paper_key": "2604.17658",
+  "paper_id": "2604.17658",
+  "title": "Towards Self-Improving Error Diagnosis in Multi-Agent Systems",
+  "version": "2604.17658v1",
+  "claim_type": "system_method",
+  "central_claim": "ErrorProbe(MAST引导分解+症状驱动反向追踪+Strategist-Investigator-Arbiter团队)提升MAS失败归因的步级/agent级准确率；仅在执行证据确认时才写入的验证式情景记忆无需标注即可自我改进并跨域迁移。"
+ },
+ "provenance": {
+  "input_hash": "bed8c93a9a4fb2708abe5c9433460c6c5b3239bdcfa0c3cca55b0782a9b71abd",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref: worker 子代理无可读取的运行回执，按模板置 null。",
+  "timestamp": "2026-10-22T00:55:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2604.17658v1",
+   "sha256": "92df3920b7a62631dbf56ee018cf43b4fcc3e9b48fd671a2c4974dca5bb31bf9",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Problem Formulation",
+    "4 Framework",
+    "5 Experiments",
+    "6 Analysis on Memory",
+    "7 Conclusion",
+    "Limitations",
+    "Appendix A",
+    "Appendix B.1-B.3"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "maintains a verified episodic memory that updates only when error patterns are confirmed by executable evidence, without the need for annotation.",
+   "support_explanation": "作者对保留机制的中心声明：写入门控=可执行证据确认，不用人工标注。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Sec 4.4 Verification Gate",
+   "quote": "It ensures that only diagnoses with high-confidence, reproducible tool evidence are committed to memory.",
+   "support_explanation": "写入规则=Verify(E)且置信度>τ；是有效性/可复现性门控，不是对后续任务边际效用的测量。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 4.3 Strategist",
+   "quote": "the Strategist gracefully degrades to first-principles reasoning, relying solely on the structural MAST tags and trace context",
+   "support_explanation": "记忆为空/无相似模式时回退到无记忆推理；说明下一轮读取路径(检索k条再生成假设)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Table 1, LLM-as-a-Judge/Claude 3.7 Sonnet row",
+   "quote": "Claude 3.7 Sonnet 67.70% 8.70% 55.60% 41.30% 43.10% 13.80% 57.03% 21.27%",
+   "support_explanation": "列序TracerTraj(Agent,Step)、W&W-Algo、W&W-Hand、Average；单次LLM判官基线，平均agent 57.03、step 21.27。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Table 1, ErrorProbe(ours)/Claude row",
+   "quote": "Claude 3.7 Sonnet 68.50% 34.60% 49.20% 58.70% 46.60% 27.6% 56.33% 41.90%",
+   "support_explanation": "无记忆的ErrorProbe(Claude)平均agent 56.33、step 41.90；agent平均低于LLM判官57.03，W&W-Algo/Hand的agent分别低于判官55.60/不高于Agent-as-Judge基线58.60。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "Table 1, ErrorProbe(ours, with memory)/Claude row",
+   "quote": "Claude 3.7 Sonnet 73.20% 39.40% 60.30% 59.50% 50.00% 29.30% 59.60% 42.73%",
+   "support_explanation": "加记忆后Claude平均step仅41.90→42.73(+0.8)，agent 56.33→59.60；记忆对强基座的增益小。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "Table 1, ErrorProbe(ours)/GPT-OSS-120B row",
+   "quote": "GPT-OSS-120B 70.40% 20.50% 46.80% 29.40% 56.90% 27.60% 58.46% 25.83%",
+   "support_explanation": "GPT-OSS无记忆平均step 25.83。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "Table 1, ErrorProbe(ours, with memory)/GPT-OSS-120B row",
+   "quote": "GPT-OSS-120B 71.70% 29.60% 49.20% 34.10% 59.90% 29.60% 60.27% 31.10%",
+   "support_explanation": "GPT-OSS加记忆后平均step 25.83→31.10，agent 58.46→60.27。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Table 2 (In-domain memory)",
+   "quote": "Improvement +1.6 +3.2 +17.1 +9.6 +25.0 +35.0 +0.0 +5.7",
+   "support_explanation": "MBPP/KodCode/GSM8K/MATH四域记忆开/关差(Agent,Step)；平均+10.9/+13.4，但测试集很小(GSM8K Step 30.0→65.0粒度暗示约20条)，且未报方差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "Sec 6.1",
+   "quote": "We split traces into train and test partitions, and manually annotate test traces for evaluation.",
+   "support_explanation": "Table 2的记忆由训练划分构建、在划分外测试集评测，是留出式评测；标注者数量/一致性未报告。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Compared Methods",
+   "quote": "where tasks are processed as a stream and new patterns are committed only when verification succeeds",
+   "support_explanation": "Table 1带记忆设置下记忆在待评测基准的任务流上在线累积，未声明流顺序/划分，选择流与报告流重合。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "Appendix A Hyperparameters",
+   "quote": "All reported numbers are averaged over 5 independent runs with default temperature.",
+   "support_explanation": "5次运行，但同段说只报告中位数且无表内区间。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "Appendix A Hyperparameters",
+   "quote": "so we report median only in Table 1 for clarity",
+   "support_explanation": "主表无不确定性；摘要/正文称显著的是ErrorProbe vs LLM判官，不是记忆开/关。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "Appendix A",
+   "quote": "over LLM-as-a-Judge are statistically significant",
+   "support_explanation": "双比例z检验只覆盖ErrorProbe相对LLM-as-a-Judge的Step提升；记忆增益无检验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "Appendix A Computational Resources",
+   "quote": "average inference time for ErrorProbe is approximately 45 seconds for Claude 3.7 Sonnet.",
+   "support_explanation": "仅报单次诊断时延；无token/调用数/记忆维护成本，也无等算力的基线。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "Appendix A Hyperparameters",
+   "quote": "on a held-out subset of TracerTraj, and reuse the same configuration across all datasets to avoid test-set overfitting.",
+   "support_explanation": "超参(k,τ,α)在TracerTraj 10%留出子集调好并冻结；但该子集与TracerTraj评测集的关系未说明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "locator": "Appendix A Table 4",
+   "quote": "Size 127 127 58",
+   "support_explanation": "三基准样本量127/127/58，规模小，单条±1.7%~0.8%粒度大。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "locator": "Sec 1 Introduction (contributions paragraph)",
+   "quote": "with ablations showing that backward tracing, structured failure-mode cues, and verified memory each contribute complementary gains",
+   "support_explanation": "作者声称三组件各有互补增益；全文(含附录A/B.1-B.3)只见记忆开/关与整套ErrorProbe vs 基线，未见反向追踪、MAST提示单独消融，也未见门控关闭的朴素记忆对照。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "locator": "Sec 6.2 Memory Scaling",
+   "quote": "These gains are achieved in an OOD setting, where patterns from",
+   "support_explanation": "KodCode记忆迁移到AgenTracer的学习曲线(Fig 3)，文中报告agent +1.6、step +4.0；仅一对域，图中无数值表与方差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "locator": "Sec 4.4",
+   "quote": "tool-grounded reproduction",
+   "support_explanation": "Verify(E)=Investigator工具复现是否成功；对Who&When中的网页/文件类轨迹如何复现、复现与‘诊断正确’的关系未量化。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "locator": "Appendix B.3",
+   "quote": "generated by the Investigator and validated by the Arbiter",
+   "support_explanation": "记忆条目是自然语言‘guard’，由Investigator生成、Arbiter验证；条目为文本护栏而非代码。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "locator": "Appendix B.2",
+   "quote": "We analyzed the 32 instances where memory augmentation corrected a previously incorrect baseline prediction.",
+   "support_explanation": "只分析被记忆纠正的32例，不分析被记忆改坏的例子，无净改变分母。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "locator": "Sec 1 Introduction",
+   "quote": "Even training-free transfer mechanisms for judge localization can be sensitive to domain shift",
+   "support_explanation": "最近邻(Yu et al. 2026训练无关迁移/缓存)被引用但未作为基线比较，也无本地原文。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M1",
+   "locator": "Sec 3 Problem Formulation",
+   "quote": "Our objective is to maximize cumulative attribution accuracy over the stream while minimizing memory size and false positive updates.",
+   "support_explanation": "目标含最小化记忆大小与假阳性写入，但全文未报告记忆规模曲线或写入假阳性率。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M1",
+   "locator": "Table 1, Agent-as-a-Judge (baseline)/Claude row",
+   "quote": "Claude 3.7 Sonnet 59.30% 11.10% 21.40% 47.60% 58.60% 15.50% 46.43% 24.73%",
+   "support_explanation": "Agent-as-a-Judge基线在W&W-Hand的agent准确率58.60%高于ErrorProbe 46.60%(E005)，反证‘agent级也提升’。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "M1",
+   "locator": "Sec 4.2 Dependency Parsing",
+   "quote": "where nodes are messages and edges represent information flow",
+   "support_explanation": "依赖图构建方法(规则解析还是LLM抽取)未说明，反向追踪的核心步骤不可重建。",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "诊断流水线的上下文构造与角色团队(非权重，每次失败轨迹的推理脚手架)",
+   "information": "可见：完整MAS轨迹、失败症状、MAST分类学标签；不可见：真值归因(记忆写入不用标注)。",
+   "operation": "MAST提示的局部异常标注→依赖图BFS反向追踪剪枝→Strategist提假设→Investigator用CodeExec/LogicProbe取证→Arbiter裁决。",
+   "output": "(agent, step, failure mode, 置信度)归因结果。",
+   "conditions": "需存在可检测异常/可复现的执行证据；静默语义失败不覆盖(作者局限)。",
+   "feedback": "沙箱执行结果/前后置条件校验。",
+   "selection_rule": "Arbiter过滤证据为空或不确定的假设；无多候选选择。",
+   "selection_data": "仅当前轨迹，无开发集反馈用于该组件自身改进。",
+   "persistence": "不适用：每次诊断独立构造，不留存。",
+   "later_use": "不适用",
+   "claimed_effect": "步级定位大幅提升(Claude平均21.27→41.90)。",
+   "failure_boundary": "静默失败、时延(45s/次)、agent级不稳定。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E015",
+    "E026"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "验证式情景记忆：以(MAST异常、工具/API、参数类型、上下文槽)为签名+诊断配方/护栏+统计(新近度/频次/影响/性能差)的条目库",
+   "information": "可见：已完成诊断的轨迹、Investigator证据、Arbiter置信度；真值标签不参与写入(Eq.1里的Verify是工具复现)。",
+   "operation": "诊断后若Verify(E)且置信度>τ则追加条目；新轨迹按签名相似度×RFI-Δ质量分检索top-k(k=5，相似度阈值0.75)注入Strategist。",
+   "output": "更新后的记忆M_t；下一轮检索得到的护栏文本。",
+   "conditions": "MAST标签须精确匹配才检索；空检索回退到首要原则推理。",
+   "feedback": "执行复现成功与否+Arbiter置信度；未用下游任务结果(正确归因)闭环更新条目价值。",
+   "selection_rule": "写入：Verify(E)∧c>τ(τ=0.7)；读出：Sim×S_RFI排序；无退役、合并、冲突处理、大小上界、版本或回退的描述。",
+   "selection_data": "同一任务流；Table 1设置下流即评测流，Table 2设置下训练划分→测试划分。",
+   "persistence": "追加式存储，条目带σ元统计；无过期。",
+   "later_use": "Strategist生成假设时读取。",
+   "claimed_effect": "记忆开/关：Table 2平均+10.9 agent/+13.4 step；Table 1各骨干平均step +0.8~+5.7；KodCode→AgenTracer迁移agent+1.6/step+4.0。",
+   "failure_boundary": "写入门控衡量‘可复现’而非‘对后续有用’；无门控关闭对照；记忆被改坏的案例无报告。",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E006",
+    "E008",
+    "E009",
+    "E011",
+    "E019",
+    "E021",
+    "E022",
+    "E024"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "MAS轨迹长、失败延迟显现；现有归因依赖昂贵专家标注、需持续重训的专用tracer或在长轨迹上定位决定性步骤不可靠的LLM判官；训练无关的判官迁移对域偏移敏感。",
+  "checked_gap": "步级定位的缺口有基准数据支持(LLM判官在TracerTraj上Step<10%)；‘自我改进记忆’一侧的缺口主要是‘防止记忆被污染’，论文只用一句话断言，未演示朴素记忆会退化。",
+  "lineage": [
+   "MAST分类学(Cemri 2025)→作为提示先验；AgenTracer(Zhang 2026)训练型tracer与基准；Who&When(Zhang 2025b)基准；Agent-as-a-Judge(Zhuge 2025)工具式判官；Reflexion/Voyager/MemGPT等记忆工作作背景。"
+  ],
+  "closest_adjacent": "Yu et al. 2026(训练无关的判官定位迁移/缓存)与Ge et al. 2025(谱系式分析)、Banerjee et al. 2025(层次分解)被引用但无比较，本地无原文，其解决了什么不能核实。",
+  "residue": "写入门控是否真的优于朴素记忆、以及各组件边际贡献，仍未被证实；agent级归因未见稳定改进。",
+  "stakes": "MAS调试的实用价值；记忆污染会使诊断在分布漂移下退化。",
+  "method_response": "反向追踪缩短上下文，MAST先验指向局部异常，工具取证抑制幻觉，验证式写入防污染。",
+  "remaining_gap": "无退役/冲突/回退；Verify语义弱；无门控消融与组件消融；静默失败。",
+  "evidence_ids": [
+   "E018",
+   "E023",
+   "E025"
+  ],
+  "unresolved": [
+   "Yu et al. 2026、AgenTracer、Ge et al. 2025原文缺失，近邻比较不完整；空检索不证明新颖。"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [
+   "self_supervised_signal_engineering"
+  ],
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "moderate",
+    "tactic_steps_checked": "Step1(名出结构性瓶颈=长轨迹中决定性步骤定位，部分满足)；Step2(Investigator必须出diff/执行日志=可机检中间物，满足；但假设→证据的类型约束较松)；Step3(沙箱复现作为可验证反馈，满足，但仅用于单次诊断与写入而非构造中修正)；Step4(未消融工具取证/反向追踪使其塌回基线，缺失)；Step5(报告时延45s，无调用数；基准较窄，部分)。",
+    "success_failure_checks": "成功条件‘typed可验证中间物’部分满足；失败模式‘多个现成agent拼装且无单一可摘除组件’与‘单基准手工提示’的风险存在：三角色与MAST提示均为提示工程，未展示摘除后塌回某已命名基线。",
+    "evidence_ids": [
+     "E002",
+     "E018",
+     "E015",
+     "E026"
+    ],
+    "reason": "实际操作是把诊断拆为反向追踪、假设、执行取证、裁决，把验证交给沙箱执行；比‘提到多智能体’更具体，但可摘除性证据缺失。"
+   },
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "Step3(单一门控=工具复现∧置信度，是自生成诊断的过滤器，部分满足)；Step4(迭代：改进后的记忆服务下一批，满足)；Step5(在真实目标指标上迁移，满足但样本小)。Step2(生成器超出语料支撑)不适用：产出的是文本护栏不是训练实例。",
+    "success_failure_checks": "‘过滤被移除时方法被打破’未验证；无标注下自生成监督的因果干预缺失。",
+    "evidence_ids": [
+     "E001",
+     "E002",
+     "E011"
+    ],
+    "reason": "无标注、由模型自身诊断经执行过滤后回灌；但回灌对象是推理时记忆而非训练数据，匹配度弱，仅作supporting。"
+   }
+  ],
+  "sub_pattern": "C25",
+  "outside_taxonomy": false,
+  "reason": "分解+委托给沙箱验证器是核心操作；记忆写入门控部分对应自监督信号的过滤，但不是训练数据生成。",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "2026-10-21-cards",
+    "fit": "moderate",
+    "condition_checks": "执行-取证-写入文本护栏-检索注入的链条齐全(S3 grounding部分满足、S5 gate部分满足)；S2 contrast(成败对比)未见；S4 显式维护(合并/遗忘/删除)未见。",
+    "evidence_ids": [
+     "E002",
+     "E003",
+     "E021"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "2026-10-21-cards",
+    "fit": "weak",
+    "condition_checks": "有写入前置门控(Verify∧c>τ)，但无隔离/回放回归预算/退役/大小上界，门控度量的是可复现性而非边际效用；只部分对应‘Admission’。",
+    "evidence_ids": [
+     "E002",
+     "E024"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00"
+   },
+   "operation_correspondence": "RS层的‘Investigator用沙箱执行取证→Arbiter裁决’对应领域层‘先取得有根据的信号再决定写什么护栏’；领域层的‘写入store并后续检索注入’在RS层无对应(RS卡只管单次分解)。",
+   "necessary_conditions_differences": "H00要求跨成败对比的抽象，此处护栏来自单次失败诊断；映射仅覆盖‘有根据的写入’一半，检索注入一半只在领域层。",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E021"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card decompose_and_delegate: Reviewer expectations #1(报告结构成本)"
+   ],
+   "applies_when": "引入多角色/多轮工具调用的系统",
+   "applicable": true,
+   "status": "partial",
+   "reason": "只报单次诊断45s，无token/调用数/沙箱成本。",
+   "evidence_ids": [
+    "E015"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card decompose_and_delegate: Reviewer expectations #2(逐组件消融)"
+   ],
+   "applies_when": "声称各组件互补",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "声称有消融，但全文只见记忆开/关；反向追踪、MAST提示、取证工具、Arbiter均无单独移除。",
+   "evidence_ids": [
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card decompose_and_delegate: Reviewer expectations #4(跨域泛化)"
+   ],
+   "applies_when": "声称跨域",
+   "applicable": true,
+   "status": "partial",
+   "reason": "三个归因基准+KodCode→AgenTracer迁移，但同属MAS归因，样本小。",
+   "evidence_ids": [
+    "E017",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card decompose_and_delegate: Reviewer expectations #5(公平对比统一基线)"
+   ],
+   "applies_when": "分解系统对比单次判官",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有LLM-as-a-Judge与Agent-as-a-Judge基线，但算力不对等，未对比AgenTracer等训练型tracer。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance S3"
+   ],
+   "applies_when": "记忆写入依赖执行反馈",
+   "applicable": true,
+   "status": "met",
+   "reason": "写入需沙箱复现成功。",
+   "evidence_ids": [
+    "E002",
+    "E020"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance S4"
+   ],
+   "applies_when": "store会增长",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无合并、遗忘、容量上界或增量编辑的描述；RFI统计只用于检索排序。",
+   "evidence_ids": [
+    "E024"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance S5"
+   ],
+   "applies_when": "有保留门控",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有门控但度量复现性；未证明被门控挡掉的条目确实有害。",
+   "evidence_ids": [
+    "E002",
+    "E018"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S1"
+   ],
+   "applies_when": "声称按效用保留",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "论文并不声称按反事实效用保留，只声称按验证保留；RFI中的‘performance delta’未见测量方式。",
+   "evidence_ids": [
+    "E002"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S2"
+   ],
+   "applies_when": "存在累积库",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "只有准入，没有退役/大小上界。",
+   "evidence_ids": [
+    "E024"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S4"
+   ],
+   "applies_when": "声称门控防污染",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无关闭门控/无验证的朴素写入对照；引言所称‘朴素方法的退化’未呈现。",
+   "evidence_ids": [
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance F2"
+   ],
+   "applies_when": "把reflect→store→retrieve用到新垂直场景",
+   "applicable": true,
+   "status": "partial",
+   "reason": "MAS失败归因是新垂直；写入门控(执行复现)提供了部分差异化，但领域为主要新意。",
+   "evidence_ids": [
+    "E001",
+    "E002"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2604.17658-1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文目标函数‘minimizing ... false positive updates’(Sec 3)"
+   ],
+   "applies_when": "声称门控降低假阳性写入",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "全文无写入假阳性率、记忆规模或被门控拒绝的比例。",
+   "evidence_ids": [
+    "E024"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2604.17658-2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 1 流式记忆设置"
+   ],
+   "applies_when": "记忆在评测流上在线累积",
+   "applicable": true,
+   "status": "partial",
+   "reason": "写入不用标签故无标签泄漏，但流顺序/种子/划分未声明，选择流=报告流。",
+   "evidence_ids": [
+    "E011"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ErrorProbe显著提升步级归因，且agent级也改进。",
+   "setting": "TracerTraj(127)/W&W-Algo(127)/W&W-Hand(58)；Claude 3.7 Sonnet、GPT-OSS-120B、Qwen3-32B；5次运行取中位数。",
+   "baseline_control": "单次LLM判官(无Qwen)；Agent-as-a-Judge(Zhuge 2025)；算力/调用数不对等。",
+   "selection_vs_test": "超参在TracerTraj 10%留出子集调好后冻结(与评测集关系未明)。",
+   "result_denominator": "平均Step：Claude 21.27→41.90，GPT-OSS 15.13→25.83；平均Agent：Claude 57.03→56.33(未提升)，GPT-OSS 47.93→58.46；W&W-Hand上agent低于Agent-as-Judge基线。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E007",
+    "E014",
+    "E017",
+    "E025"
+   ],
+   "counterevidence": [
+    "E005",
+    "E025"
+   ],
+   "allowed_conclusion": "整套流水线在三个小基准上显著提升步级定位；agent级提升不稳定，不能写‘同时提升’。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "验证式情景记忆带来额外的留存收益，并可在不重训的情况下跨域迁移。",
+   "setting": "Table 1流式累积；Table 2 MBPP/KodCode/GSM8K/MATH训练划分→人工标注测试划分；Fig 3 KodCode→AgenTracer。",
+   "baseline_control": "记忆关/开；无‘门控关闭’的朴素记忆，无替代记忆写入规则。",
+   "selection_vs_test": "Table 2为训练/测试划分(留出式)；Table 1选择流=评测流。",
+   "result_denominator": "Table 2平均+10.9 agent/+13.4 step(测试集很小)；Table 1平均step Claude +0.8、GPT-OSS +5.3、Qwen +5.7；迁移agent +1.6/step +4.0；仅分析32个被纠正例，未报被改坏例。",
+   "evidence_ids": [
+    "E006",
+    "E008",
+    "E009",
+    "E010",
+    "E011",
+    "E019",
+    "E022"
+   ],
+   "counterevidence": [
+    "E006"
+   ],
+   "allowed_conclusion": "作者报告：加入记忆后后续诊断在小样本留出集上有正向收益；‘验证式’门控是否是原因未检验。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "反向追踪、结构化失败模式提示、验证记忆各有互补增益。",
+   "setting": "未在材料中呈现。",
+   "baseline_control": "无逐组件移除。",
+   "selection_vs_test": "不适用",
+   "result_denominator": "未报告",
+   "evidence_ids": [
+    "E018"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "不被材料支持；仅有整套系统vs基线与记忆开/关两个对比。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "作者报告：ErrorProbe流水线在三个小型MAS归因基准上显著提高步级定位；执行验证写入的记忆在划分外测试集和一对跨域设置上带来小到中等的额外提升。",
+  "unresolved": [
+   "记忆门控的因果作用(无关闭门控/朴素记忆对照)",
+   "反向追踪/MAST提示/工具取证的单独贡献",
+   "agent级归因是否真正提升(Claude平均略降)",
+   "近邻训练型/训练无关方法的比较",
+   "记忆增长、退役、冲突、污染的真实行为"
+  ],
+  "not_claimed": "我们没有复现任何结果；所有数值为作者报告。"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "步级归因缺口有数据支撑，且点出了训练型tracer的重训成本与判官的长上下文问题；但‘记忆污染’一侧缺口只是断言，最近邻(Yu et al., Ge et al., AgenTracer)无比较，也无本地原文。",
+   "evidence_ids": [
+    "E004",
+    "E018",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "反向追踪缩短上下文+工具取证抑制幻觉的机制说得通，保留门控设计有动机；但Verify与‘诊断正确’的关系未论证、依赖图如何构造未说明、护栏为何对后续轨迹迁移无独立预测。",
+   "evidence_ids": [
+    "E002",
+    "E020",
+    "E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "诊断流水线与写入/检索规则(Sim×RFI、τ、k)可大体重建，超参表完整；但写入只有追加，没有退役/合并/冲突/版本/回退，Verify对非代码轨迹的实现不清，依赖图构造缺失，τ在不同处0.7/0.75含义易混。",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E024",
+    "E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Agent/Step精确匹配准确率是合适的归因指标，TracerTraj注入故障真值明确，W&W有人工标注；但三基准仅127/127/58条、Table 2人工标注者与一致性未报、记忆写入假阳性率与记忆规模这类对保留主张关键的量没有被测量。",
+   "evidence_ids": [
+    "E004",
+    "E010",
+    "E017",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "有记忆开/关对比，但‘验证’门控、反向追踪、MAST提示、取证工具均无单独移除，作者声称的消融在全文不存在；Agent-as-a-Judge基线与完整系统在组件和算力上同时不同；Claude上记忆增益仅+0.8 step，难与噪声区分；无朴素记忆对照。",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E006"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Table 2使用训练→人工标注测试划分，Fig 3有一对跨域迁移，写入不用标签；但Table 1的记忆在评测流上累积且未声明顺序，超参在TracerTraj子集调好后评测集同基准，W&W公开基准的污染未讨论。",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E016",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "5次运行并报告了标准差范围(±1.5/±2.5)和对LLM判官的双比例z检验；但主表只报中位数且无区间，记忆开/关无检验，Table 2测试集极小且无方差。",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "仅报Claude单次诊断约45秒并在局限中承认时延；无token/调用数、沙箱成本、记忆检索成本，也没有按调用预算匹配的单次判官或多样本判官基线。",
+   "evidence_ids": [
+    "E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 45.0,
+  "display": 45.0,
+  "lower": 45.0,
+  "upper": 45.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

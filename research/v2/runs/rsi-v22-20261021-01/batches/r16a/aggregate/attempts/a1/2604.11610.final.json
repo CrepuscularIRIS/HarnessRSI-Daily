@@ -1,0 +1,1553 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r16a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.11610",
+  "claim_type": "system_method",
+  "central_claim": "Existing self-evolving prompt frameworks (GEPA, ACE, MemEvolve) degrade on heterogeneous task distributions; CluE, a cluster-based self-evolving strategy that clusters training examples by extraction scenario, analyzes each cluster independently and synthesizes cross-cluster insights, evolves a memory-extraction prompt that generalizes across heterogeneous tasks (+9.04% relative gain on BEHEMOTH) and consistently outperforms prior frameworks.",
+  "paper_id": "2604.11610",
+  "title": "Self-Evolving LLM Memory Extraction Across Heterogeneous Tasks",
+  "version": "2604.11610v1"
+ },
+ "provenance": {
+  "input_hash": "211a176e5d9e4b370e048216751f3e4277298b7195cf125261d2bfcb1f7f07ec",
+  "input_package": "batches/r16a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:24:33Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.11610.txt",
+   "url": "https://arxiv.org/html/2604.11610v1",
+   "version": "2604.11610v1",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.11610.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§1 line164",
+   "quote": "Updating prompts too frequently risks overfitting to recent examples, while updating too infrequently slows adaptation and dilutes feedback signals across dissimilar examples.",
+   "support_explanation": "作者所指异质反馈与更新粒度矛盾；不是独立邻居核验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§5.1 line916",
+   "quote": "The Cluster Manager may create new clusters, merge existing ones, or split them as the distribution of examples evolves across rounds.",
+   "support_explanation": "跨轮保留cluster描述，动态划分提取场景而非dataset标签。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§5.1 line920",
+   "quote": "Each cluster is analyzed independently, so recommendations for one scenario do not interfere with another.",
+   "support_explanation": "分区诊断的设计意图，非已经证明不存在干扰。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§5.1 line924",
+   "quote": "It identifies general principles shared across clusters, organizes cluster-specific insights into structured guidelines, and resolves conflicting recommendations by scoping them to relevant memory categories.",
+   "support_explanation": "合成统一提取prompt，作用域化协调冲突。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix A.2 line1984",
+   "quote": "Our CluE adopts the exact same hyperparameters as MemEvolve.",
+   "support_explanation": "沿用5轮、每轮3候选、35新+10当前样本tournament；不是完整计算预算匹配。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix A.2 line1982",
+   "quote": "samples drawn from the current batch for stability, and the winner advances to the next round.",
+   "support_explanation": "选择集与诊断集部分重叠，10个保护样本；胜者下一轮复用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§3.2 line469",
+   "quote": "From the remaining in-distribution datasets, we randomly sample 20 examples from each (50 for AIME, which aggregates multiple competition years) to form the training set (330 in total, randomly shuffled) and use the rest as in-distribution test sets.",
+   "support_explanation": "ID样本划分，330训练，不把tournament选择分当测试。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§5.3 line1210",
+   "quote": "we evaluate the evolved prompts on held-out datasets not used during evolution",
+   "support_explanation": "完整留出LongMemEval/GPQA-Diamond/ToolBench，支持保留prompt后续效用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Table2 lines1067–1091",
+   "quote": "CluE\n\n65.72\n\n+\n+\n12.34\n\n51.85\n\n+\n+\n8.39\n\n35.24\n\n+\n+\n7.22\n\n50.01\n\n+\n+\n9.04",
+   "support_explanation": "Qwen ID MA50.01，RG9.04%是几何相对比而非百分点。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix A.1 line1616",
+   "quote": "As a result, each example’s source conversation originates from a distinct query, but multiple examples may share the same target query.",
+   "support_explanation": "example-level split不自动保证target-query去重；不推断实际污染。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Table6 caption line1933",
+   "quote": "SoPR = solvable pass rate (LLM judge), LLM Judge = LLM-as-judge evaluation.",
+   "support_explanation": "部分任务是模型judge；不能笼统称所有下游指标无judge。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix A.1 line1628",
+   "quote": ") three times and report the average for all experiments.",
+   "support_explanation": "小于200测试样本的完整提取+回答重复3次；并非独立重跑进化。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix B.1 lines2251–2253",
+   "quote": "On the Agentic category, all evolved prompts, including ours, fall below the\nSimple\nbaseline.",
+   "support_explanation": "Gemini agentic负结果，限制跨后端全类别稳定提升主张。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Table8 lines2298–2316",
+   "quote": "MemEvolve\n\n∼\n\\sim\n5.0h\n\n30\n\n1,150\n\nCluE\n\n∼\n\\sim\n5.5h\n\n221\n\n1,150",
+   "support_explanation": "评估调用相同但优化调用30→221，墙钟5.0→5.5h；无总token/dollar预算。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§6 line1433",
+   "quote": "We select two tasks on which CluE outperforms MemEvolve in the single-step evaluation: Game of 24 (problem-solving) and AlfWorld (agentic), and focus the analysis on whether single-step gains transfer.",
+   "support_explanation": "continual验证选择了有利任务，不是预注册全任务持续学习检验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix A.3 line2036",
+   "quote": "we leave evolving prompts directly under the continual and heterogeneous regime to future work.",
+   "support_explanation": "当前只将single-step进化prompt迁入continual；不证明直接持续异质进化。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§6 line1544",
+   "quote": "CluE maintains its advantage over MemEvolve in both tasks under the continual setting (50.83 vs. 43.33 on Game of 24; 67.25 vs. 62.57 on AlfWorld)",
+   "support_explanation": "两项continual相对MemEvolve优势，不能跨不同样本池比较单步与持续绝对值。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E018",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§6 line1564",
+   "quote": "The resulting prompt (1,403 tokens) is considerably longer than those of GEPA (1,243), CluE (936), and MemEvolve (539)",
+   "support_explanation": "提供部署prompt长度；不能替代全搜索token核算。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E019",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Table3 lines1196–1203",
+   "quote": "CluE\n\n63.07\n\n48.48\n±1.80\n\n26.67",
+   "support_explanation": "三个OOD任务CluE结果；GPQA的±为评估重复标准差，不是搜索方差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "existing self-evolving prompt optimization frameworks, originally designed for homogeneous distributions, degrade when training tasks are heterogeneous.",
+   "support_explanation": "Author gap: prior prompt-evolution loops assume homogeneous tasks.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "Sec 1",
+   "quote": "Updating prompts too frequently risks overfitting to recent examples, while updating too infrequently slows adaptation and dilutes feedback signals across dissimilar examples.",
+   "support_explanation": "States the instability/dilution dilemma that CluE targets.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "Sec 5.2",
+   "quote": "training examples are grouped into clusters that share similar memory extraction scenarios, and analysis is performed per cluster rather than over the entire batch.",
+   "support_explanation": "Core operation of CluE.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "Sec 5.2 Cross-cluster Proposal",
+   "quote": "It identifies general principles shared across clusters, organizes cluster-specific insights into structured guidelines, and resolves conflicting recommendations by scoping them to relevant memory categories.",
+   "support_explanation": "Proposer step: how per-cluster analyses are merged into a prompt edit and conflicts handled.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "Sec 3.2",
+   "quote": "we hold out one dataset per category",
+   "support_explanation": "OOD held-out datasets (LongMemEval, GPQA-Diamond, ToolBench) not used in evolution.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "Sec 3.2",
+   "quote": "we randomly sample 20 examples from each (50 for AIME, which aggregates multiple competition years) to form the training set (330 in total, randomly shuffled) and use the rest as in-distribution test sets.",
+   "support_explanation": "Train/test split inside each in-distribution dataset: evolution on 330 examples, tests are the disjoint remainder.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "Sec 5.3 / Table 2",
+   "quote": "Our method yields the highest overall relative gain",
+   "support_explanation": "CluE +9.04% overall vs GEPA +5.06, ACE +3.56, MemEvolve +2.11 relative to the Simple seed (Table 2).",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "Sec 5.3",
+   "quote": "gains on some categories come at the cost of regressions on others.",
+   "support_explanation": "Baseline category trade-offs (GEPA -2.16 personalization, MemEvolve -3.25 agentic) that motivate the claim.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "Table 3, CluE row",
+   "quote": "CluE 63.07 48.48 ±1.80 26.67",
+   "support_explanation": "OOD results: LongMemEval 63.07, GPQA-D 48.48±1.80, ToolBench 26.67.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "Table 3, MemEvolve row",
+   "quote": "MemEvolve 56.82 47.98 ±1.09 26.67",
+   "support_explanation": "Nearest baseline OOD: GPQA-D 47.98±1.09 (overlaps CluE) and ToolBench identical 26.67.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "Sec 5.3 OOD paragraph",
+   "quote": "does not drop below the Simple prompt on GPQA-Diamond or ToolBench",
+   "support_explanation": "OOD claim; but no gain over MemEvolve there.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "Sec 6.1",
+   "quote": "GEPA fails to find any improvement and returns the seed unchanged.",
+   "support_explanation": "Stronger-seed (Survey) experiment: baselines fail or regress, CluE +6.54%.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "App B.1",
+   "quote": "On the Agentic category, all evolved prompts, including ours, fall below the Simple baseline.",
+   "support_explanation": "With a Gemini-3-Flash backend CluE regresses on agentic (-5.93%) although overall +3.40%; contradicts 'consistent' improvement.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "App B.2",
+   "quote": "introducing moderate optimizer overhead (221 vs. 30 calls) at a marginal wall-time cost",
+   "support_explanation": "Cost accounting: CluE 221 optimization calls vs MemEvolve 30; wall time ~5.5h vs ~5.0h; eval calls 1,150 each.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "App A.2",
+   "quote": "Our CluE adopts the exact same hyperparameters as MemEvolve.",
+   "support_explanation": "CluE inherits MemEvolve's round/batch/tournament settings (5 rounds, batch 35 + 10).",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "App A.2 MemEvolve",
+   "quote": "and the winner advances to the next round.",
+   "support_explanation": "Selection/retention rule: tournament among seed + 3 candidates on fresh examples; winner becomes incumbent.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "Sec 3.1",
+   "quote": "We isolate memory extraction from orthogonal factors such as memory retrieval and management",
+   "support_explanation": "Single-step protocol: retrieval/consolidation excluded from the main evaluation.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Sec 4",
+   "quote": "Unless otherwise stated, we use Qwen3-32B as both the generation model and the extraction model throughout all experiments.",
+   "support_explanation": "Single model family for extraction, generation and (per App A.2) optimization.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "Table 9-11 captions",
+   "quote": "Subscripts denote standard deviations over three runs.",
+   "support_explanation": "Std is over three repeats of the evaluation pipeline (App A.1), not over independent evolution runs.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "Sec 6.2",
+   "quote": "We select two tasks on which CluE outperforms MemEvolve in the single-step evaluation",
+   "support_explanation": "Continual-setting check uses tasks selected where CluE already wins: selection by results.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "App A.3",
+   "quote": "yet our prompts are evolved exclusively under the single-step regime where source conversations are memory-free.",
+   "support_explanation": "Prompt never evolved/tested in a closed retain-retrieve-reuse loop; only a post-hoc continual check.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "Sec 4",
+   "quote": "No single static memory extraction prompt dominates.",
+   "support_explanation": "Empirical characterization of heterogeneity (Table 1).",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "Sec 2.2",
+   "quote": "evolves per-domain memory skill banks using a PPO-trained controller with hard-case clustering.",
+   "support_explanation": "MemSkill uses hard-case clustering: a close neighbor that is described but not compared experimentally.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "Sec 6.3",
+   "quote": "The resulting prompt (1,403 tokens) is considerably longer than those of GEPA (1,243), CluE (936), and MemEvolve (539)",
+   "support_explanation": "Evolved prompt lengths differ by up to ~2x; prompt length is an uncontrolled alternative explanation.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "App A.2 GEPA",
+   "quote": "we reserve 100 examples from the training set as a validation set and optimize over the remaining 230 examples.",
+   "support_explanation": "Baselines use different data usage than CluE/MemEvolve (ACE online, no validation) i.e. re-implemented baselines with differing protocols.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "Table 6",
+   "quote": "LongMemEval (Wu et al., 2025) – 176 LLM Judge",
+   "support_explanation": "The largest OOD gain (LongMemEval) is scored by an LLM judge; other datasets use rule/accuracy.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "Sec 3.1",
+   "quote": "we adopt a utility-driven metric rather than LLM-based judges",
+   "support_explanation": "Primary metric is downstream utility of the extracted memory.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "App B.3",
+   "quote": "The cluster pool starts with 7 fine-grained clusters and consolidates over rounds",
+   "support_explanation": "Optimizer-internal state (cluster pool) persists and is merged/split across rounds.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "Sec 1",
+   "quote": "All code and data have been publicly available at",
+   "support_explanation": "Code and data release claimed (not inspected).",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "Sec 6.3 Fig. 4 caption",
+   "quote": "MemEvolve lacks a memory taxonomy and instead introduces a penalty clause that prohibits specific extraction patterns.",
+   "support_explanation": "Qualitative evidence that the evolved prompt structure differs; author interpretation of why gaps arise.",
+   "kind": "author_report",
+   "material_id": "2604.11610.txt",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.11610.txt",
+   "material_hash": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix A.2",
+   "quote": "Our CluE adopts the exact same hyperparameters as MemEvolve.",
+   "support_explanation": "CluE vs MemEvolve is a same-hyperparameter, same-evaluation-budget comparison that isolates the cluster-based analysis as one bundle (not its individual steps).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.11610.txt",
+   "material_hash": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "§3.2",
+   "quote": "we hold out one dataset per category, i.e., LongMemEval ( Wu et al., 2025 ) , GPQA-Diamond ( Rein et al., 2023 ) , and ToolBench ( Guo et al., 2024 ) , as out-of-distribution test sets.",
+   "support_explanation": "The two LLM-judged datasets (LongMemEval, ToolBench) are OOD test sets only. They take no part in evolution or selection.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.11610.txt",
+   "material_hash": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Table 6 caption",
+   "quote": "SoPR = solvable pass rate (LLM judge), LLM Judge = LLM-as-judge evaluation.",
+   "support_explanation": "Every in-distribution training dataset uses an accuracy/EM/rule/success/pass@1 reward. The LLM judge appears only in the held-out OOD sets.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2604.11610.txt",
+   "material_hash": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix C.2",
+   "quote": "The prompts for the different LLM roles in the CluE optimization pipeline are provided in Figures 10 , 11 , 12 , and 13 .",
+   "support_explanation": "The optimiser prompts are present as text listings in the pinned material, contrary to son55's note that they are images.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2604.11610.txt",
+   "material_hash": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Figure 11 listing (Appendix C.2)",
+   "quote": "You are a clustering agent for memory extraction prompt evolution",
+   "support_explanation": "Example of a prompt listing present verbatim in the text (Cluster Manager).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2604.11610.txt",
+   "material_hash": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "sha256": "81e477631c1d6caba1f6256f00b7bf863ffdcd5fd44da5c85923c136c73e9564",
+   "locator": "Appendix B.2",
+   "quote": "introducing moderate optimizer overhead (221 vs. 30 calls) at a marginal wall-time cost",
+   "support_explanation": "The optimiser-call budget is disclosed and not matched (7×). Evaluation calls are equal (1,150).",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Memory-extraction system prompt (the instruction that decides what is written to memory), non-weight text",
+   "information": "Training logs (source conversation, extracted memory, target conversation, reward) for 330 examples across 15 in-distribution datasets; no category label; reward from downstream answer quality",
+   "operation": "Summarize each log into an extraction-scenario -> Cluster Manager assigns/merges/splits clusters -> Cluster Analyzer inspects logs per cluster -> Proposer synthesizes cross-cluster principles into a new prompt",
+   "output": "Updated extraction prompt (targeted modifications rather than full rewrites)",
+   "conditions": "Heterogeneous training stream; Qwen3-32B as extractor/generator/optimizer",
+   "feedback": "Downstream task reward r in [0,1] of target-query answering conditioned on extracted memory",
+   "selection_rule_data": "Tournament of seed + 3 candidates evaluated on fresh 35 + 10 examples; winner advances (inherited MemEvolve hyperparameters, 5 rounds)",
+   "persistence": "Evolved prompt string reused for all test sets; cluster pool persists across rounds (optimizer state); no versioning/rollback described",
+   "later_use": "In-distribution test examples, 3 OOD datasets, and a post-hoc continual retrieve-inject pipeline",
+   "claimed_effect": "+9.04% relative gain over Simple seed on in-distribution tests; best on LongMemEval OOD",
+   "failure_boundary": "Gemini backend agentic regression; ties with MemEvolve on GPQA-D/ToolBench; prompt not evolved under continual regime",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E006",
+    "son55:E007",
+    "son55:E015",
+    "son55:E016",
+    "son55:E021",
+    "son55:E028"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Evaluation protocol/benchmark BEHEMOTH (18 repurposed datasets)",
+   "information": "Source conversation, target query, task reward; no category labels exposed to extractor",
+   "operation": "Single-step extraction measured by downstream utility metric (macro accuracy, geometric-mean relative gain)",
+   "output": "Benchmark + static-prompt analysis",
+   "conditions": "Qwen3-32B generator; retrieval/management excluded",
+   "feedback": "not_applicable",
+   "selection_rule_data": "not_applicable",
+   "persistence": "not_applicable",
+   "later_use": "not_applicable",
+   "claimed_effect": "No single static prompt dominates",
+   "failure_boundary": "Single-step only; LLM-completed source conversations for problem-solving/agentic datasets",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E017",
+    "son55:E022",
+    "son55:E026",
+    "son55:E027"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Static extraction rules are tailored to narrow contexts and no benchmark evaluates memory extraction across heterogeneous tasks; existing self-evolving frameworks assume homogeneous distributions.",
+  "checked_gap": "Supported empirically: no static prompt dominates (Table 1) and each baseline trades categories (Table 2). The 'designed for homogeneous' premise is asserted; no experiment shows the baselines succeed on homogeneous splits.",
+  "lineage": "APE/OPRO -> GEPA/ACE (prompt/playbook evolution) -> MemEvolve (analyzer-proposer tournament) -> CluE (adds scenario clustering and per-cluster analysis); memory side: Mem0/ReasoningBank/Dynamic Cheatsheet fixed extraction -> learnable extraction prompt.",
+  "closest_adjacent": "MemEvolve (same architecture/hyperparameters; compared) and MemSkill (hard-case clustering per domain with PPO controller; described but not compared), ALMA and Evo-Memory (described).",
+  "residue": "Dilution vs instability when updating a single prompt from dissimilar examples.",
+  "stakes": "Baselines regress on some categories (GEPA personalization -2.16, MemEvolve agentic -3.25) and degrade a stronger seed (ACE -1.44, MemEvolve -0.74).",
+  "method_response": "Group by extraction scenario, analyze per cluster, then synthesize a prompt that scopes conflicting advice.",
+  "remaining_gap": "Continual/closed-loop regime, storage/retrieval/management stages, backend where headroom is small (Gemini agentic).",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E002",
+   "son55:E008",
+   "son55:E012",
+   "son55:E022",
+   "son55:E023"
+  ],
+  "unresolved": [
+   "Whether MemSkill-style clustering baseline would match CluE",
+   "Whether the 'homogeneous-only' premise of baselines holds"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "heterogeneous_decomposition",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Both seats agree: mixed training logs are partitioned by an LLM-summarised extraction scenario and each partition gets its own analysis before synthesis. Sub null: C04 is a model-compression tactic.",
+  "matches": [
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium-high",
+    "tactic_steps_checked": "C04 not applicable (compression). Main-card signature: identify heterogeneous resource (Table 1 shows no static prompt dominates; baselines trade categories) -> partition by scenario (Summarizer+Cluster Manager) -> tailored operation per partition (Cluster Analyzer) executed; heterogeneity characterization partly empirical.",
+    "success_failure_checks": "Success 'heterogeneity empirically characterized': partial (category-level, not the cluster distribution itself). 'Partition load-bearing via ablation of uniform treatment': MemEvolve is the uniform counterpart but with 7x fewer optimizer calls; no component ablation. Failure 'treatment assembled from off-the-shelf modules': partial (built on MemEvolve).",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E004",
+     "son55:E007",
+     "son55:E014",
+     "son55:E022"
+    ],
+    "reason": "Operation matches the main signature; the partition criterion (LLM-summarized scenario) is the contribution and its value vs a random/uniform grouping is not isolated."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial: better heterogeneous-task generalisation in the single-step setting; clustering's own causal role is not isolated"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "conditions.json current",
+    "fit": "high",
+    "condition_checks": "S4 diagnose mechanisms not instances: met (logs clustered before an edit). S3 retention rule protects earlier wins: partial (tournament keeps seed unless a candidate wins on 45 examples; stronger-seed experiment shows preservation). S2 steered evaluation budget: partial (fixed tournament, no bandit). S6 general improver: partial (stated general, evaluated only on extraction prompt). F2 one more signal in update rule: partial (adds analysis topology but inherits selection). F4 self-constructed validation: partial (rewards are task-grounded; LongMemEval/ToolBench use LLM judges).",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E004",
+     "son55:E012",
+     "son55:E016",
+     "son55:E026"
+    ]
+   },
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H21",
+    "version": "manifest-fixed",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "met",
+      "reason": "外层tournament与reward保持固定",
+      "evidence_ids": [
+       "sol:E005",
+       "sol:E006"
+      ]
+     },
+     {
+      "id": "S2",
+      "status": "partial",
+      "reason": "以提取记忆后的任务reward测writer；主要单步而非累计学习曲线",
+      "evidence_ids": [
+       "sol:E009",
+       "sol:E015",
+       "sol:E016"
+      ]
+     },
+     {
+      "id": "S4",
+      "status": "partial",
+      "reason": "提取prompt可替换，但非含schema/retrieval/update的完整可执行机制",
+      "evidence_ids": [
+       "sol:E004",
+       "sol:E016"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E004",
+     "sol:E005",
+     "sol:E008",
+     "sol:E015",
+     "sol:E016"
+    ]
+   }
+  ],
+  "unassigned": [
+   "BEHEMOTH heterogeneous extraction benchmark / static-prompt analysis (evaluation resource side)"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10"
+   },
+   "operation_correspondence": "将反馈按提取场景分区后各自诊断，作用域化修改统一prompt；partition为改写提供可定位诊断",
+   "necessary_conditions_and_differences": "主卡并不要求prompt；H10要求选择/保留及独立test，而这些由外层tournament及test协议补足；无C04压缩操作",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E004",
+    "sol:E005",
+    "sol:E008"
+   ]
+  },
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "make_the_improver_editable",
+    "sub": "H21"
+   },
+   "operation_correspondence": "被改写的是代理未来写记忆的规则，从记忆产品下游效用打分",
+   "necessary_conditions_and_differences": "不是自改outer optimizer；H21只中等适配，因为主要单步prompt而非全可执行learning mechanism/stream search",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E009",
+    "sol:E015",
+    "sol:E016"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:attribute_and_patch_incumbent/H10",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H10.md"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "诊断正负日志、分簇后局部改写，tournament保留；保护集局部与诊断重叠",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E004",
+    "sol:E005",
+    "sol:E006"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:attribute_and_patch_incumbent/H10"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S1",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "met",
+   "reason": "固定outer与reward；可重建可更改范围",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:make_the_improver_editable/S1"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/H21",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H21.md"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "ID/OOD保留writer效用与两continual任务，但非完整内层机制搜索或独立search repeats",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E015",
+    "sol:E016",
+    "sol:E017"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:make_the_improver_editable/H21"
+  },
+  {
+   "id": "local:2604.11610-1",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.11610.txt §5.1/Appendix B.2"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "应隔离分簇而非增加optimizer工作量；现无等总预算cluster-off比较",
+   "evidence_ids": [
+    "sol:E014"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:local:2604.11610-1"
+  },
+  {
+   "id": "local:2604.11610-2",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.11610.txt Appendix A.1"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "共享target的配对需query级train/test隔离，已有整dataset OOD，但ID去重协议未述",
+   "evidence_ids": [
+    "sol:E007",
+    "sol:E008",
+    "sol:E010"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:local:2604.11610-2"
+  },
+  {
+   "id": "local:2604.11610-3",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.11610.txt Appendix A.1/Table9"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (revised from sol partial; = son55's local-1): the question is variance across independent evolution runs. None is reported. The three-repeat std covers only extraction+answering of one evolved prompt on small test sets.",
+   "evidence_ids": [
+    "sol:E012",
+    "son55:E019"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2604.11610-3; son55:local:2604.11610-1",
+   "note": "son55:local:2604.11610-1 (independent evolution runs, son55 unmet) merged here (A4: same question under a different ID).",
+   "merged_from": "son55:local:2604.11610-1 (independent evolution runs, son55 unmet)",
+   "merged_evidence_ids": [
+    "son55:E019"
+   ]
+  },
+  {
+   "id": "local:2604.11610-4",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.11610.txt Appendix B.2"
+   ],
+   "applies_when": "异质反馈驱动提取prompt改写并主张保留及泛化收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告调用与wall time而无总token/dollar；承认optimizer调用显著增加",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E018"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:local:2604.11610-4"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md reviewer expectations #3"
+   ],
+   "applies_when": "multi-component differentiated treatment",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No ablation of Summarizer, Cluster Manager, per-cluster Analyzer or Proposer; only whole-method comparison to MemEvolve.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E015"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-3"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md reviewer expectations #4"
+   ],
+   "applies_when": "decomposition vs uniform treatment",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Most competing methods (GEPA, ACE, MemEvolve) are included, but baselines use different data protocols and CluE uses 221 vs 30 optimizer calls and a different prompt length; no matched-optimizer-budget or random-cluster control.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E024",
+    "son55:E025"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-4"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md reviewer expectations #5"
+   ],
+   "applies_when": "heterogeneity is the premise",
+   "applicable": true,
+   "status": "met",
+   "reason": "Static-prompt table and baseline category trade-offs characterize the heterogeneity empirically; cluster evolution analyzed in App B.3.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E022",
+    "son55:E028"
+   ],
+   "score_item": "G",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-5"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md reviewer expectations #2"
+   ],
+   "applies_when": "efficiency or cost implied",
+   "applicable": true,
+   "status": "met",
+   "reason": "Wall time, optimizer calls and evaluation calls reported for all four frameworks.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-2"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent S4"
+   ],
+   "applies_when": "prompt edited from diagnosed failures",
+   "applicable": true,
+   "status": "met",
+   "reason": "Traces are clustered by extraction scenario and analyzed per cluster before the proposer edits.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S4"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent S3"
+   ],
+   "applies_when": "incumbent replaced by edit",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Winner-takes-round tournament keeps incumbent unless beaten on a small fresh batch; stronger-seed experiment suggests preservation, but no per-edit regression check or rollback is specified.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E016"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S3"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent F4"
+   ],
+   "applies_when": "loop uses its own validation",
+   "applicable": true,
+   "status": "met",
+   "reason": "Opus (revised from son55 partial): the certifying signal is never self-constructed. Every training dataset uses a ground-truth reward (accuracy/EM/rule/success/pass@1), and the two LLM-judged datasets are OOD test sets that play no part in selection (opus:O02, opus:O03). A shared Qwen3-32B backbone is a separate (F5-type) concern.",
+   "evidence_ids": [
+    "son55:E018",
+    "son55:E026",
+    "son55:E027",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/F4"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent F2"
+   ],
+   "applies_when": "novelty is an added update signal",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Adds scenario clustering (an analysis-topology change) but selection/certification are inherited from MemEvolve.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E016"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/F2"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S6",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent S6"
+   ],
+   "applies_when": "claim of a general improver",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Method stated as extendable beyond memory extraction but evaluated only on extraction prompts.",
+   "evidence_ids": [
+    "son55:E003"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S6"
+  },
+  {
+   "id": "local:2604.11610-5",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "held-out evaluation practice"
+   ],
+   "applies_when": "generalization claim",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Three OOD datasets are held out, but CluE ties MemEvolve on two (ToolBench identical, GPQA-D within std) and wins only on the LLM-judged LongMemEval; continual tasks were chosen where CluE already wins.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E009",
+    "son55:E010",
+    "son55:E020",
+    "son55:E026"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2604.11610-2",
+   "note": "Renumbered from local:2604.11610-2 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "CluE yields the best overall relative gain among self-evolving frameworks from the Simple seed",
+   "setting": "BEHEMOTH in-distribution tests, Qwen3-32B, 330 training examples",
+   "baseline_control": "GEPA, ACE, MemEvolve, seed Simple",
+   "selection_vs_test": "evolution on training split; evaluation on disjoint remainder",
+   "result_denominator": "overall RG 9.04 vs 5.06/3.56/2.11; positive in all three categories",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E007",
+    "son55:E008"
+   ],
+   "counterevidence": "Single evolved prompt per method (optimizer variance unknown); optimizer calls and prompt length unmatched.",
+   "allowed_conclusion": "Under this setup CluE's evolved prompt scores higher on held-out in-distribution examples than baseline-evolved prompts."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Evolved prompts generalize to OOD datasets",
+   "setting": "LongMemEval, GPQA-Diamond, ToolBench held out",
+   "baseline_control": "Simple seed and baselines",
+   "selection_vs_test": "datasets absent from evolution",
+   "result_denominator": "LME 63.07 vs 56.82; GPQA-D 48.48±1.80 vs 47.98±1.09; ToolBench 26.67 = MemEvolve",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "son55:E026"
+   ],
+   "counterevidence": "Gains confined to the LLM-judged LongMemEval; ties elsewhere.",
+   "allowed_conclusion": "No degradation below seed on OOD; clear advantage only on LongMemEval."
+  },
+  {
+   "claim_id": "C3",
+   "text": "CluE preserves strengths of a stronger seed while baselines damage it",
+   "setting": "Survey seed",
+   "baseline_control": "GEPA, ACE, MemEvolve",
+   "selection_vs_test": "same split",
+   "result_denominator": "CluE +6.54, ACE -1.44, MemEvolve -0.74, GEPA 0 (seed returned)",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "counterevidence": "Personalization +13.62 dominates the overall gain.",
+   "allowed_conclusion": "Supported for this seed/backend."
+  },
+  {
+   "claim_id": "C4",
+   "text": "The advantage transfers to another backbone and to continual extraction",
+   "setting": "Gemini-3-Flash; Game of 24 and AlfWorld continual",
+   "baseline_control": "MemEvolve etc.",
+   "selection_vs_test": "continual tasks chosen where CluE won single-step",
+   "result_denominator": "Gemini overall +3.40 but agentic regresses; continual 50.83 vs 43.33 and 67.25 vs 62.57",
+   "evidence_ids": [
+    "son55:E013",
+    "son55:E020",
+    "son55:E021"
+   ],
+   "counterevidence": "Agentic regression with Gemini; two hand-selected tasks.",
+   "allowed_conclusion": "Partial transfer; not a general claim."
+  },
+  {
+   "claim_id": "C5",
+   "text": "No single static extraction prompt dominates across task categories",
+   "setting": "Six static prompts, in-distribution tests",
+   "baseline_control": "No Memory / Simple",
+   "selection_vs_test": "no selection",
+   "result_denominator": "Table 1",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "counterevidence": "Differences among Survey/OpenMemory are small.",
+   "allowed_conclusion": "Supported for the tested prompts and datasets."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A prompt evolved by CluE on a 330-example heterogeneous training set scores higher than prompts evolved by GEPA/ACE/MemEvolve on disjoint in-distribution test examples and does not fall below the seed on three held-out datasets, with larger optimizer cost than MemEvolve; consistency across backends and continual use is not shown.",
+  "unresolved": [
+   "optimizer variance across independent evolution runs",
+   "component ablation / random-cluster control",
+   "MemSkill-style clustering baseline",
+   "evolution under the continual retain-retrieve-reuse regime",
+   "Opus: OOD advantage is only on LongMemEval; GPQA-D (48.48 vs GEPA 50.00) and ToolBench (tie with MemEvolve, below ACE 26.82) do not favour CluE."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. The fixed object (a static extraction prompt) and its residual are measured: no static prompt dominates (Table 1), and GEPA/ACE/MemEvolve trade categories (Table 2). The closest clustering neighbour (MemSkill) is cited but not run, and the 'designed for homogeneous distributions' premise is asserted.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E002",
+    "son55:E008",
+    "son55:E022",
+    "son55:E023",
+    "sol:E001"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Logs → scenario summaries → clusters → per-cluster analysis → scoped synthesis responds to the stated instability/dilution dilemma and predicts a taxonomy-shaped prompt (Fig. 4/App. B.3). The causal role of clustering vs extra analysis calls is not separated.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E030",
+    "sol:E002",
+    "sol:E003",
+    "sol:E004"
+   ],
+   "counterevidence_ids": [
+    "son55:E014",
+    "son55:E024"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Rounds, batch sizes, the tournament with fresh+stability samples, the persistent cluster pool and all optimiser prompts are given. Opus correction to son55: the prompts are text listings in the pinned material (opus:O04, opus:O05), not images. No per-edit regression check, versioning or rollback for the retained prompt.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E016",
+    "son55:E028",
+    "sol:E005",
+    "sol:E006",
+    "opus:O04",
+    "opus:O05"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Downstream-utility rewards are mostly ground truth (opus:O03), with a No-Memory floor. LLM judges only on two OOD sets. Source conversations are completed by the same Qwen3-32B used as generator.",
+   "evidence_ids": [
+    "son55:E018",
+    "son55:E026",
+    "son55:E027",
+    "sol:E011",
+    "opus:O03"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Same-hyperparameter comparison with MemEvolve isolates the cluster-analysis bundle (opus:O01), and two seeds and two backends are tried. There is no step ablation or random-cluster control, 7× optimiser calls are unmatched, and prompt length is uncontrolled.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E012",
+    "son55:E014",
+    "son55:E024",
+    "sol:E005",
+    "opus:O01"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. 330 training examples, disjoint in-distribution remainder and three whole held-out datasets. Possible target-query sharing between in-distribution train and test pairs (App. A.1) and the hand-picked continual tasks limit it to 3.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E006",
+    "son55:E009",
+    "son55:E010",
+    "sol:E010",
+    "opus:O02"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2 (A2 ladder): three-repeat std on small test sets and visible regressions, but no variance across evolution runs and no tests.",
+   "evidence_ids": [
+    "son55:E019",
+    "sol:E012",
+    "sol:E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with son55. Wall time, optimiser calls and evaluation calls are reported for all four optimisers. The closest baseline is matched on evaluation calls (1,150) and hyperparameters, and CluE's 7× optimiser-call overhead is disclosed (opus:O06). Not 4: no token/dollar totals and no control matched on optimiser calls. sol's 2 treats a disclosed, partly matched budget like an unreported one (cf. EvolveRouter r14b, where no matched comparison existed).",
+   "evidence_ids": [
+    "son55:E014",
+    "sol:E014",
+    "sol:E018",
+    "opus:O06"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 text with Appendices A–C (including the prompt listings) read. In scope (system_method): a non-weight memory-extraction prompt is evolved from task feedback, retained and evaluated on disjoint and held-out data. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ],
+    [
+     "make_the_improver_editable",
+     "H21"
+    ]
+   ],
+   "son55_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ]
+   ],
+   "decision": "sol",
+   "final_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ],
+    [
+     "make_the_improver_editable",
+     "H21"
+    ]
+   ],
+   "reason": "H10 agreed. sol's H21 kept as supporting: the evolved object is the agent's memory-write instruction, i.e. part of the inner experience-learning mechanism, scored by the downstream utility of what it writes. This matches H21's target (memory/context design) as for M* in this batch, at medium fit, since evolution is single-step.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E015",
+    "sol:E016",
+    "sol:E017"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.11610-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "revised",
+   "final_value": "unmet",
+   "reason": "Merged with son55's local-1 (same question). No independent evolution runs are reported, so unmet.",
+   "evidence_ids": [
+    "sol:E012",
+    "son55:E019"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.11610-4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: calls and wall time but no tokens or dollars.",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E018"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-2].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: wall-clock time is reported for all four optimisers (deployment units).",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: Summarizer, Cluster Manager, per-cluster Analyzer and Proposer are not ablated separately. Only the whole bundle is compared with MemEvolve.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E015"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: direct competitors included; no random-cluster or matched-optimiser-call control.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E024",
+    "son55:E025"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: heterogeneity is analysed empirically (Tables 1–2, App. B.3).",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E022",
+    "son55:E028"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/F2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: clustering is added to MemEvolve's analyzer–proposer loop while selection is inherited. The added topology is substantive, so partial.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/F4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "met",
+   "reason": "The LLM-judged datasets are OOD test-only and every selection reward is ground truth, so the failure mode is avoided.",
+   "evidence_ids": [
+    "son55:E026",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/H10].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: diagnosed, scoped rewrites retained via tournament; the protected set is small.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E004",
+    "sol:E005",
+    "sol:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: the tournament keeps the incumbent unless beaten. The Survey-seed run shows preservation; there is no per-edit regression check.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: logs are clustered by scenario before any edit.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: generality is claimed but tested only on extraction prompts.",
+   "evidence_ids": [
+    "son55:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/H21].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: writer prompt evolved; inner-loop evaluation is single-step, with continual use checked on two tasks.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E015",
+    "sol:E016",
+    "sol:E017"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S1].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "Verified: outer tournament and reward fixed.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.E.cost",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": 3,
+   "reason": "See ratings.E.cost: all optimisers costed, and the closest baseline matched on evaluation calls and hyperparameters.",
+   "evidence_ids": [
+    "son55:E014",
+    "opus:O06"
+   ],
+   "score_impact": "+1.25 vs sol (5×1/4)"
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the full v1 text first. Initial view: in scope, retained (evolved prompt frozen and tested on disjoint and held-out datasets). G 3, M 3, X 3, Em 3, Ec 2, Eh 3, Es 2, E.cost 2–3. The MemEvolve comparison is a same-hyperparameter bundle ablation.",
+  "integrity_checks": "Both seats a1 on 2604.11610v1, material sha 81e47763…; canonical seat hashes equal conflicts.json; both claim_type system_method; RS/domain ids valid. son55's 'prompt figures are images' is a reading error (they are listings); no field depends on it.",
+  "core_claim_check": "Strongest supported claim: a CluE-evolved extraction prompt beats GEPA/ACE/MemEvolve prompts on disjoint in-distribution tests (Qwen3 and Gemini backends, Simple and Survey seeds) and does not drop below the seed OOD. 'Consistent' gains do not hold for Gemini agentic (−5.93%) or OOD GPQA/ToolBench. claim_support scoped.",
+  "rating_agreement": "G, M, X, Em, Ec, Eh, Es agree and were re-checked; E.cost → son55. Final 70.0."
+ },
+ "input_seat_hashes": {
+  "sol": "43e23d4bab33406c76613fe0be5aef88a0d41a46bda8ed6cbde390f4c35bab24",
+  "son55": "77af6b3fa3dda3a721eedc1647c544aff665b3e1828a4c794ffbaa327eaae947"
+ },
+ "score": {
+  "raw": 70.0,
+  "display": 70.0,
+  "lower": 70.0,
+  "upper": 70.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "a5bf3994017073935f95aa8ee30e436b0d088b2a1ee1913483bfca1333b2f9d5"
+}

@@ -1,0 +1,1707 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r15a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.04347",
+  "paper_id": "2604.04347",
+  "title": "RoboPhD: Evolving Diverse Complex Agents Under Tight Evaluation Budgets",
+  "version": "2604.04347v1",
+  "claim_type": "system_method",
+  "central_claim": "Validation-free Elo-tournament evolution (RoboPhD) with comparative error reports, self-instrumenting agents and Deep Focus refinement outperforms GEPA (Pareto) and an Autoresearch adaptation (greedy hill-climbing) on three of four benchmarks under an identical 1,500-evaluation budget and shared diagnostics, using a single default configuration (e.g., ARC-AGI 27.8% -> 65.8%)."
+ },
+ "provenance": {
+  "input_hash": "fb05ffc507afcc13500156828fbd834621f67469db3844c8cce73124c4b7be30",
+  "input_package": "batches/r15a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:18:13Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.04347.txt",
+   "url": "https://arxiv.org/html/2604.04347v1",
+   "version": "2604.04347v1",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.04347.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E01",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§1 line100",
+   "quote": "set, which is never used in the optimization process itself so as to have a better estimate of performance on future, unseen cases. GEPA evaluates each candidate on a minibatch of 3 training examples; candidates that improve on the minibatch are then subjected to a validation sweep of 100–200 examples, yielding roughly 7–13 validated candidates per 1,500-evaluation budget.",
+   "support_explanation": "明确训练/选择验证/最终测试三个层级；作者指出验证预算瓶颈。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E02",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§3.2 line322",
+   "quote": "). The evolution AI (Claude Code with Opus 4.6) receives Elo rankings, structured error analysis reports comparing agent performance, and per-problem ASI from each agent, then creates a new agent for the next iteration.",
+   "support_explanation": "变异信息、排名与诊断机制具体。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E03",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§3.2 line1116",
+   "quote": ": for binary-scored tasks, which agents uniquely solved or failed to solve each problem; for continuous-scored tasks, the problems with the greatest score deltas between agents. This contrastive signal directs the evolution AI to the problems most worth studying.",
+   "support_explanation": "比较错误信号而非只有标量。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E04",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§3.2 line1143",
+   "quote": "and compared against the three agents from that iteration. The evolution AI then refines the agent based on the comparative results before the agent enters the main tournament. Crucially, this refinement takes place within the same Claude Code session, so the evolution AI retains all of the context and reasoning from its original design.",
+   "support_explanation": "Deep Focus旧训练轮数据局部测试与上下文内修复。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E05",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§3.2 line1186",
+   "quote": ": Each iteration evaluates on 20 examples sampled with replacement from the full training pool. Agents never see the same evaluation set twice, so selection pressure rewards generalization rather than overfitting to a fixed subset.",
+   "support_explanation": "作者以随机新批次促进泛化；有放回不保证个别题或集合绝不重复，也不保证测试隔离。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E06",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§3.4 line1238",
+   "quote": "We use Opus 4.6 via the Claude API as the reflection model. In contrast, RoboPhD and Autoresearch use Opus 4.6 via Claude Code, which provides the evolution agent with tool access (file editing, code execution, shell commands) in addition to LLM reasoning.",
+   "support_explanation": "同模型但生成器工具权限/执行方式未配平，算法因果混杂。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E07",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§4.2 line1491",
+   "quote": "Using a single default configuration across all benchmarks, RoboPhD’s default configuration outperforms both GEPA and Autoresearch on three of four tasks.",
+   "support_explanation": "主结论是3/4，不是对所有变体/任务必胜。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E08",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§4.2 line1500",
+   "quote": "90.7). We attribute this to the nature of the task: Can’t Be Late involves no LLM calls and can be solved with under 90 lines of code, perhaps rewarding incremental parameter refinement over architectural diversity. The competition between default RoboPhD and the KotH configuration is very close, but we interpret the evidence as favoring the default configuration on the grounds that the default configuration surpasses Autoresearch and GEPA on three of four tasks, whereas KotH surpasses them on only two of four. All of this warrants further study.",
+   "support_explanation": "负结果与解释是猜测；KotH在ARC与调度更好，不能证Elo独立优势。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E09",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§4.3 line1520",
+   "quote": "). Smaller validation sets free budget for more evolutionary exploration, but at an increased risk of overfitting. Following this logic to its conclusion, the optimal validation set size under tight budgets trends toward zero—which is precisely the regime RoboPhD occupies, using Elo competition on training data as its selection mechanism in lieu of validation.",
+   "support_explanation": "200→100不充分推出0最优；测试集上的配置比较可带来元选择。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E10",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Ethics line1736",
+   "quote": "85.4 through perfect foresight, far better than any legitimate agent. Neither RoboPhD nor GEPA found this exploit across 20+ preliminary runs. In response, we redesigned the task API to eliminate access to simulator internals.",
+   "support_explanation": "报告真实开发期oracle漏洞与API修复，不把漏洞分数当有效结果；最终安全审计不完整。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E11",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§5 lines1718–1722",
+   "quote": "—a meta-agent that examines the full evolutionary history and evolves new evolution strategies, which in turn evolve new agents. All experiments here use a single, deliberately simple strategy (“use your judgment”; Appendix\nC\n), leaving meta-evolution for future work.",
+   "support_explanation": "meta-evolution尚未实验，诊断print自修改不证明improver层证据。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E12",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Reproducibility line1740",
+   "quote": "All experiments use a fixed evaluation budget of 1,500 and are reproducible using our open-source code. We document model families, evaluation interfaces, and configuration parameters. Non-determinism in LLM responses may lead to variation across runs.",
+   "support_explanation": "配平的是评估次数，未报演化多种子方差或总token成本。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E13",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§4.1 line1394",
+   "quote": "For all LLM-based benchmarks (ARC-AGI, Text2SQL, DocFinQA), correct answers that exceed the assigned cost budget are penalized to a score of 0.9 rather than 1.0, following the approach in",
+   "support_explanation": "评分含软成本罚分，不是严格硬美元上限。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E14",
+   "material_id": "2604.04347.txt",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Appendix A line1869",
+   "quote": "). Because Elo ratings persist across iterations, they accumulate information from all past competitions—agents that win more often than their competitors will gradually develop higher ratings even though individual iterations are noisy (see Section",
+   "support_explanation": "留存的群体/评分跨轮累积。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Abstract",
+   "quote": "RoboPhD introduces validation-free evolution: instead of splitting the budget between training and validation, it uses Elo competition on training data to simultaneously evaluate agents and drive evolution.",
+   "support_explanation": "Core mechanism claim.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Abstract",
+   "quote": "RoboPhD outperforms both GEPA and Autoresearch on three of four benchmarks, losing only on the simplest task",
+   "support_explanation": "Headline comparative result.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Abstract",
+   "quote": "On ARC-AGI, RoboPhD evolves a 22-line seed agent into a 1,013-line multi-strategy system, improving accuracy from 27.8% to 65.8% using Gemini 3.1 Flash Lite as the solver.",
+   "support_explanation": "Seed -> evolved artifact gain on held-out ARC-AGI test.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 1",
+   "quote": "In both cases, evaluations spent on validation inform selection but do not contribute to improving the next candidate.",
+   "support_explanation": "Author-stated gap: validation budget is dead for evolution.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 1",
+   "quote": "GEPA evaluates each candidate on a minibatch of 3 training examples; candidates that improve on the minibatch are then subjected to a validation sweep of 100–200 examples, yielding roughly 7–13 validated candidates per 1,500-evaluation budget.",
+   "support_explanation": "Quantified residual cost of the validate-then-select paradigm.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.2",
+   "quote": "Each iteration, 3 agents are evaluated on 20 randomly sampled training examples.",
+   "support_explanation": "Selection data and size: fresh training samples, no validation split.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.2",
+   "quote": "The evolution AI (Claude Code with Opus 4.6) receives Elo rankings, structured error analysis reports comparing agent performance, and per-problem ASI from each agent, then creates a new agent for the next iteration.",
+   "support_explanation": "Information given to the proposer.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.2",
+   "quote": "RoboPhD instead accepts noisy selection: 20 examples per iteration is insufficient to reliably distinguish agents with small accuracy differences",
+   "support_explanation": "Authors accept noisy per-iteration selection by design.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "App B",
+   "quote": "The best agent (70%) is ranked #1 only 45.0% of the time at",
+   "support_explanation": "Simulation (3 agents at 70/69/68%) of selection accuracy at n=20: barely above 33.3% random.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Table 2",
+   "quote": "ARC-AGI (%) 27.8 (22) 65.8 (1,013) 67.0 (1,125) 54.2 (304) 58.5 (366)",
+   "support_explanation": "Seed / RoboPhD / KotH / Autoresearch / GEPA test accuracy with lines of code, ARC-AGI; one number per cell, no spread.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Table 2",
+   "quote": "Text2SQL (%) 52.2 (96) 64.5 (602) 62.1 (595) 60.7 (265) 60.4 (498) DocFinQA (%) 17.7 (29) 50.4 (825) 47.9 (342) 48.2 (198) 40.0 (207)",
+   "support_explanation": "Text2SQL and DocFinQA results; RoboPhD vs Autoresearch on DocFinQA differs by 2.2 points (n=922 test items).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 4.2",
+   "quote": "The competition between default RoboPhD and the KotH configuration is very close, but we interpret the evidence as favoring the default configuration on the grounds that the default configuration surpasses Autoresearch and GEPA on three of four tasks, whereas KotH surpasses them on only two of four.",
+   "support_explanation": "The 2-agent no-tournament variant is nearly as good; default preference rests on a count of wins.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.5",
+   "quote": "that the evidence points towards a narrow win for our default Elo-based configuration over KotH, but the competition is close, suggesting that much of RoboPhD",
+   "support_explanation": "Authors concede much of the advantage over Autoresearch is due to other shared features, not Elo.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Table 3 caption",
+   "quote": "Effect of validation set size on GEPA and Autoresearch test scores. Reducing from 200 to 100 improves all eight paired comparisons.",
+   "support_explanation": "Only direct evidence for the validation-free argument is an extrapolation from 200->100 on baselines.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.4",
+   "quote": "In contrast, RoboPhD and Autoresearch use Opus 4.6 via Claude Code, which provides the evolution agent with tool access (file editing, code execution, shell commands) in addition to LLM reasoning.",
+   "support_explanation": "GEPA uses API reflection without tools, a system-level confound vs the Claude Code engines.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Table 4 caption",
+   "quote": "Deep Focus improves all four benchmarks.",
+   "support_explanation": "Deep Focus ablation reported as single-run deltas (-2.1/-3.1/-1.9/-9.2 without it).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Reproducibility statement",
+   "quote": "Non-determinism in LLM responses may lead to variation across runs.",
+   "support_explanation": "Variation acknowledged, not measured; tables carry no repeats.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Ethics statement",
+   "quote": "discovered an oracle exploit in the simulator: the agent read the full future spot availability trace directly from the simulator",
+   "support_explanation": "Disclosure of evaluator-gaming by single-session agent during development; API was redesigned afterwards.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Table 1",
+   "quote": "Text2SQL (BIRD) Database queries Claude Haiku 4.5 6,601 1,534 Binary DocFinQA Financial QA GPT-4.1-mini 6,515 922 Binary",
+   "support_explanation": "Train pool and held-out test sizes; ARC-AGI is 400/400, Can't Be Late 2,000/1,080.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 1",
+   "quote": "set, which is never used in the optimization process itself so as to have a better estimate of performance on future, unseen cases.",
+   "support_explanation": "Definition of held-out test set not used in optimization.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 4.1",
+   "quote": "This soft penalty proved sufficient to keep budget breaches under 1% across all experiments.",
+   "support_explanation": "Per-problem solver cost caps enforced via 0.9 penalty; breaches under 1%.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 1",
+   "quote": "Evaluations may be expensive—for ARC-AGI, even capping solver cost at $0.25 per problem, 1,500 evaluations can cost up to $375 in API fees alone.",
+   "support_explanation": "Evaluation cost stated as a motivation; evolution-agent cost not given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 1",
+   "quote": "call, while evolved agents from both RoboPhD and GEPA grow to over 20 calls tracing decision points, intermediate results, and failure modes for the benefit of their evolutionary successors.",
+   "support_explanation": "Observational support for self-instrumentation; no ablation of print diagnostics.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 2",
+   "quote": "RoboPhD was originally developed as a Text2SQL-specific system",
+   "support_explanation": "System developed on one of the four benchmarks before the comparison; tuning history on BIRD data not described.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.3",
+   "quote": "Our adaptation replaces the fixed training script with arbitrary task evaluators from the same task registry used by RoboPhD and GEPA, providing the same per-problem diagnostics and ASI.",
+   "support_explanation": "Autoresearch baseline is an author adaptation, not the original system.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.4",
+   "quote": "but GEPA samples 3 examples per minibatch, Autoresearch samples at its discretion, and RoboPhD samples 20 per iteration",
+   "support_explanation": "Sampling strategies differ across systems.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.2",
+   "quote": "RoboPhD incorporates six diversity mechanisms that sacrifice short-term selection reliability for evolutionary breadth:",
+   "support_explanation": "Six mechanisms bundled; none ablated individually.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 2",
+   "quote": "Our work, along with GEPA and Autoresearch, differs from both lines in evolving complete code artifacts that generalize from training data to unseen test instances.",
+   "support_explanation": "Positioning against prompt optimization (APE, OPRO, DSPy, ACE, TextGrad).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 1",
+   "quote": "Yet no systematic comparison of these approaches exists under controlled conditions—identical tasks, budgets, and evaluation infrastructure.",
+   "support_explanation": "Author-stated gap for the comparison contribution.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 3.5",
+   "quote": "The KotH variant uses the same RoboPhD infrastructure as our default configuration but tests only 2 agents per iteration (the current champion and a new challenger), with the winner advancing (ties go to the incumbent).",
+   "support_explanation": "Matched-infrastructure greedy control that isolates the 3-agent Elo tournament.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 4.2",
+   "quote": "iteration 21 reverted from voting complexity back to a simpler foundation after the evolution AI determined that",
+   "support_explanation": "Rollback is a judgment of the evolution AI, not a rule of the selection mechanism.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "material_id": "M1",
+   "material_sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Sec 4.1",
+   "quote": "Using a single default configuration across all benchmarks",
+   "support_explanation": "No per-task tuning for RoboPhD; same for baselines (validation size chosen from two values).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.04347.txt",
+   "material_hash": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "Table 3 caption",
+   "quote": "Reducing from 200 to 100 improves all eight paired comparisons.",
+   "support_explanation": "Table 2's GEPA/Autoresearch cells equal Table 3's val=100 column (e.g., ARC 58.5/54.2, DocFinQA 40.0/48.2). Baselines are thus reported at their test-better setting, a test-informed choice that favours the baselines, not RoboPhD.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.04347.txt",
+   "material_hash": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "sha256": "170afd3e7ef7ef108bb8183d8abb4b8d83bb90b2e0dac6e456f4bfc55a5ab894",
+   "locator": "§3.5",
+   "quote": "We argue in Section 4.2 that the evidence points towards a narrow win for our default Elo-based configuration over KotH",
+   "support_explanation": "Default vs KotH, Table 2: KotH higher on ARC (67.0 vs 65.8) and Can't Be Late; default higher on Text2SQL and DocFinQA. 2:2 in single runs, so the 3-agent Elo tournament itself is not shown to matter.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "agent artifact (Python program/prompts; e.g. 22-line seed -> 1,013-line ARC agent; two-file analyze_db.py + agent.py for Text2SQL) held in an Elo-ranked population",
+   "information": "evolution AI (Claude Code, Opus 4.6) sees Elo rankings, comparative error reports (which agents solved what), per-problem diagnostics/ASI incl. the agents' own print() output; it does not see test data",
+   "operation": "each iteration: sample 20 training examples, evaluate 3 agents (previous winner, newest agent, random top-2 by Elo), update Elo (K=32) from pairwise mean scores, generate comparative error report, fresh Claude Code session creates a new agent, Deep Focus refinement on iteration k-1 data, new agent joins next round",
+   "output": "new agent artifact; final output = argmax Elo agent",
+   "conditions": "fixed 1,500-evaluation budget, solver cost caps, clone discarding (-200 Elo), random tie-breaking, 20-sample shallow evaluation",
+   "feedback": "execution scores and diagnostics on training samples drawn with replacement",
+   "selection_rule": "pairwise win/tie/loss -> Elo; winners chosen randomly among ties; no separate validation set",
+   "selection_data": "training pool only (fresh random 20 per iteration)",
+   "persistence": "population/archive of all agents with Elo ratings; evolved agent files",
+   "later_use": "evolved agent run on held-out test set; successors read predecessors' artifacts and diagnostics",
+   "claimed_effect": "ARC 65.8 vs GEPA 58.5, Autoresearch 54.2; Text2SQL 64.5 vs 60.4/60.7; DocFinQA 50.4 vs 40.0/48.2; loses on Can't Be Late (-90.7 vs -87.6 Autoresearch)",
+   "failure_boundary": "simple/compact tasks favor greedy single-lineage search; selection accuracy barely above chance per iteration; evaluator gaming possible in unconstrained single-session setups",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E006",
+    "son55:E007",
+    "son55:E008",
+    "son55:E012",
+    "son55:E018"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "agent's own diagnostic instrumentation (print statements) inside the evolved artifact",
+   "information": "stdout captured as agent_stdout in diagnostics visible to the next evolution session",
+   "operation": "seed contains a demonstration print; evolution pressure grows it (ARC winner has 37 prints)",
+   "output": "richer per-problem diagnostics for successors",
+   "conditions": "identical diagnostics infrastructure for all engines",
+   "feedback": "agent-side logs",
+   "selection_rule": "not_applicable: kept only if the agent that contains it wins",
+   "selection_data": "not_applicable",
+   "persistence": "inside agent code",
+   "later_use": "read by next iterations' evolution AI",
+   "claimed_effect": "descriptive growth from 1 to over 20 calls; no effect on accuracy tested",
+   "failure_boundary": "no ablation",
+   "evidence_ids": [
+    "son55:E023"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Under tight evaluation budgets, validate-then-select (GEPA, Autoresearch) spends many evaluations on validation that do not help the next candidate (7-13 validated candidates per 1,500 budget), and there is no controlled head-to-head of the new artifact-evolution systems.",
+  "checked_gap": "Specific and quantified: validation sweeps consume most of the budget, and the authors show shrinking validation 200->100 helps all eight paired baseline results; the assumption that held-out validation is needed for reliable selection is the audited premise.",
+  "lineage": "OPRO/APE/DSPy prompt optimization -> GEPA (reflective Pareto, optimize_anything with ASI) -> Autoresearch (single-session greedy) -> RoboPhD (Elo tournament, validation-free, self-instrumentation). AlphaEvolve/OpenEvolve target single-instance problems.",
+  "closest_adjacent": "GEPA and Autoresearch are directly compared; population-based noisy-fitness methods (successive halving, bandit allocation, quality-diversity archives) are not discussed.",
+  "residue": "Selection reliability per evaluation dollar; generalization of evolved artifacts.",
+  "stakes": "Up to $375 API cost per ARC run; human-judgment evaluations.",
+  "method_response": "Spend all evaluations on competition that doubles as evolution signal, with Elo accumulating weak selection signal.",
+  "remaining_gap": "Isolation of validation-free selection from other system differences; single-run variance; evolution-side cost; meta-evolution untested.",
+  "evidence_ids": [
+   "son55:E004",
+   "son55:E005",
+   "son55:E014",
+   "son55:E028",
+   "son55:E029"
+  ],
+  "unresolved": [
+   "GEPA and Autoresearch source/papers are not pinned locally, so the baselines' faithful configuration cannot be checked; noisy-selection/bandit literature as nearest neighbor is not discussed in the paper."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "assumption_audit_and_pivot",
+  "supporting": [
+   "controlled_diagnostic_design"
+  ],
+  "matches": [
+   {
+    "main_id": "assumption_audit_and_pivot",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "moderate",
+    "tactic_steps_checked": "Pattern signature: identify implicit assumption (a held-out validation set is required for reliable candidate selection) -> relax it (select by Elo on training samples) -> demonstrate the new behaviour (test results). Executed. Sibling theory cards (C01/C05/C11/C19/C28/C29) re-prove a guarantee after the pivot; here the 'certificate' is a Monte-Carlo selection-accuracy simulation (Appendix B) and empirical tests, so no sub-card is assigned (closest C11 selection-rule pivot lacks a re-derived guarantee).",
+    "success_checks": "Assumption named; paired evidence that smaller validation helps baselines (8/8); matching infrastructure variant (KotH).",
+    "failure_checks": "No tightness/lower-bound analogue; pivot not cleanly separated from other features (E013); precedent in noisy-fitness/bandit selection not addressed.",
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E004",
+     "son55:E009",
+     "son55:E014",
+     "son55:E013"
+    ],
+    "reason": "The central move is auditing and dropping the validation-split premise of artifact evolution."
+   },
+   {
+    "main_id": "controlled_diagnostic_design",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "low-moderate",
+    "tactic_steps_checked": "Constructs a shared task registry, equal evaluation budget, equal diagnostics and a matched-infrastructure variant (KotH) so optimizer paradigms can be compared; C02 requires a de-confounded instance set with an independent oracle, which is not built here.",
+    "success_checks": "Same budget, diagnostics and test sets across engines; evaluator-exploit episode reported.",
+    "failure_checks": "GEPA runs through the API without tools; sampling sizes differ; single runs; baselines are author-implemented.",
+    "evidence_ids": [
+     "son55:E015",
+     "son55:E025",
+     "son55:E026",
+     "son55:E029",
+     "son55:E030"
+    ],
+    "reason": "The head-to-head harness is a distinct operation from the pivot, used as supporting evidence."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "son55 adopted. The paper's headline move audits the validate-then-select premise and drops it (son55:E001, E004), with a selection-noise analysis as the substitute certificate. generative_process_redesign (sol) is weaker: no conventionally fixed artifact of the generative process is freed. The matched-budget comparison is controlled_diagnostic_design (agreed by both).",
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "fit": "high",
+    "condition_checks": "S1 contribution at the search level: met (selection and budget allocation); S4 mutations grounded in what the evaluator observed: met (comparative error reports, diagnostics, print logs); S2 evaluator hard to game: partial (oracle exploit found in one engine, API redesigned); S3 small evolved unit in scaffold: challenged (600-1,100 line artifacts evolved successfully); S5 archive earns its place by measured effect: partial (KotH close, no archive ablation); F5 orchestration in place of search: partly applies (Claude Code sessions, Deep Focus)",
+    "evidence_ids": [
+     "son55:E006",
+     "son55:E007",
+     "son55:E012",
+     "son55:E018",
+     "son55:E013"
+    ]
+   },
+   {
+    "main": "diagnose_self_improvement",
+    "sub": "H32",
+    "fit": "low",
+    "condition_checks": "KotH, Deep Focus and validation-size comparisons act as controlled interventions; S1 one alternative explanation one targeted cut: partial; F1 end-to-end sweep without matched control: partly applies (GEPA infrastructure differs)",
+    "evidence_ids": [
+     "son55:E014",
+     "son55:E015",
+     "son55:E016",
+     "son55:E030"
+    ]
+   }
+  ],
+  "unassigned": [
+   {
+    "candidate": "H16",
+    "reason": "Opus: rejected. The Elo-ranked population with random top-2 pairing, clone penalty and tie randomization injects noise but preserves no frontier and names no complementarity axis."
+   }
+  ],
+  "revision_proposals": [
+   "H14/H16: add 'validation-free competitive selection' as a variant with the selection-noise caveat (case only, one paper)."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "assumption_audit_and_pivot",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "population_search_executable_fitness",
+   "domain_sub": "H14",
+   "operation_correspondence": "Audit-and-relax of the validation-split premise corresponds to changing the selection/commit rule of an LLM-mutation program search (Elo on training samples instead of validation).",
+   "differences": "RS pattern expects a re-derived guarantee; the paper offers a simulation and benchmarks. Domain pattern H14 does not itself prescribe selection without a held-out gate.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E009",
+    "son55:E014"
+   ]
+  },
+  {
+   "rs_main": "controlled_diagnostic_design",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "diagnose_self_improvement",
+   "domain_sub": "H32",
+   "operation_correspondence": "Matched-budget comparison and ablations of optimizer features correspond to controlled interventions on evolution systems.",
+   "differences": "Not a frozen/held-out intervention on a single evolved artifact; compares whole systems.",
+   "evidence_ids": [
+    "son55:E029",
+    "son55:E030",
+    "son55:E015"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "manifest-fixed",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#reviewer-expectations"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "验证规模和去DeepFocus有对照，但无隔离Elo/克隆过滤/自instrument的完整因果实验。",
+   "evidence_ids": [
+    "sol:E07",
+    "sol:E08",
+    "sol:E09"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rs:generative_process_redesign/RE-1"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-5",
+   "version": "manifest-fixed",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#reviewer-expectations"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "评估次数等额，生成器权限/上下文和全成本不等。",
+   "evidence_ids": [
+    "sol:E06",
+    "sol:E12"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rs:generative_process_redesign/RE-5"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-6",
+   "version": "manifest-fixed",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#reviewer-expectations"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "四任务有调度负结果与预算边界；没有预算曲线/多种子，0验证最优未证。",
+   "evidence_ids": [
+    "sol:E08",
+    "sol:E09",
+    "sol:E12"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:rs:generative_process_redesign/RE-6"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H14-step3",
+   "version": "manifest-fixed",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H14.md#step-by-step"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "met",
+   "reason": "排名、差分报告和可演化stdout指导mutation。",
+   "evidence_ids": [
+    "sol:E02",
+    "sol:E03"
+   ],
+   "score_item": "M",
+   "origin": "sol:rsi:population_search_executable_fitness/H14-step3"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H14-step4",
+   "version": "manifest-fixed",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H14.md#step-by-step"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "固定次数、克隆拒绝与多样性采样，缺完整API/计算成本。",
+   "evidence_ids": [
+    "sol:E12",
+    "sol:E14"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rsi:population_search_executable_fitness/H14-step4"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H14-step5",
+   "version": "manifest-fixed",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H14.md#step-by-step"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "partial",
+   "reason": "训练选最终测试有分割但无真实重复搜索，测试配置比较带元调参风险。",
+   "evidence_ids": [
+    "sol:E01",
+    "sol:E09",
+    "sol:E12"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:population_search_executable_fitness/H14-step5"
+  },
+  {
+   "id": "local:2604.04347-1",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.04347v1 §4.3"
+   ],
+   "applies_when": "声称验证预算重分配提高程序演化样本效率时",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (sol local-1 + son55 local-3, same question; unmet). No RoboPhD-with-validation or validation-free-baseline run on identical infrastructure. The 200→100 trend (8 single runs) cannot establish zero as optimal, and KotH (also validation-free) ties default 2:2 (opus:O02).",
+   "evidence_ids": [
+    "sol:E06",
+    "sol:E09",
+    "son55:E014",
+    "son55:E013"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:local:2604.04347-1; son55:local:2604.04347-3"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S1",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness S1"
+   ],
+   "applies_when": "a search-level contribution is claimed",
+   "applicable": true,
+   "status": "met",
+   "reason": "Contribution is how evaluations are spent and selection is done, not a domain result; same domain tasks for all engines.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E005"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:population_search_executable_fitness/S1"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness S2"
+   ],
+   "applies_when": "executable fitness drives selection",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Standard benchmark evaluators with cost-penalty; one engine found a simulator-state oracle exploit during development and the API was redesigned, which shows exposure to gaming.",
+   "evidence_ids": [
+    "son55:E018",
+    "son55:E021"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rsi:population_search_executable_fitness/S2"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S3",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness S3"
+   ],
+   "applies_when": "evolved unit size",
+   "applicable": true,
+   "status": "challenged_with_evidence",
+   "reason": "Expectation: small evolved unit in a scaffold. The paper evolves whole agents of 600-1,100 lines with gains, though on the compact task the winner has 87 lines; no matched small-genome control.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E010",
+    "son55:E011"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:population_search_executable_fitness/S3"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S4",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness S4"
+   ],
+   "applies_when": "mutation conditioned on evaluator observations",
+   "applicable": true,
+   "status": "met",
+   "reason": "Proposer receives Elo, comparative error reports, per-problem ASI and agent logs.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E023"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:population_search_executable_fitness/S4"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S5",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness S5"
+   ],
+   "applies_when": "archive/memory claimed useful",
+   "applicable": true,
+   "status": "partial",
+   "reason": "KotH (no population) is within noise of the Elo tournament on ARC and better on Can't Be Late; archive/diversity mechanisms not individually ablated.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E027"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:population_search_executable_fitness/S5"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F5",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness F5"
+   ],
+   "applies_when": "orchestration changes versus search dynamics changes",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Expectation: gains attributable to generate-evaluate-select dynamics, not plumbing. The authors say much of the advantage over Autoresearch comes from other shared features (fresh sessions, Deep Focus, error reports).",
+   "evidence_ids": [
+    "son55:E013",
+    "son55:E016"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:population_search_executable_fitness/F5"
+  },
+  {
+   "id": "rsi:diagnose_self_improvement/F1",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json diagnose_self_improvement F1"
+   ],
+   "applies_when": "engines are compared end-to-end",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Expectation: matched control so gain is not confounded. KotH is matched; GEPA differs in tool access, sampling and reflection channel.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E026",
+    "son55:E030"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:diagnose_self_improvement/F1"
+  },
+  {
+   "id": "rsi:diagnose_self_improvement/S3",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json diagnose_self_improvement S3"
+   ],
+   "applies_when": "evaluation held apart from the loop",
+   "applicable": true,
+   "status": "met",
+   "reason": "Test sets are never used in optimization; selection uses training samples only.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:diagnose_self_improvement/S3"
+  },
+  {
+   "id": "rs:assumption_audit_and_pivot/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "assumption_audit_and_pivot.md Reviewer expectations #2"
+   ],
+   "applies_when": "a weakened assumption is introduced",
+   "applicable": true,
+   "status": "partial",
+   "reason": "The regime where noisy training-set selection works is characterized by simulation (Appendix B) and by the compact-task loss, but not by when validation is still necessary (e.g., large budgets or easy overfitting).",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E012"
+   ],
+   "score_item": "M",
+   "origin": "son55:rs:assumption_audit_and_pivot/RE-2"
+  },
+  {
+   "id": "rs:assumption_audit_and_pivot/RE-4",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "assumption_audit_and_pivot.md Reviewer expectations #4"
+   ],
+   "applies_when": "similar prior moves exist",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Differentiated from GEPA/Autoresearch; noisy-fitness EAs, successive halving and bandit allocation are not discussed as precedent.",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E029"
+   ],
+   "score_item": "G",
+   "origin": "son55:rs:assumption_audit_and_pivot/RE-4"
+  },
+  {
+   "id": "rs:assumption_audit_and_pivot/RE-6",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "assumption_audit_and_pivot.md Reviewer expectations #6"
+   ],
+   "applies_when": "prior approaches' failure must be characterized first",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Table 3 shows baselines improve when validation shrinks, which supports the premise; no run with validation-free baselines.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_item": "G",
+   "origin": "son55:rs:assumption_audit_and_pivot/RE-6"
+  },
+  {
+   "id": "rs:controlled_diagnostic_design/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "controlled_diagnostic_design.md Reviewer expectations #3"
+   ],
+   "applies_when": "compute/budget-matched baselines",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Evaluation counts are matched at 1,500 and per-problem cost caps enforced; evolution-side model cost and wall-clock are not matched or reported.",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E022"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:controlled_diagnostic_design/RE-3"
+  },
+  {
+   "id": "local:2604.04347-5",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Reproducibility statement admits run-to-run variation"
+   ],
+   "applies_when": "stochastic LLM-driven evolution is compared across systems",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Expectation: multiple independent evolution runs with spread. Only one number per cell is reported.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E017"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2604.04347-1",
+   "note": "A4: renumbered from son55 local-1 (multiple evolution runs)."
+  },
+  {
+   "id": "local:2604.04347-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 3.4 engine differences"
+   ],
+   "applies_when": "engines use different proposer channels",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Expectation: report evolution-AI tokens/time per engine since RoboPhD runs ~21 Claude Code sessions vs 7-13 API reflections for GEPA.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E015",
+    "son55:E022"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:local:2604.04347-2"
+  },
+  {
+   "id": "local:2604.04347-4",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 1 self-instrumenting agents"
+   ],
+   "applies_when": "self-instrumentation is claimed to benefit successors",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Expectation: ablate the print-diagnostics channel. Only growth in print counts is observed.",
+   "evidence_ids": [
+    "son55:E023"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2604.04347-4"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Default RoboPhD outperforms GEPA and Autoresearch on three of four benchmarks under the same 1,500-evaluation budget and diagnostics.",
+   "setting": "ARC-AGI (Gemini 3.1 Flash Lite), Can't Be Late (algorithmic), Text2SQL (Haiku 4.5), DocFinQA (GPT-4.1-mini); evolution AI Opus 4.6",
+   "baseline_control": "GEPA v0.1.1 (API reflection), author-adapted Autoresearch, KotH variant; baselines at validation size 100",
+   "selection_vs_test": "selection on training pool only; separate test sets of 400/1,080/1,534/922",
+   "result": "65.8/-90.7/64.5/50.4 vs GEPA 58.5/-89.3/60.4/40.0 and Autoresearch 54.2/-87.6/60.7/48.2",
+   "denominator": "single run per cell; test n as listed",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E010",
+    "son55:E011",
+    "son55:E019",
+    "son55:E020"
+   ],
+   "counterevidence": [
+    "son55:E012",
+    "son55:E017"
+   ],
+   "allowed_conclusion": "Single-run advantage on three benchmarks (2.2 points over Autoresearch on DocFinQA is within plausible noise); not a significance-tested ranking."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Validation-free Elo selection extracts more performance per evaluation than validate-then-select.",
+   "setting": "same as C1",
+   "baseline_control": "Table 3 validation 200 vs 100; KotH",
+   "selection_vs_test": "same",
+   "result": "8/8 paired improvements when baseline validation shrinks 200->100; KotH close to default",
+   "denominator": "8 paired single runs",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E014",
+    "son55:E012",
+    "son55:E013"
+   ],
+   "counterevidence": [
+    "son55:E013",
+    "son55:E015",
+    "opus:O02"
+   ],
+   "allowed_conclusion": "Smaller validation helps baselines; RoboPhD's own advantage is not attributed to validation-free Elo."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Deep Focus refinement improves all four benchmarks.",
+   "setting": "default (k=1) vs k=0",
+   "baseline_control": "no Deep Focus",
+   "selection_vs_test": "test sets",
+   "result": "+2.1/+3.1/+1.9/+9.2",
+   "denominator": "single run per benchmark",
+   "evidence_ids": [
+    "son55:E016"
+   ],
+   "counterevidence": [
+    "son55:E017"
+   ],
+   "allowed_conclusion": "Consistent sign across four single runs; magnitude uncertain."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Self-instrumenting agents evolve richer diagnostics for their successors.",
+   "setting": "ARC-AGI etc.",
+   "baseline_control": "none",
+   "selection_vs_test": "not_applicable",
+   "result": "print count grows from 1 to 20+ (37 in ARC winner)",
+   "denominator": "not_applicable",
+   "evidence_ids": [
+    "son55:E023"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Descriptive growth only; benefit untested."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_note": "Both seats retained; kept. Evolved agent code, selected only on training samples, improves separate test sets. Not improver: the evolution AI and strategy are fixed and meta-evolution is untested.",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Under a matched 1,500-evaluation budget and shared diagnostics, single runs of default RoboPhD score above the authors' GEPA and Autoresearch runs on held-out ARC-AGI, BIRD dev and DocFinQA tests. A matched validation-free KotH variant is as good on 2 of 4, so validation-free Elo selection specifically, and self-instrumentation, are not isolated.",
+  "unresolved": [
+   "Run-to-run variance.",
+   "Evolution-AI token/time cost per engine.",
+   "Faithfulness of adapted baselines and GEPA's API-vs-Code channel."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. The bottleneck is quantified (validation consumes the budget; 7–13 candidates) and baselines are actually run (son55:E004, E005, E029). Noisy-fitness/bandit precedent is not discussed.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E014",
+    "son55:E029",
+    "sol:E01",
+    "sol:E06"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Biased-noisy selection accumulated by Elo, with an exact selection-accuracy analysis and a stated falsifying regime (compact task). The distinct prediction vs greedy KotH is weakly borne out.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E008",
+    "son55:E009",
+    "son55:E012",
+    "sol:E02",
+    "sol:E03",
+    "sol:E04"
+   ],
+   "counterevidence_ids": [
+    "son55:E013"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Algorithm 1, the Elo constants, sample size, clone penalty, ties, Deep Focus and the strategy prompt are given. Broken-agent handling and rollback beyond the AI's judgment are unspecified.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E007",
+    "son55:E027",
+    "son55:E031",
+    "sol:E05",
+    "sol:E14"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Executable/exact-match scorers, cost caps with breach rate <1%, and a disclosed and fixed simulator exploit (son55:E018, E021).",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E021",
+    "son55:E018",
+    "sol:E10",
+    "sol:E13"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. KotH, the Deep Focus ablation and the validation-size sweep are useful. Engines differ in proposer channel (API vs Claude Code), sampling and tooling (son55:E015, E026). No run isolates validation-free selection, and the default-vs-KotH tally is 2:2 (opus:O02).",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E014",
+    "son55:E015",
+    "son55:E016",
+    "son55:E030",
+    "opus:O02"
+   ],
+   "counterevidence_ids": [
+    "son55:E026"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus → son55 3 (sol 2). Four fixed train/test splits are used identically across engines; every engine's final artifact is chosen without touching test (Elo on fresh training samples for RoboPhD; son55:E019, E020, sol:E01, E05). The test-informed choice sol cites (validation size) set the BASELINES at their better val=100 configuration (opus:O01). That inflates the comparators, not RoboPhD's own claim. Below 4: RoboPhD's defaults descend from Text2SQL-specific development (son55:E024) with BIRD dev use unaudited, the Deep Focus default is justified by a test-set ablation, and there is no contamination audit for ARC/BIRD.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "son55:E032",
+    "sol:E01",
+    "sol:E05"
+   ],
+   "counterevidence_ids": [
+    "son55:E024",
+    "opus:O01",
+    "sol:E09"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; A2 ladder. Test sizes and a negative task are reported; every cell is a single run with no intervals. The selection-noise simulation is not end-to-end uncertainty.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E017",
+    "sol:E08"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. The evaluation budget is matched (including Deep Focus) and per-problem solver caps are enforced. Evolution-AI tokens/time, which differ sharply between Claude Code sessions and API reflection, are unreported.",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E022",
+    "son55:E005",
+    "sol:E06",
+    "sol:E12"
+   ],
+   "counterevidence_ids": [
+    "son55:E015"
+   ],
+   "search_scope": [
+    "Sec 4",
+    "Appendices A-D"
+   ]
+  }
+ },
+ "status": "reviewed",
+ "reason": "Full v1 text including Appendices A–D read. In scope: evolved non-weight agent code retained and evaluated on held-out tests. claim_type system_method. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "generative_process_redesign",
+   "son55_value": "assumption_audit_and_pivot",
+   "decision": "son55",
+   "final_value": "assumption_audit_and_pivot",
+   "reason": "See rs_pattern.reason.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E004"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "controlled_diagnostic_design",
+     null
+    ],
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "assumption_audit_and_pivot",
+     null
+    ],
+    [
+     "controlled_diagnostic_design",
+     null
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "assumption_audit_and_pivot",
+     null
+    ],
+    [
+     "controlled_diagnostic_design",
+     null
+    ]
+   ],
+   "reason": "controlled_diagnostic_design is agreed. The pivot card replaces generative_process_redesign.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E029"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "population_search_executable_fitness",
+     "H14"
+    ]
+   ],
+   "son55_value": [
+    [
+     "diagnose_self_improvement",
+     "H32"
+    ],
+    [
+     "population_search_executable_fitness",
+     "H14"
+    ],
+    [
+     "population_search_executable_fitness",
+     "H16"
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "diagnose_self_improvement",
+     "H32"
+    ],
+    [
+     "population_search_executable_fitness",
+     "H14"
+    ]
+   ],
+   "reason": "H14 is agreed. H32 is added (son55): the matched-budget engine comparison and the KotH isolation are a claimed contribution. H16 is rejected (no frontier/complementarity axis).",
+   "evidence_ids": [
+    "son55:E027",
+    "son55:E030"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.04347-2].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: evolution-AI cost is not reported per engine.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E015"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.04347-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "same_supported_fact",
+   "final_value": "unmet",
+   "reason": "Same question as sol local-1 (validation-free attribution), both unmet; merged into local-1 (A4).",
+   "evidence_ids": [
+    "son55:E014",
+    "sol:E09"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.04347-4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: print-diagnostics channel not ablated.",
+   "evidence_ids": [
+    "son55:E023"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:assumption_audit_and_pivot/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:assumption_audit_and_pivot/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: noisy-fitness precedent absent.",
+   "evidence_ids": [
+    "son55:E028"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:assumption_audit_and_pivot/RE-6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:controlled_diagnostic_design/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Kept as a check question.",
+   "evidence_ids": [
+    "sol:E07",
+    "sol:E08"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-5].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Kept as a check question.",
+   "evidence_ids": [
+    "sol:E06",
+    "sol:E12"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-6].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Kept as a check question.",
+   "evidence_ids": [
+    "sol:E08",
+    "sol:E12"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:diagnose_self_improvement/F1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: KotH matched; GEPA differs.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E030"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:diagnose_self_improvement/S3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/F5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: the authors concede shared features carry much of the gain.",
+   "evidence_ids": [
+    "son55:E013"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/H14-step3].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "sol:E02",
+    "sol:E03"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/H14-step4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "sol:E12",
+    "sol:E14"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/H14-step5].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: single runs.",
+   "evidence_ids": [
+    "sol:E01",
+    "sol:E12"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/S1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E001"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/S2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: exploit found and patched.",
+   "evidence_ids": [
+    "son55:E018"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/S3].status",
+   "sol_value": null,
+   "son55_value": "challenged_with_evidence",
+   "decision": "son55",
+   "final_value": "challenged_with_evidence",
+   "reason": "Legitimate use: the paper's own results (600–1,100-line agents with held-out gains on three LLM tasks, the compact task won by an 87-line artifact) present evidence against 'small unit in a scaffold' as a necessity here. There is no matched small-genome control.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E010",
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/S4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:population_search_executable_fitness/S5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E027"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.E.holdout. The test-informed decision favours the baselines, and no final artifact is selected on test.",
+   "evidence_ids": [
+    "opus:O01",
+    "son55:E020"
+   ],
+   "score_impact": "+2.5 vs sol (65.0 → 67.5)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "expectations[local:2604.04347-1].id",
+   "sol_value": "local-1 = validation-free attribution (unmet)",
+   "son55_value": "local-1 = multi-run variance (unmet); local-3 = validation-free attribution (unmet)",
+   "final_value": "local-1 = sol local-1 + son55 local-3 (merged); local-5 = son55 local-1",
+   "reason": "A4 hidden collision with equal status, so the mechanical diff missed it; renumbered and merged.",
+   "evidence_ids": [
+    "sol:E09",
+    "son55:E014"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the full text before the seat records. In scope; retained. Clean held-out tests, never used for selection. Single runs; Elo vs KotH 2:2; the GEPA API-vs-Code confound. Expected G3 M3 X3 Em3 Ec2 Eh3 Es1 Ecost2.",
+  "integrity_checks": "Both seats a1 on v1, input_hash fb05ffc5…; hashes equal conflicts.json; material sha 170afd3e…; 15+31 complete, valid parents.",
+  "core_claim_check": "Tables 2–4 re-read. Baseline cells equal Table 3 val=100 (opus:O01). The '3 of 4' claim holds for default; KotH ties it 2:2.",
+  "rating_agreement": "Seven of eight items agree and were re-derived; E.holdout resolved to 3."
+ },
+ "input_seat_hashes": {
+  "sol": "1df11257a569e8ca06e0d7bbd716262166505e625328325be89aefe06d7b3f66",
+  "son55": "c61f7ce7e16b6c82883fd88c98c670387043ad2e010c8b61940a366a054743ad"
+ },
+ "score": {
+  "raw": 67.5,
+  "display": 67.5,
+  "lower": 67.5,
+  "upper": 67.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "072a274234dde4703ab9f7ccc0c30ea42005f7051f420e7aea36c51d58d6fb7c"
+}

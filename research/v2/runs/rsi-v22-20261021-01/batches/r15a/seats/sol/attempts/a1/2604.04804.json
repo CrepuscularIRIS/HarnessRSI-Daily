@@ -1,0 +1,722 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r15a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.04804",
+    "paper_id": "2604.04804",
+    "title": "SkillX: Automatically Constructing Skill Knowledge Bases for Agents",
+    "version": "2604.04804v2",
+    "claim_type": "system_method",
+    "central_claim": "强模型用成功轨迹抽取三层技能，经执行反馈迭代合并过滤、覆盖驱动探索扩展，预构建库可即插即用迁移并改善性能/执行效率。"
+  },
+  "provenance": {
+    "input_hash": "fb05ffc507afcc13500156828fbd834621f67469db3844c8cce73124c4b7be30",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T00:45:06.855276+00:00",
+    "notes": "上下文声明gpt-6.1-sol；无独立模型回执、session或receipt引用，留null，不探测配置。"
+  },
+  "materials": [
+    {
+      "material_id": "2604.04804.txt",
+      "url": "https://arxiv.org/html/2604.04804v2",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "complete": true,
+      "missing_sections": [],
+      "sections_read": [
+        "Abstract",
+        "§1–8",
+        "Tables1–3",
+        "Impact/Limitations",
+        "Appendix A.1–A.3",
+        "Appendix B cases/captions",
+        "Appendix C.1–C.7 prompts"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E01",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§3.2 lines792–798",
+      "quote": "During this compression, we explicitly filter out non-essential transitions such as exploration, backtracking, and trial-and-error behaviors that are incidental to the final solution but detrimental to skill reuse.",
+      "support_explanation": "成功轨迹压缩成计划，而非原日志直接检索；失败知识可能损失。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E02",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§3.3 lines1138–1142",
+      "quote": "and we stop the iteration when this test performance no longer improves.",
+      "support_explanation": "作者明确按test停止迭代，不能当完全盲留出。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E03",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§3.3 lines1239–1248",
+      "quote": "This stage mitigates tool-use hallucinations by validating each skill against the environment-provided tool schema, rejecting skills that reference non-existent tools, invalid parameters, or schema-incompatible argument structures.",
+      "support_explanation": "schema过滤是质量环节；AppendixC表明为LLM判断，不等于抽象技能重放。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E04",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§3.4 line1290",
+      "quote": "We guide exploration using experience collected from rollouts on the seed set (e.g., tools the agent already uses reliably, tools with high failure rates, and tools that are never invoked), thereby prioritizing under-explored or failure-prone tools to improve sample efficiency.",
+      "support_explanation": "按工具覆盖/失败探索，制造任务再进库。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E05",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§4 lines1363–1365",
+      "quote": "This rewritten pseudo-plan serves as an intermediate retrieval query\nto better align subsequent skill retrieval with the current execution setting.\nTo mitigate hallucination risks and prevent speculative content from affecting agent behavior, the pseudo-plan is not injected into the final system prompt.",
+      "support_explanation": "伪计划只做检索，技能最终system conditioning。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E06",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.1 lines1850–1858",
+      "quote": "For BFCL-v3, we use the base multi-turn category and randomly split it into 50 training instances and 150 test instances.\nAppWorld provides 90 training instances and the Test Normal category as test set.",
+      "support_explanation": "初始训练/测试有实例分割，不是所有库从测试提取；仍存在E02选择泄漏。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E07",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.1 lines1858–1865",
+      "quote": "For AppWorld and BFCL-v3, we report Avg@4 and Pass@4, the average success rate over four independent runs and the probability of succeeding at least once across four runs, respectively.",
+      "support_explanation": "四次推理成功和至少一次成功均报，但不是四次独立建库。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E08",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.1 line1898",
+      "quote": "which retrieves relevant past trajectories as few-shot demonstrations and incorporates distilled insights to improve LLM performance. For a fair comparison, all methods retrieve experience only based on the user’s initial query and insert the retrieved content into the system prompt following a unified protocol.",
+      "support_explanation": "统一初始query/system，AWM/ExpeL强提取器控制；不是完全相同检索器/预算。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E09",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.1 lines1911–1918",
+      "quote": "independently rollouts four times per training task, followed by skill extraction, skill refinement, and skill expansion.\nThe maximum number of refinement iterations is set to 3. For efficiency, we limit environment exploration to one rollout per training task; the sampling temperature is 1.0 during exploration.",
+      "support_explanation": "构建有限轮数/探索预算有报，未全成本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E10",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.3 lines2027–2035",
+      "quote": "Finally, we find that GLM-4.6 benefits the most from using all skill types; K2 performs best with Functional + Atomic Skills; and Qwen3-32B achieves its best performance when only Planning Skills are enabled.",
+      "support_explanation": "层级不是各模型全组件最优；反驳无条件组合优势。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E11",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.3 lines2047–2053",
+      "quote": "However, when training data are limited, text-only optimization can lead to overfitting.\nThus, selecting an appropriate number of update rounds is crucial to obtain a higher-quality skill library.",
+      "support_explanation": "作者承认过拟合；Table3第三轮BFCL/未扩展AppWorld回落。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E12",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§5.3 lines2078–2081",
+      "quote": "Although we do not achieve the minimum number of execution steps or the fewest input tokens, we obtain the best overall performance (see Table",
+      "support_explanation": "不把步骤少当总代价更低；无完整离线账。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E13",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "Limitations line2573",
+      "quote": "is currently most naturally applicable when skills can be grounded in a relatively stable tool environment. The extracted skills are associated with specific tool schemas, which makes direct reuse across substantially different domains or tool ecosystems less straightforward.",
+      "support_explanation": "跨模型/同环境不等于跨生态泛化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E14",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "Appendix A.3 line2678",
+      "quote": "We cluster the extracted skills using DBSCAN (Density-Based Spatial Clustering of Applications with Noise) with a cosine similarity threshold of 0.9. For each cluster, we truncate the skill set to at most 15 skills. Skill updates are performed with up to three iterative refinement rounds.",
+      "support_explanation": "聚类参数与限额明确；未见回放/回滚门。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E15",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "Appendix A.3 line2683",
+      "quote": "Finally, we return up to 8 skills after applying Maximal Marginal Relevance (MMR) for diversity-aware selection, using a relevance–diversity trade-off weight of 0.75 to emphasize relevance while mitigating redundancy.",
+      "support_explanation": "检索top100、阈值0.45/0.08、去重0.95、MMR和最多8条可操作。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E16",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "Appendix A.1 line2603",
+      "quote": "Evaluation is based on state-driven unit tests that assess task completion from multiple aspects. AppWorld provides both task-level and scenario-level metrics. In this work, we use Task Goal Completion as the primary measure of performance.",
+      "support_explanation": "环境状态测试而非仅LLM自评。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E17",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "§6.2 lines2207–2219",
+      "quote": "-Bench is a user-interactive benchmark whose tool schemas are relatively simple in both number and dependency structure, and its training set already covers many task patterns directly. More broadly, for user-centric benchmarks of this type (e.g., dialogue benchmarks), it remains an open question whether experience learning centered around tool-schema-based skills is the most appropriate formulation. Therefore, we believe that component studies on skill iteration and skill expansion are less suitable for",
+      "support_explanation": "τ2无迭代/扩展消融是明确实验范围限制，不虚构数据。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E18",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "Table 3 lines2237–2277",
+      "quote": "Vanilla-Iter2\n\n79.50\n\n86.00\n\n64.29\n\n85.12\n\nVanilla-Iter3\n\n78.83\n\n84.67\n\n61.46\n\n85.71",
+      "support_explanation": "不扩展第三轮Avg下降；追加循环不保证改进。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E19",
+      "material_id": "2604.04804.txt",
+      "sha256": "c28b89ef54912eb7b270aee15178b56e16ef66cca57e310ca554e33dbbcc8171",
+      "locator": "Table 1 lines1588–1603",
+      "quote": "SkillX\n‡\n\n63.67\n\n82.00\n\n35.12\n\n58.93\n\n66.87\n\n47.50\n\n43.75",
+      "support_explanation": "Qwen使用GLM库的BFCL/AppWorld/τ2三域成绩；用表头解释。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "外部规划/功能/原子技能文本库",
+      "information": "GLM4.6训练四次rollouts、成功trace/工具反馈、调用覆盖和失败率",
+      "operation": "成功提取→聚类merge/decompose→LLM通用/schema过滤→add/modify/keep；覆盖驱动探索/合成任务再抽取，最多3轮",
+      "output": "多层非权重技能库",
+      "conditions": "每环境训练集单独构库；GLM4.6固定；DBSCAN0.9/最多15skills每簇",
+      "feedback": "任务成功信号/轨迹及未用或易失败工具；停止依据test表现",
+      "selection_rule": "按test不再改善停止；LLM通用性/schema质量筛选",
+      "data": "BFCL50训练/150测试、AppWorld90训练/TestNormal、τ2官方域split；无合成重叠审计",
+      "persistence": "技能JSON/name/document/content/tools跨轮、跨后续任务模型留存",
+      "later_use": "Qwen/Kimi/GLM/DeepSeek/GPT后续测试任务",
+      "claimed_effect": "库质量覆盖增长并迁移到弱模型",
+      "failure_boundary": "test元调参、未重放抽象条目、工具生态固定、过拟合/过度模仿",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E06",
+        "E09",
+        "E13",
+        "E14"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "使用时的库检索与系统conditioning",
+      "information": "初始query、相似计划和工具技能embedding",
+      "operation": "计划检索→执行模型伪计划rewrite→每步召回→去重/MMR/LLM选用→system一次注入→固定模型执行",
+      "output": "任务轨迹与环境成功",
+      "conditions": "Top100/0.45与best-0.08/去重0.95/MMR0.75/最多8",
+      "feedback": "任务结果；部署时未报告即时更新",
+      "selection_rule": "推理检索筛选非留存提交规则",
+      "data": "仅初始任务query；不注入伪计划本身",
+      "persistence": "库预构建保留，伪计划临时",
+      "later_use": "同环境新任务/不同执行模型",
+      "claimed_effect": "转移经验和降低步骤",
+      "failure_boundary": "假设计划吻合环境，弱模型过模仿，新增检索重写开销",
+      "evidence_ids": [
+        "E05",
+        "E08",
+        "E10",
+        "E12",
+        "E15"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "孤立经验重复、样本少和弱模型能力瓶颈；既有表示难同时泛用/检索/执行。",
+    "checked_gap": "实际baseline含AWM/ExpeL和强模型蒸馏；三层表示与合成扩展有局部增益，但非通用直接执行技能或跨生态验证。",
+    "lineage": [
+      {
+        "name": "AWM",
+        "source": "2604.04804v2 §5.1/A.2",
+        "version": "Wang2025c，本地本文改造描述"
+      },
+      {
+        "name": "ExpeL",
+        "source": "2604.04804v2 §5.1/A.2",
+        "version": "Zhao2024，本文重现描述"
+      },
+      {
+        "name": "Claude Skills / Experience Guiding Exploration",
+        "source": "2604.04804v2 §1/3.4",
+        "version": "Anthropic2025 / Zhai2025，未独立原文"
+      }
+    ],
+    "closest_adjacent": [
+      "AWM",
+      "ExpeL",
+      "A-Mem",
+      "Claude Skills",
+      "Zhai2025 exploration"
+    ],
+    "residue": "三粒度结构、任务伪计划检索和按使用失败覆盖探索组合。",
+    "stakes": "预构建一次可跨模型复用，避免弱模型重复挖掘。",
+    "method_response": "GLM强提取器、库精炼和定向扩展、同初始query插入协议。",
+    "remaining_gap": "纯表示相对检索/预算收益、独立停止、抽象验证/全成本/跨环境。",
+    "evidence_ids": [
+      "E04",
+      "E08",
+      "E10",
+      "E13",
+      "E18"
+    ],
+    "unresolved": [
+      "请求总控固定AWM、ExpeL、A-Mem与Zhai2025探索原文/所用实现版本，核验first reusable KB及适配公平；本席无web访问。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "训练经验结构化并留存",
+          "新任务检索system conditioning",
+          "固定执行模型无逐任务权重更新"
+        ],
+        "success_checks": [
+          "三环境多模型、库off/强提取器对照"
+        ],
+        "failure_checks": [
+          "test停止泄漏",
+          "不同模型最佳层级不同"
+        ],
+        "evidence_ids": [
+          "E02",
+          "E05",
+          "E08",
+          "E10",
+          "E19"
+        ],
+        "reason": "核心是留存经验在推理时conditioning；无C03专门解析训练/共享表示对齐，不强套子卡。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "新任务通过检索技能而非更新权重；建库迭代不自动等于生成过程子卡。",
+    "executes_pattern": "yes",
+    "resolves_problem": "scoped to benchmark-specific libraries and initial-query use"
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "crystallize_executable_capability",
+        "sub": "H06",
+        "version": "manifest-fixed",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "condition": "训练/自发探索成功trace形成可复用参数化技能",
+            "status": "met",
+            "evidence_ids": [
+              "E01",
+              "E04",
+              "E14"
+            ]
+          },
+          {
+            "condition": "抽象callable重放/真实调用效果准入",
+            "status": "unmet",
+            "evidence_ids": [
+              "E03",
+              "E15"
+            ]
+          },
+          {
+            "condition": "独立后续任务+库off+完整成本",
+            "status": "partial",
+            "evidence_ids": [
+              "E02",
+              "E06",
+              "E12",
+              "E19"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E01",
+          "E03",
+          "E04",
+          "E14"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "crystallize_executable_capability",
+        "sub": "H06"
+      },
+      "operation_correspondence": "成功实践抽象留库→新任务检索conditioning→执行；预构建而非现场缺口触发",
+      "necessary_conditions": "可靠成功反馈、独立后续任务、抽象后验证",
+      "differences": "H06典型可调用工具复合，本篇文本技能/代码用法注入，禁止互调，无严格abstract replay；只部分对应",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E15"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:adapt_via_conditioning/RE-1",
+      "version": "manifest-fixed",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有no-memory及同GLM提取器基线；表示、检索器和额外推理预算未完全分离。",
+      "evidence_ids": [
+        "E08",
+        "E10"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-fixed",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "有实例分割，但明确按test停止；未见另留最终集/合成任务泄漏审计。",
+      "evidence_ids": [
+        "E02",
+        "E06"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-4",
+      "version": "manifest-fixed",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Table3分解轮次/扩展，模型特定技能组合；无pseudo-plan/过滤/merge独立对照，τ2缺组件实验。",
+      "evidence_ids": [
+        "E10",
+        "E17",
+        "E18"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-5",
+      "version": "manifest-fixed",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "三环境五执行模型提供有限泛用证据，各环境单独构库，不证不同工具生态直接移植。",
+      "evidence_ids": [
+        "E06",
+        "E13",
+        "E19"
+      ],
+      "score_item": "G"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/H06-step3",
+      "version": "manifest-fixed",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/sub/H06.md#step-by-step"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "成功轨迹抽象/聚类和LLM-schema筛选详；无抽象技能重放/真实调用效果准入，保留对象是提示片段而非新增可调用工具。",
+      "evidence_ids": [
+        "E01",
+        "E03",
+        "E14"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/H06-step5",
+      "version": "manifest-fixed",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/sub/H06.md#step-by-step"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "库off及后续任务有比；停止读test且全构建账缺失。",
+      "evidence_ids": [
+        "E02",
+        "E09",
+        "E12",
+        "E19"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "local:2604.04804-1",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.04804v2 §5.3/Table3"
+      ],
+      "applies_when": "主张反馈建库可迁移到后续任务和其他模型时",
+      "applicable": true,
+      "status": "challenged_with_evidence",
+      "reason": "无条件多层级/多轮持续优越的解释被Qwen仅plan最优及第3轮回退限定；须模型特定选择并用独立集。",
+      "evidence_ids": [
+        "E10",
+        "E18"
+      ],
+      "score_item": "M"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "预构库提高后续模型能力",
+      "setting": "BFCL/AppWorld/τ2，五执行模型",
+      "baseline_control": "no memory、A-Mem、AWM、ExpeL；后两者同GLM提取器",
+      "selection_vs_test": "训练构建，作者明确按test表现停止迭代",
+      "result": "Qwen BFCL53.67→63.67、AppWorld27.68→35.12 Avg@4；τ2 53.75/38.75/36.25→66.87/47.50/43.75",
+      "denominator": "BFCL150test；AppWorldTestNormal；四次推理；无独立建库重复",
+      "evidence_ids": [
+        "E02",
+        "E06",
+        "E07",
+        "E08",
+        "E19"
+      ],
+      "counterevidence": [
+        "E13"
+      ],
+      "allowed_conclusion": "同生态后续任务上外部非权重库可用；不证完全盲泛化或跨环境移植。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "层级、迭代和扩展持续改善库",
+      "setting": "AppWorld/BFCL Table3与§5.3",
+      "baseline_control": "层级组合、VanillaIter1–3、ExpandIter1–3；τ2未做后两项",
+      "selection_vs_test": "多配置test曲线/停止未隔离",
+      "result": "GLM AppWorld VanillaIter1 62.35/83.33→Iter2 64.29/85.12→Iter3 61.46/85.71；ExpandIter3 64.88/88.69；不同模型最佳层级不同",
+      "denominator": "四次consumer试验；未见跨构库种子",
+      "evidence_ids": [
+        "E10",
+        "E11",
+        "E17",
+        "E18"
+      ],
+      "counterevidence": [
+        "E10",
+        "E18"
+      ],
+      "allowed_conclusion": "收益有模型/轮次条件，非单调增长；图3未可读数值不编造。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "减少执行步骤与输入token代表成本效率",
+      "setting": "Figure3 e/f 与构建设置",
+      "baseline_control": "经验baseline/无库",
+      "selection_vs_test": "下游推理比较",
+      "result": "作者承认非最少step/token；未报完整离线支出",
+      "denominator": "图数值未在固定文本提取，无manifest页图；不猜测数值",
+      "evidence_ids": [
+        "E09",
+        "E12",
+        "E15"
+      ],
+      "counterevidence": [
+        "缺构建总tokens/美元和摊销拐点"
+      ],
+      "allowed_conclusion": "仅执行阶段部分效率线索，不支持端到端节费。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "环境反馈构建的外部技能库可在后续测试和不同消费模型复用；报告性能改善，但测试用于停止，跨生态/持续单调改进及总成本优势未证。",
+    "unresolved": [
+      "独立停止/最终测试",
+      "抽象技能真实验证",
+      "多构库seed/公平全成本",
+      "无实际复现；图3数值未猜测"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "问题清楚且有AWM/ExpeL强模型提取控制；first reusable KB和通用跨环境新颖性缺邻居原文确认。",
+      "evidence_ids": [
+        "E08",
+        "E13"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "计划/功能/原子分解与覆盖探索可理解；合并的向量delta数学化无可验证优化保证，层级收益依模型，抽象后技能未重放。",
+      "evidence_ids": [
+        "E01",
+        "E03",
+        "E04",
+        "E10"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "抽取/合并/过滤prompt和检索参数详；add/modify/keep可留存，但缺回滚、实际抽象执行验证、精确各库快照与独立停止集。",
+      "evidence_ids": [
+        "E03",
+        "E09",
+        "E14",
+        "E15"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "BFCL执行结果、AppWorld状态tests、τ2规则评估并列Avg/Pass较可信；库过滤是LLM schema审查，不能冒充技能执行有效率。",
+      "evidence_ids": [
+        "E07",
+        "E16"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "统一接口、同GLM提取控制、层级/轮次/扩展对照支持部分机制；无等token/等构建成本或独立检索与过滤贡献，表示重要性胜过强模型结论过强。",
+      "evidence_ids": [
+        "E08",
+        "E10",
+        "E18"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "初始任务train/test分开且跨执行模型，但明确按test表现停止，并展示多轮/技能组合选择；缺独立selection/最终report与合成任务重叠审计。",
+      "evidence_ids": [
+        "E02",
+        "E06",
+        "E11"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "每任务四次独立推理、Avg@4/Pass@4报告重复失败与负结果；无独立建库种子、方差/CI或显著性，不能视作稳定演化收益。",
+      "evidence_ids": [
+        "E07",
+        "E10",
+        "E18"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "构建rollout/轮数与推理token/step相对比较有报；无包含提取、合并、重写、检索和扩展的端到端账/摊销拐点。",
+      "evidence_ids": [
+        "E09",
+        "E12",
+        "E15"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 48.75,
+    "display": 48.8,
+    "lower": 48.75,
+    "upper": 48.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整读固定文本含附录。非权重技能留存和后续使用属范围；方法有报告缺陷和图数值限制，但核心Table1–3/机制足够审查，不据此冒称缺全文。",
+  "rationale": "三层经验库支持后续任务及跨模型复用，且有强提取器基线/迭代扩展对照；按test停止、未重放抽象技能且缺构库方差与全成本，泛化/持续改进结论需限缩。"
+}

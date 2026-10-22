@@ -1,0 +1,260 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r16b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "被评价对象是经GRPO更新权重的Qwen3-8B/14B策略；环境/任务/诊断指南是训练数据，未作为非权重harness组件被评价。按冻结rubric A3(improver更新对象与产物均为权重)判范围外，不以低分代替。",
+ "rationale": "环境合成+自演化RL竞技场，但改进对象与产物都是策略权重(GRPO)；环境/任务只是训练数据，非harness组件，判范围外。",
+ "paper": {
+  "paper_key": "2604.18292",
+  "paper_id": "2604.18292",
+  "title": "Agent-World: Scaling Real-World Environment Synthesis for Evolving General Agent Intelligence",
+  "version": "2604.18292v1",
+  "claim_type": "system_method",
+  "central_claim": "Agent-World通过真实环境主题的数据库/工具/可验证任务合成(Agentic Environment-Task Discovery)与多环境RL+自演化竞技场(诊断能力缺口→定向任务合成→继续RL)，使Agent-World-8B/14B在23个基准上超过强基线，并呈现环境数量与演化轮数的扩展趋势。"
+ },
+ "provenance": {
+  "input_hash": "bed8c93a9a4fb2708abe5c9433460c6c5b3239bdcfa0c3cca55b0782a9b71abd",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref: worker 子代理无可读取的运行回执，按模板置 null。范围外记录未做完整G/M/X/E与模式评分。",
+  "timestamp": "2026-10-22T01:10:00Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2604.18292v1",
+   "sha256": "3487c04d726b0a15074104e3b16a67048f13b6a3540b4de9095b0a560d265013",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Preliminary",
+    "3.1 Environment-Task Discovery",
+    "3.2 Continuous Self-Evolving Agent Training",
+    "4.1-4.3 Experiments/Analyses",
+    "Related Work",
+    "Conclusion",
+    "Appendix: diagnosis prompt, environment case cards (skimmed, not decision-relevant)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract / Sec 3 (component 2)",
+   "quote": "which combines multi-environment reinforcement learning with a self-evolving agent arena that automatically identifies capability gaps through dynamic task synthesis and drives targeted learning",
+   "support_explanation": "第二组件的中心操作：用RL(更新策略)与竞技场诊断驱动定向学习；学习发生在权重。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "Sec 3.2.1",
+   "quote": "we perform multi-environment agent RL to improve state-aware reasoning, long-horizon tool use, and environment interaction robustness",
+   "support_explanation": "改进手段是对策略的RL训练(GRPO)，目标是策略的能力。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "Sec 4.1 Implementation details",
+   "quote": "After cold-start SFT, we initialize the Qwen3-8B/14B backbones",
+   "support_explanation": "被评价与发布的对象是SFT+GRPO训练后的Qwen3-8B/14B权重。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "Sec 4.3 self-evolving rounds analysis",
+   "quote": "finally, targeted synthesis and continual RL produce the next-round policy",
+   "support_explanation": "每轮的留存产物是下一轮策略权重；合成任务/诊断指南用于继续RL的训练数据，实验未评价环境库或诊断指南作为推理期非权重组件的效果。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "Sec 3.1 Tool Interface Generation and Verification",
+   "quote": "A tool is retained only if it satisfies all of the following:",
+   "support_explanation": "环境内工具经单测过滤后保留，是执行门控的合成环境资产；但这些工具属于训练环境，不是被训练智能体在评测基准中使用的harness组件。",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "策略权重(Qwen3-8B/14B)与由GPT-OSS-120B合成的环境/任务/验证脚本训练数据",
+   "information": "诊断代理可见失败轨迹、按环境/类别的错误统计、环境元数据。",
+   "operation": "评测→诊断出弱环境与任务生成指南→定向合成任务(可含数据库复杂化)→继续GRPO训练。",
+   "output": "下一轮策略权重。",
+   "conditions": "可执行验证器/量规；留出的竞技场环境每轮动态刷新。",
+   "feedback": "沙箱执行、可执行验证脚本或量规LLM判官的奖励。",
+   "selection_rule": "任务合成时ReAct代理5次求解、至少2次一致才保留；工具Acc>0.5保留。",
+   "selection_data": "合成数据的内部一致性过滤；无对策略版本的接受/回退门控。",
+   "persistence": "权重继承；环境/任务库跨轮保留为训练数据。",
+   "later_use": "作为训练输入。",
+   "claimed_effect": "两轮自演化：Agent-World-14B在tau2/BFCL-V4/MCP-Mark 45.3/52.4/29.5→50.5/55.8/38.1(作者报告)。",
+   "failure_boundary": "不适用：范围外，未展开。",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "真实感环境缺乏可扩展合成；现有工作偏重环境构建，缺少用环境诊断智能体弱点并驱动持续自我改进的机制。",
+  "checked_gap": "未展开(范围外)。",
+  "lineage": [],
+  "closest_adjacent": "EnvScaler、ScaleEnv、AWM等环境合成基线(论文内有数值比较)；未展开。",
+  "residue": "未展开",
+  "stakes": "未展开",
+  "method_response": "未展开",
+  "remaining_gap": "未展开",
+  "evidence_ids": [],
+  "unresolved": [
+   "范围外，未做完整gap核查。"
+  ]
+ },
+ "rs_pattern": {
+  "primary": null,
+  "supporting": [],
+  "matches": [],
+  "outside_taxonomy": false,
+  "reason": "范围外记录，未执行完整原15+31识别；不计入outside_taxonomy比率。参考性观察：诊断→定向合成任务→继续训练对应领域层self_generate_the_curriculum(H23)，该卡标注‘touches weights’边界。",
+  "executes_pattern": null,
+  "resolves_problem": null
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H23",
+    "version": "2026-10-21-cards",
+    "fit": "boundary_weights_informational",
+    "condition_checks": "仅作范围参考：诊断驱动、执行验证的任务合成确实出现，但被改进对象是权重，卡片本身标注边界；不据此计分。",
+    "evidence_ids": [
+     "E001",
+     "E004"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [],
+ "expectations": [],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "环境合成+自演化RL训练使8B/14B策略在23个基准上超过强基线，并随环境数量与演化轮数扩展。",
+   "setting": "Qwen3-8B/14B，SFT冷启动+GRPO，GPT-OSS-120B合成环境/任务；8次重复取平均。",
+   "baseline_control": "EnvScaler/ScaleEnv/AWM等环境扩展基线、开源/专有基础模型。",
+   "selection_vs_test": "未展开",
+   "result_denominator": "未展开",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "范围外：不对该主张的有效性评分；仅记录其改进对象是权重。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "not_assessed",
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "范围外，未评。",
+  "unresolved": [
+   "若总控认定环境/任务库本身是被评价的留存非权重组件(需修订范围规则)，应另建attempt做完整评审。"
+  ],
+  "not_claimed": "我们没有复现任何结果；所有数值为作者报告。"
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外，未评。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0,
+  "upper": 100,
+  "coverage": 0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -1,0 +1,684 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r16b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.19795",
+    "paper_id": "2604.19795",
+    "title": "Prism: An Evolutionary Memory Substrate for Multi-Agent Open-Ended Discovery",
+    "version": "2604.19795v1",
+    "claim_type": "system_method",
+    "central_claim": "Prism以熵分层、causal图、VoI、heartbeat及replicator动态形成带形式保证的可演化记忆；LOCOMO J88.1，四agent优化约2.8倍IR，知识积累驱动改进。"
+  },
+  "provenance": {
+    "input_hash": "bed8c93a9a4fb2708abe5c9433460c6c5b3239bdcfa0c3cca55b0782a9b71abd",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T01:01:51.168141+00:00",
+    "notes": "派发sonnet→gpt-6.1-sol；无独立receipt/session记录，按模板null。数学核对为our_inference，未运行论文代码或实验。"
+  },
+  "materials": [
+    {
+      "material_id": "2604.19795.txt",
+      "url": "https://arxiv.org/html/2604.19795v1",
+      "version": "2604.19795v1",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "sections_read": [
+        "Abstract",
+        "1–7",
+        "All definitions, Theorems 3.1–3.6 and Algorithms 1–3",
+        "Tables 1–6",
+        "Appendices A–C"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§1 introduction",
+      "quote": "Current memory architectures satisfy these conditions partially:\n\n1.\n\nLayered file persistence\n(Claude Code): Three-tier architecture with always-loaded index, on-demand topic files, and grep-only transcripts. Background “autoDream” consolidation prunes and rewrites memories. Single-agent only.\n\n2.\n\nConfidence-scored extraction\n(DeerFlow 2.0): LLM-powered extraction with debounced async queues and JSON persistence with prompt injection. No multi-agent support.\n\n3.\n\nTwo-phase vector+graph pipelines\n(Mem0/Mem0\ng\n): Extract-then-update with semantic deduplication and optional entity-relationship graphs. No evolutionary dynamics.\n\n4.\n\nEvolutionary multi-agent coordination\n(\nCoral\n): Shared persistent memory (attempts/notes/skills) with heartbeat-driven interventions and isolated worktrees. Achieves 3–10\n×\n\\times\nimprovement rates—but lacks formal memory architecture.\n\nPrism\nsynthesizes all four paradigms",
+      "support_explanation": "作者将Claude Code、DeerFlow、Mem0与Coral的局部能力组合为待填补问题；这些邻居评价只由本文转述，未独立核原文。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.1 S1 extraction",
+      "quote": "Each candidate undergoes the four-operation update protocol against the shared store:\no\n∗\n∈\n{\nAdd\n,\nUpdate\n,\nDelete\n,\nNoop\n}\no^{*}\\in\\{\\textsc{Add},\\textsc{Update},\\textsc{Delete},\\textsc{Noop}\\}\n. Critically, every new memory carries an\nagent provenance tag\n\nα\n⁡\n(\nm\n)\n=\ni\n\\alpha(m)=i\n, enabling multi-agent knowledge tracing.",
+      "support_explanation": "ADD/UPDATE/DELETE/NOOP及agent provenance是明确编辑接口。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.2 semantic tiering",
+      "quote": "The semantic alignment is natural:\nskills\nare compact, highly reusable procedures (low entropy, high frequency)—always loaded.\nNotes\nare medium-entropy observations requiring context for relevance—retrieved via ANN.\nAttempts\nare high-entropy raw evaluation logs—accessed only when VoI analysis demands it.",
+      "support_explanation": "skills常驻、notes ANN、attempts按需检索体现差异化处理；不等于熵必然对应语义可复用性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.4 fitness definition",
+      "quote": "where a retrieval is “successful” if the downstream agent response was positively evaluated, and",
+      "support_explanation": "反馈依赖下游positive evaluation；评测者、可靠性/归因细节未在这里定义。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.5 strategy evolution",
+      "quote": "After each retrieval-use cycle, the strategy that was used receives a fitness update based on outcome quality, and the population evolves:\n\nw\nj\n(\nt\n+\n1\n)\n=\nw\nj\n(\nt\n)\n⋅\nexp\n⁡\n(\nη\n⋅\nr\nj\n(\nt\n)\n)\nw_{j}^{(t+1)}=w_{j}^{(t)}\\cdot\\exp(\\eta\\cdot r_{j}^{(t)})\n\n(14)",
+      "support_explanation": "检索策略按结果质量指数权重更新，为非权重检索器配置保留变化；仅已用策略反馈不自动满足全信息Hedge假设。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.6 consolidation",
+      "quote": "The five-phase pipeline (fork, distillation, conflict resolution, pruning, index synchronization) operates as in the base architecture, with the distillation phase now explicitly converting\nnotes\ninto\nskills\n:",
+      "support_explanation": "fork/distill/conflict/prune/index同步明确curator操作，但执行器细节与独立验证不足。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.7 heartbeat intervention",
+      "quote": "Three intervention types:\n\n1.\n\nReflection\n(fired every\nh\nr\nh_{r}\nturns): Agent records structured observations as notes in the hub.\n\n2.\n\nConsolidation\n(fired when\n|\nℳ\nnotes\n|\n>\nν\n|\\mathcal{M}_{\\text{notes}}|>\\nu\n): Notes are distilled into skills via AutoDream.\n\n3.\n\nRedirection\n(fired at\nτ\n∗\n\\tau^{*}\n): Agent pivots strategy. The causal graph identifies unexplored branches; the agent is redirected toward the region with highest\nRisk of Inaction\n:\n\nRoI\n​\n(\nv\n)\n=\n𝔼\n⁡\n[\nQ\n⁡\n(\na\n∗\n,\nθ\n)\n−\nQ\n⁡\n(\na\nnull\n,\nθ\n)\n∣\nv\n]\n\\text{RoI}(v)=\\mathbb{E}[Q(a^{*},\\theta)-Q(a_{\\text{null}},\\theta)\\mid v]\n\n(19)",
+      "support_explanation": "周期反思、notes阈值合并、置信停滞重定向构成调度链；未证明观察均值差就是CUSUM最优停止。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§5.1 setup",
+      "quote": "Conversational memory (LOCOMO):\nTests single-hop, temporal, multi-hop, and open-domain questions across long conversation histories. Baselines: Full Context, RAG-512, DeerFlow, Claude Code Memory (simulated), Mem0, Mem0\ng\n.\n\nEvolutionary optimization:\nInspired by\nCoral\n’s evaluation, we test multi-agent\nPrism\non three tasks: 100-city TSP, circle packing optimization, and a kernel engineering microbenchmark. Baselines: Single-agent\nPrism\n, random evolutionary search, OpenEvolve-style fixed mutation.\n\nAll experiments use GPT-4o with\nτ\n1\n=\n2.5\n\\tau_{1}=2.5\n,\nτ\n2\n=\n5.0\n\\tau_{2}=5.0\nnats,\nλ\n=\n0.01\n\\lambda=0.01\n/day.",
+      "support_explanation": "两个套件、三优化任务及GPT4o/熵阈值/衰减；没有独立冻结后未见任务协议。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§5.2 Table 1",
+      "quote": "Method\n\nJ\nJ\n(\n↑\n\\uparrow\n)\n\nF1 (\n↑\n\\uparrow\n)\n\np95 (s)\n\nSavings\n\nFull Context\n\n71.4\n\n58.2\n\n17.12\n\n—\n\nRAG-512\n\n59.8\n\n47.1\n\n2.31\n\n82%\n\nDeerFlow\n\n62.5\n\n49.8\n\n0.42\n\n88%\n\nCC Memory\n\n65.1\n\n52.4\n\n0.38\n\n90%\n\nMem0\n\n67.2\n\n53.9\n\n1.44\n\n90%\n\nMem0\ng\n\n68.4\n\n55.1\n\n2.59\n\n88%\n\nPrism\n(1 agent)\n\n88.1\n\n71.6\n\n0.89\n\n93%",
+      "support_explanation": "LOCOMO作者报告Prism J88.1/F1 71.6/p95 .89s/93% savings，对比Mem0 J67.2；judge提示/数据分母与运行误差未充分交代。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§5.3 Table 3",
+      "quote": "100-City TSP (minimize distance)\n\nRandom Evo\n\n1\n\n0.08\n\n—\n\n42,180\n\n500\n\nOpenEvolve\n\n1\n\n0.15\n\n—\n\n38,920\n\n500\n\nPrism\n(1)\n\n1\n\n0.31\n\n0.42\n\n35,640\n\n380\n\nPrism\n(4)\n\n4\n\n0.87\n\n0.71\n\n33,210\n\n420\n\nCircle Packing (maximize density)\n\nRandom Evo\n\n1\n\n0.05\n\n—\n\n0.821\n\n300\n\nPrism\n(1)\n\n1\n\n0.19\n\n0.38\n\n0.856\n\n280\n\nPrism\n(4)\n\n4\n\n0.53\n\n0.68\n\n0.879\n\n310\n\nKernel Microbenchmark (minimize cycles)\n\nPrism\n(1)\n\n1\n\n0.22\n\n0.35\n\n1,284\n\n200\n\nPrism\n(4)\n\n4\n\n0.61\n\n0.64\n\n1,142\n\n240",
+      "support_explanation": "三优化任务有评价次数/最优分数/IR/KR；四agent与单agent评次数不同，IR精确定义和单位不清，非等算力因果证据。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§5.3 correlation",
+      "quote": "knowledge reuse rate\n(KR)—the fraction of retrieved memories drawn from other agents’ contributions—is strongly correlated with improvement rate (\nr\n=\n0.89\nr=0.89\n,\np\n<\n0.01\np<0.01\n), confirming\nCoral\n’s mechanistic finding that knowledge accumulation, not just parallel compute, drives multi-agent gains.",
+      "support_explanation": "r=.89,p<.01是相关报告，不能据此确认knowledge accumulation而非parallel compute驱动。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§5.4 Table 4",
+      "quote": "Full\nPrism\n(4 agents)\n\n88.1\n\n0.87\n\n−\n-\nTri-partite hub (flat tiers)\n\n82.4\n\n0.68\n\n−\n-\nCausal edges (\nE\nc\nE_{c}\n)\n\n76.8\n\n0.59\n\n−\n-\nEvolutionary VoI\n\n79.3\n\n0.44\n\n−\n-\nHeartbeat controller\n\n84.6\n\n0.51\n\n−\n-\nReplicator dynamics\n\n85.2\n\n0.62\n\n−\n-\nMulti-agent (1 agent)\n\n88.1\n\n0.31\n\n−\n-\nAll (flat vector, 1 agent)\n\n67.2\n\n0.15",
+      "support_explanation": "去hub/causal/VoI/heartbeat/replicator/多agent逐模块消融有作者报告；不含等预算/随机seed细节。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.3 Theorem 3.2 coverage bound",
+      "quote": "For\nn\nn\nagents with pairwise exploration divergence\nD\n⁡\n(\ni\n,\nj\n)\n≥\nd\nmin\n>\n0\nD(i,j)\\geq d_{\\min}>0\n, the expected number of distinct memories accessed in\nT\nT\nretrieval rounds is:\n\n𝔼\n[\n|\n⋃\ni\n=\n1\nn\nS\ni\n(\nT\n)\n|\n]\n≥\nn\n⋅\nk\n⋅\n(\n1\n−\ne\n−\nd\nmin\nT\n/\n|\nℳ\n|\n)\n\\mathbb{E}\\left[\\left|\\bigcup_{i=1}^{n}S_{i}^{(T)}\\right|\\right]\\geq n\\cdot k\\cdot\\left(1-e^{-d_{\\min}T/|\\mathcal{M}|}\\right)\n\n(7)\n\nwhere\nk\nk\nis the per-agent retrieval budget.",
+      "support_explanation": "本席解析反例：在未限制n*k≤|M|时取n=2,k=2,|M|=3且分布散度>0，T足够大右侧趋于4，distinct memories最多3，原定理不可能普遍成立。未运行论文代码。",
+      "kind": "our_inference"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "Appendix A Pinsker step",
+      "quote": "When\nD\nKL\n(\nR\ni\n∥\nR\nj\n)\n≥\nd\nmin\nD_{\\text{KL}}(R_{i}\\|R_{j})\\geq d_{\\min}\n, by Pinsker’s inequality,\n‖\nR\ni\n−\nR\nj\n‖\n1\n≥\n2\n​\nd\nmin\n\\|R_{i}-R_{j}\\|_{1}\\geq\\sqrt{2d_{\\min}}\n. This ensures the distributions are sufficiently different",
+      "support_explanation": "本席静态数学核对：Pinsker给KL≥(1/2)||P-Q||₁²；KL有下界不推出L1有下界，论文反向使用。大KL可由极小尾部比值产生，不能保证盲区不重叠。",
+      "kind": "our_inference"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§3.4 Theorem 3.3 proof",
+      "quote": "The decay term\nλ\n​\nV\n\\lambda V\ndrives\nV\nV\ntoward its minimum. Combined with positive mutation\nμ\n>\n0\n\\mu>0\nensuring the support of\n𝜿\n\\boldsymbol{\\kappa}\nnever collapses, the system converges to a fixed point\n𝜿\n∗\n\\boldsymbol{\\kappa}^{*}\nwhere\nf\ni\n=\nf\n¯\nf_{i}=\\bar{f}\nfor all\nm\ni\nm_{i}\nwith\nκ\ni\n∗\n>\nμ\n/\nλ\n\\kappa_{i}^{*}>\\mu/\\lambda\n. At this fixed point, condition",
+      "support_explanation": "作者以Lyapunov/正mutation推收敛及不可入侵；fitness随窗口改变，导数省略fitness/fbar变化，且固定点条件不能推出所有外部memory低fitness。此证明不足，不把保证当作已证事实。",
+      "kind": "our_inference"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "Appendix C hyperparameter sensitivity",
+      "quote": "Table\n5\nshows the optimal entropy thresholds at\nτ\n1\n=\n2.5\n,\nτ\n2\n=\n5.0\n\\tau_{1}=2.5,\\tau_{2}=5.0\n, holding approximately 18 skills in Tier 1. Table\n6\nshows that decay rate\nλ\n=\n0.01\n\\lambda=0.01\nwith mutation\nμ\n=\n0.005\n\\mu=0.005\nbalances memory retention against evolutionary pressure, yielding the highest improvement rate with a manageable store size of 185 memories.",
+      "support_explanation": "阈值和replicator参数在LOCOMO/TSP结果上展示最优选择，未报告独立验证/最终测试划分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2604.19795.txt",
+      "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+      "locator": "§6.4 limitations",
+      "quote": "LLM dependency.\nExtraction, causal edge identification, and consolidation all require LLM calls. Distilled extraction models would reduce cost.\n\nCausal identification.\nAutomatic extraction of\ndo\n-calculus edges from text is imperfect. Human validation is recommended for high-stakes decisions.\n\nEvolutionary benchmarks.\nOur optimization experiments are smaller-scale than\nCoral\n’s full evaluation suite. Larger-scale validation on the complete\nCoral\nbenchmark is future work.",
+      "support_explanation": "作者承认LLM调用成本、因果边提取不完美且规模小；这些不是实际复现凭据。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "共享skills/notes/attempts记忆及confidence/provenance图",
+      "information": "各agent交互、embedding、token entropy、频率、下游positive evaluation",
+      "operation": "LLM抽取并ADD/UPDATE/DELETE/NOOP；熵/频率分层；replicator+decay+mutation更新confidence，AutoDream合并/剪枝",
+      "output": "有agent归属的分层共享知识及causal边",
+      "conditions": "熵可准确估计且对应可复用性、positive evaluation可靠、文本因果边可识别",
+      "feedback": "下游正面评价定义successful retrieval；使用频次/置信停滞",
+      "selection_rule": "LLM-Decide编辑；熵τ1=2.5/τ2=5及频率门；剪枝/合并与replicator动态",
+      "selection_data": "正在执行的对话/优化流；Appendix C用LOCOMO/TSP指标比较参数",
+      "persistence": "外部memory与graph；fork/distill/conflict/prune/index同步；事务/版本回滚和权限未详",
+      "later_use": "skills常驻、notes ANN、graph扩展、必要时attempts grep，再拼prompt",
+      "claimed_effect": "LOCOMO J88.1、三优化任务四agent约2.8倍IR、store收敛保证",
+      "failure_boundary": "熵单位/定义、分层频率条件歧义、评价器未定义、自动causal提取错误、理论不成立",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E006",
+        "E007",
+        "E008",
+        "E009",
+        "E013",
+        "E014",
+        "E015"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "检索配置(k,成本敏感α,多样性γ)的策略权重",
+      "information": "检索-使用后的outcome quality",
+      "operation": "按指数权重选择检索策略，VoI贪心组装后更新已用策略权重",
+      "output": "更偏向高质量反馈的后续配置选择",
+      "conditions": "VoI和reward可估计且可归因；反馈信息模式与所引Hedge定理相符",
+      "feedback": "所用策略的reward",
+      "selection_rule": "w_j←w_j exp(η r_j)；归一化/未用策略reward估计不清",
+      "selection_data": "同一运行的retrieval-use cycles",
+      "persistence": "策略权重跨cycle保留",
+      "later_use": "下一检索Categorical选择策略",
+      "claimed_effect": "低regret的自演化VoI并支撑IR提升",
+      "failure_boundary": "仅bandit反馈不等于full-information Hedge；连续VoI估计、normalized概率等实现条件缺失",
+      "evidence_ids": [
+        "E005",
+        "E012"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "现有file/vector/graph/multiagent各自覆盖部分持久协作与反思，缺统一有formal guarantees的memory substrate。",
+    "checked_gap": "接口组合问题成立，但所谓formal justification不由数学命名自动实现；核心coverage界与证明可直接反驳，未独立读取邻居原文。",
+    "lineage": [
+      {
+        "method": "Claude Code、DeerFlow2、Mem0/g、Coral、AlphaEvolve/OpenEvolve",
+        "source": "本文§1–2自述与inline author-year citations",
+        "version": "作者引用版本；邻居材料未固定，不能独立确认第一性/性能对比"
+      }
+    ],
+    "closest_adjacent": "Mem0四操作curation、Coral共享attempts/notes/skills与heartbeat",
+    "residue": "怎样证明分层、维护和检索控制增加可靠任务收益，而不是仅组合功能。",
+    "stakes": "错误causal边/未经校准positive反馈可使错误知识积累；错误理论不能作安全边界。",
+    "method_response": "分层异质处理、provenance、curator剪枝和检索策略指数更新。",
+    "remaining_gap": "理论修复、完整可执行估计器、独立holdout、等预算与多seed复核。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E013",
+      "E014",
+      "E015",
+      "E017"
+    ],
+    "unresolved": [
+      "请求总控固定Mem0/g与Coral原文版本供谱系核对；本席未联网。",
+      "作者实验没有现成独立运行凭据，本文表格不等于本席复现。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "heterogeneous_decomposition",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "heterogeneous_decomposition",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "按熵/频率分skills/notes/attempts",
+          "常驻、ANN、按需grep差异处理",
+          "flat-tier消融有，熵异质性分布/可靠界未证",
+          "C04针对trained overprovisioned artifact的高影响保护/误差分解不贴切，故子卡null"
+        ],
+        "success_checks": [
+          "存在明确分区与不同操作、flat-tier对照"
+        ],
+        "failure_checks": [
+          "未测熵分布和可复用性关系；formal justification的边界/证明有错误"
+        ],
+        "evidence_ids": [
+          "E003",
+          "E012",
+          "E013",
+          "E014"
+        ],
+        "reason": "实际操作是外部memory异质分层与差异访问，不因math名词匹配更多卡；无贴切子卡可用null。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "原15主卡操作足以覆盖分层差异处理；子卡C04不硬套。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01",
+        "version": "manifest-pinned",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "下游positive评价作fitness，但评价器/因果归因不详。"
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "编辑/合并/冲突/剪枝有协议，精确实现与语义正确性未实证。"
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "有编辑及剪枝而缺独立效用门/冻结后未见任务验证。"
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E004",
+          "E006"
+        ]
+      }
+    ],
+    "unassigned": [
+      "检索配置会更新但不足以称已证明improver；并非memory substrate天然保证学习。"
+    ],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01"
+      },
+      "operation_correspondence": "外部知识按属性分层→不同访问/持久策略→curator更新/合并/剪枝后被下一轮读取",
+      "necessary_conditions_and_differences": "原卡关心分层的判别性质与差异处理；H01关心store维护政策，两者交集是可维护分层知识，而非熵自动等于长期效用。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E006"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:heterogeneous_decomposition/RE-5",
+      "version": "manifest-pinned",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "原主卡Reviewer expectations item5"
+      ],
+      "applies_when": "熵作为分层的核心判别依据",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "未展示entropy与语义/下游价值的分布关系；参数表不替代前提刻画。",
+      "evidence_ids": [
+        "E003",
+        "E016"
+      ],
+      "score_item": [
+        "G",
+        "X"
+      ]
+    },
+    {
+      "id": "rs:heterogeneous_decomposition/RE-4",
+      "version": "manifest-pinned",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "原主卡Reviewer expectations item4"
+      ],
+      "applies_when": "声称分层/多agent而非额外算力驱动",
+      "applicable": true,
+      "status": "partial",
+      "reason": "flat-tier与模块消融有报告，但多agent用更多eval、无等算力对照，相关性不隔离因果。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012"
+      ],
+      "score_item": [
+        "E.causality"
+      ]
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/H01",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H01.md steps1–5"
+      ],
+      "applies_when": "共享memory需维护而不只是append",
+      "applicable": true,
+      "status": "partial",
+      "reason": "显式编辑和AutoDream剪枝有设计；缺完整curator可靠性、编辑单独等预算控制及构建测试分离。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E006",
+        "E012",
+        "E016"
+      ],
+      "score_item": [
+        "M",
+        "X",
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "local:2604.19795-1",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文Theorems3.1–3.6及Appendix A"
+      ],
+      "applies_when": "声称formal justification和coverage/convergence/regret保证",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "coverage界可超过记忆全集大小、Pinsker方向反用；replicator证明与bandit/Hedge信息权限有缺口，不能作为已证机制保证。",
+      "evidence_ids": [
+        "E005",
+        "E013",
+        "E014",
+        "E015"
+      ],
+      "score_item": [
+        "M"
+      ]
+    },
+    {
+      "id": "local:2604.19795-2",
+      "version": "manifest-pinned",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "本文§5.1–5.3及Appendix B"
+      ],
+      "applies_when": "J/IR/KR用于能力结论",
+      "applicable": true,
+      "status": "partial",
+      "reason": "F1与best-score直接相关，但judge提示/positive evaluator/IR分母单位缺失；KR只度量他人贡献被取用，不是因果收益。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E009",
+        "E010",
+        "E011"
+      ],
+      "score_item": [
+        "E.measurement"
+      ]
+    },
+    {
+      "id": "local:2604.19795-3",
+      "version": "manifest-pinned",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "本文§5及Appendix C"
+      ],
+      "applies_when": "把共享记忆收益称可留存泛化",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "只有对话回忆和同优化任务内轨迹，参数也在这些指标上比较，未报告独立冻结后任务。",
+      "evidence_ids": [
+        "E008",
+        "E016"
+      ],
+      "score_item": [
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "local:2604.19795-4",
+      "version": "manifest-pinned",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "本文§5.2–5.5及§6.4"
+      ],
+      "applies_when": "单点巨大提升需方差与全预算",
+      "applicable": true,
+      "status": "partial",
+      "reason": "提供eval次数、p95/savings与相关p值；无多seed主结果区间、失败候选/LLM反思合并全成本或等墙钟。",
+      "evidence_ids": [
+        "E009",
+        "E010",
+        "E011",
+        "E017"
+      ],
+      "score_item": [
+        "E.statistics",
+        "E.cost"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "熵分层、causal memory、VoI与replicator动态提供带coverage/convergence保证的自演化substrate。",
+      "setting": "有限共享memory、n agents与k检索预算，成功反馈动态fitness",
+      "baseline_control": "理论推导；flat-tier/去模块作者报告",
+      "selection_vs_test": "定理无独立数值验证可代替证明；系统测试未说明冻结/holdout",
+      "result_denominator": "Theorem3.2右侧趋n*k而distinct≤|M|；未假设n*k≤|M|；Appendix A重复同一Pinsker错误",
+      "evidence_ids": [
+        "E013",
+        "E014",
+        "E015",
+        "E005"
+      ],
+      "counterevidence": [
+        "n=2,k=2,|M|=3允许正KL散度；T充分大时声称下界>3，与集合大小上界直接冲突。",
+        "KL≥d不推出L1≥sqrt(2d)；此为静态数学核对，不是运行。",
+        "只更新已用策略不直接满足Hedge全信息regret保证。"
+      ],
+      "allowed_conclusion": "结构可作为启发式实现设想，原文通用coverage保证被反例否定，其余理论不能由引用现成定理自动成立。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "Prism在LOCOMO达J88.1、比Mem0提高31.2%，四agent优化约2.8倍IR，证明知识积累而非并行算力驱动。",
+      "setting": "GPT4o；LOCOMO及TSP/circle packing/kernel microbenchmark",
+      "baseline_control": "Full Context、RAG512、DeerFlow、模拟CC、Mem0/g；单agent/Random Evo/OpenEvolve-style；模块消融",
+      "selection_vs_test": "Appendix C用LOCOMO/TSP分数选择最优超参；未见独立构建/验证/最终测试描述",
+      "result_denominator": "LOCOMO J67.2→88.1,F1 53.9→71.6；TSP IR .31→.87，eval380→420；circle .19→.53，280→310；kernel .22→.61，200→240；未报告主结果多seed分母",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E010",
+        "E011",
+        "E012",
+        "E016"
+      ],
+      "counterevidence": [
+        "四agent对单agent不是等LLM calls/墙钟预算；IR/KR相关并不确认因果。",
+        "J evaluator/positive评价与IR精确定义不全，主结果无运行误差条。"
+      ],
+      "allowed_conclusion": "这些是作者报告的任务内memory/多agent收益与有限消融；未独立复现，不足以证明严格留存迁移或排除并行计算解释。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "contradicted",
+    "strongest_supported_claim": "作者报告任务内memory、多agent与组件移除的结果；启发式维护链可描述。通用coverage保证按原文无条件形式已被有限全集上界反例否定；经验数值尚未独立复核，不把数学反例说成实验数值造假。",
+    "unresolved": [
+      "其余定理需要补齐假设与正确证明；无权将作者命名的theorem视为已证。",
+      "独立非权重留存泛化、IR/judge定义、多seed和全预算仍未报告。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "共享持久知识与多范式接口问题具体，邻居列得广；残余瓶颈未独立对照，熵语义对应主要被断言。",
+      "evidence_ids": [
+        "E001",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "编辑/检索/反馈链有构造，但核心formal justification不能成立：coverage界违反集合上界、Pinsker方向错误；replicator与Hedge条件亦未闭合。按机制论证缺陷评此项，不把公式存在当正确。",
+      "evidence_ids": [
+        "E002",
+        "E005",
+        "E013",
+        "E014",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "八模块与三算法、阈值/更新/剪枝操作可粗重建；VoI估计、positive评测器、token entropy测量及概率归一化、频率条件/单位未充分定义，未见版本事务回退。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "给J/F1、best score与eval数，但judge配置/样本分母、IR单位和positive evaluation不清；跨agent取用率KR不是知识有效性真值。",
+      "evidence_ids": [
+        "E004",
+        "E009",
+        "E010",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "有组件消融而非零对照，但多agent更多eval/LLM资源且无等预算；相关性r=.89不能排除parallel compute，因果边也只是自动提取。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "not_reported",
+      "rating": 0,
+      "reason": "全文含附录未报告独立构建/参数选择流、冻结memory后未见任务评测；当前对话回忆/同task优化不能冒充独立留存。",
+      "evidence_ids": [
+        "E008",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7、全部算法/表1–6、Appendices A–C；未见独立任务/冻结holdout协议。"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告优化eval次数与相关p值，有具体分母片段；主结果缺重复seed/CI/失败分布，相关显著性不等于J/IR提升稳定。",
+      "evidence_ids": [
+        "E010",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "p95延迟/token savings和优化eval数有报告；全LLM调用、提取/合并/失败候选/多agent墙钟与等预算未记账。",
+      "evidence_ids": [
+        "E009",
+        "E010",
+        "E017"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 31.25,
+    "display": "31.2",
+    "lower": 31.25,
+    "upper": 31.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整材料及附录已读，hash匹配；有实验故不套A1无实验全零。理论错误与测量/实验缺口是论文事实，非缺全文。",
+  "rationale": "共享memory编辑与分层链具体，但coverage界可超过全集大小且Pinsker方向反用，形式保证不成立。任务表格缺IR/judge细节、独立holdout、等预算与主结果多seed，不能确认留存泛化或知识而非算力驱动。"
+}

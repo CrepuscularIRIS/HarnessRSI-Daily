@@ -1,0 +1,1617 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r16b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.19795",
+  "paper_id": "2604.19795",
+  "title": "Prism: An Evolutionary Memory Substrate for Multi-Agent Open-Ended Discovery",
+  "version": "2604.19795v1",
+  "claim_type": "system_method",
+  "central_claim": "Prism把分层文件持久化、向量语义记忆、图结构关系记忆与多智能体进化搜索统一到一个决策论框架(八个子系统：熵门控三层hub、因果记忆图、VoI检索+自演化策略选择、心跳整合控制器、复制-衰减动力学并证明收敛到进化稳定记忆集)，在LOCOMO上LLM判官88.1(比Mem0高31.2%)，四智能体在CORAL式进化优化任务上改进率为单智能体的2.8倍。"
+ },
+ "provenance": {
+  "input_hash": "bed8c93a9a4fb2708abe5c9433460c6c5b3239bdcfa0c3cca55b0782a9b71abd",
+  "input_package": "batches/r16b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:35:08Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.19795.txt",
+   "url": "https://arxiv.org/html/2604.19795v1",
+   "version": "2604.19795v1",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.19795.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§1 introduction",
+   "quote": "Current memory architectures satisfy these conditions partially:\n\n1.\n\nLayered file persistence\n(Claude Code): Three-tier architecture with always-loaded index, on-demand topic files, and grep-only transcripts. Background “autoDream” consolidation prunes and rewrites memories. Single-agent only.\n\n2.\n\nConfidence-scored extraction\n(DeerFlow 2.0): LLM-powered extraction with debounced async queues and JSON persistence with prompt injection. No multi-agent support.\n\n3.\n\nTwo-phase vector+graph pipelines\n(Mem0/Mem0\ng\n): Extract-then-update with semantic deduplication and optional entity-relationship graphs. No evolutionary dynamics.\n\n4.\n\nEvolutionary multi-agent coordination\n(\nCoral\n): Shared persistent memory (attempts/notes/skills) with heartbeat-driven interventions and isolated worktrees. Achieves 3–10\n×\n\\times\nimprovement rates—but lacks formal memory architecture.\n\nPrism\nsynthesizes all four paradigms",
+   "support_explanation": "作者将Claude Code、DeerFlow、Mem0与Coral的局部能力组合为待填补问题；这些邻居评价只由本文转述，未独立核原文。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.1 S1 extraction",
+   "quote": "Each candidate undergoes the four-operation update protocol against the shared store:\no\n∗\n∈\n{\nAdd\n,\nUpdate\n,\nDelete\n,\nNoop\n}\no^{*}\\in\\{\\textsc{Add},\\textsc{Update},\\textsc{Delete},\\textsc{Noop}\\}\n. Critically, every new memory carries an\nagent provenance tag\n\nα\n⁡\n(\nm\n)\n=\ni\n\\alpha(m)=i\n, enabling multi-agent knowledge tracing.",
+   "support_explanation": "ADD/UPDATE/DELETE/NOOP及agent provenance是明确编辑接口。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.2 semantic tiering",
+   "quote": "The semantic alignment is natural:\nskills\nare compact, highly reusable procedures (low entropy, high frequency)—always loaded.\nNotes\nare medium-entropy observations requiring context for relevance—retrieved via ANN.\nAttempts\nare high-entropy raw evaluation logs—accessed only when VoI analysis demands it.",
+   "support_explanation": "skills常驻、notes ANN、attempts按需检索体现差异化处理；不等于熵必然对应语义可复用性。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.4 fitness definition",
+   "quote": "where a retrieval is “successful” if the downstream agent response was positively evaluated, and",
+   "support_explanation": "反馈依赖下游positive evaluation；评测者、可靠性/归因细节未在这里定义。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.5 strategy evolution",
+   "quote": "After each retrieval-use cycle, the strategy that was used receives a fitness update based on outcome quality, and the population evolves:\n\nw\nj\n(\nt\n+\n1\n)\n=\nw\nj\n(\nt\n)\n⋅\nexp\n⁡\n(\nη\n⋅\nr\nj\n(\nt\n)\n)\nw_{j}^{(t+1)}=w_{j}^{(t)}\\cdot\\exp(\\eta\\cdot r_{j}^{(t)})\n\n(14)",
+   "support_explanation": "检索策略按结果质量指数权重更新，为非权重检索器配置保留变化；仅已用策略反馈不自动满足全信息Hedge假设。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.6 consolidation",
+   "quote": "The five-phase pipeline (fork, distillation, conflict resolution, pruning, index synchronization) operates as in the base architecture, with the distillation phase now explicitly converting\nnotes\ninto\nskills\n:",
+   "support_explanation": "fork/distill/conflict/prune/index同步明确curator操作，但执行器细节与独立验证不足。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.7 heartbeat intervention",
+   "quote": "Three intervention types:\n\n1.\n\nReflection\n(fired every\nh\nr\nh_{r}\nturns): Agent records structured observations as notes in the hub.\n\n2.\n\nConsolidation\n(fired when\n|\nℳ\nnotes\n|\n>\nν\n|\\mathcal{M}_{\\text{notes}}|>\\nu\n): Notes are distilled into skills via AutoDream.\n\n3.\n\nRedirection\n(fired at\nτ\n∗\n\\tau^{*}\n): Agent pivots strategy. The causal graph identifies unexplored branches; the agent is redirected toward the region with highest\nRisk of Inaction\n:\n\nRoI\n​\n(\nv\n)\n=\n𝔼\n⁡\n[\nQ\n⁡\n(\na\n∗\n,\nθ\n)\n−\nQ\n⁡\n(\na\nnull\n,\nθ\n)\n∣\nv\n]\n\\text{RoI}(v)=\\mathbb{E}[Q(a^{*},\\theta)-Q(a_{\\text{null}},\\theta)\\mid v]\n\n(19)",
+   "support_explanation": "周期反思、notes阈值合并、置信停滞重定向构成调度链；未证明观察均值差就是CUSUM最优停止。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.1 setup",
+   "quote": "Conversational memory (LOCOMO):\nTests single-hop, temporal, multi-hop, and open-domain questions across long conversation histories. Baselines: Full Context, RAG-512, DeerFlow, Claude Code Memory (simulated), Mem0, Mem0\ng\n.\n\nEvolutionary optimization:\nInspired by\nCoral\n’s evaluation, we test multi-agent\nPrism\non three tasks: 100-city TSP, circle packing optimization, and a kernel engineering microbenchmark. Baselines: Single-agent\nPrism\n, random evolutionary search, OpenEvolve-style fixed mutation.\n\nAll experiments use GPT-4o with\nτ\n1\n=\n2.5\n\\tau_{1}=2.5\n,\nτ\n2\n=\n5.0\n\\tau_{2}=5.0\nnats,\nλ\n=\n0.01\n\\lambda=0.01\n/day.",
+   "support_explanation": "两个套件、三优化任务及GPT4o/熵阈值/衰减；没有独立冻结后未见任务协议。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.2 Table 1",
+   "quote": "Method\n\nJ\nJ\n(\n↑\n\\uparrow\n)\n\nF1 (\n↑\n\\uparrow\n)\n\np95 (s)\n\nSavings\n\nFull Context\n\n71.4\n\n58.2\n\n17.12\n\n—\n\nRAG-512\n\n59.8\n\n47.1\n\n2.31\n\n82%\n\nDeerFlow\n\n62.5\n\n49.8\n\n0.42\n\n88%\n\nCC Memory\n\n65.1\n\n52.4\n\n0.38\n\n90%\n\nMem0\n\n67.2\n\n53.9\n\n1.44\n\n90%\n\nMem0\ng\n\n68.4\n\n55.1\n\n2.59\n\n88%\n\nPrism\n(1 agent)\n\n88.1\n\n71.6\n\n0.89\n\n93%",
+   "support_explanation": "LOCOMO作者报告Prism J88.1/F1 71.6/p95 .89s/93% savings，对比Mem0 J67.2；judge提示/数据分母与运行误差未充分交代。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.3 Table 3",
+   "quote": "100-City TSP (minimize distance)\n\nRandom Evo\n\n1\n\n0.08\n\n—\n\n42,180\n\n500\n\nOpenEvolve\n\n1\n\n0.15\n\n—\n\n38,920\n\n500\n\nPrism\n(1)\n\n1\n\n0.31\n\n0.42\n\n35,640\n\n380\n\nPrism\n(4)\n\n4\n\n0.87\n\n0.71\n\n33,210\n\n420\n\nCircle Packing (maximize density)\n\nRandom Evo\n\n1\n\n0.05\n\n—\n\n0.821\n\n300\n\nPrism\n(1)\n\n1\n\n0.19\n\n0.38\n\n0.856\n\n280\n\nPrism\n(4)\n\n4\n\n0.53\n\n0.68\n\n0.879\n\n310\n\nKernel Microbenchmark (minimize cycles)\n\nPrism\n(1)\n\n1\n\n0.22\n\n0.35\n\n1,284\n\n200\n\nPrism\n(4)\n\n4\n\n0.61\n\n0.64\n\n1,142\n\n240",
+   "support_explanation": "三优化任务有评价次数/最优分数/IR/KR；四agent与单agent评次数不同，IR精确定义和单位不清，非等算力因果证据。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.3 correlation",
+   "quote": "knowledge reuse rate\n(KR)—the fraction of retrieved memories drawn from other agents’ contributions—is strongly correlated with improvement rate (\nr\n=\n0.89\nr=0.89\n,\np\n<\n0.01\np<0.01\n), confirming\nCoral\n’s mechanistic finding that knowledge accumulation, not just parallel compute, drives multi-agent gains.",
+   "support_explanation": "r=.89,p<.01是相关报告，不能据此确认knowledge accumulation而非parallel compute驱动。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.4 Table 4",
+   "quote": "Full\nPrism\n(4 agents)\n\n88.1\n\n0.87\n\n−\n-\nTri-partite hub (flat tiers)\n\n82.4\n\n0.68\n\n−\n-\nCausal edges (\nE\nc\nE_{c}\n)\n\n76.8\n\n0.59\n\n−\n-\nEvolutionary VoI\n\n79.3\n\n0.44\n\n−\n-\nHeartbeat controller\n\n84.6\n\n0.51\n\n−\n-\nReplicator dynamics\n\n85.2\n\n0.62\n\n−\n-\nMulti-agent (1 agent)\n\n88.1\n\n0.31\n\n−\n-\nAll (flat vector, 1 agent)\n\n67.2\n\n0.15",
+   "support_explanation": "去hub/causal/VoI/heartbeat/replicator/多agent逐模块消融有作者报告；不含等预算/随机seed细节。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.3 Theorem 3.2 coverage bound",
+   "quote": "For\nn\nn\nagents with pairwise exploration divergence\nD\n⁡\n(\ni\n,\nj\n)\n≥\nd\nmin\n>\n0\nD(i,j)\\geq d_{\\min}>0\n, the expected number of distinct memories accessed in\nT\nT\nretrieval rounds is:\n\n𝔼\n[\n|\n⋃\ni\n=\n1\nn\nS\ni\n(\nT\n)\n|\n]\n≥\nn\n⋅\nk\n⋅\n(\n1\n−\ne\n−\nd\nmin\nT\n/\n|\nℳ\n|\n)\n\\mathbb{E}\\left[\\left|\\bigcup_{i=1}^{n}S_{i}^{(T)}\\right|\\right]\\geq n\\cdot k\\cdot\\left(1-e^{-d_{\\min}T/|\\mathcal{M}|}\\right)\n\n(7)\n\nwhere\nk\nk\nis the per-agent retrieval budget.",
+   "support_explanation": "本席解析反例：在未限制n*k≤|M|时取n=2,k=2,|M|=3且分布散度>0，T足够大右侧趋于4，distinct memories最多3，原定理不可能普遍成立。未运行论文代码。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "Appendix A Pinsker step",
+   "quote": "When\nD\nKL\n(\nR\ni\n∥\nR\nj\n)\n≥\nd\nmin\nD_{\\text{KL}}(R_{i}\\|R_{j})\\geq d_{\\min}\n, by Pinsker’s inequality,\n‖\nR\ni\n−\nR\nj\n‖\n1\n≥\n2\n​\nd\nmin\n\\|R_{i}-R_{j}\\|_{1}\\geq\\sqrt{2d_{\\min}}\n. This ensures the distributions are sufficiently different",
+   "support_explanation": "本席静态数学核对：Pinsker给KL≥(1/2)||P-Q||₁²；KL有下界不推出L1有下界，论文反向使用。大KL可由极小尾部比值产生，不能保证盲区不重叠。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§3.4 Theorem 3.3 proof",
+   "quote": "The decay term\nλ\n​\nV\n\\lambda V\ndrives\nV\nV\ntoward its minimum. Combined with positive mutation\nμ\n>\n0\n\\mu>0\nensuring the support of\n𝜿\n\\boldsymbol{\\kappa}\nnever collapses, the system converges to a fixed point\n𝜿\n∗\n\\boldsymbol{\\kappa}^{*}\nwhere\nf\ni\n=\nf\n¯\nf_{i}=\\bar{f}\nfor all\nm\ni\nm_{i}\nwith\nκ\ni\n∗\n>\nμ\n/\nλ\n\\kappa_{i}^{*}>\\mu/\\lambda\n. At this fixed point, condition",
+   "support_explanation": "作者以Lyapunov/正mutation推收敛及不可入侵；fitness随窗口改变，导数省略fitness/fbar变化，且固定点条件不能推出所有外部memory低fitness。此证明不足，不把保证当作已证事实。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "Appendix C hyperparameter sensitivity",
+   "quote": "Table\n5\nshows the optimal entropy thresholds at\nτ\n1\n=\n2.5\n,\nτ\n2\n=\n5.0\n\\tau_{1}=2.5,\\tau_{2}=5.0\n, holding approximately 18 skills in Tier 1. Table\n6\nshows that decay rate\nλ\n=\n0.01\n\\lambda=0.01\nwith mutation\nμ\n=\n0.005\n\\mu=0.005\nbalances memory retention against evolutionary pressure, yielding the highest improvement rate with a manageable store size of 185 memories.",
+   "support_explanation": "阈值和replicator参数在LOCOMO/TSP结果上展示最优选择，未报告独立验证/最终测试划分。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2604.19795.txt",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§6.4 limitations",
+   "quote": "LLM dependency.\nExtraction, causal edge identification, and consolidation all require LLM calls. Distilled extraction models would reduce cost.\n\nCausal identification.\nAutomatic extraction of\ndo\n-calculus edges from text is imperfect. Human validation is recommended for high-stakes decisions.\n\nEvolutionary benchmarks.\nOur optimization experiments are smaller-scale than\nCoral\n’s full evaluation suite. Larger-scale validation on the complete\nCoral\nbenchmark is future work.",
+   "support_explanation": "作者承认LLM调用成本、因果边提取不完美且规模小；这些不是实际复现凭据。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "an evolutionary memory substrate for multi-agent AI systems engaged in open-ended discovery",
+   "support_explanation": "中心声明：多智能体共享记忆底座。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "M1",
+   "locator": "Sec 3.2 Definition 3.2",
+   "quote": "skills are compact, highly reusable procedures (low entropy, high frequency)—always loaded.",
+   "support_explanation": "层级分配假设：词元熵低=可复用技能；熵与可复用性/效用的关系无经验检验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "M1",
+   "locator": "Sec 3.4 Definition 3.5",
+   "quote": "if the downstream agent response was positively evaluated",
+   "support_explanation": "记忆适应度=被检索后‘下游回答获正面评价’的比例；评价者/信号来源(任务分数、LLM判官、人)在全文未指定，亦非记忆开/关反事实。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "M1",
+   "locator": "Sec 3.3 Theorem 3.2 proof",
+   "quote": "Pinsker’s inequality gives",
+   "support_explanation": "证明声称KL>=d_min时Pinsker给出L1距离下界；Pinsker不等式给的是L1距离的上界(TV<=sqrt(KL/2))，方向相反，该步骤不成立，定理3.2证明未能建立。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "M1",
+   "locator": "Sec 3.4 Theorem 3.3 proof",
+   "quote": "the system converges to a fixed point",
+   "support_explanation": "ESMS收敛证明依赖Lyapunov函数，文中把+λV项称作‘驱动V趋向最小’，但λ>0时该项使V增大，单调下降未被建立；结论‘收敛到ESMS’论证不充分(我们的推断)。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "M1",
+   "locator": "Table 1 (LOCOMO)",
+   "quote": "Prism (1 agent) 88.1 71.6 0.89 93%",
+   "support_explanation": "Prism单智能体J=88.1、F1=71.6；对比行Mem0 67.2/53.9、Mem0 g 68.4/55.1、Full Context 71.4；基线是重跑还是引用已发表数值文中未说明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "M1",
+   "locator": "Table 1",
+   "quote": "Mem0 67.2 53.9 1.44 90% Mem0 g 68.4 55.1 2.59 88%",
+   "support_explanation": "Mem0/Mem0g基线数值，来源未注明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Setup",
+   "quote": "All experiments use GPT-4o",
+   "support_explanation": "全部实验用GPT-4o；LOCOMO判官、进化任务的执行代理、Mem0基线所用模型是否同一，未说明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "material_id": "M1",
+   "locator": "Table 3 caption",
+   "quote": "IR = improvement rate (higher = better).",
+   "support_explanation": "改进率(IR)只有此一句说明，无公式、窗口、归一化；是进化实验的主指标，且各任务的分数单位/最优值未给。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "material_id": "M1",
+   "locator": "Table 3 (100-City TSP rows)",
+   "quote": "Prism (1) 1 0.31 0.42 35,640 380 Prism (4) 4 0.87 0.71 33,210 420",
+   "support_explanation": "单/四智能体Prism在TSP上IR 0.31→0.87、最佳35,640→33,210；评估次数380 vs 420，四智能体的调用/算力预算是否匹配不明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Setup (baselines)",
+   "quote": "Baselines: Single-agent Prism, random evolutionary search, OpenEvolve-style fixed mutation.",
+   "support_explanation": "进化任务的基线是单智能体Prism、随机进化和‘OpenEvolve风格固定变异’，没有标准TSP启发式(2-opt/LKH等)、没有Coral原系统、没有关闭记忆的Prism。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "material_id": "M1",
+   "locator": "Table 4",
+   "quote": "Full Prism (4 agents) 88.1 0.87",
+   "support_explanation": "消融表中‘Full Prism(4 agents)’的LOCOMO J=88.1，与Table 1中单智能体Prism的88.1相同。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "material_id": "M1",
+   "locator": "Table 4",
+   "quote": "Multi-agent (1 agent) 88.1 0.31",
+   "support_explanation": "去掉多智能体对LOCOMO无影响(88.1不变)，说明LOCOMO上没有多智能体成分；表中数字无方差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "material_id": "M1",
+   "locator": "Table 4",
+   "quote": "All (flat vector, 1 agent) 67.2 0.15",
+   "support_explanation": "‘全部去掉’的J=67.2与Table 1中Mem0的67.2相同，表明‘扁平向量单智能体’与Mem0基线是同一数值；两者是否同一实现、同一运行不明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "material_id": "M1",
+   "locator": "Sec 5.3",
+   "quote": "is strongly correlated with improvement rate",
+   "support_explanation": "KR与IR相关(r=0.89, p<0.01)，样本数n、独立性、是否跨任务汇总均未说明；相关性不是因果，且KR与多智能体数量混杂。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "material_id": "M1",
+   "locator": "Appendix C",
+   "quote": "yielding the highest improvement rate with a manageable store size of 185 memories.",
+   "support_explanation": "λ、μ在报告的TSP改进率上取最优；Table 5同样在LOCOMO J上扫描τ1/τ2并取最优(2.5/5.0)，超参在评测指标上选择，无独立调参集。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "material_id": "M1",
+   "locator": "Sec 5.1 Setup (baselines)",
+   "quote": "Claude Code Memory (simulated)",
+   "support_explanation": "Claude Code记忆是‘模拟’的，非真实系统；模拟方式未描述。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "material_id": "M1",
+   "locator": "Sec 6.4 Limitations",
+   "quote": "Larger-scale validation on the complete Coral benchmark is future work.",
+   "support_explanation": "进化实验为小规模三任务，未用Coral的完整基准，无与Coral的直接对比。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "material_id": "M1",
+   "locator": "Sec 3.7 Theorem 3.6 proof",
+   "quote": "Our stopping time (18) is a discretized CUSUM over the confidence process.",
+   "support_explanation": "停滞检测监视的是记忆平均置信度的平台期，而非任务分数进展；与‘任务进展停滞’的对应、几何分布起始假设均未检验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "material_id": "M1",
+   "locator": "Sec 3.5 Theorem 3.5 proof",
+   "quote": "This is a direct application of the Hedge algorithm bound",
+   "support_explanation": "检索策略选择=指数权重(Hedge)的标准结果，遗憾界对‘最佳固定策略’而言，结论成立但属直接套用；奖励的有界性与‘结果质量’的定义未给。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "material_id": "M1",
+   "locator": "Sec 6.4 Limitations",
+   "quote": "Theorem 3.3 proves convergence to an ESMS but not uniqueness.",
+   "support_explanation": "作者自述仅证收敛不证唯一，且收敛到哪个盆地取决于初值。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "material_id": "M1",
+   "locator": "Sec 6.4 Limitations",
+   "quote": "Extraction, causal edge identification, and consolidation all require LLM calls.",
+   "support_explanation": "提取、因果边识别与整合均需LLM调用；实验中未报告调用数/令牌成本(LOCOMO仅报p95延迟与相对全上下文的节省)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "material_id": "M1",
+   "locator": "Sec 6.4 Limitations",
+   "quote": "Automatic extraction of do -calculus edges from text is imperfect.",
+   "support_explanation": "‘因果图’的干预边由LLM从文本抽取，作者承认不完善；消融中因果边贡献最大(-11.3 J)，但边的质量未被独立验证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.19795.txt",
+   "material_hash": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.3 (definition of KR in the r = 0.89 sentence)",
+   "quote": "the fraction of retrieved memories drawn from other agents’ contributions",
+   "support_explanation": "KR is defined as the share of retrieved memories contributed by other agents.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.19795.txt",
+   "material_hash": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "Table 3, 100-City TSP, single-agent Prism row",
+   "quote": "Prism (1) 1 0.31 0.42 35,640 380",
+   "support_explanation": "Single-agent Prism is reported with KR 0.42 (and 0.38 and 0.35 on circle packing and the kernel). With one agent there are no other agents' contributions, so by the paper's own definition (opus:O01, O03) KR must be 0. The KR numbers, and the r = 0.89 KR–IR correlation built on them, are internally inconsistent.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.19795.txt",
+   "material_hash": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "Appendix B, Definition B.1",
+   "quote": "A KR of 0 means the agent only uses its own memories.",
+   "support_explanation": "This confirms the definition: KR counts only memories with α(m) ≠ i.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2604.19795.txt",
+   "material_hash": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.5 (Figure 2 text)",
+   "quote": "reaching 0.74 at turn 500 compared to 0.42 for single-agent",
+   "support_explanation": "This repeats a non-zero single-agent KR. It also gives 4-agent KR 0.74 against Table 3's 0.71 on the same task.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2604.19795.txt",
+   "material_hash": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "Table 3, TSP OpenEvolve row",
+   "quote": "OpenEvolve 1 0.15 — 38,920 500",
+   "support_explanation": "Table 4's 'All removed (flat vector, 1 agent)' row (J 67.2, IR 0.15; son55:E014) reproduces exactly the Mem0 J (Table 1) and the OpenEvolve IR. The ablation's floor row appears to be copied baseline values rather than a run of Prism's own ablated configuration.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2604.19795.txt",
+   "material_hash": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "sha256": "68e3a23e78f6cc5aeb8334577d7a5445b8587189da4101ce59ae2a04648c899f",
+   "locator": "§5.1 Setup",
+   "quote": "nats, λ = 0.01",
+   "support_explanation": "The thresholds are given in nats, while Definition 3.1 uses log2. Definition 3.1 also sums −p log p over the realised tokens, which is not the entropy of the memory. The quantity that drives tier assignment is ill-defined.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "多智能体共享记忆库：skills/notes/attempts三层hub、因果图、各记忆的置信度、检索策略权重",
+   "information": "可见：每个智能体的回合内容、检索结果、下游回答的正面评价(来源未指定)、记忆置信度；不可见：真值标签在写入时的使用方式未说明。",
+   "operation": "LLM抽取候选→与近邻比较后ADD/UPDATE/DELETE/NOOP；词元熵+频率分层；复制-衰减更新置信度；Hedge选择检索策略；心跳触发反思/整合(AutoDream)/重定向。",
+   "output": "更新后的记忆库与图、下一轮assembled prompt中的检索集。",
+   "conditions": "熵阈值τ1=2.5、τ2=5.0，衰减λ=0.01/天、变异μ=0.005等固定超参。",
+   "feedback": "回答被正面评价的比例(Definition 3.5)、策略使用后的结果质量r_j。",
+   "selection_rule": "写入由LLM-Decide判定；留存由置信度衰减/剪枝阈值；检索由VoI贪心+策略权重。",
+   "selection_data": "同一任务运行内的反馈；无独立开发/测试划分(超参在报告指标上调选)。",
+   "persistence": "共享store跨智能体和回合；整合把notes蒸馏为skills；剪枝按置信度阈值ε。",
+   "later_use": "每轮检索组装prompt，skills总是加载。",
+   "claimed_effect": "LOCOMO J 88.1；四智能体IR为单智能体的约2.8倍；各组件消融均降分。",
+   "failure_boundary": "LLM依赖、因果抽取不完善、基准规模小、ESMS不唯一。",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003",
+    "son55:E010",
+    "son55:E016",
+    "son55:E019",
+    "son55:E020",
+    "son55:E021",
+    "son55:E023"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "现有记忆架构各自只满足部分条件：Claude Code分层文件持久化仅单智能体；DeerFlow无多智能体；Mem0无进化动力学；Coral有实证但缺形式化记忆架构。",
+  "checked_gap": "所述缺口是‘缺少把四类范式统一并形式化的架构’，属缺少本文模块式的问题定义；未给出最近邻在具体条件下的失效证据(如Coral的启发式层级在何种任务退化)。",
+  "lineage": [
+   "MemGPT/Letta分层 → Mem0 ADD/UPDATE/DELETE/NOOP更新协议 → Zep/Graphiti时序图 → Claude Code文件式记忆+autoDream → Coral多智能体共享attempts/notes/skills+心跳 → 本文把上述拼接并配上信息论/博弈论外衣。"
+  ],
+  "closest_adjacent": "Coral(Qu et al. 2026)是最近邻且论文自认‘互补’；Mem0、Zep、Letta、DeerFlow被讨论；本地无Coral原文，无法核对‘缺形式化’的描述，也无与Coral的直接比较。",
+  "residue": "未证明：(a)任何组件相对Coral手工层级的优势，(b)记忆本身(而非多智能体或更多算力)带来进化任务的收益。",
+  "stakes": "多智能体开放式发现中记忆如何组织与更新；论文还给出制药战略应用设想，但无实验。",
+  "method_response": "用熵门控分层、置信度作为适应度的复制-衰减、Hedge策略选择、CUSUM式停滞检测，把各设计点形式化。",
+  "remaining_gap": "形式定理多为套用经典结果且部分证明有误；经验证据不可复核。",
+  "evidence_ids": [
+   "son55:E004",
+   "son55:E005",
+   "son55:E018"
+  ],
+  "unresolved": [
+   "Coral原文缺失；‘缺形式化记忆架构’的陈述及其实证对比无法核对。"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "heterogeneous_decomposition",
+  "supporting": [
+   "reframe_as_solvable_object"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus: the paper names the entropy-gated tri-partite hub (S2) as its 'core architectural innovation'. Memories are partitioned by a measured property (token entropy, frequency) and each partition gets its own treatment (always loaded, ANN, grep on demand). That is heterogeneous_decomposition (sol; sub null, since C04 is model-compression specific). son55's reframe_as_solvable_object is kept as supporting, not primary. The paper does recast retrieval choice as Hedge, stagnation as quickest detection and confidence as replicator dynamics to borrow guarantees, but the correspondence is unproven or wrong (Theorems 3.2/3.3), so the pattern is invoked rather than executed (son55 executes_pattern=false).",
+  "matches": [
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": [
+     "按熵/频率分skills/notes/attempts",
+     "常驻、ANN、按需grep差异处理",
+     "flat-tier消融有，熵异质性分布/可靠界未证",
+     "C04针对trained overprovisioned artifact的高影响保护/误差分解不贴切，故子卡null"
+    ],
+    "success_checks": [
+     "存在明确分区与不同操作、flat-tier对照"
+    ],
+    "failure_checks": [
+     "未测熵分布和可复用性关系；formal justification的边界/证明有错误"
+    ],
+    "evidence_ids": [
+     "sol:E003",
+     "sol:E012",
+     "sol:E013",
+     "sol:E014"
+    ],
+    "reason": "实际操作是外部memory异质分层与差异访问，不因math名词匹配更多卡；无贴切子卡可用null。"
+   },
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "把记忆管理的若干子问题改写为经典对象：检索策略选择→专家建议/Hedge遗憾最小化；停滞重定向→最快检测/CUSUM；置信度演化→复制动力学；分层→信息熵编码。对应‘改写为成熟对象以套用既有保证’；但对应定理未证明改写与原问题的对应关系(E004/E005)，对象本身(适应度来源、奖励)未形式化(E003)。C00(可解释性度量)、C21(RL→序列建模)、C27(博弈)均不贴切，故子卡为空。",
+    "success_failure_checks": "成功条件‘对应定理把新对象的解与原问题的解绑定’未满足；失败模式‘对应关系被断言而非证明’‘核心对象未形式化’‘机械套用现成工具’均出现。",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E004",
+     "son55:E005",
+     "son55:E019",
+     "son55:E020"
+    ],
+    "reason": "实际操作是把各子系统套用到Hedge/CUSUM/复制动力学上，匹配度弱，仅因找不到更贴切的原卡而选，且不能因此加分。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "2026-10-21-cards",
+    "fit": "moderate",
+    "condition_checks": "ADD/UPDATE/DELETE/NOOP编辑、AutoDream整合与剪枝、反思写入notes构成‘维护活的记忆’(S4部分满足)；写入由LLM判断而非执行门控(S5未满足)；成败对比(S2)未见。",
+    "evidence_ids": [
+     "son55:E002",
+     "son55:E003",
+     "son55:E022"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "version": "2026-10-21-cards",
+    "fit": "moderate (tiered hub + causal graph + decay rules is H04's move)",
+    "condition_checks": "三层hub+向量+因果图是对记忆底座的重构(F6‘新存储形状代替论证’风险)；选择性检索(VoI贪心、容量k、Tier-3条件触发)满足S4；‘用移除store证明其价值’(S5)未见。",
+    "evidence_ids": [
+     "son55:E002",
+     "son55:E010",
+     "son55:E014"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "version": "2026-10-21-cards",
+    "fit": "weak",
+    "condition_checks": "适应度=被检索后获正面评价的比例并进入置信度更新，形似按效用估值；但无无记忆反事实(S1未满足)，评价信号未定义，且价值反馈回到同一store的置信度，形成F3所述‘无固定裁判的自强化回路’风险。",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E005"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01"
+   },
+   "operation_correspondence": "外部知识按属性分层→不同访问/持久策略→curator更新/合并/剪枝后被下一轮读取",
+   "necessary_conditions_and_differences": "原卡关心分层的判别性质与差异处理；H01关心store维护政策，两者交集是可维护分层知识，而非熵自动等于长期效用。",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E006"
+   ]
+  },
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "evidence_gated_retention",
+    "sub": "H29"
+   },
+   "operation_correspondence": "RS层‘把记忆置信度演化改写为复制动力学并套用既有收敛结论’对应领域层‘给记忆条目按效用赋值并调权’：二者都把条目价值当作可更新的量。",
+   "necessary_conditions_differences": "H29要求价值来自与无记忆/无指导的反事实对比；Prism的适应度是检索成功率，无反事实；RS层要求改写与原问题的对应定理成立，此处证明有缺陷。映射因此仅在‘价值可更新’层面成立。",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "version": "manifest-pinned",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原主卡Reviewer expectations item5"
+   ],
+   "applies_when": "熵作为分层的核心判别依据",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未展示entropy与语义/下游价值的分布关系；参数表不替代前提刻画。",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E016"
+   ],
+   "score_item": [
+    "G",
+    "X"
+   ],
+   "origin": "sol:rs:heterogeneous_decomposition/RE-5"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "version": "manifest-pinned",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "原主卡Reviewer expectations item4"
+   ],
+   "applies_when": "声称分层/多agent而非额外算力驱动",
+   "applicable": true,
+   "status": "partial",
+   "reason": "flat-tier与模块消融有报告，但多agent用更多eval、无等算力对照，相关性不隔离因果。",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E011",
+    "sol:E012"
+   ],
+   "score_item": [
+    "E.causality"
+   ],
+   "origin": "sol:rs:heterogeneous_decomposition/RE-4"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H01",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H01.md steps1–5"
+   ],
+   "applies_when": "共享memory需维护而不只是append",
+   "applicable": true,
+   "status": "partial",
+   "reason": "显式编辑和AutoDream剪枝有设计；缺完整curator可靠性、编辑单独等预算控制及构建测试分离。",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E004",
+    "sol:E006",
+    "sol:E012",
+    "sol:E016"
+   ],
+   "score_item": [
+    "M",
+    "X",
+    "E.holdout"
+   ],
+   "origin": "sol:rsi:abstract_experience_into_guidance/H01"
+  },
+  {
+   "id": "local:2604.19795-1",
+   "version": "manifest-pinned",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文Theorems3.1–3.6及Appendix A"
+   ],
+   "applies_when": "声称formal justification和coverage/convergence/regret保证",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "coverage界可超过记忆全集大小、Pinsker方向反用；replicator证明与bandit/Hedge信息权限有缺口，不能作为已证机制保证。",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E013",
+    "sol:E014",
+    "sol:E015"
+   ],
+   "score_item": [
+    "M"
+   ],
+   "origin": "sol:local:2604.19795-1"
+  },
+  {
+   "id": "local:2604.19795-2",
+   "version": "manifest-pinned",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文§5.1–5.3及Appendix B"
+   ],
+   "applies_when": "J/IR/KR用于能力结论",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (revised from sol partial): J's judge configuration and the provenance of the baseline values are unstated; IR has no formula; KR's single-agent values contradict its definition (opus:O02, O03); the ablation floor row copies baseline numbers (opus:O05). The measurements cannot carry the capability conclusions.",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E009",
+    "sol:E010",
+    "opus:O02",
+    "opus:O03",
+    "opus:O05"
+   ],
+   "score_item": [
+    "E.measurement"
+   ],
+   "origin": "sol:local:2604.19795-2"
+  },
+  {
+   "id": "local:2604.19795-3",
+   "version": "manifest-pinned",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文§5及Appendix C"
+   ],
+   "applies_when": "把共享记忆收益称可留存泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "只有对话回忆和同优化任务内轨迹，参数也在这些指标上比较，未报告独立冻结后任务。",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E016"
+   ],
+   "score_item": [
+    "E.holdout"
+   ],
+   "origin": "sol:local:2604.19795-3"
+  },
+  {
+   "id": "local:2604.19795-4",
+   "version": "manifest-pinned",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文§5.2–5.5及§6.4"
+   ],
+   "applies_when": "单点巨大提升需方差与全预算",
+   "applicable": true,
+   "status": "partial",
+   "reason": "提供eval次数、p95/savings与相关p值；无多seed主结果区间、失败候选/LLM反思合并全成本或等墙钟。",
+   "evidence_ids": [
+    "sol:E009",
+    "sol:E010",
+    "sol:E011",
+    "sol:E017"
+   ],
+   "score_item": [
+    "E.statistics",
+    "E.cost"
+   ],
+   "origin": "sol:local:2604.19795-4"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card reframe_as_solvable_object: Reviewer expectations #1(证明归约/等价而非断言)"
+   ],
+   "applies_when": "论文以定理形式声称新对象的解对应原问题",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Theorem 3.2的Pinsker用法方向相反；Theorem 3.3的Lyapunov步骤不能推出单调下降；3.6、3.5是套用经典结果而未证明‘任务进展停滞’与‘置信度平台’对应。",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E019",
+    "son55:E020"
+   ],
+   "score_item": "M",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-1"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-2",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card reframe_as_solvable_object: Reviewer expectations #2(形式化核心对象)"
+   ],
+   "applies_when": "引入适应度、改进率等核心量",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "适应度所依赖的‘正面评价’未指定来源；IR只有一句说明。",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E009"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-2"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card reframe_as_solvable_object: Reviewer expectations #3(新的识别结构而非重用既有机器)"
+   ],
+   "applies_when": "改写后套用成熟求解器",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Hedge、CUSUM、复制动力学均为标准工具，新意主要是把它们挂到记忆子系统；论文自称‘统一’。",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020"
+   ],
+   "score_item": "G",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-3"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "rs card reframe_as_solvable_object: Reviewer expectations #4(以因果干预或真值验证忠实性)"
+   ],
+   "applies_when": "声称改写后的对象忠实于原问题",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无验证‘熵分层与可复用性’‘平台期与真实停滞’‘ESMS与更优记忆集’对应关系的干预或真值实验。",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E019"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-4"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance S4"
+   ],
+   "applies_when": "记忆库会增长",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有衰减、剪枝、冗余消除(互信息)和AutoDream整合的设计与超参，但未量化其效果，也未给冲突处理细节。",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E022"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S4"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance S5"
+   ],
+   "applies_when": "有保留门控",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "写入由LLM-Decide判定，无执行测试/外部检查。",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S5"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S1"
+   ],
+   "applies_when": "按效用保留或排序",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "适应度为检索成功率，无memory-on/off反事实。",
+   "evidence_ids": [
+    "son55:E003"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:evidence_gated_retention/S1"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S4"
+   ],
+   "applies_when": "声称门控/价值信号有效",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Table 4有去掉复制动力学(J 85.2/IR 0.62)的消融，但数字无方差，且单次。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:evidence_gated_retention/S4"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json index_experience_for_reuse S5"
+   ],
+   "applies_when": "声称存储结构带来收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无关闭整个store的对照，只有部分组件消融；‘全去掉’数值与Mem0基线数值相同而未解释。",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:index_experience_for_reuse/S5"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F6",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json index_experience_for_reuse F6"
+   ],
+   "applies_when": "提出新存储形状",
+   "applicable": true,
+   "status": "partial",
+   "reason": "三层hub+因果图+向量的组合接近‘新存储形状代替论证’，但配有消融尝试。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:index_experience_for_reuse/F6"
+  },
+  {
+   "id": "local:2604.19795-5",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "自改进/进化记忆文献对超参、预算和方差的一般实践"
+   ],
+   "applies_when": "报告进化实验的改进率与相关系数",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (verified son55): no seeds, runs, variance or n for the reported correlations.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E016"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2604.19795-1",
+   "note": "Renumbered from son55:local:2604.19795-1 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "local:2604.19795-6",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 3: 四智能体 vs 单智能体"
+   ],
+   "applies_when": "把多智能体收益归因于记忆",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (verified son55): no multi-agent-without-shared-memory or budget-matched parallel single-agent control.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E015"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2604.19795-2",
+   "note": "Renumbered from son55:local:2604.19795-2 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Prism在LOCOMO上达到88.1 LLM判官分，比Mem0高31.2%。",
+   "setting": "LOCOMO长对话记忆QA；GPT-4o；基线含Full Context、RAG-512、DeerFlow、Claude Code Memory(模拟)、Mem0、Mem0g。",
+   "baseline_control": "基线数值来源(重跑/引用)未注明；Claude Code记忆为模拟。",
+   "selection_vs_test": "τ1/τ2在LOCOMO J上扫描并取最优，无独立调参集。",
+   "result_denominator": "J 88.1 vs Mem0 67.2；无种子、方差；Table 4中‘全去掉’数值等于Mem0数值。",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E007",
+    "son55:E008",
+    "son55:E014",
+    "son55:E016",
+    "son55:E017"
+   ],
+   "counterevidence": [
+    "son55:E014",
+    "son55:E016",
+    "opus:O05"
+   ],
+   "allowed_conclusion": "作者报告的单次数值；不能认定为超过Mem0的可复核结果。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "四智能体Prism在进化优化任务上改进率比单智能体高2.8倍，知识复用率与改进率强相关，证实知识累积而非并行算力驱动增益。",
+   "setting": "100城TSP、圆堆积、内核微基准；GPT-4o；评估次数约200-500。",
+   "baseline_control": "单智能体Prism、随机进化、OpenEvolve风格固定变异；无关闭记忆的对照，无标准TSP启发式，无Coral。",
+   "selection_vs_test": "λ、μ在TSP改进率上选最优。",
+   "result_denominator": "Table 3：TSP 0.31→0.87，圆堆积0.19→0.53，内核0.22→0.61；IR未定义；相关性n未给；评估次数380 vs 420。",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "son55:E015",
+    "son55:E016"
+   ],
+   "counterevidence": [
+    "son55:E011",
+    "opus:O02",
+    "opus:O03",
+    "opus:O04"
+   ],
+   "allowed_conclusion": "作者报告的小规模三任务上，多智能体设置的IR更高；‘记忆是原因’不被支持。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "复制-衰减动力学可证明收敛到进化稳定记忆集，心跳控制器最优，检索策略有次线性遗憾。",
+   "setting": "形式定理3.1-3.6。",
+   "baseline_control": "不适用",
+   "selection_vs_test": "不适用",
+   "result_denominator": "定理3.5是Hedge的标准结果；3.2、3.3的证明步骤有误或不充分；3.6依赖未检验的几何起始假设。",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E019",
+    "son55:E020",
+    "son55:E021"
+   ],
+   "counterevidence": [
+    "son55:E004",
+    "son55:E005"
+   ],
+   "allowed_conclusion": "只有对Hedge策略选择的遗憾界成立(标准结果)；其余形式声明目前不成立或未被证明。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "unsupported",
+  "strongest_supported_claim": "作者报告：在其自行设置的LOCOMO和三个小规模进化任务上，完整Prism配置的分数高于其所选基线；检索策略选择的遗憾界是标准结果。没有证据表明留存的记忆本身带来了后续任务上的改进。",
+  "unresolved": [
+   "IR与适应度评价信号的定义",
+   "基线数值来源与Claude Code记忆的模拟方式",
+   "记忆关闭/等算力的对照",
+   "种子与方差",
+   "Coral及标准TSP启发式的直接对比",
+   "定理3.2、3.3的正确证明",
+   "Opus: single-agent KR values (0.42/0.38/0.35) contradict KR's definition, which forces 0 for one agent (opus:O01–O04). The 'knowledge, not compute' correlation is internally inconsistent.",
+   "Opus: Table 4's all-removed row equals Mem0 J and OpenEvolve IR exactly (opus:O05).",
+   "Sub-claims refuted: Theorem 3.2's bound exceeds |M| when n·k > |M| (sol:E013), and Pinsker is used backwards (sol:E014, son55:E004)."
+  ],
+  "not_claimed": "我们没有复现任何结果；所有数值为作者报告。",
+  "claim_support_note": "unsupported (son55). The headline empirical claims (LOCOMO J 88.1, 2.8× IR) are unsupported for lack of protocol, variance and controls, not refuted. Specific sub-claims are contradicted: the coverage guarantee (Theorem 3.2) and the KR mechanism evidence. sol's 'contradicted' is recorded as applying to those sub-claims."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus sides with son55. The 'gap' is a union of features each neighbour lacks (single-agent only, no evolutionary dynamics, 'lacks formal memory architecture'). No neighbour is shown to fail on any task because of the missing piece. Coral, the nearest neighbour, is never compared (son55:E018), and LOCOMO is single-conversation, so the multi-agent motivation does not bind there. Not 0: the neighbours and the changed non-weight objects (tiering, confidence dynamics, retrieval strategy) are named.",
+   "evidence_ids": [
+    "son55:E018",
+    "sol:E001",
+    "sol:E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked. The links from mechanism to problem are analogies (entropy ↔ reusability, confidence plateau ↔ task stagnation). The formal justifications fail: Theorem 3.2's bound can exceed |M| and uses Pinsker in the wrong direction (sol:E013, E014). The Theorem 3.3 Lyapunov step treats +λV as decreasing V (son55:E005). Theorems 3.5/3.6 are textbook bounds whose premises (bounded reward, geometric onset) are not shown.",
+   "evidence_ids": [
+    "sol:E013",
+    "sol:E014",
+    "sol:E015",
+    "son55:E002",
+    "son55:E004",
+    "son55:E005",
+    "son55:E019",
+    "son55:E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus sides with son55. Pseudo-code and a few hyperparameters exist, but the loop's load-bearing quantities are undefined or contradictory: the 'positive evaluation' that sets fitness (son55:E003); IR (son55:E009); how EVOI is estimated; how agents generate candidates in the optimisation tasks; and token entropy, defined with log2 but thresholded in nats over realised tokens (opus:O06). Writes are LLM-decided with no external gate. Per the anchor, key conditions missing or contradictory gives 0–1; 1 because the store operations are specified.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E009",
+    "son55:E022",
+    "sol:E002",
+    "sol:E006",
+    "opus:O06"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked, with an Opus addition. The LOCOMO judge setup and baseline provenance are unstated, and Claude Code memory is 'simulated' (son55:E017). IR is undefined. KR's single-agent values contradict its definition (opus:O02, O03). Table 4's floor row copies the baselines (opus:O05).",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E007",
+    "son55:E009",
+    "son55:E017",
+    "opus:O02",
+    "opus:O03",
+    "opus:O05"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked. There is a single-run component ablation table, but its all-removed row reproduces baseline values (opus:O05). There is no memory-off arm on the optimisation tasks, and 4 vs 1 agents run at unmatched evaluations. The KR–IR correlation is both observational and inconsistent (opus:O02).",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E012",
+    "son55:E014",
+    "son55:E015",
+    "opus:O02",
+    "opus:O05"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "Both seats not_reported 0; re-checked. No build/test separation and no unseen-task result. τ and λ/μ are chosen by sweeping the reported LOCOMO J and TSP IR (App. C).",
+   "evidence_ids": [
+    "son55:E016",
+    "sol:E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "full text §1–7, Tables 1–6, Figs 2–3 captions, Appendices A–C (Opus re-read)"
+   ]
+  },
+  "E.statistics": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "Opus sides with son55. There are no seeds, run counts, SDs, intervals or tests for any reported J/F1/IR value. The only statistics are r = 0.89 / 0.91 correlations with p < 0.01 and no n, for a secondary analysis whose KR values are themselves inconsistent (opus:O02). Evaluation counts are budgets, not sample sizes. A2 ladder: the statistics for the claims are absent after a full search.",
+   "evidence_ids": [
+    "son55:E015",
+    "opus:O02"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "full text §5, Tables 1–6, Figs 2–3 text, Appendices A–C (Opus re-read)"
+   ]
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1; re-checked. p95 latency, 'savings' and per-run evaluation counts are given. Extraction, causal-edge, consolidation and reflection LLM calls are uncounted, and 4- vs 1-agent budgets are unmatched.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E022",
+    "sol:E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 HTML text with Appendices A–C read. In scope (system_method): a shared non-weight memory with outcome-driven confidence evolution, consolidation and retrieval-strategy weights. All eight items resolved; the low score reflects the evidence, not a scope ruling.",
+ "resolutions": [
+  {
+   "field_path": "assessment.claim_support",
+   "sol_value": "contradicted",
+   "son55_value": "unsupported",
+   "decision": "son55",
+   "final_value": "unsupported",
+   "reason": "The headline empirical claims lack protocol, variance and controls (unsupported). sol's contradicted applies to sub-claims (Theorem 3.2's counterexample; KR inconsistency) and is preserved in claim_support_note. No compromise label is used.",
+   "evidence_ids": [
+    "sol:E013",
+    "son55:E006",
+    "son55:E015",
+    "opus:O02"
+   ],
+   "score_impact": "none (claim_support is not scored)"
+  },
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "heterogeneous_decomposition",
+   "son55_value": "reframe_as_solvable_object",
+   "decision": "sol",
+   "final_value": "heterogeneous_decomposition",
+   "reason": "The core innovation named by the paper is entropy-based partition with differentiated access.",
+   "evidence_ids": [
+    "sol:E003",
+    "son55:E002"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "heterogeneous_decomposition",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "reframe_as_solvable_object",
+     null
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "heterogeneous_decomposition",
+     null
+    ],
+    [
+     "reframe_as_solvable_object",
+     null
+    ]
+   ],
+   "reason": "sol's partition card is primary; son55's reframing card is supporting (invoked, correspondence unproven).",
+   "evidence_ids": [
+    "sol:E003",
+    "son55:E004",
+    "son55:E020"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ]
+   ],
+   "son55_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "evidence_gated_retention",
+     "H29"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "evidence_gated_retention",
+     "H29"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ]
+   ],
+   "reason": "H01 (ADD/UPDATE/DELETE/NOOP + AutoDream) is agreed. The tiered hub, causal graph and decay rules are H04's substrate restructuring. Retrieval-success fitness driving confidence is H29's utility valuation, without a counterfactual.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003",
+    "sol:E002"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.19795-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "unmet",
+   "reason": "A4 hidden collision. sol's local-2 (do J/IR/KR support capability conclusions) is kept, revised to unmet by the KR contradiction and the copied ablation row (opus:O02, O05). son55's local-2 (multi-agent gain attributed to memory) moved to local-6 (unmet). son55's local-1 moved to local-5.",
+   "evidence_ids": [
+    "opus:O02",
+    "opus:O05",
+    "sol:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.19795-3].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "Verified: no frozen-store unseen-task evaluation.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.19795-4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Cost and latency fragments exist; variance does not.",
+   "evidence_ids": [
+    "sol:E009",
+    "sol:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "A flat-tier ablation exists, but single-run and with no matched-capacity control.",
+   "evidence_ids": [
+    "sol:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-5].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "The entropy–reusability heterogeneity is posited, not measured.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "The reductions are asserted. Theorem 3.2 is false as stated and the Theorem 3.3 proof is flawed.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "sol:E013"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-2].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Fitness's 'positive evaluation' and IR are not formally defined.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Hedge, CUSUM and replicator dynamics are reused machinery attached to memory subsystems.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "No intervention validates entropy ↔ reusability, plateau ↔ stagnation or ESMS ↔ a better store.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E019"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/H01].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Edit operations and pruning are designed, but curator reliability is untested.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Decay, MI pruning and consolidation are specified, but their effects are unmeasured.",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Writes are LLM-decided, with no execution or external gate.",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Fitness is retrieval-success share, with no memory-on/off counterfactual.",
+   "evidence_ids": [
+    "son55:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "There is a replicator-off ablation row, single-run.",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/F6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "A new store shape stands in for much of the argument, with an ablation attempt.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "There is no whole-store-off arm; the floor row copies Mem0 (opus:O05).",
+   "evidence_ids": [
+    "son55:E014",
+    "opus:O05"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "See ratings.G. The gap is a feature union with no demonstrated failure of any neighbour.",
+   "evidence_ids": [
+    "son55:E018"
+   ],
+   "score_impact": "−3.75 vs sol"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "See ratings.X. The fitness signal, IR, EVOI and entropy are undefined or contradictory (opus:O06).",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E009",
+    "opus:O06"
+   ],
+   "score_impact": "−5.0 vs sol"
+  },
+  {
+   "field_path": "ratings.E.statistics",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "not_reported",
+    "rating": 0
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "not_reported",
+    "rating": 0
+   },
+   "reason": "See ratings.E.statistics. The applicable statistics are absent. The lone correlation p-values have no n and rest on inconsistent KR values.",
+   "evidence_ids": [
+    "son55:E015",
+    "opus:O02"
+   ],
+   "score_impact": "−1.25 vs sol"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "E.measurement / E.causality (KR evidence)",
+   "sol_value": "KR read as a valid cross-agent reuse share",
+   "son55_value": "KR read as a valid observational share",
+   "final_value": "Single-agent KR > 0 contradicts its definition (opus:O02–O04)",
+   "reason": "Neither seat checked KR against Definition B.1. The ratings were already 1, so this strengthens the reasons without changing them.",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "expectations[local:2604.19795-*].id",
+   "sol_value": "local-1 = formal guarantees, local-2 = measurement, local-3 = holdout, local-4 = stats/cost",
+   "son55_value": "local-1 = statistics, local-2 = multi-agent attribution",
+   "final_value": "sol's local-1..4 kept; son55's local-1 → local-5, local-2 → local-6",
+   "reason": "A4 hidden ID collisions on local-1 and local-2.",
+   "evidence_ids": [
+    "sol:E013",
+    "son55:E015"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole paper (§1–7, Tables 1–6, Appendices A–C) first. Single runs, no protocol, hyperparameters swept on the test metrics, theorems with wrong steps, single-agent KR > 0 against its definition, and the ablation floor equal to the baselines. Initial view: G1 M1 X1 Em1 Ec1 Eh0 Es0 Ecost1.",
+  "integrity_checks": "Both seats a1 on 2604.19795v1, material sha 68e3a23e…. Canonical seat hashes equal conflicts.json.",
+  "core_claim_check": "Headline claims are unsupported. The coverage theorem is refuted (sol:E013). The KR mechanism evidence is inconsistent (opus:O02).",
+  "rating_agreement": "G/X/E.statistics are resolved to son55. The five agreeing items were re-checked and kept."
+ },
+ "input_seat_hashes": {
+  "sol": "e9370b2bed45e9e06a3e35a1ef282687f7764f409f682a0f81e13ca4f6eb06b5",
+  "son55": "7cbf431bf41485975ba8c1bb50c345061939b55cad66efc63db391542577dcb0"
+ },
+ "score": {
+  "raw": 21.25,
+  "display": 21.3,
+  "lower": 21.25,
+  "upper": 21.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "e79630076ffbc4ce3a7f74ebed76a0e0a99b32a44ef590cb6c2779eb276ed265"
+}

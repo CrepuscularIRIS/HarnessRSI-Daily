@@ -1,0 +1,1304 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r14a",
+ "attempt_id": "a2",
+ "seat": "opus55",
+ "paper": {
+  "claim_type": "component_training",
+  "central_claim": "Training an LLM with a single-step, improvement-based RL reward (post-edit minus pre-edit holdout performance) to edit the instruction field of its context, combined with UCB tree-guided evolution at test time, lets a 4B model outperform self-evolving policies powered by GPT-5/Claude Sonnet 4.5 and prompt optimizers (GEPA, TextGrad) on BIRD and MMLU-Redux, and transfers to guide other action models without further training.",
+  "paper_key": "2603.18620",
+  "paper_id": "2603.18620",
+  "title": "Learning to Self-Evolve",
+  "version": "2603.18620v1"
+ },
+ "provenance": {
+  "input_hash": "62074d901f63013454dc74e8e81c26c15c26d528bf1cbfb67635bc43e5895f60",
+  "input_package": "batches/r14a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:17:47Z"
+ },
+ "materials": [
+  {
+   "material_id": "2603.18620.txt",
+   "url": "https://arxiv.org/html/2603.18620v1",
+   "version": "2603.18620v1",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2603.18620.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Abstract",
+   "quote": "Existing approaches rely entirely on the inherent reasoning ability of the model and never explicitly train it for this task.",
+   "support_explanation": "作者gap，未独立核验普遍排他命题。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§3.2",
+   "quote": "for the self-evolving policy to edit, leaving all other components (e.g., task description, format specification) fixed.",
+   "support_explanation": "部署期非权重instruction边界",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§3.2",
+   "quote": "containing the problems, the outputs of the action LLM, ground-truth answers, and per-problem correctness signals from round",
+   "support_explanation": "编辑器有真值特权",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§3.3",
+   "quote": "This reduces the problem to a contextual bandit and avoids the long-horizon credit-assignment difficulty while\nstill capturing the core challenge of learning to improve instructions from feedback.",
+   "support_explanation": "多步转单步近似非等价",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§3.3 Eq8–9",
+   "quote": "the same gradient estimates whenever a learned baseline is used. Rather than using a value model or group-based normalization\nas the baseline, we can bypass baseline estimation entirely:",
+   "support_explanation": "普通baseline吸收delta；关键不用学习baseline",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§3.3",
+   "quote": "It is, however, a control variate that cancels prompt-specific offsets.",
+   "support_explanation": "前编辑分数controlvariate",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.2",
+   "quote": "On BIRD, LSE surpasses GEPA by 4.5% (67.3% vs. 62.8%) and TextGrad by 4.2% (67.3% vs. 63.1%).",
+   "support_explanation": "作者主结果",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.1 Evaluation protocol",
+   "quote": "We report the best performance achieved over",
+   "support_explanation": "报告按轮次选择的best",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix A",
+   "quote": "at 50 problems. Performance on the holdout set is calculated as the average over eight generations. We run 25 rounds of evolution and report the best holdout performance achieved by each self-evolving method over the course of evolution.",
+   "support_explanation": "50题D为每候选和最终最大选择集",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix A",
+   "quote": "At each round, a batch of 10 problems is sampled with replacement and presented to the action model. The random seed is fixed so that all methods observe the same sequence of problem batches.",
+   "support_explanation": "同顺序固定单种子",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix A",
+   "quote": "We train a separate self-evolving policy for each task domain (Text-to-SQL and QA) using evolutions trajectories generated from the corresponding training set. For each domain, we run 200 data-generation runs, each containing 20 rounds of evolution, yielding approximately 4,000 tree nodes to sample from during RL training.",
+   "support_explanation": "分别领域训练与数据成本规模",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix A",
+   "quote": "We perform on-policy training and do not apply KL regularization. We train for 4 epochs and select the best checkpoint based on a separate development set.",
+   "support_explanation": "训练dev分开，非部署期D独立测试",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.3",
+   "quote": "by 4.3% (67.3% vs. 63.0%; Figure",
+   "support_explanation": "同设置GRPO消融",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.3",
+   "quote": "shows that tree search improves the average by 2.4% on BIRD (62.2% vs. 59.8%) and 2.2% on MMLU-Redux (71.2% vs. 69.0%; Figure",
+   "support_explanation": "未训练编辑器树线性消融",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.3 Table3",
+   "quote": "shows that LSE evolution improves Arctic by 6.7% on average (57.7%",
+   "support_explanation": "Arctic最终64.4，同选择协议",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§5 Limitations",
+   "quote": "we train a separate self-evolving policy for each task domain.",
+   "support_explanation": "不是跨域单一通用优化器",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.1",
+   "quote": "We train on the BIRD training split and evaluate on five randomly selected databases from the BIRD-SQL Mini-Dev split.",
+   "support_explanation": "离线train和部署数据库分开",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E018",
+   "material_id": "2603.18620.txt",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§4.1",
+   "quote": "We train on SuperGPQA and evaluate on ten subjects from MMLU-Redux.",
+   "support_explanation": "QA跨数据集",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "LSE reduces the multi-step evolution problem to a single-step RL objective, where each context edit is rewarded by the improvement in downstream performance.",
+   "support_explanation": "Core operation: improver (policy weights) is trained on delta reward for edits to a non-weight context.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "1 Introduction",
+   "quote": "These methods, however, rely entirely on the inherent ability of the LLM to analyze feedback and propose better context.",
+   "support_explanation": "Author gap: prompt/memory self-evolution methods never train the improver.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "3.2",
+   "quote": "To obtain a consistent measure across rounds, we fix a separate holdout set",
+   "support_explanation": "Holdout D defines node reward in the evolution tree (UCB selection and final argmax) -- it is the selection data.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "Appendix A Evaluation protocol",
+   "quote": "We run 25 rounds of evolution and report the best holdout performance achieved by each self-evolving method over the course of evolution.",
+   "support_explanation": "Reported metric is best-over-rounds on the same holdout D that drives selection; optimistic best-of-25 on a selection set.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "Appendix A Evaluation protocol",
+   "quote": "Performance on the holdout set is calculated as the average over eight generations.",
+   "support_explanation": "Holdout is 50 problems per domain (same paragraph), averaged over 8 samples; this reduces sampling noise per context but not selection/max bias.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "Appendix A Evaluation protocol",
+   "quote": "At each round, a batch of 10 problems is sampled with replacement and presented to the action model.",
+   "support_explanation": "Source pool of evolution batches relative to holdout D is not stated; overlap/leakage cannot be excluded or confirmed.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "4.2",
+   "quote": "LSE outperforms both frontier models on BIRD, surpassing GPT-5 by 2.1% (67.3% vs. 65.2%) and Claude Sonnet 4.5 by 2.8%.",
+   "support_explanation": "BIRD average over five databases (Table 1); frontier models act only as the evolving policy with a Qwen3-4B action model.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "4.2",
+   "quote": "On MMLU-Redux, LSE matches GPT-5 (73.3% vs. 72.5%) and outperforms Claude Sonnet 4.5.",
+   "support_explanation": "MMLU-Redux margins are under one point against GPT-5 and GEPA; no uncertainty reported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "4.2",
+   "quote": "On BIRD, LSE surpasses GEPA by 4.5% (67.3% vs. 62.8%) and TextGrad by 4.2% (67.3% vs. 63.1%). On MMLU-Redux, LSE matches GEPA (73.3% vs. 73.0%) and outperforms TextGrad by 4.2%.",
+   "support_explanation": "Prompt-optimizer baselines run with Qwen3-4B-Instruct as proposer, not their usual stronger proposers.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "4.2",
+   "quote": "The untrained Qwen3-4B-Instruct baseline improves over the seed prompt by 5% on BIRD and 3.6% on MMLU-Redux.",
+   "support_explanation": "Untrained same-size improver with the same tree search is the key trained-vs-untrained improver control (62.2 vs 67.3 on BIRD, 71.2 vs 73.3 on MMLU-Redux).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "4.3 Effect of reward design",
+   "quote": "These results provide empirical evidence that the improvement-based objective is more effective for training self-evolving policies.",
+   "support_explanation": "Reward ablation is reported for BIRD (67.3 vs 63.0) in Figure 2(a); no MMLU-Redux counterpart in text.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "3.3",
+   "quote": "That is, the delta-reward and the post-edit reward yield the same gradient estimates whenever a learned baseline is used.",
+   "support_explanation": "Authors' own derivation: the ablated factor is the baseline/advantage estimator (null-edit vs GRPO group baseline), not a different reward signal.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "4.3 Effect of search strategy",
+   "quote": "shows that tree search improves the average by 2.4% on BIRD (62.2% vs. 59.8%) and 2.2% on MMLU-Redux (71.2% vs. 69.0%",
+   "support_explanation": "Tree search vs linear chain, both with untrained improver.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "4.3 specialized models",
+   "quote": "The result also demonstrates that the LSE-trained policy transfers across action models",
+   "support_explanation": "Transfer shown on Arctic-Text2SQL-R1-7B (57.7 to 64.4 avg on BIRD) with no untrained-improver control and the same holdout protocol.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "5 Limitations",
+   "quote": "Second, we train a separate self-evolving policy for each task domain.",
+   "support_explanation": "No single cross-domain improver; the improver is domain-specific.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "5 Limitations",
+   "quote": "Finally, our training and evaluation environments are relatively small in scale.",
+   "support_explanation": "Authors concede limited scale.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "Appendix A Data generation",
+   "quote": "For each domain, we run 200 data-generation runs, each containing 20 rounds of evolution, yielding approximately 4,000 tree nodes to sample from during RL training.",
+   "support_explanation": "Training data generation cost is given in runs/rounds but no GPU hours or token costs; baselines do not receive this budget.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Appendix A RL training",
+   "quote": "We train for 4 epochs and select the best checkpoint based on a separate development set.",
+   "support_explanation": "Checkpoint selection uses a dev set separate from the evaluation holdout, which is a good guard.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "4.1 Tasks and datasets",
+   "quote": "We train on the BIRD training split and evaluate on five randomly selected databases from the BIRD-SQL Mini-Dev split.",
+   "support_explanation": "Improver training and evaluation databases are disjoint splits; QA trains on SuperGPQA and evaluates on MMLU-Redux (same paragraph group).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "4.1 Tasks and datasets",
+   "quote": "Each database is a separate task domain: problems are sampled from the same domain for both evolution rounds and holdout evaluation.",
+   "support_explanation": "Evolution rounds and holdout evaluation draw from the same domain pool; no stated exclusion of holdout problems from evolution batches.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "3.2",
+   "quote": "containing the problems, the outputs of the action LLM, ground-truth answers, and per-problem correctness signals",
+   "support_explanation": "Evolution-time feedback includes ground-truth answers; the improver sees labels for evolution problems.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "5 Limitations",
+   "quote": "First, we reduce the multi-step evolution problem to a single-step training objective, delegating exploration entirely to the tree search algorithm at test time.",
+   "support_explanation": "Single-step objective is acknowledged as an approximation of the multi-step target; no proof of correspondence.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "3.2",
+   "quote": "leaving all other components (e.g., task description, format specification) fixed.",
+   "support_explanation": "Edited object is only the instruction field of the context.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "4.3 Figure 3 discussion",
+   "quote": "UCB selection shifts back to a higher-scoring ancestor, keeping the trajectory out of bad local optima.",
+   "support_explanation": "Backtracking/rollback behaviour illustrated on one database (Card Games).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "4.1 Baselines",
+   "quote": "For both methods, we use Qwen3-4B-Instruct as the prompt proposer and optimizer.",
+   "support_explanation": "GEPA and TextGrad use the small untrained model as proposer; strength of these baselines is limited by design.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "3.3",
+   "quote": "Rather than using a value model or group-based normalization",
+   "support_explanation": "Null-edit baseline replaces value model or group normalization; reduces training cost relative to group rollouts.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "Appendix A Evaluation protocol",
+   "quote": "The random seed is fixed so that all methods observe the same sequence of problem batches.",
+   "support_explanation": "Controls problem order across methods but implies one evolution trajectory per method and domain; no variance across seeds reported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2603.18620.txt",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix A, Evaluation protocol",
+   "quote": "report the best holdout performance achieved by each self-evolving method over the course of evolution",
+   "support_explanation": "The reported number is a max over 25 rounds on D, the same set that scores every node for UCB selection and the final argmax.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2603.18620.txt",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix A, Evaluation protocol",
+   "quote": "At each round, a batch of 10 problems is sampled with replacement and presented to the action model.",
+   "support_explanation": "Batches are drawn from the domain's problem pool (Table 4 lists 95–191 'evaluation problems per domain'). Nowhere does the text say the batch pool excludes the 50 D problems.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2603.18620.txt",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "§3.2",
+   "quote": "containing the problems, the outputs of the action LLM, ground-truth answers, and per-problem correctness signals",
+   "support_explanation": "The improver sees ground-truth answers for every batch problem.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2603.18620.txt",
+   "material_hash": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "sha256": "836565cb9348e46743920165d8c96032a6dd87bf1fc2ff618f13d6a3e5f86258",
+   "locator": "Appendix B.3, example instruction found by LSE (MMLU-Redux Anatomy)",
+   "quote": "fertilization occurs in the fallopian tube, not the ovary or uterus",
+   "support_explanation": "Evolved instructions carry answer-level factual content. With ground-truth-bearing summaries and unstated batch/D disjointness, part of the D gain may be answer transfer rather than better procedure.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Improver weights (Qwen3-4B-Instruct) that edit the instruction field of the action model's prompt",
+   "information": "Current context plus structured summary of 10 problems: questions, action outputs, ground-truth answers, correctness",
+   "operation": "Policy proposes revised instruction; RL (GRPO-style, null-edit baseline) on reward = holdout accuracy(post-edit) minus holdout accuracy(pre-edit); start nodes sampled from pre-generated evolution trees",
+   "output": "Domain-specific trained improver weights",
+   "conditions": "Per-domain training on train splits with ground-truth rewards",
+   "feedback": "Holdout accuracy change of the edited context",
+   "selection_rule_data": "Policy gradient on delta reward; checkpoint chosen on separate dev set",
+   "persistence": "Improver weights persist; evolved contexts are per-run artifacts",
+   "later_use": "Improver is applied to unseen databases/subjects and to another action model",
+   "claimed_effect": "BIRD 67.3 vs 62.2 untrained same-size improver; MMLU-Redux 73.3 vs 71.2",
+   "failure_boundary": "Single-step approximation; per-domain policies; small environments",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E017",
+    "son55:E018",
+    "son55:E021",
+    "son55:E022",
+    "son55:E026"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Prompt instruction field evolved at test time (tree of contexts)",
+   "information": "Ground-truth labels on sampled problems and a fixed holdout of 50 problems",
+   "operation": "UCB selects a node, action model runs a batch, improver proposes child context, child scored on holdout, appended to tree",
+   "output": "Best-scoring context node after 25 rounds",
+   "conditions": "Labels available at evolution time",
+   "feedback": "Holdout mean reward per node",
+   "selection_rule_data": "UCB over holdout mean reward; final argmax on the same holdout",
+   "persistence": "Tree within one run; no store across domains",
+   "later_use": "Best instruction replaces seed instruction in system prompt",
+   "claimed_effect": "Tree search +2.4 BIRD / +2.2 MMLU over linear chain (untrained improver)",
+   "failure_boundary": "Selection and reporting share D; holdout/evolution pool overlap unstated",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E013",
+    "son55:E020",
+    "son55:E024"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Test-time self-evolution methods rely on the LLM's emergent ability to analyse feedback and rewrite its context; the improver is never explicitly trained for the task.",
+  "checked_gap": "A concrete and plausibly important residue: the improver (prompt editor) is held fixed or untrained across prompt-optimization, reflection and memory systems, and small models do poorly at it. The paper evidences it with the untrained 4B vs trained 4B comparison.",
+  "lineage_closest_adjacent": "Prompt optimizers GEPA and TextGrad, reflection ExpeL/Reflexion, self-referential ADAS and Darwin Goedel Machine, Voyager and memory stores (all named). Learned or RL-trained prompt editors are not surveyed as a neighbor category; SCoRe/TTRL are noted as intra-episode.",
+  "residue": "Domain-specific improver; single-step objective; small-scale environments.",
+  "stakes": "Small models cannot self-evolve contexts well without help; frontier improver calls are costly.",
+  "method_response": "Train the improver with a delta reward and sample start nodes from evolution trees; use UCB tree search at test time.",
+  "remaining_gap": "Multi-step credit, cross-domain improver, larger environments, independent held-out evaluation.",
+  "evidence_ids": [
+   "son55:E002",
+   "son55:E010",
+   "son55:E015",
+   "son55:E016",
+   "son55:E022"
+  ],
+  "unresolved": [
+   "Whether prior learned/meta-trained prompt editors exist as closer neighbors than the surveyed list"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Both seats: reframe_as_solvable_object, sub null. Multi-step self-evolution is recast as a single-step contextual bandit, with the pre-edit score as a known baseline. No C-sub fits.",
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "Recast multi-step self-evolution as a one-step contextual bandit solvable with policy gradient (executed)",
+     "Null-edit baseline deletes value model/group normalization (executed; matches 'delete a component' lesson)",
+     "Correspondence between single-step and multi-step objective: not proven, acknowledged limitation (unmet)",
+     "Faithfulness validated only empirically via tree search at test time"
+    ],
+    "success_failure_checks": [
+     "Success 'correspondence theorem': unmet",
+     "Success 'deletes a component': met (value model / group rollouts)",
+     "Failure 'correspondence asserted not proven': partly present",
+     "Failure 'mechanical wrapper re-applying existing solver': partly present (GRPO/PPO on a prompt editor)"
+    ],
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E012",
+     "son55:E022",
+     "son55:E026"
+    ],
+    "reason": "The distinctive operation is reducing the multi-step evolution problem to a single-step RL objective and importing policy-gradient machinery. No C-sub-pattern fits: C21 recasts RL as supervised, C00 and C27 concern interpretability and games; sub is null."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "amortize_improver_into_trained_policy",
+    "sub": "H27",
+    "version": "patterns-2026-10-21",
+    "fit": "high",
+    "condition_checks": [
+     "S1 reward the improvement not the score: met (E001)",
+     "S4 train a new kind of object: partial (trained prompt editor inside a known evolve loop)",
+     "S5 meta-train across task families: unmet (per-domain policies, E015)",
+     "F1 optimizer swap on a known loop: partially present",
+     "H27 step5: compare against prompted proposer of same size at matched budget: met via untrained Qwen3-4B with same tree search (E010); evaluate on unseen families: partial; never select checkpoint on reused holdout: partial (E018 vs E003)"
+    ],
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E010",
+     "son55:E015",
+     "son55:E018"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "patterns-2026-10-21",
+    "fit": "medium",
+    "condition_checks": [
+     "S3 retention rule protects earlier wins: partial (tree keeps all nodes, argmax holdout)",
+     "S5 proposer sees raw evidence: met (full thinking process + ground truth in summary)",
+     "F4 self-constructed validation: not present (ground-truth labels)"
+    ],
+    "evidence_ids": [
+     "son55:E021",
+     "son55:E024"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "amortize_improver_into_trained_policy",
+   "domain_sub": "H27",
+   "operation_correspondence": "RS: recast problem as an object with mature solver machinery (single-step bandit + policy gradient). RSI: train a proposer on delta reward to replace per-task prompt search.",
+   "necessary_conditions_differences": "RS requires correspondence proof back to the original problem (absent). RSI requires trained-vs-prompted comparison at matched budget and held-out evaluation (partly met).",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E010",
+    "son55:E022"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:reframe_as_solvable_object/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #1 (prove the reduction)"
+   ],
+   "applies_when": "Claim rests on a reduction to a simpler object",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Single-step objective is not shown to correspond to the multi-step objective; limitation is conceded.",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "score_item": "M",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-1"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #4 (faithfulness validation)"
+   ],
+   "applies_when": "Reduced objective stands in for the original",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Multi-round tree-search results are the empirical check; no multi-step-trained comparator.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E022"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-4"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #5 (scalability and assumptions)"
+   ],
+   "applies_when": "Claims practical advantage of reduction",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Reduced rollout cost claimed (no group rollouts/value network) but training cost is not measured.",
+   "evidence_ids": [
+    "son55:E017",
+    "son55:E026"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-5"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S1",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "amortize_improver_into_trained_policy S1"
+   ],
+   "applies_when": "Trains an improver on downstream outcomes",
+   "applicable": true,
+   "status": "met",
+   "reason": "Reward is post-edit minus pre-edit holdout accuracy with null-edit baseline.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E026",
+    "sol:E005",
+    "sol:E006"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:amortize_improver_into_trained_policy/S1; sol:rsi:amortize_improver_into_trained_policy/S1"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S5",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "amortize_improver_into_trained_policy S5"
+   ],
+   "applies_when": "Claims reusable improver",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus (revised from unmet): each improver trains across many databases (BIRD train) or subjects (SuperGPQA) and is tested on unseen ones, i.e. across task families within a task type. It does not cross task types, one policy per domain (conceded).",
+   "evidence_ids": [
+    "son55:E015"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:amortize_improver_into_trained_policy/S5"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/F1",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "amortize_improver_into_trained_policy F1"
+   ],
+   "applies_when": "Improver trained inside a known generate-evaluate-train loop",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Training recipe (delta-baseline GRPO variant) is the main contribution on a known evolve loop, though the trained object (prompt editor with tree start-states) is the paper's point.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E012"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:amortize_improver_into_trained_policy/F1"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/H27-step5",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "H27 Step-by-Step 5; Reviewer expectations: trained vs prompted improver at matched budget; seed variance; leakage guard; cost"
+   ],
+   "applies_when": "Claims trained proposer beats prompted proposer",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus: the same-size untrained improver runs with identical tree search, seeds and rounds, so that part is met. But checkpoints are chosen on a separate dev set while every headline is best-of-25 on D, and training cost is not priced.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E017",
+    "son55:E027",
+    "sol:E007",
+    "sol:E009",
+    "sol:E013"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:amortize_improver_into_trained_policy/H27-step5; sol:rsi:amortize_improver_into_trained_policy/H27",
+   "merged_from": "sol:rsi:amortize_improver_into_trained_policy/H27",
+   "note": "Merged here from sol:rsi:amortize_improver_into_trained_policy/H27 (A4: same question under a colliding or non-grammar ID)."
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "evidence_gated_retention S1 (explicit counterfactual behind credit)"
+   ],
+   "applies_when": "Credits edits by marginal effect",
+   "applicable": true,
+   "status": "met",
+   "reason": "Each edit credited by holdout delta vs the parent node.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:evidence_gated_retention/S1",
+   "note": "Check question only (evidence_gated_retention is not a domain match). Met: the training reward and the tree both credit an edit against an explicit counterfactual (pre-edit/parent score)."
+  },
+  {
+   "id": "local:2603.18620-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Selection-set vs report-set separation (EVIDENCE.md rule 2)"
+   ],
+   "applies_when": "Evolution loop selects contexts on a holdout and the same holdout is reported",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "UCB selection and argmax use D; reported numbers are best holdout performance over rounds on D.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "sol:E008",
+    "sol:E009"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2603.18620-1; sol:local:2603.18620-1"
+  },
+  {
+   "id": "local:2603.18620-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Margins under one point need uncertainty estimates"
+   ],
+   "applies_when": "Claims matching or exceeding baselines with small margins",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (both seats asked about statistics): one fixed seed per method, no interval or test, and sub-point MMLU margins called 'matches'. Eight generations per D evaluation reduce evaluation noise but are not an uncertainty estimate of the search.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009",
+    "son55:E027",
+    "sol:E009",
+    "sol:E010"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2603.18620-2; sol:local:2603.18620-2"
+  },
+  {
+   "id": "local:2603.18620-3",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Transfer claims need an untrained-improver control on the new action model"
+   ],
+   "applies_when": "Claims the trained improver transfers to Arctic-7B",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Arctic result has seed vs LSE-evolved only; no untrained Qwen improver baseline on Arctic.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2603.18620-3"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H10.md"
+   ],
+   "applies_when": "训练编辑器声称跨episode可泛化改进",
+   "applicable": true,
+   "status": "partial",
+   "reason": "树回退保留历史，但非独立回归gate。",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E008"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S3"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "A 4B LSE-trained improver outperforms GPT-5 and Claude Sonnet 4.5 as improvers on BIRD and matches/exceeds them on MMLU-Redux.",
+   "setting": "Qwen3-4B-Instruct action model, 25 evolution rounds, 5 BIRD DBs and 10 MMLU-Redux subjects",
+   "baseline_control": "Frontier models as improver with identical tree search",
+   "selection_vs_test": "Selection (UCB) and reporting on the same fixed 50-problem holdout, best over rounds",
+   "result_denominator": "BIRD avg 67.3 vs 65.2/64.5; MMLU 73.3 vs 72.5/72.0; single fixed seed; no failed-run accounting",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E007",
+    "son55:E008",
+    "son55:E027"
+   ],
+   "counterevidence": [
+    "son55:E003",
+    "opus:O01",
+    "opus:O02",
+    "opus:O04"
+   ],
+   "allowed_conclusion": "On best-of-25 holdout accuracy, trained 4B improver is ahead on BIRD and at parity on MMLU-Redux within unquantified noise."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Explicit training for self-evolution beats untrained same-size improvers and prompt optimizers.",
+   "setting": "Same action model; GEPA and TextGrad with Qwen3-4B proposers",
+   "baseline_control": "Untrained Qwen3-4B, GEPA, TextGrad",
+   "selection_vs_test": "Same as C1",
+   "result_denominator": "BIRD 67.3 vs 62.2/62.8/63.1; MMLU 73.3 vs 71.2/73.0/69.1",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E025"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Training improves over the untrained 4B improver on both tasks; GEPA parity on MMLU."
+  },
+  {
+   "claim_id": "C3",
+   "text": "The improvement-based reward is more effective than the standard post-edit/GRPO advantage.",
+   "setting": "BIRD only (Figure 2a)",
+   "baseline_control": "A_GRPO variant",
+   "selection_vs_test": "Same as C1",
+   "result_denominator": "67.3 vs 63.0 on BIRD",
+   "evidence_ids": [
+    "son55:E011"
+   ],
+   "counterevidence": [
+    "son55:E012"
+   ],
+   "allowed_conclusion": "A null-edit baseline outperforms GRPO group baseline on BIRD in one run; the derivation shows gradient equivalence with a learned baseline."
+  },
+  {
+   "claim_id": "C4",
+   "text": "The trained improver transfers to guide other action models without additional training.",
+   "setting": "Arctic-Text2SQL-R1-7B on BIRD",
+   "baseline_control": "Seed prompt only",
+   "selection_vs_test": "Same as C1",
+   "result_denominator": "57.7 to 64.4 avg",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Evolution with LSE improves Arctic over its seed prompt; no untrained-improver control."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Under a protocol where contexts are selected and scored on the same 50-problem holdout (best over 25 rounds), a Qwen3-4B improver trained with the delta-reward RL ahead of its untrained counterpart by about 5 points on BIRD and 2 points on MMLU-Redux, with unquantified variance; no independent held-out confirmation of retained contexts.",
+  "unresolved": [
+   "Overlap of evolution batches with holdout D",
+   "Seed variance",
+   "Training cost vs savings",
+   "Untrained-improver control for transfer to Arctic",
+   "Multi-step vs single-step objective",
+   "Opus: batch/D disjointness unstated while summaries contain ground-truth answers; evolved instructions contain answer-level facts (opus:O02–O04)."
+  ],
+  "note": "Author-reported results only. Central claim kept as stated; supported conclusion is narrower because the reported metric is the selection set.",
+  "evidence_level_note": "EVIDENCE rule 2: every reported context score is a max on D, which also selects nodes. The trained improver's domain hold-out is real but is graded in E.holdout; it does not make the retained contexts 'retained' evidence."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. A specific residual (the improver is never trained for editing) is probed by a trained-vs-untrained 4B comparison, and prompt-optimiser, self-referential and memory neighbours are surveyed. Not 4: RL-trained prompt-rewriting or reflection models are not surveyed, so 'never explicitly train it' is unverified.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E010",
+    "son55:E016",
+    "sol:E001"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. The bandit reduction, null-edit baseline and tree-sampled start states are derived honestly, including the admission that the delta and post-edit rewards give equal gradients under a learned baseline. The correspondence between single-step training and multi-step use is unproven.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E012",
+    "son55:E022",
+    "son55:E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Algorithm 1, the edited field, prompts, the UCB rule and the training recipe are reproducible. Retention is within-run tree only.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E023",
+    "son55:E024",
+    "sol:E002",
+    "sol:E010"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. SQL execution accuracy and MCQ accuracy (8 generations each) are credible verifiers. The best-of-rounds aggregation and the answer-transfer channel are charged in E.holdout (A2).",
+   "evidence_ids": [
+    "son55:E005",
+    "sol:E007",
+    "sol:E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with son55. Trained-vs-untrained in the same loop and seeds is clean, and frontier, GEPA and TextGrad improvers share protocol. But: the reward ablation is BIRD-only, and the paper shows it reduces to a baseline-estimator change; tree vs chain is tested only with the untrained improver; the Arctic transfer has no untrained-improver arm. No control separates feedback-driven evolution from a learned static instruction (first-edit-only or shuffled-summary). The RL training budget is unpriced against the untrained baselines (A2).",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E013",
+    "son55:E014",
+    "son55:E025",
+    "sol:E013"
+   ],
+   "counterevidence_ids": [
+    "son55:E012"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus sides with son55. Improver training and evaluation use disjoint domains (BIRD train → Mini-Dev DBs; SuperGPQA → MMLU-Redux), and checkpoints are picked on a separate dev set; this is real hold-out evidence for the trained component, so not 0. But every reported context score is best-of-25 on the D that drives UCB (opus:O01). Batch/D disjointness is unstated (opus:O02), while ground-truth answers reach the improver (opus:O03) and evolved instructions carry answer-level facts (opus:O04).",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E018",
+    "son55:E019",
+    "son55:E020",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "opus:O04"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1 (A2 ladder): sample sizes are reported, but there is one fixed seed, no interval or test, and sub-point MMLU margins.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E008",
+    "son55:E027",
+    "sol:E010"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1. Rounds are matched, but RL training (200×20 data generation, 4 epochs) and frontier-improver calls are not costed or compared.",
+   "evidence_ids": [
+    "son55:E017",
+    "sol:E011",
+    "sol:E012"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 HTML text, including Appendices A–B, read. In scope per A3 (component_training): the retained object is a non-weight instruction context; the improver is weight-trained. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "expectations[local:2603.18620-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Same statistics question in both seats. Eight generations average evaluation noise but do not estimate search variance; no seed repeats, so unmet.",
+   "evidence_ids": [
+    "son55:E027",
+    "sol:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2603.18620-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: Table 3 has only seed vs +LSE evolution for Arctic; no untrained-improver arm.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no proof that single-step training corresponds to multi-step use; conceded in Limitations.",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: multi-round tree use with ground-truth accuracy is an empirical faithfulness check, but there is no per-depth analysis or multi-step-trained comparator.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: lower rollout cost is argued, not measured; small environments are conceded.",
+   "evidence_ids": [
+    "son55:E017",
+    "son55:E026"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:amortize_improver_into_trained_policy/F1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Failure mode partly present: the delta-baseline policy-gradient recipe on a known evolve loop is the main novelty, though the trained object is the paper's point.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:amortize_improver_into_trained_policy/H27].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "same_supported_fact",
+   "final_value": {
+    "moved_to": "rsi:amortize_improver_into_trained_policy/H27-step5",
+    "status": "partial"
+   },
+   "reason": "sol's whole-card H27 check (same-size untrained and search comparisons present; no independent test or cost match) is son55's H27 step 5. Same finding, same status; merged under the step ID.",
+   "evidence_ids": [
+    "sol:E007",
+    "sol:E009",
+    "son55:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:amortize_improver_into_trained_policy/H27-step5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "same_supported_fact",
+   "final_value": "partial",
+   "reason": "See H27: same substance from both seats (sol's entry merged here).",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E018"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:amortize_improver_into_trained_policy/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "partial",
+   "reason": "son55 wrote unmet (one policy per domain). The card asks for meta-training across task families. Each improver trains across many databases/subjects and is tested on unseen ones, so partial; it does not cross task types.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E019",
+    "sol:E018"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: the tree keeps all nodes and can backtrack, but nothing protects earlier wins beyond the argmax on the same D.",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E008"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Check question only (card not matched). Verified: each edit is credited against its pre-edit/parent score.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.E.causality",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "son55",
+   "final_value": 2,
+   "reason": "See ratings.E.causality: the clean trained-vs-untrained contrast is offset by a BIRD-only reward ablation, no learned-static-instruction control, no untrained arm for transfer, and unpriced training budget. sol's 3 treats the three ablations as near-factorial isolation.",
+   "evidence_ids": [
+    "son55:E011",
+    "son55:E012",
+    "son55:E014"
+   ],
+   "score_impact": "−3.75 vs sol (15×1/4)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 0
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "decision": "son55",
+   "final_value": 1,
+   "reason": "See ratings.E.holdout: the domain hold-out of the trained improver keeps it above 0. Reporting best-of-25 on the selection set D, plus the unstated batch/D disjointness, keeps it at 1.",
+   "evidence_ids": [
+    "son55:E019",
+    "opus:O01",
+    "opus:O02"
+   ],
+   "score_impact": "+2.5 vs sol (10×1/4)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.holdout.reason",
+   "sol_value": "0 (D reuse; no batch/D overlap analysis)",
+   "son55_value": "1 (overlap 'unstated', not linked to answer content)",
+   "final_value": 1,
+   "reason": "Neither seat connected three facts: the improver sees ground-truth answers for each batch (opus:O03); the batch pool is not stated to exclude D (opus:O02); and the evolved MMLU instruction contains answer-level facts (opus:O04). Together these form a possible answer-transfer channel into D scores. It supports, not changes, the rating of 1.",
+   "evidence_ids": [
+    "opus:O02",
+    "opus:O03",
+    "opus:O04"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v1 text first. Initial view: component_training in scope; headline is best-of-25 on the UCB set D, with a real domain hold-out for the trained improver. G 3, M 3, X 3, Em 3, Ec 2, Eh 1, Es 1, E.cost 1; evidence_level task.",
+  "integrity_checks": "Both seats a1 hash-equal to conflicts.json; 2603.18620v1, material sha 836565cb…; both claim_type component_training; IDs valid.",
+  "core_claim_check": "Strongest supported claim: under a protocol that selects and reports contexts on the same 50 problems, an RL-trained 4B improver beats its untrained twin by ~5 pts (BIRD) and ~2 pts (MMLU-Redux), with unquantified variance. claim_support scoped.",
+  "rating_agreement": "Six items agree and were re-checked; E.causality and E.holdout → son55. Final 61.25."
+ },
+ "input_seat_hashes": {
+  "sol": "cb80124eca2f350d72f8c8898dc88298da9741117c1aa36f8419a8c770dc8b5c",
+  "son55": "608da1261f0f17966f9092448c4691cfa6621782160088ce42bc8f5d19227846"
+ },
+ "score": {
+  "raw": 61.25,
+  "display": 61.3,
+  "lower": 61.25,
+  "upper": 61.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "a7c7e5321c38d5455952d76d887eac626e5dbc5dbdfffafd4d1f4a856eddc680",
+ "supersedes_aggregate": "a1"
+}

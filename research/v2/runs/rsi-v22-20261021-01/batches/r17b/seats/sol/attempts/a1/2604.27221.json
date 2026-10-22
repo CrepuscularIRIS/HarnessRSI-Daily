@@ -1,0 +1,594 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r17b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.27221",
+    "paper_id": "2604.27221",
+    "title": "Web2BigTable: A Bi-Level Multi-Agent LLM System for Internet-Scale Information Search and Extraction",
+    "version": "2604.27221v1",
+    "claim_type": "system_method",
+    "central_claim": "双层run–verify–reflect共同演化编排分解和worker执行技能，通过持久非参数记忆与临时workboard提升宽/深搜索，胜于静态分解与单智能体。"
+  },
+  "provenance": {
+    "input_hash": "98ac945e7c4bbbda444afedffc531319beeec87430d3819722daa02b558134d0",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T01:08:35.925560+00:00",
+    "notes": "派发 model type=sonnet，声明映射 gpt-6.1-sol；未独立探测模型，工具未提供可核验 actual_model/session/receipt，故为 null。未读另一席或其他 attempt；未运行收录代码。"
+  },
+  "materials": [
+    {
+      "material_id": "2604.27221.txt",
+      "url": "https://arxiv.org/html/2604.27221v1",
+      "version": "2604.27221v1",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996",
+      "sections_read": [
+        "Abstract; §§1–2.4.2 and Algorithms 1–2",
+        "§§3.1–3.5 Tables 1–4 and case study",
+        "§4 related work; §5 conclusion",
+        "Appendices A theoretical extension, B Table 5, C cases B/C; complete fixed HTML"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "status": "reviewed",
+  "reason": "固定完整材料支持非权重skill持久更新与后续冻结测试；流程与实验有内部歧义但不是材料缺失。",
+  "rationale": "分解技能的冻结测试和消融支持有限retained增益；训练查询由测试参数扰动，执行期冻结与在线修复相矛盾，无完整成本及方差，不能推出通用双层自改进。",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "locator": "§2.2 memory regimes",
+      "quote": "a persistent store of skills that evolves only during training and is frozen at inference.",
+      "support_explanation": "区分持久技能和每任务workboard。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E002",
+      "locator": "§2.3.1 Reflect",
+      "quote": "Prior skills are never overwritten, so updates are monotone additions.",
+      "support_explanation": "分解/路由技能由错误报告生成并追加，非权重更新。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E003",
+      "locator": "§2.3.1 Reflect",
+      "quote": "Training queries are clustered by structural decomposition pattern rather than semantic topic",
+      "support_explanation": "抽取结构分解规则，不是原始轨迹缓存。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E004",
+      "locator": "§2.3.2 creation",
+      "quote": "as either a function skill (an executable Python script with a CLI entry point, validated via AST parsing) or a knowledge skill (a structured Markdown document with YAML frontmatter).",
+      "support_explanation": "动态工具/知识技能注册；AST不等于语义验证。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E005",
+      "locator": "§2.3.2 repair",
+      "quote": "The error trace and the current skill code are supplied to the LLM to synthesise a corrected iteration, subjected to strict AST validation before replacing the original.",
+      "support_explanation": "trace-driven修复，与全局单调追加存在表述张力。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E006",
+      "locator": "§3.1 WideSearch",
+      "quote": "we synthesise a set of 20 queries by perturbing task parameters (e.g., entity counts or time ranges) to avoid overlap with the original benchmark",
+      "support_explanation": "训练由原测试任务参数扰动，实体/来源重叠未审计。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E007",
+      "locator": "§3.1 WideSearch",
+      "quote": "is frozen and the unmodified 200 tasks serve as the held-out test set.",
+      "support_explanation": "作者声明冻结后200题测试，支持有限retained而非完全结构外推。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E008",
+      "locator": "§3.2 metrics",
+      "quote": "Cell matching employs type-specific comparators: exact match for categorical fields, numeric tolerance for quantities, URL normalisation for links, and LLM-based semantic judgement for free text.",
+      "support_explanation": "测量涵盖不同字段；未给judge误差审计。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E009",
+      "locator": "§3.2 repetition",
+      "quote": "Each system is run four times independently on the test set.",
+      "support_explanation": "四次推理均值/最佳值，但无主结果CI或跨训练种子。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E010",
+      "locator": "§3.4 learned skill ablation",
+      "quote": "On WideSearch, the Success Rate falls from 38.50 to 7.00, Row F1 from 63.53 to 45.23, and Item F1 from 80.12 to 62.87; on XBench-DeepSearch, accuracy decreases from 73.0 to 41.0",
+      "support_explanation": "冻结分解技能与无技能控制有显著数值差距，非独立复现。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E011",
+      "locator": "§3.4 worker ablation",
+      "quote": "Constrained to their default toolset, workers lose the capacity to discover task-specific cloud skills or autonomously repair execution failures.",
+      "support_explanation": "worker消融同时改变工具发现和修复，并非纯retained库关闭。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E012",
+      "locator": "§2.4 inference",
+      "quote": "No reflection, verification, or memory update is performed; the output is a structured table",
+      "support_explanation": "测试只读主张与§3.4运行期技能、case follow-up存在歧义。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E013",
+      "locator": "§3.5 case",
+      "quote": "after deduplication and aggregation,",
+      "support_explanation": "case明确dedup，与§2.4.1 no post-processing冲突。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E014",
+      "locator": "§3.3 configuration",
+      "quote": "Each task is served by up to 10 parallel workers powered by Gemini 3 Flash",
+      "support_explanation": "资源配置有交代，无完整训练/推理账单或matched budget。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    },
+    {
+      "evidence_id": "E015",
+      "locator": "§4 memory lineage",
+      "quote": "Web2BigTable\ninherits this theoretical foundation, extending it to a hierarchical multi-agent architecture.",
+      "support_explanation": "继承Memento；附录A为另项ongoing理论工作而非本篇证明。",
+      "kind": "author_report",
+      "material_id": "2604.27221.txt",
+      "sha256": "253b4727ea8f100a7f039903ba20852ef19d9a52312eb6a0110b45ba02136996"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "orchestrator分解与router SKILL.md",
+      "information": "训练题、金标准表及worker JSONL轨迹",
+      "operation": "run→cell verify→错误摘要→按结构聚类→反思生成placeholder技能",
+      "output": "增加的分解策略库",
+      "conditions": "gold可得、错误能归因于分解、结构技能可迁移",
+      "feedback": "Item-F1及缺行/低准确列/超时报告",
+      "selection_rule/data": "20个参数扰动训练题；LLM生成即追加，未述效用晋升门",
+      "persistence": "版本可控文本技能，旧技能不覆写",
+      "later_use": "以后episode及200原题只读冻结测试",
+      "claimed_effect": "纠正粗粒度分解及覆盖缺口",
+      "failure_boundary": "源实体重叠、单调增长、缺独立效用门",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E006",
+        "E007",
+        "E010"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "worker function/knowledge skills",
+      "information": "任务需求、8000+云技能、代码和执行错误",
+      "operation": "精确/语义检索→缺口生成→AST检查→错误修复→刷新索引",
+      "output": "共享技能库",
+      "conditions": "工具环境可用、AST通过仍需语义正确",
+      "feedback": "执行错误和episode评分",
+      "selection_rule/data": "优先重用；缺匹配才生成；AST为主要显式gate",
+      "persistence": "本地/共享skill文件与BM25/向量索引",
+      "later_use": "其他worker及之后任务检索；测试是否允许更新表述不一致",
+      "claimed_effect": "更强执行与错误恢复",
+      "failure_boundary": "无语义回归；测试freeze和runtime repair定义不一致",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E011",
+        "E012"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "静态分解无法应对宽搜索的覆盖和深搜索的推理；现有记忆自演化多为单层。",
+    "checked_gap": "上下文与分解粒度瓶颈具体，case和skill关闭控制相关；双层联动相对Memento-Skills/G-Memory/已有workflow搜索的最近邻残差未独立核定。",
+    "lineage": [
+      {
+        "method": "Memento/Memento-Skills → 分解/执行双技能库；SAMULE/EvolveR及G-Memory为邻居",
+        "source": "§§2.2,2.3.2,4",
+        "version": "2604.27221v1中的引用说明，邻居原文未固定"
+      }
+    ],
+    "closest_adjacent": "直接继承Memento-Skills；新组合是错误驱动分解技能加并发共享工作板。",
+    "residue": "是否双层共同演化优于只学分解或现有自动workflow，在预算与训练曝光一致下未证。",
+    "stakes": "覆盖完整性与并发搜索成本",
+    "method_response": "从缺行/字段错误学习分解规则及worker skill并供以后任务读取。",
+    "remaining_gap": "未给因子交互、结构外留出与完整成本；无改进器自我提升证据。",
+    "evidence_ids": [
+      "E003",
+      "E010",
+      "E015"
+    ],
+    "unresolved": [
+      "请总控固定Memento-Skills、G-Memory及最近自动workflow搜索原文供双席共同核查；不自行联网补读。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "把反馈蒸馏为文本skill",
+          "之后任务以冻结技能conditioning，不改权重",
+          "C03专用统一输入训练/类别外结构留出不完整，子卡不强配"
+        ],
+        "success/failure_checks": [
+          "有技能开关控制",
+          "结构/来源重叠未审计"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E007",
+          "E010"
+        ],
+        "reason": "主卡conditioning链匹配；普通编排本身不强配其他原主卡。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "以持久经验技能替代每题权重更新。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H02",
+        "version": "frozen-input",
+        "fit": "medium",
+        "condition_checks": {
+          "step2": "met:结构化SKILL.md供其他worker/episode",
+          "step3": "partial:单调追加，缺去重合并/效用gate",
+          "step5": "partial:冻结测试但参数扰动源与原题相邻"
+        },
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E006",
+          "E007"
+        ]
+      },
+      {
+        "main": "crystallize_executable_capability",
+        "sub": "H07",
+        "version": "frozen-input",
+        "fit": "medium",
+        "condition_checks": {
+          "step1": "met:检索无匹配触发生成",
+          "step3": "partial:AST及trace修复，不是known-answer语义测试",
+          "step5": "partial:worker消融混合检索/修复"
+        },
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E011"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H02"
+      },
+      "operation_correspondence": "轨迹和gold错误→结构skill→未来分解conditioning",
+      "conditions/differences": "可共享package但缺合并与admission，未符合C03完整训练策略",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E007"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "crystallize_executable_capability",
+        "sub": "H07"
+      },
+      "operation_correspondence": "需求缺口→新技能注册→检索调用",
+      "conditions/differences": "代码扩展action space超出纯文本conditioning；只给AST gate",
+      "evidence_ids": [
+        "E004",
+        "E005"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md S5"
+      ],
+      "applies_when": "声称技能承载增益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有技能关闭后续任务比较；未测每条新skill增量效用或噪声门。",
+      "evidence_ids": [
+        "E002",
+        "E010"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/S1",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md S1"
+      ],
+      "applies_when": "动态代码技能注册",
+      "applicable": true,
+      "status": "partial",
+      "reason": "AST验证不保证语义正确，错误trace修复有具体实现。",
+      "evidence_ids": [
+        "E004",
+        "E005"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2604.27221-1",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§3.1"
+      ],
+      "applies_when": "宣称泛化至unseen任务",
+      "applicable": true,
+      "status": "partial",
+      "reason": "冻结后原题测试明确，训练由同题参数变体生成，实体/来源/结构独立性未审计。",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2604.27221-2",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§§2.4,3.4,3.5"
+      ],
+      "applies_when": "复原实际运行路径",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "§2.4说测试无更新，worker消融解释含runtime repair；case含Round2与dedup，算法说single pass/no postprocessing。",
+      "evidence_ids": [
+        "E011",
+        "E012",
+        "E013"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2604.27221-3",
+      "version": "frozen-input-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "§§3.2–3.4"
+      ],
+      "applies_when": "benchmark整体优越性",
+      "applicable": true,
+      "status": "partial",
+      "reason": "四次推理报告均值和max，无区间及完整训练重复；并发数不是实际总成本。",
+      "evidence_ids": [
+        "E009",
+        "E014"
+      ],
+      "score_item": "E.statistics"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "学习分解技能产生主要搜索提升",
+      "setting": "WideSearch200原题及XBench，20参数扰动训练题/benchmark",
+      "baseline/control": "相同其余配置w/o learned orch skills",
+      "selection_vs_test": "训练gold用于skill，之后冻结测原题；来源/实体可能重叠",
+      "result/denominator": "WideSearch SR38.50 vs7.00, Item80.12 vs62.87；XBench73 vs41；WideSearch4次推理",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E009",
+        "E010"
+      ],
+      "counterevidence": [
+        "无训练种子、污染审计或matched总预算；每benchmark分别训练，不是零样本跨benchmark transfer"
+      ],
+      "allowed_conclusion": "作者的冻结技能开关实验支持相邻任务分布上的retained分解收益。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "双层共同自演化及worker工具带来通用收益",
+      "setting": "worker evolution/workboard消融",
+      "baseline/control": "删除worker机制同时禁用云技能发现与运行修复",
+      "selection_vs_test": "训练/测试更新权限表述冲突",
+      "result/denominator": "w/o worker SR33,Row59.67,Item76.38,XBench64 vs full38.5/63.53/80.12/73",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E011",
+        "E012"
+      ],
+      "counterevidence": [
+        "非纯retained库消融；未测双层交互或改进器改善"
+      ],
+      "allowed_conclusion": "混合worker工具机制有相关增益，不能隔离持续自演化或improver质量。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者冻结分解技能后，在原benchmark题上较无技能控制更强；限于参数变体训练及未审计共享实体的相邻分布。",
+    "unresolved": [
+      "测试期worker更新、Round2/dedup的真实配置需澄清",
+      "无improver自改进、严格跨结构迁移或成本优越证据"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "问题具体，直接祖先Memento-Skills残余未独立核查。",
+      "evidence_ids": [
+        "E003",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "分解缺口→结构技能→后轮分解的因果机制可检验；双层并行改进不干扰仅为假设。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "流程/接口详述，但freeze vs runtime、single-pass vs Round2和dedup冲突影响重建。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E011",
+        "E012",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "完整表/行/单元格多尺度真值指标相关；LLM free-text judge无误差校验。",
+      "evidence_ids": [
+        "E008",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "相同系统skill开关及workboard控制有价值；worker开关混合工具发现/修复，无匹配预算强替代。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "20训练与200冻结测试明确；由原题参数扰动而非结构/实体隔离，每benchmark各训练。",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "4次推理avg/max但无主结果区间、种子、跨技能训练方差；依A2未到2。",
+      "evidence_ids": [
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "not_reported",
+      "rating": 0,
+      "reason": "模型和并发数不等于实际成本；未报20题训练+反思、搜索API、失败与推理总token/time/费用。",
+      "evidence_ids": [],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§§1–5及附录A–C、Tables1–5；无总成本或预算匹配结果"
+      ]
+    }
+  },
+  "score": {
+    "raw": 53.75,
+    "display": 53.8,
+    "lower": 53.75,
+    "upper": 53.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}

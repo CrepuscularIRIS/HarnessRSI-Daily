@@ -1,0 +1,851 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r17a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Complete HTML full text read (short FSE Companion paper, no appendix). Weak self-improvement component; scored under system_method with retained claim limited to Level 1 memory.",
+ "paper": {
+  "paper_key": "2604.16941",
+  "paper_id": "2604.16941",
+  "title": "MEMRES: A Memory-Augmented Resolver with Confidence Cascade for Agentic Python Dependency Resolution",
+  "version": "2604.16941v1",
+  "claim_type": "system_method",
+  "central_claim": "A six-level confidence cascade (session memory, curated compatibility maps/templates, co-occurrence mining, heuristics, then LLM last) with intra-session memory, self-evolving memory (tips/shortcuts), an error-pattern KB, semantic import analysis and Python 2 detection resolves 86.6% (10-run avg) of HG2.9K snippets with Gemma-2 9B vs PLLM's reported 54.7%, with 68.0% resolved without any LLM call."
+ },
+ "provenance": {
+  "input_hash": "5523ec4cfb11dc4c101ccd397ae80559dd9b4782285ef68e424f562340f29c27",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker; model_type is the configured slot only",
+  "timestamp": "2026-10-22T01:08:31Z"
+ },
+ "rationale": "确定性级联为主、会话记忆为辅。仅有Level 1记忆消融(+5.0pp)；基线数字取自原论文，31.9pp增益未分解；设计基于评测集失败分析，无独立测试。",
+ "materials": [
+  {
+   "material_id": "M-2604.16941",
+   "url": "https://arxiv.org/html/2604.16941v1",
+   "sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d",
+   "sections_read": [
+    "Abstract",
+    "1-5",
+    "Tables 1-3",
+    "3.1 Threats to Validity"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "kind": "author_report",
+   "quote": "an agentic system for Python dependency resolution that introduces a multi-level confidence cascade where the LLM serves as the last resort",
+   "support_explanation": "Central design: deterministic levels first, LLM last.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Sec 1 Key Insight",
+   "kind": "author_report",
+   "quote": "Our analysis of PLLM’s failures reveals deterministic root causes: 33% are SyntaxErrors from Python 2 code run under Python 3, 30% are ImportErrors for known name mismatches",
+   "support_explanation": "Author gap: PLLM failures on HG2.9K are mostly deterministic; the design is derived from failure analysis of the evaluation benchmark itself.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 1",
+   "kind": "author_report",
+   "quote": "Calling an LLM wastes 60 to 120 s per snippet with no benefit for these cases.",
+   "support_explanation": "Cost motivation for the cascade.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 3 PLLM Baseline",
+   "kind": "author_report",
+   "quote": "We directly compare against the reported 54.7% success rate from the original PLLM paper",
+   "support_explanation": "Baseline is a number copied from the original paper (1583/2891), not rerun on the same hardware, model, timeout or success implementation.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Sec 3 Success criterion",
+   "kind": "author_report",
+   "quote": "a snippet is successful when all its pip dependencies are installed and the script executes past all import statements without ImportError or ModuleNotFoundError",
+   "support_explanation": "Success = install + survive import statements only (inherited from PLLM), not functional correctness.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Sec 3 Success criterion",
+   "kind": "author_report",
+   "quote": "Runtime passes (correct dependencies but environmental failures such as missing display servers or hardware) are counted as failures to prevent inflation.",
+   "support_explanation": "Conservative counting of environment-dependent snippets; whether PLLM's 54.7% treats them the same way is not stated.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Sec 2.3",
+   "kind": "author_report",
+   "quote": "Memory is fully reset between independent evaluation runs: no state persists across runs, preventing cross-run overfitting.",
+   "support_explanation": "Retention scope: within one evaluation batch only; no cross-run or cross-dataset persistence.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Sec 3 Results, Table 2",
+   "kind": "author_report",
+   "quote": "To address fairness, disabling Level 1 simply forces snippets through the remaining deterministic and LLM levels.",
+   "support_explanation": "Table 2: full pipeline 2503 (86.6%) vs Level 1 OFF 2357 (81.6%), delta +146 (+5.0 pp). Only ablation table; no ± for the OFF condition.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Sec 2.1",
+   "kind": "author_report",
+   "quote": "Since PLLM evaluates sequentially within a single session, we emulate this by caching solutions proven successful for earlier code blocks to resolve near-duplicate datasets (e.g., identical GitHub forks).",
+   "support_explanation": "Level 1 memory exploits near-duplicate snippets (forks) inside the evaluated batch, i.e. the store is built from the test stream.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 2.3",
+   "kind": "author_report",
+   "quote": "Shortcuts are validated with a quick Docker build to prevent compounding errors.",
+   "support_explanation": "Execution-based write gate for shortcuts; no gate described for tips.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 2.3",
+   "kind": "author_report",
+   "quote": "(natural language guidelines) and shortcuts (reusable solutions matched via Jaccard similarity over import sets, threshold 0.5)",
+   "support_explanation": "Memory has two entry types; tips' content, injection into prompts and effect are not specified or ablated.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Sec 3.1 Development-time curation leakage",
+   "kind": "author_report",
+   "quote": "No HG2.9K result was used to add or tune KB entries; the 50-entry held-out subset is disjoint from HG2.9K.",
+   "support_explanation": "Disclosed mitigation for KB leakage: about 150 entries from PyPI docs/StackOverflow and about 50 from a disjoint held-out dev subset.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Sec 2.4 Python 2 detection",
+   "kind": "author_report",
+   "quote": "A manual analysis of a random 100-snippet sample from PLLM’s SyntaxError failures reveals that 91% are actually Python 2 code mis-executed under a Python 3 interpreter.",
+   "support_explanation": "Python-2 rules (13 indicators) are designed from failures observed on the evaluation benchmark.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Sec 3 Setup",
+   "kind": "author_report",
+   "quote": "We aggregate 10 independent test runs with randomized snippet orderings, ensuring the order-sensitive Session Memory does not introduce positional bias.",
+   "support_explanation": "Table 1: 2503 +/- 9.3 resolved (86.6%), 387 failed; Table 3 states 86.6% +/- 0.3%; all 2890 snippets (one empty removed) are in the denominator, failures counted.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Sec 3.2 Efficiency",
+   "kind": "author_report",
+   "quote": "resolves 68.0% of passing cases without any LLM call, reducing token usage by",
+   "support_explanation": "Table 3: 0.34 LLM calls/snippet vs PLLM 1 to 5; median 15.2 s vs PLLM about 120 to 180 s (PLLM values from its paper); hardware stated (i5-14600K, RTX 5070).",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Sec 3.1 Co-occurrence leakage",
+   "kind": "author_report",
+   "quote": "removing co-occurrence mining reduces success by",
+   "support_explanation": "Second ablation, reported only in prose as under 2%; no table or run count.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Sec 1 Contributions",
+   "kind": "author_report",
+   "quote": "with 6 resolution levels reducing LLM calls by 60%+ while improving accuracy",
+   "support_explanation": "Claims cascade improves accuracy; no LLM-first vs cascade comparison on the same system is reported.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Sec 3.1 Knowledge leakage via session memory",
+   "kind": "author_report",
+   "quote": "Intra-session memory (Level 1) accumulates solutions within a single evaluation batch, which could amplify batch-order effects.",
+   "support_explanation": "Authors acknowledge the stream/order concern; mitigation is order randomisation over 10 runs, not a disjoint split.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Sec 3.2 / Sec 3.3",
+   "kind": "author_report",
+   "quote": "Median resolution is 15.2 s for successes.",
+   "support_explanation": "Time reported for successes; manual KB curation effort and the fixed dev cost are not costed.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 5",
+   "kind": "author_report",
+   "quote": "Future work will focus on broader corpus validation and improved handling of C-extension failures.",
+   "support_explanation": "Single benchmark (HG2.9K), single LLM (Gemma-2 9B); authors concede broader validation is future work.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Sec 4 Related work",
+   "kind": "author_report",
+   "quote": "V2 aligns with our Reflexion Build Loop, but we add cross-snippet memory and unfixability estimators to avoid wasteful search.",
+   "support_explanation": "Nearest neighbours (PLLM, V2, Repo2Run, PyEGo, DockerizeMe, Mobile-Agent-E) named; only PLLM is compared quantitatively, and only via its reported number.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Sec 2.2",
+   "kind": "author_report",
+   "quote": "8 Python versions with known-good pins (manually curated from documentation and CI/CD logs)",
+   "support_explanation": "Large share of the system is hand-curated static knowledge (compat maps, 23 templates, 45+ rules, 200+ KB mappings) rather than feedback-derived.",
+   "material_id": "M-2604.16941",
+   "material_sha256": "30e563f8fcefcb320429057fc565d4d8c21b08c7507335e6ad23381d3db7c40d"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "session memory (shortcuts keyed by import sets, tips, per-package failure anti-patterns) and runtime-learned ErrorPatternKB mappings; baseline PLLM with no cross-snippet memory",
+   "information": "earlier snippets in the same batch and their Docker build/execution outcomes, PyPI query results; HG2.9K ground-truth labels stated not used",
+   "operation": "store validated solutions as shortcuts; for a new snippet match by Jaccard >= 0.5 on imports -> reapply via single pip install, partial match -> version/package hints; validate new shortcuts by quick Docker build; record failure stats; add runtime import->package mappings",
+   "output": "Level 1 of the cascade answers or hints before other levels",
+   "conditions": "near-duplicate snippets within the batch (forks); order-sensitive; sandboxed containers",
+   "feedback": "Docker build / import-execution results (execution, not labels)",
+   "selection_rule_data": "write only after Docker validation (shortcuts); gate for tips and runtime KB mappings not stated",
+   "persistence": "within one evaluation batch; reset between runs",
+   "later_use": "subsequent snippets in the same batch at Level 1",
+   "claimed_effect": "+146 snippets (+5.0 pp) when Level 1 is on (Table 2)",
+   "failure_boundary": "order dependence, benchmark near-duplicates, poisoned-memory risk (mitigated by sandbox), no cross-run retention",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E011",
+    "E018"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "static confidence cascade, curated KB/maps, Python 2 detector, semantic import analyzer",
+   "information": "snippet source, curated resources, pip/Docker signals",
+   "operation": "ordered deterministic resolution levels with LLM version selection only when all fail; unfixability estimator; Python 2.7 forcing",
+   "output": "package set and interpreter version",
+   "conditions": "not adaptive over time",
+   "feedback": "not_applicable (hand-designed)",
+   "selection_rule_data": "not_applicable",
+   "persistence": "not_applicable (fixed resources)",
+   "later_use": "not_applicable",
+   "claimed_effect": "86.6% vs 54.7%, 0.34 LLM calls/snippet",
+   "failure_boundary": "build/C-extension failures, obscure packages, timeouts (Sec 3.3)",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E013",
+    "E015",
+    "E022"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "PLLM leaves 45.3% of HG2.9K unresolved and spends LLM calls on failures with deterministic causes; it also lacks cross-snippet memory.",
+  "checked_gap": "Plausible and quantified by the authors' own failure analysis; derived from the evaluation benchmark, and PLLM's number is not re-measured. No check of whether stronger LLM-only or agentic baselines (V2, Repo2Run) close the gap.",
+  "lineage": "pip/pipreqs -> PyEGo (constraint search), DockerizeMe (system deps), READPyE -> PLLM (RAG+LLM) -> V2 (search-heavy mutation) -> MemRes (knowledge-heavy cascade + session memory); memory side: Reflexion, Mobile-Agent-E tips/shortcuts",
+  "closest_adjacent": "PLLM, V2, Repo2Run, Mobile-Agent-E",
+  "residue": "build/C-extension failures (~50% of remaining), obscure packages, timeouts",
+  "stakes": "legacy Python code reproducibility",
+  "method_response": "deterministic front-loading, curated KB, Python 2 detection, session memory",
+  "remaining_gap": "generalisation beyond HG2.9K and Gemma-2 9B; share of gain due to learning vs curated knowledge",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E021",
+   "E020"
+  ],
+  "unresolved": [
+   "PLLM/V2 original texts not in package; baseline comparability unverified"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "1 name the unreliable sub-problem vs sound solver: yes (deterministic/pip/Docker vs LLM)",
+     "2 machine-checkable artifact at the boundary: LLM emits version pins restricted to candidates, checkable by build: partial",
+     "3 close loop with solver output: Docker build/retry loop: yes",
+     "4 ablate verification step / isolate marginal contribution: not done",
+     "5 account for delegation cost: yes (calls, time)"
+    ],
+    "success_failure_checks": [
+     "bottleneck diagnostic linking sub-task to outcome: met (failure root causes)",
+     "ablations isolating components: unmet",
+     "fair comparison to end-to-end baselines: unmet (copied number)"
+    ],
+    "evidence_ids": [
+     "E001",
+     "E002",
+     "E010",
+     "E015"
+    ],
+    "reason": "Routing each resolution sub-problem to exact deterministic handlers or pip/Docker, with the LLM confined to constrained version selection, matches the delegate-to-sound-solver move; the memory part is not covered by any RS card."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Primary matched for the cascade; the self-evolving memory operation has no matching RS card and is handled by the domain layer.",
+  "executes_pattern": true,
+  "resolves_problem": "partial: headline gain reported against a copied baseline without component isolation"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version_ref": "domain_cards_hash",
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "domain_cards_hash",
+    "fit": "medium",
+    "condition_checks": [
+     "S1 partial",
+     "S2 met",
+     "S4 unknown",
+     "S5 partial",
+     "F1 partial",
+     "F3 present",
+     "F4 avoided"
+    ],
+    "evidence_ids": [
+     "E009",
+     "E010",
+     "E011",
+     "E008",
+     "E018"
+    ],
+    "reason": "Solved snippets stored as near-raw cases (import set -> pip solution), matched by Jaccard similarity, gated by Docker validation, with a retained-store (Level 1) ablation; store is built from and evaluated on the same batch."
+   }
+  ],
+  "unassigned": [
+   "tips (natural-language guidelines) and failure-stat anti-patterns: content, use and effect unspecified"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain_namespace": "rsi",
+   "domain_main": "index_experience_for_reuse",
+   "domain_sub": "H03",
+   "operation_correspondence": "Docker/pip execution as the sound checker in C25 doubles as the write gate for H03 shortcuts; Level 1 reuses checked solutions before invoking other levels",
+   "necessary_conditions": "execution-validated writes; store built disjoint from test; retained-store ablation",
+   "differences": "C25 concerns routing/decomposition; H03 concerns case reuse; they are different operations of the same system; the memory contributes about 5 of 31.9 pp",
+   "evidence_ids": [
+    "E008",
+    "E010"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations"
+   ],
+   "applies_when": "delegation adds components",
+   "applicable": true,
+   "status": "met",
+   "reason": "LLM calls/snippet, token reduction, median/P90 time and hardware reported.",
+   "evidence_ids": [
+    "E015",
+    "E019"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations"
+   ],
+   "applies_when": "multiple components claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Only Level 1 (table) and co-occurrence (prose) ablated; KB, Python 2 detector, semantic analyzer, cascade order untested.",
+   "evidence_ids": [
+    "E008",
+    "E016"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations"
+   ],
+   "applies_when": "LLM prompts matter",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Prompt format summarised (structured JSON, stdlib exclusion rules); artifacts at a GitHub link; prompt text not in paper.",
+   "evidence_ids": [
+    "E020"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations"
+   ],
+   "applies_when": "generality claimed",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "One benchmark and one LLM; authors list broader validation as future work.",
+   "evidence_ids": [
+    "E020"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations"
+   ],
+   "applies_when": "comparison to prior art",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "PLLM number copied from its paper; V2/Repo2Run not compared; no LLM-only baseline with Gemma-2 9B under the same harness.",
+   "evidence_ids": [
+    "E004",
+    "E021"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-6",
+   "version": "domain_cards_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#Reviewer expectations"
+   ],
+   "applies_when": "decomposition justified by bottleneck",
+   "applicable": true,
+   "status": "met",
+   "reason": "Failure-category analysis links sub-tasks to outcome, though derived on the evaluation set.",
+   "evidence_ids": [
+    "E002",
+    "E013"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S1",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "reusable cases",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Shortcut is a full pip solution keyed by import set; partial matches only yield hints, no re-binding of instance values.",
+   "evidence_ids": [
+    "E011",
+    "E009"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S2",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "writes to the store",
+   "applicable": true,
+   "status": "met",
+   "reason": "Shortcuts written only after Docker validation; sandboxed.",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "store claimed to carry gain",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Level 1 OFF reduces success by 5.0 pp (single reported value), on the test stream.",
+   "evidence_ids": [
+    "E008",
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "avoidance check: store must not be built from the test stream (status = degree avoided)",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "By design the store accumulates over the evaluated batch; order randomisation mitigates but does not separate construction from evaluation.",
+   "evidence_ids": [
+    "E009",
+    "E018"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F4",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "avoidance check: model outputs enter memory without external gate",
+   "applicable": true,
+   "status": "met",
+   "reason": "Docker-build validation gates shortcut writes.",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F1",
+   "version": "domain_cards_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "avoidance check: store incidental to method",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Memory contributes about 5 pp of the 31.9 pp gain; the rest is static cascade/KB.",
+   "evidence_ids": [
+    "E008",
+    "E022"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2604.16941-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "common baseline-comparability practice"
+   ],
+   "applies_when": "comparing against a number from another paper",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No rerun of PLLM under the same LLM, timeout, success implementation and hardware.",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2604.16941-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 2.3"
+   ],
+   "applies_when": "'self-evolving memory' claimed as a contribution",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Tips, shortcuts and runtime KB self-learning are not separately ablated.",
+   "evidence_ids": [
+    "E011",
+    "E008"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2604.16941-3",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "docs/EVIDENCE.md rule 2"
+   ],
+   "applies_when": "design derived from benchmark failure analysis",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No dev/test split of HG2.9K for the cascade design.",
+   "evidence_ids": [
+    "E002",
+    "E013"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "MemRes resolves 86.6% of HG2.9K vs PLLM 54.7%.",
+   "setting": "HG2.9K 2890 snippets, Gemma-2 9B via Ollama, 10 runs, Docker python:3.10.12",
+   "baseline_control": "PLLM reported number (not rerun)",
+   "selection_vs_test": "design informed by failure analysis of the same benchmark",
+   "result_denominator": "2503 +/- 9.3 of 2890; runtime passes counted as failures",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E014"
+   ],
+   "counterevidence": [
+    "E002",
+    "E013"
+   ],
+   "allowed_conclusion": "High success on this benchmark under the authors' harness; comparison to PLLM indicative only"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Intra-session memory contributes +5.0 pp.",
+   "setting": "Level 1 OFF vs ON, same pipeline",
+   "baseline_control": "Level 1 disabled",
+   "selection_vs_test": "memory built on the test stream; near-duplicate forks",
+   "result_denominator": "2357 vs 2503 of 2890",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E018"
+   ],
+   "counterevidence": [
+    "E018"
+   ],
+   "allowed_conclusion": "Retained, within-batch benefit on this duplicate-rich benchmark"
+  },
+  {
+   "claim_id": "C3",
+   "text": "Cascade cuts LLM calls (0.34/snippet, 68.0% no-LLM successes) and time (median 15.2 s).",
+   "setting": "Table 3 vs PLLM published figures",
+   "baseline_control": "PLLM paper values",
+   "selection_vs_test": "n/a",
+   "result_denominator": "successes only for time",
+   "evidence_ids": [
+    "E015",
+    "E019"
+   ],
+   "counterevidence": [
+    "E004"
+   ],
+   "allowed_conclusion": "Efficiency gains plausible; comparison not like-for-like"
+  },
+  {
+   "claim_id": "C4",
+   "text": "Self-evolving memory transfers resolution knowledge via tips and shortcuts.",
+   "setting": "not separately tested",
+   "baseline_control": "none",
+   "selection_vs_test": "n/a",
+   "result_denominator": "n/a",
+   "evidence_ids": [
+    "E011",
+    "E007"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Only shortcut reuse within a batch is evidenced"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "On HG2.9K with Gemma-2 9B, the full cascade resolves 86.6% (10-run mean) and a within-batch, Docker-validated memory adds about 5 pp over the same pipeline without it; efficiency is much better than PLLM's published figures.",
+  "author_claim_vs_supported": "Superiority over PLLM and attribution to the confidence cascade/self-evolving memory are not isolated: baseline is a copied number and almost all components are unablated.",
+  "unresolved": [
+   "component ablations",
+   "baseline rerun",
+   "held-out evaluation",
+   "tips/anti-pattern role",
+   "cross-benchmark generalisation"
+  ],
+  "note": "retained scoped to the Level 1 store-off ablation inside a single batch; no improver-level or cross-run retention; headline gain is mostly static curated knowledge."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Concrete, quantified limitation of the nearest system (PLLM 54.7%, deterministic failure causes, LLM wasted) with neighbours named; but the failure analysis is the authors' own sample on the evaluation set, the gap is domain-specific rather than about a changed harness-level learning component, and cross-snippet memory is motivated only by PLLM's sequential evaluation.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Cascade ordering (cheap exact levels, LLM last, Docker verification) is coherent and the memory loop (execute -> validated shortcut -> Jaccard reuse) is explicit, but the mechanism explaining the main gain is static curated knowledge; the role of tips/anti-patterns and why self-evolving memory is needed beyond a cache is thin, and no distinguishing predictions against simpler alternatives are made.",
+   "evidence_ids": [
+    "E001",
+    "E009",
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Main levels, thresholds (Jaccard 0.5), validation by Docker build, run-level reset and sandboxing are stated. Missing: tips content/usage, how anti-pattern stats are consumed, KB self-learning conflict handling, expiry/rollback inside a batch, partial-match hint handling; prompts only summarised.",
+   "evidence_ids": [
+    "E007",
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [
+    "E011"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Full 2890-snippet denominator with failures counted and runtime passes counted as failures, plus 10 runs; but success is import-level only, and the PLLM figure is copied from another paper without confirming identical success/thresholding and infrastructure.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E004"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Only the Level 1 memory ablation (+5.0 pp) is tabulated and a prose-only co-occurrence ablation; the 31.9 pp gain over PLLM is not decomposed (KB, Python 2 detector, semantic analyzer, cascade vs LLM-first all untested), tips/shortcuts/runtime KB learning are not separated, and no rerun baseline with the same LLM.",
+   "evidence_ids": [
+    "E008",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E004",
+    "E017",
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Disclosed mitigations (about 50 KB entries from a disjoint dev subset, pre-2020 co-occurrence data, state reset, no HG2.9K-derived KB entries). But the design was motivated by failure analysis on the evaluation benchmark, there is no separate test set, the store is built from the test stream (near-duplicate forks), and only one dataset and one LLM are used.",
+   "evidence_ids": [
+    "E012",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E002",
+    "E009",
+    "E013",
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "10 randomised-order runs with mean +/- std (9.3 snippets) and complete failure counts; effect over PLLM (32 pp) far exceeds noise. No significance test, PLLM comparator is a single reported value, and the ablation lacks a stated run count.",
+   "evidence_ids": [
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E008"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "LLM calls per snippet, token reduction, median/P90 time, hardware and timeouts reported against PLLM's published figures. Not like-for-like (PLLM from its paper), and manual curation cost of KBs/maps is excluded.",
+   "evidence_ids": [
+    "E015",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E004",
+    "E022"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 48.75,
+  "display": 48.8,
+  "lower": 48.75,
+  "upper": 48.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -1,0 +1,754 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r16a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "status": "reviewed",
+  "reason": "Complete fixed-version text §§1–7 and AppendicesA–T read. In scope A: self-judged retained nonweight thought store; not weight learning.",
+  "paper": {
+    "paper_key": "2604.12231",
+    "paper_id": "2604.12231",
+    "title": "Thought-Retriever: Don't Just Retrieve Raw Data, Retrieve Thoughts for Memory-Augmented Agentic Systems",
+    "version": "2604.12231v1",
+    "claim_type": "system_method",
+    "central_claim": "Persistent validated query-conditioned thoughts improve retrieval and enable self-evolution, consistently outperforming retrieval and long-context baselines with small overhead."
+  },
+  "provenance": {
+    "input_hash": "211a176e5d9e4b370e048216751f3e4277298b7195cf125261d2bfcb1f7f07ec",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "Session reports sonnet dispatch / gpt-6.1-sol; no independently authenticated receipt/session identifier exposed; no probing.",
+    "timestamp": "2026-10-22T01:02:58.916309+00:00"
+  },
+  "rationale": "混合检索与自判去重写回机制明确，附录提供查询留出及空库对照；收益限于局部记忆复用，标签暴露审计、维护、主结果方差及完整构建成本不足，普遍最优与scaling-law措辞过强。",
+  "materials": [
+    {
+      "material_id": "2604.12231.txt",
+      "url": "https://arxiv.org/html/2604.12231v1",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "sections_read": [
+        "Abstract",
+        "Sections1–7",
+        "AppendicesA–T"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E01",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 273-291",
+      "quote": "Figure 2\n:\nThought-Retriever Framework\n.\n(a) Thought retrieval:\nUpon receiving a user query, Thought-Retriever retrieves top-K data chunks from the mixture of external knowledge and thought memory based on embedding similarity; (b)\nAnswer and confidence generation:\nThe LLM generates the answer for the user query based on the retrieved data chunks;\n(c)\nThought generation:\nThe LLM further generates thoughts and its confidence based on the user query and the generated answer;\n(d)\nThought merge:\nThe calculation of similarity is used to measure whether the generated thought will cause redundancy in data chunks;\n(e)\nThought memory update:\nMeaningless and redundant thoughts are removed and the remaining\nnovel\nthoughts are used to update the thought memory.",
+      "support_explanation": "Retrieve mixed raw/thought memory, generate answer and thought, self-confidence and novelty filters, then persist.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E02",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 318-364",
+      "quote": "Instead of treating model outputs merely as transient responses, we formally define a\nthought\n(\nT\ni\nT_{i}\n) as a persistent, query-driven cognitive unit derived from the interaction between a query\nQ\nQ\nand retrieved context\n𝒦\ni\n\\mathcal{K}_{i}\n. Formally, a Thought\nT\ni\nT_{i}\nis a validated abstraction\nT\ni\n=\nAbstract\n​\n(\nQ\n,\nA\n,\n𝒦\ni\n)\nT_{i}=\\text{Abstract}(Q,A,\\mathcal{K}_{i})\nthat satisfies three key properties: (1)\nQuery-Conditioned\n: it captures the logical link between a specific query and the data, unlike static summaries; (2)\nAbstractive\n: it distills a coherent knowledge point from the raw conversation; and (3)\nValidated\n: it passes a confidence check (\nc\ni\nc_{i}\n) and a novelty check (\ns\ni\ns_{i}\n) to ensure it is meaningful and non-redundant.",
+      "support_explanation": "Thought is query-conditioned, abstractive and retained after confidence/novelty checks, not a weight update.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E03",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 1213-1227",
+      "quote": "Baselines.\nTo gain a comprehensive understanding of our thought retriever’s performance on LLM long-term memory tasks, we have adopted several baselines. All experiments with these baselines are conducted under the same LLM: Mistral-8x7B with LLM context length of 4,096\n(\nJiang et al., 2024\n)\n. Note that we set chunk size=500, K=8,\nϵ\n=\n0.85\n\\epsilon=0.85\n, and maximum context length=2,000 tokens for all RALMs. We employ Contriever\n(\nIzacard et al., 2022\n)\nas our primary retriever due to its unsupervised design, which provides strong zero-shot performance across diverse domains without requiring labeled training data (unlike supervised alternatives like DPR). This aligns with our goal of building a general-purpose framework. Its empirical superiority over other retrievers is further verified in our ablation study in Sec 4.5. First, we consider 2 heuristic-based retrievers",
+      "support_explanation": "Main common model/context/retriever/chunk settings; equal context does not equal equal construction compute.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E04",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 1677-1717",
+      "quote": "Thought-Retriever\n\n0.290\n\n50%\n\n0.275\n\n50%\n\n0.216\n\n50%\n\n0.232\n\n50%\n\n0.238\n\n50%\n\nEvaluation Metrics.\n\nOur evaluation approach encompasses both traditional metric and AI-based assessments: (1)\nF1\n\n(\nLin, 2004\n)\n: This metric computes the semantic similarity between the generated text and the ground truth reference through ROUGE-L (F1). An F1 score closer to 1 indicates a higher alignment with the reference text, signifying the better quality of the generated content. (2)\nWin Rate\n: Alongside F1, we incorporate feedback from the AI evaluator for a more comprehensive assessment. Here, we choose Qwen1.5-72B-chat as our AI evaluator, since it has superb alignment with human preference\n1\n1\n\n1\n\nhttps://qwenlm.github.io/blog/qwen1.5/\n.\nThis evaluation process involves presenting various responses to the LLM evaluator, who then ranks the quality of the responses. The percentage represents the frequency of a response being chosen over our thought retriever. A rate below 50% suggests that our thought retriever is outperforming the compared baseline.",
+      "support_explanation": "Reported five-task scores and ROUGE-L / Qwen1.5-72B preference evaluation.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E05",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 1633-1675",
+      "quote": "OpenOrca-8k\n\n0.175\n\n20%\n\n0.135\n\n3%\n\n0.135\n\n13%\n\n0.244\n\n41%\n\n0.169\n\n30%\n\nNous Hermes-32k\n\n0.247\n\n30%\n\n0.204\n\n7%\n\n0.183\n\n15%\n\n0.238\n\n37%\n\n0.214\n\n37%",
+      "support_explanation": "GovReport long-context baseline .244 exceeds Thought-Retriever .232, limiting universal superiority wording.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E06",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 1887-1898",
+      "quote": "(2) Thought-Retriever helps LLM self-evolve after solving more user queries - a new type of scaling law.\nTo investigate the relationship between the performance of Thought-Retriever and the number of thoughts, we design an experiment using varying numbers of thoughts on Abstract-multi and Related-multi of AcademicEval. As depicted in Figure\n6\n, there is a distinct trend of increasing F1 scores correlating with the growing number of thoughts, which indicates improved performance. Therefore, more interactions with the users enable Thought-Retriever to assist LLM agents in self-evolving and developing deeper understandings, demonstrating a new type of scaling law\n(\nKaplan et al., 2020\n)\nfor agentic memory. We also verify the diversity of thoughts and effectiveness of thought filtering mechanisms in Appendix\nK\nand\nM\n.",
+      "support_explanation": "Increasing-thought trend called a scaling law; no functional law or controlled budget demonstrated here.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E07",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 1912-1922",
+      "quote": "We conduct a series of experiments to investigate the impact of various retrievers. (1)\nw/wo TF-IDF/DPR/DRAGON\n: In these variants, we replace the retriever (Contriever) in our method with other representative retrievers to assess their effectiveness compared to our current retriever. (2)\nw/wo NousHermes\n: Here, we utilize NousHermes to construct the thoughts. (3)\nw/o Filter\n: We remove the confidence generation and thought merge in our framework to assess the importance of filtering meaningless and redundant thoughts. We report the evaluation results on Abstract-single and Abstract-multi datasets in Figure\n7\n.\nThese comparisons clearly show that our method consistently outperforms all the variants\n, suggesting that Contriever is most suitable for Thought-Retriever, and filtering meaningless and redundant thoughts can bring great improvement to the performance.",
+      "support_explanation": "Retriever/backbone and joint filter-removal ablations, not independent confidence/novelty controls.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E08",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 2390-2406",
+      "quote": "Appendix D\nUser Query Formation\n\nTo model user queries in real-world scenarios for guiding thought generation, we primarily use two approaches: 1) template-based query formation, and 2) LLM-based query formation. The prompts are shown in Figure\n13\n\nTemplate-based Query Formation.\nWe construct general and broadly applicable templates for all papers. For example,\n\"What are the practical applications of the research in ’title’?\"\nand\n\"What new perspectives does ’title’ offer in its field?\"\n. During experiments, we substitute\n’title’\nwith the actual paper title to form specific queries.\n\nLLM-based Query Formation.\nAnother approach we use to generate more specific queries is by leveraging LLMs. Specifically, we utilize models such as Mistral 8x7B and expert LLM. By providing these models with the paper title and abstract, we ask them to generate diverse questions at varying levels of abstraction. These questions are tailored to each specific paper, allowing for more nuanced and targeted queries.",
+      "support_explanation": "Query construction includes actual paper title and abstract; abstract can also be an evaluation label, so exposure requires audit.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E09",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3020-3034",
+      "quote": "Thought Quality Filtering.\n\nWhen generating answers based on a given query and retrieved information, we explicitly instruct the LLM to assess whether the retrieved content is sufficient to answer the question. If not, it is prompted to return\n‘‘No’’\nrather than produce a speculative answer. Furthermore, when generating thoughts based on the question and answer, we use a specialized prompt that includes a binary confidence check—asking the model to indicate whether the generated thought is logical and non-hallucinated. If not meaningful, the thought is discarded. This process is detailed in section\n2.3\n, and the full prompt is included in Figure\n3\n.\n\nThought Redundancy Filtering.\n\nAs illustrated in section\n2.3\n, before adding a new thought to the pool, we compute its cosine similarity against existing thoughts. If it is too similar to any existing entry, it is filtered out. This ensures that unique, non-redundant thoughts are stored, promoting diversity and reducing duplication.",
+      "support_explanation": "Confidence is prompted logical/nonhallucination self-assessment; cosine threshold rejects novel duplicates rather than editing old entries.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E10",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3147-3171",
+      "quote": "Human Evaluation of Thought Quality.\n\nWe conducted a human evaluation study (the detailed human instructions can be seen in Table\n11\n) to directly assess the quality and reliability of the generated thoughts and our confidence-based filtering mechanism. Ten volunteers were recruited to review generated thoughts, with each thought independently evaluated by five annotators. On the\nAbstract-single\ndataset, the thoughts matched human judgment 96% of the time. On the\nRelated-multi\ndataset, the agreement rate was 93%. These results confirm that our LLM-generated confidence scores are highly reliable and effective for filtering out low-quality or hallucinated thoughts.\n\nRobustness to Low-Quality Thoughts (Empirical Study).\n\nWe further evaluated how the system performs in the presence of low-quality thoughts. Using the\nRelated-multi\ndataset, we compared two settings: (a)\nWithout relevant thoughts\n, where only unrelated thoughts were injected, and (b)\nRaw data chunks only\n, without any thoughts. The F1 scores in both settings were nearly identical (0.207 vs. 0.208), indicating that our framework remains robust even in the presence of noisy or irrelevant thoughts.\n\nReal-World Deployment Validation.\n\nAs introduced in Appendix H, we have built a real-world application named\nArxiv Copilot\nwith Thought-Retriever. Arxiv Copilot can interact with real users and provides two types of answers: one based solely on retrieved original data chunks, and the other incorporating both original data chunks and historical thoughts. We collected feedback from 500 real users to compare preferences for these two types of responses. Approximately 75% of users preferred answers that included both original data chunks and historical thoughts. This observation demonstrates the effectiveness of Thought-Retriever in real-world scenarios involving large query requests.",
+      "support_explanation": "Human agreement93/96% with five annotators per thought, unreported thought count; 500-user75% preference report.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E11",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3734-3771",
+      "quote": "Experimental Setup.\n\nWe partition each dataset into two disjoint subsets with a\n50%/50% split ratio\n:\n\n•\n\nEvolution Set (\nQ\ne\n​\nv\n​\no\n​\nl\nQ_{evol}\n):\nThe first 50% of queries are used solely for generating and accumulating thoughts into the memory\n𝒯\n\\mathcal{T}\n. No performance metrics are recorded during this phase.\n\n•\n\nHeld-out Test Set (\nQ\nt\n​\ne\n​\ns\n​\nt\nQ_{test}\n):\nThe remaining 50% of queries are used for evaluation. These queries are strictly unseen during the evolution phase.",
+      "support_explanation": "Explicit disjoint 50/50 evolution-query versus test-query split, but no document-level split or frozen-test-memory detail.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E12",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3773-3818",
+      "quote": "Results.\n\nWe compare the F1 performance on the\nTest Set\nunder two experimental conditions:\n\n1.\n\nBaseline (Cold Start):\nThe model processes the test queries starting with an empty thought memory (\n𝒯\n=\n∅\n\\mathcal{T}=\\emptyset\n).\n\n2.\n\nOurs (Evolved):\nThe model processes the test queries with a thought memory pre-filled by the Evolution Set (\n𝒯\n←\nThoughts from\n​\nQ\ne\n​\nv\n​\no\n​\nl\n\\mathcal{T}\\leftarrow\\text{Thoughts from }Q_{evol}\n).\n\nAs presented in Table\n15\n, the model utilizing the evolved memory achieves consistent performance gains across both datasets. Specifically, on\nAbstract-multi\n, the pre-accumulated thoughts yield a\n6.4%\nrelative improvement in F1 score compared to the cold-start baseline. This provides strong causal evidence that the system learns transferable reasoning patterns from past interactions that generalize to novel, unseen queries.\n\nTable 15\n:\nCausal Evidence of Self-Evolution on Disjoint Sets. Comparison of F1 scores on the held-out Test Set (50% of data) with and without prior evolution on the disjoint Evolution Set (50% of data). The consistent improvement confirms that accumulated thoughts provide transferable benefits to novel queries.",
+      "support_explanation": "Cold-start versus prefilled-thought test control; author asserts transferable benefit.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E13",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3832-3852",
+      "quote": "Baseline (Cold Start)\n\nEmpty\n\n0.235\n\n0.198\n\nOurs (Evolved)\n\nPre-filled (from Evolution Set)\n\n0.250\n\n0.210\n\nRelative Improvement\n\n+6.4%\n\n+6.1%",
+      "support_explanation": "Held-out .235→.250 and .198→.210, +6.4/+6.1% relative gains, not improver-quality measurements.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E14",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3854-3882",
+      "quote": "Appendix R\nInference Time Comparison\n\nIn this section, we analyze the computational efficiency of Thought-Retriever compared to baseline methods. We measured the average end-to-end inference latency per query on a single NVIDIA A6000 GPU. The results are summarized in Table\n16\n.\n\nComparison with Heuristic and Dense Retrievers.\n\nAs expected, lightweight heuristic methods (e.g., BM25, TF-IDF) and single-step dense retrievers (e.g., Contriever, DPR) exhibit the lowest latency (e.g.,\n<\n1.0\n<1.0\ns). Thought-Retriever incurs a moderate overhead (e.g., 1.85s on Abstract-single) compared to these methods. This additional cost stems from the generation-based nature of our approach, where the model must query the thought memory and potentially generate new thoughts, rather than simply matching static vectors. However, given the significant performance gains demonstrated in the main results, this latency increase is acceptable for most applications.\n\nComparison with Advanced Retrieval and Long-Context Baselines.\n\nCritically, Thought-Retriever demonstrates superior efficiency against advanced reasoning-heavy and long-context baselines:\n\n•\n\nvs. IRCoT:\nIterative retrieval methods like IRCoT suffer from high latency due to their multi-step \"retrieve-then-reason\" loop. For instance, on the complex\nAbstract-multi\ndataset, IRCoT requires 10.50s per query. In contrast, Thought-Retriever achieves a\n𝟑\n×\n\\mathbf{3\\times}\nspeedup (3.20s) by leveraging pre-generated thoughts directly from memory, avoiding repetitive retrieval cycles at inference time.",
+      "support_explanation": "A6000 average inference latency; preprocessing construction excluded/unclear relative to pre-generated thoughts.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E15",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3061-3070",
+      "quote": "In the RAG system, the majority of computation is allocated to LLM inference, while retrieval operations can be executed on the CPU. The Thought-Retriever maintains nearly identical retrieval compute costs across all experiments by using the same retriever. The cost of LLM inference is directly proportional to the number of retrieved tokens. To illustrate the efficiency of Thought-Retriever in real-world applications, we use the Arxiv Copilot introduced in Appendix\nH\nas an example. We have constructed 100,000 paper abstracts as the original data chunks, and we pre-calculate and store the embeddings of these chunks. Additionally, we need to construct index files to establish the connection between data chunks and thoughts. The storage of this data requires less than 1.5 GB of memory. On this basis, we utilize FAISS\n2\n2\n\n2\n\nhttps://github.com/facebookresearch/faiss\n, a high-efficiency vector processor capable of handling billions of vectors, as the similarity retriever, and implement the entire framework on CPUs. When a user query arrives, we use the Thought-Retriever based on FAISS to retrieve historical thoughts or data chunks and save the newly derived thoughts. The average inference time for generating user responses is approximately 5 seconds, which is mainly limited by the API’s response speed.",
+      "support_explanation": "100000 abstracts, <1.5GB and approximate5-second API scenario; no complete accumulated-write amortization.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E16",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 3443-3456",
+      "quote": "To rigorously evaluate the effectiveness of our proposed method, we introduce an\nOracle\nbaseline which serves as a theoretical upper bound. Specifically, we utilize the ground truth answers to calculate the ROUGE-L overlap scores with all corpus chunks, selecting the top-\nK\nK\nchunks with the highest overlap to serve as the \"perfect\" input context.\nCrucially, we employ the same generator (Mistral-8x7B) and context window constraints\nfor the Oracle, Thought-Retriever, and all baselines. This ensures that any performance difference is solely attributed to the quality and format of the retrieved context.\n\nTable\n13\nreveals a counter-intuitive yet compelling result:\nThought-Retriever consistently outperforms the Oracle baseline on AcademicEval datasets\n(e.g., F1 0.290 vs. 0.278 on Abstract-single), while maintaining a competitive >50% win rate against traditional baselines. Although the Oracle utilizes ground-truth-derived gold chunks, these raw texts inherently contain significant redundancy and irrelevant syntactic noise. Given the fixed context window (e.g., 2,000 tokens), filling the prompt with raw chunks limits the total volume of distinct information the model can ingest.",
+      "support_explanation": "Oracle is reference-overlap topK, not a true theoretical upper bound; same generator/context constraints.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E17",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 4097-4104",
+      "quote": "To address the qualitative dynamics of how Thought-Retriever interacts with different user queries to achieve \"self-evolution,\" we present a sequential case study using our Arxiv Copilot system.\n\nIt is important to clarify that in our framework,\nself-evolution\nrefers to the continuous expansion and refinement of the Thought Memory (\n𝒯\n\\mathcal{T}\n), as defined in Algorithm 1, rather than the updating of LLM parameters. This qualitative analysis complements the quantitative \"scaling law\" of thoughts demonstrated in Figure 5.",
+      "support_explanation": "Authors define evolution as memory expansion/refinement, explicitly not parameter updates.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E18",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 1320-1362",
+      "quote": "AcademicEval\n\nAbstract-single\n\nSingle Sum\n\n8,295\n\n100\n\nAbstract-multi\n\nMulti Sum\n\n33,637\n\n30\n\nRelated-multi\n\nMulti Related\n\n22,107\n\n30\n\nPublic Datasets\n\nGov Report\n\nSingle QA\n\n8,910\n\n100\n\nWCEP\n\nMulti QA\n\n8,176\n\n30",
+      "support_explanation": "Main dataset counts100/30/30/100/30; no repeated-run uncertainty supplied.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E19",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 2073-2082",
+      "quote": "7\nLimitations\n\nDespite the promising results and contributions of our work, we would like to discuss some limitations. Our experiments and the AcademicEval dataset primarily utilize papers from AI-related fields, which could limit the generalizability of our findings. Future work should consider extending the scope to a broader range of disciplines.\n\nAdditionally, our experiments and evaluations are conducted in English. This focus on English may overlook the nuances and challenges associated with other languages. Expanding our approach to include multilingual datasets and evaluations could provide a more comprehensive assessment of its effectiveness.\n\nWhile AcademicEval provides a dynamic and continuously updated dataset from arXiv, it is reliant on the availability and quality of the papers uploaded to the platform. We assume and hope that researchers will continue to produce novel and high-quality work.\n\nLastly, while our framework shows effectiveness in our experiments, its robustness, scalability, and adaptability to real-world, extremely large-scale applications have yet to be fully tested. We are actively working on our demos and hope to provide more exciting updates on this front in the near future.",
+      "support_explanation": "Authors limit English/AI-related and not fully tested real-world scale.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E20",
+      "material_id": "2604.12231.txt",
+      "sha256": "ef8f755ee258a9f8460f9ee5304c7b9439c77c56c663138c3d1ca510d14efc89",
+      "locator": "lines 2909-2917",
+      "quote": "Redundancy Filtering for Diversity.\n\nAs stated in section\n2.3\n, in our framework, when a new thought is generated, we explicitly check its cosine similarity against existing thoughts in the pool. If it is too similar to any existing thought, it is discarded. This ensures that unique, non-redundant thoughts are retained, maintaining the diversity of the thought pool.\n\nEmpirical Diversity Analysis.\n\nTo quantify diversity, we further conducted an analysis where we randomly sampled 50 thoughts from the thought pool in the AcademicEval task and computed their pairwise cosine similarities. This was repeated 10 times. The average pairwise similarity was 0.32, indicating a high level of semantic diversity among the thoughts.",
+      "support_explanation": "Diversity similarity repeated10 times, not repeated main performance/stream-order uncertainty.",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "Persistent textual thought memory T; frozen answer model and retriever",
+      "information": "Query, retrieved raw/thought content, generated response; self-confidence and cosine novelty",
+      "operation": "Retrieve topK from K∪T; answer; abstract query+answer; accept only confidence1 and nonduplicate; append toT",
+      "output": "Query-conditioned knowledge points plus recursive root-source links",
+      "conditions": "Contriever; chunk500; K8; epsilon.85; retrieved context2000tokens; Mistral8x7B main backbone",
+      "feedback": "Generated answer plus self-assessment; no externally verified success required",
+      "selection_rule": "Binary self-confidence and novelty threshold; no score-best candidate search",
+      "selection_data": "Synthetic/template/user queries; AppendixQ evolution queries",
+      "persistence": "Nonweight external thought memory indexed for subsequent retrieval",
+      "later_use": "New queries retrieve old thoughts and can synthesize deeper thoughts",
+      "claimed_effect": "Better reference-based generation and increasing-thought trend",
+      "failure_boundary": "Self-confirmation errors, unbounded append-only store, domain/English limits, unclear construction/test document overlap",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E03",
+        "E08",
+        "E09",
+        "E11",
+        "E17"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "Raw topK context misses broad evidence; static hierarchical summaries are query-independent and expensive.",
+    "checked_gap": "A specific information-density bottleneck is coherent; stronger retriever/compression baselines and small disjoint-query gains support a scoped response, not arbitrary-scale understanding.",
+    "lineage": [
+      {
+        "source": "2604.12231v1 §§1/5, AppendicesP/L",
+        "description": "RAG/Contriever; MemWalker hierarchical summaries; RECOMP/AutoCompressors; GenerativeAgents/Voyager/MemGPT persistent memory; IRCoT transient reasoning."
+      }
+    ],
+    "closest_adjacent": [
+      "MemWalker (Chen et al.2023), cited in target; pinned original absent",
+      "RECOMP (Xu et al.2023), cited in target; pinned original absent"
+    ],
+    "residue": "Reuse query-conditioned abstractions rather than only static raw chunks/summaries.",
+    "stakes": "Coverage within a limited retrieved context.",
+    "method_response": "Persist qualified response abstractions in mixed retrieval corpus.",
+    "remaining_gap": "Robust faithful abstraction, document-level transfer, state maintenance and full amortized budget remain unresolved.",
+    "evidence_ids": [
+      "E01",
+      "E02",
+      "E09",
+      "E13",
+      "E19"
+    ],
+    "unresolved": [
+      "Request version-pinned shared MemWalker and RECOMP originals for independent closest-neighbor adjudication; no web retrieval performed.",
+      "Abstract-guided construction queries versus abstract-reference evaluation require exposure audit."
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "Shared retrievable textual substrate",
+          "Frozen model composes from retrieved references without upstream tuning",
+          "Canonical query/context→response format",
+          "Query holdout but not structural category holdout"
+        ],
+        "success_checks": [
+          "Multiple task families and backbones",
+          "Raw-memory and cold-start controls"
+        ],
+        "failure_checks": [
+          "Budget unmatched",
+          "Structural transfer and label exposure not audited"
+        ],
+        "evidence_ids": [
+          "E01",
+          "E03",
+          "E11",
+          "E13"
+        ],
+        "reason": "C03 parameter-free shared-representation retrieval branch executes; its structural-holdout success condition is not fully met."
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "Conditioning via a shared persistent substrate, not retraining.",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H00",
+        "version": "manifest-bound",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "Raw fixed chunks/rigid summaries replaced by query-conditioned stored abstractions.",
+            "evidence_ids": [
+              "E01",
+              "E02"
+            ]
+          },
+          {
+            "id": "S2",
+            "status": "unmet",
+            "reason": "Thoughts narrate query-answer content, not success/failure contrasts.",
+            "evidence_ids": [
+              "E09"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "Self-confidence gates write; human agreement helps but neither outcome verification nor self-judge calibration denominator is complete.",
+            "evidence_ids": [
+              "E09",
+              "E10"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "Dedup filters prospective additions; no contradiction repair, expiry, forgetting or rollback described after full text.",
+            "evidence_ids": [
+              "E09"
+            ]
+          },
+          {
+            "id": "S5",
+            "status": "met",
+            "reason": "Explicit confidence plus novelty acceptance rule.",
+            "evidence_ids": [
+              "E01",
+              "E09"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E01",
+          "E02",
+          "E09",
+          "E11",
+          "E13"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain_namespace": "rsi",
+      "domain_main": "abstract_experience_into_guidance",
+      "domain_sub": "H00",
+      "operation_correspondence": "Turn prior query/response into stored abstraction, retrieve as conditioning for new task.",
+      "necessary_conditions": "Self-judgment supplies weak outcome gate; next-query reuse actually occurs.",
+      "differences": "No success/failure contrast; knowledge summaries rather than explicit trigger-conditioned procedural lessons; novelty rejection is not H01 merge/update/delete.",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E09",
+        "E13"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "research/patterns/conditions.json"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "met",
+      "reason": "Raw fixed chunks/rigid summaries replaced by query-conditioned stored abstractions.",
+      "evidence_ids": [
+        "E01",
+        "E02"
+      ],
+      "score_item": "G"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S2",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "research/patterns/conditions.json"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "Thoughts narrate query-answer content, not success/failure contrasts.",
+      "evidence_ids": [
+        "E09"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "research/patterns/conditions.json"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Self-confidence gates write; human agreement helps but neither outcome verification nor self-judge calibration denominator is complete.",
+      "evidence_ids": [
+        "E09",
+        "E10"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "research/patterns/conditions.json"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Dedup filters prospective additions; no contradiction repair, expiry, forgetting or rollback described after full text.",
+      "evidence_ids": [
+        "E09"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md",
+        "research/patterns/conditions.json"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "met",
+      "reason": "Explicit confidence plus novelty acceptance rule.",
+      "evidence_ids": [
+        "E01",
+        "E09"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-1",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Cold-start versus prefilled memory helps identify retained effect; extra construction exposure/compute remains unmatched.",
+      "evidence_ids": [
+        "E11",
+        "E12",
+        "E13"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Query-disjoint appendixQ is useful; same document/abstract-guided query formation and test-time writes not fully audited.",
+      "evidence_ids": [
+        "E08",
+        "E11"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-3",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#Reviewer expectations"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Raw retrieval, RECOMP, MemWalker and long context compared; retained-history construction budget not matched.",
+      "evidence_ids": [
+        "E03",
+        "E04",
+        "E14"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2604.12231-1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.12231v1 AppendixQ"
+      ],
+      "applies_when": "Accumulated memories claim reliable improvement across interactions.",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "No confidence intervals, search/stream-order seeds or significance for main retained gains after complete §§1–7 and AppendicesA–T search.",
+      "evidence_ids": [
+        "E18",
+        "E20"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2604.12231-2",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.12231v1 AppendicesN/R"
+      ],
+      "applies_when": "Persistent thoughts are used to claim adaptation on future queries.",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Latency/storage are reported; initial thought construction, failed writes and end-to-end amortized token/call costs are not.",
+      "evidence_ids": [
+        "E14",
+        "E15"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "Consistently best generation across benchmarks.",
+      "setting": "Five main tasks with fixed2000token retrieved context",
+      "baseline_control": "BM25/TFIDF, dense retrievers, IRCoT, RECOMP, long context, MemWalker",
+      "selection_vs_test": "Main table construction/evaluation exposure incompletely specified; AppendixQ separate control",
+      "result_denominator": "F1 .290/.275/.216/.232/.238; cases100/30/30/100/30. GovReport long-context .244 exceeds ours .232.",
+      "evidence_ids": [
+        "E03",
+        "E04",
+        "E05",
+        "E18"
+      ],
+      "counterevidence": [
+        "Not all baselines lose; Qwen reference-preference judge measures alignment not verified reasoning."
+      ],
+      "allowed_conclusion": "Mostly favorable author-reported task metrics, not consistent universal dominance."
+    },
+    {
+      "claim_id": "C2",
+      "text": "Accumulating thoughts causes self-evolution on unseen queries.",
+      "setting": "AppendixQ Abstract-multi/Related-multi50/50query split",
+      "baseline_control": "Empty memory versus evolution-prefilled memory",
+      "selection_vs_test": "Disjoint queries asserted; store frozen during test and source document overlap unspecified",
+      "result_denominator": ".235→.250 and .198→.210; nominal datasets30cases each so small holdout; exact AppendixQ counts not independently stated.",
+      "evidence_ids": [
+        "E11",
+        "E12",
+        "E13",
+        "E18"
+      ],
+      "counterevidence": [
+        "No stream-order variation or matched construction exposure; abstract-informed query generation needs audit."
+      ],
+      "allowed_conclusion": "Retained memory yields local author-reported query transfer, not better subsequent edits or a validated new scaling law."
+    },
+    {
+      "claim_id": "C3",
+      "text": "Thought filtering reliable and efficient.",
+      "setting": "Confidence/novelty checks, human evaluation and latency",
+      "baseline_control": "Joint filter-off; raw-only/noisy memory; retrieval/long-context latency",
+      "selection_vs_test": "Self-judged retention distinct from reference-based final evaluation",
+      "result_denominator": "93/96% human agreement without thought sample count;500users75% preference; average1.85–3.50s main tasks.",
+      "evidence_ids": [
+        "E07",
+        "E09",
+        "E10",
+        "E14",
+        "E15"
+      ],
+      "counterevidence": [
+        "Agreement denominator/calibration and full construction cost absent."
+      ],
+      "allowed_conclusion": "Plausible filtering with limited corroboration and inference-time advantage over some expensive baselines, not negligible full lifecycle cost."
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "Author-reported query-disjoint empty-versus-prefilled comparison supports persistent nonweight memory benefit on two small tasks; no independent reproduction and no improver-level evidence.",
+    "unresolved": [
+      "Document/label exposure audit",
+      "No frozen-memory test or ordering variance detail",
+      "Complete construction/maintenance cost",
+      "Independent closest-neighbor sources"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Real topK/rigid-summary bottleneck and retrieval/compression lineage; independent pinned closest-neighbor originals absent.",
+      "evidence_ids": [
+        "E01",
+        "E19"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Mixed retrieval→answer→query-conditioned abstraction→self-confidence/novelty→append→later retrieval is reconstructible; confidence does not imply factual correctness.",
+      "evidence_ids": [
+        "E01",
+        "E02",
+        "E09"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Actual persistent write/retrieval and gates specified; no revision/expiry/contradiction repair or frozen-test-memory implementation detail.",
+      "evidence_ids": [
+        "E01",
+        "E09",
+        "E11"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "ROUGE-L and model preference plus human confidence agreement offer triangulation; source ancestry is not semantic faithfulness, thought sample denominator missing and Oracle overlap is not an upper bound.",
+      "evidence_ids": [
+        "E04",
+        "E10",
+        "E16"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Joint filter ablation and explicit empty-versus-prefilled control support memory contribution, but construction compute/exposure and independent filter roles not isolated.",
+      "evidence_ids": [
+        "E07",
+        "E11",
+        "E12",
+        "E13"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "AppendixQ gives disjoint queries; lacks document/category exclusion, store-freeze detail and audit of abstract-informed construction query exposure.",
+      "evidence_ids": [
+        "E08",
+        "E11",
+        "E12"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "Sample counts and negative/noisy-thought outcomes available; main gains have no run/stream-order uncertainty, intervals or tests. Diversity sampling10 repeats is not performance replication.",
+      "evidence_ids": [
+        "E10",
+        "E18",
+        "E20"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Main settings, storage/scale and hardware latency tables exist; no cumulative memory construction cost or equal-total-budget quality frontier.",
+      "evidence_ids": [
+        "E03",
+        "E14",
+        "E15"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 53.75,
+    "display": 53.8,
+    "lower": 53.75,
+    "upper": 53.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}

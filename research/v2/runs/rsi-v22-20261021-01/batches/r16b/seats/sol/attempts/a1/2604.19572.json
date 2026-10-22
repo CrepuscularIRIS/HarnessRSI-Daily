@@ -1,0 +1,662 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r16b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.19572",
+    "paper_id": "2604.19572",
+    "title": "A Self-Evolving Framework for Efficient Terminal Agents via Observational Context Compression",
+    "version": "2604.19572v3",
+    "claim_type": "system_method",
+    "central_claim": "TACO以可留存演化规则在六基准维持/提高成功并节省tokens，无训练/人工规则，学到可泛化压缩知识。"
+  },
+  "provenance": {
+    "input_hash": "bed8c93a9a4fb2708abe5c9433460c6c5b3239bdcfa0c3cca55b0782a9b71abd",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T00:57:46.892425+00:00",
+    "notes": "配置派发sonnet→gpt-6.1-sol；无独立模型receipt或session可记录，按模板null。仅读材料，不运行被收录代码，不联网。"
+  },
+  "materials": [
+    {
+      "material_id": "2604.19572.txt",
+      "url": "https://arxiv.org/html/2604.19572v3",
+      "version": "2604.19572v3",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "sections_read": [
+        "Abstract",
+        "1–5",
+        "Limitations/Ethics/Broader impacts",
+        "References",
+        "Appendices A–N, rule schemas/examples and prompts",
+        "Final convergence statistics paragraph"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§1 motivation",
+      "quote": "manually extracting effective text from 50 sampled TB 2.0 trajectories removes 24.6%–44.1% of raw prompt tokens across the evaluated models",
+      "support_explanation": "50条轨迹的人工有效文本分析支持冗余瓶颈；不是自动压缩无损保证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§2.3 Task-Level Rule Selection",
+      "quote": "We first retrieve the top-\nk\nk\nrules from\nR\ng\nR_{g}\naccording to their ranking scores\nR\ng\n​\ns\n​\n(\nr\n)\nR_{gs}(r)\nas candidates.\nGiven the task description and objective, an LLM then selects and refines these candidates to better align with the current context.\nThis task-conditioned selection prevents high-ranked but irrelevant rules from being activated: candidates whose triggers do not match the current task are filtered out regardless of their\nR\ng\n​\ns\n​\n(\nr\n)\nR_{gs}(r)\nvalues.\nThe resulting rules initialize the task-specific active rule set\nR\nt\nR_{t}\n.\nAdditional implementation details are provided in Appendix",
+      "support_explanation": "top-k按全局可靠度×使用频次取候选，LLM再按任务筛选/细化；附录G取k=30。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§2.4 critical-output bypass",
+      "quote": "Observations containing explicit error or failure signals, such as syntax errors and exception traces, are treated as\nCritical\n, as they often inform subsequent decisions.\nTACO leaves such outputs unchanged and applies the active task-specific rules in\nR\nt\nR_{t}\nonly to non-Critical outputs:",
+      "support_explanation": "显式error/failure视为Critical并旁路，非所有潜在关键信息都有显式失败标志。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§2.5 Updating Rules",
+      "quote": "Behaviors such as requesting the full output, indicating missing critical details, or repeating the same command to recover more information are treated as over-compression complaints. In response, TACO traces back the rules that triggered and modified the current observation, suppresses their use for subsequent steps, and injects more conservative replacement variants via LLMs. The corresponding prompt is provided in Appendix",
+      "support_explanation": "重复命令/请求全文等投诉触发抑制原规则和保守替换，构成执行反馈闭环。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§2.6 writeback",
+      "quote": "A rule is written back to\nR\ng\nR_{g}\nonly if it has been successfully applied at least once and remains reliable, i.e.,\nΔ\n​\nn\nr\n≥\n1\n\\Delta n_{r}\\geq 1\nand\nc\nr\nt\n≥\nτ\nc_{r}^{t}\\geq\\tau\n, where\nτ\n\\tau\nis a small confidence threshold.\nRules that receive explicit complaints are assigned\nc\nr\nt\n=\n0\nc_{r}^{t}=0\nfor the current task and are therefore excluded from write-back.\nIf such a rule already exists in\nR\ng\nR_{g}\n, its global confidence\nc\nr\ng\nc_{r}^{g}\nis further decayed, lowering its ranking score and reducing its chance of being retrieved in subsequent tasks.",
+      "support_explanation": "至少一次成功应用且任务置信≥τ方写回；投诉置信归0，既有全局规则衰减。τ仅称small，非独立任务收益检验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§2.6 Multi-round Evolution",
+      "quote": "multiple evolution rounds\non the same dataset until convergence is reached.",
+      "support_explanation": "同一数据集反复演化；不可将收敛后同基准重用视为独立holdout。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§2.7 Reward-Free Rule Evolution",
+      "quote": "TACO evolves compression rules solely from terminal observations, without accessing benchmark answers, hidden tests, verifier outcomes, task success labels, or leaderboard feedback.\nRule updates depend only on observation-level signals, including rule triggers, application counts, terminal observation, and subsequent interactions that indicate possible over-compression.\nThe stopping criterion is also",
+      "support_explanation": "作者声明更新不使用答案、隐藏测试、verifier、成功标签或排行榜；不消除超参在TB2选取的适应。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.1 Table 1",
+      "quote": "SWE-Bench-Lite\n\n56.30\n\n57.12\n↑0.82\n\n307.61\n\n270.53\n↓12.1%\n\nCompileBench\n\n75.00\n\n75.00\n\n14.55\n\n11.41\n↓21.6%\n\nDevEval\n\n38.10\n\n39.74\n↑1.64\n\n36.72\n\n26.82\n↓27.0%\n\nCRUST-Bench\n\n47.00\n\n48.05\n↑1.05\n\n163.53\n\n134.97\n↓17.5%\n\nTB 1.0\n\n42.30\n\n45.25\n↑2.95\n\n29.74\n\n23.43\n↓21.2%\n\nTB 2.0\n\n42.80\n\n44.16\n↑1.36\n\n113.74\n\n110.63\n↓2.7%",
+      "support_explanation": "MiniMax六基准结果及token分母；SWE56.30→57.12/307.61M→270.53M，Dev38.10→39.74/36.72M→26.82M。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.3 fixed budgets",
+      "quote": "TACO consistently improves performance across all six models under the same token budgets, ranging from 14 million to 120 million tokens.",
+      "support_explanation": "作者报告等token预算比较；曲线具体各点不在纯文本，不能补造数值。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.4 static baselines",
+      "quote": "We compare TACO with three static compression baselines on TB 2.0 using Qwen3-Coder-480B.\nThese baselines cover representative static heuristic compression strategies for terminal observations, including command-aware truncation and error-preserving compression.\nSpecifically, we consider\nHigh-Quality Rules\n, which use 200 human-curated structured rules;\nLLM-Gen Rules\n, which ask an LLM to generate task-conditioned rules but keep them fixed during execution; and\nLLM Summarization\n, which directly summarizes terminal observation with an LLM.\nThe construction of the High-Quality Rules",
+      "support_explanation": "包含200人工规则、静态LLM规则和LLM摘要；支持不是仅与raw上下文比较，仍非独立曲线搜索等预算审计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.6 observation audit",
+      "quote": "To assess whether TACO preserves information needed for subsequent decisions, we randomly sample\nN\n=\n200\nN=200\nobservation pairs before and after compression from Qwen3-Coder-480B trajectories on TB 2.0.\nFor each pair, an LLM judge evaluates three aspects: preservation of potentially task-critical information, removal of redundancy, and retention of useful non-critical context.\nThe full protocol and judge prompt are provided in Appendix\nM\n.\nEvaluation results indicate that TACO preserves potentially critical information in 96.0% of cases, removes redundant content in 81.0%, and retains useful non-critical context in 78.5%. Only 4.0% of cases are flagged as potential critical losses.\nWe manually inspect all eight flagged cases in Appendix\nM.2\n: seven are benign event-level flags with no observable behavioral impact, while the remaining case triggers the intended\nneed_full_output\ncomplaint signal, providing feedback for subsequent rule evolution.\nThese results demonstrate the robustness of TACO for preservation-aware context compression.",
+      "support_explanation": "200对judge观察样本：96%关键保留；8个潜在损失由作者审计，不能升级为无损证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.6 task rescue/regression",
+      "quote": "A task is counted as\nrescued\nif Baseline fails but TACO succeeds, and as\nregressed\nif Baseline succeeds but TACO fails.\nTo reduce randomness, we average outcomes over the last five converged runs and consider a task solved only if at least 50% of runs solve it.\nAs shown in Tab.\n5\n, TACO rescues more tasks than it regresses across all models",
+      "support_explanation": "最后5轮、≥50%成功定义任务挽回/退化，承认负例；非多次独立规则搜索统计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.7 Table 6 and reuse",
+      "quote": "Table 6:\nRule reusability on TB 2.0.\n\nModel\n\nSetting\n\nAcc. (%)\n\nDeepSeek-V3.2\n\nBaseline\n\n40.62\n\nTACO (Online)\n\n42.77\n\nTACO (Reuse)\n\n42.69\n\nQwen3-480B\n\nBaseline\n\n23.90\n\nTACO (Online)\n\n25.86\n\nTACO (Reuse)\n\n26.96\n\nMiniMax-M2.5\n\nBaseline\n\n42.80\n\nTACO (Online)\n\n44.16\n\nTACO (Reuse)\n\n44.94\n\nAlthough TACO requires multiple cold-start iterations to reach rule convergence, this cost is incurred only once.\nOnce converged, the learned Global Rule Pool can be frozen and reused for subsequent tasks, avoiding repeated test-time scaling.\nAs shown in Tab.\n6\n, the reused rules remain effective on TB 2.0, indicating that they capture generalizable terminal-output patterns rather than benchmark-specific artifacts.\nTherefore, cold-start inference cost can be amortized over future deployments.",
+      "support_explanation": "冻结池在TB2重用有报告：42.69/26.96/44.94；未交代与构建任务不相交，generalizable不能无条件采信。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "§4.8 ablation",
+      "quote": "For the variant without\nIntra-Task Rule Set Evolution\n, we use the final Global Rule Pool from TACO on TB 2.0 as a fixed initialization source for each task. During execution, the intra-task rule set remains unchanged, and neither task-specific rules nor the Global Rule Pool are updated. For the variant without\nGlobal Rule Pool Evolution\n, we perform only task-level rule evolution within each task, without maintaining or updating a shared Global Rule Pool.\n\nTable 7:\n\nAblation results on TB 2.0. Total tokens are reported in millions (M).\n\nMethod\n\nAcc.\n\nTotal Tok. (M)\n\nBaseline\n\n40.6%\n\n99.60\n\nTACO w/o GRPE\n\n40.4%\n\n81.57\n\nTACO w/o ITRSE\n\n38.9%\n\n69.02\n\nTACO (Full)\n\n42.7%\n\n81.45",
+      "support_explanation": "去全局/去本地演化与完整方法：40.4/38.9/42.7%且token81.57/69.02/81.45M；模块有效性部分可归因。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "Appendix E statistical protocol",
+      "quote": "We report the mean accuracy and run-level standard deviation over five evaluation runs.",
+      "support_explanation": "五评测运行与逐模型标准差优于单点；未提供独立多种子搜索置信区间/配对显著性。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "Appendix G Top-k and batch selection",
+      "quote": "To examine their effects, we perform an ablation study on TB 2.0 with Qwen3-Coder-480B.\n\nTop-\nk\nk\nSelection.\n\nTo examine the effect of Top-\nk\nk\nunder a fixed computational budget, we fix the batch size at\nN\n=\n4\nN=4\nand vary Top-\nk\nk\n. We evaluate both agent accuracy and the token cost of rule selection. As shown in the left part of Fig.\n5\n, a smaller\nk\nk\nreduces token consumption but limits performance by narrowing the pool of candidate historical rules. As\nk\nk\nincreases, accuracy improves at first and then gradually saturates, while the cost of self-evolution continues to rise. When\nk\n>\n30\nk>30\n, the additional performance gain becomes marginal or even negative, whereas the token cost keeps increasing. Moreover, a larger\nk\nk\nleads to a longer retrieval context, which may be less stable for smaller models. Therefore, we set\nk\n=\n30\nk=30\nin the main experiments.\n\nBatch Size\nN\nN\nSelection.\n\nWe fix Top-\nk\nk\nat 30 and investigate the effect of different batch sizes\nN\nN\non TB 2.0. As shown in the right part of Fig.\n5\n, smaller batch sizes tend to yield higher accuracy, since newly learned rules can be written back more frequently and reused by subsequent tasks sooner. In contrast, larger batch sizes improve parallel throughput and overall runtime efficiency, but delay the application of newly acquired rules to later tasks. Balancing accuracy, throughput, and rule-propagation efficiency, we adopt\nN\n=\n4\nN=4\nin the main experiments.",
+      "support_explanation": "k=30和N=4经TB2准确率/开销选取；TB2不能再称严格独立holdout。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "Appendix J overhead",
+      "quote": "To ensure fair cost accounting, all token numbers reported in the main paper include both backbone-agent execution tokens and auxiliary LLM calls introduced by TACO for rule selection, generation, and revision.\nAs shown in Tab.\n12\n, the auxiliary rule-evolution overhead remains below 2% across all benchmarks, indicating that the reported token reductions are net end-to-end savings rather than excluding the cost of self-evolution.",
+      "support_explanation": "作者将辅助LLM调用计入主表token，<2%；未给多轮冷启动全部累计成本与break-even。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "Table 4 vs Appendix E Qwen3-Coder-480B",
+      "quote": "Baseline\n\n23.9\n±\n\\pm\n2.9\n\n0.00\n\n+ HQ Rule\n\n24.3\n±\n\\pm\n2.2\n\n17.90\n\n+ LLM-Gen Rule\n\n19.71\n±\n\\pm\n1.6\n\n7.10\n\n+ LLM Sum.\n\n20.3\n±\n\\pm\n3.2\n\n21.30\n\n+ TACO\n\n25.9\n±\n\\pm\n1.5\n\n10.78",
+      "support_explanation": "表4 baseline/TACO SD为2.9/1.5，附录E对应1.48/0.78，口径未解释，统计证据需保守。",
+      "kind": "our_inference"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2604.19572.txt",
+      "sha256": "9451afb6ef1bc97164e7deb9f3f0a6594f9ddac7686b969ac6055a3814784c86",
+      "locator": "Appendix E Table 8 Qwen3-Coder-480B",
+      "quote": "Qwen3-Coder-480B\n\nBaseline\n\n37.50\n±\n3.93\n37.50\\pm 3.93\n\n23.90\n±\n1.48\n23.90\\pm 1.48\n\nTACO\n\n38.50\n±\n2.23\n38.50\\pm 2.23\n\n25.86\n±\n0.78\n25.86\\pm 0.78",
+      "support_explanation": "附录E明确报告TB2 baseline23.90±1.48、TACO25.86±0.78；与表4均值接近但SD不同，需作者解释口径。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "冻结agent前的结构化terminal-observation压缩规则及Global Rule Pool",
+      "information": "命令、原始观察、触发/应用计数、请求全文/重复命令等投诉；不读取隐藏测试/成功标签",
+      "operation": "固定保守执行器旁路Critical输出；LLM为未覆盖输出生规则，并对投诉规则抑制/保守替换",
+      "output": "trigger/keep/strip/bounds等JSON规则及压缩观察",
+      "conditions": "触发可匹配；显式error识别可靠；投诉能反映真实信息损失",
+      "feedback": "任务内重复命令/缺细节/请求全文、成功应用计数与置信度",
+      "selection_rule": "Δn≥1且task-confidence≥τ写回；投诉置0排除，既有全局置信衰减；top-k按confidence×(usage+1)取候选后任务筛选",
+      "selection_data": "同数据集多轮观察轨迹；TB2用于k,N超参选择；不读reward不等于未见评测输入",
+      "persistence": "外部结构化全局池，既有规则统计更新/降级；未清楚定义τ值、置信更新/衰减公式、冲突合并和池容量上限",
+      "later_use": "后续完成任务写回后，新任务top30筛选初始化；池可冻结重用",
+      "claimed_effect": "六基准准确率-token折中改善，并声称规则可泛化重用",
+      "failure_boundary": "无显式error的中段关键信息、投诉漏报、频次偏置、同基准多轮适应、冷启动成本",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E006",
+        "E007",
+        "E013"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "原始terminal观察冗余但混有稀疏精确信号；通用摘要/静态规则/训练剪枝不兼顾异质任务的保真和效率。",
+    "checked_gap": "50轨迹冗余及raw/static比较支持具体瓶颈，提升不是只凭冻结权重背景；独立最近邻原文不在材料包，不能确认首创或全面优越。",
+    "lineage": [
+      {
+        "method": "SWE-Pruner、LongCodeZip；trajectory summarization/masking/context folding",
+        "source": "本文§1、§5及references",
+        "version": "论文自引版本，邻居原文未独立固定"
+      }
+    ],
+    "closest_adjacent": "固定human/LLM compression规则、训练式SWE-Pruner、通用LLM摘要及history masking",
+    "residue": "压缩位置/精确信息保留、可复用规则的可靠维护",
+    "stakes": "少量关键错误/路径损失会改变后续执行；压缩最多不等于成功最好。",
+    "method_response": "在固定保守执行器前演化task-conditioned结构规则，用投诉修正，外部池累积复用。",
+    "remaining_gap": "严格独立跨任务收益、关键中段损失与漏投诉、长期store维护、全部冷启动摊销。",
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E004",
+      "E010",
+      "E011"
+    ],
+    "unresolved": [
+      "请求总控固定SWE-Pruner/LongCodeZip及强context-masking/folding邻居原文版本作谱系补核；本席未联网。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "固定原始观察/静态压缩为可演化中间表示",
+          "固定执行器约束下规则成为设计变量",
+          "raw/static/LLM-summary比较及去全局/去本地演化消融",
+          "不是采样器/先验主场景，无更贴切C子卡则null"
+        ],
+        "success_checks": [
+          "冻结backbone、多任务benchmark适用；主机制有控制"
+        ],
+        "failure_checks": [
+          "不是数量级提升；无无损理论；rule更新细节和严格独立迁移不足"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E004",
+          "E008",
+          "E010",
+          "E014"
+        ],
+        "reason": "终端生成/行动流水线中原本固定的观察表示被释放为反馈驱动规则；结构层操作相符，非扩散先验等特定子战术。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "先从固定组件→自由设计变量→效率/质量的操作认定原卡；领域memory只是后续映射，不从标题硬贴。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01",
+        "version": "manifest-pinned",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "投诉/应用计数可观察，但无投诉不是保留证据充分性保证。"
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "显式更新/抑制/置信衰减；合并、淘汰和容量约束未充分落实。"
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "写回门明确，但依据是局部应用/投诉而非独立下游收益。"
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E005",
+          "E006"
+        ]
+      }
+    ],
+    "unassigned": [
+      "H01仅中等：维护现有规则是核心，但完整consolidation/forgetting未展示；不将confidence gate强称H30边际效用检验。"
+    ],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01"
+      },
+      "operation_correspondence": "固定观察表示/过滤器→反馈演化结构规则→现有规则修订/降级→全局池下一任务读取",
+      "necessary_conditions_and_differences": "RS是释放固定流水线设计变量，rsi H01是可编辑外部知识的维护；这里只部分具备合并/淘汰，二者不是同义标题映射。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E005",
+        "E014"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:generative_process_redesign/RE-1",
+      "version": "manifest-pinned",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md: reviewer expectations item 1"
+      ],
+      "applies_when": "固定观察表示被主张为准确率/效率瓶颈",
+      "applicable": true,
+      "status": "partial",
+      "reason": "50条轨迹显示冗余，static与演化消融支持机制；未完全隔离信息保留和额外演化计算。",
+      "evidence_ids": [
+        "E001",
+        "E010",
+        "E014"
+      ],
+      "score_item": [
+        "G",
+        "E.causality"
+      ]
+    },
+    {
+      "id": "rs:generative_process_redesign/RE-6",
+      "version": "manifest-pinned",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md: reviewer expectations item 6"
+      ],
+      "applies_when": "主张质量-效率折中普遍改善",
+      "applicable": true,
+      "status": "partial",
+      "reason": "等预算曲线、负例和观察级损失有分析；没有理论无损与全部冷启动生命周期成本。",
+      "evidence_ids": [
+        "E009",
+        "E011",
+        "E012",
+        "E017"
+      ],
+      "score_item": [
+        "E.measurement",
+        "E.cost"
+      ]
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/H01",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H01.md steps 1–5；卡片成员结果不作本文证据"
+      ],
+      "applies_when": "被留存规则需长期维护并复用",
+      "applicable": true,
+      "status": "partial",
+      "reason": "add/update/抑制/decay有描述；τ/decay公式、去重/冲突/容量和独立构建测试分离不足。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E013"
+      ],
+      "score_item": [
+        "M",
+        "X"
+      ]
+    },
+    {
+      "id": "local:2604.19572-1",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§2.7、§4.7、Appendix G"
+      ],
+      "applies_when": "无reward泄漏与可泛化规则是核心主张",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "不读隐藏标签是权限保证，不是样本分离；多轮同dataset且TB2调超参，冻结TB2重用无明确disjoint任务。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E013",
+        "E016"
+      ],
+      "score_item": [
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "local:2604.19572-2",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§4.4、§4.8"
+      ],
+      "applies_when": "声称演化优于静态压缩/仅本地适应",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有人工200规则/静态LLM/摘要及去模块控制；rule-pool-off与完整方法token相近，仍无完整等搜索预算替代curator。",
+      "evidence_ids": [
+        "E010",
+        "E014"
+      ],
+      "score_item": [
+        "E.causality"
+      ]
+    },
+    {
+      "id": "local:2604.19572-3",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§4.6、Appendix E"
+      ],
+      "applies_when": "小幅准确率增益需不确定性与损失分母",
+      "applicable": true,
+      "status": "partial",
+      "reason": "5评测运行SD与rescued/regressed有报告；缺独立多种子规则搜索/区间/显著性，表4与附录SD不一。",
+      "evidence_ids": [
+        "E012",
+        "E015",
+        "E018",
+        "E019"
+      ],
+      "score_item": [
+        "E.statistics"
+      ]
+    },
+    {
+      "id": "local:2604.19572-4",
+      "version": "manifest-pinned",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§4.7、Appendix J"
+      ],
+      "applies_when": "宣称一次冷启动可摊销",
+      "applicable": true,
+      "status": "partial",
+      "reason": "主表含辅助调用且<2%；未报告达到收敛所有轮累计token、失败候选或break-even部署量。",
+      "evidence_ids": [
+        "E013",
+        "E017"
+      ],
+      "score_item": [
+        "E.cost"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "TACO以可留存演化规则在六基准维持/提高成功并节省tokens，无训练/人工规则，学到可泛化压缩知识。",
+      "setting": "Terminus2及Mini-SWE-Agent；多backbone；六terminal/SWE基准",
+      "baseline_control": "raw scaffold、200人工规则、静态LLM规则、LLM摘要；去GRPE/ITRSE；固定token预算",
+      "selection_vs_test": "同dataset多轮直至Top30 retention稳定；TB2选择k30/N4；不使用最终成功/隐藏verifier更新，但没有明确独立规则构建-冻结-未见任务协议",
+      "result_denominator": "MiniMax六基准SWE56.30→57.12；Compile75→75；Dev38.10→39.74；CRUST47→48.05；TB1 42.30→45.25；TB2 42.80→44.16；5次评测均值；200观察对审计；完整任务样本分母与顺序独立性未充分列示",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008",
+        "E009",
+        "E010",
+        "E011",
+        "E012",
+        "E013",
+        "E014",
+        "E015",
+        "E016",
+        "E017"
+      ],
+      "counterevidence": [
+        "规则冻结后重用仍是TB2，未证明对构建/选择未见任务迁移。",
+        "无投诉/显式error旁路不保证零关键证据丢失；作者审计已有8/200 potential loss。",
+        "主表累计token是否包含全部冷启动演化轮及候选搜索不清；不能把每轮辅助<2%当作终身摊销界。"
+      ],
+      "allowed_conclusion": "作者结果支持在所测在线/同基准演化协议内，结构化自适应过滤能改善成功率-token折中；不支持普遍无损或严格未见任务留存泛化保证。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者在多基准在线/同dataset迭代协议中报告精度-token改善，冻结池可在TB2再次运行；未证明选择/构建外未见任务的留存收益，故不升retained/improver。",
+    "unresolved": [
+      "全局池构建/冻结后任务是否disjoint未报告清楚；reward-free不等于holdout。",
+      "置信更新细节与全生命周期成本待补。"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "明确稀疏精确信号与低密度输出的矛盾；人工50轨迹支撑，并讨论SWE-Pruner/LongCodeZip、masking/folding等邻居；最近邻原文未固定，完整谱系残余仍待核。",
+      "evidence_ids": [
+        "E001",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "反馈→规则候选/保守替换→任务置信门写回→top-k/任务筛选可检验，分离固定执行器与可演化规则；投诉可靠性和成功应用定义仍是关键假设。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "主流程和JSON接口/示例/提示有报告，但τ数值、置信更新/衰减精确公式、长期冲突和容量策略不足；不能按概念安全宣称满档。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "任务成功和端到端token直接对应主张，200观察对judge及人工损失审计提供交叉核对；judge并非独立无损真值，仍有regression。",
+      "evidence_ids": [
+        "E008",
+        "E011",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "static/human/summary控制与去本地/全局演化消融支持适应起作用；控制token不尽相等，额外搜索预算、替代curator和confidence-gate独立效应未充分隔离。",
+      "evidence_ids": [
+        "E009",
+        "E010",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "不读隐藏测试和reward边界明确，但同dataset多轮及TB2超参选择/同基准冻结重用，无明确disjoint later-task结果；不能把选择集当留出。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E013",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "5评测运行均值/SD及负例计数满足重复评测层；未报告多种子规则搜索区间/配对显著性，SD口径还存在未解释差异。",
+      "evidence_ids": [
+        "E012",
+        "E015",
+        "E018",
+        "E019"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "含辅助LLM调用的端到端token、等预算比较及开销比例强于只报单次；全部冷启动轮成本、失败搜索和摊销break-even未清。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E013",
+        "E017"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 58.75,
+    "display": "58.8",
+    "lower": 58.75,
+    "upper": 58.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整版本化HTML正文及附录已读，hash匹配；科学证据/报告缺口按评分处理，不误报材料缺失。",
+  "rationale": "规则演化、投诉修正与全局复用闭环具体，端到端token及静态/模块对照有支持。同数据集多轮和TB2选参不能证明独立留存泛化，精确置信更新与冷启动总成本不足。"
+}

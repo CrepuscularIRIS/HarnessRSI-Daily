@@ -1,0 +1,1519 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r14b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.05149",
+  "paper_id": "2604.05149",
+  "title": "EvolveRouter: Co-Evolving Routing and Prompt for Multi-Agent Question Answering",
+  "version": "2604.05149v1",
+  "claim_type": "system_method",
+  "central_claim": "EvolveRouter couples graph-based per-query routing with targeted agent-instruction refinement in a closed-loop co-evolution process (router diagnostics guide prompt rewrites; refined agents give cleaner router supervision) and adds an adaptive inference rule that sets collaboration size per query via router-weighted answer agreement; it consistently outperforms SOTA routing baselines in F1 and EM on five QA benchmarks.",
+  "claim_scope": "Five QA benchmarks (2Wiki, HotpotQA, NewsQA, TriviaQA, NGQA; plus GLEN-Bench in appendix), 24-agent pool (4 backbones x 6 roles), per-benchmark training with 500/100/100 train/val/test items, 3 seeds."
+ },
+ "provenance": {
+  "input_hash": "f1e0164cb2efecf41a9f4bc99710d1f188e1dfd6715a0efdd60a457277a9b28d",
+  "input_package": "batches/r14b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T01:02:07Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.05149.txt",
+   "url": "https://arxiv.org/html/2604.05149v1",
+   "version": "2604.05149v1",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.05149.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§1 lines 119–142",
+   "quote": "First, most prior routing methods treat agent behavior as fixed, optimizing only",
+   "support_explanation": "固定池路由不调整提示，明确非权重改动对象。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§3.1 lines 1189–1197",
+   "quote": "We collect four types of diagnostic signals during training: agent-level performance summaries per backbone–role pair, a failure archive of incorrect examples with gold answers and router weights, router weight statistics indicating which agents are most relied upon, and a prompt-aware answer cache that automatically invalidates entries when prompts change. These signals guide the refinement stage described next.",
+   "support_explanation": "训练真值、路由依赖和失败档案指导编辑，不是测试时自评分。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§3.2 lines 1271–1275",
+   "quote": "and the associated failure evidence from the diagnostic archive. Rewriting is constrained to preserve the role’s core reasoning strategy and output format, and may only add, rephrase, or remove a small number of sentences. This keeps the revised prompt close to the original role while allowing targeted correction of failure patterns.",
+   "support_explanation": "有界局部重写。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 lines 3887–3900",
+   "quote": "This rule allows small mean drops within tolerance when offset by broader sample-level improvements, while still blocking clearly harmful rewrites.",
+   "support_explanation": "门控并非严格无回归，也非统计显著性保证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 lines 3891–3893",
+   "quote": "After accepted prompt revisions, the router is updated by resuming from the previous checkpoint rather than retraining from random initialization. Round 1 resumes from the Stage 1 warm-up checkpoint, and later rounds resume from the previous round. We found that retraining from scratch consistently discards useful routing knowledge and degrades performance. The update is made efficient through cache seeding: the answer cache from the previous round is copied forward, and because cache keys include a prompt hash, unchanged agents reuse cached outputs while modified agents are automatically invalidated and re-queried. In practice, only 2–3 out of 24 agents are modified per round, so the LLM cost is roughly proportional to the number of changed agents rather than the full pool.",
+   "support_explanation": "提示持久化、缓存失效和下一轮重读清楚；包含路由权重更新但评价对象不只权重。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 lines 5401–5406",
+   "quote": "From each benchmark we sample 500 training, 100 validation, and 100 test instances.",
+   "support_explanation": "明确训练/选优/测试划分，各测试100。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 line 5406",
+   "quote": "and average all results over three seeds.",
+   "support_explanation": "三种子报告，未见区间及显著性，按A2不升至3。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§4.2 lines 1653–1657",
+   "quote": "The largest gain appears on TriviaQA, where EvolveRouter improves over AgentRouter by +7.08 F1 and +8.67 EM.",
+   "support_explanation": "作者报告测试提升；需结合消融理解，而非复现。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§4.4 lines 3108–3109",
+   "quote": "Our diagnostic-guided selection improves all five datasets by a clear margin. The key difference is that our priority score accounts not only for how poorly an agent performs, but also for how heavily the router relies on it.",
+   "support_explanation": "最差agent重写与诊断优先级对照，非只有端到端。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix D.2 line 5809",
+   "quote": "The recovery is meaningful but incomplete. Even with PO prompts, the transferred router still trails the in-domain baseline by a substantial margin on all three targets, reinforcing that routing and prompt quality contribute complementary gains and that the full benefit of our co-evolution framework requires task-specific optimization of both components.",
+   "support_explanation": "明确跨任务退化，不支持一般通用路由。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 lines 5471–5484",
+   "quote": "LLM calls to collect per-agent answers. Each refinement round modifies only 2–3 agents, keeping the incremental cost at roughly 10% of the full evaluation. The GNN training itself takes under 5 minutes per epoch on a single GPU.",
+   "support_explanation": "报告部分优化成本，但未完整计所有候选/图构建/实际token差异。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§4.3 line 2597",
+   "quote": "The effect is smaller than PO on every dataset, confirming that the larger share of the final gain comes from improving agent quality rather than the stopping strategy. Nonetheless, the two components are complementary: PO makes the top-ranked agents more reliable, which in turn strengthens the answer agreement signal for Adaptive K.",
+   "support_explanation": "PO与adaptive K分别消融，Table3 NewsQA EM反例为41.67 vs 无adaptive42.00，不能逐指标声称全赢。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix A.2 line 3237",
+   "quote": "shows that prompt optimization and topology optimization are interdependent through alternating optimization. Our work differs from these methods in problem formulation. Prior work optimizes prompts either for individual agents or within a fixed multi-agent structure. In contrast, our framework uses routing-induced diagnostic signals to identify underperforming roles, refine their prompts, and retrain the router on the updated agent pool.",
+   "support_explanation": "MASS为近邻但仅本文叙述；独立原文缺失。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2604.05149.txt",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "§4.1 lines 1607–1609",
+   "quote": "EM measures whether the normalized prediction exactly matches the gold answer.\nF1 gives partial credit when the predicted answer overlaps with the gold answer but is not an exact match.",
+   "support_explanation": "标准测量；NGQA跨度/答案格式与领域真值意义有限，未校验临床有效性。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E01",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Fig.1 caption (Sec.1)",
+   "quote": "Motivating observation: agent quality is highly context-dependent, and no single agent configuration is consistently optimal.",
+   "support_explanation": "Heterogeneity of agents across task/backbone/prompt is the stated premise for differentiated treatment.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E02",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.1 Introduction, first limitation",
+   "quote": "most prior routing methods treat agent behavior as fixed, optimizing only",
+   "support_explanation": "Author gap: routers do not improve the agents they route to.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E03",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.1 Training and diagnostics",
+   "quote": "We collect four types of diagnostic signals during training: agent-level performance summaries per backbone–role pair, a failure archive of incorrect examples with gold answers and router weights, router weight statistics indicating which agents are most relied upon, and a prompt-aware answer cache that automatically invalidates entries when prompts change.",
+   "support_explanation": "Information visible to the prompt improver: failure archive with gold answers and router weights; cache keyed on prompts.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E04",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.2 Target Selection",
+   "quote": "A role becomes eligible for prompt refinement only if it underperforms on multiple backbones.",
+   "support_explanation": "Role-level consistency filter separating prompt-level weakness from backbone-specific outliers (partition by discriminating property).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E05",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.2 Target Selection",
+   "quote": "This rule prioritizes agents that perform poorly but still receive high routing weight.",
+   "support_explanation": "Priority = severity x (alpha + mean router weight); router reliance is the discriminator for which agent to treat.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E06",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.2 Prompt Rewriting",
+   "quote": "Rewriting is constrained to preserve the role’s core reasoning strategy and output format, and may only add, rephrase, or remove a small number of sentences.",
+   "support_explanation": "Bounded, localized edit operator on the instruction text.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E07",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.2 Validation Gate",
+   "quote": "A candidate is accepted only if it does not cause significant regression on the targeted validation subset and yields a non-negative net improvement at the sample level.",
+   "support_explanation": "Stated acceptance rule for retaining a rewritten prompt.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E08",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 Rejection gate",
+   "quote": "The acceptance rule used in code is more permissive than a strict “new mean must be larger than old mean” criterion.",
+   "support_explanation": "The implemented gate tolerates small mean drops (delta) if sample-level improvements offset; text rule and code rule differ and delta is not given.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E09",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.2 Router Update",
+   "quote": "After fine-tuning, we apply a validation-based safety check and revert the update if the new router causes regression.",
+   "support_explanation": "Rollback exists for the router; no analogous rollback for already-accepted prompts is described.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E10",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 Target budget and freezing",
+   "quote": "Agents that experience repeated failed rewrite attempts are frozen and removed from future rounds.",
+   "support_explanation": "Freeze rule after 3 consecutive rejections (k_freeze=3 given in same paragraph).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E11",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.4.3 Ablation",
+   "quote": "cumulative gains reaching +1.31% F1 on 2Wiki, +3.75% on HotpotQA, +9.21% on TriviaQA, and +6.67% on NGQA",
+   "support_explanation": "Reported relative F1 gains of PO over the router-only base (test splits).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E12",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.4.4 The worst agent is not the most valuable to fix",
+   "quote": "However, Table 4 shows that this strategy yields marginal gains on 2Wiki and HotpotQA, slightly hurts NewsQA, and barely changes NGQA.",
+   "support_explanation": "Diagnostic-guided target selection is compared with a lowest-F1 heuristic.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E13",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.4.4 Routing knowledge must be preserved",
+   "quote": "Retraining the router from scratch after prompt optimization consistently underperforms checkpoint resuming, with F1 gaps of +0.75 on 2Wiki, +1.88 on HotpotQA, +0.92 on NewsQA, and +4.92 on NGQA",
+   "support_explanation": "Router-retraining ablation (resume vs scratch).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E14",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 Training Details",
+   "quote": "From each benchmark we sample 500 training, 100 validation, and 100 test instances.",
+   "support_explanation": "Split sizes: held-out test is only 100 instances per benchmark.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E15",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.3.3 Adaptive inference",
+   "quote": "are tuned on the validation split for each dataset.",
+   "support_explanation": "Adaptive-K thresholds (tau, k_min, k_max) tuned on validation, not test.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E16",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.4.4 Computational cost",
+   "quote": "At inference time, Adaptive K reduces the average number of agent calls from 24 to 2.9–7.4 across our benchmarks, yielding a 69–88% reduction while maintaining or improving F1.",
+   "support_explanation": "Inference-call accounting for Adaptive K.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E17",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 Computational cost",
+   "quote": "Each refinement round modifies only 2–3 agents, keeping the incremental cost at roughly 10% of the full evaluation.",
+   "support_explanation": "Training-side cost statement (calls, not tokens/dollars); rewriter and candidate-validation cost not itemized.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E18",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix D.2 Transferability",
+   "quote": "The results reveal that cross-dataset routing consistently underperforms in-domain training by a wide margin.",
+   "support_explanation": "Counter-evidence on generality: router (and PO) are per-benchmark.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E19",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Sec.4.2 Main Results",
+   "quote": "EvolveRouter consistently achieves the strongest performance among all practical baselines, improving over the best structure-aware routing baseline on every dataset in both F1 and EM.",
+   "support_explanation": "Headline comparison claim.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E20",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 2 caption",
+   "quote": "EvolveRouter is the first framework to jointly support routing, prompt optimization, and training in a multi-agent setting.",
+   "support_explanation": "Novelty claim made by a feature-table, not by empirical comparison.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E21",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 8 (in-domain row)",
+   "quote": "EvolveRouter (in-domain) 77.70 ± \\pm 0.13 70.33 ± \\pm 0.58 64.74 ± \\pm 0.77 41.67 ± \\pm 0.47 54.04 ± \\pm 0.60 9.67 ± \\pm 0.58",
+   "support_explanation": "Full-system test results (2Wiki F1/EM; NewsQA F1/EM; NGQA F1/EM shown in this row).",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "son55:E22",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 4 (base row)",
+   "quote": "KG Router (base) 75.54 ± \\pm 0.44 67.67 ± \\pm 0.58 69.35 ± \\pm 0.56 56.33 ± \\pm 0.58 63.02 ± \\pm 2.44 41.33 ± \\pm 0.58 62.75 ± \\pm 3.69 51.33 ± \\pm 2.51 49.95 ± \\pm 1.29 8.67 ± \\pm 1.53",
+   "support_explanation": "Router-only baseline (numerically identical to the AgentRouter row of Table 3).",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "son55:E23",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 4 (worst-agent-only row)",
+   "quote": "+PO (worst agent only) 76.17 ± \\pm 0.92 67.33 ± \\pm 1.15 70.41 ± \\pm 2.25 57.00 ± \\pm 1.00 61.80 ± \\pm 0.88 40.33 ± \\pm 0.58 59.47 ± \\pm 1.55 49.00 ± \\pm 1.00 50.03 ± \\pm 0.47 8.67 ± \\pm 0.58",
+   "support_explanation": "Worst-only target selection falls below the base on NewsQA and TriviaQA F1.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "son55:E24",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 9 caption",
+   "quote": "Adaptive K exceeds the best fixed-K setting on every dataset.",
+   "support_explanation": "Adaptive K vs fixed K ablation claim.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E25",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.2 Baselines",
+   "quote": "Best Agent selects the single strongest backbone–role pair per dataset, representing the best achievable performance without any collaboration.",
+   "support_explanation": "Best Agent is chosen per dataset; the selection split is not stated.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "son55:E26",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 Prompt optimization",
+   "quote": "We use GPT-4o-mini as the rewriter LLM.",
+   "support_explanation": "Rewriter LLM is an extra model call source not matched in baselines.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E27",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix A.2 Related Work",
+   "quote": "attributes each agent’s contribution through approximate Shapley values and rewrites underperforming prompts online.",
+   "support_explanation": "Closest adjacent: HiveMind already rewrites underperforming agent prompts in multi-agent settings.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E28",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix A.2 Related Work",
+   "quote": "shows that prompt optimization and topology optimization are interdependent through alternating optimization.",
+   "support_explanation": "Closest adjacent: MASS (alternating prompt/topology optimization).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E29",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix A.2 Related Work",
+   "quote": "Prior work optimizes prompts either for individual agents or within a fixed multi-agent structure.",
+   "support_explanation": "Author-claimed differentiation from multi-agent prompt-optimization lines.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E30",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix C.3 Training Details",
+   "quote": "average all results over three seeds",
+   "support_explanation": "Seed count for all reported means/stds.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E31",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 Regression check",
+   "quote": "In practice, improvement usually saturates after 2–3 rounds",
+   "support_explanation": "Rounds are capped by plateau; stopping decided by validation (not stated explicitly).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "son55:E34",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 4 (PO from scratch row)",
+   "quote": "+PO (from scratch) 75.78 ± \\pm 2.31 67.33 ± \\pm 0.58 70.07 ± \\pm 1.52 57.33 ± \\pm 1.15 63.15 ± \\pm 1.74 41.00 ± \\pm 1.00 65.17 ± \\pm 0.93 54.67 ± \\pm 1.15 48.07 ± \\pm 1.32 8.67 ± \\pm 1.53",
+   "support_explanation": "Router retrained from scratch after PO vs resumed.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "son55:E35",
+   "material_id": "M-2604.05149",
+   "material_sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Table 4 (PO round 1 row)",
+   "quote": "+PO (Round 1) 76.53 ± \\pm 0.19 67.67 ± \\pm 0.58 70.31 ± \\pm 0.77 57.33 ± \\pm 0.58 63.48 ± \\pm 0.75 41.67 ± \\pm 0.58 67.00 ± \\pm 0.43 57.00 ± \\pm 1.00 50.31 ± \\pm 0.88 9.00 ± \\pm 0.00",
+   "support_explanation": "Per-round PO results; round-wise table reported on test.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.05149.txt",
+   "material_hash": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix D.1 (Table 7 discussion)",
+   "quote": "the full EvolveRouter achieves the best result in each case",
+   "support_explanation": "Table 7's 'EvolveRouter' NGQA row (53.28 F1 / 9.67 EM) repeats the +PO (Round 3) row of Table 4, while Table 3 and the Table 8 in-domain row give 54.04 F1 for the same system. One reported headline value is mis-copied; the ordering conclusions do not change.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.05149.txt",
+   "material_hash": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 Targeted validation subset",
+   "quote": "Among the candidates, we retain the one with the best validation performance.",
+   "support_explanation": "Candidate selection uses the validation subset (diagnosed training failures plus validation samples); the 100-item test split is not touched by selection.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.05149.txt",
+   "material_hash": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix B.1 Regression check and multi-round chaining",
+   "quote": "and the process terminates early when no candidate prompt passes validation or when all remaining candidates are frozen",
+   "support_explanation": "The number of PO rounds per dataset (2 or 3 in Table 4) is fixed by validation outcomes, not by test results.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2604.05149.txt",
+   "material_hash": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+   "locator": "Appendix A.2",
+   "quote": "Our work differs from these methods in problem formulation.",
+   "support_explanation": "The residual against HiveMind/MAPRO/MASS is stated (routing-induced diagnostics choose which prompts to refine and the router is retrained on the refined pool), not left implicit.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Per-agent role prompts (instruction text) of 24 backbone-role agents in a fixed agent pool (non-weight, prompt artifact).",
+   "information": "Failure archive of incorrect training examples with gold answers and router weights, per-agent F1 summaries, router weight statistics; gold-label F1 on the 500 training items; validation subset centered on diagnosed failures plus extra validation samples. Test items not visible.",
+   "operation": "Rank backbone-role pairs by priority = (1-meanF1)(alpha+mean router weight) after a role-level cross-backbone consistency filter; for top N_max=3 pairs a GPT-4o-mini rewriter makes 3 candidate rewrites (temps 0.30/0.45/0.60) adding/rephrasing/removing 1-3 sentences.",
+   "output": "Accepted rewritten prompt replaces the incumbent prompt for that agent; otherwise unchanged; frozen after 3 consecutive rejections.",
+   "conditions": "Role must underperform on >=tau_bb backbones (3, relaxed to 2 then 1 if none); role strategy and output format must be preserved.",
+   "feedback": "F1 against gold on training/validation items; router weights as reliance signal.",
+   "selection_rule": "Best candidate on targeted validation subset; accept if mean F1 >= old - delta AND at least one sample improves AND NOT(mean lower AND more degradations than improvements) (code rule; Sec.3.2 text states no significant regression and non-negative net sample-level improvement). delta value not given.",
+   "selection_data": "Targeted validation subset (diagnosed failures + supplemental validation samples); router regression check on validation F1 (revert if >0.03 drop).",
+   "persistence": "Accepted prompts are kept in the agent pool across rounds (max ~3); answer cache keyed on prompt hash invalidates only changed agents; router checkpoint chained across rounds.",
+   "later_use": "Re-queried refined agents produce new soft F1 targets used to fine-tune the router (resumed checkpoint); refined prompts are the ones used for test-time agent calls and voting.",
+   "claimed_effect": "Relative F1 gains of PO over router-only base: 1.31% (2Wiki), 3.75% (HotpotQA), 2.32% (NewsQA), 9.21% (TriviaQA), 6.67% (NGQA).",
+   "failure_boundary": "Routing and PO do not transfer across benchmarks (Table 8); per-benchmark training required; worst-only target selection hurts on NewsQA/TriviaQA.",
+   "evidence_ids": [
+    "son55:E03",
+    "son55:E04",
+    "son55:E05",
+    "son55:E06",
+    "son55:E07",
+    "son55:E08",
+    "son55:E09",
+    "son55:E10",
+    "son55:E11",
+    "son55:E18",
+    "son55:E23"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Inference-time collaboration size K(q) (number of agents consulted per query); not retained state.",
+   "information": "Router-ranked agent list for the query; answers of consulted agents; router weights.",
+   "operation": "Query agents sequentially in router order; stop when router-weighted agreement of the top answer >= tau after k_min agents (k<=k_max).",
+   "output": "Weighted-majority answer over consulted agents.",
+   "conditions": "tau, k_min, k_max tuned on the validation split of each dataset.",
+   "feedback": "None at inference (agreement among agents only).",
+   "selection_rule": "Agreement threshold stopping rule.",
+   "selection_data": "Validation split for threshold tuning.",
+   "persistence": "not_applicable: per-query computation; only the tuned thresholds persist.",
+   "later_use": "not_applicable (inference rule).",
+   "claimed_effect": "Calls reduced from 24 to 2.9-7.4 (69-88%) with maintained or improved F1; beats best fixed K on every dataset.",
+   "failure_boundary": "Gains over base router are small (+0.7 to +1.5 F1 relative); agreement signal depends on PO-improved agents.",
+   "evidence_ids": [
+    "son55:E15",
+    "son55:E16",
+    "son55:E24"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "RouterGNN weights (heterogeneous GNN over query-entity-agent graph) - weight-trained B-side component of the loop.",
+   "information": "Soft targets from per-agent token-F1 against gold answers on training items.",
+   "operation": "KL training to softmax(F1/tau) targets; later rounds fine-tune from previous checkpoint after prompt updates.",
+   "output": "Per-query agent distribution used for ranking, weighting and priority scoring.",
+   "conditions": "Reverted if validation F1 drops by more than 0.03.",
+   "feedback": "Gold-label F1.",
+   "selection_rule": "Validation regression check.",
+   "selection_data": "Validation split.",
+   "persistence": "Checkpoint chain across rounds (weights, outside non-weight scope; evaluated here only as a loop component).",
+   "later_use": "Defines which agents are consulted and how heavily they are weighted.",
+   "claimed_effect": "Resume-from-checkpoint beats retraining from scratch by +0.75 to +4.92 F1.",
+   "failure_boundary": "Task-specific; no transfer.",
+   "evidence_ids": [
+    "son55:E13",
+    "son55:E09",
+    "son55:E18"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Routing methods optimize which agent to invoke but treat agent behavior (prompts) as fixed, and rely on rigid participation schemes (single agent or a fixed pool).",
+  "checked_gap": "The fixed-pool premise holds for the cited routers (GraphRouter, AgentRouter, RouteLLM, etc.), but multi-agent prompt optimizers that rewrite underperforming agents (HiveMind, MAPRO) and alternating prompt/topology optimization (MASS) already exist and appear in Table 2 yet are not experimental baselines. The checked residue is narrower: using router-induced reliance (severity x router weight) to choose which agent prompt to refine and re-training the router on the refined pool.",
+  "lineage": "AgentRouter (heterogeneous-GNN KG router with soft-F1 supervision; the paper reuses it as the \"KG Router (base)\" - Table 3 and Table 4 rows are numerically identical) -> + closed-loop prompt refinement with gated acceptance -> + answer-agreement adaptive K. Prompt-refinement ancestors: GRACE (gated refinement with rejection control, single-agent), HiveMind, MAPRO, MASS.",
+  "closest_adjacent": [
+   "HiveMind: Shapley-style per-agent contribution then online prompt rewrite (E27)",
+   "MASS: alternating prompt and topology optimization (E28)",
+   "MAPRO: MAP-inference prompt optimization over agent DAG (named in related work)",
+   "GRACE: gated prompt refinement with rejection control (single agent)"
+  ],
+  "residue": "Agents with low F1 but high router weight carry disproportionate error; refinement targeted by F1 alone (worst-only) is shown to be inferior on NewsQA/TriviaQA.",
+  "stakes": "Per-benchmark F1 gains of ~1-6 points (relative 1.3%-9.2%) and 69-88% fewer agent calls at inference.",
+  "method_response": "Router diagnostics (failure archive + router weights) pick targets; a gated rewrite loop edits prompts; router is fine-tuned on refined agents; agreement-based K trims calls.",
+  "remaining_gap": "No head-to-head with HiveMind/MASS/MAPRO or generic prompt optimizers under equal budget; no gate-off/random-rewrite control; routing and PO do not transfer; only 100 test items per benchmark.",
+  "evidence_ids": [
+   "son55:E02",
+   "son55:E20",
+   "son55:E27",
+   "son55:E28",
+   "son55:E29",
+   "son55:E22",
+   "son55:E18"
+  ],
+  "unresolved": [
+   "Whether gains exceed those of generic multi-agent prompt optimizers at equal rewriter/validation budget.",
+   "Whether the benefit comes from prompt content or from the additional router fine-tuning epochs per round."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [
+   "heterogeneous_decomposition"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus: the paper's first move (§2.2) is to take the prompt set, held fixed by every prior router, and make it a jointly optimised variable; Table 4's w/o-PO arm removes exactly that liberation. That is generative_process_redesign (sol; sub null: C15/C23/C24 are geometry/diffusion/interface tactics). son55's heterogeneous_decomposition is kept as supporting, not primary: the role-consistency filter and the severity×router-weight priority partition the 24 agents by measured properties (Fig. 1, Tables 5–6) and treat only the top partition, and the worst-only arm tests that partition, but this is the target-selection step inside the liberation, not the paper's framing.",
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "点名固定agent prompts并放入交替优化",
+     "PO-off消融恢复固定提示",
+     "标准路由/GPT重写 machinery复用"
+    ],
+    "success_checks": [
+     "E001命名对象",
+     "E012隔离改动"
+    ],
+    "failure_checks": [
+     "联合系统新颖性缺强优化器对照",
+     "跨任务迁移受限"
+    ],
+    "evidence_ids": [
+     "sol:E001",
+     "sol:E003",
+     "sol:E012"
+    ],
+    "reason": "释放迭代QA系统原本固定提示；C15限几何substrate，C23限identity-neutral conditioning，C24限移植扩散引擎，均不硬套。"
+   },
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "Heterogeneity characterized before treatment (Fig.1, Tables 5-6): executed",
+     "Partition by discriminating property (role-level consistency filter + severity x router-weight priority): executed",
+     "Treatment tailored per partition (only top-N agents get prompt rewrites; others frozen/unchanged; per-query K): executed",
+     "Partition shown load-bearing by ablation (worst-only vs diagnostic-guided; from-scratch router): partially executed"
+    ],
+    "success_checks": [
+     "Heterogeneity analyzed rather than asserted: met (E01)",
+     "Partition load-bearing by ablation: partial (E12, E23)"
+    ],
+    "failure_checks": [
+     "Partition criterion is a relabeling of a known quantity: partly - it combines F1 error with router reliance; no baseline beyond worst-only",
+     "Ablation isolating decomposition from generic effects: partial - no random/uniform target baseline, no gate-off"
+    ],
+    "evidence_ids": [
+     "son55:E01",
+     "son55:E04",
+     "son55:E05",
+     "son55:E12",
+     "son55:E23"
+    ],
+    "reason": "The operation actually performed is partitioning a heterogeneous resource (24 agents) by a measured property and applying differentiated treatment (selective prompt refinement, per-query K). C04 (compression of over-provisioned trained artifacts) does not describe this operation, so sub_id is null. Fit is partial because the card family is built around model/parameter heterogeneity."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "domain_cards_hash:52ff96577c9e",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S1",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/F4",
+      "status": "met"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E03",
+     "son55:E06",
+     "son55:E07",
+     "son55:E08",
+     "son55:E09"
+    ],
+    "reason": "A single textual artifact class (agent instruction prompts) is rewritten from diagnosed failures, scored on a validation subset and retained only if it passes a regression-tolerant gate; edits are small and bounded."
+   }
+  ],
+  "unassigned": [
+   "Router-weight-conditioned target selection (severity weighted by downstream reliance) has no counterpart condition in the H10/attribute_and_patch cards.",
+   "Adaptive-K answer-agreement stopping is an inference-time rule outside the retention pattern set."
+  ],
+  "revision_proposals": [
+   {
+    "proposal_id": "local:2604.05149-rp1",
+    "target": "attribute_and_patch_incumbent",
+    "status": "proposal_only_unchecked",
+    "text": "Consider a condition covering consumer-reliance-weighted target selection (fix the artifact the downstream consumer relies on most), single-source evidence."
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10"
+   },
+   "operation_correspondence": "固定role prompt成为可编辑状态，对失败定向小改并验证替换。",
+   "necessary_conditions": "有可评分训练/验证，提示仍可塑",
+   "differences": "路由权重也更新；不把训练权重当唯一被评价留存对象，不把本方法认作H18测试时演化。",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E005"
+   ]
+  },
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10"
+   },
+   "operation_correspondence": "Partition of the agent pool into prompt-level-weak vs backbone-outlier roles and by reliance-weighted severity (RS: partition by discriminating property) maps to choosing which prompt document to attribute failures to and patch (domain: attribute then localized edit).",
+   "necessary_conditions_and_differences": "RS card concerns heterogeneity of components inside one model/resource and requires a partition criterion shown load-bearing; domain H10 requires critique-driven rewrite plus regression-checked retention. Overlap is the selection of what to edit; the domain card does not need the heterogeneity partition and the RS card does not cover retention gating.",
+   "evidence_ids": [
+    "son55:E04",
+    "son55:E05",
+    "son55:E07",
+    "son55:E08"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+   "applicable": true,
+   "status": "met",
+   "reason": "Opus (sol): the role-consistency filter attributes weakness to the prompt rather than the backbone, and edits are bounded to 1–3 sentences of the instruction suffix; that matches the artifact's unit (one agent's prompt).",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "son55:E06",
+    "son55:E04"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S1; son55:rsi:attribute_and_patch_incumbent/S1"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/attribute_and_patch_incumbent.md"
+   ],
+   "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有回退/冻结，但允许小均值退化且targeted子集独立性含混。",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E005",
+    "son55:E07",
+    "son55:E08",
+    "son55:E09"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S3; son55:rsi:attribute_and_patch_incumbent/S3"
+  },
+  {
+   "id": "local:2604.05149-2",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "https://arxiv.org/html/2604.05149v1"
+   ],
+   "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+   "applicable": true,
+   "status": "met",
+   "reason": "训练验证测试分开，迁移负结果保留。",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E010",
+    "son55:E15",
+    "son55:E14",
+    "son55:E31"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:local:2604.05149-2; son55:local:2604.05149-2"
+  },
+  {
+   "id": "local:2604.05149-3",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "https://arxiv.org/html/2604.05149v1"
+   ],
+   "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "三种子均值标准差，未做区间/显著性。",
+   "evidence_ids": [
+    "sol:E007"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2604.05149-3"
+  },
+  {
+   "id": "local:2604.05149-4",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "https://arxiv.org/html/2604.05149v1"
+   ],
+   "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告调用近似，未完整核候选/图/角色token。",
+   "evidence_ids": [
+    "sol:E011"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:local:2604.05149-4"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "version": "research/reference/researchstudio-15-31 (card order index)",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #5"
+   ],
+   "applies_when": "A differentiated-treatment claim rests on heterogeneity of components.",
+   "applicable": true,
+   "question": "Is the heterogeneity empirically analyzed rather than posited?",
+   "status": "met",
+   "reason": "Fig.1 and Tables 5-6 show per-agent F1 varies by task, backbone and prompt.",
+   "evidence_ids": [
+    "son55:E01"
+   ],
+   "score_item": "M",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-5"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-3",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #3"
+   ],
+   "applies_when": "Multi-step differentiated treatment is proposed.",
+   "applicable": true,
+   "question": "Is every component of the treatment justified by an ablation isolating its contribution?",
+   "status": "partial",
+   "reason": "PO and Adaptive K are ablated separately and worst-only/scratch variants exist, but the role-consistency filter, multi-candidate sampling, validation gate and freeze rule are not individually ablated.",
+   "evidence_ids": [
+    "son55:E12",
+    "son55:E13",
+    "son55:E24"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-3"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #4"
+   ],
+   "applies_when": "Gain is attributed to the decomposition rather than added capacity.",
+   "applicable": true,
+   "question": "Do baselines isolate decomposition from added capacity/compute and include directly competing methods?",
+   "status": "partial",
+   "reason": "Opus (revised from son55 unmet): the worst-agent-only arm isolates the priority criterion against a simpler criterion at the same budget (Table 4, son55:E23), so the partition is partly tested. Missing: uniform/random-target and ungated arms, and any competing multi-agent prompt optimiser (HiveMind/MAPRO/MASS) at matched budget.",
+   "evidence_ids": [
+    "son55:E12",
+    "son55:E23",
+    "son55:E20",
+    "sol:E009",
+    "sol:E012",
+    "sol:E013"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-4",
+   "note": "sol:local:2604.05149-1 (strong prompt-optimiser control, sol partial) merged here (A4: same question under a colliding or different ID).",
+   "merged_from": "sol:local:2604.05149-1 (strong prompt-optimiser control, sol partial)",
+   "merged_evidence_ids": []
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-2",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #2"
+   ],
+   "applies_when": "Efficiency is claimed.",
+   "applicable": true,
+   "question": "Is efficiency measured in deployment units (latency/tokens/dollars)?",
+   "status": "partial",
+   "reason": "Agent-call counts and a 10% incremental-evaluation figure are given; no latency, token or dollar cost, and rewriter/validation cost is not itemized.",
+   "evidence_ids": [
+    "son55:E16",
+    "son55:E17",
+    "son55:E26"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-2"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S5"
+   ],
+   "applies_when": "Proposer edits an artifact from execution evidence.",
+   "applicable": true,
+   "question": "Does the proposer see raw evidence rather than only a fixed summary?",
+   "status": "partial",
+   "reason": "Opus (son55): the rewriter sees representative failure cases with gold answers and aggregated error statistics, not full traces or candidate history.",
+   "evidence_ids": [
+    "son55:E03"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S5"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.F4"
+   ],
+   "applies_when": "Loop builds its own validation.",
+   "applicable": true,
+   "question": "Is the certifying signal independent of the proposer (not self-constructed)?",
+   "status": "met",
+   "reason": "Validation uses gold-answer F1 on labeled validation items, not model-generated pseudo-labels; the labels are available only because of supervised QA data.",
+   "evidence_ids": [
+    "son55:E03",
+    "son55:E14"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/F4"
+  },
+  {
+   "id": "local:2604.05149-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec.3.2/App.B.1 of the paper (own practice) and A2 rubric"
+   ],
+   "applies_when": "The reported gain is attributed to refined prompts.",
+   "applicable": true,
+   "question": "Is there a gate-off / random-or-ungated rewrite control that separates prompt content from extra router fine-tuning and extra LLM calls?",
+   "status": "unmet",
+   "reason": "Opus: verified; no ungated, random-rewrite or router-only-extra-epochs arm. Final local-1 is son55's question; sol's local-1 (competing optimiser) moved to RE-4.",
+   "evidence_ids": [
+    "son55:E22",
+    "son55:E13",
+    "son55:E35"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2604.05149-1"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Closed-loop prompt refinement improves F1 over the same router without refinement.",
+   "setting": "KG Router base vs +PO rounds, 24 agents, 3 seeds, test n=100 per benchmark.",
+   "baseline_control": "KG Router (base) = AgentRouter numbers (E22); +PO worst-only; +PO from scratch.",
+   "selection_vs_test": "Prompts selected on targeted validation subset (diagnosed training failures + validation samples); results on separate 100-item test split.",
+   "result_denominator": "Relative F1 gains 1.31%/3.75%/2.32%/9.21%/6.67%; mean +/- std over 3 seeds; n=100 test items.",
+   "evidence_ids": [
+    "son55:E11",
+    "son55:E22",
+    "son55:E35",
+    "son55:E14",
+    "son55:E30"
+   ],
+   "counterevidence": [
+    "son55:E13",
+    "son55:E23"
+   ],
+   "allowed_conclusion": "On in-distribution 100-item test splits, prompt refinement plus router fine-tuning raised mean F1 over the router-only base; attribution to prompt content vs extra router training/LLM calls is not separated."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Diagnostic-guided (severity x router weight) target selection beats lowest-F1 selection.",
+   "setting": "Table 4 worst-agent-only variant.",
+   "baseline_control": "worst-agent-only PO.",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "Worst-only gains marginal on 2Wiki/HotpotQA, below base on NewsQA/TriviaQA F1.",
+   "evidence_ids": [
+    "son55:E12",
+    "son55:E23"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Supported against one heuristic baseline; no random or uniform target baseline."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Adaptive K beats best fixed K and cuts agent calls by 69-88%.",
+   "setting": "Fixed K=3/5/10 vs adaptive, per dataset.",
+   "baseline_control": "Fixed-K.",
+   "selection_vs_test": "Thresholds tuned on validation.",
+   "result_denominator": "Avg K 2.9-7.4 vs 24.",
+   "evidence_ids": [
+    "son55:E16",
+    "son55:E24",
+    "son55:E15"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Supported for call counts; F1 gain over base router is small (+0.7 to +1.5 relative)."
+  },
+  {
+   "claim_id": "C4",
+   "text": "EvolveRouter consistently outperforms SOTA routing baselines in F1 and EM.",
+   "setting": "Table 3 main comparison.",
+   "baseline_control": "Heuristic, training-free, adaptive and structure-aware routers; none receives prompt optimization.",
+   "selection_vs_test": "Test split; Best Agent chosen per dataset (split unstated).",
+   "result_denominator": "e.g. 2Wiki F1 77.70 vs AgentRouter 75.54.",
+   "evidence_ids": [
+    "son55:E19",
+    "son55:E21",
+    "son55:E22",
+    "son55:E25"
+   ],
+   "counterevidence": [
+    "son55:E20",
+    "opus:O01"
+   ],
+   "allowed_conclusion": "Holds against listed routers that lack prompt refinement; the gain is mostly the PO component by the paper own ablation."
+  },
+  {
+   "claim_id": "C5",
+   "text": "Routing and prompt quality are task-dependent (limit).",
+   "setting": "HotpotQA-trained router applied to other benchmarks.",
+   "baseline_control": "in-domain EvolveRouter.",
+   "selection_vs_test": "n/a",
+   "result_denominator": "F1 drops of 15-29% in-domain vs transfer.",
+   "evidence_ids": [
+    "son55:E18"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "No transfer claim is supported; per-dataset optimization needed."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Prompt refinement driven by router-reliance-weighted failure diagnostics, with a regression-tolerant validation gate and a resumed router, improves in-distribution held-out F1/EM (n=100 per benchmark, 3 seeds) over the same router without refinement, and Adaptive K cuts agent calls by 69-88% with similar or better F1.",
+  "not_supported": [
+   "Superiority over other multi-agent prompt optimizers (not compared).",
+   "That the validation gate or the target-selection formula individually causes the gain beyond the worst-only comparison.",
+   "Cross-task transfer of routers or refined prompts (contradicted by Table 8 for routers, partial for prompts)."
+  ],
+  "unresolved": [
+   "Cost in tokens/dollars of rewriter and candidate validation.",
+   "Chosen-round decision rule for reported per-round numbers.",
+   "Opus: Table 7's EvolveRouter NGQA value (53.28) contradicts Tables 3/8 (54.04) (opus:O01).",
+   "Opus: NewsQA EM of the full system (41.67) is below w/o Adaptive K (42.00) (sol unresolved item)."
+  ],
+  "reproduction_note": "All numbers are author-reported; no run by this reviewer (no our_run evidence)."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with sol. The bottleneck is concrete and shown (Fig. 1 and Tables 5–6: prompt choice changes per-agent F1 by role), the immediate parent is explicit (the 'KG Router (base)' rows equal AgentRouter), and the residual against HiveMind, MAPRO and MASS is stated (opus:O04). Not 4: Table 2's 'first framework' wording overstates the gap and MASS's alternating prompt/topology optimisation is only contrasted verbally.",
+   "evidence_ids": [
+    "son55:E01",
+    "son55:E02",
+    "son55:E22",
+    "son55:E29",
+    "sol:E001",
+    "sol:E013",
+    "opus:O04"
+   ],
+   "counterevidence_ids": [
+    "son55:E20",
+    "son55:E28"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Failure archive and router weights → reliance-weighted priority → bounded rewrites → validation gate → resumed router is reconstructable, with a separating prediction (worst-only) and a mechanistic account of resume-vs-scratch. Not 4: the premise that cross-backbone weakness is prompt-caused is not tested.",
+   "evidence_ids": [
+    "son55:E05",
+    "son55:E06",
+    "son55:E12",
+    "son55:E13",
+    "sol:E002",
+    "sol:E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. N_max=3, three candidates at fixed temperatures, freeze after 3 rejections, prompt-hash cache, checkpoint resume and a 0.03 router revert are specified. Not 4: δ is never given, the main-text gate ('no significant regression') and App. C.3 ('does not regress') differ from the coded rule, and accepted prompts are never rolled back.",
+   "evidence_ids": [
+    "son55:E04",
+    "son55:E07",
+    "son55:E08",
+    "son55:E09",
+    "son55:E10",
+    "sol:E004",
+    "sol:E005"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Token F1 and EM against gold answers on standard QA sets, no LLM judge. Shared omission recorded (no change): Table 7's NGQA value contradicts Tables 3/8 (opus:O01); NGQA EM below 10% for every method makes its EM deltas one-item effects.",
+   "evidence_ids": [
+    "son55:E14",
+    "son55:E30",
+    "sol:E014",
+    "opus:O01"
+   ],
+   "counterevidence_ids": [
+    "son55:E25"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. w/o-PO, w/o-Adaptive-K, worst-agent-only and from-scratch arms are useful. Missing: ungated/random rewrites, a base router given the same extra fine-tuning epochs, and a matched-budget competing prompt optimiser.",
+   "evidence_ids": [
+    "son55:E11",
+    "son55:E12",
+    "son55:E13",
+    "son55:E22",
+    "son55:E23",
+    "sol:E009",
+    "sol:E012"
+   ],
+   "counterevidence_ids": [
+    "son55:E26",
+    "son55:E20"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with sol. A disjoint 500/100/100 split per benchmark; candidate selection (opus:O02), the number of rounds (opus:O03), Adaptive-K thresholds and router reverts all use validation; the failure of cross-benchmark transfer is reported (Table 8), which bounds the claim to in-distribution use. son55's 2 charged in-distribution scope and test size (an E.statistics matter under A2) and training-gold rewriter input (training data, not a leak). Not 4: 100 test items and no contamination check.",
+   "evidence_ids": [
+    "son55:E14",
+    "son55:E15",
+    "sol:E006",
+    "sol:E010",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "counterevidence_ids": [
+    "son55:E18"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2 (A2 ladder): three seeds with mean ± std on every cell, but 100 test items, no intervals or significance tests, and several PO gains are within seed spread.",
+   "evidence_ids": [
+    "son55:E30",
+    "son55:E11",
+    "sol:E007"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Stage-1 calls (12,000), ~10% incremental cost per round and inference calls (24 → 2.9–7.4) are reported; rewriter/validation tokens and a budget-matched comparison are absent.",
+   "evidence_ids": [
+    "son55:E16",
+    "son55:E17",
+    "sol:E011"
+   ],
+   "counterevidence_ids": [
+    "son55:E26"
+   ],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 HTML text with Appendices A–F read. In scope (system_method): non-weight agent prompts are rewritten from execution feedback, gated on validation, retained and used on a disjoint test split. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "generative_process_redesign",
+   "son55_value": "heterogeneous_decomposition",
+   "decision": "sol",
+   "final_value": "generative_process_redesign",
+   "reason": "The framing operation is liberating the fixed prompt set (§2.2); see rs_pattern.reason.",
+   "evidence_ids": [
+    "sol:E001",
+    "son55:E02"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "heterogeneous_decomposition",
+     null
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "generative_process_redesign",
+     null
+    ],
+    [
+     "heterogeneous_decomposition",
+     null
+    ]
+   ],
+   "reason": "sol's card as primary; son55's partition-by-measured-property match kept as supporting because the target-selection step does partition agents and is tested by the worst-only arm.",
+   "evidence_ids": [
+    "sol:E001",
+    "son55:E04",
+    "son55:E05",
+    "son55:E23"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.05149-1].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "A4 collision: sol's local-1 (competing prompt optimiser) and son55's local-1 (ungated/random/extra-epochs control) are different questions. Final local-1 = son55's, unmet (verified). sol's question merged into rs:heterogeneous_decomposition/RE-4.",
+   "evidence_ids": [
+    "son55:E22",
+    "son55:E34"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.05149-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Statistics (sol only). Verified: three seeds, mean ± std, no CI or test.",
+   "evidence_ids": [
+    "sol:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.05149-4].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Cost (sol only). Verified: call counts and incremental cost given, token/dollar cost absent.",
+   "evidence_ids": [
+    "sol:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Kept with the supporting card. Agent-call reduction is a deployment unit; latency and tokens absent.",
+   "evidence_ids": [
+    "son55:E16",
+    "son55:E17"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: PO and Adaptive K ablated; role filter, multi-candidate sampling, gate and freezing not.",
+   "evidence_ids": [
+    "son55:E11",
+    "son55:E12"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "partial",
+   "reason": "son55 wrote unmet. The worst-only arm is a same-budget test of the partition criterion, so the expectation is partly answered; competing optimisers and uniform/random targets remain missing. sol's local-1 merged here.",
+   "evidence_ids": [
+    "son55:E12",
+    "son55:E23",
+    "sol:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: Fig. 1 and Tables 5–6 measure the per-agent heterogeneity before treatment.",
+   "evidence_ids": [
+    "son55:E01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/F4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified (met = failure avoided): the gate scores against gold labels, not self-constructed data.",
+   "evidence_ids": [
+    "son55:E07",
+    "son55:E14"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S1].status",
+   "sol_value": "met",
+   "son55_value": "partial",
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "The prompt is the attributable unit and edits are bounded sentence-level patches; the role filter does the prompt-vs-backbone attribution. son55's partial asked for section-level attribution inside a short role prompt.",
+   "evidence_ids": [
+    "son55:E04",
+    "son55:E06",
+    "sol:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: failure cases plus aggregated statistics, not raw traces.",
+   "evidence_ids": [
+    "son55:E03",
+    "sol:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": 3,
+   "reason": "See ratings.G: shown bottleneck, explicit parent and a stated residual; the overclaim keeps it below 4.",
+   "evidence_ids": [
+    "son55:E01",
+    "son55:E22",
+    "opus:O04"
+   ],
+   "score_impact": "+3.75 vs son55 (15×1/4)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": 3,
+   "reason": "See ratings.E.holdout: all selection on validation, disjoint test, transfer limit reported; son55's deductions belong to E.statistics or are not leaks.",
+   "evidence_ids": [
+    "son55:E14",
+    "son55:E15",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "score_impact": "+2.5 vs son55 (10×1/4)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.measurement.reason",
+   "sol_value": "3 (no table-inconsistency note)",
+   "son55_value": "3 (no table-inconsistency note)",
+   "final_value": 3,
+   "reason": "Shared omission, no rating effect: Table 7's EvolveRouter NGQA row (53.28) copies the PO-Round-3 row and contradicts Tables 3/8 (54.04) (opus:O01). Recorded in E.measurement and assessment.unresolved.",
+   "evidence_ids": [
+    "opus:O01"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the full v1 text first. Initial view: in scope, retained (prompts selected on validation, used on a disjoint test). G 2–3, M 3, X 3, Em 3, Ec 2, Eh 3, Es 2, E.cost 2.",
+  "integrity_checks": "Both seats a1 on 2604.05149v1, material sha e13e37cb…; canonical seat hashes equal conflicts.json; both claim_type system_method; RS/domain ids valid.",
+  "core_claim_check": "Strongest supported claim: on five QA benchmarks (100 test items each, 3 seeds), diagnostic-guided prompt refinement plus a resumed router beats the same router without refinement and the listed routers, and Adaptive K cuts calls 69–88%. Superiority over other prompt optimisers is not tested; claim_support scoped.",
+  "rating_agreement": "M, X, Em, Ec, Es, E.cost agree and were re-checked; G and Eh → sol. Final 68.75."
+ },
+ "input_seat_hashes": {
+  "sol": "56ad923fc77d224f3cad039f90d71931d4ef9ab0c1f17337b8dcb284e71a9c14",
+  "son55": "2517057d5e2fa32f34eb4a8071af12b8c1bb7db05d7726c403d5cebb46bc6db8"
+ },
+ "score": {
+  "raw": 68.75,
+  "display": 68.8,
+  "lower": 68.75,
+  "upper": 68.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "d8cf82309343c5c9cb8a3f6375da51e042dc81a6fd4a099e75ac4daad8cffe05"
+}
