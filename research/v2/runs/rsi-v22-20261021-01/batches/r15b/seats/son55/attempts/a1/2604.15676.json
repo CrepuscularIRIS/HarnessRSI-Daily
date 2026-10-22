@@ -1,0 +1,1118 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r15b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "",
+ "paper": {
+  "paper_key": "2604.15676",
+  "paper_id": "2604.15676",
+  "title": "EvoRAG: Making Knowledge Graph-based RAG Automatically Evolve through Feedback Backpropagation",
+  "version": "2604.15676v2",
+  "claim_type": "system_method",
+  "central_claim": "EvoRAG 把响应级反馈归因到检索路径的效用，再反向传播为三元组级贡献分数，并据此做关系融合/抑制与混合优先级检索，使静态KG-RAG在线自演化；在三个QA数据集上平均准确率比最先进KG-RAG框架提高7.34%。"
+ },
+ "provenance": {
+  "input_hash": "25c1b8936cd51dd460ec242fbcc74e82112163a4d8d21596989e2e64ccc766be",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref 未由运行环境提供给 worker；按契约填 null",
+  "timestamp": "2026-10-22T00:44:33Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.15676",
+   "url": "https://arxiv.org/html/2604.15676v2",
+   "sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "chars": 71948,
+   "sections_read": [
+    "Abstract",
+    "Sec I Introduction",
+    "Sec II Preliminary & Motivation",
+    "Sec III System Overview",
+    "Sec IV Feedback Backpropagation (IV-A..C, 含收敛/噪声/复杂度)",
+    "Sec V KG Management (Alg.1, 混合检索)",
+    "Sec VI Experiments (VI-A..O, Tables I-IV, 图注与正文结果)",
+    "Sec VII Related Work",
+    "Sec VIII Conclusion"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "图中数值（如图11消融、图18骨干对比）仅在正文给出汇总百分比",
+    "训练查询规模/批次/迭代数未给出",
+    "无附录（材料正文中不含）"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec I",
+   "quote": "Although KG-RAG frameworks have demonstrated promising results by leveraging the structural information, they often underperform in real-world scenarios due to a mismatch between the pre-captured dependencies in KG and the task-specific requirements",
+   "support_explanation": "作者 gap：预构建KG依赖与任务需求错配",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec I",
+   "quote": "Secondly, existing KG-RAG frameworks cannot continuously identify and suppress stale or unreliable knowledge.",
+   "support_explanation": "第二个局限：不能持续识别并压制陈旧/不可靠知识",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec II-B",
+   "quote": "We categorize the errors into four types: (1) irrelevant facts (IF), (2) long reasoning paths (LP), (3) outdated information (OI), and (4) other errors caused by missing knowledge in the KG or hallucinations by the LLM (not the focus of this work).",
+   "support_explanation": "在RGB/MultiHop上以KRAG做错误分析；分类流程（人工/LLM）未说明",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec II-B",
+   "quote": "making them the primary bottlenecks that limit the effectiveness of KG-RAG.",
+   "support_explanation": "IF/LP/OI 平均 17.9%/20.7%/14.1%，合计超过一半错误",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec I",
+   "quote": "These scores are maintained as learnable parameters and continuously updated across interactions, allowing EvoRAG to prioritize task-relevant knowledge.",
+   "support_explanation": "核心被留存对象：每个三元组的可学习贡献分数",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec IV-A",
+   "quote": "Given the ground-truth answers in our datasets, the evaluator LLM is prompted to assess each generated response and assign a scalar score from 1 to 5, providing a reliable and objective assessment.",
+   "support_explanation": "默认反馈由看得到真值的评估LLM给出1-5分",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec IV-B",
+   "quote": "In this work, we use an LLM as a constrained path-level scoring function.",
+   "support_explanation": "路径效用由LLM按相关性打分，响应层反馈->路径层效用",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec IV-B",
+   "quote": "only when F=1 and C=-1; otherwise, the update is suppressed.",
+   "support_explanation": "仅当Fidelity=1且Conflict=-1时才用Supportiveness更新路径效用（交叉验证门）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec IV-C4",
+   "quote": "These updates occur continually during task execution rather than through one-shot global KG optimization.",
+   "support_explanation": "在线持续更新",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec IV-C3",
+   "quote": "Under standard bounded-variance and step-size conditions, the resulting clipped stochastic updates converge to a stationary point",
+   "support_explanation": "收敛性论述仅限于代理损失的驻点，不保证准确率",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec IV-C3",
+   "quote": "Feedback backpropagation is inherently noise-tolerant to erroneous feedback and LLM scoring errors in two ways.",
+   "support_explanation": "噪声容忍性靠论证+实验，未给出形式保证",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec V-A",
+   "quote": "These thresholds provide a data-driven basis, ensuring that relation fusion and pruning are guided by statistically significant differences rather than random fluctuations.",
+   "support_explanation": "阈值μ±σ被称为“统计显著”，但并无检验",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec V-A",
+   "quote": "LLM-generated labels may introduce hallucinated relations.",
+   "support_explanation": "融合产生的捷径边由LLM命名，可能幻觉；靠后续反馈自纠",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec V-A",
+   "quote": "It is worth noting that EvoRAG performs feedback-guided relation evolution over a static base KG, rather than dynamic KG maintenance.",
+   "support_explanation": "边界：静态KG上的关系级演化，不处理事实更新",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-A",
+   "quote": "The training set is constructed by generating additional query–answer pairs within the subgraphs retrieved based on the test queries.",
+   "support_explanation": "训练查询取自测试查询所检索到的子图（热点区域假设）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-A",
+   "quote": "For each subgraph, we sample alternative reasoning paths (up to two hops) that differ from the paths used to form test queries, avoiding data leakage.",
+   "support_explanation": "作者声称路径不同即避免泄漏；三元组重叠未检验",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-A",
+   "quote": "performance is then evaluated on the test set.",
+   "support_explanation": "训练后在原始测试查询上评测",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Table II caption",
+   "quote": "Alignment ratio between generated feedback and ground truth.",
+   "support_explanation": "LLM反馈与真值一致率：RGB 96%、MTH 95.96%、HPQ 88.17%（总数等于测试集规模，计算所用查询集未说明）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-B",
+   "quote": "Compared to KG-RAG frameworks, EvoRAG achieves an average improvement of",
+   "support_explanation": "摘要中的7.34%：对MRAG/LRAG/KRAG三个基线、三个数据集的ACC平均提升（EM 9.84%，F1 7.29%）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Table III",
+   "quote": "Performance comparison with KG-RAG and KGR methods.",
+   "support_explanation": "ACC：RGB MRAG 75.67/LRAG 76.00/KRAG 71.00 -> EvoRAG 84.00；MTH 75.61/76.20/74.02 -> 80.26（最佳基线KRAG+RotatE 76.72）；HPQ 38.83/44.83/39.00 -> 48.16。三基线平均提升=7.34个百分点（本席据表复算：66.10/9），对每数据集最强KG-RAG基线仅 8.00/4.06/3.33 点，平均5.13点",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-B",
+   "quote": "EvoRAG is trained on the training set, enabling it to adaptively refine the KG.",
+   "support_explanation": "EvoRAG有训练暴露，基线没有；未对基线给予同等反馈/查询",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-C",
+   "quote": "as irrelevant, outdated, incorrect, or long-path connections, are manually annotated.",
+   "support_explanation": "“问题三元组”由人工标注（标注者与一致性未说明）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-C",
+   "quote": "shows that as iterations increase, the ratio of problematic triplets steadily decreases while accuracy improves and stabilizes after approximately",
+   "support_explanation": "训练集上问题三元组占比下降、准确率约6轮后稳定",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-D",
+   "quote": "This suggests that the performance gains mainly stem from the availability of feedback rather than their specific source.",
+   "support_explanation": "LLM/真值F1/10位博士生人评反馈结果相近（平均差0.75%）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-E",
+   "quote": "To evaluate the impact of noisy feedback on EvoRAG, we simulate erroneous feedback by randomly selecting a fraction of the collected feedback and inverting the correctness.",
+   "support_explanation": "10%/20%翻转噪声使准确率仅下降1.15%/2.43%",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-F",
+   "quote": "To evaluate the contribution of the feedback mechanism, we compare four settings: LLM-only, LLM with static KG (SG), LLM+SG with feedback (FB), and LLM+SG+FB with graph evolution (i.e., EvoRAG).",
+   "support_explanation": "留存物消融：SG->FB +6.6%，->图演化 再+3.07%",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-F2",
+   "quote": "incorporating these cross-validation constraints improves the average accuracy by",
+   "support_explanation": "去掉Fidelity/Conflict交叉验证门后平均少2.24%",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-G",
+   "quote": "To quantify these benefits, we evaluate prompt length, time-to-first-token (TTFT), and peak GPU memory.",
+   "support_explanation": "平均提示长度缩短4.6x，峰值显存约22.49GB",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E030",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-H",
+   "quote": "Feedback backpropagation introduces additional overhead compared to traditional KG-RAG frameworks.",
+   "support_explanation": "反向传播开销：批20时占总运行时间23.90%；端到端延迟约为KRAG的1.12x、MRAG的1.27x",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E031",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-J",
+   "quote": "We evaluate EvoRAG in a large-scale setting with 5,000 queries sampled from HotpotQA on a KG containing 890,389 entities and 1,043,360 triplets.",
+   "support_explanation": "大规模设置：平均准确率比MRAG/LRAG/KRAG高8.25%；批20时反传占15.35%",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E032",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-L",
+   "quote": "we apply the same mechanism to MRAG and LRAG by assigning contribution scores to retrieved text chunks.",
+   "support_explanation": "迁移到文本块级：MRAG +2.83%、LRAG +1.92%",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E033",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-M",
+   "quote": "We evaluate the generality of EvoRAG across different LLM backends by replacing Qwen2.5-32B with Llama-3.1-70B (4-bit), Qwen3-8B, and GPT-4o-mini for all LLM-dependent components in EvoRAG and the baselines.",
+   "support_explanation": "更换骨干后平均提升8.95%/7.37%/8.31%",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E034",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-K2",
+   "quote": "After feedback continuously indicates an incorrect answer in 8 iterations, EvoRAG suppresses this noisy triplet by reducing its contribution score and reinforces correct triplets.",
+   "support_explanation": "单个案例展示压制错误三元组",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E035",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-K1 / Table IV",
+   "quote": "Proportions of added and removed triplets in retrieval results after KG evolution.",
+   "support_explanation": "演化后检索结果中28.17%低贡献三元组被移除、19.64%高贡献被新引入",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E036",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-O",
+   "quote": "To evaluate cold-start adaptation to unseen queries, we initialize EvoRAG without prior feedback.",
+   "support_explanation": "冷启动适应29-51秒达到峰值（作者报告）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E037",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VIII",
+   "quote": "Unlike these approaches, the novelty of EvoRAG lies in introducing feedback backpropagation: response feedback is propagated along reasoning paths to reusable triplets that guide retrieval and relation evolution.",
+   "support_explanation": "作者的新颖性定位（相对于模型级反馈优化与KG精炼）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E038",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-A",
+   "quote": "We evaluate EvoRAG on three real-world QA datasets summarized in Table",
+   "support_explanation": "三个数据集：RGB 300、MTH 816、HPQ 600 条查询（Table I）",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E039",
+   "material_id": "2604.15676",
+   "material_sha256": "12db744acd7b5fc22fdff91f8b567d0d8b5b5497f34958821b2d751a2606451e",
+   "locator": "Sec VI-D",
+   "quote": "human feedback obtained by averaging independent five-point satisfaction ratings from ten Ph.D. students",
+   "support_explanation": "真人反馈来自10位博士生的平均评分",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "三元组的可学习贡献分数 S_c（初始100）与混合系数 α，以及据此的检索优先级；基线为静态KRAG检索",
+   "information": "查询、响应、检索到的推理路径、反馈分(1-5)；默认反馈由看得到真值的评估LLM产生，亦测试人评与真值F1；路径效用由LLM按Supportiveness/Fidelity/Conflict打分",
+   "operation": "按期望效用对数损失对 S_c 和 α 做梯度步（路径内按相对期望效用的偏差V_i分配），每批更新；F=1且C=-1时才更新",
+   "output": "更新后的贡献分数；检索优先级 P(t)=(1-α)S_r+αS_c 的路径排序",
+   "conditions": "热点局部查询重复出现；学习率0.5；N=M=10",
+   "feedback": "响应级反馈->路径效用->三元组梯度",
+   "selection_rule/data": "连续软更新，无硬性接受/回退；无配对反事实；训练查询取自测试查询所在子图",
+   "persistence": "分数随KG持久保存，在后续查询的检索中读取",
+   "later_use": "每次查询的混合检索重排序",
+   "claimed_effect": "ACC：RGB 84.00、MTH 80.26、HPQ 48.16；相对三基线平均+7.34个百分点",
+   "failure_boundary": "静态KG，无法核实事实更新；LLM评审误差；训练暴露与基线不对称",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E008",
+    "E009",
+    "E010",
+    "E016",
+    "E021",
+    "E022"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "KG结构：关系融合（捷径边）与关系抑制",
+   "information": "各轮聚合后的三元组分数均值μ与标准差σ",
+   "operation": "路径上所有三元组分数>μ+σ且端点无边时，加一条由LLM命名的捷径边（分数取路径平均）；持续低于μ-σ的关系软降权",
+   "output": "加有捷径边的KG",
+   "conditions": "每个反馈迭代执行一次；BFS最大H跳",
+   "feedback": "三元组贡献分数",
+   "selection_rule/data": "阈值μ±σ，无独立验证；捷径边的错误靠后续反馈自纠",
+   "persistence": "KG中新增边与降权",
+   "later_use": "后续检索可走捷径，降低推理深度",
+   "claimed_effect": "图演化在反馈基础上再提升3.07%",
+   "failure_boundary": "LLM命名的捷径可能幻觉；无回退到旧版本；不删除事实",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E015",
+    "E027"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "KG-RAG的KG是预先构建且面向查询无关的，难以适配下游任务，也不能持续压制陈旧/不可靠知识；响应级反馈与三元组级精炼粒度不匹配。",
+  "checked_gap": "具体且有初步量化：以KRAG在RGB/MultiHop上的错误分析，IF/LP/OI合计占一半以上；被固定的对象是三元组检索优先级与KG结构。局限：分类流程未说明，且相关邻居中缺少智能体记忆效用估值/信用分配文献。",
+  "lineage": "GraphRAG/LightRAG/KRAG(Lego-GraphRAG) -> KG精炼(TransE/RotatE/CAGED/LLM_Sim) -> 模型级反馈优化(RLHF类) -> 本文（将响应反馈反传到KG三元组）；版本取自本文引用",
+  "closest_adjacent": "KGR方法（无任务反馈）、模型级反馈优化（更新权重）；未涉及“用结局信号给记忆条目估值”的智能体记忆工作",
+  "residue": "训练暴露对称的对照；跨区域泛化；事实更新；人工之外的问题三元组标准",
+  "stakes": "多用户热点查询反复被同一批陈旧/无关三元组误导",
+  "method_response": "路径效用归因+三元组梯度+关系融合/抑制+混合检索",
+  "remaining_gap": "训练-测试区域重叠；基线不对称；单次运行；静态KG",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E003",
+   "E004",
+   "E015",
+   "E037"
+  ],
+  "unresolved": [
+   "agent memory 中“按结局给条目估值”的相关邻居(rsi H29类)未固定，无法核对其与本文的谱系关系"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "relax_discrete_search_to_continuous"
+  ],
+  "outside_taxonomy": false,
+  "reason": "三元组级监督不存在，作者从响应级反馈经LLM路径归因“制造”三元组级效用信号并用于更新；“保留/删除哪些三元组”这一离散选择被松弛为连续贡献分数并由梯度优化，是另一个操作。",
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C26",
+    "role": "primary",
+    "fit": "weak",
+    "tactic_steps_checked": "读 C07/C08/C26：C26 的“按信用失败处重设比较粒度(结果级->步骤/元素级)并由优化器消费”最接近；但 C26 以偏好对+对比目标优化模型，本文以期望效用的对数损失更新KG中的分数；C08（数据工厂）与C07（内部读数）不符。",
+    "success_checks": {
+     "针对性诊断先于信号": "met（错误分析)",
+     "相对序而非逐点标签": "partial（V_i 为相对期望效用的偏差）",
+     "信号来源非人工": "met-ish（LLM评审，亦测人评）",
+     "下游目标直接比较": "met（ACC/EM/F1）",
+     "同算力/自我改进基线": "unmet"
+    },
+    "failure_checks": [
+     "以LLM评审替换奖励模型的单槽替换：部分适用",
+     "信号有效性依赖对真值的可见性：命中（默认反馈看得到真值）"
+    ],
+    "evidence_ids": [
+     "E003",
+     "E006",
+     "E008",
+     "E021",
+     "E022"
+    ],
+    "reason": "对象是非权重的KG分数/结构，而不是模型参数；仅在“制造细粒度信号”这一步对应。"
+   },
+   {
+    "main_id": "relax_discrete_search_to_continuous",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "读 C22：C22 要求统一参数化与权重共享、重塑搜索层级；本文不涉及，故不挂C22。",
+    "success_checks": {
+     "松弛释放新能力": "partial（跨查询反馈复用）",
+     "承重结构消融": "met（FB与图演化消融）"
+    },
+    "failure_checks": [
+     "保留贪心核心：部分（阈值μ±σ的融合/抑制仍为离散规则）"
+    ],
+    "evidence_ids": [
+     "E005",
+     "E011",
+     "E013",
+     "E027"
+    ],
+    "reason": "把“保留哪些三元组”变为可微分的贡献分数是实际操作，但并未解决组合搜索。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": false,
+  "resolves_note": "训练后IF/LP/OI类问题三元组占比下降且测试ACC提升，但问题三元组为人工标注、训练暴露与基线不对称，不能断言“陈旧/无关知识压制问题已关闭”。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "rsi-cards v1 (taxonomy sha256 b115a69b)",
+  "matches": [
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "fit": "high",
+    "condition_checks": {
+     "H29-step1 信用单位": "met（三元组/路径）",
+     "H29-step2 反事实": "partial（LLM路径归因，无配对无记忆运行）",
+     "H29-step3 共检索信用分配": "met（路径优先级+期望效用基线）",
+     "H29-step4 价值进入排序/降权+衰减": "partial（进入排序与软降权；无衰减）",
+     "H29-step5 去价值消融+留出": "partial",
+     "S1": "partial",
+     "S2": "partial",
+     "S3": "met",
+     "S4": "met",
+     "S5": "met",
+     "F5": "partial"
+    },
+    "operation_mapping": "三元组携带随结局更新的效用分数，语义相似度之上再叠加该效用来排序并软降权；共检索路径通过相对期望效用的偏差分摊信用。",
+    "evidence_ids": [
+     "E005",
+     "E008",
+     "E009",
+     "E010",
+     "E027",
+     "E028"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "fit": "medium",
+    "condition_checks": {
+     "H04-step2 内容与索引解耦": "partial（分数独立于三元组内容）",
+     "H04-step3 更新动态/局部更新": "partial（批更新、迭代级结构更新）",
+     "H04-step5 结构消融+方差/留出": "partial"
+    },
+    "operation_mapping": "在静态KG上加入捷径边(链接/提升)与降权(衰减)以改善多跳召回。",
+    "evidence_ids": [
+     "E013",
+     "E014",
+     "E015",
+     "E027"
+    ]
+   }
+  ],
+  "unassigned": [
+   "attribute_and_patch_incumbent/H09（文字反向传播）考察后弃用：被更新对象是KG中的分数而非提示/工具组件，反馈传播是数值梯度"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C26",
+   "domain": {
+    "namespace": "rsi",
+    "main": "evidence_gated_retention",
+    "sub": "H29"
+   },
+   "operation_correspondence": "把响应级结局转为元素级（路径->三元组）的效用信号（rs 制造监督信号），并用该信号对记忆条目估值、排序与降权（rsi H29）。",
+   "necessary_conditions_and_differences": "rs 卡要求同算力/自我改进基线与真实部署假设；H29 要求配对反事实与去价值消融于留出任务；本文有 SG/FB/图演化消融但缺同暴露基线，且训练查询取自测试区域。",
+   "evidence_ids": [
+    "E003",
+    "E008",
+    "E022",
+    "E027"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.S1"
+   ],
+   "applies_when": "以结局给记忆条目赋值",
+   "applicable": true,
+   "status": "partial",
+   "reason": "信用来自LLM对路径的效用判断，并以期望效用为基线；没有记忆开/关的配对运行",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.S2"
+   ],
+   "applies_when": "存储会增长",
+   "applicable": true,
+   "status": "partial",
+   "reason": "捷径边为“准入”，软降权为“退休”的弱形式；无硬性大小界限、无删除、无衰减",
+   "evidence_ids": [
+    "E013",
+    "E015"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.S3"
+   ],
+   "applies_when": "主张治理修复了某种静默失败",
+   "applicable": true,
+   "status": "met",
+   "reason": "先以错误分析量化IF/LP/OI，再显示问题三元组占比随迭代下降（人工标注）",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E023",
+    "E024"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.S4"
+   ],
+   "applies_when": "价值信号应可消融",
+   "applicable": true,
+   "status": "met",
+   "reason": "SG/FB/图演化与交叉验证门均有消融",
+   "evidence_ids": [
+    "E027",
+    "E028"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.S5"
+   ],
+   "applies_when": "门控带来额外调用",
+   "applicable": true,
+   "status": "met",
+   "reason": "报告反传占运行时间23.90%、端到端延迟1.12x KRAG、提示缩短4.6x；训练总成本未给",
+   "evidence_ids": [
+    "E029",
+    "E030"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/F5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.F5"
+   ],
+   "applies_when": "效用只用于重排检索",
+   "applicable": true,
+   "status": "partial",
+   "reason": "效用影响检索优先级，同时也驱动捷径边与降权，部分触及内容；但从不删除",
+   "evidence_ids": [
+    "E010",
+    "E013"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H29-step5",
+   "version": "cards v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H29.md Step-by-Step 5"
+   ],
+   "applies_when": "主张价值信号优于仅相似度",
+   "applicable": true,
+   "status": "partial",
+   "reason": "SG(仅相似度)->FB 的对比存在且在测试集上评测；但训练查询取自测试区域",
+   "evidence_ids": [
+    "E016",
+    "E018",
+    "E027"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H30-step4",
+   "version": "cards v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H30.md Step-by-Step 4"
+   ],
+   "applies_when": "库随时间增长、需回滚",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有版本、回滚、库大小界限或退休规则",
+   "evidence_ids": [
+    "E013",
+    "E015"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #1"
+   ],
+   "applies_when": "主张信号可推广",
+   "applicable": true,
+   "status": "met",
+   "reason": "3数据集+大规模、4个LLM骨干、评估器规模变化、迁移到MRAG/LRAG",
+   "evidence_ids": [
+    "E031",
+    "E032",
+    "E033"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #2"
+   ],
+   "applies_when": "增益应归因于制造的信号而非额外训练/算力",
+   "applicable": true,
+   "status": "partial",
+   "reason": "SG/FB消融存在；基线没有同等训练查询/反馈暴露，也无简单频次计数类替代",
+   "evidence_ids": [
+    "E022",
+    "E027"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #3"
+   ],
+   "applies_when": "主张信号改善下游目标",
+   "applicable": true,
+   "status": "met",
+   "reason": "直接报告ACC/EM/F1，而非仅中间性质",
+   "evidence_ids": [
+    "E021"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #5"
+   ],
+   "applies_when": "生成/反馈循环有额外成本",
+   "applicable": true,
+   "status": "met",
+   "reason": "给出延迟、反传占比、显存与提示长度；训练全量成本缺失",
+   "evidence_ids": [
+    "E029",
+    "E030"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #6"
+   ],
+   "applies_when": "信号依赖部署中不可得的信息",
+   "applicable": true,
+   "status": "partial",
+   "reason": "默认反馈使用真值；以人评和真值F1对比并做噪声注入缓解，但训练查询的真值来自KG自身",
+   "evidence_ids": [
+    "E006",
+    "E025",
+    "E026",
+    "E039"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2604.15676-1",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec VI-A: training queries generated within test-query subgraphs"
+   ],
+   "applies_when": "训练分布按热点区域构造",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有区域外/分布偏移测试，三元组重叠程度未量化",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2604.15676-2",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec VI: single-run tables, no seeds/intervals"
+   ],
+   "applies_when": "报告平均提升与消融",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无种子/区间/方差；训练查询量与迭代数未给；阈值称“统计显著”但无检验",
+   "evidence_ids": [
+    "E013",
+    "E021"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2604.15676-3",
+   "version": "local",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec VI-B: baselines are not trained"
+   ],
+   "applies_when": "与未接触反馈的基线比较",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "EvoRAG训练于额外查询+反馈，基线无同等暴露；7.34%为三基线平均",
+   "evidence_ids": [
+    "E020",
+    "E021",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "EvoRAG 的平均准确率比最先进KG-RAG框架高7.34%",
+   "setting": "Qwen2.5-32B，RGB/MTH/HPQ；热点式训练-测试构造",
+   "baseline_control": "MRAG/LRAG/KRAG（无训练暴露）；KRAG+KGR（无任务反馈）",
+   "selection_vs_test": "训练查询取自测试查询所在子图的“不同路径”，在原始测试查询上评测；N、M 等超参依据准确率选定",
+   "result_denominator": "ACC：RGB 84.00 vs 75.67/76.00/71.00；MTH 80.26 vs 75.61/76.20/74.02；HPQ 48.16 vs 38.83/44.83/39.00；单次运行",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E018",
+    "E020",
+    "E021",
+    "E022",
+    "E038"
+   ],
+   "counterevidence": "7.34为对三基线平均的百分点，相对最强基线仅5.13点；训练暴露不对称",
+   "allowed_conclusion": "在热点局部构造下，经训练的EvoRAG在测试集上高于未经训练的KG-RAG基线，幅度依数据集为3.3-8.0点（相对最强基线）。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "反馈反传优于现有KG精炼方法（平均+13.80% ACC）",
+   "setting": "KRAG上叠加TransE/RotatE/CAGED/LLM_Sim",
+   "baseline_control": "无任务反馈的KGR",
+   "selection_vs_test": "同C1",
+   "result_denominator": "KRAG+KGR 的ACC多数低于或接近KRAG",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "counterevidence": "对比对象不使用任务反馈",
+   "allowed_conclusion": "使用任务反馈比不使用反馈的KG精炼更有效；未与其他使用同样反馈的简单方法比较。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "反馈机制与图演化各有贡献",
+   "setting": "LLM-only / SG / FB / 图演化；交叉验证门消融",
+   "baseline_control": "SG 为无反馈的静态KG",
+   "selection_vs_test": "同C1",
+   "result_denominator": "SG vs LLM-only +23.42%；FB +6.6%；图演化 +3.07%；交叉验证 +2.24%",
+   "evidence_ids": [
+    "E027",
+    "E028"
+   ],
+   "counterevidence": "各行均无方差；SG未接触训练查询",
+   "allowed_conclusion": "留存分数与图演化在该设置下均有正贡献。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "对噪声反馈与反馈来源稳健",
+   "setting": "10%/20%翻转反馈；LLM/F1/人评",
+   "baseline_control": "无噪声",
+   "selection_vs_test": "同C1",
+   "result_denominator": "准确率仅降1.15%/2.43%；来源间平均差0.75%",
+   "evidence_ids": [
+    "E025",
+    "E026",
+    "E039"
+   ],
+   "counterevidence": "翻转为随机噪声，系统性偏差未测",
+   "allowed_conclusion": "在随机翻转噪声下退化较小。"
+  },
+  {
+   "claim_id": "C5",
+   "text": "提示更短、延迟可控",
+   "setting": "Qwen2.5-32B + vLLM KV缓存复用",
+   "baseline_control": "MRAG/LRAG/KRAG",
+   "selection_vs_test": "not_applicable",
+   "result_denominator": "提示长度平均缩短4.6x；延迟约1.12x KRAG；反传占23.90%",
+   "evidence_ids": [
+    "E029",
+    "E030"
+   ],
+   "counterevidence": "训练阶段LLM调用总量未给",
+   "allowed_conclusion": "推理期延迟与提示长度表现良好；训练成本未量化。"
+  },
+  {
+   "claim_id": "C6",
+   "text": "KG质量提高（问题三元组占比下降）",
+   "setting": "训练集迭代曲线；人工标注",
+   "baseline_control": "迭代0",
+   "selection_vs_test": "训练集上度量",
+   "result_denominator": "RGB 约83.01%问题三元组被压制",
+   "evidence_ids": [
+    "E023",
+    "E024",
+    "E035"
+   ],
+   "counterevidence": "标注者数量与一致性未说明",
+   "allowed_conclusion": "在训练区域内问题三元组占比下降，属内部诊断而非独立测试。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "evidence_level_reason": "训练阶段形成并持久化的三元组贡献分数/捷径边，在训练后对测试查询带来更高ACC，且有 SG/FB/图演化 的留存物消融；但训练查询取自测试区域、基线无同等暴露、单次运行，故为中等偏弱的retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "当训练查询来自测试查询所在的KG热点区域时，用反馈反传学习的三元组贡献分数与关系演化使测试ACC比未经训练的KG-RAG基线高3.3-8.0点（相对每数据集最强基线），并在多种反馈来源、LLM骨干和一个大规模设置下方向一致。",
+  "cannot_claim": [
+   "7.34%是相对最强基线的提升",
+   "对分布外/非热点查询有效",
+   "基线在同等反馈暴露下仍落后",
+   "陈旧知识问题已被关闭（无事实核验）",
+   "improver级别改进"
+  ],
+  "unresolved": [
+   "训练查询规模与迭代数；反馈质量统计所用的查询集；问题三元组标注细节"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "被固定对象具体（三元组检索优先级与KG结构），有初步量化的错误分析(IF/LP/OI>50%)，最近邻(KG-RAG、KG精炼、模型级反馈)与局限(静态KG)清楚；缺少对智能体记忆效用估值类邻居的比较，错误分类流程未交代。",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004",
+    "E015",
+    "E037"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "响应反馈->路径效用(含Fidelity/Conflict交叉门)->期望效用损失->三元组分数->混合检索与融合/抑制，链条对准IF/LP/OI三类错误，并给出噪声容忍预测；扣分在LLM评审与μ±σ阈值的启发式性质及“统计显著”的夸大。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E008",
+    "E009",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "初始化、学习率、阈值、BFS融合算法、软降权、读取方式、边界(静态KG)均明确；缺少版本/回滚/库大小界限与退休规则，训练查询量与迭代数未给出，捷径边无独立验证。",
+   "evidence_ids": [
+    "E005",
+    "E010",
+    "E013",
+    "E015"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "ACC/EM/F1与多数据集齐全，但ACC为“包含真值”的宽松指标，反馈评估器看得到真值，问题三元组靠人工标注，7.34%实为对三基线的平均点数。",
+   "evidence_ids": [
+    "E021",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E006",
+    "E020",
+    "E023"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有留存物消融(SG/FB/图演化)、交叉验证门消融、反馈来源与噪声实验、迁移到MRAG/LRAG；但基线无同等训练/反馈暴露，缺简单计数式替代与融合/抑制分项消融，热点重叠这一替代解释未检验。",
+   "evidence_ids": [
+    "E027",
+    "E028",
+    "E025",
+    "E026",
+    "E032"
+   ],
+   "counterevidence_ids": [
+    "E022",
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "训练与测试查询分离，且报告训练后在原始查询上评测，并在大规模和多骨干设置复现；但训练查询取自测试区域、三元组重叠未量化、无区域外测试，超参依据准确率选定。",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E031",
+    "E033"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "给出各数据集规模，但无种子、区间、方差，训练查询量不明；阈值被称“统计显著”而无检验。",
+   "evidence_ids": [
+    "E038"
+   ],
+   "counterevidence_ids": [
+    "E013",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "报告提示长度、TTFT、显存、延迟1.12x KRAG、反传占比及KV缓存复用；缺训练阶段LLM调用总量与预算对等比较。",
+   "evidence_ids": [
+    "E029",
+    "E030",
+    "E031"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "反馈→路径效用→三元组贡献分数→融合/抑制的闭环清楚，训练测试分离且消融丰富；但训练查询取自测试热点区、基线无同等反馈暴露、7.34%为对三基线平均、无方差。",
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

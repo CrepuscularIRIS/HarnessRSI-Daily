@@ -1,0 +1,986 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r14b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "2604.07645",
+  "paper_id": "2604.07645",
+  "title": "PRIME: Training Free Proactive Reasoning via Iterative Memory Evolution for User-Centric Agent",
+  "version": "2604.07645v1",
+  "claim_type": "system_method",
+  "central_claim": "PRIME, a gradient-free framework, improves frozen LLM agents on user-centric multi-turn tasks by distilling interaction trajectories into structured experiences in three semantic zones (golden/warning/preference), evolving the library with mutation, generalization, crossover and pruning, and retrieving experiences at inference; it achieves competitive performance with RL-trained (GRPO) agents on eight UserRL environments at 5-6x fewer GPU-hours, and libraries transfer across model sizes.",
+  "claim_scope": "Eight UserRL environments, Qwen3-4B/8B/14B frozen agents, GPT-4o as distiller/evolver, Qwen3-32B user simulator, 100 exploration episodes per environment."
+ },
+ "provenance": {
+  "input_hash": "f1e0164cb2efecf41a9f4bc99710d1f188e1dfd6715a0efdd60a457277a9b28d",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref unavailable to the worker subagent at write time; model_type recorded per controller dispatch instruction (agent_model=haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-22T00:32:35Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2604.07645",
+   "url": "https://arxiv.org/html/2604.07645v1",
+   "sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "chars": 55128,
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Preliminaries",
+    "3 Method (3.1-3.2)",
+    "4 Experiments (4.1-4.2)",
+    "5 Related Work",
+    "6 Conclusion",
+    "Appendix A Evolution operators",
+    "Appendix B Distillation examples",
+    "Appendix C Environment prompts",
+    "Appendix D Hyperparameters and retrieval"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "notes": "HTML-converted text; Figures 3 and 4 (bar plots) not viewable, captions read. No ReAct/Reflexion numbers appear in the text tables."
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E01",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Abstract",
+   "quote": "distills multi-turn interaction trajectories into structured, human-readable experiences organized across three semantic zones",
+   "support_explanation": "Core operation: trajectories -> structured experiences (zones: successful strategies, failure patterns, user preferences).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E02",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.1 / Abstract",
+   "quote": "existing approaches require expensive training costs and struggle with turn-level credit assignment across extended interaction horizons.",
+   "support_explanation": "Author gap: RL is costly and has weak turn-level credit assignment; no head-to-head argument against existing memory methods is given.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E03",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.3.1",
+   "quote": "we optimize the memory library",
+   "support_explanation": "Object of improvement: the external memory library, not model parameters.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E04",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.3.1",
+   "quote": "We organize memories into three semantic zones based on trajectory rewards",
+   "support_explanation": "Zone assignment is a reward-threshold rule (golden >=0.7, warning <=0.3 given in Appendix D).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E05",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.3.2 Distillation",
+   "quote": "which identifies which turns contributed most to the final outcome.",
+   "support_explanation": "Turn-level credit assignment selects key turns before LLM distillation.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E06",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix A (Mutation)",
+   "quote": "Refines experience clarity based on empirical feedback.",
+   "support_explanation": "Mutation operator description; trigger is a retrieved experience that led to a suboptimal outcome.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E07",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix A (Pruning)",
+   "quote": "Removes stale or underperforming experiences.",
+   "support_explanation": "Pruning operator; criteria are usage count and success rate thresholds (Appendix D).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E08",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix A (Mutation trigger)",
+   "quote": "Trigger: experience retrieved but led to suboptimal outcome",
+   "support_explanation": "Evolution is triggered by outcomes; no acceptance test of the edited experience is described.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E09",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix D Table 2",
+   "quote": "Exploration Episodes per env 100 Trajectories collected",
+   "support_explanation": "Exploration budget: 100 trajectories per environment; evaluation episode count and split are not stated anywhere in the text.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E10",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix D Table 3",
+   "quote": "Evolution iterations N N 5 Meta-optimization cycles",
+   "support_explanation": "Evolution is run for 5 cycles; operator probabilities (mutation 0.10, generalization 0.05, crossover 0.02) are given in the same table.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E11",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix D / Sec.4.1",
+   "quote": "Zone classification thresholds are",
+   "support_explanation": "Thresholds theta_golden=0.7 and theta_warning=0.3 are fixed hyperparameters (continuation of this sentence).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E12",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.1 Baselines",
+   "quote": "which augments agents with verbal self-reflection on past failures.",
+   "support_explanation": "Reflexion (and ReAct) are named as the most direct prompting baselines, but no ReAct/Reflexion rows appear in Table 1 (full-text search finds each name once, only here).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E13",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Table 1 (GRPO 8B row)",
+   "quote": "GRPO + + Qwen3-8B 0.573 0.192 0.423 0.210 0.532 1.903 0.561 0.888",
+   "support_explanation": "GRPO-trained 8B scores (TravelGym, TurtleGym, FunctionGym, TauGym, PersuadeGym, IntentionGym, TelepathyGym, SearchGym).",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E14",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Table 1 (PRIME 8B row)",
+   "quote": "Qwen3-8B + PRIME 0.215 ( ↑ \\uparrow 36%) 0.142 ( ↑ \\uparrow 45%) 0.278 ( ↑ \\uparrow 193%) 0.072 ( ↑ \\uparrow 50%) 0.472 ( ↑ \\uparrow 7.0%) 1.825 ( ↑ \\uparrow 5.8%) 0.524 ( ↑ \\uparrow 2.7%) 0.872 ( ↑ \\uparrow 7.9%)",
+   "support_explanation": "PRIME 8B scores: below GRPO on all eight environments.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E15",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Table 1 (raw 8B row)",
+   "quote": "Qwen3-8B 0.158 0.098 0.095 0.048 0.441 1.725 0.510 0.808",
+   "support_explanation": "Store-off (raw frozen model) comparison row.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E16",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.2",
+   "quote": "PRIME shows competitive performance while requiring no expensive gradient-based training.",
+   "support_explanation": "Author headline for competitiveness with RL.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E17",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.2",
+   "quote": "GRPO training produces larger absolute performance gains through direct parameter optimization",
+   "support_explanation": "Authors concede GRPO has larger absolute gains.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E18",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.2 Computational Budget",
+   "quote": "PRIME requires 5–6 times fewer GPU-hours per environment compared to GRPO.",
+   "support_explanation": "Cost claim counts GPU-hours only.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E19",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.1 Training Details",
+   "quote": "For distillation and evolution, we use GPT-4o as the summarization and reasoning backbone.",
+   "support_explanation": "The distiller/evolver is a stronger external model than the frozen Qwen3 agents (teacher confound; API cost uncounted).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E20",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.2 Computational Budget",
+   "quote": "the exploration, distillation and evolution phases require only forward passes through the frozen base model.",
+   "support_explanation": "Statement is inconsistent with the GPT-4o distillation/evolution backbone and with the inference-time selection LLM.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E21",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.2 Cross-Architecture Transferability",
+   "quote": "Applying an 8B-derived library to 4B yields modest but consistent improvements over the raw baseline, though the gains are smaller than those achieved by native PRIME on the source 8B model.",
+   "support_explanation": "Only transfer evidence: same environments, 8B library to 4B model.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E22",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.1 Training Details",
+   "quote": "All environments use Qwen3-32B as the user simulator to ensure consistent and reproducible evaluation across methods.",
+   "support_explanation": "LLM-simulated user; simulator noise/variance is not quantified.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E23",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.1 Training Details",
+   "quote": "the experience library is initialized empty and built through iterative exploration–distillation–evolution cycles.",
+   "support_explanation": "Store built from scratch per environment; no prior experience injected.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E24",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.3.2 Memory-Guided Inference",
+   "quote": "PRIME formats candidate experiences as callable tools and asks the agent to select the most relevant ones",
+   "support_explanation": "Retrieval: LLM-based selection among up to 20 prefiltered candidates; k=3 per turn (Appendix D).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E25",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Appendix D (credit methods)",
+   "quote": "We use two credit assignment strategies depending on environment characteristics",
+   "support_explanation": "Credit method (R2G vs Equalized) is chosen per environment by hand.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E26",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.3.1",
+   "quote": "We can interpret this as a forward gradient that represents the direction of library improvement without requiring backpropagation through the policy.",
+   "support_explanation": "Rhetorical analogy; the update distribution mu has no stated acceptance/selection criterion.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E27",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.3.1 Structuring Interaction Knowledge",
+   "quote": "This organization ensures positive guidance dominates during retrieval while cautionary signals remain available.",
+   "support_explanation": "Retrieval policy favors golden-zone entries.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E28",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Abstract",
+   "quote": "Our experiments across several diverse user-centric environments demonstrate that PRIME achieves competitive performance with gradient-based methods while offering cost-efficiency and interpretability.",
+   "support_explanation": "Central claim as stated by the authors.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E29",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.1 Benchmarks",
+   "quote": "We evaluate on eight multi-turn, user-centric environments adopted from the UserRL benchmark",
+   "support_explanation": "Evaluation benchmark: UserRL environments.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E30",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.4.2",
+   "quote": "for instance, Qwen3-8B + PRIME achieves 193% improvement on FunctionGym and 50% on TauGym over the raw base model.",
+   "support_explanation": "Relative gains quoted from very low raw bases (0.095 and 0.048).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E31",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Table 1 (PRIME 14B row)",
+   "quote": "Qwen3-14B + PRIME 0.248 ( ↑ \\uparrow 29%) 0.168 ( ↑ \\uparrow 18%) 0.298 ( ↑ \\uparrow 78%) 0.124 ( ↑ \\uparrow 20%) 0.568 ( ↑ \\uparrow 6.8%) 1.782 ( ↑ \\uparrow 4.8%) 0.632 ( ↑ \\uparrow 8.0%) 0.892 ( ↑ \\uparrow 35%)",
+   "support_explanation": "SearchGym 0.892 vs raw 0.512 is +74%, not +35% as printed; minor table error.",
+   "kind": "our_inference",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E32",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Table 1 (raw 14B row)",
+   "quote": "Qwen3-14B 0.192 0.142 0.167 0.103 0.532 1.700 0.585 0.512",
+   "support_explanation": "Raw 14B SearchGym 0.512.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E33",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.1",
+   "quote": "learned improvements are opaque and difficult to audit, and adaptation to new scenarios requires complete retraining cycles",
+   "support_explanation": "Motivation for explicit, auditable memory.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E34",
+   "material_id": "M-2604.07645",
+   "material_sha256": "133b42cc482a8ecfcb8d7625f7e5d3a61e8194ed624142d2a507c73c916fe069",
+   "locator": "Sec.5 Related Work",
+   "quote": "MemGPT Xu et al. (2025) introduces hierarchical memory management for extended conversations",
+   "support_explanation": "Memory neighbors discussed are MemGPT and MemoryAgent; Reflexion-style and other experience-memory agents are not compared.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "External experience library M of structured entries (situation, action, outcome, lesson, stage, applicability conditions, zone); frozen LLM policy unchanged.",
+   "information": "Full multi-turn trajectories with turn rewards and final trajectory reward R(tau) from the UserRL environments; credit assignment (reward-to-go or equalized) picks top-3 key turns; GPT-4o distills.",
+   "operation": "Exploration (100 episodes/env, temperature 1.0, horizon 16) -> LLM distillation of key turns into an entry -> zone by reward threshold (golden >=0.7, warning <=0.3, else preference) -> 5 evolution cycles of probabilistic mutation (0.10), generalization (0.05), crossover (0.02) and scheduled pruning (usage <2 or success <0.3).",
+   "output": "Evolved library; at inference up to 20 prefiltered candidates are shown as tools to a selection LLM which returns about 3 experiences per turn, injected zone-organized into the prompt.",
+   "conditions": "Stage filter (exploration/verification/completion by turn position 25%/75%), environment compatibility, cosine similarity >=0.6.",
+   "feedback": "Environment reward only (turn-level and trajectory-level); no execution tests of the edited entries.",
+   "selection_rule": "Zone by reward threshold at admission; pruning by usage/success thresholds; for mutation/crossover/generalization no acceptance criterion is stated (E26, E08).",
+   "selection_data": "Exploration trajectories; whether evolution uses held-aside validation episodes is not stated.",
+   "persistence": "Library persists per environment and is read by later episodes; transferable across model sizes (8B library used by 4B).",
+   "later_use": "Retrieved into the agent prompt at every turn of later episodes.",
+   "claimed_effect": "Relative score gains over raw base across all eight environments (e.g. +193% FunctionGym for 8B), competitive with GRPO at 5-6x fewer GPU-hours.",
+   "failure_boundary": "GRPO is higher on all eight environments at both 4B and 8B; transferred 8B library gives smaller gains on 4B; evolution operators are never ablated.",
+   "evidence_ids": [
+    "E01",
+    "E04",
+    "E05",
+    "E06",
+    "E07",
+    "E10",
+    "E14",
+    "E15",
+    "E21",
+    "E24"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "RL-trained user-centric agents need multi-GPU training, are opaque and non-transferable, and need retraining for new scenarios; existing approaches struggle with turn-level credit assignment.",
+  "checked_gap": "The cost/opacity limitation of RL for this benchmark is a real stated cost, but the paper does not establish that existing experience-memory methods (Reflexion-style lessons, MemGPT, memory agents) fail on these environments: Reflexion/ReAct are named as baselines yet no results are shown, and only two memory systems are discussed in related work. The residual claimed (turn-level credit assignment for memory construction in user-centric dialogs) is not isolated experimentally.",
+  "lineage": "Reflexion / verbal reflection memories -> structured experience libraries with success/failure/preference zones -> evolutionary operators on the library. RL line: UserRL GRPO with multi-turn credit assignment (the performance comparison point).",
+  "closest_adjacent": [
+   "Reflexion (named baseline, no result shown)",
+   "MemGPT hierarchical memory (related work)",
+   "MemoryAgent RL-trained memory read/write policy (related work)"
+  ],
+  "residue": "Per-turn credit for which dialogue moves mattered, and persistent, auditable cross-model transfer of experience - both asserted rather than isolated.",
+  "stakes": "Avoiding >100 GPU-hours of 8xA100 RL per environment while retaining part of the gains.",
+  "method_response": "Credit-assigned distillation + zones + evolution operators + stage-aware LLM retrieval.",
+  "remaining_gap": "No ablation of credit assignment, zones, evolution operators or retrieval; no non-evolved memory or Reflexion comparison; GRPO still far ahead on most environments; GPT-4o teacher confound.",
+  "evidence_ids": [
+   "E02",
+   "E12",
+   "E16",
+   "E17",
+   "E33",
+   "E34"
+  ],
+  "unresolved": [
+   "Whether evolution beats plain distillation memory.",
+   "Whether the gain comes from GPT-4o knowledge injected via the library rather than from the learning loop.",
+   "Whether evaluation episodes are disjoint from exploration episodes."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "Canonical conditioning schema for the task family (situation/action/outcome/lesson + stage + zone): executed",
+     "Upstream phase teaching the frozen model to parse the schema: not executed (prompt-level injection only)",
+     "Retrieve nearest reference instances as a first-class input at inference without parameter updates: executed (LLM-selected experiences)",
+     "Held-out category/task generalization test: not executed"
+    ],
+    "success_checks": [
+     "Mechanism-isolating ablation of the conditioning signal: unmet (only raw vs PRIME)",
+     "Method shown to win in the regime where the naive alternative breaks down: partial"
+    ],
+    "failure_checks": [
+     "Training-free/zero-shot claim undercut by overlap between substrate and evaluation: unknown (split not stated)",
+     "Omits the cheaper conditioning baseline (nearest-neighbor, longer context): applies",
+     "Recipe needs manual per-task choice (credit method per environment): applies"
+    ],
+    "evidence_ids": [
+     "E01",
+     "E24",
+     "E25",
+     "E15",
+     "E09"
+    ],
+    "reason": "Closest original operation is adapting a frozen model by injecting retrieved reference instances instead of retraining. It differs from C03 in that PRIME writes and evolves the reference substrate from the agent own trajectories (the harness-RSI part), which the RS card does not cover; fit is partial."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Matched on the inference-time operation (retrieval-based conditioning of a frozen model); the library-evolution loop is covered by the domain layer.",
+  "executes_pattern": true,
+  "resolves_problem": "no - cheaper conditioning alternatives and a held-out regime were not tested, so the conditioning-instead-of-retraining claim is only partially closed."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "domain_cards_hash:52ff96577c9e",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "status": "met"
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S2",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S1",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/F2",
+      "status": "partial"
+     }
+    ],
+    "evidence_ids": [
+     "E01",
+     "E04",
+     "E05"
+    ],
+    "reason": "Outcome-grounded lessons (situation-action-lesson with trigger conditions) are distilled from the agents own trajectories and injected into later tasks."
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "domain_cards_hash:52ff96577c9e",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "status": "partial"
+     }
+    ],
+    "evidence_ids": [
+     "E06",
+     "E07",
+     "E10"
+    ],
+    "reason": "Mutation, generalization, crossover and pruning are explicit edit operations on a living store; consolidation and forgetting thresholds are specified, but the effect of the edit operations is untested."
+   }
+  ],
+  "unassigned": [
+   "Zone-organized (golden/warning/preference) retrieval with stage tags is a store-structure choice closest to H04 but is not an index/graph restructuring."
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00"
+   },
+   "operation_correspondence": "RS: express tasks as conditioning (retrieved state-outcome-action instances) so a frozen model solves them without updates. Domain: write outcome-grounded lessons into an external store and inject them into later episodes. The shared operation is retrieval-time conditioning with the store as the learned state.",
+   "necessary_conditions_and_differences": "RS C03 expects a unified format plus an upstream phase teaching the model to parse it and structural hold-out; PRIME has no upstream tuning and no hold-out. Domain H00/H01 expect outcome-grounded writes with a gate and maintenance; PRIME has reward-threshold admission and probabilistic edit operators but no measured admission gate.",
+   "evidence_ids": [
+    "E01",
+    "E24",
+    "E06",
+    "E07",
+    "E04"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #2"
+   ],
+   "applies_when": "A held-out or training-free generalization claim is made.",
+   "applicable": true,
+   "question": "Is there a contamination/data-overlap analysis between the substrate-building tasks and the evaluation tasks?",
+   "status": "unmet",
+   "reason": "Evaluation episode count and split are never stated; only 100 exploration episodes per environment are given, so overlap cannot be ruled out.",
+   "evidence_ids": [
+    "E09",
+    "E23"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "A conditioning/retrieval method is claimed to be valuable.",
+   "applicable": true,
+   "question": "Is the obvious cheaper alternative compared (nearest-neighbor raw trajectories, plain distillation without evolution, Reflexion)?",
+   "status": "unmet",
+   "reason": "Reflexion and ReAct are listed as baselines but no results are reported; there is no no-evolution or raw-trajectory memory arm.",
+   "evidence_ids": [
+    "E12",
+    "E15"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #1"
+   ],
+   "applies_when": "Gain is attributed to the conditioning signal.",
+   "applicable": true,
+   "question": "Does an ablation isolate the conditioning signal from other components?",
+   "status": "partial",
+   "reason": "Raw vs PRIME shows memory-on vs memory-off; no ablation of zones, stage tags, credit assignment, evolution or the GPT-4o distiller.",
+   "evidence_ids": [
+    "E15",
+    "E14"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #6"
+   ],
+   "applies_when": "A retrieval database is the conditioning source.",
+   "applicable": true,
+   "question": "Is sensitivity to source quality/coverage and source-test gap characterized?",
+   "status": "partial",
+   "reason": "Only one cross-model transfer (8B library to 4B model, same environments); no library-size, noise or domain-shift sensitivity.",
+   "evidence_ids": [
+    "E21"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S3"
+   ],
+   "applies_when": "Lessons are written from outcomes.",
+   "applicable": true,
+   "question": "Does a grounding signal (execution/verifier/reward) decide what becomes a lesson?",
+   "status": "met",
+   "reason": "Trajectory reward thresholds and turn-level credit decide zone and key turns.",
+   "evidence_ids": [
+    "E04",
+    "E05"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S2"
+   ],
+   "applies_when": "Lessons come from success and failure trajectories.",
+   "applicable": true,
+   "question": "Is guidance built by contrasting successes and failures rather than narrating one trajectory?",
+   "status": "partial",
+   "reason": "Success and failure experiences are stored in separate zones, but distillation operates on single trajectories; no paired contrast of success vs failure on the same task.",
+   "evidence_ids": [
+    "E01",
+    "E04"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S4"
+   ],
+   "applies_when": "The store grows over episodes.",
+   "applicable": true,
+   "question": "Is there explicit maintenance (localized edits, consolidation, forgetting)?",
+   "status": "partial",
+   "reason": "Mutation/generalization/crossover/pruning with probabilities and pruning thresholds exist, but no evidence they help or that edited entries are validated.",
+   "evidence_ids": [
+    "E06",
+    "E07",
+    "E10"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "Entries are published for reuse.",
+   "applicable": true,
+   "question": "Is there a gate (execution test, quality filter, versioned merge) on what is kept?",
+   "status": "unmet",
+   "reason": "Admission is by reward-threshold zone; mutations are applied without a stated acceptance test; no versioning or rollback.",
+   "evidence_ids": [
+    "E04",
+    "E08",
+    "E26"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.F2"
+   ],
+   "applies_when": "The paper applies the attempt-reflect-store-retrieve loop to a particular vertical.",
+   "applicable": true,
+   "question": "Is the novelty more than applying the generic loop to another vertical (user-centric multi-turn)?",
+   "status": "partial",
+   "reason": "Turn-level credit assignment, stage tags and evolution operators go beyond the generic loop, but none is isolated experimentally, so the domain remains the main differentiator.",
+   "evidence_ids": [
+    "E02",
+    "E05",
+    "E34"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2604.07645-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Paper own claim that evolution operators refine the library (Sec.3.2)"
+   ],
+   "applies_when": "A multi-operator evolution procedure is claimed to improve the store.",
+   "applicable": true,
+   "question": "Is the evolved library compared with a distillation-only (no evolution) library on the same budget?",
+   "status": "unmet",
+   "reason": "No such arm; the five evolution cycles are never shown to change scores.",
+   "evidence_ids": [
+    "E10",
+    "E15"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2604.07645-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec.4.1 (GPT-4o as distiller)"
+   ],
+   "applies_when": "A stronger external model writes the memory consumed by a smaller frozen agent.",
+   "applicable": true,
+   "question": "Is the teacher confound controlled (e.g. static GPT-4o-written hints, or same-model distillation)?",
+   "status": "unmet",
+   "reason": "Library content is authored by GPT-4o; no same-model or static-hint control.",
+   "evidence_ids": [
+    "E19"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2604.07645-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Abstract claim vs Table 1"
+   ],
+   "applies_when": "Competitiveness with RL is claimed.",
+   "applicable": true,
+   "question": "Do the reported scores support competitiveness with GRPO on the environments?",
+   "status": "challenged_with_evidence",
+   "reason": "GRPO exceeds PRIME at both sizes on every one of the eight environments; near parity only on IntentionGym and SearchGym (within about 2-4%), far behind on TravelGym, FunctionGym and TauGym.",
+   "evidence_ids": [
+    "E13",
+    "E14",
+    "E17"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "PRIME improves frozen Qwen3 agents over raw baselines on eight UserRL environments.",
+   "setting": "Qwen3-4B/8B/14B frozen, library built per environment from 100 exploration episodes with GPT-4o distillation and 5 evolution cycles.",
+   "baseline_control": "Raw base models (store-off).",
+   "selection_vs_test": "Not stated; evaluation episodes vs exploration episodes unspecified.",
+   "result_denominator": "Single score per environment/model, no variance, no evaluation-episode count; relative gains from +0.5% to +218%.",
+   "evidence_ids": [
+    "E14",
+    "E15",
+    "E30",
+    "E09"
+   ],
+   "counterevidence": [
+    "E19"
+   ],
+   "allowed_conclusion": "Under the unstated evaluation protocol, adding the library raised mean task-completion scores in all 24 model-environment cells (single run); the cause cannot be attributed to the learning loop vs the GPT-4o-authored content."
+  },
+  {
+   "claim_id": "C2",
+   "text": "PRIME is competitive with GRPO-trained agents at 5-6x fewer GPU-hours.",
+   "setting": "Table 1 and Fig.4(a).",
+   "baseline_control": "GRPO 4B/8B (UserRL configuration, 8xA100).",
+   "selection_vs_test": "n/a",
+   "result_denominator": "GRPO above PRIME on 8/8 environments at both sizes.",
+   "evidence_ids": [
+    "E13",
+    "E14",
+    "E16",
+    "E17",
+    "E18"
+   ],
+   "counterevidence": [
+    "E19",
+    "E20"
+   ],
+   "allowed_conclusion": "Competitive only on near-ceiling environments; GPU-hour saving excludes GPT-4o API and inference-time selection calls."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Experience libraries transfer across model architectures.",
+   "setting": "8B-built library applied to Qwen3-4B on four environments.",
+   "baseline_control": "raw 4B.",
+   "selection_vs_test": "same environments.",
+   "result_denominator": "Figure 4(b) only; gains smaller than native.",
+   "evidence_ids": [
+    "E21"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Within the same model family and environments a library gives modest gains; no cross-family or cross-task transfer shown."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A reward-thresholded, GPT-4o-distilled experience library injected into prompts raised scores of frozen Qwen3 agents over their raw versions on UserRL environments in the authors single-run results; competitiveness with GRPO holds only on near-ceiling environments.",
+  "not_supported": [
+   "That evolution operators, credit assignment or zones contribute (never ablated).",
+   "Retained improvement on held-out tasks (split not stated, so selection/test separation cannot be verified).",
+   "Equal-footing comparison with Reflexion/ReAct (no numbers).",
+   "Cost advantage once GPT-4o and selection LLM calls are counted."
+  ],
+  "unresolved": [
+   "Evaluation protocol (episodes, split, seeds)."
+  ],
+  "reproduction_note": "Author-reported; not reproduced; evidence_level capped at task because selection and evaluation episodes cannot be shown to be disjoint."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "A cost/opacity limitation of RL is stated, but the specific residual against existing experience-memory agents is not established: Reflexion/ReAct are named baselines without results, and related work covers only MemGPT and MemoryAgent. The domain (user-centric multi-turn) plus gradient-free framing is the main differentiator, i.e. the F1/F2 failure shapes of the domain card.",
+   "evidence_ids": [
+    "E02",
+    "E33",
+    "E34"
+   ],
+   "counterevidence_ids": [
+    "E12"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "The mechanism (reward-gated zones, key-turn credit, stage-aware retrieval) is coherent and partly argued with examples, but the rationale for evolution operators is analogical (forward gradient), the credit method is hand-picked per environment, and no distinguishing prediction against plain reflective memory is offered.",
+   "evidence_ids": [
+    "E01",
+    "E04",
+    "E05",
+    "E25",
+    "E26"
+   ],
+   "counterevidence_ids": [
+    "E08"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Hyperparameters for zones, retrieval and evolution are listed and the retrieval pipeline is described, but there is no acceptance test or version/rollback for edited entries, no conflict/staleness handling beyond usage/success pruning, and the order/selection of operator application is probabilistic with no stated validation data.",
+   "evidence_ids": [
+    "E04",
+    "E06",
+    "E07",
+    "E10",
+    "E24"
+   ],
+   "counterevidence_ids": [
+    "E08",
+    "E26"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Environment task-completion scores from the adopted UserRL benchmark are objective-ish, but they are produced with an LLM user simulator whose variance is unquantified, the number of evaluation episodes is unstated, GRPO rows may come from a different run setup, and one relative gain (SearchGym 14B +35%) is mis-printed (+74%).",
+   "evidence_ids": [
+    "E29",
+    "E22",
+    "E14"
+   ],
+   "counterevidence_ids": [
+    "E31",
+    "E13"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Only raw vs PRIME (store-off) is available. No ablation of zones, credit assignment, evolution operators, or retrieval; no Reflexion/ReAct results; GPT-4o authoring of the library is an uncontrolled confound; cost comparison omits API calls.",
+   "evidence_ids": [
+    "E15",
+    "E14"
+   ],
+   "counterevidence_ids": [
+    "E12",
+    "E19",
+    "E20"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No statement of how evaluation episodes relate to the 100 exploration episodes per environment; no held-out environment or task family; the only transfer test is the 8B library applied to the 4B model on the same environments.",
+   "evidence_ids": [],
+   "counterevidence_ids": [
+    "E21"
+   ],
+   "search_scope": [
+    "Full text Sec.4.1-4.2 and Appendices A-D searched for evaluation episode count, train/test split, held-out environments, seeds, contamination analysis: none found",
+    "Cross-architecture transfer (Fig.4b) is same-environment"
+   ]
+  },
+  "E.statistics": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "All Table 1 entries are single numbers with no standard deviation, seeds, intervals or episode counts, although a stochastic user simulator and temperature-1.0 rollouts are used.",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Table 1 and surrounding text; Sec.4.2 and Appendix D searched for seeds, standard deviation, confidence intervals, significance tests, run counts: none found"
+   ]
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "GPU-hour comparison to GRPO is given (5-6x fewer; over 100 GPU-hours of 8xA100 for RL), but the statement that only forward passes through the frozen base model are needed conflicts with GPT-4o distillation/evolution and an inference-time selection LLM; API cost and search/evolution call counts are not reported.",
+   "evidence_ids": [
+    "E18"
+   ],
+   "counterevidence_ids": [
+    "E19",
+    "E20"
+   ],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Full text with appendices read; two E items are not_reported after complete search; no missing material.",
+ "rationale": "训练无关的经验库式记忆，仅有原始模型对照；无演化/信用分配消融、无Reflexion数据、无统计与评测划分说明；与GRPO相比其“有竞争力”仅在近天花板环境成立。",
+ "score": {
+  "raw": 33.75,
+  "display": 33.8,
+  "lower": 33.75,
+  "upper": 33.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

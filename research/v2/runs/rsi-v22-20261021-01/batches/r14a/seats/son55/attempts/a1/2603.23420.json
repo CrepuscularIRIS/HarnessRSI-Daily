@@ -1,0 +1,859 @@
+{
+ "status": "reviewed",
+ "reason": "Full HTML v2 text (main body, tables 1-3, discussion, limitations) available; no separate appendix. Figures are images; tables transcribed in text.",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "An autoresearch loop can be used to improve itself: an outer loop that reads the inner loop's code and trace and generates/injects new search mechanisms as Python code at runtime (Level 2) yields a 5x larger val_bpb improvement than the inner loop alone on Karpathy's GPT pretraining benchmark (-0.045 vs -0.009), whereas parameter-level adjustment (Level 1.5) gives no reliable gain; this is a first bilevel step toward recursive bootstrapping.",
+  "paper_key": "2603.23420",
+  "paper_id": "2603.23420",
+  "title": "Bilevel Autoresearch: Meta-Autoresearching Itself",
+  "version": "2603.23420v2"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "we use an autoresearch loop to optimize the autoresearch loop.",
+   "support_explanation": "States the self-referential object: the search procedure of an autoresearch loop.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "1 Introduction",
+   "quote": "the outer loop optimizes how the inner loop searches, by reading its code, identifying bottlenecks, generating new Python mechanisms, and injecting them at runtime.",
+   "support_explanation": "Operation of Level 2: read runner code and trace, write mechanism code, inject.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "1 Introduction",
+   "quote": "These are useful mechanism choices, but the systems themselves do not discover or replace the search procedure that produces future improvements.",
+   "support_explanation": "Author gap: human-fixed search procedures in autoresearch systems (single track, multi-batch, persistent memory).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "3.4",
+   "quote": "If the import succeeds, the patched runner replaces the active one; if it fails, the original is restored from a pre-patch backup.",
+   "support_explanation": "Retention gate for generated mechanisms is import validation with revert; performance of the mechanism is not used to keep or retire it.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "3.2 Level 1",
+   "quote": "is lower than the current best, the change is kept",
+   "support_explanation": "Inner keep/discard rule is on val_bpb, the same quantity reported as the primary outcome.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "3.3 Level 1.5",
+   "quote": "Level 1.5 can redirect search diversity but cannot change the proposal generation logic, the acceptance criterion, or the loop structure.",
+   "support_explanation": "Level 1.5 limited to freeze/unfreeze/guidance; structural changes only at Level 2.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "3.6 Experimental Design",
+   "quote": "Each group runs 3 independent repeats;",
+   "support_explanation": "n = 3 per group across four groups (A,B,C,D).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "3.6/Table 2",
+   "quote": "Baseline val_bpb varies slightly across repeats due to training randomness (range 1.094–1.114).",
+   "support_explanation": "Baseline spread (0.02) is larger than the Group A improvement (about 0.009) and the Group B improvement; improvements are best-of-30 on a noisy metric.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "4.1",
+   "quote": "Two of three Group C repeats (R1 and R3) show dramatic gains",
+   "support_explanation": "Group C: R1 -0.065, R2 -0.011, R3 -0.058 (mean -0.045, SD 0.030); Group A: -0.009, -0.008, -0.011; Group B: -0.000, -0.010, -0.009; Group D: -0.001, -0.063, -0.039.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "4.3 Group D",
+   "quote": "However, the per-repeat reports show that Group D’s generated mechanism patches were not successfully applied or validated, so these repeats cannot cleanly establish that successful mechanism injection alone caused the gains.",
+   "support_explanation": "Two of three Group D repeats reached large gains without validated mechanism injection, so the gain cannot be attributed to injected mechanisms.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "4.4",
+   "quote": "appears better matched to the H100-oriented setting used by the original benchmark; in our RTX 5090 setup, running SDPA rather than Flash Attention 3, smaller batch sizes produced more gradient steps within the fixed wall-clock budget.",
+   "support_explanation": "The decisive improvement (reducing TOTAL_BATCH_SIZE) is a hardware-specific hyperparameter correction, a single move that a wider or more diverse search would find.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "4.3 Group A",
+   "quote": "iterations 4–30 repeat these same two changes, accumulating up to 22 consecutive discards.",
+   "support_explanation": "Evidence of the bottleneck: baseline inner loop repeats proposals deterministically.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "4.4",
+   "quote": "Group B’s outer loop freezes TOTAL_BATCH_SIZE after the failed increase, blocking the decrease direction entirely.",
+   "support_explanation": "Explains why parameter-level adjustment (Level 1.5) did not help: it froze the productive direction.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "4.2",
+   "quote": "Five of six generated code artifacts passed import validation and were activated; one primary mechanism (GP Regressor) was reverted due to a missing sklearn dependency.",
+   "support_explanation": "Mechanism generation succeeded at first attempt; one of the primary mechanisms was reverted for a missing dependency.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "5.4 Limitations",
+   "quote": "Three repeats per group is insufficient for rigorous statistical comparison.",
+   "support_explanation": "Authors concede n = 3 is inadequate; Group C SD is 67% of mean.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "5.4 Limitations",
+   "quote": "All results are on one task: GPT pretraining at 50M parameters with a 300-second budget on RTX 5090.",
+   "support_explanation": "Single task, single hardware, single LLM (DeepSeek deepseek-chat).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "5.2",
+   "quote": "each Level 2 research session adds approximately 3 minutes of wall time and four additional LLM calls.",
+   "support_explanation": "Outer-loop overhead reported qualitatively per session; total tokens and wall-clock per group not tabulated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "5.2",
+   "quote": "Because our experimental budget fixes the number of inner iterations rather than total wall-clock time, this overhead does not reduce the number of inner evaluations; it should instead be interpreted as an additional cost of the bilevel architecture.",
+   "support_explanation": "Groups are matched on inner iterations, not on total compute; Group A is not given the outer-loop budget.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "5.4 Limitations",
+   "quote": "A preliminary run was invalidated because the Level 2 dynamic loading pipeline contained a sys.modules registration bug, causing all mechanism injections to silently fall back to the original runner.",
+   "support_explanation": "Disclosed failed run and the fragility of silent fallback; supports honesty but also shows injection can silently not apply.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "5.4 Limitations",
+   "quote": "They do not demonstrate unbounded recursive self-improvement or prove that mechanisms discovered for Level 1 will improve Level 2.",
+   "support_explanation": "Recursive claim is explicitly out of scope; only outer-improves-inner is tested.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "5.4 Limitations",
+   "quote": "Whether Level 2 would discover equally effective—or entirely different—mechanisms under an unconstrained prompt remains untested.",
+   "support_explanation": "Level 2 prompt names candidate domains; mechanism discovery is steered by the prompt author.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "2.6",
+   "quote": "We are not aware of earlier autoresearch systems in which an autonomous outer loop writes and injects code that modifies the structural logic of the inner autoresearch loop at runtime, using the same model that runs the inner loop.",
+   "support_explanation": "Novelty claim is scoped to autoresearch systems; self-modifying agent frameworks are outside the stated lineage.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "4.2",
+   "quote": "Level 2 was not told which specific mechanism to implement, though the prompt suggested broad neighboring domains.",
+   "support_explanation": "Mechanism domain (tabu, bandit, DOE) is partly prompted by neighbouring-domain suggestions.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "3.4",
+   "quote": "Level 2 executes every 2 outer cycles.",
+   "support_explanation": "Two Level 2 sessions per repeat in the 30-iteration budget (six sessions in Group C).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "4.1",
+   "quote": "Group C’s separation from Groups A and B provides evidence that Level 2 mechanism injection is the primary driver in the full bilevel setting.",
+   "support_explanation": "Author interpretation; conflicts in part with the Group D confound (E010) and with n = 3.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "3.1",
+   "quote": "All levels use the same DeepSeek deepseek-chat model.",
+   "support_explanation": "No stronger model at the meta level; one backbone only.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "Section 2.1-2.6 (searched)",
+   "quote": null,
+   "support_explanation": "Our reading of the Related Work: the autoresearch lineage, FunSearch/algorithm design, ADOPT, PiEvo and later concurrent works are discussed, while earlier self-modifying agent frameworks that edit their own improvement code (e.g., Godel Agent, Darwin Godel Machine, ADAS) are not cited in the text provided.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Search/update mechanism of the inner autoresearch loop (runner.py code)",
+   "information": "Level 2 reads full runner.py source and the search trace (proposals, val_bpb, accepted flags); prompt suggests adjacent domains",
+   "operation": "4-round LLM dialogue (explore, critique, specify, generate) writes a Python mechanism module and patches runner.py",
+   "output": "Patched runner with new search behaviour (tabu list, bandit proposer, orthogonal exploration)",
+   "conditions": "Every 2 outer cycles (every 10 inner iterations); same DeepSeek model",
+   "feedback": "Search trace over the first 5-10 inner iterations",
+   "selection_rule_data": "importlib import validation; revert on failure; no performance-based retention check of the mechanism",
+   "persistence": "runner.py replaced in place within a run; restored to baseline between repeats",
+   "later_use": "Subsequent inner iterations in the same run",
+   "claimed_effect": "Group C -0.045 vs Group A -0.009 val_bpb",
+   "failure_boundary": "Silent fallback bug, missing dependency, Group D patches not applied, n = 3, one benchmark",
+   "evidence_ids": [
+    "E002",
+    "E004",
+    "E009",
+    "E014",
+    "E019",
+    "E024"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Inner-loop training configuration (train.py hyperparameters)",
+   "information": "Current best train.py, editable parameters, guidance string from Level 1.5",
+   "operation": "LLM proposes parameter changes; 300 s training; keep if val_bpb lower",
+   "output": "Best configuration after 30 iterations",
+   "conditions": "DEPTH and ASPECT_RATIO locked",
+   "feedback": "val_bpb",
+   "selection_rule_data": "keep/discard on val_bpb",
+   "persistence": "Best copy in the run",
+   "later_use": "Next iteration proposals",
+   "claimed_effect": "Improvement Delta = best minus baseline val_bpb",
+   "failure_boundary": "Deterministic repetition, up to 22 consecutive discards",
+   "evidence_ids": [
+    "E005",
+    "E008",
+    "E012"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Autoresearch systems (Karpathy single-track, AutoResearchClaw multi-batch, EvoScientist persistent memory) have human-designed search procedures; no system lets the loop discover or replace that procedure.",
+  "checked_gap": "The residue is real and evidenced in this setting: the baseline loop repeats the same two proposals for iterations 4-30 and misses the batch-size direction. The nearest neighbors for self-editing improvement code (Godel Agent, DGM, ADAS and similar) are not covered in the stated lineage, so the novelty claim is scoped to autoresearch systems.",
+  "lineage_closest_adjacent": "Autoresearch lineage (Karpathy 2026, AutoResearchClaw, EvoScientist); FunSearch/LLM algorithm design; ADOPT and PiEvo; later concurrent works Meta-Harness, GEAR, AEvo etc. added in v2 as complementary.",
+  "residue": "Whether mechanisms transfer across seeds, tasks and hardware; whether the outer loop can itself be improved.",
+  "stakes": "Search deadlock in LLM-driven hyperparameter optimization.",
+  "method_response": "Outer LLM session writes new search code injected at runtime.",
+  "remaining_gap": "Attribution to injected mechanisms, generality, recursion, compute-matched comparison.",
+  "evidence_ids": [
+   "E003",
+   "E012",
+   "E022",
+   "E027"
+  ],
+  "unresolved": [
+   "Overlap with self-referential coding-agent frameworks not cited"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "Identify conventionally fixed component of an iterative procedure: the human-designed search/update mechanism of autoresearch (executed, named explicitly)",
+     "Treat it as a free design variable: Level 2 rewrites it as code (executed)",
+     "Redesign for quality gain: -0.045 vs -0.009 val_bpb (partially evidenced)"
+    ],
+    "success_failure_checks": [
+     "Success 'component named with reason it was held fixed': met (E003)",
+     "Success 'single mechanism isolated by ablation that collapses the result': partial (Level 1.5 vs Level 2; Group D confounded)",
+     "Failure 'fixed component never shown to be the actual bottleneck': partly addressed by Group A trace",
+     "Failure 'obvious strong baseline omitted': present (no alternative search procedure or restart baseline)",
+     "Failure 'gain not demonstrated beyond marginal / confounded': partly present (single hyperparameter move)"
+    ],
+    "evidence_ids": [
+     "E003",
+     "E010",
+     "E012",
+     "E025"
+    ],
+    "reason": "Operation matches 'liberate a fixed component of an iterative procedure' with the fixed component being the search mechanism itself. The sub-cards C15/C23/C24 concern 3D synthesis and diffusion chains, so none applies and sub is null."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "generative_process_redesign is the closest original card; assumption_audit_and_pivot considered (assumption: search procedure must be human-designed) but no relaxation-with-guarantee or exploit is performed.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H19",
+    "version": "patterns-2026-10-21",
+    "fit": "high",
+    "condition_checks": [
+     "S1 named immutable anchor: partial (Level 2 itself and the train.py evaluation are fixed, but not stated as an anchor; whether Level 2 may edit the keep/discard rule is not stated)",
+     "S2 improver fitness = downstream fitness of its products: met (val_bpb of inner runs)",
+     "S3 comparison against the fixed hand-designed improver: met in form (Group A) with n = 3",
+     "S4 search cost on the table: partial (E017, E018)",
+     "F2 self-modification breaks loop: partly mitigated by import revert; silent fallback bug disclosed",
+     "F3 benchmark reuse passes for self-improvement: present (single benchmark, same metric)",
+     "F4 noise compounds: present (n = 3)",
+     "F5 anchor leaks: partial (no restriction on imports)",
+     "H19 step4 select rewrites on one set and report on another: unmet"
+    ],
+    "evidence_ids": [
+     "E002",
+     "E005",
+     "E009",
+     "E015",
+     "E017",
+     "E019"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "patterns-2026-10-21",
+    "fit": "low",
+    "condition_checks": [
+     "S5 proposer sees raw evidence: met (full runner.py and trace)",
+     "S3 retention rule protects earlier wins: unmet (mechanism retention not performance-gated)"
+    ],
+    "evidence_ids": [
+     "E002",
+     "E004"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "make_the_improver_editable",
+   "domain_sub": "H19",
+   "operation_correspondence": "RS: free the fixed component of an iterative procedure. RSI: put the improvement procedure (search mechanism code) inside the edit space and score it by the products.",
+   "necessary_conditions_differences": "RS needs ablation showing the freed component was the binding constraint (partial). RSI needs selection/report separation, multiple lineages and a named anchor (absent or partial).",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E010",
+    "E012"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #1 (fixed component is the bottleneck, ablation collapses gain)"
+   ],
+   "applies_when": "Claims a fixed component limits the procedure",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Group A trace shows deterministic repetition; Level 1.5 vs Level 2 differ, but Group D (patches not applied) also reached large gains.",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E013"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #2 (strongest baseline)"
+   ],
+   "applies_when": "A redesign claims benefit over the default",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No alternative search procedure (random restart, temperature or seed diversity, hand-coded tabu/bandit, population search) is given as a baseline.",
+   "evidence_ids": [
+    "E007",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #3 (per-component ablation)"
+   ],
+   "applies_when": "Several components are added",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Level-wise ablation (A,B,C,D) exists; individual mechanisms (tabu, bandit, orthogonal) are not ablated.",
+   "evidence_ids": [
+    "E009",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #5 (gain not confounded by compute)"
+   ],
+   "applies_when": "Redesign adds compute",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Inner iterations matched; outer overhead stated (3 min, 4 calls per session) but not compute-matched.",
+   "evidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #6 (failure cases)"
+   ],
+   "applies_when": "Redesign has variable outcomes",
+   "applicable": true,
+   "status": "met",
+   "reason": "Failed runs, reverted mechanism, R2 underperformance and an invalidated preliminary run are disclosed.",
+   "evidence_ids": [
+    "E014",
+    "E019",
+    "E009"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S1",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "make_the_improver_editable S1"
+   ],
+   "applies_when": "Improver code is editable",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Level 2 is fixed and the train.py evaluation is fixed, but the anchor is not stated and Level 2 can patch runner.py including possibly the acceptance logic.",
+   "evidence_ids": [
+    "E004",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S2",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "make_the_improver_editable S2"
+   ],
+   "applies_when": "Improver is evaluated through its products",
+   "applicable": true,
+   "status": "met",
+   "reason": "Level 2 effect is judged by inner-run val_bpb.",
+   "evidence_ids": [
+    "E005",
+    "E009"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S3",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "make_the_improver_editable S3"
+   ],
+   "applies_when": "Claims editing the improver helps",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Compared to the unmodified inner loop and to parameter-only adjustment; n = 3 and no stronger fixed improver.",
+   "evidence_ids": [
+    "E009",
+    "E015"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F3",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "make_the_improver_editable F3"
+   ],
+   "applies_when": "Improver promoted by a score that is also reported",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "val_bpb is both the keep/discard criterion and the reported metric; one benchmark.",
+   "evidence_ids": [
+    "E005",
+    "E016"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F4",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "make_the_improver_editable F4"
+   ],
+   "applies_when": "Few seeds",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Three repeats, SD about 67% of mean in Group C, baseline spread larger than Group A gain.",
+   "evidence_ids": [
+    "E008",
+    "E015"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2603.23420-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "4.4: gains concentrated in one hyperparameter correction"
+   ],
+   "applies_when": "Gain stems from one discovered configuration change",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Large gains come from reducing TOTAL_BATCH_SIZE on non-H100 hardware; there is no control showing that a plain diversified search does not find it.",
+   "evidence_ids": [
+    "E011",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2603.23420-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "4.3 Group D confound"
+   ],
+   "applies_when": "Ablation group intended to isolate mechanism injection",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Group D mechanism patches were not successfully applied, so D neither supports nor refutes injection as the cause.",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "E.causality"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Level 2 mechanism research gives a 5x larger improvement than the inner loop alone.",
+   "setting": "Karpathy GPT pretraining benchmark, RTX 5090, 300 s training, 30 iterations, DeepSeek deepseek-chat, 3 repeats per group",
+   "baseline_control": "Group A (Level 1), Group B (+1.5), Group D (Level 1 + 2)",
+   "selection_vs_test": "Same val_bpb used for keep/discard and reporting; best over 30 iterations",
+   "result_denominator": "C: -0.065, -0.011, -0.058; A: -0.009, -0.008, -0.011; B: -0.000, -0.010, -0.009; D: -0.001, -0.063, -0.039",
+   "evidence_ids": [
+    "E005",
+    "E007",
+    "E008",
+    "E009"
+   ],
+   "counterevidence": [
+    "E010",
+    "E015"
+   ],
+   "allowed_conclusion": "In this setting two of three full-bilevel runs found a large improvement the baseline never found; sample is too small for a ratio claim."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Parameter-level adjustment without mechanism change yields no reliable gain.",
+   "setting": "Group B",
+   "baseline_control": "Group A",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "-0.006 +/- 0.006 vs -0.009 +/- 0.002",
+   "evidence_ids": [
+    "E009",
+    "E013"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Level 1.5 did not help here and froze the productive direction."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Generated mechanisms (tabu, bandit, orthogonal exploration) break deterministic search patterns and force exploration of directions the LLM avoids.",
+   "setting": "Trace analysis of Groups A to D",
+   "baseline_control": "Group A traces",
+   "selection_vs_test": "not applicable",
+   "result_denominator": "Qualitative traces; 5 of 6 artifacts activated",
+   "evidence_ids": [
+    "E012",
+    "E014",
+    "E010"
+   ],
+   "counterevidence": [
+    "E010",
+    "E011"
+   ],
+   "allowed_conclusion": "Plausible explanation for Group C; Group D shows large gains without validated mechanisms."
+  },
+  {
+   "claim_id": "C4",
+   "text": "An outer loop can autonomously generate and inject new search mechanisms from adjacent domains.",
+   "setting": "Six Level 2 sessions in Group C",
+   "baseline_control": "none",
+   "selection_vs_test": "not applicable",
+   "result_denominator": "5 of 6 artifacts activated, 1 reverted; 0 retries",
+   "evidence_ids": [
+    "E014",
+    "E023"
+   ],
+   "counterevidence": [
+    "E021"
+   ],
+   "allowed_conclusion": "Feasibility of code injection demonstrated; mechanism choices partly prompted."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "On one 50M-parameter pretraining benchmark on one GPU with one LLM, runs that included a code-generating outer loop reached a markedly better val_bpb than plain or parameter-tuned inner loops in 2 of 3 repeats (selected and reported on the same metric); injection of the generated mechanisms as the cause is not established because the injection-only group's patches were not applied.",
+  "unresolved": [
+   "Attribution of gains to injected mechanisms",
+   "Alternative search baselines",
+   "Variance beyond n = 3",
+   "Transfer to other tasks/hardware/seeds",
+   "Overlap with self-referential agent frameworks"
+  ],
+  "note": "Author-reported results only; nothing was run by us. Central claim retained as stated; supported conclusion is narrower."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Evidenced residue (baseline loop repeats proposals for iterations 4-30) in a clearly stated lineage, but nearest self-editing-agent neighbors are not covered and the novelty claim is scoped to autoresearch systems.",
+   "evidence_ids": [
+    "E003",
+    "E012",
+    "E022",
+    "E027"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Two-level design with explicit hypotheses and a predicted contrast (Level 1.5 vs Level 2) is reconstructable, but plausible naive alternatives (diversified or restarted search) are not set up as competing predictions and the gain depends on a single hyperparameter move.",
+   "evidence_ids": [
+    "E002",
+    "E011",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Algorithm 1, group definitions and Level 2 dialogue are reproducible with candid failure modes, but mechanism retention is only import-validated (no performance gate or retirement), the anchor is unnamed, and persistence is within a run.",
+   "evidence_ids": [
+    "E004",
+    "E006",
+    "E019",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "val_bpb is a valid training metric but best-of-30 improvements of 0.006-0.009 are smaller than the 0.02 baseline spread across repeats, and the metric is also the selection criterion.",
+   "evidence_ids": [
+    "E005",
+    "E008",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "A four-group level ablation is a relevant design, but Group D (patches not applied) also gained, individual mechanisms are not ablated, no alternative search baseline exists, and the dominant gain is one hardware-specific hyperparameter.",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "No disjoint evaluation exists: the keep/discard metric is the reported metric, on one task, hardware and LLM; transfer of discovered mechanisms to other seeds/tasks is listed as future work.",
+   "evidence_ids": [
+    "E005",
+    "E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Methods 3.2-3.6",
+    "Algorithm 1",
+    "Results 4.1-4.4",
+    "Discussion 5.1-5.5",
+    "Limitations 5.4",
+    "Future work 5.5"
+   ]
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Three repeats per group with mean and SD, per-repeat values and failures shown, but authors call n = 3 insufficient, SD is 67% of the Group C mean, and the 5x claim is a ratio of noisy means with no interval or test.",
+   "evidence_ids": [
+    "E007",
+    "E009",
+    "E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Outer overhead is disclosed (about 3 minutes and four LLM calls per Level 2 session) and inner iterations are matched, but total tokens/wall-clock per group are not tabulated and Group A does not get the outer budget.",
+   "evidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "Outer LLM loop that writes and injects search-mechanism code into an autoresearch loop. Honest disclosure of limits, but n = 3 on one benchmark, selection metric equals reported metric, the key gain is one hardware-specific hyperparameter change, and Group D undermines attribution to injected mechanisms.",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r14a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "62074d901f63013454dc74e8e81c26c15c26d528bf1cbfb67635bc43e5895f60",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this run; null per BATCH_CONTRACT.",
+  "timestamp": "2026-10-22T00:39:14Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2603.23420v2",
+   "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work (2.1-2.6)",
+    "3 Methods (3.1-3.6, Algorithm 1)",
+    "4 Results (4.1-4.4)",
+    "5 Discussion (5.1-5.5)",
+    "6 Conclusion"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 1-5 are images (Figure 5 code excerpt transcribed in text)"
+   ]
+  }
+ ],
+ "score": {
+  "raw": 41.25,
+  "display": 41.3,
+  "lower": 41.25,
+  "upper": 41.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

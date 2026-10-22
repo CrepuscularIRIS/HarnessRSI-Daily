@@ -1,0 +1,655 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r14a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2603.23420",
+    "paper_id": "2603.23420",
+    "title": "Bilevel Autoresearch: Meta-Autoresearching Itself",
+    "version": "2603.23420v2",
+    "claim_type": "system_method",
+    "central_claim": "同一LLM外层生成并注入Python搜索机制改变内层autoresearch，30次评估下val_bpb改善约为固定内层5倍；仅建立第一步双层，不声称已完成无限递归。"
+  },
+  "provenance": {
+    "input_hash": "62074d901f63013454dc74e8e81c26c15c26d528bf1cbfb67635bc43e5895f60",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "配置sonnet→gpt-6.1-sol；无独立模型回执/会话ID，不探测。",
+    "timestamp": "2026-10-22T00:33:39.673678+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2603.23420.txt",
+      "url": "https://arxiv.org/html/2603.23420v2",
+      "version": "2603.23420v2",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "sections_read": [
+        "Abstract; §1–6完整，含§2.1–2.6、§3.1–3.6 Algorithm1、§4.1–4.4 Tables1–3/Figures1–5及生成代码摘录、§5.1–5.5所有局限"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "固定v2无附录；不读取/运行外部repository。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§1",
+      "quote": "These are useful mechanism choices, but the systems themselves do not discover\nor replace the search procedure that produces future improvements.",
+      "support_explanation": "作者对Karpathy/AutoResearchClaw/EvoScientist的gap，非排除所有先前元优化",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§1",
+      "quote": "This paper empirically studies the first bilevel step—an outer loop improving\nan inner loop—and leaves full recursive self-application to future work.",
+      "support_explanation": "不把展望当递归成果",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§3.4",
+      "quote": "If the import succeeds, the patched runner replaces the active one;\nif it fails, the original is restored from a pre-patch backup.",
+      "support_explanation": "持久runner更改与import-failure回退",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§3.6",
+      "quote": "All variables are held constant across groups: LLM model, GPU hardware\n(RTX 5090 32 GB, three independent servers), 300-second training budget,\n30-iteration search budget, and baseline",
+      "support_explanation": "控制的是内层evaluation预算，不是total外层推理预算",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§3.6",
+      "quote": "Each group runs 3 independent repeats;",
+      "support_explanation": "重复分母",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§4.1 Table2 discussion",
+      "quote": "Group A achieves consistent but small improvements:",
+      "support_explanation": "数值见同节Table2：A -0.009±0.002，C -0.045±0.030",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§4.2 Table3",
+      "quote": "Five of six generated code artifacts passed import validation and were\nactivated; one primary mechanism (GP Regressor) was reverted due to a missing",
+      "support_explanation": "代码生成/加载分母与失败报告",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§4.3",
+      "quote": "However, the per-repeat reports show that Group D’s generated mechanism patches\nwere not successfully applied or validated, so these repeats cannot cleanly\nestablish that successful mechanism injection alone caused the gains.",
+      "support_explanation": "D高收益并非成功加载的干净证据",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§4.4",
+      "quote": "a smaller batch size yields more gradient\nsteps within the fixed time budget, and better convergence for this 50M-parameter\nmodel.",
+      "support_explanation": "收益来自RTX5090有限时间下batch下降，窄机制",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§4.2",
+      "quote": "Level 2 was not told which specific mechanism to implement, though the prompt\nsuggested broad neighboring domains.",
+      "support_explanation": "不是完全无先验自主发现",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§5.2",
+      "quote": "each Level 2 research session\nadds approximately 3 minutes of wall time and four additional LLM calls.",
+      "support_explanation": "额外成本明确",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§5.4",
+      "quote": "Three repeats per group is insufficient for rigorous statistical comparison.",
+      "support_explanation": "作者承认统计不足",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§5.4 Baseline variance",
+      "quote": "Using\nΔ\n=\nbest\n−\nbaseline",
+      "support_explanation": "报告best-baseline而非独立最终test",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§5.4",
+      "quote": "Generalization to other model sizes, training budgets, or tasks is unproven.",
+      "support_explanation": "无跨任务improver泛化",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§5.4",
+      "quote": "The present system relies on import validation and revert-on-failure, not on a\nformal convergence or stability guarantee.",
+      "support_explanation": "import不是性能gate",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2603.23420.txt",
+      "sha256": "d4467e5386790fb6808fa97870670d2cbf30756e2966fd88aaf8f1588e24a289",
+      "locator": "§4.3",
+      "quote": "iterations 4–30 repeat these same two changes, accumulating up to 22\nconsecutive discards.",
+      "support_explanation": "弱固定搜索基线，需朴素去重对照",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S01",
+      "object": "runner.py中内层搜索/提议机制",
+      "information": "完整runner source及proposal/outcome trace；人工邻域提示",
+      "operation": "每10内层迭代四轮explore→critique→specify→generate；动态import后替换",
+      "output": "Tabu/Bandit/Orthogonal等Python机制",
+      "conditions": "同DeepSeek deepseek-chat；固定inner metric、30×300秒训练",
+      "feedback": "val_bpb搜索轨迹，重复提议/参数fixation",
+      "selection_rule": "外层LLM选方案；import成功激活，失败恢复backup，无性能门控",
+      "selection_data": "同一预训练benchmark验证轨迹",
+      "persistence": "runner.py及机制内部state",
+      "later_use": "第10/20轮激活后剩余内层搜索",
+      "claimed_effect": "更佳后续搜索，跳出LLM重复方向",
+      "failure_boundary": "可import不等于被调用或有效；D失效，依赖缺失，val过拟合",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E007",
+        "E008",
+        "E010",
+        "E015"
+      ]
+    },
+    {
+      "sig_id": "S02",
+      "object": "SearchConfig与train.py incumbent",
+      "information": "最近proposal/val_bpb及冻结参数记录",
+      "operation": "每5步freeze/unfreeze/guidance；内层提参数→300秒train→keep/discard",
+      "output": "config guidance、最佳训练参数",
+      "conditions": "DEPTH8/ASPECT64锁定；其余参数开放",
+      "feedback": "validation bpb是否下降",
+      "selection_rule": "best val keep；失败方向默认3次冻结",
+      "selection_data": "同report validation",
+      "persistence": "best train.py、frozen set及trace",
+      "later_use": "下轮proposal",
+      "claimed_effect": "改善探索",
+      "failure_boundary": "冻结TOTAL_BATCH_SIZE可能同时封住相反有效方向；仅调参数组无可靠gain",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E009",
+        "E016"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "既有autoresearch loop人工设计；能否由同一LLM读源码和轨迹自改搜索程序。",
+    "checked_gap": "具体固定loop提议重复及freeze封住有益方向得到日志描述；不是首次所有agent自改进，作者v2纳入相邻harness/meta系统。",
+    "lineage": [
+      {
+        "name": "Karpathy autoresearch; AutoResearchClaw; EvoScientist",
+        "version": "paper-cited 2026",
+        "role": "固定inner、并行与memory祖先"
+      },
+      {
+        "name": "LLM algorithm design / FunSearch",
+        "version": "paper-cited 2023/2024",
+        "role": "代码生成搜索祖先"
+      },
+      {
+        "name": "AEvo / Meta-Harness / GEAR",
+        "version": "v2称concurrent/subsequent；原文未随包给出",
+        "role": "最近meta-procedure/harness邻居"
+      }
+    ],
+    "closest_adjacent": [
+      "AEvo",
+      "GEAR controller evolution",
+      "Meta-Harness"
+    ],
+    "residue": "把同一LLM的搜索程序作为代码改写对象，区分调既有参数与变机制。",
+    "stakes": "重复提议浪费训练evaluation，并影响自动研究闭环效率。",
+    "method_response": "四轮结构化机制设计、runtime injection、加载失败回退。",
+    "remaining_gap": "强去重/随机/固定Tabu基线，独立配置验证，机制实际调用与收益关联，跨任务迁移及总预算公平。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E008",
+      "E016"
+    ],
+    "unresolved": [
+      "请总控补固定Karpathy原始loop及AEvo/GEAR/Meta-Harness原文以核首次主张和邻居边界。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "将固定propose/search procedure命名为可变代码",
+          "根据重复提议诊断替换探索机制",
+          "同任务用后续轨迹检验",
+          "C15几何/C23扩散内部/C24conditioning均不适用"
+        ],
+        "success_checks": [
+          "固定组件与残余瓶颈具体",
+          "A/B/C/D形成机制开关对照"
+        ],
+        "failure_checks": [
+          "基线重复很弱，D没有成功加载仍高收益",
+          "无全预算及独立测试"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E008",
+          "E016"
+        ],
+        "reason": "真实释放迭代提议过程这一固定设计面；不是把任意代码编辑叫算子替换。原子卡都针对生成表示/扩散/conditioning，不强配。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "主卡泛化匹配为medium，子卡null；不按匹配加分。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "make_the_improver_editable",
+        "sub": "H19",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "step1",
+            "status": "met",
+            "reason": "outer固定、inner runner为改写对象，base LLM与目标metric固定。",
+            "evidence_ids": [
+              "E002",
+              "E003",
+              "E004"
+            ]
+          },
+          {
+            "id": "step3",
+            "status": "partial",
+            "reason": "import回退实现，缺descendant-gain晋升gate。",
+            "evidence_ids": [
+              "E003",
+              "E015"
+            ]
+          },
+          {
+            "id": "step4",
+            "status": "unmet",
+            "reason": "同val选择及报告，无跨task heldout。",
+            "evidence_ids": [
+              "E013",
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E007",
+          "E008"
+        ],
+        "reason": "外层调内层optimizer代码并以后代配置分数评价；H19允许outer tuning。非H21另一个memory/retrieval设计，也非outer自身递归。"
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "make_the_improver_editable",
+        "sub": "H19"
+      },
+      "operation_correspondence": "fixed iterative proposal mechanism→可变runner→安装并由后续configuration utility评价",
+      "necessary_conditions": "固定metric/API与预算锚点、可重放下游轨迹",
+      "differences": "没有经典bilevel精确求解；没有outer自递归；import gate不认证效用。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E015"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:generative_process_redesign/RE-1",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md Reviewer expectations #1"
+      ],
+      "applies_when": "声称改写搜索程序而非单次配置有更好后续探索",
+      "applicable": true,
+      "status": "partial",
+      "reason": "C对A/B表明增益但D加载失效及弱重复基线让机制因果不干净。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E016"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:generative_process_redesign/RE-5",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md Reviewer expectations #5"
+      ],
+      "applies_when": "声称改写搜索程序而非单次配置有更好后续探索",
+      "applicable": true,
+      "status": "partial",
+      "reason": "同模型/inner evaluations，但外层增加成本，未比较全预算匹配基线。",
+      "evidence_ids": [
+        "E004",
+        "E011"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/H19",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H19.md"
+      ],
+      "applies_when": "声称改写搜索程序而非单次配置有更好后续探索",
+      "applicable": true,
+      "status": "partial",
+      "reason": "runner确已改变且部分激活，有backup；无效用gate与跨任务认证。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E014",
+        "E015"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/S4",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H19.md"
+      ],
+      "applies_when": "声称改写搜索程序而非单次配置有更好后续探索",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "同一val用于keep/search/report；没有冻结改进器后另跑独立任务。",
+      "evidence_ids": [
+        "E013",
+        "E014"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2603.23420-1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2603.23420v2 §5.4"
+      ],
+      "applies_when": "声称改写搜索程序而非单次配置有更好后续探索",
+      "applicable": true,
+      "status": "partial",
+      "reason": "三重复均值SD完整且失败公开，未固定配对seed/显著性，作者承认样本不足。",
+      "evidence_ids": [
+        "E005",
+        "E012"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2603.23420-2",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2603.23420v2 §1/5.3"
+      ],
+      "applies_when": "声称改写搜索程序而非单次配置有更好后续探索",
+      "applicable": true,
+      "status": "met",
+      "reason": "v2明确只证明首层bilevel，不把未来bootstrapping作实证。",
+      "evidence_ids": [
+        "E002"
+      ],
+      "score_item": "M"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "全双层5倍改善超过固定loop",
+      "setting": "50M GPT pretrain RTX5090，DeepSeek-chat，30×300秒，各3repeats",
+      "baseline_control": "A L1；B L1+1.5；C全；D L1+2",
+      "selection_vs_test": "最佳val_bpb既是接受信号也是report，无未触碰test",
+      "result": "A[-.009,-.008,-.011] mean-.009±.002；B[.000,-.010,-.009] -.006±.006；C[-.065,-.011,-.058] -.045±.030；D[-.001,-.063,-.039] -.034±.031",
+      "denominator": "4组×3=12 runs；训练初始化/data order不同",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E006",
+        "E008",
+        "E012",
+        "E013"
+      ],
+      "counterevidence": [
+        "5倍是改善幅度比，不是bpb下降5倍",
+        "D没有成功应用机制仍两run大gain",
+        "最强方向为batch下降；无简单去重/固定经典搜索比较"
+      ],
+      "allowed_conclusion": "单benchmark验证选择集上的增益与Level2条件关联；不证明独立任务/总预算因果优势"
+    },
+    {
+      "claim_id": "C2",
+      "text": "自治生成激活搜索机制改变后续搜索",
+      "setting": "C 3repeat每次2session，四轮每轮一次LLMcall",
+      "baseline_control": "无机制A/B与失败D；import check",
+      "selection_vs_test": "以同轨迹挑机制，无外部泛化",
+      "result": "6code artifacts，5import通过激活，GP缺sklearn回退；Tabu/Bandit/Orthogonal，Bandit run仅-.011",
+      "denominator": "6sessions；helper不能计额外独立成功机制",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E008",
+        "E010",
+        "E011"
+      ],
+      "counterevidence": [
+        "import不保证runtime调用和效用",
+        "广义域人类prompt提示",
+        "outer递归明确未测试"
+      ],
+      "allowed_conclusion": "可行性示范与窄首层机制变化，不是已证明improver泛化或递归自举"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "非权重搜索runner被修改并继续使用，单benchmark验证选择分数改善；没有冻结后在独立后来任务或新seed matched budget证明其改进产物更佳，不能升improver。",
+    "unresolved": [
+      "未触碰测试与跨任务transfer",
+      "D机制应用失效解释",
+      "额外outer预算、朴素去重或固定Tabu基线",
+      "性能gate与依赖沙箱"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "固定搜索机制瓶颈和重复提议具体，直接/并发邻居丰富；原文未核排他首创，baseline可朴素去重。",
+      "evidence_ids": [
+        "E001",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "机制级编辑与参数调整区分，四轮生成/集成链针对探索固化；同模型不等于唯一解释。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E009",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "API/周期/backup可重建，激活与失败分母公开；import非性能gate、D无效加载、动态加载曾silently fallback，缺回归与隔离。",
+      "evidence_ids": [
+        "E003",
+        "E007",
+        "E008",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "validation bpb适合有限时间语言建模，报告绝对delta与失败；5倍只属改善比，未独立审计metric不可修改边界。",
+      "evidence_ids": [
+        "E004",
+        "E006",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "四组保持模型硬件inner评价预算，有trace指向batch；D未成功应用仍增益、缺等外层调用/经典搜索强基线，因果只部分。",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E009",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 0,
+      "reason": "同val用于keep/discard和best report；无独立最终test或冻结runner新任务认证。不同repeat重搜不是已选机制迁移。",
+      "evidence_ids": [
+        "E013",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "三独立repeat及全数值mean/SD和失败充分公开；无CI/significance/固定配对seed，按A2不得升3。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "300秒×30、GPU、每outer约3分钟4calls与额外预算说明清楚；无全token/currency总账、wallclock匹配对照。",
+      "evidence_ids": [
+        "E004",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 56.25,
+    "display": 56.2,
+    "lower": 56.25,
+    "upper": 56.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整v2全文已读；局限是作者设计事实，非缺证据材料。",
+  "rationale": "外层确改非权重搜索runner，四组重复显示单benchmark验证增益；D加载失败仍高收益、弱重复基线与同val选报限制因果及improver泛化。"
+}

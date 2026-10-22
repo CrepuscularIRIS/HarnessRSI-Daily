@@ -1,0 +1,603 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r14b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.05149",
+    "paper_id": "2604.05149",
+    "title": "EvolveRouter: Co-Evolving Routing and Prompt for Multi-Agent Question Answering",
+    "version": "2604.05149v1",
+    "claim_type": "system_method",
+    "central_claim": "通过路由诊断驱动提示修订、修订agent反哺路由训练，加自适应协作规模，在五个QA基准提高F1/EM并减少调用。"
+  },
+  "provenance": {
+    "input_hash": "f1e0164cb2efecf41a9f4bc99710d1f188e1dfd6715a0efdd60a457277a9b28d",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按已配置sonnet类型执行；环境标示gpt-6.1-sol，无独立运行凭据/会话ID可存，不额外探测。",
+    "timestamp": "2026-10-22T00:27:11.656567+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2604.05149.txt",
+      "url": "https://arxiv.org/html/2604.05149v1",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "sections_read": [
+        "§1–5",
+        "Appendices A–F",
+        "Tables 1–10",
+        "Figures 1–12 captions and textual prompts/cases"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§1 lines 119–142",
+      "quote": "First, most prior routing methods treat agent behavior as fixed, optimizing only",
+      "support_explanation": "固定池路由不调整提示，明确非权重改动对象。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§3.1 lines 1189–1197",
+      "quote": "We collect four types of diagnostic signals during training: agent-level performance summaries per backbone–role pair, a failure archive of incorrect examples with gold answers and router weights, router weight statistics indicating which agents are most relied upon, and a prompt-aware answer cache that automatically invalidates entries when prompts change. These signals guide the refinement stage described next.",
+      "support_explanation": "训练真值、路由依赖和失败档案指导编辑，不是测试时自评分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§3.2 lines 1271–1275",
+      "quote": "and the associated failure evidence from the diagnostic archive. Rewriting is constrained to preserve the role’s core reasoning strategy and output format, and may only add, rephrase, or remove a small number of sentences. This keeps the revised prompt close to the original role while allowing targeted correction of failure patterns.",
+      "support_explanation": "有界局部重写。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix B.1 lines 3887–3900",
+      "quote": "This rule allows small mean drops within tolerance when offset by broader sample-level improvements, while still blocking clearly harmful rewrites.",
+      "support_explanation": "门控并非严格无回归，也非统计显著性保证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix B.1 lines 3891–3893",
+      "quote": "After accepted prompt revisions, the router is updated by resuming from the previous checkpoint rather than retraining from random initialization. Round 1 resumes from the Stage 1 warm-up checkpoint, and later rounds resume from the previous round. We found that retraining from scratch consistently discards useful routing knowledge and degrades performance. The update is made efficient through cache seeding: the answer cache from the previous round is copied forward, and because cache keys include a prompt hash, unchanged agents reuse cached outputs while modified agents are automatically invalidated and re-queried. In practice, only 2–3 out of 24 agents are modified per round, so the LLM cost is roughly proportional to the number of changed agents rather than the full pool.",
+      "support_explanation": "提示持久化、缓存失效和下一轮重读清楚；包含路由权重更新但评价对象不只权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix C.3 lines 5401–5406",
+      "quote": "From each benchmark we sample 500 training, 100 validation, and 100 test instances.",
+      "support_explanation": "明确训练/选优/测试划分，各测试100。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix C.3 line 5406",
+      "quote": "and average all results over three seeds.",
+      "support_explanation": "三种子报告，未见区间及显著性，按A2不升至3。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§4.2 lines 1653–1657",
+      "quote": "The largest gain appears on TriviaQA, where EvolveRouter improves over AgentRouter by +7.08 F1 and +8.67 EM.",
+      "support_explanation": "作者报告测试提升；需结合消融理解，而非复现。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§4.4 lines 3108–3109",
+      "quote": "Our diagnostic-guided selection improves all five datasets by a clear margin. The key difference is that our priority score accounts not only for how poorly an agent performs, but also for how heavily the router relies on it.",
+      "support_explanation": "最差agent重写与诊断优先级对照，非只有端到端。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix D.2 line 5809",
+      "quote": "The recovery is meaningful but incomplete. Even with PO prompts, the transferred router still trails the in-domain baseline by a substantial margin on all three targets, reinforcing that routing and prompt quality contribute complementary gains and that the full benefit of our co-evolution framework requires task-specific optimization of both components.",
+      "support_explanation": "明确跨任务退化，不支持一般通用路由。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix C.3 lines 5471–5484",
+      "quote": "LLM calls to collect per-agent answers. Each refinement round modifies only 2–3 agents, keeping the incremental cost at roughly 10% of the full evaluation. The GNN training itself takes under 5 minutes per epoch on a single GPU.",
+      "support_explanation": "报告部分优化成本，但未完整计所有候选/图构建/实际token差异。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§4.3 line 2597",
+      "quote": "The effect is smaller than PO on every dataset, confirming that the larger share of the final gain comes from improving agent quality rather than the stopping strategy. Nonetheless, the two components are complementary: PO makes the top-ranked agents more reliable, which in turn strengthens the answer agreement signal for Adaptive K.",
+      "support_explanation": "PO与adaptive K分别消融，Table3 NewsQA EM反例为41.67 vs 无adaptive42.00，不能逐指标声称全赢。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "Appendix A.2 line 3237",
+      "quote": "shows that prompt optimization and topology optimization are interdependent through alternating optimization. Our work differs from these methods in problem formulation. Prior work optimizes prompts either for individual agents or within a fixed multi-agent structure. In contrast, our framework uses routing-induced diagnostic signals to identify underperforming roles, refine their prompts, and retrain the router on the updated agent pool.",
+      "support_explanation": "MASS为近邻但仅本文叙述；独立原文缺失。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2604.05149.txt",
+      "sha256": "e13e37cbe0ca17e909972212bb37c37a73e5cc632f833ea30c92d3600b89c57f",
+      "locator": "§4.1 lines 1607–1609",
+      "quote": "EM measures whether the normalized prediction exactly matches the gold answer.\nF1 gives partial credit when the predicted answer overlaps with the gold answer but is not an exact match.",
+      "support_explanation": "标准测量；NGQA跨度/答案格式与领域真值意义有限，未校验临床有效性。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "24个backbone-role提示与图路由器",
+      "information": "训练金答案/输出F1、失败档案、router权重；测试仅问题上下文和回答",
+      "operation": "一致弱角色过滤→severity×依赖权重优先→3个小幅候选重写→验证门控→重训路由",
+      "output": "修订提示及续训路由",
+      "conditions": "标签训练与验证集、固定24-agent池",
+      "feedback": "gold token F1",
+      "selection_rule": "针对失败及补充验证样本选best，均值容差及样本改善数门控；3次失败冻结",
+      "selection_data": "500训练及100验证/benchmark，targeted subset来源描述含混",
+      "persistence": "提示文件/哈希缓存、历轮checkpoint；回退路由允许0.03容差",
+      "later_use": "后轮诊断和独立100测试题读取修订提示",
+      "claimed_effect": "提高路由协作测试F1/EM",
+      "failure_boundary": "小验证集过拟合；跨benchmark路由迁移退化；非严格无回归",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E006"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "推理时参与agent数",
+      "information": "router排名/权重及已查询回答，无测试gold",
+      "operation": "按rank查询，至少kmin后以加权回答一致度≥τ停止，最多kmax",
+      "output": "当前查询的加权多数答案",
+      "conditions": "阈值由验证集调优",
+      "feedback": "answer agreement",
+      "selection_rule": "Eq5–6",
+      "selection_data": "validation tuning",
+      "persistence": "调好的阈值保留；单题答案不作为学习状态",
+      "later_use": "测试题复用固定策略",
+      "claimed_effect": "平均2.9–7.4 agent调用",
+      "failure_boundary": "一致可共同错误；角色内部调用与图构建未完全计入",
+      "evidence_ids": [
+        "E011",
+        "E012"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "静态agent池与固定参与规模限制路由。",
+    "checked_gap": "本文显示提示/任务/模型相互作用且修订有局部收益；联合优化不是从无到有。",
+    "lineage": [
+      {
+        "source": "AgentRouter (Zhang et al.,2025e)",
+        "version": "仅本文Appendix A/C引用，邻居原文未固定",
+        "relation": "KG soft-F1 GNN router基础"
+      },
+      {
+        "source": "MASS (Zhou et al.,2026), HiveMind, MAPRO",
+        "version": "仅本文Appendix A.2引用",
+        "relation": "提示与结构交替及信用归因近邻"
+      }
+    ],
+    "closest_adjacent": "MASS交替提示/拓扑优化；AgentRouter固定提示图路由",
+    "residue": "如何用实际路由依赖引导提示编辑并保留路由知识",
+    "stakes": "修复低权重差agent可能浪费预算",
+    "method_response": "依赖×severity、局部编辑与checkpoint续训",
+    "remaining_gap": "预算匹配强优化器、迁移、统计门控和全成本",
+    "evidence_ids": [
+      "E001",
+      "E009",
+      "E010",
+      "E013"
+    ],
+    "unresolved": [
+      "请求固定MASS、HiveMind、AgentRouter原文以独立核first/最近邻差异；两席共用补包"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "点名固定agent prompts并放入交替优化",
+          "PO-off消融恢复固定提示",
+          "标准路由/GPT重写 machinery复用"
+        ],
+        "success_checks": [
+          "E001命名对象",
+          "E012隔离改动"
+        ],
+        "failure_checks": [
+          "联合系统新颖性缺强优化器对照",
+          "跨任务迁移受限"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E012"
+        ],
+        "reason": "释放迭代QA系统原本固定提示；C15限几何substrate，C23限identity-neutral conditioning，C24限移植扩散引擎，均不硬套。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "按实际迭代过程中的固定组件可变操作匹配，不因co-evolution术语贴卡。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H10",
+        "version": "manifest-frozen",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "局部句子编辑"
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "容差门控并非严格保护旧赢面"
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E004",
+          "E005"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H10"
+      },
+      "operation_correspondence": "固定role prompt成为可编辑状态，对失败定向小改并验证替换。",
+      "necessary_conditions": "有可评分训练/验证，提示仍可塑",
+      "differences": "路由权重也更新；不把训练权重当唯一被评价留存对象，不把本方法认作H18测试时演化。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E005"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md"
+      ],
+      "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+      "applicable": true,
+      "status": "met",
+      "reason": "句子级局部修改和诊断归属。",
+      "evidence_ids": [
+        "E002",
+        "E003"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md"
+      ],
+      "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有回退/冻结，但允许小均值退化且targeted子集独立性含混。",
+      "evidence_ids": [
+        "E004",
+        "E005"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2604.05149-1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "https://arxiv.org/html/2604.05149v1"
+      ],
+      "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有PO-off和最差agent替代，无强prompt优化器预算匹配。",
+      "evidence_ids": [
+        "E009",
+        "E012",
+        "E013"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2604.05149-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "https://arxiv.org/html/2604.05149v1"
+      ],
+      "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+      "applicable": true,
+      "status": "met",
+      "reason": "训练验证测试分开，迁移负结果保留。",
+      "evidence_ids": [
+        "E006",
+        "E010"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2604.05149-3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "https://arxiv.org/html/2604.05149v1"
+      ],
+      "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "三种子均值标准差，未做区间/显著性。",
+      "evidence_ids": [
+        "E007"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2604.05149-4",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "https://arxiv.org/html/2604.05149v1"
+      ],
+      "applies_when": "声称诊断驱动提示优化带来可留存测试收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "报告调用近似，未完整核候选/图/角色token。",
+      "evidence_ids": [
+        "E011"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "五基准F1/EM超过实用路由基线",
+      "setting": "24 agents, four backbones, five QA datasets",
+      "baseline_control": "AgentRouter/GraphRouter/flat routers/Best Agent",
+      "selection_vs_test": "500 train,100 validation,100 test per dataset; three seeds",
+      "result": "TriviaQA 69.83 F1/60.00 EM vs AgentRouter62.75/51.33；其他Table3",
+      "denominator": "各100测试×3 seeds",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E008"
+      ],
+      "counterevidence": [
+        "无同预算强prompt optimizer"
+      ],
+      "allowed_conclusion": "作者报告所列小样本同分布测试优势"
+    },
+    {
+      "claim_id": "C2",
+      "text": "提示与路由联合修订和adaptive K有贡献且省调用",
+      "setting": "Tables4,8–10",
+      "baseline_control": "PO-off, adaptive-off, worst-agent-only, from-scratch router",
+      "selection_vs_test": "训练/验证开发后测试",
+      "result": "有提示消融收益；迁移有明显退化；平均K2.9–7.4",
+      "denominator": "5 datasets,3seeds",
+      "evidence_ids": [
+        "E009",
+        "E010",
+        "E011",
+        "E012"
+      ],
+      "counterevidence": [
+        "NewsQA EM无adaptive条件更高",
+        "无完整搜索token成本"
+      ],
+      "allowed_conclusion": "有限留存task分布内增益，不证明improver自身持续变好"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告训练/验证上获得的提示在同分布独立测试题可改善路由QA，且PO-off和多轮/选target消融支持提示作用；不是我们复现。",
+    "unresolved": [
+      "并非所有指标严格超过off条件：NewsQA EM全模型41.67<无adaptive42.00",
+      "跨域路由退化，不能声称通用improver进步",
+      "无预算匹配MASS/HiveMind比较"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "固定提示池与路由交互是具体残余，相关工作覆盖AgentRouter/MASS/HiveMind；未固定邻居全文，first联合主张未独立确认。",
+      "evidence_ids": [
+        "E001",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "依赖权重×错误严重度决定编辑对象、局部重写和交替训练可重建，有最差agent替代预测；跨骨干弱角色并不充分证明错误由提示造成。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "候选数/温度、冻结阈值、哈希缓存、checkpoint和回退描述充分；门控容许均值小降，δ和针对失败的验证子集关系及格式约束存在含混。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "标准EM/F1和多数据集明确；短字符串一致并非正确性保证，NGQA高F1低EM提示测量范围，不作真实营养安全外推。",
+      "evidence_ids": [
+        "E014",
+        "E008"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有PO-off、adaptive-off、从头训及最差agent消融；未做预算匹配的强prompt优化器/MASS比较，联合收益不能充分归因于独有算法。",
+      "evidence_ids": [
+        "E009",
+        "E012",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "500/100/100明确分开并有迁移负结果；诊断failure与targeted validation重叠表达含混、未做污染审计。",
+      "evidence_ids": [
+        "E006",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "均值标准差及三种子有报告，测试各100；无区间和显著性检验/完整搜索方差分解，不达A2的3档。",
+      "evidence_ids": [
+        "E006",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "12,000初始调用及每轮少数agent缓存、平均K报告；候选验证/图构建和角色内部多调用未完整计token及公平总预算。",
+      "evidence_ids": [
+        "E011",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendices A–F，Tables 3–10"
+      ]
+    }
+  },
+  "status": "reviewed",
+  "reason": "完整固定v1全文含附录可评价；独立最近邻原文缺口不阻塞局部证据评分，已请求。",
+  "rationale": "路由依赖指导局部提示修订并保留，链条和同分布留出较清楚；消融支持有限留存收益。强优化器预算匹配、全成本、统计门控与跨域泛化仍不足。",
+  "score": {
+    "raw": 68.75,
+    "display": "68.8",
+    "lower": 68.75,
+    "upper": 68.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}

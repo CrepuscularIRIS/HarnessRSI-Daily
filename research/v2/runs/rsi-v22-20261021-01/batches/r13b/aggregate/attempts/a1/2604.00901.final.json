@@ -1,0 +1,1810 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r13b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "HERA：层级式框架，联合演化多智能体 RAG 的全局编排（orchestrator 对一组候选拓扑做 group-relative 采样，反思成功/失败对比得到语义优势，沉淀为带效用的经验库，并在拓扑变异中复用）与局部角色提示（RoPE：用失败轨迹重放+提示变体做对比分析，沿 operational/behavioral 两轴改写 agent prompt），全程冻结 LLM。作者原话：'achieves an average improvement of 38.69% over recent baselines while maintaining robust generalization and token efficiency'。",
+  "version": "2604.00901v2",
+  "paper_key": "2604.00901",
+  "paper_id": "2604.00901",
+  "title": "Experience as a Compass: Multi-agent RAG with Evolving Orchestration and Agent Prompts"
+ },
+ "provenance": {
+  "input_hash": "b4101aab7a6a53fbf7d10443f07752da150c1dd7ce6ccaad756de6926bcbc218",
+  "input_package": "batches/r13b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T00:42:52Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.00901.txt",
+   "url": "https://arxiv.org/html/2604.00901v2",
+   "version": "2604.00901v2",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.00901.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 413-438",
+   "quote": "The orchestrator’s optimization is inspired by Group Relative Policy Optimization (GRPO)\n(\nShao et al., 2024\n;\nCai et al., 2025\n)\n, which updates a policy by comparing sampled actions within a group. Unlike the training-free GRPO\n(\nCai et al., 2025\n)\n, we extend the idea beyond token-level generation, lifting optimization\nfrom token generation to cooperation topology\n. Operating over a structured action space of agent topologies\nΓ\n\\Gamma\n, the orchestrator performs group-based optimization at the level of global strategy. Given a query\nq\nq\n, it samples a group of candidate agent sequences. Each sequence is executed by invoking the corresponding agents, producing a trajectory\nτ\ni\n\\tau_{i}\n, which is subsequently evaluated to obtain a reward. Instead of relying on scalar advantages, we adopt a hierarchical comparison: trajectories are first ranked by downstream task performance (\ne.g\n.\n, F1 score), and then by efficiency, measured as the total number of input and output tokens consumed across all agents. The orchestrator is then prompted to articulate the reasons for relative success and failure across the group, producing a set of natural language insights",
+   "support_explanation": "在候选拓扑真实执行后按任务分数与token排序，不更新权重。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 477-526",
+   "quote": ", which accumulates semantic advantages derived from reflective comparisons of successful and failed trajectories, serving as both an episodic memory and an optimization medium for the orchestrator.\n\nℰ\n\\mathcal{E}\nis charatcerized with a\nProfile–Insight–Utility\nstructure\n(\nc\n,\nz\n,\nu\n)\n(c,z,u)\n, where\nc\nc\ndenotes the\nquery characteristics or types\n,\nz\nz\nis the natural language\ninsight\n, and\nu\nu\nrepresents the\nutility\n, measuring the empirical success rate of\nz\nz\n- that is, how often the insight is successfully applied in subsequent agent orchestration.\nℰ\n\\mathcal{E}\nis updated online through consolidation operations:\nADD\ninserts insights that are distinct from any existing entries;\nMERGE\ncombines semantically similar or complementary entries,\n\nPRUNE\nremoves conflicting or low-utility insights to maintain generalizable insights while preventing uncontrolled growth, and\n\nKEEP\nleaves\nℰ\n\\mathcal{E}\nunchanged.",
+   "support_explanation": "Profile–Insight–Utility存储及ADD/MERGE/PRUNE/KEEP。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 528-545",
+   "quote": "Experience as a Prior.\nGiven a query\nq\nq\n, the orchestrator first analyzes its characteristics and retrieves a set of relevant insights from\nℰ\n\\mathcal{E}\n. Retrieval balances two objectives: maximizing empirical\nutility\n\nu\nu\n, which favors insights that have historically led to successful coordination, and maintaining\ndiversity\n, achieved by selecting insights that are semantically distinct from those already chosen and that have lower prior usage frequency. The retrieved insights inform the orchestrator’s selection and sequencing of agents, guiding multi-step execution toward high-performing strategies. By combining high-utility and diverse insights, the orchestrator biases execution to maximize task accuracy while minimizing token consumption. In this manner,\nℰ\n\\mathcal{E}\nserves as a structured, experience-driven prior, enabling contextual policy improvement and without modifying the underlying LLM.",
+   "support_explanation": "后续query读取经验改变选人和顺序。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 1730-1742",
+   "quote": "presents the ablation results of\nHERA\non the test set using Qwen-3-14B as the backbone (Llama-3.1-8 results are provided in Appendix\nF.2\n). Removing the experience library yields consistent but moderate performance declines across datasets (typically\n↓\n\\downarrow\n6% to 15% relative accuracy), highlighting its role in improving knowledge guiding and cross-instance generalization. In contrast, omitting prompt evolution leads to substantially larger and more variable declines on multi-hop QA (up to\n↓\n\\downarrow\n30% relative on 2WikiQA for both backbones), where precise decomposition and trajectory control are essential. On ambiguity-intensive datasets AmbigQA, prompt evolution introduces a recall-oriented bias: improving F1 while occasionally reducing EM, whereas the experience library promotes precision through grounded outputs, revealing a systematic EM–F1 trade-off. These patterns are consistent across backbones, indicating that the functional contributions of each component are largely model-agnostic. Importantly, the full\nHERA\nframework consistently outperforms both ablations by a non-additive margin, indicating a positive interaction effect: improved reasoning behaviors from prompt evolution enhance the quality of stored experiences, which in turn reinforce subsequent reasoning through stronger grounding. Overall, the results demonstrate that prompt evolution and the experience library target complementary failure modes: procedural correctness versus epistemic reliability, and that their synergy is critical for robust multi-hop reasoning.",
+   "support_explanation": "经验库与prompt evolution分别消融，报告相互作用；不能单独证明具体编辑操作。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 1687-1710",
+   "quote": "(i) Consistent gains over SOTA iterative and agentic RAG baselines\n.\nHERA\nachieves an average of 38.69% gains on all datasets compared against recent SOTA, demonstrating the effectiveness of experience-guided orchestration for interleaved reasoning and retrieval. Best AmbigQA performance highlights\nHERA\n’s robustness to queries with multiple plausible interpretations.\n(ii) Robust OOD performance.\n\nHERA\nranks second on Bamboogle (F1\n−\n5.4\n%\n-5.4\\%\nvs. ExSearch) and first on HoVer (\n+\n64.95\n%\n+64.95\\%\nvs. CORAG), reflecting the transferability of the accumulated experience library and evolving agent behaviors. In contrast, most prior approaches relying on heuristic planning or fixed iterative retrieval generalize poorly beyond in-distribution data.\n(iii) Efficiency as gradient-free optimization\n.\nHERA\nsurpasses RL-fine-tuned multi-agent RAG methods, such as MMAO-RAG, showing that semantic group-wise advantages enable stable, consistent improvements across tasks and distribution shifts without costly model updates.",
+   "support_explanation": "作者广泛增益、OOD及梯度自由效率原主张。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 1753-1769",
+   "quote": "Dynamics of Token Consumption\n\nWe visualize the token consumption throughout the learning process by Locally Weighted Scatterplot Smoothing (LOWESS)\n(\nCleveland, 1981\n;\nDang et al., 2025\n)\n. Figure\n3\nillustrates token usage trends on HotpotQA and 2WikiQA as representative tasks.\n(i) Exploration–Exploitation Transition\n. On HotpotQA, token consumption follows a non-monotonic trajectory. Early spikes reflect an exploratory phase in which the orchestrator activates multiple agents, constructs extended reasoning traces, and performs redundant steps to optimize performance. As experience accumulates, token usage declines monotonically, marking a transition to exploitation: low-efficiency agents are pruned, and reasoning chains are shortened. A subsequent plateau indicates convergence toward an efficient token budget. In contrast, 2WikiQA exhibits no initial exploratory peak, suggesting that transferable priors from previously accumulated reasoning experience support efficient agent orchestration with minimal trial-and-error.\n(ii) Functional Contributions.\nToken usage dynamics are tightly coupled with\nHERA\n’s experience library and prompt evolution. The library accumulates high-utility and generalizable experience, while evolving prompts enables agents to elevate their performance. Together, they drive emergent computational frugality, enabling high reasoning performance without explicit token-based penalties.",
+   "support_explanation": "学习过程token动态及定性解释，不是总训练成本。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 1777-1804",
+   "quote": "Figure\n4\ncompares multi-hop QA performance against token consumption. Key observations include:\n(i) Superior Performance–Efficiency Trade-off\n. Across all datasets,\nHERA\nconsistently dominates the performance–efficiency frontier, achieving higher F1 scores with controlled token budgets. This demonstrates that gains arise from efficient reasoning trajectories instead of brute-force context scaling.\n\n(ii) Backbone-Specific Patterns.)\n\nHERA\nwith Qwen-3-14B achieves the highest absolute performance, whereas\nHERA\nwith Llama-3.1-8 consistently minimizes token consumption (\n∼\n\\sim\n4.7k–6.6k across most datasets) while preserving competitive F1 scores, indicating favorable computational efficiency.\n(iii) Consistent performance and efficiency gains over baselines\n. CORAG uses the largest number of tokens across most datasets (up to\n20\n​\nk\n+\n20k+\n) without converting these costs into sustainable reasoning improvements or effective knowledge reuse, resulting in suboptimal F1 (\ne.g\n.\n, 20.30 on MusiQue and 40.82 on HoVer). AceSearcher occupies an intermediate position, balancing moderate token usage and performance.",
+   "support_explanation": "推理token效率比较；不包含全部候选搜索与反思成本。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 2431-2431",
+   "quote": "This represents a reward-filtered empirical distribution instead of a properly normalized probabilistic posterior.",
+   "support_explanation": "EM附录明确非正规化概率后验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 2513-2521",
+   "quote": "which implicitly increases the probability mass on high-performing structures by enriching the conditioning context (experience library).\n\nR\n⁡\n(\nτ\n)\nR(\\tau)\nhere serves as a heuristic surrogate rather than a proper probabilistic objective.",
+   "support_explanation": "奖励仅heuristic surrogate，不能推出单调提升定理。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 2641-2643",
+   "quote": "\\pi^{*}(\\Gamma\\mid q)\\propto\\pi_{\\text{base}}(S\\mid q)\\cdot\\exp\\Bigl(\\frac{f_{\\mathcal{E}}(\\Gamma,q)}{\\beta}\\Bigr).\n\nThe frozen base model therefore serves as an implicit KL anchor, preventing policy collapse and ensuring that the updated distribution stays within the support of the original model. This stability property is absent in unconstrained policy gradient methods, where aggressive updates can destabilise the base distribution.",
+   "support_explanation": "KL形式的理论解释，未给真实上下文更新的KL界。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 3195-3272",
+   "quote": "We standardize decoding and prompting across baselines to ensure fair comparison. For LLMs Qwen-3-4B, 8B, and 14B\n(\nYang et al., 2025a\n)\n, Qwen2.5-Instruct-7B\n(\nHui et al., 2024\n)\n, LLaMA3.1-8B\n(\nGrattafiori et al., 2024\n)\n, and GPT-4o-mini\n(\nHurst et al., 2024\n)\n, we follow official guidance. We set\nt\n​\ne\n​\nm\n​\np\n​\ne\n​\nr\n​\na\n​\nt\n​\nu\n​\nr\n​\ne\n=\n0.6\n,\nt\n​\no\n​\np\n−\np\n=\n0.95\n,\nt\n​\no\n​\np\n−\nk\n=\n20\n,\na\n​\nn\n​\nd\n​\nm\n​\ni\n​\nn\n−\np\n=\n0\ntemperature=0.6,top-p=0.95,top-k=20,andmin-p=0\n.",
+   "support_explanation": "附录E统一解码temperature .6，与正文分阶段温度需澄清。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 3055-3138",
+   "quote": "Table 2:\nStatistics of datasets.\n\nDataset\n\nTrain\n\nVal\n\nTest\n\nTotal\n\nReasoning\n\n2WikiQA\n\n154K\n\n16K\n\n22K\n\n192K\n\n2-hop (cross-doc)\n\nHotpotQA\n\n90K\n\n7.4K\n\n7.4K\n\n105K\n\n2-hop (bridge/comp)\n\nMuSiQue\n\n19K\n\n2.4K\n\n2.4K\n\n24K\n\n2–4 hop (compositional)\n\nBamboogle\n\n–\n\n–\n\n125\n\n125\n\nMulti-hop (adversarial)\n\nHoVer\n\n13K\n\n1.8K\n\n2.7K\n\n18K\n\n2–4 hop (verification)\n\nAmbigQA\n\n10K\n\n2K\n\n2K\n\n14K",
+   "support_explanation": "提供数据集标准划分规模，不等于实际curated训练/评测实例清单。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 4391-4427",
+   "quote": "for\neach\n(\nc\n,\nz\n,\nu\n)\n∈\nℰ\n(c,\\,z,\\,u)\\in\\mathcal{E}\n\ndo\n\n17:\n\nif\n\nz\nz\nwas used\nand\noutcome\n=\n=\nsuccess\nthen\n\n18:\n\nu\n←\nu\n+\n1\nu\\leftarrow u+1",
+   "support_explanation": "算法utility只在成功时加1；与正文经验success rate定义不一致。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 4700-4745",
+   "quote": "10:\n\n𝒩\ni\n.\nρ\n←\nρ\nvar\n\\mathcal{N}_{i}.\\rho\\leftarrow\\rho^{\\text{var}}\n\n11:\n\nτ\nvar\n←\nReExecute\n​\n(\nτ\n,\n𝒩\ni\n)\n\\tau^{\\text{var}}\\leftarrow\\textsc{ReExecute}(\\tau,\\,\\mathcal{N}_{i})\n\n⊳\n\\triangleright\nreplay full trajectory with variant prompt\n\n12:\n\nresults\n.\nAppend\n​\n(\n(\n,\n,\n,\n,\n,\n)\n)\n\\text{results}.\\textsc{Append}\\bigl((\\rho^{\\text{var}},\\,\\tau^{\\text{var}},\\,\\textsc{Eval}(\\tau^{\\text{var}}))\\bigr)",
+   "support_explanation": "单个agent变体重跑全轨迹，提供局部反事实信号。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 4825-4852",
+   "quote": "17:\n\nρ\ni\nt\n+\n1\n←\nΠ\n𝒞\n​\n(\nρ\ni\nt\n⊕\nΔ\n​\nρ\ni\n)\n\\rho_{i}^{t+1}\\leftarrow\\Pi_{\\mathcal{C}}\\!\\left(\\rho_{i}^{t}\\oplus\\Delta\\rho_{i}\\right)\n\n⊳\n\\triangleright\nproject onto length and coherence constraints\n𝒞\n\\mathcal{C}",
+   "support_explanation": "最终prompt按长度与一致性投影，未列独立接受阈值与回退。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 5092-5119",
+   "quote": "Case 3 (Fig.\n11\n) requires computing the temporal intersection of two activity periods, which demands not just parallel retrieval but a subsequent arithmetic-logical operation on the retrieved intervals. The system correctly decomposes the query and retrieves accurate individual activity periods: 1914–1938 for Hutchison and 1921–1944 for Howard. However, the Answer Generator returns “1914–1944” — the union of the two intervals rather than their intersection (which would correctly be 1921–1938).\nThis failure reveals a fundamental limitation: the system lacks an explicit set-theoretic reasoning module. This suggests that for questions requiring numerical or logical operations over retrieved facts, a dedicated symbolic computation step is necessary. The failure is not a retrieval failure but a reasoning composition failure — a distinction with important implications for system design.\n\nH.4\nCase 4 - Intersection Multi-hop QA\n\nFigure 12:\nCase 4 - Intersection Multi-hop QA\n\nFor Case 4 (Fig.\n12\n), which is a Intersection Multi-Hop type, the error illustrates a critical challenge in handling multi-entity property overlap. The pipeline’s goal is to identify a property that applies to both Pavel Alexandrov and Valentin Turchin. Here, the intended property is “Soviet”. However, the Query Rewriter reformulated the query around “what they were known for,” shifting focus to professional achievements (mathematician, computer scientist) rather than shared nationality or affiliation. Consequently, the Retriever retrieved evidence on their careers, and the Evidence Selector highlighted disciplinary roles, leading the Conclude Agent to output “scientists.”\n\nInsights from this case:\n\n•\n\nIntersection multi-hop questions require careful alignment of the property type, for example nationality, affiliation, or field must be explicitly targeted; otherwise, retrieval can be biased toward more salient but irrelevant attributes.\n\n•\n\nParallel entity retrieval is insufficient if the property semantics are ambiguous, as each agent may return correct facts individually, but the intersection reasoning fails if the property dimension differs.\n\n•\n\nConclude Agent reasoning is sensitive to initial decomposition: even small shifts in question framing (profession vs. nationality) propagate to a semantically plausible but incorrect intersection.",
+   "support_explanation": "失败案例明确组合推理与问题改写错误。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 1610-1644",
+   "quote": "Ours\n\nHERA (Qwen-3-14B)\n\n55.38\n\n52.50\n\n63.03\n\n60.02\n\n59.50\n\n64.77\n\n27.19\n\n26.57\n\n35.82\n\n54.43\n\n48.74\n\n67.81\n\n49.01\n\n46.46\n\n60.53\n\n67.35",
+   "support_explanation": "主表Qwen HERA六benchmark值；Bamboogle F1 60.53、HoVer accuracy 67.35。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E018",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 1372-1404",
+   "quote": "ExSearch (Qwen2.5-7B)\n\n55.04\n\n45.11\n\n58.22\n\n44.83\n\n44.03\n\n51.56\n\n22.73\n\n19.58\n\n27.10\n\n–\n\n—\n\n–\n\n56.12\n\n51.27\n\n63.80\n\n66.62",
+   "support_explanation": "ExSearch Bamboogle F1 63.80及HoVer 66.62；并非HERA所有指标均最优。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E019",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 2120-2167",
+   "quote": "Prompt Optimization and Evolution\n\nAutomatic Prompt Optimization treats prompts as a black-box search over seeds, feedback, candidate generation and selection\n(\nRamnath et al., 2025\n)\n.\nProgrammatic frameworks\n(\nKhattab et al., 2024\n)\ncompile LM pipelines and optimize prompts offline using user metrics, while textual backpropagation\n(\nYuksekgonul et al., 2025\n;\nHu et al., 2024\n;\nMa et al., 2025\n)\nutilizes natural-language feedback to refine collaboration protocols and behavioral instructions. Recent work jointly optimizes agentic structures and prompts\n(\nTian et al., 2025\n;\nMurthy et al., 2025\n;\nSpiess et al., 2025\n)\n, using search-based strategies\n(\nZhang et al., 2024\n)\n, genetic algorithms\n(\nAgrawal et al., 2026\n)\nand treats prompt optimization as experience-driven adaptation\n(\nYao et al., 2022\n;\nShinn et al., 2023\n;\nZhao et al., 2024\n;\nPei et al., 2025\n;\nXie et al., 2026\n)\n.",
+   "support_explanation": "作者承认DSPy、TextGrad及联合结构prompt优化邻近谱系。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E020",
+   "material_id": "2604.00901.txt",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "lines 931-963",
+   "quote": "Implementation Details.\nWe consider core agents commonly employed in RAG: Query Decomposer, Retriever, Answer Generator, Query Rewriter, Evidence Selector, Context Validator, Reflect Agent, and Conclude Agent. We use Wikipedia as the corpus, returning top-\n5\npassages per step for multi-step retrieval and top-\n10\nfor single-turn methods via the BGE retriever\n(\nXiao et al., 2024\n)\n. We use Llama-3.1-8\n(\nGrattafiori et al., 2024\n)\nand Qwen-3-14B\n(\nYang et al., 2025a\n)\nas the backbone LLMs for the orchestrator and GPT-4o-mini for agents. All backbones remain frozen during learning and inference. To highlight data efficiency, we first use GPT-4o to annotate queries from 2WikiQA, HotpotQA, AmbigQA, and MusiQue along\nreasoning type\n(bridge, intersection, comparison, temporal multi-hop, ambiguous) and\ncomplexity\n(easy, medium, hard). Based on these annotations, we perform stratified, difficulty-aware sampling to construct a curated training set that ensures balanced coverage across reasoning categories while preserving distributional diversity (statistics in Appendix\nD\n). Generative sampling uses temperature 0.9 during group rollouts, and\n0.0\n/\n0.3\n0.0/0.3\nfor in-distribution and OOD evaluation, respectively. (Pseudocode for\nHERA\nis provided in Appendix\nG\n).",
+   "support_explanation": "正文模型、检索器、训练抽样与分阶段解码设置。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "We identify two key limitations: the lack of continuously adaptive orchestration mechanisms and the absence of behavior-level learning for individual agents.",
+   "support_explanation": "作者定位的 gap：静态编排与无 agent 级行为学习；摘要未给出量化证据。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "Abstract",
+   "quote": "achieves an average improvement of 38.69% over recent baselines while maintaining robust generalization and token efficiency.",
+   "support_explanation": "摘要主结果；'recent baselines' 的平均如何计算未说明。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "4 Implementation Details",
+   "quote": "All backbones remain frozen during learning and inference.",
+   "support_explanation": "所有 LLM 冻结；学到的状态只是经验库、agent prompt、拓扑策略（均为文本/配置）。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "3.1 Orchestrator",
+   "quote": "The orchestrator is then prompted to articulate the reasons for relative success and failure across the group, producing a set of natural language insights",
+   "support_explanation": "group-relative 采样后由编排者反思成败差异（语义优势），即对比式提炼。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "3.1 Orchestrator",
+   "quote": "we focus on groups explicitly containing both successful and failed. trajectories.",
+   "support_explanation": "仅在含成败混合的组上提炼，与 Algorithm 2 的 HasMixedOutcomes 一致。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "3.2 Experience Library",
+   "quote": "ADD inserts insights that are distinct from any existing entries; MERGE combines semantically similar or complementary entries, PRUNE removes conflicting or low-utility insights to maintain generalizable insights while preventing uncontrolled growth",
+   "support_explanation": "经验库的编辑词表（ADD/MERGE/PRUNE/KEEP），由 LLM 按附录 B 提示决策。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "3.2 Experience Library",
+   "quote": "how often the insight is successfully applied in subsequent agent orchestration.",
+   "support_explanation": "效用 u = 洞见被使用后成功的经验频率；Algorithm 3 中 u 仅在 '被使用且成功' 时 +1，无反事实（无库对照）基线。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "3.2 Experience as a Prior",
+   "quote": "which favors insights that have historically led to successful coordination, and maintaining diversity , achieved by selecting insights that are semantically distinct from those already chosen and that have lower prior usage frequency.",
+   "support_explanation": "检索：效用+多样性；读取方式明确（Algorithm 4）。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "3.4.1 Prompt Evolution",
+   "quote": "we retrieve its recent failed trajectories, then we generate prompt variants, and reexecutet the original whole agent trajectories with these prompt variants. Then RoPE performs contrastive analysis to extract actionable improvements along two complementary dimensions",
+   "support_explanation": "RoPE：在最近失败轨迹上重放提示变体并做对比分析；变体评估所用轨迹与提出改动所用轨迹相同。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "3.4 RoPE",
+   "quote": "an agent is considered underperforming if the orchestrator identifies it as the primary contributor to the trajectory's failure.",
+   "support_explanation": "责任归因由编排者 LLM 判定，无归因准确性验证。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "3.4.2 Prompt Consolidation",
+   "quote": "selected updates are integrated into the agent's prompt via prompt consolidation, which prunes redundant or low-utility instructions to maintain a compact and coherent representation.",
+   "support_explanation": "prompt 写回由 LLM 按长度/一致性约束整合；文中无对整合后 prompt 的回归测试、版本或回退。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "3.5 Topology Mutation",
+   "quote": "performs topology mutation when trajectories consistently fail",
+   "support_explanation": "结构后备：持续失败（如 F1=0）才变异拓扑；阈值未给。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "Appendix A.3",
+   "quote": "here serves as a heuristic surrogate rather than a proper probabilistic objective.",
+   "support_explanation": "作者自己承认 EM 解读中的奖励只是启发式代理；理论部分并非形式保证。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "4 Implementation Details",
+   "quote": "we perform stratified, difficulty-aware sampling to construct a curated training set that ensures balanced coverage across reasoning categories while preserving distributional diversity",
+   "support_explanation": "训练集由 GPT-4o 标注+分层采样构造；文中未给训练集规模、迭代数 T、组大小 G、K、变异阈值（见 search_scope）。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "4 Implementation Details",
+   "quote": "as the backbone LLMs for the orchestrator and GPT-4o-mini for agents.",
+   "support_explanation": "编排者用 Llama-3.1-8/Qwen-3-14B，各 agent 用闭源 GPT-4o-mini；多数基线为 7-8B 级单模型。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "4 Implementation Details",
+   "quote": "Generative sampling uses temperature 0.9 during group rollouts",
+   "support_explanation": "学习阶段高温采样；评测阶段 temperature 0.0/0.3（ID/OOD），故评测单次近确定性。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "Table 1",
+   "quote": "HERA (Qwen-3-14B) 55.38 52.50 63.03 60.02 59.50 64.77 27.19 26.57 35.82 54.43 48.74 67.81 49.01 46.46 60.53 67.35",
+   "support_explanation": "HERA(Qwen) 各数据集 Acc/EM/F1：HotpotQA 55.38/52.50/63.03；2Wiki 60.02/59.50/64.77；MuSiQue 27.19/26.57/35.82；AmbigQA 54.43/48.74/67.81；Bamboogle 49.01/46.46/60.53；HoVer 67.35。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Table 1",
+   "quote": "AceSearcher-8B 42.91 37.19 68.07 50.83 45.59 52.75 25.24 19.10 26.62 - - - 47.21 45.12 51.91 59.37",
+   "support_explanation": "AceSearcher 在 HotpotQA F1 为 68.07，高于 HERA(63.03)。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "Table 1",
+   "quote": "ExSearch (Qwen2.5-7B) 55.04 45.11 58.22 44.83 44.03 51.56 22.73 19.58 27.10 - - - 56.12 51.27 63.80 66.62",
+   "support_explanation": "ExSearch 在 Bamboogle F1 63.80 高于 HERA(60.53)；在 HoVer 66.62，HERA 仅高 0.73 点。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "Table 1",
+   "quote": "CORAG-8B (Greedy) 38.02 32.95 52.85 39.09 35.43 46.62 16.45 15.98 21.00 32.10 27.25 43.95 33.03 31.61 41.25 40.82",
+   "support_explanation": "摘要/正文 HoVer '+64.95% vs CORAG' 的参照是 40.82 的弱基线，而非 66.62 的次优项。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "Table 1 (single-turn GPT-4o-mini)",
+   "quote": "GPT-4o-mini 46.30 37.74 49.30 28.42 28.41 35.11 16.63 13.94 19.60 37.40 33.80 47.99 38.36 36.00 42.81 47.95",
+   "support_explanation": "与 agent 同模型 GPT-4o-mini 的单轮 RAG 对照：HotpotQA Acc 46.30 vs HERA 55.38 等；是表中唯一与 agent LLM 对齐的基线，但并非静态多 agent 拓扑对照。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "5.1",
+   "quote": "HERA achieves an average of 38.69% gains on all datasets compared against recent SOTA, demonstrating the effectiveness of experience-guided orchestration for interleaved reasoning and retrieval.",
+   "support_explanation": "38.69% 的聚合口径（对哪些基线、如何平均）在文中与附录均未说明。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "5.1 (iii)",
+   "quote": "HERA surpasses RL-fine-tuned multi-agent RAG methods, such as MMAO-RAG, showing that semantic group-wise advantages enable stable, consistent improvements across tasks and distribution shifts without costly model updates.",
+   "support_explanation": "与 RL 训练基线的 head-to-head 解读；两者模型容量、数据、agent LLM 不同。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "5.2",
+   "quote": "omitting prompt evolution leads to substantially larger and more variable declines on multi-hop QA",
+   "support_explanation": "消融（Figure 2，数值仅在图中，材料中不可读）：去经验库 6-15% 相对降幅，去 prompt evolution 最高 30%；仅 Qwen 与 Llama 两骨干，无全移除静态对照。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "5.2",
+   "quote": "Importantly, the full HERA framework consistently outperforms both ablations by a non-additive margin, indicating a positive interaction effect",
+   "support_explanation": "'非加性' 协同的论断，无统计检验或数值。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "Appendix F.2",
+   "quote": "exceot MusiQue and Bamboogle",
+   "support_explanation": "Llama 骨干消融在 MusiQue 与 Bamboogle 上趋势不同（作者自述）。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "5.3.2",
+   "quote": "This demonstrates that gains arise from efficient reasoning trajectories instead of brute-force context scaling.",
+   "support_explanation": "token 效率只与所选基线比较（Figure 4），学习阶段的总成本未汇总。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "3.2 Experience Library",
+   "quote": "is updated online through consolidation operations",
+   "support_explanation": "经验库 '在线更新'；测试阶段是否冻结文中未说明（我们据此将保留收益判为带条件）。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "3.4.1",
+   "quote": "Prompt variants are generated along behavioral axes such as thoroughness, risk sensitivity, error correction and heuristic injection",
+   "support_explanation": "正文列四个轴；Algorithm 5 列 efficiency/thoroughness/risk_sensitivity 三个轴，实现与描述不一致（our_inference，基于材料内两处文字对照）。",
+   "kind": "our_inference",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "Appendix C",
+   "quote": "a small, manually constructed QA dataset of 125 challenging real-world multi-hop questions",
+   "support_explanation": "Bamboogle 仅 125 题，OOD 结论的样本量很小。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "locator": "Appendix H.3",
+   "quote": "The failure is not a retrieval failure but a reasoning composition failure",
+   "support_explanation": "案例中的失败分析：union vs intersection；说明系统缺少集合运算而非库/提示问题，也是为数不多的失败披露。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "locator": "Appendix E",
+   "quote": "We standardize decoding and prompting across baselines to ensure fair comparison.",
+   "support_explanation": "声称基线统一解码；未说明基线数值是重跑还是引用，也未统一模型规模/检索预算。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "locator": "5.4.2",
+   "quote": "This selective retention is guided by the experience library, which reinforces high-value interaction topologies, and by prompt evolution, which refines agent behaviors and intermediate outputs.",
+   "support_explanation": "拓扑演化分析是描述性指标（熵、图指标），将归因于库与 prompt evolution 但无对照（our_inference：缺受控对比）。",
+   "kind": "author_report",
+   "material_id": "2604.00901",
+   "material_sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.00901.txt",
+   "material_hash": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "§3.1 Orchestrator",
+   "quote": "trajectories are first ranked by downstream task performance",
+   "support_explanation": "Every library update needs gold-answer F1 (Algorithm 2). With the library 'updated online' (§3.2) and no freeze statement, whether updates also ran on evaluation queries is unknown.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.00901.txt",
+   "material_hash": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+   "locator": "§5.1 (ii)",
+   "quote": "vs. CORAG), reflecting the transferability of the accumulated experience library and evolving agent behaviors.",
+   "support_explanation": "HoVer +64.95% is computed against CORAG (40.82); ExSearch (66.62) is 0.73 below HERA's 67.35 (Table 1). The Bamboogle '−5.4%' vs ExSearch recomputes to −5.1% (60.53 vs 63.80).",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "编排者的经验库 E（(查询画像 c, 洞见 z, 效用 u) 条目，自然语言）及其条件化的拓扑策略（agent 子集、顺序、依赖）",
+   "information": "编排者看到查询、被检索的高效用+多样洞见、agent 描述；学习阶段额外看到一组 G 个候选拓扑的完整轨迹、F1（对标准答案）与 token 成本排序",
+   "operation": "对同一查询采样 G 个拓扑 → 执行 → 按 (F1↓, tokens↑) 排序 → 仅在成败混合的组上由编排者反思成败差异 → 洞见经 ADD/MERGE/PRUNE/KEEP 并入库；u 在被使用且成功时 +1",
+   "output": "更新后的 E；下次查询的检索上下文",
+   "conditions": "冻结 LLM；仅训练集（GPT-4o 标注、分层采样）上的 F1 有标准答案；评测时 ID temperature 0.0、OOD 0.3",
+   "feedback": "标准答案 F1 + token 成本；编排者生成的成败解释",
+   "selection_rule": "结果驱动的组内排序；库条目由 LLM 按附录 B 提示决定 ADD/MERGE/PRUNE/KEEP；无独立验证集上的条目准入检验，无回滚",
+   "persistence": "E 持续累积（'在线更新'）；测试阶段是否冻结文中未说明",
+   "later_use": "每个新查询：按画像相似度+效用+多样性检索洞见，注入编排者提示以采样拓扑",
+   "claimed_effect": "平均提升 38.69%（口径不明）；去库 6-15% 相对下降；见 E017-E024",
+   "failure_boundary": "案例 H.3/H.4 的失败；Llama 骨干在 MusiQue/Bamboogle 上趋势不同；缺总成本、缺 T/G/训练集规模",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E006",
+    "son55:E007",
+    "son55:E008",
+    "son55:E014",
+    "son55:E028"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "各角色 agent 的 prompt ρ_i（Query Decomposer、Retriever、Answer Generator、Rewriter、Evidence Selector、Validator、Reflect、Conclude）",
+   "information": "被编排者判定为 '主要失败贡献者' 的 agent，可见其最近失败轨迹缓冲区、提示变体重放结果、F1 与 token",
+   "operation": "生成提示变体 → 在失败轨迹上重放 → 对比成败变体抽取 operational rules 与 behavioral principles → 经 LLM 整合（长度/一致性约束 K）写回新 prompt",
+   "output": "ρ_i 的新版本",
+   "conditions": "LLM 冻结；变体轴在正文与 Algorithm 5 中不一致",
+   "feedback": "重放轨迹的 F1/token",
+   "selection_rule": "整合步骤由 LLM 做 diff；无在新样本上的接受检验，无回滚",
+   "persistence": "更新后的 prompt 持续使用于后续查询",
+   "later_use": "后续所有包含该 agent 的拓扑",
+   "claimed_effect": "去 prompt evolution 在 2Wiki 上相对降 ≤30%（图）",
+   "failure_boundary": "评测与提出改动用同一批失败轨迹；无跨样本回归检查",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "son55:E024",
+    "son55:E029"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "协调拓扑（结构后备）",
+   "information": "编排者认定持续失败（F1=0）时的失败 agent 集",
+   "operation": "替换失败 agent 或在其后加入新 agent，生成候选拓扑并回灌到同一个 group-relative 优化循环",
+   "output": "候选拓扑进入下一轮组采样",
+   "conditions": "阈值与触发频率未给",
+   "feedback": "同 S1",
+   "selection_rule": "由 S1 的组排序决定",
+   "persistence": "经验库中记录的洞见",
+   "later_use": "同 S1",
+   "claimed_effect": "拓扑从发散收敛到紧凑（Figure 5-6）",
+   "failure_boundary": "无对 topology mutation 的单独消融",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E033"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "多智能体 RAG 依赖静态 agent 行为与固定编排，在多样多跳任务上脆弱；全局监督信号(最终答案)难以归因；训练型优化昂贵且难以持续适应。",
+  "checked_gap": "部分成立：'静态编排/提示脆弱' 的证据主要来自对比不同规模的外部基线，而非本文受控地展示 '同 agent 同模型下静态拓扑/静态提示' 的失败；与最近邻 training-free GRPO（Cai et al.，group-relative 语义优势）的区别以一句话叙述，未与之实验对比。",
+  "lineage": "固定/顺序式多 agent RAG（IRCoT、Plan-RAG、CORAG）→ RL 训练的多 agent RAG（MMOA-RAG、MAO-ARAG、AceSearcher）→ training-free GRPO（语义优势+经验库）→ 联合优化结构与 prompt 的 agent 系统（引文 Tian/Murthy/Spiess 等）→ 本文：把语义优势提升到拓扑层并叠加角色级 prompt 演化。上述近邻原文未在固定材料中，描述采用本文转述。",
+  "closest_adjacent": "training-free GRPO（Cai et al. 2025）；GEPA/DSPy/TextGrad 的 prompt 优化；联合优化 agent 结构与 prompt 的工作；MMOA-RAG 等 RL 多 agent RAG。",
+  "residue": "未证明 '拓扑层的语义优势' 相对 '仅经验库式 training-free GRPO' 或 '固定最佳拓扑+同 agent' 的增量；LLM 归因准确性未验证。",
+  "stakes": "多跳问答的错误传播与过多 token；文中给出 token 使用曲线。",
+  "method_response": "orchestrator 的 group-relative 反思沉淀经验库，RoPE 对 agent prompt 做角色级演化，拓扑变异作结构后备。",
+  "remaining_gap": "同模型静态多 agent 对照、学习成本总账、冻结测试、归因准确性、统计不确定性、训练设置完整公开。",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E003",
+   "son55:E015",
+   "son55:E022",
+   "son55:E032"
+  ],
+  "unresolved": "training-free GRPO 与联合优化类近邻的原文未固定，无法核对差异的实质程度。"
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [
+   "decompose_and_delegate"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus sides with son55, following the r08b convention for frozen-model curated memory: adapt_via_conditioning (sub null) with decompose_and_delegate (sub null) supporting, since the orchestrator emits a typed JSON topology executed by role agents and a retriever. C03 is not assigned (r04b: no canonical-schema training phase and no simpler-conditioning control). sol's generative_process_redesign is not kept: the searchable orchestration is captured by the domain cards.",
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "moderate",
+    "tactic_steps_checked": "定义：用条件化（示例/检索实例）而非逐任务参数更新来适应——HERA 以检索到的经验洞见为条件采样拓扑，并以进化后的 prompt 为条件，冻结所有 LLM，贴合。C03 的步骤（统一 schema、广参考底座上的上游训练、整类别留出、对最便宜条件化基线的公平对照）：参考底座=经验库，类别留出=OOD 数据集（Bamboogle、HoVer），其余步骤（上游训练、与更长上下文/最近邻条件化基线对比）未执行，故子卡 null。",
+    "success_failure_checks": "成功条件：结构性留出部分满足；条件化渠道一等输入——编排者提示中显式注入洞见；失败模式命中：'多组件条件化流水线的消融过浅'、'未对比最便宜替代'、'单一任务族（Wikipedia 多跳 QA）'。",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E006",
+     "son55:E008",
+     "son55:E014",
+     "son55:E024"
+    ],
+    "reason": "冻结 LLM、以检索洞见与演化 prompt 为条件适应，符合 conditioning-not-retraining 的签名；但最具特色的组内反思与经验库管理并不是该卡强调的内容。"
+   },
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "weak",
+    "tactic_steps_checked": "编排者把查询分解为 agent 子集+顺序+依赖的 JSON 拓扑，并把子任务交给专用 agent（结构化中间产物）；但 agent 是通用 LLM，没有 '可机检的中间产物/可靠外部求解器'，C25 步骤 2-3 (machine-checkable artifact、solver 闭环) 不成立，故子卡 null。",
+    "success_failure_checks": "命中失败模式 '仅把若干通用 agent 串联、无结构性瓶颈证据'。",
+    "evidence_ids": [
+     "son55:E004",
+     "son55:E012"
+    ],
+    "reason": "该分解是被演化的底座结构，不是本文的承重创新，故弱适配。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "cards@52ff9657",
+    "fit": "high",
+    "condition_checks": "S2 对比（组内成败对比）：met；S3 grounding（标准答案 F1 + token）：met（训练阶段）；H00.step4 提炼流与评测流分离：unknown（有 train/test 划分，但测试期库是否冻结未报告）；H00.step5 预算匹配与 store-off：partial（有去库消融，无预算匹配/方差）；F3 '把存储当作优化器替身'：命中——语义优势被表述为取代数值梯度，并与 RL 微调基线直接比较；F1 '把无权重更新当成贡献'：部分命中（贡献条 (i)）。",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E004",
+     "son55:E005",
+     "son55:E013",
+     "son55:E023",
+     "son55:E024",
+     "son55:E028"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "cards@52ff9657",
+    "fit": "moderate-high",
+    "condition_checks": "显式编辑词表 ADD/MERGE/PRUNE/KEEP 与效用计数：met；S4 维护（合并/裁剪/防无界增长）：partial，无规模界数字、无冲突时间戳规则；S5 写入门控（执行/留出验证）：unmet——条目与 prompt 的准入由 LLM 决策；curator 本身未消融。",
+    "evidence_ids": [
+     "son55:E006",
+     "son55:E007",
+     "son55:E011"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H09",
+    "version": "cards@52ff9657",
+    "fit": "moderate",
+    "condition_checks": "把系统视为 agent 图，由编排者向被判定责任 agent 分配批评并更新其 prompt：met；S1 归因范围：partial（LLM 判 '主要贡献者'，无准确性验证）；S3 保护早期收益/回滚：unmet；step5 留出与批评集分离、优化器成本：partial（变体评估重放同批失败轨迹）。",
+    "evidence_ids": [
+     "son55:E009",
+     "son55:E010",
+     "son55:E011"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00"
+   },
+   "operation_correspondence": "原卡：以检索实例/条件而非重训适应 ↔ H00：把成败对比提炼成可检索洞见并注入后续上下文；共享 '冻结模型、外置文本状态'；差别：H00 强调洞见的抽象层级与门控，原卡强调任务格式与类别留出。",
+   "necessary_conditions_and_differences": "H00 的 grounding/对比条件满足；原卡的上游训练与类别级留出基本只满足 OOD 数据集留出；H00 的流分离与预算匹配条件未知/未满足。",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E008",
+    "son55:E014"
+   ]
+  },
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H09"
+   },
+   "operation_correspondence": "编排者对 agent 图分配成败责任并改写责任 agent 的 prompt ↔ 原卡 '分解并交付给专用求解器'；仅在 '存在多节点结构并逐节点处理' 一点相通。",
+   "necessary_conditions_and_differences": "原卡要求可机检中间产物与可靠求解器，本文没有；H09 要求有界传播与回滚，本文没有。",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E012"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "声称经验conditioning带来收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "经验库off与prompt evolution off存在，但编辑policy、随机同长度guidance和计算匹配未隔离。",
+   "evidence_ids": [
+    "sol:E004",
+    "son55:E024",
+    "son55:E025"
+   ],
+   "score_item": [
+    "E.causality"
+   ],
+   "origin": "sol:rs:adapt_via_conditioning/RE-1; son55:rs:adapt_via_conditioning/RE-1"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "声称跨query和OOD泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus: no overlap or contamination analysis, and the test-time freeze is unstated (opus:O01).",
+   "evidence_ids": [
+    "sol:E012",
+    "sol:E020",
+    "son55:E015",
+    "son55:E030"
+   ],
+   "score_item": [
+    "E.holdout"
+   ],
+   "origin": "sol:rs:adapt_via_conditioning/RE-2; son55:rs:adapt_via_conditioning/RE-2"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md"
+   ],
+   "applies_when": "经验库跨query增长",
+   "applicable": true,
+   "status": "partial",
+   "reason": "维护词汇完整；utility成功次数vs成功率矛盾，未量化长期存储规模。",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E013",
+    "son55:E006",
+    "son55:E007"
+   ],
+   "score_item": [
+    "X"
+   ],
+   "origin": "sol:rsi:abstract_experience_into_guidance/S4; son55:rsi:abstract_experience_into_guidance/S4"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/H09",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H09.md#step-by-step"
+   ],
+   "applies_when": "复合系统失败导致组件修改",
+   "applicable": true,
+   "status": "partial",
+   "reason": "变体重放提供相关反馈；未校验LLM错误归因或独立的接受/回滚。",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E015"
+   ],
+   "score_item": [
+    "X",
+    "E.causality"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/H09"
+  },
+  {
+   "id": "local:2604.00901-4",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文§3.3与Appendix A"
+   ],
+   "applies_when": "声称EM/KL保证稳定持续改进",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "附录承认heuristic surrogate和非正规后验；KL最优解形式不能保证实际prompt更新接近原分布或单调收益。",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E009",
+    "sol:E010"
+   ],
+   "score_item": [
+    "M"
+   ],
+   "origin": "sol:local:2604.00901-1",
+   "note": "Renumbered from sol:local:2604.00901-1 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文§5.3与Appendix E/G"
+   ],
+   "applies_when": "声称gradient-free/token效率",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus: inference tokens are reported against selected baselines; learning-phase calls, group rollouts, variant replays and library management are not.",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E007",
+    "sol:E011",
+    "son55:E027"
+   ],
+   "score_item": [
+    "E.cost"
+   ],
+   "origin": "sol:local:2604.00901-2; son55:rs:decompose_and_delegate/RE-1",
+   "note": "Merged here from sol:local:2604.00901-2 (A4: same question under a colliding or different ID)."
+  },
+  {
+   "id": "local:2604.00901-3",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文实验及Appendix F/H"
+   ],
+   "applies_when": "以多数据集主表宣称广泛稳定提升",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus: same question in both seats; no seeds, repeats, variance or intervals anywhere (sizes and negative cases exist, which is E.statistics level 1, but this check asks for uncertainty).",
+   "evidence_ids": [
+    "sol:E012",
+    "sol:E016",
+    "sol:E017",
+    "sol:E018",
+    "son55:E016",
+    "son55:E030"
+   ],
+   "score_item": [
+    "E.statistics",
+    "E.measurement"
+   ],
+   "origin": "sol:local:2604.00901-3; son55:local:2604.00901-3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S2"
+   ],
+   "applies_when": "经验被提炼为指导",
+   "applicable": true,
+   "status": "met",
+   "reason": "对同一查询的 G 个拓扑按结果排序，仅在含成败混合的组上提炼，属于对比而非叙述。",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S2"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S3"
+   ],
+   "applies_when": "有结果信号决定什么成为教训",
+   "applicable": true,
+   "status": "met",
+   "reason": "训练阶段使用标准答案 F1 与 token 成本；但洞见内容与归因由 LLM 生成。",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E014"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "条目/prompt 在发布复用前需被检验",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "洞见与 prompt 的准入由 LLM 整合决定，没有在独立样本上的执行/留出检验，也无回滚。",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E011"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S5"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S1",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S1"
+   ],
+   "applies_when": "声称打破某个此前固定的对象",
+   "applicable": true,
+   "status": "partial",
+   "reason": "点名对象是 '固定编排与静态 agent 提示'，具体；但贡献表述首条还是 '从参数更新转向经验驱动的上下文适应'。",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S1"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F3",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.F3"
+   ],
+   "applies_when": "把组相对语义优势作为权重优化的替身",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "文中直接宣称语义优势取代数值梯度并 '超越 RL 微调的 MMOA-RAG'，却是与异构容量/数据/agent LLM 的基线的 head-to-head（被检查的失败模式在本文出现）。",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E013",
+    "son55:E023"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:abstract_experience_into_guidance/F3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00.step4",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "patterns/sub/H00.md step 4"
+   ],
+   "applies_when": "声称留存经验在后续任务上带来提升",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "有训练/测试划分与 OOD 数据集，但测试阶段经验库与 prompt 是否冻结、是否继续在线更新文中未说明；无泄漏检验。",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E014",
+    "son55:E028"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:abstract_experience_into_guidance/H00.step4"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00.step5",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "patterns/sub/H00.md step 5"
+   ],
+   "applies_when": "声称存储带来增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有去经验库与去 prompt 演化的消融（数值仅在图中）；无预算匹配、无方差、无替代抽象/编辑方案对比；缺 '同模型同 agent 静态拓扑' 基线。",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E024",
+    "son55:E025"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:abstract_experience_into_guidance/H00.step5"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S1"
+   ],
+   "applies_when": "多组件系统的失败归因",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅编辑被编排者判为 '主要贡献者' 的 agent，是局部范围；但归因由 LLM 完成且无准确性检验。",
+   "evidence_ids": [
+    "son55:E010"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S1"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S3"
+   ],
+   "applies_when": "编辑可能破坏早期收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "prompt 整合没有对先前成功案例的回归测试或回滚；变体只在触发它的最近失败轨迹上评估。",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E011"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S3"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(reject_reviews)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "与更便宜的条件化替代比较",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未与 '同 agent 的固定最佳拓扑'、'把近期成败轨迹直接放进上下文' 或朴素反思记忆比较。",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E022"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-3"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #4"
+   ],
+   "applies_when": "多模块条件化流水线",
+   "applicable": true,
+   "status": "partial",
+   "reason": "只对经验库与 prompt evolution 两个模块做消融；group-relative 采样、效用/多样性检索、变体轴、拓扑变异均无单独消融。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E024",
+    "son55:E029"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-4"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #6"
+   ],
+   "applies_when": "效果依赖条件化来源的质量与覆盖",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无训练集规模、经验库规模或覆盖度的敏感性分析；仅在 token 曲线中看到学习阶段动态。",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E027"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-6"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "decompose_and_delegate.md Reviewer expectations #3"
+   ],
+   "applies_when": "多 agent 流水线需可复现",
+   "applicable": true,
+   "status": "met",
+   "reason": "附录 B 给出编排、语义优势、库操作、prompt 整合、RoPE 的提示词；但缺关键超参 G/T/K/阈值与代码。",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E029"
+   ],
+   "score_item": "X",
+   "origin": "son55:rs:decompose_and_delegate/RE-3"
+  },
+  {
+   "id": "local:2604.00901-1",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§4 与 Appendix D/G 的缺项"
+   ],
+   "applies_when": "学习超参决定演化规模",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "训练集规模、迭代数 T、组大小 G、K、拓扑变异阈值与库容量上限均未在文本中给出；Algorithm 5 的变体轴与正文不符。",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E029"
+   ],
+   "score_item": "X",
+   "origin": "son55:local:2604.00901-1"
+  },
+  {
+   "id": "local:2604.00901-2",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 1 / §4 Baselines"
+   ],
+   "applies_when": "与不同模型规模/训练方式的基线直接比较",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "HERA 用闭源 GPT-4o-mini 作 agent，多数基线为 7-8B 单模型且数值来源不明；38.69% 的聚合口径、'Acc' 的计算方式均未说明；HoVer 的 +64.95% 以最弱基线为参照。",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E020",
+    "son55:E022",
+    "son55:E032"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:local:2604.00901-2"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "在六个知识密集型基准上平均提升 38.69% 并优于最近 SOTA",
+   "setting": "编排者 Qwen-3-14B / Llama-3.1-8，agent 为 GPT-4o-mini；Wikipedia + BGE 检索；四个 ID 数据集 + 两个 OOD",
+   "baseline_control": "单轮 RAG、迭代 RAG、Agentic RAG（7-8B 级，多为异构训练方式）",
+   "selection_vs_test": "训练集分层采样自四数据集；评测集未明确是否冻结库",
+   "result_denominator": "HERA(Qwen) HotpotQA F1 63.03 低于 AceSearcher 68.07；Bamboogle F1 60.53 低于 ExSearch 63.80；HoVer 67.35 仅比 ExSearch 66.62 高 0.73；2Wiki Acc 60.02、MuSiQue Acc 27.19、AmbigQA F1 67.81 为最好",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E017",
+    "son55:E018",
+    "son55:E019",
+    "son55:E020",
+    "son55:E022"
+   ],
+   "counterevidence": [
+    "聚合口径不明；基线异构；无方差",
+    "opus:O02"
+   ],
+   "allowed_conclusion": "在其设定下 HERA 在若干数据集上处于最好或接近最好，而非全面领先；38.69% 不可解读为对强基线的增益"
+  },
+  {
+   "claim_id": "C2",
+   "text": "经验库与 prompt 演化各自带来增益且协同",
+   "setting": "Qwen-3-14B/Llama-3.1-8；测试集消融",
+   "baseline_control": "去经验库、去 prompt 演化",
+   "selection_vs_test": "测试集（库冻结状态未知）",
+   "result_denominator": "去库约 6-15% 相对降幅；去 prompt 演化最多 ~30%（2Wiki）；数值仅在图",
+   "evidence_ids": [
+    "son55:E024",
+    "son55:E025",
+    "son55:E026"
+   ],
+   "counterevidence": [
+    "无同 agent 静态多 agent；Llama 在 MusiQue/Bamboogle 趋势不同；无统计",
+    "opus:O01"
+   ],
+   "allowed_conclusion": "两组件移除后性能下降，但缺全静态对照和方差，'非加性协同' 为论断"
+  },
+  {
+   "claim_id": "C3",
+   "text": "稳健的 OOD 泛化",
+   "setting": "Bamboogle(125 题)与 HoVer",
+   "baseline_control": "同 Table 1",
+   "selection_vs_test": "整数据集留出",
+   "result_denominator": "Bamboogle F1 60.53（次于 ExSearch 63.80）；HoVer 67.35 vs ExSearch 66.62",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "son55:E030"
+   ],
+   "counterevidence": "Bamboogle 不是最优；HoVer 次优差距极小；无 '库关闭' 的 OOD 对照",
+   "allowed_conclusion": "OOD 上表现有竞争力，但无证据把 OOD 表现归因于经验库的迁移"
+  },
+  {
+   "claim_id": "C4",
+   "text": "token 高效，gains 来自高效轨迹而非暴力上下文",
+   "setting": "Figure 3-4 与所选基线",
+   "baseline_control": "CORAG、AceSearcher 等",
+   "selection_vs_test": "not_applicable",
+   "result_denominator": "Llama-HERA 约 4.7-6.6k tokens；CORAG 20k+",
+   "evidence_ids": [
+    "son55:E027"
+   ],
+   "counterevidence": "学习阶段总成本未报告；基线为所选",
+   "allowed_conclusion": "推理期 token 用量低于所选的几个基线；学习期成本未知"
+  },
+  {
+   "claim_id": "C5",
+   "text": "涌现的自组织、稀疏探索得到紧凑高效网络",
+   "setting": "拓扑熵与图指标的描述性分析",
+   "baseline_control": "无",
+   "selection_vs_test": "not_applicable",
+   "result_denominator": "无对照",
+   "evidence_ids": [
+    "son55:E033"
+   ],
+   "counterevidence": "未与固定/随机拓扑或无库对照比较",
+   "allowed_conclusion": "描述性现象，非因果证据"
+  },
+  {
+   "claim_id": "C6",
+   "text": "EM/KL 解读使更新稳定一致",
+   "setting": "附录 A",
+   "baseline_control": "无",
+   "selection_vs_test": "not_applicable",
+   "result_denominator": "无",
+   "evidence_ids": [
+    "son55:E013"
+   ],
+   "counterevidence": "作者承认奖励仅为启发式代理",
+   "allowed_conclusion": "类比性解释，非保证"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在作者设定下（冻结 LLM、GPT-4o-mini 作 agent、Wikipedia 检索），带经验库与 prompt 演化的 HERA 在多跳 QA/歧义 QA 的若干数据集上取得最好或接近最好的 Acc/EM/F1，且移除两组件之一会降低测试集表现；推理期 token 用量低于所选基线。但缺少同 agent 静态对照、统计不确定性与学习成本总账，也无法确认测试期库是否冻结，38.69% 与 OOD 优势不能解读为对强基线的稳健增益。",
+  "unresolved": [
+   "测试期库冻结状态；训练规模与超参；同模型静态多 agent 对照；group-relative 反思相对简单反思的贡献；LLM 归因准确性；统计不确定性；学习成本。",
+   "Opus: whether library/prompt updates (which need gold F1) also ran on evaluation queries (opus:O01)."
+  ],
+  "improver_or_online_note": "improver 层未被编辑（编排者与反思/整合提示固定）；保留对象为经验库与 agent prompt，故最高 retained，且因测试期冻结状态未知而带条件。"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Fixed orchestration and static prompts are named and neighbours listed, but training-free GRPO is distinguished in one sentence and static failure is not measured under the same agents.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E003",
+    "sol:E001",
+    "sol:E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with son55. The chain (group contrast → semantic advantage → library → topology; failure replay → prompt variants → consolidation) is concrete, but the load-bearing assumptions (LLM credit assignment, consolidation quality) are untested, the EM/KL account is self-described as heuristic, and no prediction separates HERA from a fixed best topology or plain reflective memory. The store is cast as a stand-in optimizer (F3).",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E009",
+    "son55:E010",
+    "son55:E013",
+    "sol:E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Prompts and pseudocode are given; G, T, K, training size and thresholds are missing, Algorithm 5's axes differ from the text, utility is a count in Algorithm 3 but a success rate in §3.2, and writes have no gate or rollback.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E011",
+    "son55:E029",
+    "sol:E013",
+    "sol:E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Standard EM/F1/Acc, but 'Acc' is undefined, baseline provenance is mixed, the 38.69% aggregate is unexplained, and the HoVer '+64.95%' uses the weakest baseline while the Bamboogle gap is misstated (opus:O02). Run text–number cap at 2.",
+   "evidence_ids": [
+    "son55:E020",
+    "son55:E021",
+    "son55:E022",
+    "sol:E017",
+    "opus:O02"
+   ],
+   "counterevidence_ids": [
+    "son55:E018",
+    "son55:E019"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Library-off and prompt-evolution-off ablations on two backbones (values partly figure-only); no all-static same-agent arm, no simple-reflection or random-attribution control, heterogeneous quoted baselines.",
+   "evidence_ids": [
+    "son55:E024",
+    "son55:E025",
+    "sol:E004"
+   ],
+   "counterevidence_ids": [
+    "son55:E023",
+    "son55:E026"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with son55. Standard train/test splits with a separately curated training set and two whole OOD datasets. The test-time freeze is unstated while updates need gold F1 (opus:O01), and there is no overlap audit; as in r11a ReCreate, an unreported possible leak route on otherwise standard splits is 2, not 1.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E016",
+    "son55:E028",
+    "sol:E012",
+    "opus:O01"
+   ],
+   "counterevidence_ids": [
+    "sol:E003"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus sides with sol (A2 ladder tier 1): split sizes (Table 2, Bamboogle 125) and negative results (Bamboogle second, Llama ablation exceptions, failure cases H.3–H.4) are reported; no main-result uncertainty. not_reported 0 is for a complete absence of the relevant statistics, which is not the case here.",
+   "evidence_ids": [
+    "sol:E012",
+    "sol:E016",
+    "son55:E026",
+    "son55:E030"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1. Inference token use is measured against selected baselines (Llama ~4.7k–6.6k vs CORAG 20k+); learning-phase cost is absent and nothing is budget-matched.",
+   "evidence_ids": [
+    "son55:E027",
+    "sol:E006",
+    "sol:E007"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v2 text incl. Appendices A–H read. In scope (system_method): an experience library and role prompts are evolved from execution feedback without weight updates and reused on test and OOD queries. All eight items resolved; the test-time freeze is recorded as unresolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ],
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "decompose_and_delegate",
+     null
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "decompose_and_delegate",
+     null
+    ]
+   ],
+   "reason": "r08b convention for frozen-model curated memory; C03 dropped per r04b; see rs_pattern.reason.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "attribute_and_patch_incumbent",
+     "H09"
+    ],
+    [
+     "search_agent_architecture",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ],
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "attribute_and_patch_incumbent",
+     "H09"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ],
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ],
+    [
+     "attribute_and_patch_incumbent",
+     "H09"
+    ]
+   ],
+   "reason": "H00 (son55) names the group-contrast reflection into lessons; H01 the ADD/MERGE/PRUNE/KEEP curator; H09 the orchestrator's credit to the responsible agent prompt. sol's search_agent_architecture with no sub is dropped: neither H17 (one offline design) nor H18 (test-time rewiring with a gate) fits, and per-query topology generation is the read path of H00.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E006",
+    "son55:E010"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.00901-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "A4 collision: sol's local-2 (cost) and son55's local-2 (measurement: heterogeneous baselines, 38.69% aggregate) differ. Final local-2 = son55's, unmet (verified, plus opus:O02). sol's cost question merged into rs:decompose_and_delegate/RE-1.",
+   "evidence_ids": [
+    "son55:E022",
+    "opus:O02"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.00901-3].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Same question in both seats; the check asks for uncertainty, of which there is none.",
+   "evidence_ids": [
+    "son55:E016",
+    "sol:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "RE-2 asks for an overlap/contamination analysis: none, and the freeze is unstated (opus:O01).",
+   "evidence_ids": [
+    "son55:E014",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no fixed-best-topology, raw-trajectory-context or plain reflective-memory arm.",
+   "evidence_ids": [
+    "son55:E024"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: only two modules ablated.",
+   "evidence_ids": [
+    "son55:E024",
+    "son55:E025"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-6].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no sensitivity to training size or library coverage.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified; sol's local-2 merged here.",
+   "evidence_ids": [
+    "son55:E027"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: Appendix B gives all prompts (hyperparameters missing, charged under X).",
+   "evidence_ids": [
+    "son55:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/F3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: semantic advantages are presented as replacing numerical gradients and set head-to-head with RL-trained baselines of different capacity.",
+   "evidence_ids": [
+    "son55:E023"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/H00.step4].status",
+   "sol_value": null,
+   "son55_value": "unknown",
+   "decision": "son55",
+   "final_value": "unknown",
+   "reason": "Verified: a split exists but whether the library is frozen at evaluation is not stated (opus:O01).",
+   "evidence_ids": [
+    "son55:E028",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/H00.step5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: store-off exists; no budget match or variance.",
+   "evidence_ids": [
+    "son55:E024"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: specific fixed objects named, but 'no parameter updates' is contribution (i).",
+   "evidence_ids": [
+    "son55:E001"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S2].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: insights only from mixed success/failure groups.",
+   "evidence_ids": [
+    "son55:E005"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: gold F1 and tokens rank trajectories during learning.",
+   "evidence_ids": [
+    "son55:E004",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: admission is an LLM decision without a held-out test or rollback.",
+   "evidence_ids": [
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/H09].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified (sol only): variant replay gives component feedback; attribution accuracy and rollback are unchecked.",
+   "evidence_ids": [
+    "sol:E014",
+    "son55:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: only the agent judged primary contributor is edited; attribution accuracy is untested.",
+   "evidence_ids": [
+    "son55:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no regression check on earlier successes; variants are scored on the failures that triggered them.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.M",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "son55",
+   "final_value": 2,
+   "reason": "See ratings.M: untested credit-assignment premises and no separating prediction against simple alternatives; the EM/KL account is heuristic by the authors' own statement.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E013"
+   ],
+   "score_impact": "−5.0 vs sol (20×1/4)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "son55",
+   "final_value": 2,
+   "reason": "See ratings.E.holdout: standard splits and two OOD datasets; the unstated freeze is an unreported possible leak route, which the run scores 2 (r11a ReCreate).",
+   "evidence_ids": [
+    "son55:E028",
+    "opus:O01"
+   ],
+   "score_impact": "+2.5 vs sol (10×1/4)"
+  },
+  {
+   "field_path": "ratings.E.statistics",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "not_reported",
+    "rating": 0
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "See ratings.E.statistics: sizes and negative results exist (A2 tier 1); not_reported is for a full absence.",
+   "evidence_ids": [
+    "sol:E012",
+    "son55:E030"
+   ],
+   "score_impact": "+1.25 vs son55 (5×1/4)"
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v2 text and Appendices A–H first. Initial view: in scope; retained conditional on an unstated freeze. G 2, M 2, X 2, Em 2 (aggregate/baseline problems), Ec 2, Eh 1–2, Es 1, E.cost 1.",
+  "integrity_checks": "Both seats a1 on 2604.00901v2, material sha 12427e26…; canonical seat hashes equal conflicts.json; both claim_type system_method; both evidence_level retained.",
+  "core_claim_check": "Strongest supported claim: with frozen LLMs, HERA is best or near-best on several QA datasets and removing the library or prompt evolution lowers test scores. The 38.69% aggregate, the HoVer framing and 'robust OOD' are not supported as stated; 'retained' holds only if the library was frozen at evaluation.",
+  "rating_agreement": "G, X, Em, Ec, E.cost agree and were re-checked; M and Eh → son55, Es → sol. Final 47.5."
+ },
+ "input_seat_hashes": {
+  "sol": "442c213a60130823362d19c595df3b910a71a58e1fce33c1e0d747af3dde23cd",
+  "son55": "85646c0e45b3f6f507697f3287817feb18c28f947bbcf1d157e3f84ca2a03b45"
+ },
+ "score": {
+  "raw": 47.5,
+  "display": 47.5,
+  "lower": 47.5,
+  "upper": 47.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "af5071cd49ff93179975ec0cea1550354cd85661da5e601a09adde7ef6d2bbcc"
+}

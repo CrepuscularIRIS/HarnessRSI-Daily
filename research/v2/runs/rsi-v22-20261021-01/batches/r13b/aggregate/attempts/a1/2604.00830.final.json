@@ -1,0 +1,1674 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r13b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "Meta-TTL：把 '测试时学习(TTL)中的自我改进策略' 作为学习对象，用双层优化——内层为标准 TTL（meta-agent 依 meta-prompt φ 在每个 episode 之后重写冻结 actor 的 system prompt），外层为跨训练任务的反思式元训练（提出候选 φ，按 balanced improvement score 在验证任务上择优替换）。作者原话：'consistently outperforms existing baselines, improving TTL over the strongest baseline by up to 23% on ID tasks and 27% on OOD tasks' 且 'the optimized self-improvement policy encodes transferable meta-strategies that generalize beyond the training task distribution'。",
+  "version": "2604.00830v4",
+  "paper_key": "2604.00830",
+  "paper_id": "2604.00830",
+  "title": "Meta-TTL: Meta-Learning Self-Improvement Policies for Language Agents"
+ },
+ "provenance": {
+  "input_hash": "b4101aab7a6a53fbf7d10443f07752da150c1dd7ce6ccaad756de6926bcbc218",
+  "input_package": "batches/r13b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T00:42:52Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.00830.txt",
+   "url": "https://arxiv.org/html/2604.00830v4",
+   "version": "2604.00830v4",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.00830.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 150-158",
+   "quote": "To this end, we propose\nMeta-TTL\n, a framework that treats learning to perform TTL effectively as a meta-learning problem: given a distribution of training tasks, we formulate the discovery of effective self-improvement policies as a bi-level optimization. Concretely, this bi-level structure consists of an inner TTL loop and an outer meta-training loop. In the inner loop, an LLM agent interacts with the environment over a series of episodes and adapts based on prior attempts, measuring how well a candidate self-improvement policy\nϕ\n\\phi\nhelps the agent improve across episodes. In the outer loop, we optimize\nϕ\n\\phi\nover a distribution of training tasks through reflective meta-training: we iteratively refine candidate policies, evaluate them through the inner loop, and retain those that produce stronger TTL performance. At test time, the learned self-improvement policy is frozen and applied to unseen tasks.",
+   "support_explanation": "作者将跨任务改进规则本身优化，测试时冻结。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 595-610",
+   "quote": "In general, an LLM-based actor policy is jointly determined by its weights\nθ\n\\theta\nand its prompt\nc\nc\n. The self-improvement policy can therefore operate along two axes: modifying\nθ\n\\theta\n(gradient-based adaptation) or modifying\nc\nc\n(prompt-based adaptation). We focus on the prompt-based instantiation, where\nθ\n\\theta\nis frozen and all behavioral change is mediated through system prompt rewriting. This avoids gradient computation at test time and makes adaptation lightweight.",
+   "support_explanation": "权重冻结；改变的是 actor system prompt。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 739-763",
+   "quote": "Overview\n\nAs shown in the outer loop of Figure\n2\n, meta-training maintains a single expert meta-prompt\nϕ\n⋆\n\\phi^{\\star}\n, initialized from the seed meta-prompt\nϕ\n0\n\\phi_{0}\n. At each iteration, we sample a task from the train set and run it using\nϕ\n⋆\n\\phi^{\\star}\nto produce a full TTL session. A reflection module then reflects on the resulting TTL session to propose a revised meta-prompt candidate\nϕ\n~\n\\tilde{\\phi}\n, which is compared against the current expert meta-prompt over the validation set. The candidate replaces\nϕ\n⋆\n\\phi^{\\star}\nif its balanced improvement score (defined below) is positive.",
+   "support_explanation": "单一 incumbent meta-prompt、轨迹反思、验证选择。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 918-944",
+   "quote": "Both meta-prompts are normalized using the same history of scores.\nThe candidate\nϕ\n~\n\\tilde{\\phi}\nreplaces the\ncurrent expert\nϕ\n⋆\n\\phi^{\\star}\nonly if\n\nBIS\nt\n​\n(\nϕ\n~\n,\nϕ\n⋆\n)\n>\n0\n\\mathrm{BIS}_{t}(\\tilde{\\phi},\\phi^{\\star})>0\n. More details can be found in Appendix\nC",
+   "support_explanation": "相同历史归一化，BIS>0 接受；不是统计显著性门控。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 949-965",
+   "quote": "After offline meta-training, we freeze the learned meta-prompt\n\nϕ\n⋆\n\\phi^{\\star}\nand evaluate it on in-distribution (ID) and out-of-distribution (OOD) tasks. ID and OOD are defined relative to meta-training: ID tasks come from domains used\nduring meta-training, whereas OOD tasks come from held-out domains. For WebArena-Lite and\nτ\n2\n\\tau^{2}\n-bench, ID evaluation uses\nheld-out task instances within the seen domains. For Jericho, where each game is a single task, ID evaluation uses the meta-training games. Within each evaluation task, the meta-agent uses the fixed\n\nϕ\n⋆\n\\phi^{\\star}\nto update the actor’s prompt between episodes.",
+   "support_explanation": "ID/OOD 边界明确；Jericho ID 复用训练游戏。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 998-1007",
+   "quote": ", a realistic customer-service benchmark involving conversational tool use. For Jericho, Detective, Zork 1, and Temple are used for meta-training\nand ID evaluation, while Balances, Library, and Zork 3 are held out for OOD evaluation. For WebArena-Lite, Shopping, GitLab, and Map are ID domains, whose tasks are split into training, validation, and evaluation sets; Reddit and Shopping Admin are OOD domains. For\nτ\n2\n\\tau^{2}\n-bench, Airline and Retail are ID domains, and Telecom is OOD. Each TTL session contains six episodes on Jericho and three on WebArena-Lite and\nτ\n2\n\\tau^{2}\n-bench.",
+   "support_explanation": "三个 benchmark 的 domain 划分与 episode 数。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1039-1057",
+   "quote": "configuration-optimization methods. Methods that use a separate LLM to update the actor between episodes (the\nadaptation LLM\n, corresponding to the meta-agent in\nMeta-TTL\n) use GPT-5, the same model as\nMeta-TTL\n’s meta-agent. We also include a\nNaive\nmeta-agent that shares the same architecture and models of\nMeta-TTL\nbut uses an unoptimized self-improvement policy. We report two metrics for each TTL session:\nAverage Score\n, the mean score across episodes, and\nW-AUC\n(Eq.\n1\n). Results with additional model backbones are reported in Appendix\nD\n.",
+   "support_explanation": "共享适配模型及 naive meta-agent 对照。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1814-1817",
+   "quote": "Figure 3:\nPer-episode normalized score on Jericho, averaged over ID and OOD games.\nMeta-TTL\nshows the largest improvement over the session. Shading denotes the standard error over five runs.",
+   "support_explanation": "主图提供五次运行标准误。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 2175-2202",
+   "quote": "Reflective meta-training matches RL-based training with far fewer rollouts.\n\nWe provide a comparison between training the same Qwen3-4B meta-agent by GRPO\n(\nShao et al., 2024\n)\nand by\nMeta-TTL\n’s outer-loop, both using a shared frozen Gemini-3-Flash actor. GRPO updates the meta-agent’s weights, whereas our reflective meta-training updates its meta-prompt. As shown in Table\n5\n, the\nMeta-TTL\nouter loop matches or exceeds GRPO on both ID and OOD averages while using far fewer rollouts (350 vs. 1,920). Moreover,\nMeta-TTL\n’s outer loop is gradient-free and produces a readable meta-prompt rather than model weights.\n\nMeta-TTL\n’s outer loop outperforms GEPA.\n\nWe also compare with GEPA\n(\nAgrawal et al., 2026\n)\n, a widely used reflective prompt optimizer that maintains a Pareto frontier of candidates across validation tasks. As shown in Table\n5\n, GEPA performs well on some ID games but transfers less effectively to OOD games. A plausible explanation is that GEPA’s candidate-selection mechanism preserves prompts specialized to individual tasks, which is not well aligned with the meta-learning objective of finding a single self-improvement policy that generalizes. This is also consistent with our finding that the prompts produced by GEPA contain substantial task-specific facts and solutions, which can benefit seen tasks but are less useful on unseen ones. Full meta-prompts can be found in Appendix\nA\n.",
+   "support_explanation": "GRPO及GEPA improver对照；预算350 vs1920且解释GEPA差异仅 plausible。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 2344-2354",
+   "quote": "Efficiency analysis.\n\nTest time.\nAs shown in Table\n6\n,\nMeta-TTL\n’s test-time latency is comparable to existing prompt-optimization baselines. It uses five adaptation LLM calls per six-episode Jericho session, with total LLM calls and token usage within the range of these baselines.\n\nMeta-training.\nMeta-training incurs a one-time offline cost that requires no GPU training. Across the three benchmarks, meta-training runs for 12–15 iterations with 205–350 TTL sessions and about $30–70 in API cost per benchmark, depending on the benchmark and model backbone. The learned meta-prompt is then applied to all test tasks without further training.",
+   "support_explanation": "报告在线调用和一次性搜索成本。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 3999-4001",
+   "quote": "Setup.\n\nIn a TTL session, the actor attempts the same task over several episodes, and the environment is reset at the start of each episode. Within an episode, the actor acts based only on its system prompt and current observation. After each episode, the meta-agent, following the meta-prompt, reads the history of previous episodes and writes new guidance for the actor. This guidance becomes the actor’s entire system prompt for the next episode, so it is the only information carried from one episode to the next. Text in quotation marks is copied exactly from the environment, the meta-agent’s output, or the meta-prompt.",
+   "support_explanation": "新 episode 重置，跨 episode 只有 guidance 留存。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 4098-4102",
+   "quote": "The actor answers questions on a shopping website by clicking and typing, with at most 10 actions per episode and 3 episodes per session. After each episode, the meta-agent learns only whether the answer was correct, plus a short reason. The task is:\n\n“How much did I spend on shopping at One Stop Market on November 2022? They gave me a 20% discount on the total amount for orders exceeding $200 in cash.”\n\nThe actor must add up all November 2022 orders, taking 20% off any cash order over $200. The three episodes failed, failed, and passed.",
+   "support_explanation": "Web 测试重试收到 correctness 及简短原因。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 4149-4151",
+   "quote": "Task.\n\nThe actor is an airline customer-service agent. It chats with a simulated user and, following the airline’s policy, uses tools to look up and change bookings. An episode scores 1 only if (a) the database ends in the correct state and (b) the user was told the required information; otherwise it scores 0. The simulated user can end the conversation at any time, and the session has 3 episodes. Here, the user wants to move a basic economy booking to the nonstop flight HAT041. Since basic economy cannot be changed, this takes two changes: an upgrade to economy, then the flight change. The three episodes scored 0, 1, and 1.",
+   "support_explanation": "tau2 使用数据库与交流检查。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 2926-2928",
+   "quote": "You are the META agent in a test-time-learning loop for a browser ACTOR. Read the complete task history and write self-contained guidance for the next episode. Your guidance replaces all prior ACTOR instructions, so preserve every still-useful verified fact needed to finish while removing obsolete procedures, failed speculation, and unnecessary replay.\n\nOptimize for the earliest likely successful episode, not for producing the most detailed plan. The guidance must fit the observed step budget and be robust to the ACTOR’s demonstrated behavior.",
+   "support_explanation": "完整学习产物；存在网站应用状态保留措辞，与实验重置声明存在张力。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 3280-3296",
+   "quote": "Give highest priority to explicit evaluator evidence: reward components, database checks, action checks, communication checks, termination reason, and tool results.\n\n•\n\nUse the transcript and visible policy to explain evaluator evidence. Do not treat the ACTOR’s own policy claims as authoritative.\n\n•\n\nSeparately assess required reads, required writes, final database state, and communication as confirmed correct, confirmed wrong, or uncertain.\n\n•\n\nAudit every actual mutation in the transcript, including its arguments and side effects.\n\n•\n\nDo not assume an action checker lists or penalizes every extra action. “All expected writes matched” can coexist with harmful extra writes and a wrong final database state.",
+   "support_explanation": "测试时meta-agent可见reward、database/action/communication checks。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1059-1067",
+   "quote": "Table 1:\nJericho Results.\nTop: ID games used for meta-training; bottom: OOD games unseen during meta-training. All methods use a frozen Gemini-3-Flash actor. Methods requiring a separate adaptation LLM use GPT-5. Each result is averaged over five repeated runs. Best results are in\nbold\nand second-best results are\nunderlined\n. Green subscripts show the relative improvement of\nMeta-TTL\n’s average over the strongest baseline.",
+   "support_explanation": "Jericho五次重复。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1455-1463",
+   "quote": "Table 2:\nWebArena-Lite Results.\nTop: ID domains used for meta-training; bottom: OOD domains unseen during meta-training. All methods use a frozen Gemini-3-Flash actor. Methods requiring a separate adaptation LLM use GPT-5. Each result is averaged over three repeated runs. Best results are in\nbold\nand second-best results are\nunderlined\n. Green subscripts show the relative improvement of\nMeta-TTL\n’s average over the strongest baseline.",
+   "support_explanation": "Web三次重复。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E018",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1247-1265",
+   "quote": "Meta-TTL\n\n252.67\n\n50.33\n\n8.23\n\n103.74\n+20%\n\n0.790\n\n0.150\n\n0.248\n\n0.396\n+23%",
+   "support_explanation": "Jericho ID W-AUC .396，对照EvoTest .323。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E019",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1435-1453",
+   "quote": "Meta-TTL\n\n13.67\n\n15.30\n\n2.87\n\n10.61\n+33%\n\n0.292\n\n0.522\n\n0.427\n\n0.414\n+27%",
+   "support_explanation": "Jericho OOD W-AUC .414，对照 .325。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E020",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1643-1661",
+   "quote": "Meta-TTL\n\n0.878\n\n0.444\n\n0.644\n\n0.656\n+9%\n\n0.883\n\n0.483\n\n0.711\n\n0.693\n+12%",
+   "support_explanation": "Web ID .693 vs Memory .619。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E021",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 1795-1809",
+   "quote": "Meta-TTL\n\n0.754\n\n0.747\n\n0.751\n+5%\n\n0.772\n\n0.760\n\n0.766\n+5%",
+   "support_explanation": "Web OOD .766 vs TextGrad .728。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E022",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 2012-2027",
+   "quote": "Meta-TTL\n\n0.667\n\n0.633\n\n0.533\n\n0.717\n+10%\n\n0.700\n+11%\n\n0.583\n+11%",
+   "support_explanation": "tau2 Airline/Retail/Telecom W-AUC .717/.700/.583。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E023",
+   "material_id": "2604.00830.txt",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "lines 4931-4951",
+   "quote": "SFT+MAML.\n\nThis baseline meta-learns an initialization for Online SFT. On the ID games, a first-order MAML outer loop, implemented with Reptile\n(\nFinn et al., 2017\n;\nNichol et al., 2018\n)\n, learns the initialization\nθ\n0\n\\theta_{0}\nof a LoRA adapter\n(\nHu et al., 2021\n)\nfor the Online SFT inner loop. At test time, the actor starts from\nθ\n0\n\\theta_{0}\nand adapts with Online SFT. The LoRA adapter trained using 15 meta-steps on 2xH200 GPUs, and the 8B base model is kept frozen. We use first-order Reptile to avoid the heavy computational cost of second-order MAML, which requires computing second-order gradients through the inner loop of an 8B model.",
+   "support_explanation": "参数方法独立训练设计，不能作严格成本公平的能力定论。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "We argue that optimal self-improvement policies should be learned from task environments, not hand-engineered based on human intuition.",
+   "support_explanation": "作者的 gap/主张：自我改进策略应被学习而非手写。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "Abstract",
+   "quote": "improving TTL over the strongest baseline by up to 23% on ID tasks and 27% on OOD tasks.",
+   "support_explanation": "摘要主结果；'up to' 对应 Jericho 的 ID(+23%)、OOD(+27%)。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "1 Introduction, contributions",
+   "quote": "The learned policy is instantiated as a natural-language meta-prompt.",
+   "support_explanation": "被学习/留存对象：自然语言 meta-prompt（非权重）。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "3 Methodology",
+   "quote": "The inner loop adapts the actor across episodes by rewriting its system prompt, while the outer loop improves the meta-prompt by proposing candidates from rollouts and retaining the candidate only if it improves on validation tasks.",
+   "support_explanation": "双层结构与留存规则的作者概述。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "Figure 2 caption",
+   "quote": "A proposer reflects on a TTL session generated by the current expert meta-prompt to propose a candidate meta-prompt. The candidate is evaluated across validation tasks and replaces the expert if its balanced improvement score (BIS) is positive.",
+   "support_explanation": "外循环：单一 incumbent(expert) φ⋆，候选仅在 BIS>0 时替换。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "3.3 Task-Balanced Scoring",
+   "quote": "we define a balanced improvement score (BIS) by normalizing each task's W-AUC against its score history",
+   "support_explanation": "选择统计量：对每个验证任务按其历史得分 z-score 后求候选与 incumbent 的差均值；严格 >0 即替换，无置信/配对检验。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "3.4 Evaluation",
+   "quote": "For Jericho, where each game is a single task, ID evaluation uses the meta-training games.",
+   "support_explanation": "Jericho 的 ID 评测集=元训练游戏（选择集），摘要 '23% ID' 的数据来自这里。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "3.4 Evaluation",
+   "quote": "ID evaluation uses held-out task instances within the seen domains.",
+   "support_explanation": "WebArena-Lite 与 τ²-bench 的 ID 评测使用同域留出任务实例。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "4.1 Benchmarks",
+   "quote": "Detective, Zork 1, and Temple are used for meta-training and ID evaluation, while Balances, Library, and Zork 3 are held out for OOD evaluation.",
+   "support_explanation": "Jericho：3 个训练/ID 游戏、3 个 OOD 游戏；OOD 为同一基准内的未见游戏/网站/领域。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "4.1 Benchmarks",
+   "quote": "Each TTL session contains six episodes on Jericho and three on WebArena-Lite",
+   "support_explanation": "session 内对同一任务重复 6 或 3 个 episode。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "3.1",
+   "quote": "After each episode, the environment resets to its initial state, so improvement across the session must come from adaptation in the agent rather than from environmental state continuity.",
+   "support_explanation": "TTL 协议：同一任务重复尝试，环境重置；session 内改进仅靠重写的 prompt。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "4.1 Models and Baselines",
+   "quote": "We also include a Naive meta-agent that shares the same architecture and models of Meta-TTL but uses an unoptimized self-improvement policy.",
+   "support_explanation": "关键对照：同架构同模型、仅 φ 未优化。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "4.1 Models and Baselines",
+   "quote": "All main experiments use a frozen Gemini-3-Flash actor.",
+   "support_explanation": "actor 固定为 Gemini-3-Flash；meta-agent 与需要适配 LLM 的基线均用 GPT-5。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "Table 1 caption",
+   "quote": "Each result is averaged over five repeated runs.",
+   "support_explanation": "Jericho：5 次重复运行平均；表中无区间。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "Table 1 (Jericho ID)",
+   "quote": "EvoTest 205.33 48.03 7.03 86.80 0.628 0.139 0.202 0.323 Naive Meta-Agent 114.00 44.30 6.73 55.01 0.327 0.129 0.189 0.215 Meta-TTL 252.67 50.33 8.23 103.74 +20% 0.790 0.150 0.248 0.396 +23%",
+   "support_explanation": "Jericho ID（训练游戏）W-AUC：Meta-TTL 0.396 vs 最强基线 EvoTest 0.323、Naive 0.215。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "Table 1 (Jericho ID)",
+   "quote": "Static 122.00 39.83 5.00 55.61 0.328 0.114 0.143 0.195",
+   "support_explanation": "无学习 Static 的 ID W-AUC 0.195，高于 Reflexion(0.173)、Memory Agent(0.181)、TextGrad(0.156)、EvoPrompt 约 0.196 持平，说明多个基线在此设置反而不如不学习。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "Table 1 (Jericho OOD)",
+   "quote": "EvoTest 9.67 10.30 2.87 7.61 0.197 0.355 0.423 0.325 Naive Meta-Agent 10.00 11.97 1.73 7.90 0.200 0.409 0.248 0.286 Meta-TTL 13.67 15.30 2.87 10.61 +33% 0.292 0.522 0.427 0.414 +27%",
+   "support_explanation": "Jericho OOD（留出游戏）：Meta-TTL 0.414 vs EvoTest 0.325 vs Naive 0.286；Zork 3 上 Meta-TTL(0.427)≈EvoTest(0.423)。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Table 2 caption",
+   "quote": "Each result is averaged over three repeated runs.",
+   "support_explanation": "WebArena-Lite：3 次重复平均。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "Table 2 (WebArena ID)",
+   "quote": "Naive Meta-Agent 0.778 0.356 0.500 0.545 0.806 0.383 0.511 0.567 Meta-TTL 0.878 0.444 0.644 0.656 +9% 0.883 0.483 0.711 0.693 +12%",
+   "support_explanation": "WebArena ID（留出任务实例）：W-AUC 0.693 vs 最强基线 +12%，vs Naive 0.567。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "Table 2 (WebArena OOD)",
+   "quote": "Naive Meta-Agent 0.708 0.702 0.705 0.719 0.724 0.722 Meta-TTL 0.754 0.747 0.751 +5% 0.772 0.760 0.766 +5%",
+   "support_explanation": "WebArena OOD：Meta-TTL 0.766 vs 最强基线 +5%、vs Naive 0.722（+6%）；Static 为 0.694。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "Table 3 caption + rows",
+   "quote": "ID results on Airline and Retail, and OOD results on Telecom with the meta-prompt frozen.",
+   "support_explanation": "τ²-bench 表题未说明重复运行次数；结果粒度（0.567、0.633…）对应小样本。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "Table 3",
+   "quote": "Meta-TTL 0.667 0.633 0.533 0.717 +10% 0.700 +11% 0.583 +11%",
+   "support_explanation": "τ²-bench：Airline/Retail ID 与 Telecom OOD 的平均分与 W-AUC；Retail 平均分 0.633 与 Reflexion 同值。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "Table 4",
+   "quote": "Meta-TTL 0.259 0.074 0.214 0.182 0.131 0.233 0.238 0.201",
+   "support_explanation": "Qwen3-8B 上与 Online SFT/GRPO/SFT+MAML 比较：Meta-TTL 平均 0.182/0.201；SFT+MAML 在 Zork 3 为 0.405 更高。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "4.3",
+   "quote": "outer loop matches or exceeds GRPO on both ID and OOD averages while using far fewer rollouts (350 vs. 1,920).",
+   "support_explanation": "外循环优化器对比：vs GRPO（权重更新 meta-agent）。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "Table 5",
+   "quote": "Base (untrained) 0.198 0.110 0.129 0.146 0.105 0.217 0.181 0.168 RL outer loop (GRPO) 0.219 0.117 0.114 0.150 0.121 0.172 0.229 0.174 GEPA outer loop 0.218 0.085 0.154 0.152 0.124 0.252 0.219 0.198 Meta-TTL outer loop 0.235 0.127 0.129 0.164 0.150 0.300 0.247 0.232",
+   "support_explanation": "同 actor、同 Qwen3-4B meta-agent 下替代外循环：ID 平均 0.164 vs GEPA 0.152 vs 未训练 0.146；OOD 0.232 vs 0.198 vs 0.168；单次、无区间。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "4.4 Efficiency analysis",
+   "quote": "meta-training runs for 12-15 iterations with 205-350 TTL sessions and about $30-70 in API cost per benchmark",
+   "support_explanation": "元训练成本：迭代数、session 数、美元。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "4.4 Efficiency analysis",
+   "quote": "It uses five adaptation LLM calls per six-episode Jericho session, with total LLM calls and token usage within the range of these baselines.",
+   "support_explanation": "测试时成本与基线对比（Table 6：Meta-TTL 约 861s/364k tokens；EvoTest 759s/181k）。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "4.4 Emergent strategies",
+   "quote": "Collectively, these strategies describe how to learn from previous attempts rather than how to solve any particular task",
+   "support_explanation": "作者对学到的 meta-prompt 的定性解读；附录 A.1 的 Jericho meta-prompt 同时含大量文字冒险专属规则（parser 反馈、库存、危险转移等），所以 '纯元层' 解读未被隔离（our_inference）。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "Appendix B.1",
+   "quote": "In episode 4, the actor followed the guidance and it still failed, so the meta-agent attributed the failure to the guidance and replaced the idea instead of repeating it.",
+   "support_explanation": "定性案例：meta-agent 区分 '依从失败' 与 '指导本身错误'。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "Appendix B Setup/B.2",
+   "quote": "After each episode, the meta-agent learns only whether the answer was correct, plus a short reason.",
+   "support_explanation": "反馈信息：episode 级正确性+简短原因（WebArena）。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "locator": "Contributions",
+   "quote": "Meta-TTL achieves the highest average W-AUC on every benchmark in both ID and OOD settings, improving over the strongest baseline by 10-23% on ID tasks and 5-27% on OOD tasks.",
+   "support_explanation": "完整幅度范围：ID 10-23%、OOD 5-27%。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "locator": "Appendix C Algorithm 2 (inputs)",
+   "quote": "acceptance margin",
+   "support_explanation": "Algorithm 2 的输入含 acceptance margin δ，但替换判据只写 '平均归一化得分更大' 而未使用 δ（our_inference：规则与文字描述的 BIS>0 一致，δ 未起作用）。",
+   "kind": "our_inference",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "locator": "Table 1 (Jericho ID)",
+   "quote": "Reflexion 101.33 41.47 4.03 48.94 0.288 0.120 0.113 0.173",
+   "support_explanation": "Reflexion 的 ID W-AUC 0.173 低于 Static(0.195)。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "son55:E034",
+   "locator": "Appendix D",
+   "quote": "The meta-prompt used for evaluation is independently meta-trained with this backbone.",
+   "support_explanation": "换 GLM-5.3-Flash 作 meta-agent 需重新元训练；Meta-TTL 在 Tables 7-8 的各列最优。",
+   "kind": "author_report",
+   "material_id": "2604.00830",
+   "material_sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.00830.txt",
+   "material_hash": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "Appendix B Setup",
+   "quote": "This guidance becomes the actor’s entire system prompt for the next episode, so it is the only information carried from one episode to the next.",
+   "support_explanation": "φ acts only through the post-episode rewrites; episode 1 runs the same initial actor prompt in every arm. Differences between Naive and Meta-TTL sessions therefore come from the subsequent changes the improver writes.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.00830.txt",
+   "material_hash": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "Appendix D",
+   "quote": "The meta-prompt used for evaluation is independently meta-trained with this backbone.",
+   "support_explanation": "A second, independent meta-training run (GLM-5.3-Flash meta-agent) reproduces the ordering against Naive/AWM/EvoTest on Jericho and WebArena-Lite (Tables 7–8).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.00830.txt",
+   "material_hash": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "sha256": "93c421cfdfc77207cc8a6b61fd498581345b5019da638e4ff45a457f9f271f71",
+   "locator": "Appendix A.2 (learned WebArena-Lite meta-prompt)",
+   "quote": "A visibly confirmed committed application change is normally durable.",
+   "support_explanation": "The learned prompt treats committed web-application state as persisting across episodes, while §3.1 says the environment resets. If WebArena state persists, part of the cross-episode gain in every arm comes from environment continuity. Unresolved; it affects all arms equally.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "自我改进策略 φ（meta-prompt，自然语言）——即 '改进器'；单一 incumbent φ⋆，由种子 φ0 初始化",
+   "information": "外循环：对从训练集采样的一个任务，用 φ⋆ 跑完整 TTL session；两阶段反思先抽取任务专属事实 F_g，再据 session、F_g、φ⋆ 提出任务无关的修订 φ̃；验证：在验证任务上分别用 φ⋆ 与 φ̃ 跑 TTL session",
+   "operation": "采样训练任务 → 跑 session → 抽事实 → 反思提议 φ̃ → 在验证集上评测 φ⋆ 与 φ̃ → 按 BIS 判定替换",
+   "output": "冻结的 φ⋆（12-15 次迭代的产物）",
+   "conditions": "actor 冻结(Gemini-3-Flash)；meta-agent GPT-5；W-AUC 按线性权重偏重后期 episode；各 benchmark 单独元训练",
+   "feedback": "环境原生奖励（Jericho 得分、WebArena 评测器结果+简短原因、τ² 数据库终态+信息核对）经 W-AUC 汇总",
+   "selection_rule": "每个验证任务的 W-AUC 对其历史得分 z-score，候选与 incumbent 的均值差 >0 即替换；无配对检验/多种子，Jericho 的 '验证' 与 ID 评测任务重合风险",
+   "persistence": "φ⋆ 文本保存，测试时冻结并复用于所有测试任务；提议器提示词、种子 φ0、验证集规模未在材料中给出",
+   "later_use": "在 ID 留出实例与 OOD 游戏/网站/领域上作为 meta-agent 的 meta-prompt",
+   "claimed_effect": "Jericho ID/OOD W-AUC 相对最强基线 +23%/+27%，WebArena +12%/+5%，τ² +10-11%；见 E015-E022",
+   "failure_boundary": "OOD 仅同一基准族内；Zork 3 近乎打平；Jericho ID=训练游戏；无元训练种子方差",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E005",
+    "son55:E006",
+    "son55:E007",
+    "son55:E009",
+    "son55:E032"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "actor 的 system prompt ρ_k（内层 TTL，session 内瞬时状态）",
+   "information": "meta-agent 看到完整轨迹历史 H_k 与当前 ρ_k；环境在每个 episode 后重置",
+   "operation": "ρ_{k+1} ~ f_φ(·|ρ_k, H_k)：诊断失败来源（执行问题 vs 指导错误），保留已验证事实，写自包含的新指导",
+   "output": "下一个 episode 的完整 system prompt（替换旧指导）",
+   "conditions": "同一任务连续 K 次（Jericho 6、WebArena/τ² 3）；episode 反馈为得分/评测器结果",
+   "feedback": "上一 episode 的结果与简短原因",
+   "selection_rule": "无接受/拒绝：每个 episode 后总是替换（由 φ 内的规则来 '保护强基线'）",
+   "persistence": "仅 session 内；不跨任务保留（跨任务保留的是 φ⋆）",
+   "later_use": "同一任务的后续 episode",
+   "claimed_effect": "session 内 W-AUC 随 episode 上升（Fig.3）；案例研究",
+   "failure_boundary": "改进建立在对同一任务反复试错之上，提升含任务专属信息的累积（E011）",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E011",
+    "son55:E029",
+    "son55:E030"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "已有 TTL 方法（Reflexion、记忆、提示/配置优化）使用手工设计的自我改进策略，没有为 '下游改进' 而优化；自我改进是需要专门优化的学习算法，不是通用 LLM 的副产品。",
+  "checked_gap": "大体成立且有间接证据：Jericho ID 上 Reflexion/Memory Agent/TextGrad 的 W-AUC 低于 Static，Naive meta-agent 仅略高于 Static，表明手工/未优化策略不稳定增益（E016, E033）。但 '最优策略应被学习而非手写' 属论断，缺少 '强的人写 meta-prompt' 作为对照来证明学习优于认真手写。",
+  "lineage": "Reflexion/Self-Refine（手写反思）→ 记忆与技能库（Memory Agent、AWM）→ 提示与配置优化（TextGrad、EvoPrompt、GEPA、EvoTest，优化任务行为但策略手写）→ 并行工作 LAMER/MR-Search/LSE（用 RL 训练自我改进能力，需改权重）→ 本文（在 prompt 空间对自我改进策略做元学习，无梯度）。近邻只以引用和本文转述出现，原文未固定。",
+  "closest_adjacent": "EvoTest（演化整个 agent 配置，自带手写 evolver）；GEPA（反思式 prompt 优化器，作为外循环对照）；LSE（单步目标训练 prompt 编辑策略，改权重）；LAMER、MR-Search。",
+  "residue": "未排除 '元训练得到的 prompt 只是编码了基准族的领域先验' 的解释；无强人写策略对照；BIS 与两阶段反思未消融。",
+  "stakes": "TTL 部署中重复犯错；自我改进策略决定可否跨任务迁移。",
+  "method_response": "双层优化：外循环以 TTL 表现为适应度，反思式元训练 φ，验证门控替换；测试时冻结。",
+  "remaining_gap": "多种子元训练稳健性；跨基准族迁移（目前 OOD 仍在同一族）；与手写强策略的对比；提议器与种子公开。",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E012",
+   "son55:E016",
+   "son55:E028",
+   "son55:E033"
+  ],
+  "unresolved": "近邻（EvoTest、LSE、LAMER、MR-Search）原文未固定，其自我改进策略是否已被不同形式地优化无法核对；不据此断言新颖性。"
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus sides with sol. The paper liberates a conventionally fixed component, the hand-crafted self-improvement policy, and makes it a learned artifact; the taxonomy note maps make_the_improver_editable to generative_process_redesign. adapt_via_conditioning/C03 (both seats) is supporting: meta-training over a task distribution with whole-domain holdout, acting through conditioning text. son55's reframe_as_solvable_object (bi-level formulation) is a framing, weak by son55's own note, and is not kept.",
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": [
+     "明确固定的self-improvement policy",
+     "开放meta-prompt为搜索变量",
+     "以下游TTL选择并冻结部署"
+    ],
+    "success/failure_checks": "naive与GEPA/GRPO对照、OOD展示；BIS和reflection单项消融不足；C15/23/24专属空间表示/扩散链/生成接口战术不适配，sub=null。",
+    "evidence_ids": [
+     "sol:E001",
+     "sol:E003",
+     "sol:E009"
+    ],
+    "reason": "自由化的是跨episode生成改进的规则，不是泛泛多模块。"
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "supporting",
+    "fit": "moderate",
+    "tactic_steps_checked": "C03 步骤对照：(1) 统一条件化格式——自包含的 system prompt/TTL session 格式，部分；(2) 参考底座——跨领域训练任务集合，执行；(3) 上游阶段让冻结模型学会 '怎么读条件'——本文的上游阶段是 prompt 空间的元训练（不更新权重），与 C03 的多任务调优/元学习相似但载体不同；(4) 按整类别/目标分布留出——OOD 游戏/网站/领域留出，执行（但在同一基准族内）；(5) 对最便宜替代做公平对照——Naive meta-agent、Memory Agent 等，执行；未做 '更长原始上下文' 单独基线。",
+    "success_failure_checks": "成功条件：结构性留出(OOD 域)、对比同架构对照、多任务泛化——部分满足；失败模式：'conditioning 配方依赖手工任务专属搜索' 轻度命中（元提示含基准族专属规则）、'单任务演示'未命中（三基准）。",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E009",
+     "son55:E012",
+     "son55:E017",
+     "son55:E020",
+     "son55:E028"
+    ],
+    "reason": "冻结 actor、仅用 prompt 条件化实现适应，并以跨域元训练学到条件化内容，贴近 adapt_via_conditioning/C03；差别是 '被学习的是 prompt 而非参数'，且 OOD 仍在同族。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H19",
+    "version": "cards@52ff9657",
+    "fit": "high",
+    "condition_checks": "S1 命名不可变锚点：partial（外循环反思模块、BIS 规则、验证集、W-AUC 固定，但未明确作为锚点论述）；S2 改进器适应度=其产物的下游适应度：met（W-AUC of TTL sessions）；S3 对比手写固定改进器：met（Reflexion/AWM/EvoTest/Naive）；S4 成本摆上台面：met（$30-70、session 数、测试时延）；S5 容忍非改进步骤/多谱系：unmet（单 incumbent，严格 >0）；F3 重用基准：Jericho ID=训练游戏命中；F4 噪声累积：partial（BIS 归一化但无多种子）；H19.step3 自我应用与回滚：本文无自应用，候选被拒即回退；step4 选择与报告分离/多谱系：partial。",
+    "evidence_ids": [
+     "son55:E004",
+     "son55:E005",
+     "son55:E006",
+     "son55:E007",
+     "son55:E012",
+     "son55:E015",
+     "son55:E017",
+     "son55:E026"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "manifest-frozen",
+    "fit": "medium",
+    "condition_checks": {
+     "S3": "partial: outer BIS拒绝；inner主要是prompt约束",
+     "S5": "met:完整TTL轨迹",
+     "F5": "partial:案例支持归因，未系统量化诊断准确率"
+    },
+    "evidence_ids": [
+     "sol:E003",
+     "sol:E004",
+     "sol:E011"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H31",
+    "version": "cards@52ff9657",
+    "fit": "moderate-weak",
+    "condition_checks": "候选替换前须通过与提议数据分离的验证集评测：met（提议用一个训练任务的 session，验证用 D_val）；提交统计量应匹配噪声：unmet（均值差>0，无配对检验/多种子/margin 未用）；回滚点：隐含（保留旧 φ⋆）；审计者不在 agent 可及范围：met（评测器为基准原生）。",
+    "evidence_ids": [
+     "son55:E005",
+     "son55:E006",
+     "son55:E032"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "make_the_improver_editable",
+    "sub": "H19"
+   },
+   "operation_correspondence": "传统固定phi被当作外循环搜索变量；产品是生成actor edits的improver。",
+   "necessary_conditions_and_differences": "H19允许固定外层按产品选择，不必声称无限递归；H21侧重可执行memory机制，这里直接编辑meta-agent prompt。",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E003"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain": {
+    "namespace": "rsi",
+    "main": "make_the_improver_editable",
+    "sub": "H19"
+   },
+   "operation_correspondence": "原卡：冻结模型 + 以条件化(prompt)适应新任务，上游阶段学习 '怎么读条件' ↔ 领域卡：改进器(meta-prompt)作为被优化物，以下游表现为适应度；二者共享 '冻结模型、条件文本为学到的状态'，差别在于领域卡把 '产生条件的改进器' 作为编辑对象。",
+   "necessary_conditions_and_differences": "C03 要求类别级留出与最便宜对照（本文有 OOD 域与 Naive 对照）；H19 另要求选择/报告任务分离与多谱系（本文在 Jericho ID 未满足）。",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E007",
+    "son55:E009",
+    "son55:E012"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:make_the_improver_editable/S1",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md reviewer expectations; research/patterns/conditions.json"
+   ],
+   "applies_when": "编辑improver时需固定锚",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus: the outer loop, BIS rule, validation tasks and W-AUC are fixed in practice but not stated as the anchor; the proposer prompts and φ0 are not given.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "son55:E004",
+    "son55:E005",
+    "son55:E006"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:make_the_improver_editable/S1; son55:rsi:make_the_improver_editable/S1"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S2",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md reviewer expectations; research/patterns/conditions.json"
+   ],
+   "applies_when": "声称改进机制优于手工策略",
+   "applicable": true,
+   "status": "met",
+   "reason": "以下游多episode W-AUC而非自身文本评分",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E007",
+    "son55:E004",
+    "son55:E005"
+   ],
+   "score_item": "M",
+   "origin": "sol:rsi:make_the_improver_editable/S2; son55:rsi:make_the_improver_editable/S2"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S3",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md reviewer expectations; research/patterns/conditions.json"
+   ],
+   "applies_when": "声称meta-training有效",
+   "applicable": true,
+   "status": "met",
+   "reason": "Opus: Naive meta-agent (same architecture/models, unoptimized φ) plus Reflexion/AWM/EvoTest with the same GPT-5 adaptation LLM.",
+   "evidence_ids": [
+    "sol:E007",
+    "sol:E009",
+    "son55:E012",
+    "son55:E015",
+    "son55:E017",
+    "son55:E019"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:make_the_improver_editable/S3; son55:rsi:make_the_improver_editable/S3"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F3",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md reviewer expectations; research/patterns/conditions.json"
+   ],
+   "applies_when": "声称未见任务泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus: Jericho ID reuses the meta-training games, but the improver claim rests on whole held-out games/domains and held-out instances.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E012",
+    "sol:E015",
+    "son55:E007",
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:make_the_improver_editable/F3; son55:rsi:make_the_improver_editable/F3"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F4",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md reviewer expectations; research/patterns/conditions.json"
+   ],
+   "applies_when": "多轮选择存在噪声",
+   "applicable": true,
+   "status": "partial",
+   "reason": "五/三次评测及标准误，但非独立outer搜索多种子",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E016",
+    "sol:E017",
+    "son55:E006",
+    "son55:E014",
+    "son55:E018"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:rsi:make_the_improver_editable/F4; son55:rsi:make_the_improver_editable/F4"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S4",
+   "version": "frozen-v1.0",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md reviewer expectations; research/patterns/conditions.json"
+   ],
+   "applies_when": "嵌套搜索主张效率",
+   "applicable": true,
+   "status": "met",
+   "reason": "报告API成本/会话/在线token，不等于所有方法成本严格相等",
+   "evidence_ids": [
+    "sol:E009",
+    "sol:E010",
+    "son55:E026",
+    "son55:E027"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rsi:make_the_improver_editable/S4; son55:rsi:make_the_improver_editable/S4"
+  },
+  {
+   "id": "local:2604.00830-4",
+   "version": "frozen-v1.0",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文v4 §3–4 / Appendix A–E"
+   ],
+   "applies_when": "以W-AUC评价TTL",
+   "applicable": true,
+   "status": "met",
+   "reason": "原环境reward/成功checker、同时均分与W-AUC；不是只看优化目标文字",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E013"
+   ],
+   "score_item": "E.measurement",
+   "origin": "sol:local:2604.00830-1",
+   "note": "Renumbered from sol:local:2604.00830-1 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S5",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json make_the_improver_editable.S5"
+   ],
+   "applies_when": "改进器搜索可能陷入局部最优",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "单一 incumbent、严格 BIS>0 才替换，无档案或非最优父代；单谱系、单次元训练。",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E006"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:make_the_improver_editable/S5"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F6",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json make_the_improver_editable.F6"
+   ],
+   "applies_when": "声称学到的机制可泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "泛化仅在同一基准族内的 OOD 游戏/网站/域；元提示含基准族专属规则，且换 meta-agent 骨干需重新元训练。",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E028",
+    "son55:E034"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:make_the_improver_editable/F6"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H31.step3",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "patterns/sub/H31.md step 3"
+   ],
+   "applies_when": "用含噪评测决定是否替换 incumbent",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "判据为归一化均值差 >0，未用配对检验、多种子或 margin（δ 仅出现在输入列表）；噪声下可能误提升。",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E032"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:evidence_gated_retention/H31.step3"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #1"
+   ],
+   "applies_when": "声称增益来自条件化内容",
+   "applicable": true,
+   "status": "met",
+   "reason": "Naive meta-agent 与 Meta-TTL 仅 φ 不同（同架构、同模型），直接隔离 '优化后的条件文本' 的作用。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E015",
+    "son55:E017"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-1"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #2"
+   ],
+   "applies_when": "声称 held-out/OOD 泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "OOD 为未参与元训练的游戏/网站/域；但未做底座与 actor 对 Jericho/WebArena/τ² 公开任务的预训练污染分析。",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E020"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:adapt_via_conditioning/RE-2"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(reject_reviews)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "与更便宜的条件化替代比较",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有 Static、Memory Agent(保留历史)、Reflexion 等便宜替代；无 '同样 token 的更长原始上下文' 基线或强人写 meta-prompt。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E016",
+    "son55:E033"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-3"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #6"
+   ],
+   "applies_when": "效果依赖条件化来源的质量与覆盖",
+   "applicable": true,
+   "status": "partial",
+   "reason": "给出换 meta-agent(GLM-5.3-Flash) 重训、换 actor(Qwen3-8B) 的结果；未研究训练任务数量/覆盖对迁移的影响。",
+   "evidence_ids": [
+    "son55:E023",
+    "son55:E034"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-6"
+  },
+  {
+   "id": "local:2604.00830-1",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§1 contributions 与 §4.4 BIS 论述"
+   ],
+   "applies_when": "把 BIS 或两阶段反思列为方法组成并声称其作用",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无 BIS 对原始均值、无两阶段反思对单阶段反思的消融；提议器提示词未提供。",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E006"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2604.00830-1"
+  },
+  {
+   "id": "local:2604.00830-2",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§4.4 'transferable meta-strategies' 论断与 Appendix A"
+   ],
+   "applies_when": "声称学到的是不含任务知识的元层策略",
+   "applicable": true,
+   "status": "partial",
+   "reason": "学到的 Jericho meta-prompt 含大量文字冒险专属操作规则（parser 反馈、库存、转移状态等），OOD 仍是同族游戏；无 '去掉族专属内容' 或跨族迁移实验。",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E009"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2604.00830-2"
+  },
+  {
+   "id": "local:2604.00830-3",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Tables 1-3 与 Fig.3"
+   ],
+   "applies_when": "多个 benchmark 的小样本任务比较",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus (revised from unmet): Jericho tables average 5 runs and Fig. 3 shows standard errors; the tables carry no intervals, the τ² repeat count is unstated, and there is one meta-training run per benchmark.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E017",
+    "son55:E021",
+    "son55:E022"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2604.00830-3"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "优化后的自我改进策略显著优于手写/未优化的 TTL 方法（ID）",
+   "setting": "冻结 Gemini-3-Flash actor；GPT-5 作适配 LLM；Jericho/WebArena-Lite/τ²-bench",
+   "baseline_control": "Static、Reflexion、Memory Agent、AWM、TextGrad、EvoPrompt、EvoTest、Naive meta-agent",
+   "selection_vs_test": "Jericho ID=元训练游戏（选择集）；WebArena/τ² ID 为同域留出实例",
+   "result_denominator": "Jericho ID W-AUC 0.396 vs 0.323(EvoTest)/0.215(Naive)；WebArena ID 0.693 vs 0.619 最强/0.567 Naive；τ² Airline 0.717/Retail 0.700",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E015",
+    "son55:E019",
+    "son55:E022"
+   ],
+   "counterevidence": "Jericho ID 数据来自训练游戏；WebArena ID 最强基线(Memory Agent 0.619)；τ² 重复次数未说明",
+   "allowed_conclusion": "在 WebArena/τ² 的同域留出实例上有 10-12% 的相对增益；Jericho 的 ID 增益属选择集结果"
+  },
+  {
+   "claim_id": "C2",
+   "text": "学到的策略迁移到 OOD 游戏/网站/领域",
+   "setting": "Jericho 3 个留出游戏；WebArena Reddit/Shopping Admin；τ² Telecom",
+   "baseline_control": "同上",
+   "selection_vs_test": "整域/整游戏留出，未参与元训练",
+   "result_denominator": "Jericho OOD W-AUC 0.414 vs 0.325 (+27%)；WebArena OOD 0.766 vs 0.728 (+5%)；Telecom 0.583 vs 0.525(Reflexion) (+11%)；Zork 3 与 EvoTest 近乎打平",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E017",
+    "son55:E020",
+    "son55:E022"
+   ],
+   "counterevidence": [
+    "OOD 仍在同一基准族；元提示含族专属内容；无元训练种子方差",
+    "opus:O03"
+   ],
+   "allowed_conclusion": "优化后的 φ 在三个基准族内的未见游戏/网站/域上优于对照；跨族迁移未检验"
+  },
+  {
+   "claim_id": "C3",
+   "text": "外循环优于 RL(GRPO)与 GEPA 元训练，且 rollouts 更少",
+   "setting": "Jericho；同 Gemini-3-Flash actor、Qwen3-4B meta-agent",
+   "baseline_control": "未训练、GRPO(1920 rollouts)、GEPA",
+   "selection_vs_test": "ID=训练游戏，OOD=留出游戏",
+   "result_denominator": "ID 0.164/0.152/0.150/0.146；OOD 0.232/0.198/0.174/0.168；350 vs 1,920 rollouts",
+   "evidence_ids": [
+    "son55:E024",
+    "son55:E025"
+   ],
+   "counterevidence": "ID 差距极小(≈0.012-0.018)、单次、无区间；rollout 计数不同口径",
+   "allowed_conclusion": "该设置下外循环不弱于 GRPO/GEPA，OOD 上差距更明显；统计上未证明"
+  },
+  {
+   "claim_id": "C4",
+   "text": "优于更新参数的 TTL 方法(Online SFT/GRPO/SFT+MAML)",
+   "setting": "Qwen3-8B actor；Jericho；3 个 episode/session",
+   "baseline_control": "Static 与三种参数更新",
+   "selection_vs_test": "ID/OOD 同上",
+   "result_denominator": "平均 0.182/0.201 vs SFT+MAML 0.122/0.157；Zork 3 上 SFT+MAML 0.405 更高",
+   "evidence_ids": [
+    "son55:E023"
+   ],
+   "counterevidence": "总分极低(≤0.4)；设置为极少 episode",
+   "allowed_conclusion": "在该小模型、极少 episode 设置下优于所测参数更新基线，不外推到大模型"
+  },
+  {
+   "claim_id": "C5",
+   "text": "学到的是可迁移的元层策略（credit assignment、verified retention、bounded exploration）",
+   "setting": "定性解读 meta-prompt 与 3 个案例",
+   "baseline_control": "无",
+   "selection_vs_test": "not_applicable",
+   "result_denominator": "无定量隔离",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E029"
+   ],
+   "counterevidence": "meta-prompt 含基准族专属规则",
+   "allowed_conclusion": "作者的解释性叙述；非受控证据"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "improver",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在 Jericho/WebArena-Lite/τ²-bench 三个基准族中，经外循环元训练的 meta-prompt（改进器）在未参与元训练的游戏/网站/领域（OOD）以及同域留出实例上，W-AUC 优于同架构的未优化 meta-agent 及所测手写/优化基线（相对最强基线约 +5% 至 +27%，Jericho ID 属选择集结果）。改进器层面的证据来自 Naive meta-agent 对照与 OOD 留出；但仅为单次元训练、同族 OOD、无强人写对照。",
+  "unresolved": [
+   "BIS 与两阶段反思的贡献；强人写 meta-prompt；元训练种子方差；去除基准族专属内容后的迁移；跨基准族迁移；提议器提示词。",
+   "Opus: WebArena application-state persistence across episodes vs §3.1 reset (opus:O03)."
+  ],
+  "improver_or_online_note": "improver 层：被编辑对象是改进器(meta-prompt)，由固定的外层提议/验证机制编辑；在同架构 Naive 对照与 OOD 留出上产生更有效的后续改动，判 improver（受统计与族内 OOD 限制）。",
+  "evidence_level_note": "improver, checked strictly against EVIDENCE.md: the edited object is the improver (φ governs the post-episode rewrites, the only state carried between episodes; opus:O01); the Naive meta-agent is the fixed improver at the same architecture, models and episode protocol (son55:E012); the improved φ yields better subsequent changes on whole held-out games/sites/domains and held-out instances (son55:E017, son55:E020, son55:E022), replicated by an independent GLM meta-training (opus:O02). Limits: one meta-training run per benchmark, OOD within each benchmark family, Jericho ID = training games, φ0 undisclosed."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. The fixed object (hand-crafted self-improvement policy) is named, neighbours are grouped, and Reflexion/Memory/TextGrad falling below Static on Jericho ID supports the gap. No strong hand-written meta-prompt is compared.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E012",
+    "son55:E016",
+    "sol:E001"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. φ as the optimized improver with product-based fitness (W-AUC), train/validation separation and BIS; Naive gives a separating prediction. BIS and two-stage reflection are unjustified by evidence.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E006",
+    "sol:E003"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Algorithms 1–2, BIS, freezing, iteration/session counts and the final meta-prompts are given; retention is BIS>0 with the old φ⋆ as fallback. Proposer prompts, φ0 and validation-set size are missing; δ is listed but unused (son55:E032).",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E006",
+    "son55:E007",
+    "sol:E004"
+   ],
+   "counterevidence_ids": [
+    "son55:E032"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Native rewards/checkers, W-AUC normalised to max return plus Average Score, Static as trivial baseline. W-AUC is also the meta-training objective; WebArena state persistence is unresolved (opus:O03).",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E016",
+    "son55:E021",
+    "sol:E006"
+   ],
+   "counterevidence_ids": [
+    "opus:O03"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with son55. The Naive meta-agent differs from Meta-TTL only in φ (same architecture, GPT-5 meta-agent, Gemini actor), which isolates the learned improver; GEPA/GRPO outer loops with a shared meta-agent and a second backbone (opus:O02) add alternatives. Not 4: BIS and two-stage reflection are not ablated and there is no strong hand-written φ. sol's 2 asked for component ablations that test sub-mechanisms, not the central claim.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E015",
+    "son55:E019",
+    "son55:E024",
+    "son55:E025",
+    "opus:O02"
+   ],
+   "counterevidence_ids": [
+    "son55:E028"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with son55. φ is frozen and tested on whole held-out games, sites and a held-out τ² domain, plus held-out instances in WebArena/τ². Jericho ID reuses training games (labelled as such), OOD stays within each benchmark family, and public-benchmark pretraining exposure is unaudited. sol's point about checker feedback at test time is the TTL setting itself, applied to every arm, and limits scope rather than holdout.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E009",
+    "son55:E017",
+    "son55:E020",
+    "sol:E005"
+   ],
+   "counterevidence_ids": [
+    "son55:E007"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2 (A2 ladder): 5/3 repeated runs and Fig. 3 standard errors; no intervals in tables, τ² repeats unstated, no meta-training seed variance.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E018",
+    "sol:E008"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Meta-training $30–70, 12–15 iterations, 205–350 sessions; test-time latency/calls/tokens vs all baselines (Table 6); 350 vs 1,920 rollouts vs GRPO. Baseline tuning cost not counted.",
+   "evidence_ids": [
+    "son55:E026",
+    "son55:E027",
+    "sol:E010"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v4 text incl. Appendices A–E read. In scope (system_method): a non-weight self-improvement policy (meta-prompt) is learned from execution feedback, frozen, and reused on held-out tasks and domains. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "generative_process_redesign",
+   "son55_value": "adapt_via_conditioning",
+   "decision": "sol",
+   "final_value": "generative_process_redesign",
+   "reason": "Liberating a fixed component (the improver) is the taxonomy's counterpart of make_the_improver_editable; see rs_pattern.reason.",
+   "evidence_ids": [
+    "sol:E001",
+    "son55:E003"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ],
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ],
+    [
+     "reframe_as_solvable_object",
+     null
+    ]
+   ],
+   "decision": "sol",
+   "final_value": [
+    [
+     "generative_process_redesign",
+     null
+    ],
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ]
+   ],
+   "reason": "C03 is shared by both seats; reframe_as_solvable_object is a formulation, weak by son55's own fit.",
+   "evidence_ids": [
+    "sol:E001",
+    "son55:E009"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ],
+    [
+     "make_the_improver_editable",
+     "H19"
+    ]
+   ],
+   "son55_value": [
+    [
+     "evidence_gated_retention",
+     "H31"
+    ],
+    [
+     "make_the_improver_editable",
+     "H19"
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "make_the_improver_editable",
+     "H19"
+    ],
+    [
+     "attribute_and_patch_incumbent",
+     "H10"
+    ],
+    [
+     "evidence_gated_retention",
+     "H31"
+    ]
+   ],
+   "reason": "H19 shared. H10 (sol) names the outer move: one document (φ) rewritten from diagnosed adaptation failures. H31 (son55) names the commit rule: BIS on a validation set disjoint from the proposal task. Each names a distinct operation (r10b MemSkill convention).",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E006",
+    "sol:E003",
+    "sol:E004"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.00830-1].status",
+   "sol_value": "met",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "A4 collision: sol's local-1 (native-reward measurement, met) and son55's local-1 (no BIS/two-stage ablation) differ. Final local-1 = son55's question, unmet (verified). sol's question renumbered to local-4 (met).",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E005"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.00830-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: the Jericho meta-prompt is full of text-adventure rules; no cross-family transfer test.",
+   "evidence_ids": [
+    "son55:E028"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.00830-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "partial",
+   "reason": "son55 wrote unmet. Repeats (5/3) and Fig. 3 standard errors exist; tables lack intervals and τ² repeats are unstated. partial matches the agreed E.statistics=2.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E018",
+    "sol:E008"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: Naive vs Meta-TTL differ only in φ.",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: whole-domain OOD, but no pretraining-overlap audit for public benchmarks.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: Static/Memory Agent/Reflexion exist; no equal-token raw-context or strong hand-written φ.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E033"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: backbone swaps reported; no training-task coverage study.",
+   "evidence_ids": [
+    "son55:E034",
+    "son55:E023"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/H31.step3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: acceptance is mean normalised difference > 0, with no paired test or margin (δ unused).",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E032"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F3].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Jericho ID = training games triggers F3, but the improver evidence is on held-out games/domains and instances; partial, not unmet.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: OOD only within each benchmark family; meta-prompt contains family-specific rules.",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S1].status",
+   "sol_value": "met",
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "The fixed levels exist but are not named as the anchor; proposer prompts and φ0 missing.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E032"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S3].status",
+   "sol_value": "partial",
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "S3 asks for a comparison against the fixed, hand-designed improver: Naive plus hand-designed TTL methods with the same adaptation LLM. sol's partial concerned BIS/two-stage ablations, which is local-1.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E015"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: single incumbent, strict BIS>0, no archive.",
+   "evidence_ids": [
+    "son55:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.E.causality",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": 3,
+   "reason": "See ratings.E.causality: the Naive control isolates the learned φ; missing sub-mechanism ablations keep it below 4.",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E025",
+    "opus:O02"
+   ],
+   "score_impact": "+3.75 vs sol (15×1/4)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": 3,
+   "reason": "See ratings.E.holdout: whole-domain and instance holdouts across three families; Jericho ID reuse is disclosed and not the basis of the improver claim.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E020",
+    "son55:E022"
+   ],
+   "score_impact": "+2.5 vs sol (10×1/4)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.measurement.reason",
+   "sol_value": "3 (no reset note)",
+   "son55_value": "3 (no reset note)",
+   "final_value": 3,
+   "reason": "Shared omission, no rating change. The learned WebArena meta-prompt treats committed application state as durable across episodes, while §3.1 states that the environment resets (opus:O03; sol listed it only under unresolved). If state persists, cross-episode gains include environment continuity in every arm; the comparison between arms is unaffected.",
+   "evidence_ids": [
+    "opus:O03"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v4 text and Appendices A–E first. Initial view: improver is defensible (Naive same-architecture control on OOD); G 3, M 3, X 3, Em 3, Ec 3, Eh 3, Es 2, E.cost 3.",
+  "integrity_checks": "Both seats a1 on 2604.00830v4, material sha 93c421cf…; canonical seat hashes equal conflicts.json; both claim_type system_method; both evidence_level improver.",
+  "core_claim_check": "Strongest supported claim: a meta-trained φ makes the same GPT-5 meta-agent improve a frozen actor more across episodes than the unoptimized φ and hand-designed TTL methods, on held-out games/sites/domains within each benchmark family (author_report).",
+  "improver_check": "Strict EVIDENCE.md check passed; see assessment.evidence_level_note.",
+  "rating_agreement": "G, M, X, Em, Es, E.cost agree and were re-checked; Ec and Eh → son55. Final 73.75."
+ },
+ "input_seat_hashes": {
+  "sol": "d2ec033b2847af0b0629a2318eff9a6fb9b468666fb5e6f93fb53231b007deab",
+  "son55": "b1c609b1924aa3cc75bacbf621215f280ea9963b472ea7b0bb0fc521d8764836"
+ },
+ "score": {
+  "raw": 73.75,
+  "display": 73.8,
+  "lower": 73.75,
+  "upper": 73.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "4b616b8d72c532468684bad3bd83c4dc27deb17619a80132d1df3cf8e53a6ddf"
+}

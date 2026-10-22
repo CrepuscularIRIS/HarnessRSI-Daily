@@ -1,0 +1,1027 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r14b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "2604.09297",
+  "paper_id": "2604.09297",
+  "title": "SkillMOO: Multi-Objective Optimization of Agent Skills for Software Engineering",
+  "version": "2604.09297v3",
+  "claim_type": "system_method",
+  "central_claim": "SE agent skill bundles should be treated as multi-objective search objects; SkillMOO evolves bundles via LLM-proposed edits (pruning, substitution, reordering, rewriting) and NSGA-II Pareto selection on pass rate and inference cost, achieving the top pass-rate rank on 11 of 12 non-zero-pass SkillsBench SE tasks with cost reductions up to 32.1% over static bundles and pass-rate gains up to 42 percentage points, and pruning/substitution dominate successful edits.",
+  "claim_scope": "16 SkillsBench SE tasks (4 with zero pass for all methods), GLM-5 as solver and optimizer, population 4 x 3 generations, 10 runs per method per task, LLM-expanded 40-43-test verifiers."
+ },
+ "provenance": {
+  "input_hash": "f1e0164cb2efecf41a9f4bc99710d1f188e1dfd6715a0efdd60a457277a9b28d",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref unavailable to the worker subagent at write time; model_type recorded per controller dispatch instruction (agent_model=haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-22T00:40:04Z"
+ },
+ "materials": [
+  {
+   "material_id": "M-2604.09297",
+   "url": "https://arxiv.org/html/2604.09297v3",
+   "sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "chars": 25385,
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 SkillMOO",
+    "4 Experimental Setup",
+    "5.1-5.4 Results, Overhead, Edit patterns, Threats",
+    "6 Conclusion and Research Agenda"
+   ],
+   "complete": true,
+   "missing_sections": [],
+   "notes": "HTML-converted text v3 (ASE 2026 NIER); Figure 1 image not viewable, caption read. The SkillOptimizer prompts and replication package are referenced externally and not in the text."
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E01",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Abstract",
+   "quote": "current practice treats them as static, hand-crafted assets, or evolved on pass rate alone.",
+   "support_explanation": "Author gap: static or pass-rate-only skills.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E02",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Abstract",
+   "quote": "a skill can improve task success while substantially raising token cost, or introducing misleading guidance.",
+   "support_explanation": "Stated trade-off motivating a two-objective formulation.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E03",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.1",
+   "quote": "many public SWE skills provide no pass rate improvement",
+   "support_explanation": "Cited external evidence (SWE-Skills-Bench) that skills can fail to help and add token overhead.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E04",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.1",
+   "quote": "demonstrate that skills can themselves be optimized through iterative refinement, but they focus on pass rate alone.",
+   "support_explanation": "Closest neighbors (EvoSkill, Meta Context Engineering, EvoSkills) optimize pass rate only; cost-aware selection is the stated delta.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E05",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.1",
+   "quote": "SkillMOO treats a skill bundle as a candidate solution, evaluates it with a task solver agent, and uses a skill optimizer agent to propose edits such as pruning, substitution, reordering, and rewriting.",
+   "support_explanation": "Operation: solver-optimizer loop over skill bundles.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E06",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.3",
+   "quote": "Generation 0 seeds the population with candidates sampled as diverse subsets of the available skill pool.",
+   "support_explanation": "Initial population = subsets of existing skills.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E07",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.3",
+   "quote": "The skill optimizer agent receives each surviving bundle together with its evaluation evidence and decides what change is most likely to improve the pass/cost tradeoff",
+   "support_explanation": "Proposer sees evaluation evidence (pass, cost, runtime, failure traces).",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E08",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.3",
+   "quote": "non-dominated sorting and crowding-distance tie-breaking on the two objectives below; the top-ranked survivors breed the next generation’s population.",
+   "support_explanation": "Selection: standard NSGA-II on (pass rate, cost).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E09",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.4",
+   "quote": "Each method is run 10 times per task; a run passes only when its solution passes the full automated test suite, so pass rate is the fraction of passing runs.",
+   "support_explanation": "10 runs per method per task; binary pass per run.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E10",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.4",
+   "quote": "we expanded every suite to 40–43 tests with GPT-5.4",
+   "support_explanation": "Verifier expanded by an LLM from 3-10 tests to 40-43.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E11",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.4",
+   "quote": "Each added test was checked manually against the task specification and reference environment, generated without skill content, and applied uniformly across methods.",
+   "support_explanation": "Mitigation for LLM-generated tests.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E12",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.4",
+   "quote": "The evaluation uses population size 4 and 3 generations, which are chosen to bound optimization budget",
+   "support_explanation": "Search budget: population 4, 3 generations.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E13",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.4",
+   "quote": "with per-candidate evaluation costs of $0.1–$14",
+   "support_explanation": "Per-candidate cost range (full sentence continues: 900 s timeout, $1-$15 per-task overhead).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E14",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.4 Threats",
+   "quote": "they were produced by the same model family used for task solving, which may introduce shared reasoning biases in borderline cases",
+   "support_explanation": "Author-acknowledged threat on test generation (note: the text elsewhere says GPT-5.4 generated tests and GLM-5 solves).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E15",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.4",
+   "quote": "We evaluate SkillMOO , ori_skill (original skill bundle), and no_skill (no guidance)",
+   "support_explanation": "Only two baselines: static original bundle and no skills; no pass-only search, random search or equal-budget alternative.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E16",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Table 2 (Avg row)",
+   "quote": "Avg 1.7 1.1 0.39 1.7 0.71 2.6 1.9 0.14 2.5 0.89 0.0 1.9 0.21 1.3 0.64",
+   "support_explanation": "Averages: SkillMOO pass 0.39 / cost 0.71; ori_skill 0.14 / 0.89; no_skill 0.21 / 0.64. Static original skills average lower pass than no skills.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E17",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.1",
+   "quote": "SkillMOO achieves the top pass rate rank on 11 of 12 non-zero-pass tasks",
+   "support_explanation": "Headline result.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E18",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.1 footnote",
+   "quote": "4 tasks yield zero pass for all methods",
+   "support_explanation": "Four tasks have zero pass for all methods and are excluded from comparison (failure denominator disclosed).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E19",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.1",
+   "quote": "the strongest gain on a non-trivial task is on Task 5 : pass rate rises from 0.16 to 0.37 (+21.3 percentage points) while cost falls by 32.1% and runtime by 23.6%",
+   "support_explanation": "Best cost-reduction example.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E20",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Abstract",
+   "quote": "with pass rate gains up to 42 percentage points",
+   "support_explanation": "Abstract figure that does not match Table 2 differences versus ori_skill (e.g. Task 1: 0.90 vs 0.10).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E21",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Table 2 (Task 1 row)",
+   "quote": "1 1.0 1 0.90 ± \\pm 0.32 1 0.25 ± \\pm 0.24 1.0 3 0.10 ± \\pm 0.32 2 0.31 ± \\pm 0.07 0.0 2 0.60 ± \\pm 0.52 2 0.22 ± \\pm 0.25",
+   "support_explanation": "Task 1 has a single-skill bundle: SkillMOO 0.90 pass vs ori_skill 0.10 and no_skill 0.60, so gains here cannot come from pruning and must come from content edits/reordering.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  },
+  {
+   "evidence_id": "E22",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.2",
+   "quote": "optimization costs range from $1.76 to $13.73.",
+   "support_explanation": "Per-task search overhead.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E23",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.2",
+   "quote": "approximate cost-only break-even of 5–682 reuses (median 45)",
+   "support_explanation": "Reuse needed to recover search cost; assumes the optimized bundle is reused on the same task.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E24",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.3",
+   "quote": "Because the edits are filtered from search traces, RQ3 should be read as exploratory pattern evidence rather than an independent causal study.",
+   "support_explanation": "Authors disclaim causal reading of the edit-pattern analysis.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E25",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.3",
+   "quote": "Add Skills shows 0/9 pass improvements across its three sub-types",
+   "support_explanation": "Descriptive edit statistics over a filtered archive.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E26",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.4",
+   "quote": "First, our evaluation covers a single benchmark, with 1–8 initial skills",
+   "support_explanation": "Scope threat: single benchmark; one LLM (GLM-5).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E27",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.4",
+   "quote": "is an open empirical question",
+   "support_explanation": "Transfer to other coding agents is untested (continuation: \"whether the MOO framing and Pareto improvements transfer ... is an open empirical question\").",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E28",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.6",
+   "quote": "Future work should isolate edit operations through controlled ablations, randomized edit proposals, and repeated validation",
+   "support_explanation": "Authors state controlled ablations and randomized edits are future work.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E29",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.1",
+   "quote": "with Scott-Knott ESD confirming statistical significance.",
+   "support_explanation": "Statistical ranking via Scott-Knott ESD over 10-run vectors.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E30",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.1",
+   "quote": "fractional values arise from run-to-run variation in the selected candidate",
+   "support_explanation": "Each of the 10 SkillMOO runs performs its own search and selects its own candidate (so a run result is the outcome of a search); whether the reported pass is a fresh re-execution is not stated.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E31",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.2",
+   "quote": "each one-percent HV gain costs well under two U.S. cents in search fees",
+   "support_explanation": "Cost-per-HV efficiency statement.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E32",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.2",
+   "quote": "the Pareto archive retains alternatives for a deployment budget or reliability target rather than simply choosing the highest-pass run.",
+   "support_explanation": "Final-selection rule from the archive is not specified beyond this remark.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E33",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.3",
+   "quote": "RQ3 uses only edits drawn from the Pareto archive of fully evaluated candidates",
+   "support_explanation": "Edit analysis restricted to archive members with non-zero deltas (selection-filtered).",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E34",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.3",
+   "quote": "Each child is then evaluated by the same task solver.",
+   "support_explanation": "Children evaluated by the same solver and verifier used for selection.",
+   "kind": "author_report",
+   "quote_match": "line"
+  },
+  {
+   "evidence_id": "E35",
+   "material_id": "M-2604.09297",
+   "material_sha256": "22e8109c3ccf555ae872c7103d47eae88fd7d670818df9c45035613d26f686b1",
+   "locator": "Sec.5.1",
+   "quote": "Notably, no_skill achieves rank 1 cost on 12 of 16 tasks and has the lowest mean cost on every task",
+   "support_explanation": "No-skill is cheapest on every task; SkillMOO is not cost-dominant.",
+   "kind": "author_report",
+   "quote_match": "norm"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Per-task skill bundle (subset and edited versions of the task SkillsBench skill pool: instructions, scripts, resources).",
+   "information": "Per-candidate evaluation evidence: pass rate, cost, runtime, failure traces from the full verifier test suite (40-43 tests).",
+   "operation": "Population 4, 3 generations. Optimizer agent (GLM-5) proposes remove/replace/add/reorder/rewrite edits per surviving bundle; solver agent (GLM-5) evaluates each child; NSGA-II ranks by (-pass, cost) with crowding distance and survivors breed the next generation.",
+   "output": "Pareto archive of evaluated bundles; one bundle selected per run (selection rule from the archive not specified).",
+   "conditions": "Per-candidate timeout 900 s; per-task budget about $1-$15 and under three hours.",
+   "feedback": "Verifier pass/fail (oracle test suite for the same task) and measured USD cost/runtime.",
+   "selection_rule": "NSGA-II non-dominated sorting on pass rate and cost.",
+   "selection_data": "The same task and same verifier test suite used later to report results; candidates evaluated by the same solver.",
+   "persistence": "Task-specific optimized bundle / Pareto archive that can be reused on the same task; routing/reuse across tasks is future work.",
+   "later_use": "Reuse on repeated runs of the same task (break-even 5-682 reuses).",
+   "claimed_effect": "Top pass-rate rank 11/12; Task 5 pass 0.16->0.37, cost -32.1%; average pass 0.39 vs 0.14 (ori_skill) and 0.21 (no_skill).",
+   "failure_boundary": "Four tasks zero pass for all methods; no cross-task or cross-model transfer; edit analysis exploratory only; Add-skill edits never improved pass rate in the archive.",
+   "evidence_ids": [
+    "E05",
+    "E06",
+    "E07",
+    "E08",
+    "E09",
+    "E12",
+    "E13",
+    "E19",
+    "E30",
+    "E32",
+    "E34"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Agent skills are deployed as static hand-crafted assets or evolved on pass rate alone, although a skill can raise token cost or add misleading guidance, so pass rate and cost trade off.",
+  "checked_gap": "The trade-off is supported by cited external evidence (SkillsBench, SWE-Skills-Bench) and by the paper own Table 2, where the original bundles average lower pass (0.14) than no skills (0.21) and cost more than no skills. Pass-rate-only neighbors (EvoSkill, Meta Context Engineering, EvoSkills, ACE, GEPA, Meta-Harness) are named but not run; LLM-guided genetic improvement is the closest search precedent. The checked residue is narrow: cost-aware Pareto selection and pruning-dominant edits.",
+  "lineage": "Static curated skills (SkillsBench/SWE-Skills-Bench) -> pass-rate skill evolution (EvoSkill, EvoSkills) and context/prompt/harness optimizers (ACE, GEPA, Meta-Harness) -> LLM-guided GI with NSGA-II -> SkillMOO (cost-aware Pareto selection of skill bundles).",
+  "closest_adjacent": [
+   "EvoSkill / EvoSkills / Meta Context Engineering: pass-rate-only skill evolution (E04)",
+   "GEPA, ACE, Meta-Harness: prompt/context/harness optimizers (cited)",
+   "LLM-guided Genetic Improvement: LLM edits + search-based software evolution (cited)"
+  ],
+  "residue": "Skill bundles that raise cost or distract the agent; pass-only evolution ignores this.",
+  "stakes": "Up to 32.1% lower cost and 23.6% lower runtime with higher pass on the best task; typical search overhead $1.76-$13.73 per task.",
+  "method_response": "Treat bundle as a candidate in a bi-objective search; LLM edits informed by evaluation evidence; NSGA-II survivor selection.",
+  "remaining_gap": "No pass-only or budget-matched alternative search; cross-task/model transfer open; per-task optimization on the same verifier; mechanism of gains only descriptive.",
+  "evidence_ids": [
+   "E01",
+   "E02",
+   "E03",
+   "E04",
+   "E15",
+   "E16"
+  ],
+  "unresolved": [
+   "Whether cost-aware selection or LLM edits are needed relative to simple subset search at equal evaluation budget.",
+   "Whether reported SkillMOO pass rates are fresh re-evaluations or search-time outcomes."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "Recast skill-bundle design as a bi-objective search/selection problem (pass, cost): executed",
+     "Solve with the mature machinery of the new object (NSGA-II, Pareto fronts, hypervolume, Scott-Knott ESD): executed",
+     "Independent faithfulness validation back to the original problem (does the optimized bundle help on unseen tasks/models): not executed",
+     "Boundary of the reframe stated: partial (single benchmark, one LLM)"
+    ],
+    "success_checks": [
+     "Chosen object unlocks machinery the native formulation lacked (cost-aware Pareto reasoning): partial",
+     "Reframe deletes a component instead of wrapping machinery around the old pipeline: unmet (adds an optimizer agent and NSGA-II around the existing skill pipeline)"
+    ],
+    "failure_checks": [
+     "Mechanical wrapper re-applying an existing solver to a new domain: partly applies (NSGA-II is off the shelf; new part is the cost objective)",
+     "Correspondence asserted not proven: applies, no argument that Pareto selection on training-time outcomes corresponds to deployment value"
+    ],
+    "evidence_ids": [
+     "E05",
+     "E08",
+     "E15",
+     "E26"
+    ],
+    "reason": "The operation is recasting skill engineering as multi-objective subset/edit selection solved with NSGA-II. C00/C21/C27 (transparency measurement, RL-as-supervised, game/equilibrium) do not describe it, so sub_id is null."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Main-card definition (recast as an optimization program so existing solvers apply) matches; no child card fits.",
+  "executes_pattern": true,
+  "resolves_problem": "partial - Pareto-superior bundles are found per task against two static baselines, but whether the multi-objective reframing (versus pass-only or random search) caused it is not shown."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H16",
+    "version": "domain_cards_hash:52ff96577c9e",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:population_search_executable_fitness/S1",
+      "status": "met"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S2",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S4",
+      "status": "met"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S5",
+      "status": "partial"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/F1",
+      "status": "partial"
+     }
+    ],
+    "evidence_ids": [
+     "E05",
+     "E07",
+     "E08",
+     "E12"
+    ],
+    "reason": "Population of skill bundles, LLM mutation grounded in evaluation evidence, executable verifier fitness, and selection by a Pareto frontier (NSGA-II) over pass rate and cost."
+   }
+  ],
+  "unassigned": [
+   "Per-task, test-suite-conditioned specialization of a skill bundle (teaching-to-the-verifier) has no explicit condition in H16."
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "population_search_executable_fitness",
+    "sub": "H16"
+   },
+   "operation_correspondence": "RS: recast the problem as a well-studied optimization object (bi-objective selection) and apply its solvers. Domain: LLM-mutated population with executable fitness and Pareto selection. Both describe NSGA-II over skill bundles; the RS card emphasizes the reframing, the domain card the search loop and archive.",
+   "necessary_conditions_and_differences": "RS needs an independently validated faithfulness back to the original problem; the domain H16 needs an evaluator that is hard to game and a named axis of complementarity. The paper provides the axis (pass vs cost) but validates faithfulness only on the same verifier.",
+   "evidence_ids": [
+    "E05",
+    "E08",
+    "E15",
+    "E34"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:reframe_as_solvable_object/RE-3",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #3"
+   ],
+   "applies_when": "An off-the-shelf solver is applied to a new object.",
+   "applicable": true,
+   "question": "Does the reframe contribute new identifying structure beyond re-applying existing machinery?",
+   "status": "partial",
+   "reason": "The new element is the cost objective and bundle edit operators; NSGA-II, hypervolume and Scott-Knott are off-the-shelf.",
+   "evidence_ids": [
+    "E04",
+    "E08"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-4",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #4"
+   ],
+   "applies_when": "Downstream metric gains are used as the validity argument.",
+   "applicable": true,
+   "question": "Is faithfulness to the original problem validated by an oracle/causal intervention rather than only downstream gains?",
+   "status": "unmet",
+   "reason": "Edit-level causality is explicitly deferred; no fresh-task, fresh-model or randomized-edit check that Pareto-selected bundles are better for the original goal.",
+   "evidence_ids": [
+    "E24",
+    "E28"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-5",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #5"
+   ],
+   "applies_when": "A solver is claimed tractable.",
+   "applicable": true,
+   "question": "Is the solver scalability and assumption set examined?",
+   "status": "partial",
+   "reason": "Per-task budget and overhead are reported and the search is small (4 x 3); larger skill pools and repositories are acknowledged as costlier but not tested.",
+   "evidence_ids": [
+    "E12",
+    "E13",
+    "E22",
+    "E26"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-6",
+   "version": "card order index",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #6"
+   ],
+   "applies_when": "The paper offers design principles.",
+   "applicable": true,
+   "question": "Does the paper deliver an actionable principle rather than a descriptive observation?",
+   "status": "partial",
+   "reason": "Prune/replace-over-add is offered as a principle but is drawn from filtered search traces and labeled exploratory.",
+   "evidence_ids": [
+    "E24",
+    "E25",
+    "E33"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.S1"
+   ],
+   "applies_when": "Population search is the method.",
+   "applicable": true,
+   "question": "Does the contribution live at the search level (what fitness measures or how evaluations are spent) rather than only the domain?",
+   "status": "met",
+   "reason": "Fitness is made two-objective with cost; this is the stated contribution.",
+   "evidence_ids": [
+    "E01",
+    "E05",
+    "E08"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.S2"
+   ],
+   "applies_when": "Selection pressure comes from an automatic evaluator.",
+   "applicable": true,
+   "question": "Is the evaluator built before the loop and hard to game?",
+   "status": "partial",
+   "reason": "Execution-based verifier with 40-43 tests and preserved build gates, but tests were LLM-expanded, are the same ones driving selection, and the optimizer sees failure traces from them; pass improvements arise when edits target verifier failures.",
+   "evidence_ids": [
+    "E10",
+    "E11",
+    "E14",
+    "E34"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.S4"
+   ],
+   "applies_when": "Mutations are proposed by an LLM.",
+   "applicable": true,
+   "question": "Are mutations grounded in what the evaluator observed?",
+   "status": "met",
+   "reason": "Optimizer receives each bundle with its evaluation evidence.",
+   "evidence_ids": [
+    "E07"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.S5"
+   ],
+   "applies_when": "A frontier/archive is kept.",
+   "applicable": true,
+   "question": "Does the frontier name the complementarity axis and earn its place by measured effect?",
+   "status": "partial",
+   "reason": "Axis (pass vs cost) is named and hypervolume measured, but the final bundle choice from the archive and the benefit of keeping alternatives are not evaluated.",
+   "evidence_ids": [
+    "E32",
+    "E31"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.F1"
+   ],
+   "applies_when": "A generic loop is pointed at a new domain.",
+   "applicable": true,
+   "question": "Is there search-level novelty beyond a generic LLM-mutation + standard metaheuristic loop on skills?",
+   "status": "partial",
+   "reason": "Cost-aware selection is search-level but NSGA-II, population and mutation loop are standard; no comparison shows it matters.",
+   "evidence_ids": [
+    "E04",
+    "E08",
+    "E15"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2604.09297-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec.4 baselines; Sec.6 research agenda"
+   ],
+   "applies_when": "A search method is compared with a single-evaluation static baseline.",
+   "applicable": true,
+   "question": "Is there an equal-evaluation-budget alternative (random subset/edit search or pass-only evolution)?",
+   "status": "unmet",
+   "reason": "Only ori_skill and no_skill are run; SkillMOO consumes a multi-candidate search budget that baselines do not get.",
+   "evidence_ids": [
+    "E15",
+    "E12",
+    "E28"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2604.09297-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec.4/5.1"
+   ],
+   "applies_when": "Reported per-run outcomes come from a stochastic search that selects among stochastic evaluations.",
+   "applicable": true,
+   "question": "Is the selected bundle re-evaluated on fresh executions (or held-out tasks/tests) before reporting?",
+   "status": "unknown",
+   "reason": "The paper says each run selects its own candidate but does not say the final pass rate is a fresh re-execution; the same verifier is used for search and reporting.",
+   "evidence_ids": [
+    "E30",
+    "E34",
+    "E09"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2604.09297-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Abstract and Table 2"
+   ],
+   "applies_when": "Headline numbers are stated in the abstract.",
+   "applicable": true,
+   "question": "Do abstract effect sizes match Table 2?",
+   "status": "unknown",
+   "reason": "Abstract says gains up to 42 pp, yet Table 2 differences versus ori_skill reach 0.80 (Task 1) and 0.73 (Task 2); the baseline/definition behind 42 pp is not stated.",
+   "evidence_ids": [
+    "E20",
+    "E21"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2604.09297-4",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec.3, Sec.5.1"
+   ],
+   "applies_when": "A multi-objective framing is the headline contribution.",
+   "applicable": true,
+   "question": "Is multi-objective selection ablated against pass-only selection?",
+   "status": "unmet",
+   "reason": "No single-objective arm; cost benefits are not separated from pruning enabled by any search.",
+   "evidence_ids": [
+    "E15",
+    "E35"
+   ],
+   "score_item": "E.causality"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "SkillMOO achieves the top pass-rate rank on 11 of 12 non-zero-pass tasks with lower cost than static bundles.",
+   "setting": "16 SkillsBench SE tasks, GLM-5, 10 runs per method.",
+   "baseline_control": "ori_skill and no_skill; no equal-budget search baseline.",
+   "selection_vs_test": "Same task and same verifier used for fitness and reporting; fresh re-evaluation not stated.",
+   "result_denominator": "Mean +/- SD over 10 binary runs per task; Scott-Knott ESD ranks; 4 zero-pass tasks excluded from comparison but reported.",
+   "evidence_ids": [
+    "E09",
+    "E16",
+    "E17",
+    "E18",
+    "E19",
+    "E21",
+    "E29"
+   ],
+   "counterevidence": [
+    "E15",
+    "E30",
+    "E34",
+    "E35"
+   ],
+   "allowed_conclusion": "Per task, the search-selected bundle outperformed the original and empty bundles on the same verifier; the contribution of cost-aware selection or LLM edits versus any search is not isolated."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Pruning and substitution are the dominant successful edit operations.",
+   "setting": "38 filtered archive edits.",
+   "baseline_control": "none",
+   "selection_vs_test": "Edits filtered from search traces with non-zero deltas.",
+   "result_denominator": "e.g. Remove 8/11 pass up; Add 0/9.",
+   "evidence_ids": [
+    "E24",
+    "E25",
+    "E33"
+   ],
+   "counterevidence": [
+    "E21"
+   ],
+   "allowed_conclusion": "Descriptive only (authors disclaim causality); Task 1 gains occurred with a single-skill bundle where pruning is impossible."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Optimization overhead is economically worthwhile.",
+   "setting": "Table 3; break-even analysis.",
+   "baseline_control": "ori_skill cost.",
+   "selection_vs_test": "n/a",
+   "result_denominator": "$1.76-$13.73 per task; break-even 5-682 reuses (median 45), cost-only.",
+   "evidence_ids": [
+    "E22",
+    "E23",
+    "E31"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Plausible when the same task is repeated tens of times; one-shot tasks need a reliability argument."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Treating skills as multi-objective objects is warranted over static or pass-only practice.",
+   "setting": "Whole paper.",
+   "baseline_control": "no pass-only arm.",
+   "selection_vs_test": "n/a",
+   "result_denominator": "n/a",
+   "evidence_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E16"
+   ],
+   "counterevidence": [
+    "E15",
+    "E28"
+   ],
+   "allowed_conclusion": "Motivated by static-bundle weakness (avg pass 0.14 vs 0.21 for no skill), but the benefit of the multi-objective part is not tested."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "For individual SkillsBench SE tasks, a small LLM-mutation + NSGA-II search over skill bundles found bundles with higher pass rate and often lower cost than the original or empty bundle on the same verifier suite (10 runs per task, GLM-5), at roughly $2-14 search cost per task.",
+  "not_supported": [
+   "That multi-objective selection is needed (no pass-only/equal-budget arm).",
+   "Transfer of optimized bundles across tasks or models.",
+   "Causal role of pruning/substitution (authors say exploratory).",
+   "Retained improvement on held-out tasks."
+  ],
+  "unresolved": [
+   "Fresh re-evaluation of final bundles.",
+   "Abstract +42pp vs Table 2 differences."
+  ],
+  "reproduction_note": "Author-reported; not reproduced. Capped at task because selection and reporting share task and verifier."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete, sourced bottleneck (skills raise cost or mislead; external benchmarks plus the paper own Table 2 show original bundles averaging lower pass than no skill) with named closest neighbors (EvoSkill, EvoSkills, Meta Context Engineering, GEPA, ACE, Meta-Harness, LLM-guided GI) and a bounded delta (cost-aware Pareto selection). Neighbors are not run, so not 4.",
+   "evidence_ids": [
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E16"
+   ],
+   "counterevidence_ids": [
+    "E15"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "The bi-objective formulation directly answers the stated cost/misleading-guidance problem; mutation is grounded in evaluation evidence; edit types are enumerated and tied to the pruning-dominant observation. A distinguishing prediction against pass-only search is not tested, and the edit mechanism analysis is exploratory.",
+   "evidence_ids": [
+    "E05",
+    "E07",
+    "E08",
+    "E24"
+   ],
+   "counterevidence_ids": [
+    "E21"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Phases, population/generation sizes, objectives and selection are clear, but the optimizer prompts and edit application rules live outside the text, the final-bundle choice from the archive is unspecified, noise handling of single stochastic evaluations is absent, and there is no versioning, rollback or reuse protocol beyond a per-task archive.",
+   "evidence_ids": [
+    "E05",
+    "E06",
+    "E08",
+    "E12"
+   ],
+   "counterevidence_ids": [
+    "E32",
+    "E30"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Objective execution-based verifier (original gates plus manually checked expanded tests), USD cost and runtime, plus the no_skill majority-style baseline. Minor concerns: LLM-expanded tests, inconsistent statements about which model generated them, and an abstract effect size that does not match Table 2.",
+   "evidence_ids": [
+    "E09",
+    "E10",
+    "E11",
+    "E16"
+   ],
+   "counterevidence_ids": [
+    "E14",
+    "E20"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Comparisons are against the static original and empty bundles only. No pass-only, random-edit/subset or budget-matched search arm; multi-objective benefit, LLM edits and population search are not separated; Task 1 gains occur with a single-skill bundle where only content edits are possible, indicating verifier-specific rewriting; authors defer causal edit studies.",
+   "evidence_ids": [
+    "E15",
+    "E16",
+    "E21"
+   ],
+   "counterevidence_ids": [
+    "E28",
+    "E24"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Search and reporting use the same task and the same verifier suite, with no held-out tasks or models and an unstated fresh re-evaluation; scope limited to one benchmark and one LLM. The authors disclose these limits and list transfer as future work.",
+   "evidence_ids": [
+    "E26",
+    "E27"
+   ],
+   "counterevidence_ids": [
+    "E34",
+    "E30"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "10 independent runs per method per task, mean +/- SD, Scott-Knott ESD ranks, hypervolume, and explicit reporting of zero-pass tasks excluded from comparison. Limits: binary outcomes with n=10 give wide intervals and no multiple-comparison treatment.",
+   "evidence_ids": [
+    "E09",
+    "E29",
+    "E18"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Per-task search cost, runtime, hypervolume per dollar and a cost-only break-even reuse analysis are reported, with per-candidate cost ranges and timeouts. Baselines do not receive the same evaluation budget, and cost is dollar-only (GLM-5 pricing).",
+   "evidence_ids": [
+    "E13",
+    "E22",
+    "E23",
+    "E31"
+   ],
+   "counterevidence_ids": [
+    "E15"
+   ],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Full HTML text read; all items resolved; prompts and replication package are external.",
+ "rationale": "问题定位清晰、统计与成本报告较规范，但缺少预算对齐/仅通过率搜索对照，选择与报告共用同一任务与验证器；多目标收益与编辑机制未被隔离。",
+ "score": {
+  "raw": 57.5,
+  "display": 57.5,
+  "lower": 57.5,
+  "upper": 57.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

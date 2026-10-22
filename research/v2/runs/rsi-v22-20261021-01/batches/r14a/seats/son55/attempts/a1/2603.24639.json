@@ -1,0 +1,961 @@
+{
+ "status": "reviewed",
+ "reason": "Full HTML v2 text including Appendices A-G (tau2-bench, setup, extra experiments, cost, iterative ERL, examples, prompts) available.",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "ERL reflects on single-attempt task trajectories and outcomes to write trigger-conditioned heuristics into a persistent pool, retrieves the most relevant ones with an LLM at test time and injects them into the agent's system prompt; on Gaia2 (Search and Execution) it improves success by 7.8 points over a ReAct baseline, outperforms ExpeL and AutoGuide, selective retrieval is essential, and heuristics transfer better than raw few-shot trajectories.",
+  "paper_key": "2603.24639",
+  "paper_id": "2603.24639",
+  "title": "Experiential Reflective Learning for Self-Improving LLM Agents",
+  "version": "2603.24639v2"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "ERL reflects on task trajectories and outcomes to generate heuristics, capturing actionable lessons that transfer across tasks.",
+   "support_explanation": "Central operation: outcome-grounded reflection into reusable heuristics (text store).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "1 Introduction",
+   "quote": "Both methods require multiple rollouts per task to construct contrastive trajectory pairs, an assumption that breaks down in practical agent deployment where tasks cannot be retried.",
+   "support_explanation": "Author gap against nearest neighbors ExpeL and AutoGuide (retries / paired trajectories).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "2 Heuristic generation",
+   "quote": "After each task, the agent reflects on this experience to generate a structured heuristic containing: (1) an analysis identifying what led to success or failure, and (2) a learned guideline with explicit trigger conditions and recommended actions",
+   "support_explanation": "Heuristic format; one heuristic per task, from a single trajectory and its binary outcome; no admission test.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "2 Retrieval-augmented execution",
+   "quote": "An LLM analyzes the new task, decomposes it into potential sub-tasks and action steps, and scores each stored heuristic for relevance.",
+   "support_explanation": "Retrieval is an LLM scoring pass over the whole pool at task start.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "3 Experimental setup",
+   "quote": "we accumulate heuristics on 8 universes (112 execution / 132 search tasks) and evaluate on 2 held-out test universes (48 / 28 tasks).",
+   "support_explanation": "Accumulation and test streams are disjoint universes; test set is 76 tasks, run 3 times.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "3 Experimental setup",
+   "quote": "isolated data partitions that expose identical applications and tools but contain completely disjoint information",
+   "support_explanation": "Universe structure is the basis for contamination-free evaluation (shared tools, different data).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "3 Main results",
+   "quote": "ERL achieves a 56.1% overall success rate, an improvement of +7.8% over the ReAct baseline and +5.2% over the strongest prior method (ExpeL at 50.9%).",
+   "support_explanation": "Headline result on 2 test universes (GPT-5-mini agent).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Figure 2(a) / Table",
+   "quote": "Baseline 43.1 53.6 48.3 Few-shot 41.7 51.2 46.4 ExpeL 45.8 56.0 50.9 AutoGuide 39.6 61.9 50.8 ERL (Ours) 51.4 60.7 56.1",
+   "support_explanation": "Execution / Search / Overall success (%). AutoGuide is higher than ERL on Search (61.9 vs 60.7) but below the baseline on Execution (39.6 vs 43.1).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Figure 2(b) ablations",
+   "quote": "Ablations: no retrieval 44.4 63.1 53.8 embedding retrieval 50.7 56.0 53.3 only failures 50.0 67.9 58.9 only successes 52.1 47.6 49.9",
+   "support_explanation": "The 'no retrieval' row is random heuristic selection (best random config 53.8), embedding retrieval 53.3, failures-only 58.9, successes-only 49.9.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Appendix B ExpeL",
+   "quote": "We sample a subset of training tasks matching the test set distribution (48 execution, 28 search).",
+   "support_explanation": "ExpeL experience is collected on a 76-task subset while ERL accumulates on 244 tasks; experience budgets differ.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Appendix B ExpeL",
+   "quote": "algorithm with GPT-5-mini for up to 3 retries.",
+   "support_explanation": "Baselines build experience with up to 3 Reflexion retries per task (more rollouts than ERL's single attempt).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Appendix B AutoGuide",
+   "quote": "we run Reflexion with GPT-5-mini for up to 3 retries on all training tasks",
+   "support_explanation": "AutoGuide experience uses retries on all training tasks.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Appendix C.2 Table 3(b)",
+   "quote": "10 51.4 54.8 53.1 20 51.4 60.7 56.1",
+   "support_explanation": "The k=20 row of the k-sweep equals the main-result row (51.4 / 60.7 / 56.1), so retrieval count and method were compared and chosen on the same test universes.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "3 Retrieval quality",
+   "quote": "Performance exhibits a non-monotonic pattern, peaking around 40–60 heuristics before degrading with excessive inclusion.",
+   "support_explanation": "Random heuristic injection already yields up to 53.8 versus 48.3 baseline.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "3 Retrieval quality",
+   "quote": "and the best random selection configuration (53.8%), confirming that retrieval quality matters more than heuristic quantity.",
+   "support_explanation": "LLM retrieval 56.1 vs best random 53.8 vs embedding 53.3: retrieval adds 2.3 points over random on 76 tasks, while 5.5 of the 7.8-point gain appears with random selection.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "3 Heuristics vs trajectories",
+   "quote": "this approach fails to improve performance (-1.9% vs. baseline), suggesting that raw trajectories lack the actionable insights necessary for the agent to improve on new scenarios.",
+   "support_explanation": "Few-shot raw trajectories do not help.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Appendix C.1",
+   "quote": "This holds when comparing the same number of experiences provided in-context as either heuristics or raw trajectories",
+   "support_explanation": "Token/experience-matched comparison supports heuristics over raw trajectories.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "3 Reliability",
+   "quote": "ERL yields substantial gains on passˆ3 (+8.3% in Execution and +10.6% in Search), indicating more stable performance across runs.",
+   "support_explanation": "Consistency gain over three runs; pass@3 gains small.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "3 Failure vs success heuristics",
+   "quote": "While failure-only retrieval yields the highest overall score (58.9%), this reflects strong Search performance at the expense of Execution tasks.",
+   "support_explanation": "A variant exceeds the main ERL configuration; the main configuration was not chosen by that result.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Appendix D",
+   "quote": "Accounting for heuristic generation and retrieval, ERL incurs a 40% overall increase in API costs.",
+   "support_explanation": "Total ERL evaluation cost 21.40 USD vs 15.27 USD baseline per Table 4; input tokens nearly double.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Appendix A",
+   "quote": "shows that ERL improves overall success rate over the baseline (0.380 vs. 0.367), with gains on Airline and Retail but a slight drop on Telecom.",
+   "support_explanation": "Second benchmark: +1.3 points overall with Telecom decline.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Appendix A Table 1",
+   "quote": "Airline Retail Telecom Overall Success Rate Baseline 36.7 43.3 30.0 36.7 ERL 38.3 47.5 28.3 38.0 passˆ3 Baseline 20.0 12.5 10.0 14.2 ERL 25.0 17.5 0.0 14.2 pass@3 Baseline 55.0 80.0 57.5 64.2 ERL 50.0 75.0 62.5 62.5",
+   "support_explanation": "On tau2-bench the overall passˆ3 is unchanged (14.2 vs 14.2) and overall pass@3 falls (62.5 vs 64.2).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Appendix C Importance of reward signal",
+   "quote": "In this setting, the agent correctly identifies success or failure only 70% of the time, and the success rate of ERL drops to 51.2% (-4.8%).",
+   "support_explanation": "Without environment reward ERL still exceeds baseline (51.2 vs 48.3) but loses 4.8 points.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "Appendix E",
+   "quote": "The scores reveal that iterative ERL achieves higher success rates than the standard version during accumulation but lower test performance (-5.4%).",
+   "support_explanation": "The online loop (retrieve while the pool grows) generalizes worse (50.7 vs 56.1); the headline result is from offline accumulation.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "4 Conclusion",
+   "quote": "Future work could bootstrap heuristic accumulation via synthetic task generation or address challenges in scaling heuristic pools, such as resolving conflicting guidelines and maintaining retrieval quality.",
+   "support_explanation": "Pool maintenance (conflicts, consolidation, retrieval at scale) is acknowledged as unaddressed.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Appendix B",
+   "quote": "Test universes (22 and 25) were randomly selected from the available pool.",
+   "support_explanation": "Two test universes only; no cross-validation over universe splits.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "Appendix B Table 2",
+   "quote": "Role LLM Agent gpt-5-mini-2025-08-07 ARE LLM Judge gpt-5-mini-2025-08-07 Heuristic generation gpt-5-mini-2025-08-07 Heuristic retrieval gpt-5.2-2025-12-11",
+   "support_explanation": "Retrieval uses a stronger model (gpt-5.2) than the agent; part of verification uses an LLM judge from the same family as the agent.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "Figure 2 caption",
+   "quote": "Success rates on the Gaia2 test universes (3 runs).",
+   "support_explanation": "Three runs averaged; no variance or intervals reported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "Appendix G",
+   "quote": "This version was selected after a human comparison with other variants containing more detailed rubrics and different scoring ranges.",
+   "support_explanation": "Retrieval prompt was chosen by human comparison of variants; the data used for that comparison is not stated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  },
+  {
+   "evidence_id": "E030",
+   "locator": "1 Introduction",
+   "quote": "ERL extracts heuristics from single-attempt trajectories, enabling efficient adaptation without curated training sets or repeated execution.",
+   "support_explanation": "Single-attempt reflection without contrastive pairs is the claimed differentiator.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Persistent pool of reflection-derived heuristics (analysis + trigger/action guideline) injected into the agent's system prompt",
+   "information": "Task description, full trajectory, binary success/failure outcome from the environment (a self-assessed outcome variant is reported)",
+   "operation": "Per-task reflection prompt writes one heuristic; stored in the pool unmodified",
+   "output": "Pool grows by one entry per accumulation task",
+   "conditions": "Offline accumulation on 8 universes before testing; outcome signal available",
+   "feedback": "Environment validation reward",
+   "selection_rule_data": "No admission, merging, or retirement test; every trajectory yields an entry",
+   "persistence": "Pool (244 entries) kept fixed during test",
+   "later_use": "At each test task an LLM (gpt-5.2) scores the pool and top-k=20 are injected into the system prompt",
+   "claimed_effect": "+7.8 points overall success and +8.3/+10.6 passˆ3 on held-out universes",
+   "failure_boundary": "Telecom dual-control domain, iterative accumulation, no-reward variant, large-pool retrieval cost",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E007",
+    "E018",
+    "E022",
+    "E024"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Test-time context (system prompt) conditioning",
+   "information": "Top-k scored heuristics from the pool",
+   "operation": "Inject heuristics before ReAct execution",
+   "output": "Task-specific guidance in context",
+   "conditions": "k=20; pool fits the LLM scoring prompt",
+   "feedback": "none at test time",
+   "selection_rule_data": "LLM relevance scoring by task similarity, diversity, informativeness",
+   "persistence": "not applicable (per task)",
+   "later_use": "not applicable",
+   "claimed_effect": "Retrieval quality matters more than quantity",
+   "failure_boundary": "k>20 inefficient for LLM retrieval; random selection already gives most of the gain",
+   "evidence_ids": [
+    "E004",
+    "E014",
+    "E015"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Agents approach each new task from scratch; prior experiential methods (ExpeL, AutoGuide) need repeated rollouts or paired trajectories, concatenate all insights into every prompt, or add per-turn retrieval overhead, which breaks down when tasks cannot be retried.",
+  "checked_gap": "A concrete and plausible deployment gap vs two named neighbors. The scaling-poorly and overhead claims are argued rather than measured, and the reflection-store-retrieve loop is a well-covered family whose other members (Voyager-style, memory-centric agents) are cited in a list but not compared.",
+  "lineage_closest_adjacent": "Reflexion, ExpeL (insight extraction with retries), AutoGuide (context-aware guidelines), plus a cited cluster of experiential-memory works not compared.",
+  "residue": "Store maintenance (conflicts, consolidation), online accumulation (iterative ERL degrades), scaling retrieval beyond about 20 entries.",
+  "stakes": "Practical agent deployment without retries or curated training sets.",
+  "method_response": "Single-attempt reflection into trigger-conditioned heuristics plus LLM retrieval.",
+  "remaining_gap": "Maintenance, online learning, and generality beyond Gaia2 (tau2-bench shows no passˆ3 gain).",
+  "evidence_ids": [
+   "E002",
+   "E024",
+   "E025",
+   "E022"
+  ],
+  "unresolved": [
+   "Comparison to other experiential-memory systems at matched experience budgets"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "Step1 canonical conditioning schema: heuristic = analysis + trigger/action guideline (executed)",
+     "Step2 reference substrate: pool built from 8 universes (executed, single domain family)",
+     "Step3 teach the model to read conditioning: not applicable (frozen model; format taught by prompt only)",
+     "Step4 held-out categories + contamination audit: partial (held-out universes with disjoint data; same task types and tools; no overlap audit against pretraining)",
+     "Step5 adversarial cheaper baselines at equal budget: executed (random selection, embedding retrieval, token-matched raw trajectories), baselines ExpeL/AutoGuide not budget-matched"
+    ],
+    "success_failure_checks": [
+     "Success 'ablation toggling the conditioning signal': met (ReAct baseline, random heuristics)",
+     "Success 'regime where it wins is characterized': partial (failures help Search, successes Execution; Telecom degrades)",
+     "Failure 'single task/domain': partly present (one main benchmark, second benchmark mixed)",
+     "Failure 'obvious cheaper alternative omitted': not present (few-shot, embedding retrieval tested)"
+    ],
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E009",
+     "E017",
+     "E022"
+    ],
+    "reason": "Retrieved heuristics are injected as conditioning to a frozen agent with no parameter update; this matches the card's conditioning operation. The 'learn to parse the format' step does not apply, so fit is medium."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "adapt_via_conditioning/C03 is the closest original card; self_supervised_signal_engineering was considered for the no-reward self-assessment variant but that is an ablation, not the method.",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "patterns-2026-10-21",
+    "fit": "high",
+    "condition_checks": [
+     "S1 break a specific fixed assumption: partial (removes need for retries/paired trajectories)",
+     "S2 contrast not narration: unmet (single-trajectory post-mortem; the paper reports success-only and failure-only variants but not paired contrast)",
+     "S3 grounding signal in loop: met (environment reward; 70%-accurate self-assessment variant reported)",
+     "S4 explicit maintenance once store grows: unmet (pool only grows)",
+     "S5 gate on what is kept: unmet",
+     "F4 retrieval fix presented as learning: partially present (retrieval choices carry part of the claim)",
+     "H00 step3 transfer across instances not retries: met (disjoint universes)",
+     "H00 step4 freeze store before testing: met for ERL, not for iterative ERL",
+     "H00 step5 budget-match and store-off ablation: store-off met, budget-match unmet for ExpeL/AutoGuide"
+    ],
+    "evidence_ids": [
+     "E003",
+     "E005",
+     "E010",
+     "E011",
+     "E023",
+     "E024",
+     "E025"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "RS: express a new task as retrieved conditioning in a frozen model. RSI: write outcome-grounded lessons into a persistent store and inject retrieved lessons into later task contexts.",
+   "necessary_conditions_differences": "RS needs category-level holdout, contamination audit and cheaper-baseline comparison (mostly met). RSI needs contrast, maintenance, gate and budget-matched comparison (largely unmet beyond the store-off control).",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E009",
+    "E017"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #1 (ablation isolating conditioning signal)"
+   ],
+   "applies_when": "Claims gain comes from conditioning",
+   "applicable": true,
+   "status": "met",
+   "reason": "ReAct baseline and random-heuristic condition isolate retrieved heuristics.",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #2 (contamination analysis)"
+   ],
+   "applies_when": "Held-out generalization claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Universes have disjoint data by construction, but no analysis of overlap with benchmark data in model pretraining or of task-template overlap.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3 (cheaper alternatives)"
+   ],
+   "applies_when": "Retrieval-based conditioning",
+   "applicable": true,
+   "status": "met",
+   "reason": "Raw few-shot trajectories (token-matched) and embedding retrieval are compared.",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E009"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #5 (generic across tasks)"
+   ],
+   "applies_when": "Claims a generic recipe",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Second benchmark tau2-bench: +1.3 success, passˆ3 unchanged, Telecom degrades.",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #6 (sensitivity to source quality/coverage)"
+   ],
+   "applies_when": "Conditioning source varies in quality",
+   "applicable": true,
+   "status": "partial",
+   "reason": "No-reward variant (70% self-assessment accuracy) and random k sweep are reported; coverage of the pool relative to test tasks is not analysed.",
+   "evidence_ids": [
+    "E023",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance S2"
+   ],
+   "applies_when": "Lessons are extracted from outcomes",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Heuristics come from single trajectories (analysis of one success or failure) with no paired contrast.",
+   "evidence_ids": [
+    "E003",
+    "E030"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance S3"
+   ],
+   "applies_when": "Outcome signal decides what is learned",
+   "applicable": true,
+   "status": "met",
+   "reason": "Environment validation reward; the effect of an unreliable self-assessed signal is measured.",
+   "evidence_ids": [
+    "E003",
+    "E023"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance S4"
+   ],
+   "applies_when": "Store grows",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No consolidation, forgetting or conflict resolution; stated as future work.",
+   "evidence_ids": [
+    "E025"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance S5"
+   ],
+   "applies_when": "Entries are published for reuse",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Every reflection is stored; no test or quality filter decides what is kept.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/budget-matched",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance Reviewer expectations (budget-matched baselines)"
+   ],
+   "applies_when": "Compared with retry-based methods",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "ExpeL built on a 76-task subset with up to 3 retries, AutoGuide with retries on all training tasks; ERL on 244 tasks with a single attempt; token and rollout budgets are not equalized.",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/variance",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance Reviewer expectations (variance across runs or stream orderings)"
+   ],
+   "applies_when": "Accumulating store",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Three evaluation runs but no intervals and a single accumulation ordering.",
+   "evidence_ids": [
+    "E028"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/reflector-cost",
+   "version": "patterns-2026-10-21",
+   "source_strength": "domain_card",
+   "source_refs": [
+    "abstract_experience_into_guidance Reviewer expectations (reflector cost)"
+   ],
+   "applies_when": "Reflection uses extra model calls",
+   "applicable": true,
+   "status": "met",
+   "reason": "Appendix D reports tokens and dollars for heuristic generation, retrieval and rollout.",
+   "evidence_ids": [
+    "E020"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2603.24639-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Hyperparameters should be selected on data disjoint from the reported test set"
+   ],
+   "applies_when": "k and retrieval method are tuned",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "The k sweep and retrieval-method comparison are reported on the test universes and the headline uses the best k.",
+   "evidence_ids": [
+    "E013",
+    "E029"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2603.24639-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "3 Retrieval quality; Appendix C.2"
+   ],
+   "applies_when": "Claims selective retrieval is essential",
+   "applicable": true,
+   "status": "partial",
+   "reason": "LLM retrieval beats random selection by 2.3 points on 76 tasks while random heuristics already give most of the gain over baseline; embedding retrieval falls below the best random configuration.",
+   "evidence_ids": [
+    "E009",
+    "E015"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2603.24639-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Appendix E iterative ERL"
+   ],
+   "applies_when": "Claims a self-improvement loop rather than offline batch learning",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "The online loop variant degrades test performance (50.7 vs 56.1); the headline is offline accumulation then frozen retrieval.",
+   "evidence_ids": [
+    "E024"
+   ],
+   "score_item": "X"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ERL improves success by 7.8 points over ReAct and outperforms ExpeL and AutoGuide on Gaia2.",
+   "setting": "GPT-5-mini agent, Search and Execution splits, 2 held-out universes (76 tasks), 3 runs",
+   "baseline_control": "ReAct, few-shot, ExpeL, AutoGuide",
+   "selection_vs_test": "Accumulation on 8 disjoint universes; k and retrieval method compared on the test universes",
+   "result_denominator": "56.1 vs 48.3 / 50.9 / 50.8 / 46.4 overall; no variance reported",
+   "evidence_ids": [
+    "E005",
+    "E007",
+    "E008",
+    "E013",
+    "E028"
+   ],
+   "counterevidence": [
+    "E010",
+    "E011",
+    "E012"
+   ],
+   "allowed_conclusion": "Heuristic injection improves held-out-universe success over ReAct by several points; advantage over ExpeL/AutoGuide is not budget-matched."
+  },
+  {
+   "claim_id": "C2",
+   "text": "ERL improves reliability (passˆ3).",
+   "setting": "Gaia2 test universes",
+   "baseline_control": "ReAct",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "+8.3 Execution, +10.6 Search passˆ3; pass@3 gains small",
+   "evidence_ids": [
+    "E018"
+   ],
+   "counterevidence": [
+    "E022"
+   ],
+   "allowed_conclusion": "Higher consistency on Gaia2; tau2-bench overall passˆ3 unchanged."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Heuristics provide more transferable abstractions than few-shot trajectories.",
+   "setting": "Gaia2, token/experience-matched",
+   "baseline_control": "Raw trajectory few-shot",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "46.4 vs 56.1; matched-count curves in Figure 5",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Supported on this benchmark."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Selective retrieval is essential.",
+   "setting": "k sweep, random vs embedding vs LLM retrieval",
+   "baseline_control": "Random heuristic selection, embedding retrieval",
+   "selection_vs_test": "k and method chosen on test universes",
+   "result_denominator": "56.1 vs 53.8 (best random) vs 53.3",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "counterevidence": [
+    "E009"
+   ],
+   "allowed_conclusion": "LLM retrieval is modestly better than random on this test; most of the gain over baseline appears with random heuristics."
+  },
+  {
+   "claim_id": "C5",
+   "text": "ERL generalizes to another benchmark.",
+   "setting": "tau2-bench Airline, Retail, Telecom",
+   "baseline_control": "ReAct-style baseline",
+   "selection_vs_test": "heuristics from the training split, evaluated on the test split",
+   "result_denominator": "38.0 vs 36.7 overall; passˆ3 14.2 vs 14.2; Telecom drops",
+   "evidence_ids": [
+    "E021",
+    "E022"
+   ],
+   "counterevidence": [
+    "E022"
+   ],
+   "allowed_conclusion": "Small gain in single-control domains; none overall on consistency."
+  },
+  {
+   "claim_id": "C6",
+   "text": "Reflecting on single-attempt experiences enables effective self-improvement.",
+   "setting": "Offline accumulation vs iterative loop",
+   "baseline_control": "Iterative ERL",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "Iterative 50.7 vs offline 56.1",
+   "evidence_ids": [
+    "E024",
+    "E030"
+   ],
+   "counterevidence": [
+    "E024"
+   ],
+   "allowed_conclusion": "Holds for offline batch accumulation; the online loop variant is worse on test."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A pool of heuristics distilled from single-attempt trajectories on 8 Gaia2 universes raises success on 2 held-out universes by about 5 to 8 points over ReAct (GPT-5-mini; 76 tasks, 3 runs), and raw few-shot trajectories do not help; the gain is not shown to beat retry-based baselines at matched experience budgets, retrieval adds about 2 points over random selection, and the online accumulation loop and the second benchmark do not reproduce the gain.",
+  "unresolved": [
+   "Budget-matched comparison with ExpeL/AutoGuide",
+   "Statistical uncertainty on 76 tasks",
+   "Hyperparameters tuned on test",
+   "Maintenance of a growing pool",
+   "Gain beyond Gaia2"
+  ],
+  "note": "Author-reported results only; nothing was run by us. 'Retained' reflects held-out-universe gains from a frozen pool; no improver-level claim is made or supported."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete deployment gap relative to two named neighbors (retries and paired trajectories, all-insight prompts, per-turn retrieval); scaling and overhead criticisms are argued, not measured, and other experiential-memory neighbors are only cited.",
+   "evidence_ids": [
+    "E002",
+    "E030"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Mechanism and its assumptions (single-trajectory post-mortem, trigger-conditioned guideline, LLM relevance retrieval) are clear and tested against distinguishable naive alternatives (random, embedding, raw trajectories); lessons are not contrasted.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E016",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Heuristic format, retrieval prompt, k and injection are reproducible and the reward-signal dependency is characterised, but there is no admission gate, maintenance, conflict handling or versioning, and the online loop variant degrades.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E023",
+    "E024",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Gaia2 scenarios have ground-truth trajectories with automatic verification and pass@3/passˆ3 are reported, though the verifier includes an LLM judge from the agent's family and the test set is only 76 tasks.",
+   "evidence_ids": [
+    "E005",
+    "E018",
+    "E027"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Store-off, random, embedding, raw-trajectory and success/failure controls exist, but ExpeL/AutoGuide experience budgets are unmatched, random heuristics give most of the gain, and the failures-only variant exceeds the headline without analysis.",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E012",
+    "E015",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Accumulation and test use disjoint universes with held-out data and a second benchmark is run; k and retrieval variants were compared on the test universes and only two test universes are used.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E013",
+    "E026",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Three runs on 76 tasks with no variance, intervals or tests, margins of 2 points between retrieval variants, but sample sizes and several negative results (tau2 Telecom, iterative ERL, no-reward) are reported (A2 ladder level 1).",
+   "evidence_ids": [
+    "E028",
+    "E005",
+    "E022",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Token counts and dollar cost per phase are reported with a 40% overall increase, and a token-matched few-shot comparison is included; baseline retry costs for ExpeL/AutoGuide are not reported.",
+   "evidence_ids": [
+    "E020",
+    "E017",
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "Offline reflect-and-retrieve heuristic pool (H00) with a clean held-out-universe design and honest cost and negative results. Weaknesses are unmatched ExpeL/AutoGuide budgets, test-tuned k, small test set without variance, no store maintenance, and an online variant that degrades.",
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r14a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "provenance": {
+  "input_hash": "62074d901f63013454dc74e8e81c26c15c26d528bf1cbfb67635bc43e5895f60",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this run; null per BATCH_CONTRACT.",
+  "timestamp": "2026-10-22T00:39:14Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2603.24639v2",
+   "sha256": "4e1c91889b09d8f4835b1edd7eefe4cddd815c5d97781e180debc367983bfe74",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Methods",
+    "3 Experiments",
+    "4 Conclusion",
+    "Appendix A (tau2-bench)",
+    "Appendix B (setup)",
+    "Appendix C (token-matched, retrieval, reward signal)",
+    "Appendix D (cost)",
+    "Appendix E (iterative ERL)",
+    "Appendix F-G (examples, prompts)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 2-5 are images; Table-equivalent numbers transcribed in text"
+   ]
+  }
+ ],
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

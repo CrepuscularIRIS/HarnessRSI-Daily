@@ -1,0 +1,608 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r15b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "status": "reviewed",
+  "reason": "固定v2全文及附录A–E完整；可评分，保留跨任务分离、因果及统计边界。",
+  "paper": {
+    "paper_key": "2604.14972",
+    "paper_id": "2604.14972",
+    "title": "SAGER: Self-Evolving User Policy Skills for Recommendation Agent",
+    "version": "2604.14972v2",
+    "claim_type": "system_method",
+    "central_claim": "每用户持久策略技能通过增量对比CoT、短注入和listwise推理持续演进，在四推荐基准优于基线，产生独立于记忆积累的策略个体化收益。"
+  },
+  "provenance": {
+    "input_hash": "25c1b8936cd51dd460ec242fbcc74e82112163a4d8d21596989e2e64ccc766be",
+    "rubric_version": "v1.0-frozen",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "按派发sonnet→gpt-6.1-sol；未提供可独立验证实际模型回执或session标识，故置null；无模型探测。",
+    "timestamp": "2026-10-22T00:35:37.812341+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2604.14972v2-text",
+      "url": "https://arxiv.org/html/2604.14972v2",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "sections_read": [
+        "abstract",
+        "1–5",
+        "Algorithm 1",
+        "Tables 1–6",
+        "figure captions 1–7",
+        "Appendices A–E"
+      ],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "HTML正文与全部附录读完；未从缺失的图像推造曲线数值。"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 155-180",
+      "quote": "We share this vision, and observe that a key dimension of improvement remains largely unexplored. Current agents, including the self-evolving ones, focus on enriching what the agent\nknows\nabout each user: building richer memories and retrieving more relevant context. Yet the way the agent\nthinks\n, specifically the reasoning strategy that translates memory into rankings, typically remains fixed and shared across all users. We hypothesize that this reasoning gap constitutes a significant bottleneck: for users whose decision logic departs from the population mean, richer memories may not be sufficient to close the residual performance gap, because the divergence resides in the\nstrategy\n, not the\nfacts\n.\nConcretely, as illustrated in Figure\n1\n(a), existing recommendation agents operate under a single, shared recommendation\npolicy\n: a fixed set of decision principles hardcoded as a universal system prompt for every user. While these agents produce different recommendations for different users by conditioning on different memories, they reason about every user in the same way, a regime we call\none-policy-fits-all\n. Worse still, when a recommendation fails, the agent updates its memory, recording that an item was not clicked, but it never asks the more consequential question:\nwhat was wrong with the reasoning that produced this recommendation?\nThe agent knows\nwhat\nhappened but it never learns\nwhy it was wrong\n. Closing this gap calls for a fundamentally new form of adaptation, not memory evolution but\npolicy evolution\n: updating\nhow\nthe agent reasons for each individual user.",
+      "support_explanation": "作者把既有个体化记忆与固定共享推理策略区分；是作者gap，非独立新颖性证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 774-810",
+      "quote": "This finding motivates a\ntwo-representation\ndesign. The\nFull Skill Repository\n(\n𝒮\nu\n(\nt\n−\n1\n)\n\\mathcal{S}_{u}^{(t-1)}\n,\n∼\n\\sim\n1500 chars) is maintained on disk as the substrate for evolution. At each inference step, a\nSlim Working Skill\n(\n𝒮\nu\n(\nt\n−\n1\n)\n,\nslim\n\\mathcal{S}_{u}^{(t-1),\\text{slim}}\n,\n∼\n\\sim\n30 tokens) is extracted via prompt\nP\nextract\nP_{\\text{extract}}\n:",
+      "support_explanation": "完整技能落盘与短注入分离，形成可留存非权重状态。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 1102-1144",
+      "quote": "Discover.\nWhat new preferences (patterns, or criteria) emerge from\ni\n+\ni^{+}\nthat are absent from\n𝒮\nu\n(\nt\n−\n1\n)\n\\mathcal{S}_{u}^{(t-1)}\n? New preferences are appended at confidence\nlow\nas single-observation hypotheses, preventing overfitting while recording exploratory signals. Crucially, unchosen\n≠\n\\neq\ndisliked: no avoidance rules are extracted from non-clicks, consistent with the\nPositive Exploration Paradigm\n: skills encode exclusively positive signals (\nlikes\nand\nstyle\n).\n\nWeaken.\nOnly if\ni\n+\ni^{+}\nclearly\ncontradicts\nan existing preference (pattern, or criterion) is that preference demoted by exactly one tier (high\n→\n\\,\\to\\,\nmedium, or medium\n→\n\\,\\to\\,\nlow), never deleted outright. This conservative demotion ensures that statistically robust priors from\nStatInit\nrequire multiple contradictions before being discarded.",
+      "support_explanation": "低置信发现、明确正例矛盾才保守降级；不把未选当负偏好。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 1146-1173",
+      "quote": "Incremental Merge Protocol.\n\nThe contrastive reasoning output is a structured diff\nΔ\nu\n=\n{\nreinforced\n,\ndiscovered\n,\nweakened\n}\n\\Delta_{u}=\\{\\texttt{reinforced},\\;\\texttt{discovered},\\;\\texttt{weakened}\\}\n, merged into\n𝒮\nu\n(\nt\n−\n1\n)\n\\mathcal{S}_{u}^{(t-1)}\nvia confidence-tier updates. High-confidence preferences from\nStatInit\nare\nprotected\nand require multiple contradictions before being downgraded. The resulting update is:",
+      "support_explanation": "结构化增量合并及对统计先验的保护。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 2264-2307",
+      "quote": "Implementation Details.\n\nWe implement\nSager\nusing\ngpt-4o-mini\n\nOpenAI (2024)\nas the LLM. The memory retrieval backbone is built on\nMemRec\n\nChen et al. (2026)\n; memory-related hyperparameters follow the MemRec configuration.\nFor all experiments, we fix the candidate list size at\nN\n=\n10\nN=10\n(one positive item and nine randomly sampled negatives). The warmup budget\nτ\n\\tau\ncontrols how many evolution rounds each user’s policy skill undergoes before evaluation; once warmup completes, the skill is\nfrozen\nso that all test-time predictions reflect a fixed policy, ensuring fair comparison with baselines that do not evolve at inference time. We report\nHit Rate (H@K)\nand\nNDCG (N@K)\nfor\nK\n∈\n{\n1\n,\n3\n,\n5\n}\nK\\in\\{1,3,5\\}\n.\nFollowing\nZhang et al. (2024b)\n, we utilize a randomly sampled subset of 1000 users in the subsequent sensitivity study, with a\nfixed candidate set\ngenerated once per user and reused across all conditions, eliminating variance from random sampling.",
+      "support_explanation": "同基座、10候选、warmup后冻结以及固定候选敏感性实验协议。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 2370-2380",
+      "quote": "Sager\nachieves consistent state-of-the-art performance.\n\nSager\noutperforms all baselines across the vast majority of metrics on all four benchmarks. The gains are most pronounced on Goodreads (H@1 = 0.4593,\n+14.91%\nover MemRec), followed by Yelp (+7.37%), MovieTV (+6.83%), and Books (+1.92%). Since\nSager\nand MemRec share the identical memory retrieval backbone, these improvements are\ndirectly and exclusively\nattributable to the policy skill layer, confirming that per-user policy evolution constitutes an independent personalization dimension orthogonal to memory accumulation.",
+      "support_explanation": "作者报告四域H@1结果和exclusively归因；后者须受listwise共同变化限制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 2840-2842",
+      "quote": "that is merged into the existing skill. To disentangle their effects, Table\n5\ncompares four progressively stronger configurations: no policy skill (MemRec baseline), StatInit only (no CoT refinement), full-replacement CoT, and incremental CoT (ours).",
+      "support_explanation": "替代编辑器、静态初始化和无技能直接比较设计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 2881-2983",
+      "quote": "Incremental CoT (ours)\n\n0.459\n\n0.700\n\n0.827\n\n0.523\n\n0.722\n\n0.814\n\n0.628\n\n0.832\n\n0.909\n\n0.521\n\n0.705\n\n0.810\n\nFull-Replacement CoT\n\n0.435\n\n0.689\n\n0.820\n\n0.507\n\n0.713\n\n0.807\n\n0.613\n\n0.824\n\n0.904\n\n0.518\n\n0.700\n\n0.807\n\nStatInit Only (no CoT)\n\n0.430\n\n0.678\n\n0.815\n\n0.502\n\n0.707\n\n0.800\n\n0.608\n\n0.819\n\n0.901\n\n0.514\n\n0.697\n\n0.805\n\nNo Policy Skill (MemRec)\n\n0.400\n\n0.666\n\n0.805\n\n0.487\n\n0.691\n\n0.791\n\n0.588\n\n0.782\n\n0.882\n\n0.511\n\n0.692\n\n0.801",
+      "support_explanation": "表5四域逐列对照：Goodreads增量.459/整替换.435/静态.430/无技能.400。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 3104-3124",
+      "quote": "τ\n=\n3\n\\tau=3\nregresses\n, most pronounced on sparse-history Books (H@3 drop to\nτ\n=\n0\n\\tau{=}0\nlevels). The third-round interaction heavily overlaps with already-confirmed preferences, triggering excessive\nWeaken\noperations on fragile signals. This suggests that over-evolution with limited data risks destabilizing the prior rather than refining it.\n\nBased on these results,\nτ\n=\n2\n\\tau=2\nis adopted as the default\nacross all datasets and metrics.",
+      "support_explanation": "三轮退化和默认两轮的数据驱动选择；不把此选择曲线作为独立留出。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 3500-3548",
+      "quote": "Model Deployment.\n\nAll experiments are conducted using\ngpt-4o-mini\naccessed via a unified OpenAI-compatible API endpoint, with temperature set to\n0.0\n0.0\nfor reproducibility. We use the same API endpoint and model for all pipeline stages (retrieval, re-ranking, skill evolution).\n\nHyperparameters.\n\nThe core memory and retrieval hyperparameters follow the original MemRec\nChen et al. [2026]\nconfiguration to ensure fair comparison. All retrieval, pruning, and re-ranking parameters are kept identical to MemRec defaults. For skill evolution, the warmup rounds\nτ\n\\tau\nare searched over\n{\n0\n,\n1\n,\n2\n,\n3\n}\n\\{0,1,2,3\\}\n. The slim skill injection length is searched over\n{\n10\n,\n30\n,\n80\n,\n150\n,\n200\n}\n\\{10,30,80,150,200\\}\ntokens; based on the averaged trend across multiple independent runs, 30 tokens achieves the best overall performance across datasets (individual runs may show a smaller gap between 30 tok and 80 tok, but 30 tokens is the only setting with no systematic degradation across any dataset or truncation point), and is therefore used as the default; confidence tiers have three levels (\nlow\n/\nmedium\n/\nhigh\n), with only\nmedium\nand above eligible for injection.",
+      "support_explanation": "温度0及候选长度/轮数搜索；独立运行有定性提及，无主结果跨运行区间或检验细节。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 3700-3717",
+      "quote": "Purpose:\nConvert verbose user memory into a minimal (\n∼\n\\sim\n30 tokens) structured profile for tie-breaking in ranking.\n\nExtract:\n1.\nlikes\n: Top 2–3 preference themes most strongly distinguishing this user.\n2.\nstyle\n: One phrase describing their overall taste pattern.\n\nOnly include patterns with Confidence: medium or high. Output must be\n≤\n\\leq\n50 tokens total.",
+      "support_explanation": "提取prompt定义置信门槛；与附录低置信例子的潜在不一致。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 4016-4053",
+      "quote": "Books user skill (User 0, after StatInit):\n\n### Core Preferences\n- mystery (Confidence: high, Source: confirmed)\n- romance (Confidence: low, Source: confirmed)\n- fantasy (Confidence: low, Source: confirmed)\n- uplifting reads (Confidence: low, Source: confirmed)\n\n### EVOLVABLE Strategy\nPrioritization:\nMust Include: Books in core genres: mystery, romance, fantasy\nTie Breaker: Award-winning or critically acclaimed in core genres\nExploration:\nBudget: 15%\nDirections: Adjacent genres with similar tone or themes\n\nSlim profile extracted from above:\n\nlikes: mystery, romance, fantasy | style: complex world explorer\n\nMovieTV user skill (User 0, after StatInit):\n\n### Core Preferences\n- action (Confidence: low, Source: confirmed)\n- animation (Confidence: low, Source: confirmed)\n- sci-fi (Confidence: low, Source: confirmed)\n- funny tone (Confidence: medium, Source: confirmed)\n- uplifting tone (Confidence: medium, Source: confirmed)\n\n### EVOLVABLE Strategy\nRanking Criteria:\nPrimary: Genre and director match to viewing history\nSecondary: Viewing mood (funny, uplifting)\nTie Breaker: Highly-rated films in core genres\n\nSlim profile extracted from above:\n\nlikes: action, animation, sci-fi, funny tone | style: genre variety seeker",
+      "support_explanation": "附录E例把标为low的genre写入slim；规范实现一致性未获证明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 3213-3255",
+      "quote": ". Subsequently, iAgent\nXu et al. (2025b)\nintroduced static user profiles and Chat-REC\nGao et al. (2023)\nadopted RAG-style history retrieval, but neither can adapt to real-time feedback. To address plasticity, recent work introduces dynamic memory with planning or tool-use\nWang et al. (2024a)\n;\nHuang et al. (2025)\n;\nWang et al. (2024b)\n;\nShu et al. (2024)\n: i\n2\nAgent\nXu et al. (2025b)\nand RecBot\nTang et al. (2025)\nemploy self-reflection after each interaction; simulation frameworks AgentCF\nZhang et al. (2024b)\n, Agent4Rec\nZhang et al. (2024a)\n, and RecAgent\nWang et al. (2025)\nmodel users and items as agents with evolving memories. MemRec\nChen et al. (2026)\nadvances beyond isolated self-reflection by introducing a collaborative memory graph that propagates semantic signals across users. PersonaX\nShi et al. (2025)\nexplores user modeling for long behavior sequences. More recently, STAR\nWu et al. (2026)\ndistills multi-agent teacher reasoning into a single model via SFT+GRPO, and RecNet\nLi et al. (2026)\nimplements self-evolving preference propagation inspired by network routing.\nAll\nthese systems evolve\nwhat the agent knows\n(memory), but\nnone\nevolves\nhow the agent reasons\n(policy), a fundamental gap that\nSager\naddresses.",
+      "support_explanation": "论文内最近邻谱系包括iAgent/i2Agent/AgentCF/MemRec等，未提供邻居固定全文。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2604.14972v2-text",
+      "sha256": "69c473cf06c08a2b8ef5b73fb8e8a0ead98b340c3e7def602cb64d64769e47f4",
+      "locator": "lines 2682-2732",
+      "quote": "w/o Listwise Reasoning\n\n0.427\n\n0.673\n\n0.812\n\n0.494\n\n0.703\n\n0.798\n\n0.600\n\n0.811\n\n0.895\n\n0.512\n\n0.696\n\n0.804\n\nw/o Incremental CoT\n\n0.430\n\n0.678\n\n0.815\n\n0.502\n\n0.707\n\n0.800\n\n0.608\n\n0.819\n\n0.901\n\n0.514\n\n0.697\n\n0.805",
+      "support_explanation": "表4分开移除listwise和增量CoT，说明主结果不是只加文本一个因素。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "每用户磁盘策略技能及confidence tiers",
+      "information": "历史元数据、正选i+、未选候选及排序、协同facets；无权重更新；反馈在warmup可见",
+      "operation": "StatInit/全局模板初始化→reinforce/discover/weaken结构化diff→合并；仅medium/high入短技能",
+      "output": "完整技能与约30-token likes/style",
+      "conditions": "正反馈稀疏且非选择不代表dislike；需要域适配parser",
+      "feedback": "用户选择而非LLM自评分；置信升降由LLM解释",
+      "selection_rule": "低置信新发现、逐层保守升降；无独立任务效用接受测试",
+      "selection_data": "warmup交互",
+      "persistence": "完整技能落盘，合并保留先验；warmup结束冻结",
+      "later_use": "后续test ranking抽取短技能，instruction>facets>skill",
+      "claimed_effect": "更好H@1，增量比整体重写稳定",
+      "failure_boundary": "三轮会退化；低置信输出示例违背抽取门槛；无长期退役/回滚实证",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E008",
+        "E009",
+        "E012"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "推理时上下文与排序算子",
+      "information": "同MemRec检索facets、候选10项、instruction和短技能",
+      "operation": "完整技能压缩→listwise强制全序并作为软tie-breaker",
+      "output": "JSON ranking及理由",
+      "conditions": "gpt-4o-mini实验；约30-token最优不自动跨模型",
+      "feedback": "离线H/N指标选择长度",
+      "selection_rule": "搜索10/30/80/150/200 tokens，选30",
+      "selection_data": "四域敏感性子集；独立调参与最终评测划分未具体说明",
+      "persistence": "冻结长度配置及用户技能",
+      "later_use": "下一测试候选排序",
+      "claimed_effect": "消除score tie并避免长注入退化",
+      "failure_boundary": "全序由格式要求而非执行校验保证；表4显示算子自身贡献，不能把整体收益全归技能演进",
+      "evidence_ids": [
+        "E005",
+        "E010",
+        "E014"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "个体化what但共享固定how；注入悖论、稀疏反馈稳定性与pointwise ties。",
+    "checked_gap": "固定策略与个体化技能区分具有操作对象；但likes/style及示例仍大量是偏好事实，how/what正交不由命名成立。",
+    "lineage": [
+      {
+        "method": "iAgent/i2Agent/AgentCF/RecBot→MemRec→Sager",
+        "source": "2604.14972v2 §4, Appendix A.2",
+        "version": "邻居版本未在固定包提供，仅作者本篇v2描述",
+        "evidence_ids": [
+          "E013"
+        ]
+      }
+    ],
+    "closest_adjacent": "MemRec协同记忆骨干不变；i2Agent已会反思internal state or strategy，需原文核how的独占性。",
+    "residue": "少量正反馈下保留长期先验而不过注入用户文档",
+    "stakes": "四域H@1相对增益1.92%–14.91%，稀疏Books收益较小",
+    "method_response": "统计先验+增量置信diff+短抽取+listwise",
+    "remaining_gap": "策略内容与事实摘要的等预算区别、长期漂移回滚、多模型迁移",
+    "evidence_ids": [
+      "E001",
+      "E006",
+      "E009",
+      "E012",
+      "E013",
+      "E014"
+    ],
+    "unresolved": [
+      "请求总控固定MemRec(Chen et al. 2026)、InstructRec/i2Agent(Xu et al. 2025b)原文及版本供双席一致补核；当前不独立确认first/universal gap。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "outside_taxonomy": false,
+    "reason": "冻结LLM从个体化持久技能获得推理条件；不是训练目标或连续搜索。C03强调类别级统一上游格式与参考基底，本篇用户内增量文档不充分执行该细分，故sub=null。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "读取C03全卡：统一likes/style输入及多域元数据参考符合父类conditioning",
+          "无训练统一context parser；无整体类别留出，不能强标C03"
+        ],
+        "success_checks": [
+          "短/长注入对照、无技能及替代编辑器比较"
+        ],
+        "failure_checks": [
+          "same-model only",
+          "how/what区分与信息预算混杂未排除"
+        ],
+        "evidence_ids": [
+          "E002",
+          "E005",
+          "E008",
+          "E010"
+        ],
+        "reason": "操作真实是持久文本改变后续推理条件；子卡严格定义比该执行更窄。"
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01",
+        "version": "manifest-bound-2026-10-21",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S3",
+            "status": "met",
+            "reason": "真实正选，未选不作dislike"
+          },
+          {
+            "id": "S4",
+            "status": "partial",
+            "reason": "增量升降与短抽取明确，但低置信示例与门槛矛盾，未给长期有界维护"
+          },
+          {
+            "id": "S5",
+            "status": "partial",
+            "reason": "置信注入门，不是独立效用接受/回滚门"
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E004",
+          "E011",
+          "E012"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01"
+      },
+      "operation_correspondence": "交互正选→confidence局部diff保留文档→抽取成后续ranking条件",
+      "necessary_conditions": "warmup反馈先于冻结测试；模型能读短技能；不把未点击作负例",
+      "differences": "H01着重持续维护；RS父类关心冻结推理conditioning，C03的类别级generalization不成立",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E005"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "version": "manifest-bound-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md S3"
+      ],
+      "applies_when": "声称持久个体技能带来独立于共享记忆的后续推荐收益",
+      "applicable": true,
+      "status": "met",
+      "reason": "正选反馈接地；未选不误当dislike",
+      "evidence_ids": [
+        "E003"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-bound-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H01.md steps 3–4"
+      ],
+      "applies_when": "声称持久个体技能带来独立于共享记忆的后续推荐收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "localized diffs与confidence维护；长期容量、过期与示例一致性不足",
+      "evidence_ids": [
+        "E004",
+        "E012"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2604.14972-1",
+      "version": "manifest-bound-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.14972v2 §3.4"
+      ],
+      "applies_when": "声称持久个体技能带来独立于共享记忆的后续推荐收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "表4/5有store-off、静态和替代编辑器；listwise同时影响主比较，等成本普通偏好摘要对照缺",
+      "evidence_ids": [
+        "E008",
+        "E014"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2604.14972-2",
+      "version": "manifest-bound-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.14972v2 §3.1/3.5"
+      ],
+      "applies_when": "声称持久个体技能带来独立于共享记忆的后续推荐收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "warmup后冻结但warmup样本选择、候选/图跨时间泄漏和超参开发测试隔离未充分陈述",
+      "evidence_ids": [
+        "E005",
+        "E009",
+        "E010"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2604.14972-3",
+      "version": "manifest-bound-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.14972v2 §3.2/A.3"
+      ],
+      "applies_when": "声称持久个体技能带来独立于共享记忆的后续推荐收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "p<.05和独立运行定性声称，没有检验类型/次数/区间/主结果运行方差",
+      "evidence_ids": [
+        "E006",
+        "E010"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2604.14972-4",
+      "version": "manifest-bound-2026-10-21",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2604.14972v2 §2.3/A.3"
+      ],
+      "applies_when": "声称持久个体技能带来独立于共享记忆的后续推荐收益",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "仅StatInit零LLM和注入长度，未测总演进调用/费用/延迟或等预算基线",
+      "evidence_ids": [
+        "E002",
+        "E005",
+        "E010"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "每用户持久策略技能通过增量对比CoT、短注入和listwise推理持续演进，在四推荐基准优于基线，产生独立于记忆积累的策略个体化收益。",
+      "setting": "gpt-4o-mini，4域，每候选1正9随机负",
+      "baseline_control": "MemRec、iAgent/i2Agent等；Table4/5移除与替代编辑",
+      "selection_vs_test": "warmup后冻结；采用InstructRec split；warmup/超参开发与test详细去重权限不明",
+      "result": "H@1 Goodreads .4593 vs .3997；Yelp .5227 vs .4868；MovieTV .6284 vs .5882；Books .5215 vs .5117",
+      "denominator": "表1全数据用户7.4K/11.7K/5.6K/3K；敏感性各1K；主评价确切预测/失败数未逐项给出",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E008",
+        "E014"
+      ],
+      "counterevidence": [
+        "整体系同时变listwise；skills likes/style未排除事实摘要解释；非多模型普适证明"
+      ],
+      "allowed_conclusion": "作者报告冻结技能加listwise体系在固定10候选评测改善；不是策略与记忆严格正交证明"
+    },
+    {
+      "claim_id": "C2",
+      "text": "增量优于full replacement且长期稳定",
+      "setting": "Table5四域",
+      "baseline_control": "替代编辑器及StatInit only",
+      "selection_vs_test": "两轮warmup冻结测试；非长期部署",
+      "result": "Goodreads .459 vs .435 vs .430；其余域同向；三轮退化",
+      "denominator": "相应评测用户；无运行方差",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009"
+      ],
+      "counterevidence": [
+        "三轮负结果；低置信抽取示例不一致"
+      ],
+      "allowed_conclusion": "两轮设置的增量编辑优于整替换；不保证长期稳定"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告warmup中落盘技能在冻结的后续候选排序优于移除技能及静态/替代更新，支持有限范围留存效用；不支持first、任意模型、严格how/what正交或长期连续进化。",
+    "unresolved": [
+      "warmup与test精确样本/图权限及超参隔离",
+      "邻居原文缺失",
+      "低置信示例与提取门槛不一致",
+      "主结果运行统计及全成本未给出"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "问题具体且对MemRec有定位，但first/how与what区分未独立核实。",
+      "evidence_ids": [
+        "E001",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "两级表示、正选对比和保守diff对准稀疏反馈；置信是解释式启发，策略独立性不充分。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "操作/持久化/读取和prompt可重建；低confidence进入示例、长期回退与容量未清。",
+      "evidence_ids": [
+        "E002",
+        "E004",
+        "E011",
+        "E012"
+      ],
+      "counterevidence_ids": [
+        "E012"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "H/N与10候选真值客观，表列多域一致；只代表随机负采样排序，不等于真实曝光CTR。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E008"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "store-off、静态、整替换及listwise分离有价值；extra calls及普通摘要等预算对照缺，exclusive归因过强。",
+      "evidence_ids": [
+        "E006",
+        "E008",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "明确冻结后测试支持后续使用；warmup/test身份、图与超参隔离未明确审计。",
+      "evidence_ids": [
+        "E005",
+        "E009",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "样本量、三轮退化与p阈值有报告；没有主结果区间/检验细节/跨运行方差，按A2档1。",
+      "evidence_ids": [
+        "E005",
+        "E009",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "零LLM初始化、注入长度及两轮数量提供有限成本结构；无总调用/费用/延迟与搜索成本核算。",
+      "evidence_ids": [
+        "E002",
+        "E005",
+        "E010"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 63.75,
+    "display": 63.8,
+    "lower": 63.75,
+    "upper": 63.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "rationale": "增量技能与短注入机制具体，冻结后多域对照支持有限留存收益；策略/事实正交、超参隔离、长期门控、统计与总成本仍弱。"
+}
