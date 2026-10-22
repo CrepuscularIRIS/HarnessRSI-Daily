@@ -1,0 +1,144 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r20b",
+  "attempt_id": "a3",
+  "supersedes": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2605.18729",
+    "paper_id": "2605.18729",
+    "title": "Robo-Cortex: A Self-Evolving Embodied Agent via Dual-Grain Cognitive Memory and Autonomous Knowledge Induction",
+    "version": "2605.18729v1",
+    "claim_type": "system_method",
+    "scope_class": "A",
+    "central_claim": "通过 Imagine-then-Verify、双粒度认知记忆和 AKI，将具身执行轨迹抽象成跨 episode 留存的导航启发式；这些启发式可迁移至未见环境，持续在线更新进一步改善导航成功率与效率。"
+  },
+  "provenance": {
+    "input_hash": "da091bfa50841d5394c9aab8127f2524d2739a4b27c229d3a2abd56a1614257f",
+    "rubric_version": "v2.2/frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sonnet(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T03:05:53.225467+00:00",
+    "notes": "本席按现有 sonnet→gpt-6.1-sol 配置执行；没有可独立核验的后端模型回执、会话 ID 或 receipt，故三项为 null，不额外探测。a3 依用户指令显式 supersedes a1，未读取 a1、其他席、aggregate、conflicts、archive 或 screen 判定。相同 r20b manifest；attempt 覆盖由本次派发指定，不修改 manifest。外部补充材料不属于钉定 arXiv 文档；只依据正文独立判断它是否承载必要核心证据。"
+  },
+  "materials": [
+    {
+      "material_id": "2605.18729.txt",
+      "url": "https://arxiv.org/html/2605.18729v1",
+      "sha256": "527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789",
+      "sections_read": ["Abstract", "1 Introduction", "2.1–2.3 Related Work", "3.1–3.4 Framework, equations 1–10", "4.1 Experimental Setup", "4.2 SOTA, Table 1", "4.3 Ablations, Tables 2–3 and Figure 4 caption/discussion", "4.4 Real-world, Figure 5 discussion", "5 Conclusion and Limitations", "entire pinned text through end"],
+      "complete": true,
+      "missing_sections": [],
+      "notes": "已完整阅读固定的 HTML 转文本（1496 行），方法、结果及局限均在正文。§4.1 指向 supplementary 的是 additional implementation details；正文没有将核心结果表或关键主张唯一证据移交外部补充。未报告的阈值、prompt、分母、统计和成本属于作者报告缺口，不是 needs_fulltext。manifest 无 page_images；图4数值仅引用正文解说，不推测图内未转录点。"
+    }
+  ],
+  "evidence": [
+    {"evidence_id":"E01","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§1, lines 126–142","quote":"experiential amnesia\n: the failure to transform past interactions into reusable decision knowledge that generalizes across environments.","support_explanation":"作者将具体 gap 定位于轨迹/局部记忆难以转化为跨环境决策知识，而非只有冻结权重口号。","kind":"author_report"},
+    {"evidence_id":"E02","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§2.3, line 318","quote":"Voyager learns a library of executable skills in a simulator-native domain, EvoAgent continually updates the world model for long-horizon embodied tasks, and C-NAV adapts navigation representations to new object categories under continual learning","support_explanation":"作者提供技能库、世界模型更新和持续导航三条谱系；这是本文对邻居的描述，未核邻居原文，不能作独立新颖性证明。","kind":"author_report"},
+    {"evidence_id":"E03","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.2, line 566","quote":"After executing the selected decision, Robo-Cortex updates the state and re-enters the planning loop rather than trusting a long open-loop rollout.","support_explanation":"world-model/VLM 候选选择后真实执行并重规划；这是任务控制闭环，不单独证明跨任务留存收益。","kind":"author_report"},
+    {"evidence_id":"E04","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.3, line 643","quote":"This reflective cue is then appended to the planner context for subsequent decisions within the same episode","support_explanation":"SRM 滑窗总结只影响当前 episode，不把它单独当 retained。","kind":"author_report"},
+    {"evidence_id":"E05","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.3, lines 679–691","quote":"A principle analyzer converts this trajectory into a guiding principle for successful episodes or a cautionary principle for failed episodes.","support_explanation":"LPM 将成功/失败的后续轨迹转成指导/警示原则，之后以目标条件嵌入检索；有结果 grounding，但未指定成功信号具体可见权限。","kind":"author_report"},
+    {"evidence_id":"E06","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.3 Memory consolidation, line 691","quote":"Successful episodes are prioritized over failed ones, and among successful episodes, shorter trajectories are retained as more efficient behavioral templates. When no successful episode is available, diverse failed episodes are preserved.","support_explanation":"给出 goal-wise 的成功优先、短轨迹优先及失败多样性保留规则；不是启发式边际效用门控。","kind":"author_report"},
+    {"evidence_id":"E07","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.4, line 700 and equations 9–10","quote":"After each episode, the knowledge agent loads the corresponding structured trajectory from the memory graph and applies a vision-language heuristic extractor to identify recurring success and failure patterns.","support_explanation":"AKI 输入为自身 episode 多模态轨迹；产物包含模式 ID、问题、策略、置信度及 success/failure 标签的自然语言启发式。","kind":"author_report"},
+    {"evidence_id":"E08","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.4, line 749","quote":"Heuristics are first grouped by pattern identifier, and optionally further refined by semantic similarity over their textual descriptions and recommended strategies.","support_explanation":"模式/语义聚类后 merger 泛化已有内容；有合并而无明示冲突优先级、验证回退或阈值。","kind":"author_report"},
+    {"evidence_id":"E09","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§3.4, line 791","quote":"Finally, high-confidence recurrent heuristics are fed back into the online system as structured guidance for short-term reflective analysis and planning.","support_explanation":"持久库后续确实读取并条件化反思/规划；high-confidence 是模型置信度筛选，不能等同经执行验证的可靠门控。","kind":"author_report"},
+    {"evidence_id":"E10","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.1, lines 948–1012","quote":"Additional implementation details are provided in the supplementary material.","support_explanation":"外部实现细节指针不独占正文实验结果；正文已给 Habitat、HM3D/MP3D、Qwen2.5-VL-72B、Wan2.1、动作粒度与指标。未提供的实现/成本细节按报告缺口处理，不向外访问。","kind":"author_report"},
+    {"evidence_id":"E11","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.2, line 1345; Table 1","quote":"Compared with the strongest baseline, Robo-Cortex improves IGNav by +2.69% SR and +4.16% SPL, while also achieving the best AR success rate and the shortest trajectories on both AR and AEQA.","support_explanation":"作者报告静态系统 IGNav SR41.26/SPL31.66，World-In-World38.57/27.50；是百分点差。表1不代表全指标都最好，例如 IGNav mean traj49.90比47.10长。","kind":"author_report"},
+    {"evidence_id":"E12","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.3, lines 1369–1377","quote":"We separate the evaluation set into two disjoint halves,\ni.e.\n, seen and unseen, to comprehensivly evaluate Robo-Cortex.","support_explanation":"明确 episode 集合划为两半，支持对 held-out episode 的有限迁移判断；未给 scene ID、随机化、开发选择清单或更强污染审计。","kind":"author_report"},
+    {"evidence_id":"E13","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.3 Seen split, lines 1377–1387; Table 2","quote":"We first analyze the contribution of Dual-Grain Cognitive Memory under repeated evaluation on the same split.","support_explanation":"同一 split 反复 round：Basic SR36.11、SRM40.18、round3 LPM43.06、LPM+SRM44.29（IGNav）。不能把重复已见任务收益当独立留出。AR round2组合20.16低于Basic20.93，组合也不全指标占优。","kind":"author_report"},
+    {"evidence_id":"E14","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.3 Unseen split, line 1391","quote":"In this setting, no LPM is used, so the comparison focuses on heuristic guidance and online updating.","support_explanation":"去除原始/具体 LPM 检索后比较同一Basic规划回路上的启发式，是持久启发式作用的重要隔离。","kind":"author_report"},
+    {"evidence_id":"E15","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"Table 3, lines 1218–1270","quote":"w/ transferred heur.\n\n48.61\n\n39.33\n\n46.20\n\n23.02\n\n7.78\n\n32.88\n\n19.47\n\n24.31","support_explanation":"固定 transferred启发式：IGNav SR48.61/SPL39.33，对Basic34.72/24.03和manual38.89/30.96；AR23.02对19.42；AEQA score32.88对32.42，但SPL24.31低于26.80、轨迹19.47长于19.06。结果有明确负向边界。","kind":"author_report"},
+    {"evidence_id":"E16","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.3 Unseen split, line 1397; Table 3","quote":"it does not surpass the fixed transferred-heuristic setting, suggesting that strong transferred heuristics already provide a high-quality prior and that aggressive online rewriting on limited unseen episodes may partially overwrite useful guidance.","support_explanation":"在线更新并非总改进：IGNav固定48.61/39.33降至更新41.67/34.84，AR同23.02，AEQA score32.88降32.22；不据此反证一切在线收益，而限制持续演进的普适主张。","kind":"author_report"},
+    {"evidence_id":"E17","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§4.4, line 1425","quote":"The Basic Pipeline succeeds on 4/10 goals","support_explanation":"两室内场景有基线分母及失败描述，但增强系统只有代表性SRM恢复案例，没有匹配10目标成功率或不确定性。","kind":"author_report"},
+    {"evidence_id":"E18","material_id":"2605.18729.txt","sha256":"527601287242cab14190f22f3741cfc08946f703ea6dfd06375e729c4c0e8789","locator":"§5, line 1438","quote":"we have not yet systematically evaluated Robo-Cortex with different vision-language backbones or world models.","support_explanation":"跨模型一般性未证实；真实部署也由作者承认仍是初步小规模。","kind":"author_report"}
+  ],
+  "signatures": [
+    {"sig_id":"S1","object":"episode局部规划上下文/SRM","information":"当前视觉、任务目标、候选动作理由、world-model预测和最近已执行子任务；未报告未来真值访问","operation":"短视野想象并VLM评分选动作→执行→滑窗总结进展/失败→追加上下文","output":"下一步动作及局部反思","conditions":"局部想象和视觉评估可用，短窗反思及时","feedback":"真实状态转移和局部失败模式","selection_rule":"候选按目标进展Score取argmax；SRM在积累足够子任务后运行","selection_data":"当前episode","persistence":"SRM当前episode；轨迹另入共享图供S2/S3","later_use":"同episode后续规划","claimed_effect":"减少漂移和无效重复","failure_boundary":"非独立的跨任务学习证据；预测误差和反思质量仍限制执行","evidence_ids":["E03","E04","E13","E17"]},
+    {"sig_id":"S2","object":"LPM持久轨迹图和指导/警示原则","information":"完成episode中的子任务、后续轨迹及成功/失败；具体成功反馈权限未交代","operation":"按时序图收集后续轨迹→原则分析→goal-wise consolidation→目标条件状态近邻检索","output":"可检索轨迹及原则","conditions":"匹配嵌入相关且原则能跨episode复用","feedback":"成功/失败和轨迹长度","selection_rule":"优先成功及更短成功轨迹，无成功时保存多样失败；检索超过delta_lpm阈值","selection_data":"既有episode，seen实验含同split重复任务","persistence":"episode结束写入共享图/LPM，跨episode保存","later_use":"测试决策检索并注入规划","claimed_effect":"经验越积累导航越好","failure_boundary":"阈值、容量和冲突/回退未报告；同split提高不能证明独立泛化","evidence_ids":["E05","E06","E13"]},
+    {"sig_id":"S3","object":"AKI Navigation Heuristic Library，非权重策略库","information":"自己的多模态轨迹、成功/失败、现有模式ID与启发式文本；无独立utility verifier的报告","operation":"VLM提取(模式、问题、策略、置信度、结果标签)→按模式及可选语义聚类→merger泛化→高置信复现启发式反馈SRM/规划","output":"跨episode自然语言导航启发式","conditions":"可迁移的行为规律；confidence与有效性相符；合并不过写有用旧知识","feedback":"episode执行及成败模式","selection_rule":"高置信、反复出现；未给置信聚合公式/阈值、实测回归门控或rollback","selection_data":"seen轨迹诱导；静态迁移时固定；adaptive模式从目标流持续更新","persistence":"共享知识库跨episode累积合并","later_use":"以后任务的反思与动作规划，Table3固定迁移且不使用LPM","claimed_effect":"未见episode迁移与持续在线策略演进","failure_boundary":"在线改写可能覆写有效启发式；未证明改进器自身变好","evidence_ids":["E07","E08","E09","E12","E14","E15","E16"]}
+  ],
+  "gap": {
+    "author_gap":"现有轨迹驱动/反应式导航保留局部经历但难诱导可迁移策略，形成experiential amnesia。",
+    "checked_gap":"正文具体分开了局部规划、场景/轨迹记忆和跨episode启发式；Table3去掉LPM后的固定迁移结果与该问题对位。不过反思→原则→迁移早已有通用agent谱系，仅具身落地并不证明独有机制。",
+    "lineage":[{"name":"MapGPT / WMNav / World-In-World","version":"本文v1引述，邻居版本未固定","relationship":"地图及世界模型规划基线，Table1比较"},{"name":"verbal reflection / non-embodied experience abstraction","version":"本文§2.3 refs28,19,32,24,45,20,22,34；邻居原文未固定","relationship":"反思和高层指导的直接祖先"},{"name":"Voyager / EvoAgent / C-NAV and refs17,33 cross-episode navigation","version":"本文§2.3描述；邻居原文未固定","relationship":"技能库、世界模型更新与持续导航最近邻"}],
+    "closest_adjacent":"最需核对的是§2.3 refs17/33既有跨episode导航经验积累和ref41 World-In-World；固定包没有邻居原文，不能独立断言它们都不诱导可迁移启发式。",
+    "residue":"将多模态经验抽象为不依赖单轨迹的指导，如何防过泛化、合并回归及测试流过拟合。",
+    "stakes":"未见场景导航效率/成功率、重复探索成本及真实机器人漂移。",
+    "method_response":"SRM处理局部连续性，LPM保留经验原则，AKI以跨episode模式合并生成可传递条件文本；Table3固定库实验验证有限转移。",
+    "remaining_gap":"缺邻居原文对照、抽象/合并与廉价替代的预算匹配比较、可靠门控和长期稳定性；scene级隔离与跨模型迁移未证。",
+    "evidence_ids":["E01","E02","E07","E14","E15","E16","E18"],
+    "unresolved":["请求总控若需进一步新颖性核查，为两席共同固定§2.3 refs17/33及World-In-World原文；本席不联网补单方材料。"]
+  },
+  "rs_pattern": {
+    "primary":"adapt_via_conditioning",
+    "supporting":["heterogeneous_decomposition"],
+    "matches":[
+      {"main_id":"adapt_via_conditioning","sub_id":"C03","role":"primary","fit":"medium","tactic_steps_checked":"C03步骤1/2：原则和启发式结构化为条件文本/参考库；步骤3采用冻结模型直接读取参考而非上游重训；步骤4只有episode半分而非整任务类别留出；步骤5有manual/no-heuristic但无等成本raw-context替代。","success/failure_checks":"held-out固定启发式与移除LPM支持条件化迁移；没有结构类别排除/污染审计、等预算廉价替代，不能称普遍零样本跨任务泛化。卡内训练格式条件不机械强求：此处使用直接检索/参考路径。","evidence_ids":["E05","E09","E12","E14","E15"],"reason":"产物是可供冻结规划器后续读取的策略文本，而非每任务权重；C03中无上游调参的reference路径为部分适配。"},
+      {"main_id":"heterogeneous_decomposition","sub_id":null,"role":"supporting","fit":"medium","tactic_steps_checked":"按时间尺度和信息粒度拆分同一经验：SRM局部窗口、LPM跨episode原则、AKI跨轨迹抽象；Table2局部和长期模块分别操作。C04针对敏感度分层压缩训练产物，本篇不执行，故sub=null。","success/failure_checks":"时间尺度与职责解释清楚；无等预算统一记忆处理的直接比较，互补结果并不全指标占优。","evidence_ids":["E04","E05","E07","E13"],"reason":"不是因模块多而贴卡：经验的局部连续性与跨episode可迁移性受到不同处理；未证明该划分优于统一处理。"}
+    ],
+    "outside_taxonomy":false,
+    "reason":"先按原15+31识别条件化迁移与按时间尺度差异化处理；不把启发式库误认作可执行技能或improver自修改。",
+    "executes_pattern":true,
+    "resolves_problem":false
+  },
+  "domain_pattern": {
+    "namespace":"rsi",
+    "matches":[{"main":"abstract_experience_into_guidance","sub":"H00","version":"manifest-pinned cards","fit":"high","condition_checks":[{"id":"S1","status":"met","reason":"被改变的是人工/局部导航策略向经验诱导的持久策略库。"},{"id":"S2","status":"partial","reason":"成功和失败均生成原则，但未展示成对对比提炼过程。"},{"id":"S3","status":"partial","reason":"轨迹与成败grounding可见；反馈权限和confidence可靠性未报告。"},{"id":"S4","status":"partial","reason":"有模式合并及goal-wise轨迹整合，无容量/冲突/版本/遗忘明细。"},{"id":"S5","status":"partial","reason":"有高置信筛选，不是经效果验证的回归门控。"}],"evidence_ids":["E05","E06","E07","E08","E09","E15","E16"]},{"main":"abstract_experience_into_guidance","sub":"H01","version":"manifest-pinned cards","fit":"medium","condition_checks":[{"id":"H01","status":"partial","reason":"显式merge现有启发式并更新confidence，属于维护子操作；未给delete/no-op/rollback、编辑日志及编辑器隔离消融。"}],"evidence_ids":["E08","E09","E16"]}],
+    "unassigned":[],
+    "revision_proposals":[]
+  },
+  "pattern_mapping": [
+    {"rs_main":"adapt_via_conditioning","rs_sub":"C03","domain":{"namespace":"rsi","main":"abstract_experience_into_guidance","sub":"H00"},"operation_correspondence":"episode结果→原则/启发式→持久库→未来planner/SRM条件输入；C03参考基底在此由自身经验生成。","necessary_conditions_and_differences":"冻结模型能读策略文本；不声称经过canonical-schema上游训练，也不将episode留出扩大成task-category留出。","evidence_ids":["E05","E07","E09","E12","E15"]},
+    {"rs_main":"heterogeneous_decomposition","rs_sub":null,"domain":{"namespace":"rsi","main":"abstract_experience_into_guidance","sub":"H01"},"operation_correspondence":"同源经验按局部窗口、长期原则与跨episode共享启发式处理，持久部分进行合并。","necessary_conditions_and_differences":"时间尺度分工不等于已验证最优划分；H01只部分覆盖merger维护，没有C04压缩或完整生命周期策略。","evidence_ids":["E04","E06","E08","E13"]}
+  ],
+  "expectations": [
+    {"id":"rs:adapt_via_conditioning/RE-1","version":"manifest-pinned","source_strength":"observed_in_reviews","source_refs":["原卡 Reviewer expectations 第1项（source: both），间接review归纳非本篇review"],"applies_when":"声称策略条件文本导致迁移收益","applicable":true,"status":"partial","reason":"Table3相同Basic回路去LPM、no-heuristic及manual比较支持策略条件效应；没有等长度随机/raw文本和同预算抽象器比较。","evidence_ids":["E14","E15"],"score_item":"E.causality"},
+    {"id":"rs:adapt_via_conditioning/RE-2","version":"manifest-pinned","source_strength":"observed_in_reviews","source_refs":["原卡 Reviewer expectations 第2项（source: both）"],"applies_when":"宣称未见环境迁移","applicable":true,"status":"partial","reason":"明示两半互斥episode并固定转移库；缺scene级排除、列表、选择历史和污染审计；目标流反复更新曲线不当独立留出。","evidence_ids":["E12","E13","E15","E16"],"score_item":"E.holdout"},
+    {"id":"rsi:abstract_experience_into_guidance/S3","version":"manifest-pinned","source_strength":"common_practice","source_refs":["conditions.json S3；H00步骤1；只使用条件不使用卡内成员结果"],"applies_when":"自身经验成为持久策略","applicable":true,"status":"partial","reason":"成败轨迹grounding明确；success标签获得方式、VLM confidence校准及误判率未报告。","evidence_ids":["E05","E07","E09"],"score_item":"M"},
+    {"id":"rsi:abstract_experience_into_guidance/S4","version":"manifest-pinned","source_strength":"common_practice","source_refs":["conditions.json S4；H01步骤1/3/4"],"applies_when":"知识库跨episode增长并合并","applicable":true,"status":"partial","reason":"模式ID/语义聚类与merger、goal-wise保留明确；无冲突优先级、上限、版本及回退；Table3在线过写风险已有结果。","evidence_ids":["E06","E08","E16"],"score_item":"X"},
+    {"id":"rsi:abstract_experience_into_guidance/S5","version":"manifest-pinned","source_strength":"common_practice","source_refs":["conditions.json S5；H00步骤5；H01步骤2"],"applies_when":"筛选或修改将被后续任务读取的启发式","applicable":true,"status":"partial","reason":"有high-confidence recurrent筛选，但未给阈值、效果验证和失败回退；不把confidence视为真实utility。","evidence_ids":["E09","E16"],"score_item":"X"},
+    {"id":"local:2605.18729-1","version":"1","source_strength":"single_source","source_refs":["本文§4.3 Table3及round-wise讨论"],"applies_when":"宣称continual heuristic evolution进一步改进而非只固定转移","applicable":true,"status":"partial","reason":"Table1和重复目标流曲线有正向结果，但Table3固定迁移被在线更新拉低IGNav；原主张必须保留该条件边界。","evidence_ids":["E11","E13","E16"],"score_item":"E.causality"},
+    {"id":"local:2605.18729-2","version":"1","source_strength":"single_source","source_refs":["本文§4.1实现及§4.4物理实验、§5局限"],"applies_when":"宣称真实部署有效和探索效率","applicable":true,"status":"partial","reason":"有动作/模型及路径指标，物理基线4/10及恢复案例；没有增强系统完整目标分母、重复运行、时延或AKI成本。","evidence_ids":["E10","E11","E17","E18"],"score_item":["E.measurement","E.statistics","E.cost"]}
+  ],
+  "claims": [
+    {"claim_id":"C1","text":"静态Robo-Cortex在三个任务优于强基线并提高导航效率。","setting":"Habitat-sim；IGNav/AEQA来自HM3D validation，AR来自MP3D；Qwen2.5-VL-72B及Wan2.1。","baseline/control":"MapGPT、WMNav、World-In-World；静态库固定。","selection_vs_test":"静态声明固定memory/guidance，但Table1构建来源和开发选择细节不完整。","result/denominator":"Table1 IGNav41.26/31.66 vs World-In-World38.57/27.50；AR22.39 vs20.68；AEQA29.78 vs27.19；模拟episode数未报告。","evidence_ids":["E10","E11"],"counterevidence":["IGNav mean trajectory49.90差于World-In-World47.10；未报告等调用预算。"],"allowed_conclusion":"作者报告静态SR/主指标改进，不能推成所有效率指标更好或同成本优势。"},
+    {"claim_id":"C2","text":"留存的经验抽象能迁移到未见环境，而非只回放原轨迹。","setting":"evaluation分为seen/unseen互斥两半，Table3不使用LPM。","baseline/control":"Basic、manual heuristics、fixed transferred heuristics。","selection_vs_test":"seen产生启发式，固定后在unseen评估；scene级隔离和开发选择历史未报告。","result/denominator":"Table3 fixed transferred IGNav SR48.61/SPL39.33，对Basic34.72/24.03，SPL+15.30个百分点；AR23.02对19.42；AEQA32.88对32.42但SPL24.31低于26.80；模拟分母未报告。","evidence_ids":["E12","E14","E15"],"counterevidence":["跨环境表述强于可核对的episode互斥定义；AEQA效率不一致；未分离更长上下文和额外构建预算。"],"allowed_conclusion":"支持特定固定分割中持久启发式在之后未见episode的有限迁移，证据等级retained；不是普遍跨场景/跨模型泛化。"},
+    {"claim_id":"C3","text":"持续在线自演进进一步提高成功和效率。","setting":"Table1 static vs adaptive；Table2同split重复round；Table3unseen在线更新；Fig4正文五轮。","baseline/control":"固定库、manual/transferred初始化、Basic/SRM/LPM。","selection_vs_test":"目标split重复执行并学习，非独立认证；Table3固定和更新条件可直接比较。","result/denominator":"Table1 adaptive IGNav45.07/35.06 vs static41.26/31.66；Table3 transferred+update41.67/34.84低于fixed48.61/39.33。","evidence_ids":["E11","E13","E16"],"counterevidence":["Table3在线更新损害强迁移先验，AEQA answer也下降；重复目标流曲线不能独立证明泛化。"],"allowed_conclusion":"在线更新的收益依赖初始化与任务；没有证据改进了AKI改进器本身，不授improver。"},
+    {"claim_id":"C4","text":"真实机器人支持框架有效性。","setting":"living room和supermarket的初步IGNav。","baseline/control":"Basic基线及单个SRM恢复示例。","selection_vs_test":"simulation启发式用于实体机器人；案例挑选过程未报告。","result/denominator":"Basic4/10，增强系统完整成功分母未报告。","evidence_ids":["E17","E18"],"counterevidence":["仅代表性恢复而非匹配总成功率比较。"],"allowed_conclusion":"支持物理可部署性和一个恢复案例，不支持可靠真实部署提升幅度。"}
+  ],
+  "assessment": {
+    "evidence_level":"retained",
+    "claim_support":"scoped",
+    "strongest_supported_claim":"作者报告：从seen经验诱导、冻结且无LPM的启发式，能在互斥unseen episode上提高IGNav和AR主指标；这构成有限的非权重留存迁移证据。在线更新并非持续单调增益，跨场景隔离、强成本匹配和真实机器人总体改善尚未建立。",
+    "unresolved":["邻居原文未固定，G只能有限判定。","未报告scene/episode清单、反馈成功标签权限和开发选择历史。","未报告可执行的confidence/合并阈值、冲突与回退细节、模拟样本数和运行方差、总构建/推理成本。"],
+    "fulltext_decision":"reviewed而非needs_fulltext：正文已载核心方法及全部结果表，外部supplement指针仅additional implementation details，没有承载必须补齐才可判断核心效果的唯一证据。缺报告按项降档或not_reported，不用材料缺失替代。"
+  },
+  "ratings": {
+    "G":{"status":"resolved","rating":2,"reason":"具体瓶颈是导航经验到跨episode可迁移策略，谱系覆盖规划、记忆、反思和持续导航；但最近跨episode导航邻居仅本文自述，无固定原文核对，方法新颖残余与普遍范围不够扎实，符合2档。","evidence_ids":["E01","E02","E15"],"counterevidence_ids":[],"search_scope":["全文§1–2及§4.3；manifest只有目标论文，不联网查邻居"]},
+    "M":{"status":"resolved","rating":3,"reason":"局部反思、轨迹原则和跨episode模式合并有不同职责；提取字段、保留和后续注入可重建，Table3提供不同于原始经验检索的可区分预测。成功信号权限、confidence可靠性与合并具体规则薄弱，不能4。","evidence_ids":["E03","E04","E05","E06","E07","E08","E09","E14"],"counterevidence_ids":["E16"],"search_scope":["全文§3.1–3.4 equations1–10及§4.1"]},
+    "X":{"status":"resolved","rating":2,"reason":"实际object→写入→merge→后续读取完整，LPM有成功/长度优先和匹配门槛，AKI有高置信筛选；但阈值/聚合规则、版本、冲突、容量/遗忘及回退未报告，在线覆写的已观测边界没有显式防护。主要步骤已落实但关键生效条件不完整。","evidence_ids":["E05","E06","E08","E09"],"counterevidence_ids":["E16"],"search_scope":["完整钉定正文，重点§3.3–3.4、§4.1/4.3/5；外部不可得supplement不在arXiv钉定文档，具体实现缺项视为not_reported而非材料缺失"]},
+    "E.measurement":{"status":"resolved","rating":3,"reason":"Habitat标准SR/SPL/轨迹及任务定义与导航主张吻合，Table1–3同时给成功和效率，可识别非一致收益；AEQA只引用protocol-defined score，未展开评分器校验，真实实验只有基线分母和案例，故不4。此项不因同split重复或无误差条重复扣分。","evidence_ids":["E10","E11","E15","E17"],"counterevidence_ids":[],"search_scope":["§4.1指标、Tables1–3、§4.4及§5"]},
+    "E.causality":{"status":"resolved","rating":2,"reason":"Basic保留规划回路、SRM/LPM拆分及Table3去LPM固定策略/人工策略/更新策略形成相关控制，确能支持部分artifact归因；没有等调用/经验预算的raw-context或替代抽象器、merge/gate隔离，且在线收益条件化，强方法归因仍不完整。","evidence_ids":["E13","E14","E15"],"counterevidence_ids":["E16"],"search_scope":["Tables1–3、§4.2–4.3及§4.1；外部实现supplement不可得，未声明预算匹配的内容按未报告"]},
+    "E.holdout":{"status":"resolved","rating":2,"reason":"明确互斥seen/unseen两半、固定转移库且去LPM的结果支持retained，但只给episode划分，缺scene级审计和选择历史；Table2/五轮目标流是重复已见任务，不能充留出。未将潜在泄漏写成已证泄漏。","evidence_ids":["E12","E14","E15"],"counterevidence_ids":["E13"],"search_scope":["§1静态/自适应定义、§4.1及§4.3全部，§5；未报告scene列表、随机分割种子、去重和污染审计"]},
+    "E.statistics":{"status":"resolved","rating":1,"reason":"有物理基线4/10和跨任务负向/回归结果；模拟主结果无明确episode分母、CI、seed重复或流顺序方差。按冻结A2，有限样本量与负结果但主结果无不确定性取1，不将round数当独立重复。","evidence_ids":["E13","E15","E16","E17"],"counterevidence_ids":[],"search_scope":["全文含全部表格与图4/5正文、§4.1–4.4及§5；无正文附录；外部supplement不是钉定材料，不假设其报告统计"]},
+    "E.cost":{"status":"not_reported","rating":0,"reason":"正文给backbone、独立vLLM服务和动作粒度，但没有AKI/反思/合并与搜索的调用数、token、GPU时、时延、库规模或总经验成本及预算匹配；路径长度是环境行为效率而非完整improver计算成本。","evidence_ids":["E10"],"counterevidence_ids":[],"search_scope":["完整2605.18729v1钉定正文（无arXiv附录），重点§3.2–3.4、§4.1实现、Tables1–3、§4.3多轮及§5；外部additional implementation details不在包/钉定arXiv记录内且不可得，成本按not_reported处理，不构成needs_fulltext"]}
+  },
+  "score": {
+    "raw":53.75,
+    "display":53.8,
+    "lower":53.75,
+    "upper":53.75,
+    "coverage":1.0,
+    "rubric_hash":"b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status":"reviewed",
+  "reason":"正文足以判断方法和核心实验；外部补充不是必要核心证据的唯一载体。固定启发式在互斥unseen episode上有留存迁移，在线更新存在回归；实现门控、统计及成本报告不足按冻结规则评分，不再以外部补充不可得阻塞。",
+  "rationale":"固定迁移启发式在去LPM的未见episode上改善IGNav/AR，支持有限retained；在线更新会回归。门控细节、隔离审计、统计和成本不足，不能外推长期稳定自演进或实体总体收益。"
+}

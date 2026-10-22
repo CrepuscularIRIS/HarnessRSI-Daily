@@ -1,0 +1,623 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r21a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2605.17721",
+    "paper_id": "2605.17721",
+    "title": "EXG: Self-Evolving Agents with Experience Graphs",
+    "version": "2605.17721v1",
+    "claim_type": "system_method",
+    "central_claim": "EXG把成功/失败尝试写成带task-anchor、similar_to与fixed_by关系的经验图，实现无需权重更新的即时跨任务复用和冻结离线复用，提高质量并降低交互成本。"
+  },
+  "provenance": {
+    "input_hash": "9f07015384f2faf56a6cd49aecf6ba948620414bafa59ea9ec354018f95317ec",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "分配路由sonnet→gpt-6.1-sol；无独立可核验运行receipt/session ID，未探测模型，未运行论文代码。",
+    "timestamp": "2026-10-22T03:10:23.308156+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2605.17721.txt",
+      "url": "https://arxiv.org/html/2605.17721v1",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "sections_read": [
+        "全文§1–6",
+        "算法1–2/公式1–11/表1–4/全部图注",
+        "完整附录A、B.1–B.2、C.1–C.3"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§1",
+      "quote": "EXG abstracts each attempt within a task into a structured case and inserts it as a node in a growing experience graph, where edges encode relational signals such as task association, semantic similarity, and error correction.",
+      "support_explanation": "实际持久更新是case/anchor/typed edge，而非模型权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§3.1",
+      "quote": "Based on the reranked cases, EXG constructs a set of structured experience hints, which are injected into the agent’s prompt to guide the current attempt.",
+      "support_explanation": "下一任务确实读取持久图。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§3.2",
+      "quote": "The key distinction is that no graph updates are performed in the offline setting. During evaluation, newly generated cases are not added to the graph, and no new similarity or corrective edges are created.",
+      "support_explanation": "离线明确冻结图，允许保留物后续评价。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.1.2",
+      "quote": "Each task is allowed up to two attempts, consisting of a single initial attempt followed by at most one retry.",
+      "support_explanation": "共同两次求解预算；不同机制额外reflection调用仍不等价。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.4.1",
+      "quote": "At test time, each method follows its own retrieval strategy: ExpeL injects a fixed memory consisting of five insights and five golden cases, whereas EXG-Reflexion injects five insights together with five experience hints retrieved from the graph, which may include golden, warning, and fix-related cases. For each benchmark, the dataset is randomly shuffled and split into a 7:3 ratio for online collection and offline evaluation, respectively.",
+      "support_explanation": "有7:3实例留出，非类别排除；同case原料/提示长度未严格匹配。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.4.1",
+      "quote": "(2) In the offline stage, the experience graph constructed is kept fixed, and insights are extracted from the graph together with the associated reflections, matching ExpeL’s offline abstraction process.",
+      "support_explanation": "实测离线还进行insight抽取；不能以该结果证明完全免后处理。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.4.2 Table2",
+      "quote": "EXG-Reflexion attains a test-stage pass@1 of\n0.879\n, slightly below ExpeL’s\n0.909",
+      "support_explanation": "冻结HumanEval保留结果竞争而非全面胜出。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.5.1 w/o Similar",
+      "quote": "removes the\nsimilarity\nedges from the graph and replaces them with standard query-based similarity retrieval.",
+      "support_explanation": "有便宜向量检索对照，图边必要性并非只靠全系统比较。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.5.1 w/o Fix",
+      "quote": "removes the\ncorrection\nedges, eliminating explicit error–repair links between failed and successful cases.",
+      "support_explanation": "有错误修复关系消融，但只在HumanEval，未给独立统计。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "App C.1",
+      "quote": "Reflexion consumes 117,378 total tokens across all tasks, whereas EXG consumes 125,304 tokens, corresponding to a modest increase of 6.8% in total token usage.",
+      "support_explanation": "调用更少不等于token更少，保留反向成本事实。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§4.3.2",
+      "quote": "When combined with reflection, EXG-Reflexion incurs slightly higher latency than Reflexion alone (",
+      "support_explanation": "插入图并非普遍更快；正文列3943 vs3416 ms。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "App C.2",
+      "quote": "On HumanEval, all methods start from a similar performance level in the early stage of deployment.",
+      "support_explanation": "报告单序列累计学习曲线，未给多序列任务顺序或种子区间。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "App B.2",
+      "quote": "All models used in this work are accessed exclusively through APIs",
+      "support_explanation": "远程API延迟与版本变化缺控制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§3.1 graph update",
+      "quote": "Specifically, a new case node corresponding to",
+      "support_explanation": "每次完成尝试添加案例，成功/失败标记支持复用，但未规定独立质量门、去误修复验证或退休。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2605.17721.txt",
+      "sha256": "cccfe9b82e999cab1b08845b84c3b465e43e740a0a237d0a396fe2f3e02d43ff",
+      "locator": "§1 contributions",
+      "quote": "Experience Graph for Self-Evolving Agents.\nWe introduce EXG, the first graph-based mechanism for self-evolving agents that explicitly encodes experience into a structured representation.",
+      "support_explanation": "首个经验图是作者原创性主张，当前包无邻文原稿无法独立证实。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "case/anchor经验图与typed relations",
+      "information": "task input、generated answer、二元正确性、错误/反思signature",
+      "operation": "每次尝试外化case→添加contain、similar_to与同任务fixed_by→FAISS seeds及一跳扩展→失败感知重排→按fix/warning/golden优先级注入提示",
+      "output": "可即时读取的持久经验图及最多5条hints",
+      "conditions": "任务存在可迁移局部模式；正确性标签与fixed_by语义可信",
+      "feedback": "任务成功标记与失败signature；未完整说明在线标签的可部署获得权限",
+      "selection_rule/data": "存成功和失败case；Ks10、fanout5、候选cap30、alpha0.8、H5；rho仅临时重排不改图",
+      "persistence": "逐任务写入经验图，离线用7:3收集部分构建后冻结",
+      "later_use": "后续任务只以输入/上下文构造provisional case，检索旧case作为提示",
+      "claimed_effect": "减少重复失败、提高first-attempt与有限重试成功率",
+      "failure_boundary": "oracle反馈不可用、语义相似不等于适用、错误修复边未经独立验证、图线性增长无退休/漂移策略",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E004",
+        "E005",
+        "E014"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "既有在线反思局限单任务，离线方法需昂贵后处理，缺统一即时跨任务可复用经验图。",
+    "checked_gap": "跨任务持久case图是明确对象；但将已有记忆工作排除为非self-evolution、并声称first graph，未构成充分最近邻排除。离线实测额外insight抽取亦不能证明免后处理。",
+    "lineage/closest_adjacent": [
+      {
+        "name": "Reflexion / SE-Agent / SE-Agent-Rev",
+        "source_version": "本篇v1 §4.2、§5；邻文未附",
+        "relationship": "反思与轨迹修订被作为基线，并通过EXG插入保留层。"
+      },
+      {
+        "name": "ExpeL and graph-organized agent memory",
+        "source_version": "本篇v1 §4.4–5；原始邻文未附",
+        "relationship": "共享跨任务保留/检索/insight抽取；实测差异是带关系case与typed hints，不是首次跨任务经验复用。"
+      }
+    ],
+    "residue": "以失败signature和错误→修复路径扩展检索池，检验相同case原料下图关系是否超越向量检索。",
+    "stakes": "低容量模型在重复编程/推理结构中可减少昂贵重试。",
+    "method_response": "锚点对接本任务历史，语义关系连接跨任务案例，fix边为warning补修复，预算约束注入。",
+    "remaining_gap": "原料匹配的离线图消融、标签权限、任务顺序与跨类别迁移、多随机种子、全生命周期成本及长期噪声控制。",
+    "evidence_ids": [
+      "E001",
+      "E005",
+      "E006",
+      "E008",
+      "E009",
+      "E015"
+    ],
+    "unresolved": [
+      "请求总控提供ExpeL、SE-Agent及近邻图记忆原文至未来共享材料包；本席不联网。",
+      "正确性信号/隐藏测试对在线重试的权限未完整定义，不能断言真实泄漏但需限定可部署性。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "统一case提示格式",
+          "检索历史成功/警告/修复参考基底",
+          "跳过上游训练以共享嵌入对齐",
+          "实例7:3留出而非类别留出",
+          "向量-only、memory-off与边消融"
+        ],
+        "success/failure_checks": [
+          "有廉价检索替代控制",
+          "未证类别迁移、预训练污染或自适应顺序独立性",
+          "离线额外insights使免后处理表述范围需收窄"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E005",
+          "E006",
+          "E008",
+          "E009"
+        ],
+        "reason": "方法负载是检索参考基底条件化冻结模型，图形状不是形式结构不变量；故C03中等适配。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "存在参考基底/统一条件格式/固定权重复用的操作对应。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "index_experience_for_reuse",
+        "sub": "H04",
+        "version": "manifest-fixed",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "持久图结构及明确局部链接/检索更新",
+            "status": "met",
+            "evidence_ids": [
+              "E001",
+              "E002",
+              "E003"
+            ]
+          },
+          {
+            "condition": "外部写门、过期/冲突及规模维护成本",
+            "status": "partial",
+            "evidence_ids": [
+              "E014",
+              "E010"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E008",
+          "E009"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "index_experience_for_reuse",
+        "sub": "H04"
+      },
+      "operation_correspondence": "参考基底通过case/anchor/typed edge组织并以有限typed hints输入冻结模型",
+      "necessary_conditions/differences": "H04增加长期存储结构更新与维护条件；C03全类别留出未实现。similarity重排不是H29结果信用。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E008"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:adapt_via_conditioning/RE-isolation",
+      "version": "manifest-fixed",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "原主卡Reviewer expectations第1/4项"
+      ],
+      "applies_when": "图关系被宣称产生增益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "memory-off、w/o Similar/Fix/Anchor控制有用；离线缺相同收集原料图vsflat匹配。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E005"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-overlap",
+      "version": "manifest-fixed",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "原主卡Reviewer expectations第2项"
+      ],
+      "applies_when": "离线留出和在线复用",
+      "applicable": true,
+      "status": "partial",
+      "reason": "离线7:3并冻结；类别、预训练重复、在线真值反馈和顺序审计未报告。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:index_experience_for_reuse/H04",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "H04 step3–5"
+      ],
+      "applies_when": "长期图记忆扩展",
+      "applicable": true,
+      "status": "partial",
+      "reason": "本地链接和检索cap明确，但无case质量门、失效/淘汰控制或规模维护曲线。",
+      "evidence_ids": [
+        "E001",
+        "E014",
+        "E010"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2605.17721-1",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§4.3与App C.1"
+      ],
+      "applies_when": "宣称较低计算成本",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有calls/latency/token，公开负向成本；未给维护全账与API延迟方差。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E013"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "local:2605.17721-2",
+      "version": "manifest-fixed",
+      "source_strength": "single_source",
+      "source_refs": [
+        "本文§4.4.1与§1无后处理主张"
+      ],
+      "applies_when": "离线复用无需额外consolidation",
+      "applicable": true,
+      "status": "challenged_with_evidence",
+      "reason": "实际离线比较抽取insights，不能用该结果支持完全免后处理。",
+      "evidence_ids": [
+        "E006",
+        "E005"
+      ],
+      "score_item": "G"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "在线更高成功率",
+      "setting": "4数据集多个Qwen骨干",
+      "baseline/control": "Reflexion/SE-Agent及相应EXG插件",
+      "selection_vs_test": "预序列即时图写回；最多2求解尝试，反馈可用性与顺序未审计",
+      "result/denominator": "HumanEval1.7B EXG p1 .537 vs Reflexion .207，p2 .585 vs .543；并非所有p2行都优于强SE基线",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E004",
+        "E012"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "给定顺序和反馈条件下有收益，不能当纯独立测试或长期自主演进。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "离线可复用且有竞争力",
+      "setting": "HumanEval与HotpotQA，7:3",
+      "baseline/control": "ExpeL五insight+五golden vs五insight+五typed hints",
+      "selection_vs_test": "收集部分与测试实例分开，冻结；额外insight抽取",
+      "result/denominator": "HumanEval .879 vs .909；HotpotQA .610/.637 vs .590/.633",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E006",
+        "E007"
+      ],
+      "counterevidence": [
+        "E007"
+      ],
+      "allowed_conclusion": "有保留后续测试而非全胜；不能分离不同收集内容与图结构。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "图边和提示类型有用",
+      "setting": "HumanEval消融",
+      "baseline/control": "memory-off/vector-only/no-fix/no-anchor",
+      "selection_vs_test": "同协议，未报多种子或区间",
+      "result/denominator": "Table3 NoMemory .610/.640；SimilarOnly .823/.835；WarningOnly .866/.884；EXG .872/.896",
+      "evidence_ids": [
+        "E008",
+        "E009"
+      ],
+      "counterevidence": [],
+      "allowed_conclusion": "图关系与异质提示提供局部增益，数值无不确定性不称显著。"
+    },
+    {
+      "claim_id": "C4",
+      "text": "低成本",
+      "setting": "HumanEval调用/延迟及两数据集tokens",
+      "baseline/control": "反思/SE基线",
+      "selection_vs_test": "相同尝试上限，不同提示负载",
+      "result/denominator": "EXG1.20 vs Reflexion1.83 calls；HumanEval tokens+6.8%；EXG-Reflexion latency3943 vs3416ms",
+      "evidence_ids": [
+        "E004",
+        "E010",
+        "E011",
+        "E013"
+      ],
+      "counterevidence": [
+        "E010",
+        "E011"
+      ],
+      "allowed_conclusion": "调用更少且部分延迟低；不是所有成本维度与插件都更省。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告的预序列经验复用和7:3冻结离线评价，支持case图在给定Qwen/数据集上具有有限保留收益；不支持首创全部图经验、长期规模泛化或普遍成本下降。",
+    "unresolved": [
+      "在线正确性/重试权限",
+      "离线同原料图结构控制",
+      "QA样本选择/数量与任务顺序种子",
+      "图构建/更新完整成本；无代码执行或复现"
+    ]
+  },
+  "status": "reviewed",
+  "reason": "全文与附录完整，持久非权重case图范围内；可评但中心大主张需限缩。",
+  "rationale": "经验图操作清楚，具memory-off、边/提示类型消融和冻结离线复用；首创与免后处理论证不足，oracle权限、顺序随机性和总成本未闭合。",
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "有具体跨任务保留对象与基线，但first graph/离线免后处理缺邻近图记忆排除，实测还有insight抽取。",
+      "evidence_ids": [
+        "E015",
+        "E006"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "case关系、失败感知检索、typed hints和写回对应重复失败问题，可重建可证伪；相似性适用性仍假设。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "链条和超参数明确，但成功/失败标签可用性、修复边验证、图生命周期/噪声抑制不足。",
+      "evidence_ids": [
+        "E014",
+        "E004"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "代码执行及EvalPlus较好，QA成功评分实现与隐藏测试/错误信息接口不详；不把顺序和oracle权限问题重复扣本项。",
+      "evidence_ids": [
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "结构和hint消融及插件对照有价值；离线收集内容/insights与图结构未匹配，原料与调用预算仍混合。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E006"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "7:3冻结提供一些留出；主在线复用带正确性反馈且重试权限未澄清，无类别/相似重复或预训练污染审计。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "主表、消融和累计曲线无种子/顺序重复、误差条或显著性；有样本/图统计和负向结果，依A2为1。",
+      "evidence_ids": [
+        "E007",
+        "E012"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "calls、LLM/retrieval延迟和token含负向事实；缺嵌入/图写入维护总账、API时序公平与长流规模成本。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "完整§1–6、Appendix A–C、所有表/算法/图注"
+      ]
+    }
+  },
+  "score": {
+    "raw": 51.25,
+    "display": "51.2",
+    "lower": 51.25,
+    "upper": 51.25,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  }
+}

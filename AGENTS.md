@@ -2,7 +2,10 @@
 
 先读 [docs/MAINTAINING.md](docs/MAINTAINING.md)、[docs/EVIDENCE.md](docs/EVIDENCE.md)、[docs/PIPELINE.md](docs/PIPELINE.md)。
 
-## 当前状态（2026-10-21 用户重置）
+## 当前状态（2026-10-22 方式切换）
+
+- v2.2 双席流水线（run rsi-v22-20261021-01）应用户要求停用：中断于 218/930 已处置（169 得分＋49 范围外/阻塞），全部中间产物与 930 篇钉定全文保留在 research/v2/runs/ 与本地 materials，可复用。新打分方式规格待用户给出后另启 run。
+- 旧打分约定的其余部分在下方沿用至被新规格替代。
 
 - 本项目：HarnessRSI Daily。基于执行反馈改变并留存非权重组件：prompt、skill、tool、workflow、memory/playbook、agent 代码、评测器与配置。A 类是闭环；B 类是可直接用于闭环的组件。纯权重训练、单次回答内自我纠错和没有留存变化的通用框架不在范围内。
 - 旧评分、双席判定、Reel、校准参考与榜单均已退役，位于 `archive/2026-10-21-reset/`。禁止从旧记录恢复当前分数，禁止续跑旧批次。
@@ -16,7 +19,7 @@
 - `make check`：离线卡片与语法检查。
 - `python3 research/ingest.py inbox/<batch>.jsonl`：本地将新的 arXiv ID 入库，不会评审质量；已有 ID 的版本更新需单独核对。
 - `docs/agents/GROK_PROMPT.md`、`LOCAL_SCORING_PROMPT.md`、`REEL_PROMPT.md` 为现行提示词。
-- `main.py`、`src/`、`skills/arxiv-fetch/` 是继承的候选抓取工具，使用说明在 `docs/digest-pipeline.md`；不是质量评审入口。
+- 继承的候选抓取工具（main.py、src/、keywords.json 等）与旧文档（digest-pipeline、START_CC、RESET 记录）已于 2026-10-22 归档至 `archive/2026-10-22-method-change/`；不是质量评审入口。
 - `skills/arxiv-fetch/` 必须可独立复制，不能引入 `src/` 或仓库根依赖。插件版本仍以 `.claude-plugin/plugin.json` 为准。
 
 ## 必须遵守
