@@ -1,0 +1,768 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r20b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整正文+附录已读（含 TB2.0/SWE-Bench Pro 全表、附录实验与 schema）；附录12的提示词正文在 HTML 抽取中缺失（仅余标题），不影响主链判断。",
+ "paper": {
+  "paper_key": "2605.18401",
+  "paper_id": "2605.18401",
+  "title": "SkillsVote: Lifecycle Governance of Agent Skills from Collection, Recommendation to Evolution",
+  "version": "2605.18401v2",
+  "claim_type": "system_method",
+  "central_claim": "技能生命周期治理框架（任务前代理式推荐 + 事后子任务级归因 + 仅成功可复用探索的证据门控进化）使冻结模型在 Terminal-Bench 2.0 与 SWE-Bench Pro 上提升，经在线进化与离线冻结库迁移两条路径。"
+ },
+ "provenance": {
+  "input_hash": "da091bfa50841d5394c9aab8127f2524d2739a4b27c229d3a2abd56a1614257f",
+  "rubric_version": "v1.0-frozen",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "timestamp": "2026-10-22T02:11:58Z",
+  "notes": "actual_model/session_id/receipt_ref null: worker subagent has no accessible run receipt; model type as dispatched by controller. RE-n in rs: expectation ids = n-th bullet of the card Reviewer expectations section."
+ },
+ "materials": [
+  {
+   "material_id": "2605.18401.txt",
+   "url": "https://arxiv.org/html/2605.18401v2",
+   "sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80",
+   "sections_read": [
+    "Abstract",
+    "§1-3 方法",
+    "§4 实验与分析",
+    "Appendix 6-11（扩展分析/结果/实验细节/方法细节/实现/案例）",
+    "Appendix 12 仅标题"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Appendix 12 各提示词正文（HTML 抽取仅保留小节标题，无提示内容）"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "After execution, it decomposes trajectories into skill-linked subtasks, attributes outcomes to skill-guided execution, agent exploration, environment, and result signals, and admits only successful reusable discoveries to evidence-gated updates.",
+   "support_explanation": "作者中心主张：事后子任务归因+证据门控更新。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "§3.3 Admissibility",
+   "quote": "A unit is admissible only if it is successful and contains reusable exploration. Failed, uncertain, or weakly supported evidence may remain useful for diagnosis, but it cannot directly authorize a skill update.",
+   "support_explanation": "准入规则：仅成功且含可复用探索的子任务可触发更新；失败不触发修复。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "§9.7 / Table 12",
+   "quote": "A subtask enters evolution only when it satisfies two conditions",
+   "support_explanation": "机械准入规则（exploration 非空且归因属三类成功），失败/不确定直接跳过。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "§10.8 step 2",
+   "quote": "Before editing an old skill, the system backs up the current version in the runtime skill library using the batch timestamp.",
+   "support_explanation": "版本留存仅为编辑前备份，无回退/退役触发规则。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "§10.6 step 5",
+   "quote": "If the recommendation stage repeatedly fails to produce valid output, or if installing the selected skills fails, the system records the error and falls back to copying all candidate skills",
+   "support_explanation": "推荐失败时回落到暴露全部候选技能，可能与负迁移结论相冲突。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "§8.2 Online skill evolution",
+   "quote": "Online evolution starts from an empty skill library with task-level recommendation and evolution enabled. Tasks follow the default Terminal-Bench 2.0 order, and one sequential pass over all 89 tasks forms one job. We run 5 jobs independently and report avg@5 Accuracy. Skill libraries are fully isolated across jobs.",
+   "support_explanation": "在线设置：空库开始、测试流内更新、5 次独立 job；评测流即进化流。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "§8.2 Offline skill evolution",
+   "quote": "During this offline collection phase, ground truth is used only to assist attribution decisions through the optional oracle prompt listed in Appendix",
+   "support_explanation": "离线采集阶段归因使用 oracle（解法/测试路径），仅限源任务。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "§10.7 step 4",
+   "quote": "Offline oracle mode can additionally expose paths to the solution, verifier tests, and verifier stdout",
+   "support_explanation": "离线 oracle 暴露解法与验证器；禁止写入蒸馏内容仅靠提示约束。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "§4.2",
+   "quote": "Across all six benchmark and backbone pairs, SkillsVote improves the overall score over the baseline without skills and is the best online method, or tied for best, in every pair.",
+   "support_explanation": "在线主结果；增益 0.9–2.7pp（Tables 1-2），无方差。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "§4.2",
+   "quote": "Among the offline settings, the historical TB-Pro library gives the strongest Terminal-Bench 2.0 transfer, improving GPT-5.2, GPT-5.4 mini, and GPT-5.5 by",
+   "support_explanation": "离线 TB-Pro→TB2.0 迁移（+7.8/+5.8/+1.4pp，见 Table 1）是最强的留存证据。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "§4.2",
+   "quote": "on SWE-Bench Pro, it helps only GPT-5.4 mini",
+   "support_explanation": "Curated 冻结库在 SWE-Bench Pro 仅一个骨干受益——作者如实报告负结果。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "§4.3.2",
+   "quote": "Directly exposing the online library yields larger negative than positive deltas at the task level",
+   "support_explanation": "直接暴露在线库的净负迁移，推荐阶段将其平衡；支持“推荐控制负迁移”。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "§4.3.2",
+   "quote": "the effect of skills is heavy tailed, helping substantially when matched well but causing regressions when exposed indiscriminately.",
+   "support_explanation": "作者承认平均增益小、重尾。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "§4.1 Configurations",
+   "quote": "a direct baseline that converts completed trajectories into reusable skills without edit/create decisions guided by attribution",
+   "support_explanation": "skill-creator 基线是最接近的“无归因”对照，但同时改变提示与流程。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "§8.2 Dataset",
+   "quote": "We therefore skip these four tasks in every GPT-5.5 setting on this benchmark and exclude them from the final averages, so all reported GPT-5.5 results on Terminal-Bench 2.0 are computed over the remaining 85 tasks.",
+   "support_explanation": "GPT-5.5 所有设置统一排除 4 题，分母一致。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "§8.3 Evaluation metric",
+   "quote": "because each task is run once, avg@1 is simply the average solve rate across tasks.",
+   "support_explanation": "SWE-Bench Pro 单次 rollout，无重复、无区间。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "§4.3.1",
+   "quote": "The average API cost changes little from 1k to the full pool, suggesting that the search procedure does not grow proportionally with the size of the candidate library.",
+   "support_explanation": "仅报告路由评测的单查询成本；推荐/归因/进化的端到端成本未见。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "§4.3.3",
+   "quote": "The Terminal-Bench Pro curve is nonmonotonic, which separates benchmark performance from library utility on the transfer benchmark.",
+   "support_explanation": "源基准性能与库迁移效用分离的证据（仅 Hard 子集 avg@3）。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "§10.7 intro",
+   "quote": "it resumes the original Codex session so that the agent continues reasoning inside the native agent harness context.",
+   "support_explanation": "归因由同一 solver 会话的续跑完成：自判信号，仅获测试计数。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "§10.6 step 5",
+   "quote": "the concise usage guidance generated by the agent is appended to the end of the task instruction",
+   "support_explanation": "推荐阶段还给任务指令追加使用指南，与技能内容本身混杂。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "§3.2",
+   "quote": "A subtask is the smallest semantically complete unit that can support library evolution",
+   "support_explanation": "子任务单元定义（一目标、一主评估信号、至多一个技能上下文）。",
+   "kind": "author_report",
+   "material_id": "2605.18401.txt",
+   "material_sha256": "913921e29d833aa168ed2d9543eb7abb8347710114f8496fadb6372eed3e6f80"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "技能库（SKILL.md+scripts 的目录级 artifact）；基线：空库或冻结库",
+   "information": "续跑的 solver 会话全轨迹；在线仅得任务级通过/失败计数；离线额外得解法/测试/stdout 路径（oracle，禁止写入技能）",
+   "operation": "轨迹→子任务（目标/主评估信号/至多一个技能）→三轴归因（结果证据、责任、可复用 delta）→准入过滤→按技能聚合→路由 edit/create/skip",
+   "output": "新增或最小编辑的技能目录；编辑前整库备份",
+   "conditions": "仅 success_* 三类且 exploration 非空；失败/不确定类一律跳过",
+   "feedback": "任务级验证器计数（在线）/ 验证器+解法（离线）",
+   "selection_rule": "规则化准入（Table 12/§9.7）+ LLM 在 edit/create/skip 间选择；无边际增益回放",
+   "selection_data": "同一批次任务本身（在线为测试流）",
+   "persistence": "运行时技能库；批次时间戳备份；无退役/冲突解决规则",
+   "later_use": "后续任务经推荐阶段读取",
+   "claimed_effect": "TB2.0 / SWE-Bench Pro 上提升（在线 0.9–2.7pp；离线 TB-Pro 1.4–7.8pp）",
+   "failure_boundary": "未归因评估；无回退触发；Curated 库在部分骨干为负",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004",
+    "E006",
+    "E007",
+    "E021"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "任务前技能暴露（推荐阶段）；基线：直接暴露整个库/渐进披露",
+   "information": "只读技能库根目录+任务指令；禁止解题",
+   "operation": "独立 agent 以文件系统工具检索、选读 SKILL.md，输出 skill_names+optimized_context",
+   "output": "少量技能+追加到任务指令的使用指南",
+   "conditions": "失败回落到暴露全部候选",
+   "feedback": "无（任务前）",
+   "selection_rule": "agent 判断（覆盖/环境匹配/互补）",
+   "selection_data": "无",
+   "persistence": "无（逐任务）",
+   "later_use": "直接作用于当前 solver",
+   "claimed_effect": "消除直接暴露的净负迁移（-6.7/+3.3 → ±6.0，TB2.0 Hard）",
+   "failure_boundary": "路由随库规模与推荐模型能力下降（GPT-5.4 mini 在 50k+ 骤降）",
+   "evidence_ids": [
+    "E005",
+    "E012",
+    "E013",
+    "E020"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "原始轨迹噪声大、与环境绑定；开放技能生态冗余且质量不均；不加区分的更新污染未来上下文；不相关技能会降低表现。",
+  "checked_gap": "有来源的真实问题：负迁移与库污染（引 SkillsBench 等；本文 Fig.5 的直接暴露净负效应为自证）。“轨迹与单步之间缺少中间归因单元”主要靠论证，未与替代归因粒度实证对照。",
+  "lineage_closest_adjacent": [
+   {
+    "name": "ReasoningBank",
+    "version": "见文引用 [47]",
+    "solved": "轨迹→策略记忆，在线更新",
+    "unsolved": "无技能目录级编辑与归因门控（本文基线）"
+   },
+   {
+    "name": "skill-creator（OpenAI 版）",
+    "version": "文中固定 commit",
+    "solved": "直接轨迹→技能",
+    "unsolved": "无 edit/create 路由与归因（本文基线）"
+   },
+   {
+    "name": "SkillRouter / DCI",
+    "version": "[78],[24]",
+    "solved": "大库路由/语料直接交互",
+    "unsolved": "只处理检索，不处理库进化"
+   }
+  ],
+  "residue": "失败信息不进入修复，低估失败驱动的技能缺陷修复；归因准确性未被独立验证。",
+  "stakes": "技能库规模化后的污染与负迁移会让增益被稀释（作者称平均增益适中、重尾）。",
+  "method_response": "子任务级归因 + 成功准入 + 推荐过滤",
+  "remaining_gap": "归因门控的单独贡献、其他归因粒度、退役/冲突处理、跨基准独立迁移均未覆盖。",
+  "evidence_ids": [
+   "E001",
+   "E012",
+   "E013",
+   "E014"
+  ],
+  "unresolved": [
+   "归因门控 vs 无门控的受控对照缺失"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "heterogeneous_decomposition",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "主卡：将轨迹（资源）按“归因类别”这一判别属性划分为子任务，再对成功探索/失败/不确定分别采取创建-编辑-跳过的差异化处理；对应主卡 operational signature。子卡 C04 是对过参数化训练 artifact 的压缩，与此不同，故 sub=null。",
+    "success_failure_checks": "成功条件“划分有经验刻画并被消融证明承重”：未满足——无归因分类分布分析，无去归因消融；失败模式“差异化处理由现成模块拼装”部分相关（edit/create/skip 为提示驱动）。",
+    "evidence_ids": [
+     "E002",
+     "E003",
+     "E021"
+    ],
+    "reason": "实际操作是按归因类别划分轨迹并做差异化处理，而非仅提及。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "子卡无适配：C04 针对压缩，本文是对 agent 轨迹的责任划分。",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02",
+    "version": "conditions.json@8704c7da",
+    "fit": "strong",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S5",
+      "status": "partial",
+      "note": "有准入过滤和版本备份，但无执行测试/多维质量过滤门；准入由 LLM 归因决定"
+     },
+     {
+      "id": "rsi:abstract_experience_into_guidance/S3",
+      "status": "partial",
+      "note": "验证器计数为落地信号，但归因由同一 agent 续跑自判"
+     }
+    ],
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E010"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "conditions.json@8704c7da",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "id": "rsi:evidence_gated_retention/S2",
+      "status": "unmet",
+      "note": "只有准入，无退役/容量上限"
+     },
+     {
+      "id": "rsi:evidence_gated_retention/S1",
+      "status": "unmet",
+      "note": "无 skill-on/off 反事实边际增益回放"
+     },
+     {
+      "id": "rsi:evidence_gated_retention/S3",
+      "status": "partial",
+      "note": "展示未治理暴露的净负迁移，但治理的是暴露而非入库"
+     }
+    ],
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E012"
+    ]
+   }
+  ],
+  "unassigned": [
+   "语料画像/任务合成（百万技能的运行时/质量/可验证性画像）未映射到任何 H 卡"
+  ],
+  "revision_proposals": [
+   "H02 可补“成功仅准入、失败不修复”的显式取舍作为子条件（提案，不在批内改卡）"
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H02",
+   "operation_correspondence": "原卡“按判别属性划分资源→差异化处理”对应领域卡“轨迹→子任务→按归因路由创建/编辑/跳过→技能包”；对应的是责任类别而非技能打包。",
+   "necessary_conditions_and_differences": "原卡要求划分经表征且被消融证明承重（本文未做）；H02 要求执行/质量门与版本合并（本文仅 LLM 归因门+备份）。",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json abstract_experience_into_guidance.S5"
+   ],
+   "applies_when": "声称技能库留存复用",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有准入规则与备份；无执行测试与退役",
+   "evidence_ids": [
+    "E002",
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention.S1"
+   ],
+   "applies_when": "声称证据门控保留",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "门控依赖 LLM 归因，无 skill-on/off 反事实",
+   "evidence_ids": [
+    "E002",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention.S2"
+   ],
+   "applies_when": "库持续增长",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未见退役、容量上限、冲突处理",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention.S3"
+   ],
+   "applies_when": "主张治理缓解静默失败",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Fig.5 展示未过滤暴露的负迁移，推荐后平衡；仅 TB2.0 Hard、无区间",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention.S5"
+   ],
+   "applies_when": "门控带来额外调用",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅报告路由单查询成本，进化与归因成本未报",
+   "evidence_ids": [
+    "E017"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S3"
+   ],
+   "applies_when": "编辑既有技能",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅成功类驱动编辑，避免错误修复；但无回归检验/失败回滚",
+   "evidence_ids": [
+    "E002",
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-3",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #3"
+   ],
+   "applies_when": "差异化处理的每个组件需消融",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未做去归因、去推荐的单独消融（仅有推荐开关与 skill-creator 对照）",
+   "evidence_ids": [
+    "E012",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #4"
+   ],
+   "applies_when": "需证明分解本身而非额外容量产生增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "与 ReasoningBank、skill-creator 对照；基线在提示与流程上多处不同",
+   "evidence_ids": [
+    "E014",
+    "E009"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.18401-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文 §4.1/§8.2 与离线设定"
+   ],
+   "applies_when": "离线库从 TB-Pro 迁移到 TB2.0",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "未报告两基准任务重叠/近重复检查；案例（Apache 任务→git-webserver）显示领域相近",
+   "evidence_ids": [
+    "E007",
+    "E010"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "在线进化使 SkillsVote 在 6 个 (基准×骨干) 设置均优于无技能基线并为最佳在线方法或并列",
+   "setting": "TB2.0 avg@5 / SWE-Bench Pro avg@1；GPT-5.2/5.4 mini/5.5；Codex CLI 0.125.0",
+   "baseline_control": "无技能；ReasoningBank；skill-creator",
+   "selection_vs_test": "在线测试流内更新，无独立选择集",
+   "result_denominator": "+2.6/+1.1/+0.9 (TB2.0)，+2.7/+2.6/+1.2 (SWE-Pro)；TB2.0 GPT-5.5 分母 85 题；分母 89/731",
+   "evidence_ids": [
+    "E006",
+    "E009",
+    "E015",
+    "E016"
+   ],
+   "counterevidence": [
+    "E013"
+   ],
+   "allowed_conclusion": "在线增益小（≤2.7pp）、无方差；仅可称 task 级一致的小幅提升，未证明为留存本身所致"
+  },
+  {
+   "claim_id": "C2",
+   "text": "从 48 个 TB-Pro 任务进化的冻结库在 TB2.0 上迁移（+7.8/+5.8/+1.4pp）",
+   "setting": "离线进化→冻结库，仅推荐使用；TB2.0 avg@5",
+   "baseline_control": "无技能；Curated 开源库",
+   "selection_vs_test": "源与目标为不同基准，但无重叠检查；离线归因使用 oracle",
+   "result_denominator": "89 任务 ×5 次，GPT-5.5 为 85 任务",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E010",
+    "E018"
+   ],
+   "counterevidence": [
+    "E011"
+   ],
+   "allowed_conclusion": "冻结库在相邻终端基准上带来 1.4–7.8pp 的作者报告增益（retained 级）；归因门控的贡献、任务近似度未排除"
+  },
+  {
+   "claim_id": "C3",
+   "text": "推荐阶段抑制直接暴露的负迁移",
+   "setting": "TB2.0 Hard，task 级 avg@5 delta",
+   "baseline_control": "直接暴露在线库",
+   "selection_vs_test": "同测试流",
+   "result_denominator": "小样本 Hard 题；仅均值",
+   "evidence_ids": [
+    "E012",
+    "E013"
+   ],
+   "counterevidence": [
+    "E005"
+   ],
+   "allowed_conclusion": "小范围描述性支持；无不确定性，推荐失败回落与结论张力"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "作者报告：由 48 个 TB-Pro 任务进化出的冻结技能库，经任务前推荐，在 TB2.0 上相对无技能基线提升 1.4–7.8pp（三骨干）；在线进化增益 0.9–2.7pp 且无方差。",
+  "unresolved": [
+   "归因门控的受控消融",
+   "TB-Pro 与 TB2.0 任务重叠",
+   "进化/归因/推荐总成本",
+   "统计不确定性"
+  ],
+  "notes": "作者原主张（归因控制的闭环治理使进化更稳）未被受控证明；只支持窄结论。"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "负迁移/库污染是有来源的具体问题，最近邻（ReasoningBank、skill-creator、SkillRouter）清楚且作为基线；残余缺口（归因粒度）靠论证而非实证，故不到 4。",
+   "evidence_ids": [
+    "E001",
+    "E012",
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "三轴归因+成功准入+edit/create/skip 路由的机制可重建，且对朴素“直接轨迹→技能”有可区分预测；但归因由同一 agent 自判且准确性未验证，关键假设偏薄。",
+   "evidence_ids": [
+    "E002",
+    "E019",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "信息权限（在线仅计数/离线 oracle）、准入、聚合、备份、重试、回落均交代清楚；缺退役/冲突处理/回归保护与失败边界。",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E005",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E005"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "TB2.0 与 SWE-Bench Pro 有可执行验证器；分母/排除题处理统一；离线 oracle 仅作用于源任务。尚缺归因质量独立评估。",
+   "evidence_ids": [
+    "E009",
+    "E015",
+    "E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有无技能、ReasoningBank、skill-creator、推荐开关四类对照，但无去归因/去门控消融，推荐指南与技能内容混杂，TB-Pro 与 Curated 内容不同；替代解释（任务相似、指南文本）未排除。",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E014",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E011"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "离线库来自不同基准（源/目标分离），但无重叠检查；在线评测流即进化流（符合在线主张但无留出）；oracle 防泄漏只靠提示约束。",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E008",
+    "E010"
+   ],
+   "counterevidence_ids": [
+    "E008"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "TB2.0 为 5 次均值但无方差/区间，SWE-Bench Pro 单次；0.9–2.7pp 增益在噪声量级；负结果如 Curated 回退有如实报告。",
+   "evidence_ids": [
+    "E009",
+    "E016",
+    "E011"
+   ],
+   "counterevidence_ids": [
+    "E013"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "仅有路由评测的单查询成本；推荐+归因+进化相对基线的额外调用与 token 成本未报，基线预算对等未验证。",
+   "evidence_ids": [
+    "E017"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "全文含附录8-10，检索 cost/token/budget，仅见 §4.3.1 路由成本"
+   ]
+  }
+ },
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "系统方法：任务前推荐+子任务归因+成功门控更新。离线TB-Pro迁移+1.4~7.8pp最强；在线增益小无方差，门控未消融，成本缺。"
+}

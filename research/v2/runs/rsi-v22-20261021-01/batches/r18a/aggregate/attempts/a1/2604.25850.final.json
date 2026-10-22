@@ -1,0 +1,2197 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r18a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.25850",
+  "paper_id": "2604.25850",
+  "title": "Agentic Harness Engineering: Observability-Driven Automatic Evolution of Coding-Agent Harnesses",
+  "version": "2604.25850v4",
+  "claim_type": "system_method",
+  "central_claim": "AHE 通过组件/经验/决策三类可观测性（文件级可回滚组件、分层轨迹证据库、自声明预测的变更清单）闭环自动演化编码智能体 harness，十次迭代把 Terminal-Bench 2 从 69.7% 提到 77.0%，且冻结 harness 可迁移到 SWE-bench-verified 与其他基底，表明编码的是通用工程经验。"
+ },
+ "provenance": {
+  "input_hash": "0c0233699aedf2637373f6c916857100e3bd87c515938efd9838a7f5bd14d22d",
+  "input_package": "batches/r18a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "seat_input_pinning": [
+   "working copy of research/v2/runs/rsi-v22-20261021-01/batches/r18a/seats/sol/attempts/a1/2604.25850.json (file sha256 3f42496aa6c2…, mtime 2026-10-21T21:54:57, canonical 458fe086d534…) was rewritten after conflicts.json (mtime 2026-10-21T21:54:47) and no longer matches it; the file is untracked, so the bound version was rebuilt by removing the post-conflicts additions ['E31', 'E32'] (and every reference to them) and restoring score.display '67.5' as a string; the rebuilt record's canonical hash equals conflicts.json (3b3309f4fe15…) exactly. rv2.diff_pair on the working copy also reproduces the conflicts.json field list."
+  ],
+  "timestamp": "2026-10-22T02:15:38Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.25850.txt",
+   "url": "https://arxiv.org/html/2604.25850v4",
+   "version": "2604.25850v4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.25850.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E01",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 103-103",
+   "quote": "Yet harness engineering remains a manual craft, because automating it faces a heterogeneous action space across editable components, voluminous trajectories that bury actionable signal, and edits whose effect is hard to attribute.",
+   "support_explanation": "手工工程面临异质组件、长trace及归因的具体瓶颈。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E02",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 253-264",
+   "quote": "Jointly evolving multiple components end-to-end faces two structural obstacles: long, unstructured trajectories yield little actionable signal, and tightly coupled harness frameworks make edits beyond the prompt error-prone.",
+   "support_explanation": "作者将瓶颈定位在observability而非agent capability；这是待检验假说，不是已隔离因果事实。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E03",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 516-516",
+   "quote": ", which exposes seven orthogonal component types as explicit files at fixed mount points in a single workspace: system prompt, tool description, tool implementation, middleware, skill, sub-agent configuration, and long-term memory.",
+   "support_explanation": "七类非权重harness组件是可变对象而不是任务解答。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E04",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 521-521",
+   "quote": ": each failure pattern maps to a single component class, giving the evolve agent a clean action space and localizing every pass-rate change to one file rather than scattering it across hundreds of lines of unstructured prompt prose. Each logical edit becomes one commit on the workspace’s git history, which yields file-level diffs and rollback granularity for free.",
+   "support_explanation": "文件级diff/commit/rollback与声称单组件归因接口。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E05",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 544-552",
+   "quote": "traces in case the agents need to verify the claims in the reports. The traces are provided both in raw form and lightly processed to remove unnecessary content. All of these content is provided as files allowing",
+   "support_explanation": "任务分组的raw/clean trace和层级debugger报告可按需下钻。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E06",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 563-572",
+   "quote": "These restrictions block the shortcuts an unconstrained self-modifier would take, such as disabling the verifier, swapping the model, or raising the reasoning budget, and keep every recorded gain attributable to harness edits.",
+   "support_explanation": "编辑限workspace，runs/tracer/verifier/LLM配置只读；seed rules不可删除。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E07",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 580-581",
+   "quote": "In the next round, the loop intersects the predicted-fix and predicted-regression sets with the observed task-level deltas to produce a per-edit verdict.\nEach edit thereby becomes falsifiable by the next evaluation, which replaces rationale-driven self-justification with a measurable contract between rounds.",
+   "support_explanation": "manifest下一轮与task delta交集给per-edit verdict；预测验证不等于干预归因。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E08",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 648-648",
+   "quote": "T_{t}\\leftarrow\\textsc{Rollout}(M,H_{t-1},D,k)",
+   "support_explanation": "伪代码rollout评估H(t−1)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E09",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 835-844",
+   "quote": "\\textsc{Pass@1}(T_{t})>\\textsc{Pass@1}(H_{\\text{best}})\n\nthen\n\nH\nbest\n←\nH\nt\nH_{\\text{best}}\\leftarrow H_{t}",
+   "support_explanation": "伪代码依据T(t)却把新生成H(t)存为best，存在一轮索引不一致；不据此断言实际实现有bug。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E10",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 866-887",
+   "quote": "Algorithm\n1\ncomposes the three substrates into one iteration: rollout, clean, attribute the prior manifest and revert rejected edits, distill, edit, commit.\nWe run\nk\n≥\n2\nk\\geq 2\nrollouts per task so each task carries a pass-rate signal, which stabilizes pass@1 and lets partial-pass tasks anchor comparative diagnosis.\nAttribution runs\nbefore\ndistillation, so its verdict lands inside the evidence corpus and binds each prior manifest entry as a contract rather than a rationale.\nA one-shot explore agent (Appendix\nB.3\n) runs in parallel with iteration\n1\n1\nto seed a small number of reusable skills from the NexAU source and public coding-agent references.\nThese skills receive no special protection: from iteration\n2\n2\nonward the Evolve Agent may keep, refine, or remove them based on observed rollouts.",
+   "support_explanation": "round-order、rollback、k≥2及一次性explore技能输入。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E11",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 925-941",
+   "quote": "We drive evolution on the full 89 tasks of Terminal-Bench 2\n[\n21\n]\n, split as 4 easy, 55 medium, and 30 hard, with per-task timeout extended to 1 hour. For cross-benchmark transfer we evaluate the AHE harness on SWE-bench-verified\n[\n14\n]\n, 500 tasks across seven repositories.\nWe report two metrics per configuration:\npass@1\n, the mean binary success rate over\nk\nk\nrollouts per task; and\ntokens/trial\n, the mean per-trial total of prompt plus completion tokens across all LLM calls, in thousands. Infrastructure-aborted or timed-out trials count as failures under pass@1 (matching the official terminal-bench leaderboard) and are excluded from token means to avoid truncated figures. Runtime infrastructure (framework, dispatcher, sandbox, tracer, and concurrency) is detailed in Appendix",
+   "support_explanation": "全89 TB2驱动演化；SWE500不同任务面；超时/infra计失败但不计token均值。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E12",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 947-953",
+   "quote": "For both the evolution loop and the main experiment of §\n4.2\n, all three role agents (the Code Agent, the Agent Debugger, and the Evolve Agent) share one base model, GPT-5.4\n[\n26\n]\nat the high reasoning setting.",
+   "support_explanation": "正文称Code/Debugger/Evolve均GPT5.4 high；附录Evolve xhigh，配置文字冲突需澄清。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E13",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1080-1097",
+   "quote": "We run a single AHE campaign of ten iterations from the bash-only\nNexAU\n0\nseed (§\n3.1\n) on Terminal-Bench 2, finishing in roughly 32 hours; the best resulting configuration is reported as\nAHE\n. The two self-evolve baselines ACE\n[\n49\n]\nand Training-Free GRPO (TF-GRPO)\n[\n4\n]\nstart from the same NexAU\n0\nseed.",
+   "support_explanation": "单次10轮campaign约32h，从其中选择最好配置；与baseline共享seed不是预算匹配。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E14",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1039-1048",
+   "quote": "NexAU\n0\n\n69.7%\n\n87.5%\n\n78.2%\n\n51.7%",
+   "support_explanation": "TB2 seed69.7%，medium78.2/hard51.7。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E15",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1070-1078",
+   "quote": "AHE\n\n77.0%\n\n100.0%\n\n88.2%\n\n53.3%",
+   "support_explanation": "TB2 AHE77.0%，hard53.3。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E16",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1125-1130",
+   "quote": "Prompt-only self-evolution misses the components that carry AHE’s gain.\n\nThe gaps to ACE and TF-GRPO trace to a layer mismatch. ACE distills natural-language playbooks the agent reads in-context, and TF-GRPO is a trajectory-feedback variant of GRPO that reinforces successful tool sequences; neither method opens the surrounding scaffolding to edits.\nAHE instead jointly evolves system prompt, tools, middleware, and long-term memory, and §\n4.4.1\nshows the gain concentrates in the latter three components, exactly the layers ACE and TF-GRPO leave untouched.",
+   "support_explanation": "baseline可编辑层不同，作者归因为layer mismatch；尚未隔离observability三个pillar。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E17",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1135-1143",
+   "quote": "AHE’s harness is evolved on Terminal-Bench 2 with GPT-5.4 high. We probe whether it encodes general coding-agent experience or overfits to that target by transferring the evolved harness unchanged, without further evolution, to two off-target settings: a different task surface (SWE-bench-verified) and three alternate base models.\n\nTable 2:\nCross-benchmark transfer on SWE-bench-verified. ACE, Training-Free GRPO (TF-GRPO), and\nAHE\nshare the\nNexAU\n0\nseed and differ only in their self-evolution loop; all four columns run on GPT-5.4. AHE and the two self-evolve baselines are evolved on Terminal-Bench 2 and evaluated without in-domain re-evolution. Per-column bold marks the best; ties are all bold.",
+   "support_explanation": "冻结harness跨任务/模型迁移，SWE无in-domain re-evolution。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E18",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1176-1194",
+   "quote": "All\n\n500\n\n74.6%\n\n74.2%\n\n75.2%\n\n75.6%\n\n679\n\n582\n\n526\n\n461",
+   "support_explanation": "SWE500：seed75.2/AHE75.6，tokens526k/461k；aggregate +.4pp，约12.4% token减少。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E19",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1276-1326",
+   "quote": "scikit-learn\n\n32\n\n93.8%\n\n93.8%\n\n93.8%\n\n87.5%\n\n451\n\n378\n\n307\n\n257\n\npydata\n\n22\n\n77.3%\n\n77.3%\n\n77.3%\n\n72.7%\n\n563\n\n516\n\n386\n\n338\n\nastropy\n\n22\n\n59.1%\n\n59.1%\n\n54.5%\n\n50.0%",
+   "support_explanation": "SWE在scikit-learn、pydata、astropy均退化，不能只宣称全部task改善。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E20",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1373-1375",
+   "quote": "Cross-model transfer on Terminal-Bench 2, 89 tasks. The AHE workspace evolved on GPT-5.4 high is re-evaluated on each base without further evolution, paired against the NexAU\n0\nseed on the same base. All bases gain over the seed, with cross-family bases gaining more than within-family ones.",
+   "support_explanation": "cross-model仍是同89演化任务，不等于new-task holdout。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E21",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1475-1480",
+   "quote": "decomposes the AHE gain at the component level by isolating one of the four evolved layers, long-term memory, tools, middleware, or system prompt, while holding the other three at their seed defaults. Three of the four single-component variants outperform the seed; the system-prompt swap is the only regression.\n\nTable 3:\nComponent-level ablations on Terminal-Bench 2. Each “+ X only” row swaps a single AHE component into the NexAU\n0\nseed; per-column best is bolded. Most single-component swaps already beat the seed, and the single-component gains overshoot full AHE’s aggregate, indicating components interact non-additively rather than stacking cleanly.",
+   "support_explanation": "single-component替换检验留存产物，而不是loop pillar的gate-off消融。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E22",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1511-1549",
+   "quote": "+ memory only\n\n75.3%\n\n50.0%\n\n83.6%\n\n63.3%\n\n+ tool only\n\n73.0%\n\n75.0%\n\n87.3%\n\n46.7%\n\n+ middleware only\n\n71.9%\n\n100.0%\n\n81.8%\n\n50.0%\n\n+ system_prompt only\n\n67.4%\n\n75.0%\n\n78.2%\n\n46.7%",
+   "support_explanation": "memory-only75.3%，tools73.0%，middleware71.9%，prompt67.4%；可见组件非可加。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E23",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1578-1587",
+   "quote": "The three positive single-component gains sum to\n+\n11.1\n+11.1\npp against full AHE’s\n+\n7.3\n+7.3\npp, and on Hard the memory-only variant exceeds full AHE: memory, middleware, and the system prompt all push toward the same closure-style verification, so stacking them spends turns on redundant re-checks within the long-horizon budget.\nSince the evolve agent optimises an aggregate dominated by 55 Medium tasks, it converges to a Medium-heavy trade-off that returns part of the Hard memory effect, and we leave interaction-aware evolution to future work.",
+   "support_explanation": "positive单模块增益和11.1pp大于full7.3，hard memory-only优于full；干扰明确。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E24",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1608-1612",
+   "quote": "shows the evolve model’s targeting is evidence-driven rather than guesswork. Cross-iteration fix-precision of\n33.7%\nand fix-recall of\n51.4%\nsit roughly 5x above the random-prediction baselines of 6.5% and 10.6%, so each harness edit lands on a real, agent-anticipated target rather than on an arbitrary subset of the panel.",
+   "support_explanation": "fix precision33.7/recall51.4高于作者random基线；不能据预测命中证明正确因果。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E25",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1619-1623",
+   "quote": "The regression panel tells the opposite story: cross-iteration regression-precision of\n11.8%\nand regression-recall of\n11.1%\nsit only about 2x above their random baselines of 5.6% and 5.4%, so most upcoming regressions go unforeseen. The agent can justify why an edit should help, but it cannot reliably name the tasks the same edit is about to break, which is what produces the non-monotone steps in the evolution curve of §",
+   "support_explanation": "regression precision11.8/recall11.1，绝大多数退化未预见。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E26",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1642-1652",
+   "quote": "Our evaluation drives evolution on Terminal-Bench 2 and probes transfer on SWE-bench-verified. Even though the frozen harness transfers to a second task surface and to three alternate base-model families, broader programming languages, repository-scale deployments, and human-in-the-loop workflows remain untested.\n\nEvolution operating point.\n\nAHE’s step budget and per-task timeout were fitted to GPT-5.4 high during evolution, so cross-model transfer numbers conflate harness portability with operating-point coupling—within one family the gain is non-monotone across reasoning tiers (§\n4.3\n). Untangling these factors will require re-running the loop under multiple operating points.\n\nSelf-modification governance.\n\nAHE bounds edits to a workspace, attributes every change in a versioned manifest, and rolls back ineffective edits at file granularity, but it does not provide a complete guardrail stack. Long-horizon harness cleanup and stronger misuse prevention remain incomplete, and AHE should be viewed as a controlled research prototype rather than a fully mature autonomous self-improvement system.",
+   "support_explanation": "作者承认范围、operating-point coupling及self-modification治理限制。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E27",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1753-1763",
+   "quote": "Evolve Agent\n\nBacking model\n\nGPT-5.4\n\nReasoning effort\n\nxhigh\n\nTemperature",
+   "support_explanation": "附录配置Evolve GPT5.4 xhigh，与正文所有role high不一致。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E28",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 1912-1924",
+   "quote": "Trials that terminate on an infrastructure exception, such as a sandbox crash or API timeout, contribute\nr\n=\n0\nr=0\nrather than being dropped, a strictly harsher convention than discarding failures that keeps our numbers comparable to the official terminal-bench leaderboard. The rollout count\nk\nk\nvaries across experiments; each table states it explicitly.\n\nToken cost and Succ/Mtok.\n\nFor token cost we count every LLM call as prompt plus completion across the rollout and report the mean over completed trials in thousands, denoted Tokens k; infrastructure-aborted trials are excluded to avoid truncated figures. To compare configurations that trade accuracy for cost we combine the two via",
+   "support_explanation": "评价器与失败分母：失败计0；成本均值排除基础设施中止。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E29",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 14124-14134",
+   "quote": "The trajectories above track individual edits through individual tasks. The change-manifest carries each edit along with its predicted fixes, predicted regressions, and constraint level into Phase 3 of the next iteration, where the attribution check decides whether to keep or roll it back. One manifest figure is attached to each of the four winning rounds, all in the same Files / What changed / Failure pattern fixed / Predicted fixes layout. Figure\n8\nshows iteration 2’s prompt edit and shell-tool edit written together in the seed round. Figure\n9\nshows iteration 5’s prompt-and-descriptor rule and shell-guard installation that introduce the publish-state mechanism. Figure\n10\nshows iteration 6’s extension of the publish-state guard to script entrypoints and the introduction of the cross-step\nExecutionRiskHintsMiddleware\n. Figure\n11\nshows iteration 8’s keep-and-improve patches that close the override-token loophole on the guard and promote middleware reminders into a FRAMEWORK note visible at the next model turn. Together the four figures cover three of the four constraint levels the evolve agent uses, namely prompt, tool implementation, and middleware, all written in the same JSON shape and all subject to the same automatic rollback if their predicted fixes do not appear.",
+   "support_explanation": "C.3将manifest转为下一轮keep/rollback；此为作者描述，非本地检查运行。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E30",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "lines 14148-14180",
+   "quote": "show the per-round breakdown across the four fix/regression by precision/recall panels. Bars decompose each denominator, predicted for precision and actual for recall, into deep-blue TP versus pale FP or FN; the dashed line traces the metric on the right-hand\n0\n0\nto\n100\n%\n100\\%\naxis, and the solid line shows contemporaneous pass@1. Fix-precision and fix-recall both swing from near-zero to near-saturation across rounds, so the evolve model’s causal attribution for its own improvements is informative if noisy. Regression predictions instead stay near the floor, below\n25\n%\n25\\%\non most rounds: across the 9 rounds the agent issued 43 unique regression predictions and only 5 landed, giving cumulative\nP\n=\n11.6\n%\nP=11.6\\%\n, while 40 regressions the agent did not foresee actually occurred, giving cumulative\nR\n=\n11.1\n%\nR=11.1\\%\n.\n\nFigure 12:\nPer-round fix predictions. Left: precision. Right: recall. Bars decompose each denominator into TP versus FP or FN; lines overlay the metric and contemporaneous pass@1.\n\nFigure 13:\nPer-round regression predictions. Left: precision. Right: recall. Same encoding as Fig.\n12\n.\n",
+   "support_explanation": "累计43regression预测只中5，实际40次漏报；单campaign的per-round数据不是独立搜索重复。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract (txt L103)",
+   "quote": "Yet harness engineering remains a manual craft, because automating it faces a heterogeneous action space across editable components, voluminous trajectories that bury actionable signal, and edits whose effect is hard to attribute.",
+   "support_explanation": "作者 gap：异质动作空间、轨迹过长淹没信号、编辑效果难归因。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "§1 Introduction (txt L230)",
+   "quote": "However, few existing approaches jointly evolve the full set of editable components",
+   "support_explanation": "近邻 gap：多数方法只演化单一组件（提示/技能/playbook）。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "Abstract (txt L120)",
+   "quote": "Empirically, ten AHE iterations lift pass@1 on Terminal-Bench 2 from 69.7% to 77.0%, surpassing the human-designed harness Codex (71.9%) and the self-evolving baselines ACE and Training-Free GRPO.",
+   "support_explanation": "头条结果：TB2 69.7→77.0。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "Abstract (txt L133)",
+   "quote": "indicating the evolved components encode general engineering experience rather than benchmark-specific tuning.",
+   "support_explanation": "作者泛化主张。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "§4.1 Evaluation (txt L925)",
+   "quote": "We drive evolution on the full 89 tasks of Terminal-Bench 2",
+   "support_explanation": "演化使用全部 89 个 TB2 任务；主表在同一 89 任务上报告。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "§4.2 Main Results (txt L1080)",
+   "quote": "We run a single AHE campaign of ten iterations from the bash-only",
+   "support_explanation": "仅一次演化运行（十次迭代）。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "§4.2 Main Results (txt L1085)",
+   "quote": "finishing in roughly 32 hours; the best resulting configuration is reported as",
+   "support_explanation": "报告的是十次迭代中“最佳”配置（在同一任务集上择优）；演化耗时约 32 小时。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "§3.3 Evolve Agent (txt L569)",
+   "quote": "the Evolve Agent writes only inside the harness workspace, while the runs directory, tracer, verifier, and LLM configuration are read-only",
+   "support_explanation": "可控性约束：只能写工作区，验证器/追踪器/LLM 配置只读。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "§3.3 Evolve Agent (txt L577)",
+   "quote": "Each edit attaches a manifest entry that names the failure evidence, the inferred root cause, the targeted fix, and a predicted impact comprising both expected fixes and at-risk regressions",
+   "support_explanation": "变更清单：证据、根因、修复、预测的修复与风险回归任务。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "§3.3 Evolve Agent (txt L580)",
+   "quote": "In the next round, the loop intersects the predicted-fix and predicted-regression sets with the observed task-level deltas to produce a per-edit verdict.",
+   "support_explanation": "下一轮按任务级差异给出逐编辑裁决。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "§3 Algorithm text (txt L877)",
+   "quote": "distillation, so its verdict lands inside the evidence corpus and binds each prior manifest entry as a contract rather than a rationale.",
+   "support_explanation": "归因在蒸馏前进行，裁决进入证据库。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "§3 Algorithm text (txt L883)",
+   "quote": "to seed a small number of reusable skills from the NexAU source and public coding-agent references.",
+   "support_explanation": "一次性 explore 智能体从框架源码和公开编码智能体资料为演化器播种技能。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "Appendix B.3 (txt L7064)",
+   "quote": "build the framework knowledge and SOTA reference the Evolve Agent reads as skills.",
+   "support_explanation": "演化器读取的“SOTA 参考”技能来自外部检索的前沿编码智能体资料——引入了未对基线开放的外部先验。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "Abstract (txt L121)",
+   "quote": "The frozen harness transfers without re-evolution: on SWE-bench-verified it achieves the highest aggregate success while using",
+   "support_explanation": "迁移主张：SWE-bench-verified 总成功率最高且更省 token。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "Table 2 caption (txt L1143)",
+   "quote": "AHE and the two self-evolve baselines are evolved on Terminal-Bench 2 and evaluated without in-domain re-evolution.",
+   "support_explanation": "SWE-bench 为真正的异基准留出评估。我们读 Table 2 单元格：AHE 75.6% vs 种子 75.2%（+0.4 点≈500 题中 2 题），token 461k vs 526k。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "§4.3 Cross-benchmark transfer (txt L1356)",
+   "quote": "AHE instead achieves the highest aggregate, with the seed-relative gain concentrating on django and sphinx-doc",
+   "support_explanation": "增益集中在 django 与 sphinx-doc。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "§4.3 (txt L1357)",
+   "quote": "Marginal regressions appear only on the three smallest repositories, consistent with pass@1 variance on small repos exceeding the per-repo gain.",
+   "support_explanation": "作者承认小仓库回退并归因于方差。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Limitations (txt L1646)",
+   "quote": "so cross-model transfer numbers conflate harness portability with operating-point coupling",
+   "support_explanation": "跨模型迁移数值混杂了可移植性与运行点耦合（步预算/超时调到 GPT-5.4 high）。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "§4.4.1 Ablation (txt L1475)",
+   "quote": "Three of the four single-component variants outperform the seed; the system-prompt swap is the only regression.",
+   "support_explanation": "单组件换入：memory/tool/middleware 优于种子，system prompt 反而下降。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "Table 3 caption (txt L1480)",
+   "quote": "Most single-component swaps already beat the seed, and the single-component gains overshoot",
+   "support_explanation": "单组件增益之和（+11.1）超过完整 AHE（+7.3），组件非可加。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "§4.4.1 (txt L1564)",
+   "quote": "Memory adds 12 boundary-case lessons (performance margin, queued-over-limit cancellation, evaluator-style closure, source-packaging layout); on Hard the lessons lift it above full AHE, while on Easy they reduce to superfluous re-verification.",
+   "support_explanation": "长期记忆内容是 TB2 任务邻近的“边界情形教训”，Hard 上强于完整 AHE。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "§4.4.2 (txt L1592)",
+   "quote": "Each evolution round, our evolve model produces a change manifest naming which Terminal-Bench 2 tasks it expects to fix in the next round and which it flags at risk of regression.",
+   "support_explanation": "演化器看到并按名字预测 TB2 任务——任务级身份进入编辑循环。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "§4.4.2 (txt L1612)",
+   "quote": "sit roughly 5x above the random-prediction baselines of 6.5% and 10.6%, so each harness edit lands on a real, agent-anticipated target rather than on an arbitrary subset of the panel.",
+   "support_explanation": "修复预测约为随机基线的 5 倍（精度 33.7%、召回 51.4%）。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "§4.4.2 (txt L1623)",
+   "quote": "The agent can justify why an edit should help, but it cannot reliably name the tasks the same edit is about to break, which is what produces the non-monotone steps in the evolution curve of §",
+   "support_explanation": "回归“盲视”：非单调演化曲线的来源。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "Appendix D (txt L14159)",
+   "quote": "on most rounds: across the 9 rounds the agent issued 43 unique regression predictions and only 5 landed, giving cumulative",
+   "support_explanation": "43 条回归预测仅 5 条命中。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "Limitations (txt L1638)",
+   "quote": "This work studies a promising but high-variance setting, and the scope of our claims should be interpreted accordingly.",
+   "support_explanation": "作者承认高方差场景。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "Limitations (txt L1652)",
+   "quote": "AHE bounds edits to a workspace, attributes every change in a versioned manifest, and rolls back ineffective edits at file granularity, but it does not provide a complete guardrail stack.",
+   "support_explanation": "治理能力受限：有版本化清单与文件粒度回滚，无完整护栏。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "§3.1 NexAU (txt L527)",
+   "quote": "A seed already fitted to the target benchmark would contaminate every subsequent edit",
+   "support_explanation": "刻意使用最小 bash-only 种子，避免种子已适配基准。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "§4.1 Metrics (txt L941)",
+   "quote": "Infrastructure-aborted or timed-out trials count as failures under pass@1 (matching the official terminal-bench leaderboard) and are excluded from token means to avoid truncated figures.",
+   "support_explanation": "失败按官方口径计入分母；token 均值排除中断试验。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "§3 Algorithm text (txt L874)",
+   "quote": "rollouts per task so each task carries a pass-rate signal, which stabilizes pass@1 and lets partial-pass tasks anchor comparative diagnosis.",
+   "support_explanation": "每任务 k≥2 次 rollout（附录 Table 4 为 k=2）。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "locator": "§4.2 (txt L1119)",
+   "quote": "By difficulty, the only exception is the Hard tier, where AHE marginally trails Codex.",
+   "support_explanation": "Hard 档位 AHE 略低于 Codex。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "locator": "§4.3 (txt L1455)",
+   "quote": "The headline finding is that all five gains land positive",
+   "support_explanation": "跨模型：五个基底均为正增益（+2.3~+10.1 点），但任务集与演化集相同。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "locator": "§4.2 (txt L1127)",
+   "quote": "The gaps to ACE and TF-GRPO trace to a layer mismatch.",
+   "support_explanation": "与 ACE/TF-GRPO 的差距被解释为“层不匹配”；基线预算/先验是否对等未说明。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E034",
+   "locator": "§4.4.1 (txt L1587)",
+   "quote": "Since the evolve agent optimises an aggregate dominated by 55 Medium tasks, it converges to a Medium-heavy trade-off that returns part of the Hard memory effect, and we leave interaction-aware evolution to future work.",
+   "support_explanation": "优化目标为总体 pass@1，导致对 Medium 偏向。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E035",
+   "locator": "Appendix C.1.4 (txt L13636)",
+   "quote": "Rather than roll either back, the iteration-7 round patched a loophole in the guard and a salience gap in the middleware",
+   "support_explanation": "迭代 7 分数回落（75.8→73.0）后演化器选择打补丁而非回滚：回滚是裁决后的酌情动作。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E036",
+   "locator": "§4.2 (txt L1101)",
+   "quote": "AHE outperforms every baseline on our panel: three human-designed harnesses, OpenCode",
+   "support_explanation": "头条对比面板。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "son55:E037",
+   "locator": "§4.3 (txt L1370)",
+   "quote": "against the seed: encoding behavior in tools, middleware, and memory avoids the per-call re-derivation cost prompt-only baselines incur.",
+   "support_explanation": "token 节省的作者解释；Table 2 给出 461k vs 526k（种子）。",
+   "kind": "author_report",
+   "material_id": "M-2604.25850-v4",
+   "material_sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "Appendix C.1.4",
+   "quote": "Iteration 8’s overall score lands at 76.97, the run’s high-water mark on Figure",
+   "support_explanation": "The Table 1 AHE row (77.0%) is the in-loop iteration-8 evaluation: 137/178 rollouts at k=2 (Easy 8/8, Medium 97/110, Hard 32/60; opus:O04). It is the maximum of ten noisy evaluations on the same 89 tasks used for evolution, not a fresh re-evaluation of the selected harness. The trajectory moved 75.8→73.0→76.97 across iterations 6–8 (son55:E035).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "§4.2 Table 1, ACE row",
+   "quote": "ACE 68.9% 91.7% 78.2% 48.9%",
+   "support_explanation": "Easy 91.7% = 11/12 and Hard 48.9% = 44/90 imply k=3 rollouts per task, unlike AHE's in-loop k=2 (opus:O06). The baselines are single evaluations, whereas AHE's figure is a best-of-10.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "§4.2 Table 1, TF-GRPO row",
+   "quote": "TF-GRPO 72.3% 100.0% 79.4% 55.6%",
+   "support_explanation": "Medium 79.4% = 131/165 and Hard 55.6% = 50/90, i.e. k=3. The overall (12+131+50)/267 = 72.3% is consistent.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "§4.2 Table 1, AHE row",
+   "quote": "AHE 77.0% 100.0% 88.2% 53.3%",
+   "support_explanation": "Medium 88.2% = 97/110 and Hard 53.3% = 32/60 at k=2; overall 137/178 = 76.97% equals the iteration-8 in-loop score (opus:O01).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "§4.2 Table 1, seed row",
+   "quote": "NexAU 0 69.7% 87.5% 78.2% 51.7%",
+   "support_explanation": "Seed: Easy 7/8, Hard 31/60, so k=2. The seed is also measured inside the loop (iteration 1).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "Appendix A Table 4",
+   "quote": "Rollouts per task k k 2",
+   "support_explanation": "The reference run uses k=2 rollouts per task over T=10 iterations.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O07",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "Appendix C.3",
+   "quote": "all written in the same JSON shape and all subject to the same automatic rollback if their predicted fixes do not appear.",
+   "support_explanation": "Rollback is described as automatic here and in §3.3. The Evolve prompt instead makes it a KEEP / IMPROVE / ROLLBACK judgement by the agent (opus:O08). At iteration 7 the agent patched rather than rolled back after a 75.8→73.0 drop (son55:E035). The retention rule, including how many predicted fixes must land, is not uniquely specified.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O08",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "Appendix B.2 Evolve Agent prompt, step 9",
+   "quote": "** KEEP ** -- working , leave as - is - ** IMPROVE ** -- directionally correct , refine - ** ROLLBACK + PIVOT ** -- not working at this component level",
+   "support_explanation": "The keep/rollback decision is delegated to the Evolve agent's judgement.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O09",
+   "material_id": "2604.25850.txt",
+   "material_hash": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "sha256": "5df22cf3244270eedc7a02da7cdcfb4c58618f70bca1d0db3a7076bbd850a5a4",
+   "locator": "Appendix B.3.2 Web-research agent prompt, search list item 1",
+   "quote": "terminal bench 2 leaderboard {{ date [:4] }} scores",
+   "support_explanation": "Before evolution, the explore agent searches the Terminal-Bench 2 leaderboard and top agents' harness code, and that research becomes a skill the Evolve agent reads. External, partly benchmark-specific human harness knowledge enters the loop. That weakens 'minimal human prior' and is not given to ACE/TF-GRPO.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "编码智能体 harness 的七类文件级组件：系统提示、工具描述、工具实现、中间件、技能、子智能体配置、长期记忆（NexAU，git 工作区）",
+   "information": "Agent Debugger 的分层证据（每任务分析报告+基准级概览+原始/清洗轨迹，含通过/失败）、上一轮清单裁决、完整演化历史；验证器/追踪器/LLM 配置只读。",
+   "operation": "Evolve Agent 读取证据，选择组件层级，新增/修改/删除文件，每个逻辑编辑一次 git 提交。",
+   "output": "新的 harness H_t 与变更清单 C_t。",
+   "conditions": "种子=仅 bash 工具、无中间件/技能/子智能体/记忆；基底 GPT-5.4；k=2 rollout；十次迭代。",
+   "feedback": "TB2 全部 89 任务的 pass/fail、轨迹与验证器输出（经 Agent Debugger 蒸馏）。",
+   "selection_rule_data": "每轮 pass@1>历史最佳则更新 H_best；报告所选最佳配置。数据=演化所用的同一 89 任务。",
+   "persistence": "工作区 git 历史与清单；长期记忆文件。",
+   "later_use": "下一轮 rollout 使用新 harness；冻结后迁移到 SWE-bench 与其他基底。",
+   "claimed_effect": "TB2 69.7→77.0；SWE-bench-verified 最高总成功率且 token −12%；跨基底 +2.3~+10.1 点。",
+   "failure_boundary": "回归盲视；组件非可加；步预算/超时与运行点耦合；高方差。",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E005",
+    "son55:E007",
+    "son55:E008",
+    "son55:E018",
+    "son55:E024"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "逐编辑的“可证伪契约”：变更清单（失败证据、根因、修复、预测修复集与风险回归集）及其下一轮裁决",
+   "information": "上一轮与本轮的任务级通过情况；预测集合。",
+   "operation": "第 t≥2 轮先做 Attribute：把预测集与观测到的任务翻转相交，得每编辑裁决，再 Rollback 被否决的编辑，之后才蒸馏与演化。",
+   "output": "KEEP/IMPROVE/ROLLBACK 裁决与文件粒度回滚。",
+   "conditions": "k=2 的单次评估；演化器可在裁决后选择回滚或补丁（E035）。",
+   "feedback": "任务级翻转（fail→pass、pass→fail）。",
+   "selection_rule_data": "不使用独立验证集；与演化同集。",
+   "persistence": "清单与裁决记入 evolution_history。",
+   "later_use": "写入证据库供下一轮 Evolve Agent 读取。",
+   "claimed_effect": "编辑成为可证伪契约；修复预测精度 33.7%/召回 51.4%（约随机 5 倍），回归预测仅 11.8%/11.1%。",
+   "failure_boundary": "回归预测近乎盲视；单次随机评估的任务翻转包含噪声。",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "son55:E023",
+    "son55:E024",
+    "son55:E025"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "经验证据库：由 Agent Debugger 把数百万 token 轨迹蒸馏为逐任务分析与基准概览",
+   "information": "清洗后的轨迹文件（每条消息一个文件）、通过/失败状态。",
+   "operation": "调试器以 shell/脚本在文件环境里导航轨迹，写根因/成功模式报告；逐步披露。",
+   "output": "逐任务分析报告+基准概览。",
+   "conditions": "同一基底 GPT-5.4。",
+   "feedback": "轨迹与验证器结果。",
+   "selection_rule_data": "not_applicable",
+   "persistence": "分析目录（每迭代）。",
+   "later_use": "Evolve Agent 第一优先读取。",
+   "claimed_effect": "把信号变为可消费的结构化证据。",
+   "failure_boundary": "调试器与演化器同模型，诊断偏差可能被共享。",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E022"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "harness 工程仍是手工活；自动化面临异质动作空间、淹没信号的长轨迹、以及难以归因的编辑；现有方法多只演化单一组件（提示、技能、playbook）。",
+  "checked_gap": "三项具体障碍有来源且与编码智能体实践相符；最近邻（ACE、Training-Free GRPO）被实证比较，其它全 harness 演化工作在相关工作中仅作为类别提及。“可观测性是瓶颈而非智能体能力”是设计立场，论文并未单独检验。",
+  "lineage": {
+   "ancestors": [
+    "人工 harness（OpenCode、Terminus-2、Codex）",
+    "ACE（playbook）",
+    "Training-Free GRPO",
+    "技能库/智能体档案演化类工作"
+   ],
+   "closest_adjacent": [
+    "ACE 与 TF-GRPO（同种子、同基底实测）",
+    "论文引用的 [16] 等联合演化多组件的工作未被实测比较"
+   ],
+   "source_version": "仅依据本批固定的 2604.25850v4 正文；邻居原文未取得"
+  },
+  "residue": "既有单组件演化在跨任务面上不如多组件联合；论文以 SWE-bench 上 ACE/TF-GRPO 回退、AHE 小幅上升作证。",
+  "stakes": "编码智能体与基底模型迭代速度之间的 harness 适配成本。",
+  "method_response": "把 harness 拆成文件级组件，把轨迹蒸馏成分层证据库，把每个编辑绑定可验证预测。",
+  "remaining_gap": "回归预见、组件交互感知的演化、多运行方差、可迁移性在更多基准上的验证、运行点耦合。",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E002",
+   "son55:E033"
+  ],
+  "unresolved": [
+   "完整 harness 联合演化类近邻原文不在本批材料内；请总控按需补材。"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [
+   "generative_process_redesign"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus: the distinctive operation is a typed, machine-checkable inter-agent deliverable (the change manifest's predicted fixes and at-risk tasks, plus git commits), closed by the external verifier's next-round task outcomes. That is C25's 'typed inter-agent deliverable → verifier verdict → credit/selection/correction' (son55). Fit is medium: the 'solver' is a verifier, the three roles share one model, and the loop is not ablated. sol's generative_process_redesign (the fixed human harness liberated as a design variable) is kept as supporting. heterogeneous_decomposition is dropped: the seven-type split is engineering decoupling, not treatment derived from measured properties (son55's own note).",
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "emit a structured machine-checkable artifact at the decomposition boundary：分析报告与 change_manifest.json（执行）",
+     "route to a sound solver or verify-and-revise loop：外部 Harbor 验证器给出 pass/fail，下一轮任务翻转用于裁决（执行）",
+     "use the verifiable signal for credit assignment/selection/correction：KEEP/IMPROVE/ROLLBACK、H_best（执行）"
+    ],
+    "success_checks": [
+     {
+      "condition": "边界画在求解器能力变化的接缝",
+      "status": "partial：外部验证器与 LLM 分工明确，但三角色同模型"
+     },
+     {
+      "condition": "每次交接为类型化可外部验证的中间产物",
+      "status": "met：清单+git+验证器"
+     },
+     {
+      "condition": "单一承重机制消融后退化到已知基线",
+      "status": "unmet：三支柱本身未被消融"
+     },
+     {
+      "condition": "闭环由可获得信号驱动",
+      "status": "met"
+     }
+    ],
+    "failure_checks": [
+     {
+      "condition": "组件皆为现成提示拼装",
+      "status": "partial"
+     },
+     {
+      "condition": "路由/模板为单一基准手调",
+      "status": "partial：单基准演化，SWE-bench 小幅迁移"
+     },
+     {
+      "condition": "委派成本未量化",
+      "status": "partial：token 与 32 小时有披露，演化总成本缺"
+     },
+     {
+      "condition": "仅略胜统一端到端基线",
+      "status": "partial：对种子 +7.3 点（同集）"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E009",
+     "son55:E010",
+     "son55:E011",
+     "son55:E007",
+     "son55:E019"
+    ],
+    "reason": "C25 的“类型化中间产物+求解器闭环”与清单/验证器裁决一致；差异：所谓求解器是外部验证器而非符号求解器，三个角色代理共用同一基底。"
+   },
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "moderate",
+    "tactic_steps_checked": [
+     "把冻结LLM周围原本人工固定的生成/执行harness声明为自由设计量",
+     "文件化异质组件并通过trace生成版本化设计",
+     "以任务成功率及成本检验质量效率"
+    ],
+    "success_checks": [
+     {
+      "condition": "明确释放固定组件",
+      "status": "met",
+      "evidence_ids": [
+       "sol:E01",
+       "sol:E03"
+      ]
+     },
+     {
+      "condition": "冻结backbone上取得效果/跨任务使用",
+      "status": "met",
+      "evidence_ids": [
+       "sol:E06",
+       "sol:E17",
+       "sol:E18"
+      ]
+     },
+     {
+      "condition": "单load-bearing机制隔离",
+      "status": "partial",
+      "evidence_ids": [
+       "sol:E21",
+       "sol:E22",
+       "sol:E23"
+      ]
+     }
+    ],
+    "failure_checks": [
+     {
+      "condition": "多模块/信息接口一起改变",
+      "status": "present",
+      "evidence_ids": [
+       "sol:E03",
+       "sol:E16",
+       "sol:E21"
+      ]
+     },
+     {
+      "condition": "效率与质量权衡边界",
+      "status": "present",
+      "evidence_ids": [
+       "sol:E18",
+       "sol:E19",
+       "sol:E23",
+       "sol:E26"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E01",
+     "sol:E03",
+     "sol:E07",
+     "sol:E17",
+     "sol:E21"
+    ],
+    "reason": "主操作是释放固定生成/执行管线中的harness为可编辑组件；该原卡为宽层适配。不是C15表示替换/C23扩散内部链/C24特定conditioning重构；不硬配子卡。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "taxonomy@b115a69b",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S1",
+      "status": "met",
+      "note": "失败模式映射到单一组件类并文件粒度编辑"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "status": "partial",
+      "note": "有任务级裁决与回滚，但回归盲视且回滚酌情"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "met",
+      "note": "原始轨迹与分层报告并存"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E008",
+     "son55:E009",
+     "son55:E010",
+     "son55:E024"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "reason": "H12 (both). son55's H31 is not kept: its defining tactic is a statistically sound commit rule (disjoint held-out/regression gate, paired test, e-process). AHE commits on raw next-round deltas on the same 89 tasks at k=2, which the evidence_gated_retention main card explicitly excludes ('rather than ... a raw score delta'). Its condition checks are kept as questions about the paper's claimed per-edit gate.",
+  "revision_proposals": [
+   "H12 卡“承诺分离验证集”与 AHE（同集晋升、同集报告）的冲突可作为 H12/H31 边界案例记录；仅提案，未改卡。"
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12"
+   },
+   "operation_correspondence": "Agent Debugger turns traces into layered reports → Evolve agent patches files with a typed manifest of predicted fixes/regressions → the next round's verifier deltas give per-edit verdicts → keep or roll back.",
+   "necessary_conditions_and_differences": "H12 promotes on a separate validation set; AHE promotes and reports on the same 89 tasks (opus:O01). C25 asks for a load-bearing ablation of the verification step, which is absent.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011",
+    "opus:O01"
+   ]
+  },
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12"
+   },
+   "operation_correspondence": "The fixed human-designed harness (prompt, tools, middleware, memory) becomes the edited object, starting from a bash-only seed.",
+   "necessary_conditions_and_differences": "Minimal seed by design (son55:E028), but external SOTA research enters through the explore agent (opus:O09).",
+   "evidence_ids": [
+    "sol:E03",
+    "son55:E028",
+    "opus:O09"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#Reviewer-expectations-1"
+   ],
+   "applies_when": "声称固定不可观测harness是瓶颈",
+   "applicable": true,
+   "status": "partial",
+   "reason": "留存组件swap支持tools/memory/middleware作用；但未以同编辑空间、同预算的有/无observability对照确认其为决定瓶颈。",
+   "evidence_ids": [
+    "sol:E02",
+    "sol:E16",
+    "sol:E21",
+    "sol:E22"
+   ],
+   "score_item": [
+    "G",
+    "E.causality"
+   ],
+   "origin": "sol:rs:generative_process_redesign/RE-1"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-3",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#Reviewer-expectations-3"
+   ],
+   "applies_when": "多组件多pillar一起变化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有4类产物single-swap和4条trajectory，但无debugger-off、manifest-off、rollback-off以及完整交互因子实验。",
+   "evidence_ids": [
+    "sol:E21",
+    "sol:E22",
+    "sol:E23",
+    "sol:E29"
+   ],
+   "score_item": [
+    "M",
+    "E.causality"
+   ],
+   "origin": "sol:rs:generative_process_redesign/RE-3"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-5",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#Reviewer-expectations-5"
+   ],
+   "applies_when": "比较自动与人工harness",
+   "applicable": true,
+   "status": "partial",
+   "reason": "同seed/同下游runtime减少混淆；外层演化调用总额未列，且role reasoning-setting文字不一致。",
+   "evidence_ids": [
+    "sol:E11",
+    "sol:E12",
+    "sol:E13",
+    "sol:E27"
+   ],
+   "score_item": [
+    "E.causality",
+    "E.cost"
+   ],
+   "origin": "sol:rs:generative_process_redesign/RE-5"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.S1"
+   ],
+   "applies_when": "trace→机制→局部文件patch",
+   "applicable": true,
+   "status": "met",
+   "reason": "七类文件与逐logical edit commit可溯源；附录给prompt/tool/middleware实际变更。",
+   "evidence_ids": [
+    "sol:E03",
+    "sol:E04",
+    "sol:E29",
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_item": [
+    "M",
+    "X"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S1; son55:rsi:attribute_and_patch_incumbent/S1"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.S3"
+   ],
+   "applies_when": "新编辑需保护旧收益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "next-round检验/rollback和best-so-far都描述了；回归预测召回极低，单模块干扰显著，索引伪码也未唯一绑定best版本。",
+   "evidence_ids": [
+    "sol:E07",
+    "sol:E09",
+    "sol:E23",
+    "sol:E25",
+    "son55:E010",
+    "son55:E024",
+    "son55:E025",
+    "son55:E035"
+   ],
+   "score_item": [
+    "X"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S3; son55:rsi:attribute_and_patch_incumbent/S3"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S4",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.S4"
+   ],
+   "applies_when": "改机制而非逐task硬编码",
+   "applicable": true,
+   "status": "met",
+   "reason": "debugger跨trace聚类，附录publish-state guard及execution-risk middleware解决失败族；不是输出SQLite等单task程序。",
+   "evidence_ids": [
+    "sol:E03",
+    "sol:E05",
+    "sol:E29",
+    "son55:E001",
+    "son55:E022"
+   ],
+   "score_item": [
+    "M",
+    "X"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S4; son55:rsi:attribute_and_patch_incumbent/S4"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.S5"
+   ],
+   "applies_when": "rich trace定位code问题",
+   "applicable": true,
+   "status": "met",
+   "reason": "overview/detail优先，必要时可见raw/clean traces及source/history；压缩未完全替代原始证据。",
+   "evidence_ids": [
+    "sol:E05",
+    "sol:E10",
+    "son55:E011",
+    "son55:E022"
+   ],
+   "score_item": [
+    "X"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/S5; son55:rsi:attribute_and_patch_incumbent/S5"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F5",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.F5"
+   ],
+   "applies_when": "自我归因宣称可信",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有下一轮fix/regression precision/recall检验，超过random但大量FP/FN；task delta相关不能唯一归因并行edit，缺反事实。",
+   "evidence_ids": [
+    "sol:E07",
+    "sol:E24",
+    "sol:E25",
+    "sol:E30",
+    "son55:E010",
+    "son55:E020"
+   ],
+   "score_item": [
+    "E.causality"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/F5; son55:rsi:attribute_and_patch_incumbent/F5"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/H12",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H12.md#Step-by-Step-4"
+   ],
+   "applies_when": "selection与report分离并计optimizer cost",
+   "applicable": true,
+   "status": "partial",
+   "reason": "TB2全89反复驱动/选择不可当holdout；SWE500是冻结跨benchmark测试但仅+.4pp且多repo退化；未报优化器总token。",
+   "evidence_ids": [
+    "sol:E11",
+    "sol:E13",
+    "sol:E17",
+    "sol:E18",
+    "sol:E19",
+    "sol:E20"
+   ],
+   "score_item": [
+    "E.holdout",
+    "E.cost"
+   ],
+   "origin": "sol:rsi:attribute_and_patch_incumbent/H12"
+  },
+  {
+   "id": "local:2604.25850-1",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.25850v4 §4.2; Appendix A"
+   ],
+   "applies_when": "声称自动演化稳定收敛优于baseline",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "仅一次10轮campaign、每task2rollouts，无独立campaign variance/CI/显著性，不能从best-of-10证明稳定性。",
+   "evidence_ids": [
+    "sol:E13",
+    "sol:E30",
+    "son55:E006",
+    "son55:E026"
+   ],
+   "score_item": [
+    "E.statistics"
+   ],
+   "origin": "sol:local:2604.25850-1; son55:local:2604.25850-1"
+  },
+  {
+   "id": "local:2604.25850-2",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.25850v4 Algorithm1; Appendix B.2"
+   ],
+   "applies_when": "best harness和role配置须可重建",
+   "applicable": true,
+   "status": "partial",
+   "reason": "rollout H(t−1)却best←H(t)，正文high与附录Evolve xhigh不同；可能文稿索引/描述错，不可静态断言实现错。",
+   "evidence_ids": [
+    "sol:E08",
+    "sol:E09",
+    "sol:E12",
+    "sol:E27"
+   ],
+   "score_item": [
+    "X"
+   ],
+   "origin": "sol:local:2604.25850-2"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S2",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.S2"
+   ],
+   "applies_when": "评估预算应被引导",
+   "applicable": true,
+   "status": "partial",
+   "reason": "k=2 平均分配；未按候选引导评估预算（但多变体并行有提及）。",
+   "evidence_ids": [
+    "son55:E030"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S2"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S6",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.S6"
+   ],
+   "applies_when": "对象是通用改进者",
+   "applicable": true,
+   "status": "met",
+   "reason": "面向任意 NexAU 编码智能体 harness 的七类组件。",
+   "evidence_ids": [
+    "son55:E008"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/S6"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#attribute_and_patch_incumbent.F4"
+   ],
+   "applies_when": "自构验证替代真值",
+   "applicable": true,
+   "status": "met",
+   "reason": "[F类：met=避免] 使用官方验证器 pass/fail 与 SWE-bench 官方评测。",
+   "evidence_ids": [
+    "son55:E029",
+    "son55:E008"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rsi:attribute_and_patch_incumbent/F4"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#evidence_gated_retention.S1"
+   ],
+   "applies_when": "声称按测得效用决定留存",
+   "applicable": true,
+   "status": "partial",
+   "reason": "用“预测修复集∩实测翻转”近似反事实，非配对运行；同集、单次评估。",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E007"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:evidence_gated_retention/S1",
+   "note": "Card not matched (no sound commit rule); kept as a check question on the claimed per-edit verdict gate."
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#evidence_gated_retention.S4"
+   ],
+   "applies_when": "门控的效果可消融",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有移除清单/裁决/回滚的消融，故支柱的承重作用未被检验。",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E027"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:evidence_gated_retention/S4",
+   "note": "Card not matched; kept as a check question."
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#evidence_gated_retention.S5"
+   ],
+   "applies_when": "门控成本公开",
+   "applicable": true,
+   "status": "partial",
+   "reason": "给出推理侧 token，演化阶段 32 小时墙钟；缺演化 token/美元与调试器开销。",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E029"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rsi:evidence_gated_retention/S5",
+   "note": "Card not matched; kept as a check question."
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md Reviewer expectations #1"
+   ],
+   "applies_when": "声称分解带来效率",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告推理 token（SWE −12%）与 Succ/Mtok，但演化期成本/调用次数缺。",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E037",
+    "son55:E007"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:decompose_and_delegate/RE-1"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md Reviewer expectations #2"
+   ],
+   "applies_when": "声称承重步骤驱动增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有组件换入消融，但“三支柱”（可观测性）本身未消融，且基线预算/先验是否对等未知。",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E033",
+    "son55:E013"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:decompose_and_delegate/RE-2"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md Reviewer expectations #3"
+   ],
+   "applies_when": "披露提示与实现细节",
+   "applicable": true,
+   "status": "met",
+   "reason": "附录逐字复现演化器与探索智能体提示、超参和代码仓库。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013"
+   ],
+   "score_item": "X",
+   "origin": "son55:rs:decompose_and_delegate/RE-3"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md Reviewer expectations #4"
+   ],
+   "applies_when": "声称跨基准泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "演化于 TB2，迁移到 SWE-bench（+0.4 点）和其他基底（同 TB2 任务）。",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E015",
+    "son55:E032"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:decompose_and_delegate/RE-4"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate.md Reviewer expectations #5"
+   ],
+   "applies_when": "公平比较统一/并行方法",
+   "applicable": true,
+   "status": "partial",
+   "reason": "同种子对比 ACE 与 TF-GRPO，但预算/先验（SOTA 技能）是否对等未说明。",
+   "evidence_ids": [
+    "son55:E033",
+    "son55:E013"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:decompose_and_delegate/RE-5"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md Reviewer expectations #5"
+   ],
+   "applies_when": "被利用的异质性需实证分析",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "Opus: card dropped from the final match (the partition is engineering decoupling).",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E021"
+   ],
+   "score_item": "M",
+   "origin": "son55:rs:heterogeneous_decomposition/RE-5",
+   "note": "RS card not kept in the final match; record retained, not used."
+  },
+  {
+   "id": "local:2604.25850-4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "自改进评审常规：选择集≠报告集"
+   ],
+   "applies_when": "头条在被演化的任务集上报告",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (son55, verified): evolution, best-iteration selection and the reported Table 1 all use the same 89 TB2 tasks; the headline is the in-loop iteration-8 score (opus:O01).",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E007",
+    "son55:E022"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2604.25850-2",
+   "note": "Renumbered from son55:local:2604.25850-2 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "local:2604.25850-5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "single_source",
+   "source_refs": [
+    "附录 B.3 提示"
+   ],
+   "applies_when": "基线是否获得同等外部先验与预算",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "演化器额外读取联网检索的前沿编码智能体资料；ACE/TF-GRPO 是否获得同样资料与同等演化预算，正文未说明。",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E033"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2604.25850-3",
+   "note": "Renumbered from son55:local:2604.25850-3 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "十次 AHE 迭代使 TB2 pass@1 从 69.7% 升至 77.0%，超过 Codex(71.9)、ACE(68.9)、TF-GRPO(72.3)。",
+   "setting": "Terminal-Bench 2 全部 89 题；GPT-5.4 high；k=2 rollouts；单次演化运行",
+   "baseline_control": "NexAU0 种子；三个人工 harness；同种子的 ACE 与 TF-GRPO",
+   "selection_vs_test": "演化/晋升/报告同集；报告最佳迭代配置",
+   "result_denominator": "89 题×2 rollout 的 pass@1；无方差；+7.3 点≈6–7 题",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E005",
+    "son55:E006",
+    "son55:E007",
+    "son55:E036"
+   ],
+   "counterevidence_ids": [
+    "son55:E026",
+    "son55:E031"
+   ],
+   "counterevidence": [
+    "同集择优（胜者诅咒）、单次运行、Hard 略逊 Codex、基线预算/先验未说明。",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "opus:O09"
+   ],
+   "allowed_conclusion": "在被演化的 TB2 任务集上，所选 AHE 配置得分高于种子与所列基线；效应量的稳健性和对新任务的有效性未确认。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "冻结后的 harness 无需再演化即可迁移：SWE-bench-verified 总成功率最高且 token 少 12%；跨三个基底族 +5.1~+10.1 点。",
+   "setting": "SWE-bench-verified 500 题；TB2 上五个替代基底（同 89 题）",
+   "baseline_control": "种子、ACE、TF-GRPO",
+   "selection_vs_test": "SWE-bench 为异基准留出；跨基底仍是演化所用任务",
+   "result_denominator": "成功率 75.6% vs 75.2%（种子）；token 461k vs 526k",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E015",
+    "son55:E016",
+    "son55:E032"
+   ],
+   "counterevidence_ids": [
+    "son55:E017",
+    "son55:E018"
+   ],
+   "counterevidence": "成功率仅 +0.4 点（约 2 题），三个小仓库回退；跨基底混杂运行点耦合且任务相同。",
+   "allowed_conclusion": "token 效率在 SWE-bench 上有改善；成功率提升与“编码通用工程经验”主张未获证实。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "增益来自工具、中间件、长期记忆，而非系统提示；组件交互非可加。",
+   "setting": "TB2 单组件换入",
+   "baseline_control": "NexAU0 与 AHE 全量",
+   "selection_vs_test": "同集",
+   "result_denominator": "memory 75.3、tool 73.0、middleware 71.9、prompt 67.4；单次",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "son55:E021"
+   ],
+   "counterevidence_ids": [
+    "son55:E034"
+   ],
+   "counterevidence": "单次运行、差值 2~3 题级；记忆含 TB2 邻近教训。",
+   "allowed_conclusion": "方向性支持“事实性结构优于叙述性提示”，强度未量化。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "可观测性（组件/经验/决策）使演化可靠；自归因对修复可靠、对回归近乎盲视。",
+   "setting": "TB2 九轮评估",
+   "baseline_control": "随机预测基线",
+   "selection_vs_test": "同集",
+   "result_denominator": "修复精度 33.7%/召回 51.4%（随机 6.5/10.6）；回归 11.8/11.1",
+   "evidence_ids": [
+    "son55:E023",
+    "son55:E024",
+    "son55:E025"
+   ],
+   "counterevidence_ids": [],
+   "counterevidence": [
+    "未对三支柱做移除消融，无法判断可观测性是否是增益来源。",
+    "opus:O07"
+   ],
+   "allowed_conclusion": "关于自归因的描述性结论受支持；“可观测性是瓶颈”是设计论断，未被检验。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在被演化的 Terminal-Bench 2 全部 89 题上，经十次迭代（取最佳迭代）得到的 harness 单次运行得分高于种子和所列基线；冻结后的 harness 在 SWE-bench-verified 上 token 用量下降约 12%，成功率与种子几乎持平（+0.4 点，弱 retained 证据）。作者的“编码通用工程经验”“可观测性是瓶颈”主张超出证据。",
+  "unresolved": [
+   "多次独立演化的方差与胜者诅咒幅度",
+   "基线是否拥有同等预算与外部先验",
+   "三支柱的移除消融",
+   "记忆中的 TB2 邻近教训对跨任务迁移的贡献",
+   "演化阶段总成本",
+   "Opus: the headline 77.0% is the in-loop best-of-10 at k=2, while ACE/TF-GRPO cells imply k=3 single evaluations (opus:O01–O04).",
+   "Opus: rollback is called automatic but is decided by the Evolve agent (opus:O07, opus:O08); Algorithm 1 evaluates H_{t-1} but stores H_t as best (sol:E08, sol:E09).",
+   "Opus: the explore agent's web research on the TB2 leaderboard and top harnesses enters the loop (opus:O09)."
+  ],
+  "evidence_level_note": "Both seats retained, verified narrowly. The frozen harness, evaluated on SWE-bench-verified (500 tasks never used in evolution), keeps success level (75.6 vs 75.2; three repositories regress) with 12% fewer tokens. That is the only later-task evidence. Cross-model gains reuse the 89 selection tasks, and the TB2 headline is selection-set (EVIDENCE rule 2)."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Three concrete obstacles (heterogeneous action space, buried trajectory signal, hard-to-attribute edits). The nearest neighbours ACE and TF-GRPO are run from the same seed. Not 4: other whole-harness or agent-archive evolution work is only named by category, and 'observability, not capability, is the bottleneck' is asserted rather than tested.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E002",
+    "son55:E033",
+    "son55:E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. File-level components, layered evidence and a predictive manifest map one-to-one onto the three obstacles. The manifest's precision/recall and the single-component swaps give distinguishable predictions. Not 4: none of the three pillars is removed, so the central hypothesis is untested, and all roles share one model.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E009",
+    "son55:E010",
+    "son55:E019",
+    "son55:E023",
+    "sol:E07"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with sol. The workspace layout, read-only verifier/LLM config, manifest schema, attribution-before-distillation order, git commits, full prompts (App B) and k=2/T=10 (opus:O06) are specified. Not 4, because the retention step is not uniquely specified. (1) Algorithm 1 evaluates H_{t-1} but assigns H_best ← H_t (sol:E08, E09). (2) Rollback is described as automatic (opus:O07), but the Evolve prompt makes it a KEEP / IMPROVE / ROLLBACK judgement (opus:O08), and at iteration 7 the agent patched instead of rolling back (son55:E035). (3) The text says all roles run at high reasoning, while App A sets the Evolve agent to xhigh (sol:E12, E27).",
+   "evidence_ids": [
+    "sol:E03",
+    "sol:E04",
+    "sol:E06",
+    "sol:E07",
+    "opus:O06"
+   ],
+   "counterevidence_ids": [
+    "sol:E08",
+    "sol:E09",
+    "sol:E12",
+    "sol:E27",
+    "opus:O07",
+    "opus:O08",
+    "son55:E035"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. Official TB2 verifiers (Harbor) and SWE-bench-verified are used, and infrastructure failures count as failures. Not 4: verifier outputs also drive the loop, so 'mirror the evaluator' rules and TB2-adjacent memory can encode evaluator specifics.",
+   "evidence_ids": [
+    "son55:E029",
+    "son55:E008",
+    "sol:E11",
+    "sol:E28"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Same-seed ACE/TF-GRPO comparisons and single-component swaps exist. The pillars are never ablated. Comparison protocols are unequal: AHE's figure is an in-loop best-of-10 at k=2 against k=3 single evaluations for the baselines (opus:O01–O03). External SOTA and leaderboard research enters only AHE's loop (opus:O09, son55:E013). Evolution budgets are not matched.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E020",
+    "son55:E023",
+    "son55:E033"
+   ],
+   "counterevidence_ids": [
+    "son55:E013",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "opus:O09"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with son55. The headline is on the selection set: 89 TB2 tasks drive diagnosis and editing, the best of 10 in-loop iterations is chosen on the same tasks, and that in-loop score is reported (opus:O01, opus:O04, opus:O06). The manifest names TB2 tasks by identity. Cross-model transfer reuses those tasks. The only independent tasks (SWE-bench-verified, 500, frozen harness) show +0.4 pp success, with three repositories regressing, and 12% fewer tokens. A held-out test exists, hence above 1; its result is too small to carry the central claim, hence not 3.",
+   "evidence_ids": [
+    "son55:E014",
+    "son55:E015",
+    "son55:E028"
+   ],
+   "counterevidence_ids": [
+    "son55:E005",
+    "son55:E007",
+    "son55:E022",
+    "opus:O01",
+    "opus:O04"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1 (A2 ladder). Sample sizes, per-tier/per-repo/per-round detail and negative results are given. There is one evolution campaign, k=2, and no intervals; the authors call the setting high-variance.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E017",
+    "son55:E026",
+    "sol:E30"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Inference tokens, Succ/Mtok and a roughly 32 h campaign are reported. Evolve, Debugger and explore token/$ totals and baseline budget parity are missing.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E014",
+    "son55:E029",
+    "sol:E18"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v4 text read (all prompts, case studies, Appendices A–E). In scope: system_method; the evolved non-weight harness persists and is evaluated frozen on SWE-bench-verified. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "generative_process_redesign",
+   "son55_value": "decompose_and_delegate",
+   "decision": "son55",
+   "final_value": "decompose_and_delegate",
+   "reason": "The typed manifest closed by verifier verdicts is the paper's distinctive move (C25).",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010",
+    "son55:E011"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "decompose_and_delegate",
+     "C25"
+    ],
+    [
+     "heterogeneous_decomposition",
+     null
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "decompose_and_delegate",
+     "C25"
+    ],
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "reason": "son55's C25 primary plus sol's generative_process_redesign as supporting; heterogeneous_decomposition dropped (engineering decoupling).",
+   "evidence_ids": [
+    "son55:E009",
+    "sol:E03"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H12"
+    ]
+   ],
+   "son55_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H12"
+    ],
+    [
+     "evidence_gated_retention",
+     "H31"
+    ]
+   ],
+   "decision": "sol",
+   "final_value": [
+    [
+     "attribute_and_patch_incumbent",
+     "H12"
+    ]
+   ],
+   "reason": "H31 needs a statistically sound commit rule; AHE commits on raw same-set deltas.",
+   "evidence_ids": [
+    "son55:E010",
+    "opus:O01"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.25850-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "partial",
+   "reason": "A4 collision. sol's local-2 (pseudocode index and role-setting conflicts) stays here as partial, verified. son55's local-2 (same-set selection) is a different question; it moves to local-4 as unmet, verified by opus:O01.",
+   "evidence_ids": [
+    "sol:E08",
+    "sol:E09",
+    "sol:E27",
+    "son55:E005",
+    "opus:O01"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.25850-3].status",
+   "sol_value": null,
+   "son55_value": "unknown",
+   "decision": "revised",
+   "final_value": "unknown",
+   "reason": "A4: son55's local-3 (baseline budget/prior parity) is renumbered to local-5, unknown kept: the paper does not say whether ACE/TF-GRPO received the explore agent's SOTA skills (opus:O09).",
+   "evidence_ids": [
+    "son55:E013",
+    "opus:O09"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: inference tokens are reported; evolution-phase cost is not.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: component swaps exist; the pillars are not ablated.",
+   "evidence_ids": [
+    "son55:E019"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: prompts, hyperparameters and repository are released in the paper.",
+   "evidence_ids": [
+    "son55:E008"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: SWE +0.4 pp; cross-model results reuse the TB2 tasks.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E032"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: same-seed baselines, with budget and prior parity unstated.",
+   "evidence_ids": [
+    "son55:E033"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: swaps support the components; observability as the bottleneck is untested.",
+   "evidence_ids": [
+    "sol:E21",
+    "sol:E22"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: no debugger-off, manifest-off or rollback-off ablation.",
+   "evidence_ids": [
+    "sol:E21"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-5].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: optimizer cost is not totalled.",
+   "evidence_ids": [
+    "sol:E13",
+    "sol:E18"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:heterogeneous_decomposition/RE-5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "not_applicable",
+   "reason": "Card dropped from the final match.",
+   "evidence_ids": [
+    "son55:E019"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/F4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: official verifiers certify edits (avoided).",
+   "evidence_ids": [
+    "son55:E029"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/H12].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Verified: TB2 is reused for selection and reporting; SWE is a frozen transfer with a small effect.",
+   "evidence_ids": [
+    "sol:E11",
+    "sol:E17",
+    "sol:E18"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: k=2 is spread evenly; evaluation is not steered.",
+   "evidence_ids": [
+    "son55:E030"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:attribute_and_patch_incumbent/S6].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: stated for any NexAU coding-agent harness.",
+   "evidence_ids": [
+    "son55:E008"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: predicted-fix ∩ observed flips approximates a counterfactual without paired runs.",
+   "evidence_ids": [
+    "son55:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: the manifest/verdict/rollback gate is not ablated.",
+   "evidence_ids": [
+    "son55:E010"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: wall-clock time only; no evolution token cost.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 4
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.X: the best-assignment index and the automatic-vs-discretionary rollback leave retention underspecified.",
+   "evidence_ids": [
+    "sol:E09",
+    "opus:O07",
+    "opus:O08"
+   ],
+   "score_impact": "−5.0 vs son55 (20×1/4)"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.holdout: the headline is an in-loop best-of-10 on the selection set, and the only independent test is +0.4 pp.",
+   "evidence_ids": [
+    "opus:O01",
+    "son55:E015",
+    "son55:E005"
+   ],
+   "score_impact": "−2.5 vs sol (10×1/4)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "claims.C1 (both seats)",
+   "sol_value": "77.0% read as the selected configuration's score",
+   "son55_value": "77.0% read as the best-iteration configuration (winner's curse noted, not quantified)",
+   "final_value": "77.0% = 137/178, the in-loop iteration-8 score at k=2 (max of 10); ACE/TF-GRPO cells imply k=3 single evaluations",
+   "reason": "Neither seat derived the rollout counts from the cell values (opus:O01–O05). This strengthens the E.holdout resolution (→ 2) and the agreed E.causality 2. No other rating change.",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "opus:O04",
+    "opus:O06"
+   ],
+   "score_impact": "none beyond the E.holdout resolution"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v4 text first, including all prompts and case studies. Initial view: in scope; retained (narrow: SWE tokens, flat success); G 3, M 3, X 3, Em 3, Ec 2, Eh 2, Es 1, cost 2. Before opening the seats I noted Algorithm 1's best index, the rollback ambiguity and the in-loop headline.",
+  "integrity_checks": "Both seats a1 on 2604.25850v4, material sha 5df22cf3…. The sol file is untracked and was rewritten after conflicts.json; its bound version was rebuilt (E31/E32 removed, display string restored) and reproduces the conflicts.json canonical hash exactly. son55 matches on disk. RS/domain ids valid; both claim_type system_method.",
+  "core_claim_check": "Strongest supported claim: in one campaign, the selected harness scores above seed and baselines on the 89 evolution tasks (in-loop best-of-10). Frozen on SWE-bench it keeps success (+0.4 pp) with 12% fewer tokens. 'Observability is the bottleneck' and 'general engineering experience' are not established. claim_support scoped.",
+  "shared_error_review": "Agreed items re-checked: G 3, M 3, Em 3, Ec 2, Es 1, cost 2 kept. One shared omission recorded (headline protocol).",
+  "rating_agreement": "X → sol; E.holdout → son55. Final 65.0."
+ },
+ "input_seat_hashes": {
+  "sol": "3b3309f4fe158799dcdc9c095e6548f3acb20f11a4a571ba140f1ece16fa14b6",
+  "son55": "a1f87b67ba8c568c43bb2aa446dfdf2e6584039cc40c361f0acb33c530315f85"
+ },
+ "score": {
+  "raw": 65.0,
+  "display": 65.0,
+  "lower": 65.0,
+  "upper": 65.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "41ad5c62110875d5db74a1649f2dd4a824a9c6a728814e4ac8cee7a1e567d943"
+}

@@ -1,0 +1,2191 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r18a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2604.21725",
+  "paper_id": "2604.21725",
+  "title": "AEL: Evolving Agent Harness in Open-Ended Environments",
+  "version": "2604.21725v2",
+  "claim_type": "system_method",
+  "central_claim": "AEL 用快时标 Thompson Sampling 在记忆检索策略间选择、慢时标 LLM 反思（先诊断后处方）注入因果洞察并向池中新增检索策略，使冻结 LLM 的智能体学会“如何使用记忆”，在组合配置与工单路由上超过基线，且增益可归因于反思。"
+ },
+ "provenance": {
+  "input_hash": "0c0233699aedf2637373f6c916857100e3bd87c515938efd9838a7f5bd14d22d",
+  "input_package": "batches/r18a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "seat_input_pinning": [
+   "working copy of research/v2/runs/rsi-v22-20261021-01/batches/r18a/seats/sol/attempts/a1/2604.21725.json (file sha256 212a950a02f6…, mtime 2026-10-21T21:54:57, canonical 9abf50c6e9f2…) was rewritten after conflicts.json (mtime 2026-10-21T21:54:47) and no longer matches it; aggregated against the committed HEAD version whose canonical hash equals conflicts.json (8349cf1a75ea…). The working copy only adds sol:E27 and turns score.display from string to number; no conflict field changes."
+  ],
+  "timestamp": "2026-10-22T02:15:38Z"
+ },
+ "materials": [
+  {
+   "material_id": "2604.21725.txt",
+   "url": "https://arxiv.org/html/2604.21725v2",
+   "version": "2604.21725v2",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2604.21725.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E01",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 68-78",
+   "quote": "outperforms ten self-improving and non-LLM baselines on a sequential portfolio benchmark, lifting Sharpe by 27% over the strongest memory-only variant with the lowest variance among all stochastic methods, and generalizes to a support-ticket routing stream, where it improves accuracy by 18% over reflection-free Thompson Sampling and by 51% over the best prior baseline. Mechanism studies further show that the gains are causal: reflection helps precisely when regimes demand different retrieval behavior, and is provably no-harm/no-gain when the best policy is stable. Code is available at",
+   "support_explanation": "作者原主张：双时间尺度、最低方差、泛化及 provably no-harm；不是本评审认可的结论。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E02",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 259-261",
+   "quote": "These three modules (planner, tools, memory) form the agent harness, which is typically fixed once deployed.\nAEL\n’s default configuration learns over the memory subsystem (which retrieval policy to use) while keeping the planner and tools fixed; the framework also supports contextual bandits over planners and per-tool Thompson Sampling as ablation knobs.",
+   "support_explanation": "实际默认评价对象是检索与记忆而非三模块联合演化。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E03",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 266-306",
+   "quote": "distills reflections into rules (the closest analogue to\nAEL\n’s procedural memory) but neither evolves tools or planners.",
+   "support_explanation": "最近邻比较限于作者自己的相关工作描述；尚未独立核过相邻全文。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E04",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 542-550",
+   "quote": "Which parts of the harness are learned.\n\nThe default\nAEL\nconfiguration learns three quantities online:\n(i) a Beta posterior per memory-retrieval policy via Thompson Sampling,\n(ii) a reflection insight regenerated each slow window and injected into the planner prompt, and\n(iii) procedural rules promoted from recurring semantic patterns.\nThe planner identity, the tool set (12 tools), and all tool implementations remain fixed.",
+   "support_explanation": "列出默认三个学习量，以及固定的 planner/tool 锚点。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E05",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 560-569",
+   "quote": "), and skill extraction as optional extensions; we keep all of these off by default because the ablation (\nTable 3\n) shows they degrade performance in this short-horizon regime.\nCredit assignment uses uniform rewards; factored counterfactual (\nFCC\n) and LLM-driven (\nLLM-FCC\n) alternatives are also evaluated in\nTable 3\nand found harmful.",
+   "support_explanation": "复杂 planner/tool/cold-start/skill 与 FCC 扩展默认关闭；不能把可选实现当作主实验收益。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E06",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 609-611",
+   "quote": "\\tilde{\\mu}_{m}\\sim\\mathrm{Beta}(\\alpha_{m},\\beta_{m})\nand selects the policy with the highest sample.\nAfter observing the episode outcome, the posterior is updated:",
+   "support_explanation": "五臂 Beta TS 的采样选择与后验更新，更新式紧随其后。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E07",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 733-743",
+   "quote": "Episodic memory\nrecords each episode’s raw outcome: which tools were used, what signals they produced, whether each signal was correct, and the overall prediction quality.\nThis provides the ground-truth training data for distillation.\n\nSemantic memory\naggregates episodic records into cross-episode patterns, distilled periodically (every 10 episodes).\nThese patterns capture regularities invisible in any single episode, such as “momentum indicators are reliable for trending stocks but misleading during reversals.”\n\nProcedural memory\npromotes high-confidence semantic patterns into executable rules injected directly into planner prompts.\nThese rules represent the agent’s most trusted knowledge, influencing behavior without requiring retrieval at query time.",
+   "support_explanation": "episodic→semantic→procedural 的跨回合留存与后续注入。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E08",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 856-863",
+   "quote": "After each slow window, the LLM receives four inputs: (i) per-ticker episode summaries (planner used, score, directional accuracy), (ii) per-tool accuracy statistics aggregated over the window, (iii) market side information (sector returns, volatility regime, cross-correlation) computed from cached price data but\nnot\ngiven to the predictor, and (iv) the last three reflections for temporal continuity.\nIt produces a structured output containing a\ncausal insight\n(what market conditions caused today’s outcomes and why specific signals were reliable or misleading), a regime label, and a confidence score.\nThis insight is injected directly into the allocator’s prompt at the next episode, giving the predictor an interpretive frame for its evidence without polluting the memory store with noisy LLM-generated narratives.\nModule selection remains with the bandit; reflection diagnoses conditions, not configurations.",
+   "support_explanation": "反思额外看 cached market side information，且其解释随后进入 predictor；必须控制额外信息和反思内容。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E09",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 865-872",
+   "quote": "Code evolution\nis triggered by diagnosed structural failures, not fixed schedules.\nWhen a planner’s failure streak exceeds a threshold (default 3 consecutive slow windows), the LLM generates a new Python planner class tailored to the diagnosed failure mode; the new class must pass syntax validation and a smoke test before entering the pool.\nMemory policy evolution fires periodically (every 5 slow windows, starting after window 10) only when the average Thompson Sampling reward across all policies falls below 0.4, indicating that the entire policy pool is underperforming.\nThe LLM then designs a new retrieval policy specifying tier visibility, retrieval depth, and formatting strategy, which is added as a new bandit arm.\nNote that in the main\nAEL\nconfiguration, planner evolution is disabled; it is active only in the full EAEL variant.",
+   "support_explanation": "新臂准入条件与默认 planner evolution 关闭；代码语法/冒烟准入不同于独立任务提升门控。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E10",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 1399-1402",
+   "quote": ": 10 sector-diverse tickers spanning 7 GICS sectors at 1-hour resolution (208 episodes: 140 train / 40 val / 28 test). Training covers diverse market regimes (bull, bear, flat); the test set contains a bear-to-bull transition (full details in",
+   "support_explanation": "金融 D-full 明确声明 140/40/28 的时间切分。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E11",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 1408-1409",
+   "quote": "Support-ticket routing\n: an LLM-generated stream with 8 resolution routes, produced via Gemini 3.1 Flash-Lite. The stream spans four regimes: explicit logs, shorthand drift, imbalanced incidents, and a late route-aware regression. The LLM-agent evaluation uses 160 stratified episodes per seed (40 per regime) across 5 seeds (details in",
+   "support_explanation": "主 LLM support routing 为5种子×160 episodes，每种子各 regime40条；区别于6000条模板实验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E12",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 2511-2517",
+   "quote": "AEL\n(Sharpe 2.13,\nn\n=\n5\nn{=}5\n) vs. baselines.",
+   "support_explanation": "主金融平均 Sharpe2.13，5种子。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E13",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 2637-2648",
+   "quote": "HyperAg\n\n+0.72 (0.38)\n\n+1.41\n\n+5.22\n\n.001\n∗∗∗\n\n.691",
+   "support_explanation": "HyperAgent SD .38 小于 AEL .47；与所有随机方法中最低方差的宽主张不符。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E14",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 2675-2685",
+   "quote": "+Memory\n\n+1.68 (0.96)\n\n+0.45\n\n+0.94\n\n.384\n\n.195",
+   "support_explanation": "对最强 memory-only 的均值差 p=.384，不支持显著优越。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E15",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 2687-2692",
+   "quote": "On mean Sharpe, 4 of 9 comparisons survive\nα\n=\n0.05\n\\alpha{=}0.05\n(Reflexion, Meta-Reflexion, HyperAgent); the remaining baselines have large per-seed variance that inflates the pooled standard error.",
+   "support_explanation": "文字声称4/9但只列3项显著；表亦只有3项，统计文字有不一致。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E16",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 2708-2715",
+   "quote": "AEL\n’s 95% CI is\n[\n1.72\n,\n2.54\n]\n[1.72,2.54]",
+   "support_explanation": "作者报告 AEL95%CI；与完整5种子和显著性检验一起按冻结统计阶梯评价。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E17",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 3198-3209",
+   "quote": ", only marginally better than +Memory (\n1.68\n1.68\n) and well below\nAEL\n(\n2.13\n2.13\n).\nThe 0.59 Sharpe drop from shuffling provides the cleanest evidence yet that reflection contributes\nspecifically\nvia its content rather than as undifferentiated extra context.",
+   "support_explanation": "shuffled-content 消融的方向证据，但其文字把1.54称为好于1.68；应按数值而非修辞读。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E18",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 3596-3602",
+   "quote": "Table 10:\n20Newsgroups streaming classification (5 seeds, 200 episodes, 4 regimes). Top-1 accuracy per regime and overall. AEL matches the strongest fixed policy but does not improve on it; the mechanism transfers as\nno-harm\nrather than as positive lift. Statistical comparisons against AEL: Welch’s two-sample\nt\nt\n-test on overall accuracy.",
+   "support_explanation": "20Newsgroups 是非显著/无提升边界实验，不是普遍 no-harm 定理。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E19",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 3927-3938",
+   "quote": "To add a larger but still cheap validation setting, we constructed a support-ticket routing stream for an LLM API service.\nEach episode is a user report; the agent predicts one of eight resolution routes (schema validation, queue backpressure, timeout configuration, media pipeline, backend error, sandbox isolation, session resume, or auth/environment).\nThe stream has four regimes over 1,200 episodes per seed: explicit error logs, shorthand vocabulary drift, imbalanced incident mix, and a late route-aware regression where the user text is deliberately ambiguous and the correct route must be inferred from endpoint metadata.\nThe benchmark is generated deterministically from a template bank using LLM API calls; all reported numbers use the built-in templates for reproducibility.\n\nTable 11\nshows the result across five seeds (6,000 episodes total).\nThe key comparison is the late route-aware regime: TS without reflection collapses to 0.206 accuracy because the initial text-only retrieval policies have no access to the endpoint-conditioned rule, while\nAEL\ninjects a route-aware retrieval policy at episode 920 and reaches 0.863 in the same regime.\nOverall accuracy rises from 0.535 to 0.700, exceeding the strongest fixed initial policy (class-balanced, 0.548) while remaining below the per-episode oracle (0.776).\nThis benchmark therefore supplies a fast sanity check for the paper’s central mechanism: reflection helps when it adds a genuinely new retrieval policy keyed to a slow-window diagnostic signal.",
+   "support_explanation": "模板完整流的特殊新臂与 endpoint-conditioned 信息不对等；0.700/0.535不可冒充主LLM0.840/0.711。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E20",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 4435-4438",
+   "quote": "Financial domain test window.\n\nAEL\nis domain-agnostic in design (requiring only a context vector and scalar reward), but the most rigorous empirical evidence remains the financial benchmark. The 28-episode held-out test window is short and gives an annualized Sharpe with non-trivial standard error; absolute magnitudes should be read as benchmark-specific. The synthetic bandit, 20Newsgroups, and support-ticket routing studies are mechanism checks, not a claim of broad task coverage. Cross-domain validation on coding",
+   "support_explanation": "作者明确短金融测试与跨领域仍待验证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E21",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 4489-4498",
+   "quote": "Thompson Sampling vs. alternative bandits.\n\nThe counterfactual replay (\nTable 6\n) shows TS is competitive but not strictly dominant on training reward. A full end-to-end ablation that swaps TS for\nε\n\\varepsilon\n-greedy or UCB1\nwhile keeping reflection-driven arm injection active\nwould directly test how much of the gain comes from TS specifically vs. from the two-timescale design as a whole. This experiment is computationally large (each variant requires 5 full LLM-driven training runs) and is left for follow-up work; we discuss the qualitative trade-off in",
+   "support_explanation": "未做保留 reflection injection 的端到端 TS/UCB 等替代优化器比较。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E22",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 4811-4832",
+   "quote": "All experiments use Claude Haiku 4.5 (\nus.anthropic.claude-haiku-4-5\n)\nas the backbone LLM with temperature 0.3 for predictions and reflection.\nEach episode invokes all 12 tools (no tool selection in portfolio mode);\nthe planner then synthesizes tool outputs into portfolio weights.\nA 15-bar warm-up period runs tool-only predictions before learning begins.\nMemory caps at 500 entries per tier with quality threshold 0.3 for writes.\nSemantic distillation occurs every 10 episodes.\nThe LinUCB context vector is 7-dimensional (sector encoding, volatility,\ndata richness, recent performance).\nThe main configuration uses uniform credit; full hyperparameters are listed in\nAppendix C\n.\nThe matched incremental build uses seeds 42, 123, 456; headline methods extend\nto 5 seeds (+789, +1024).\n\nCost.\nEach full\nAEL\nrun costs approximately $2.80 in LLM calls\n(~$2 for predictions, ~$0.80 for reflection/evolution across 208 episodes).",
+   "support_explanation": "实现、5种子与总调用成本约$2.80，其中反思/演化约$.80。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E23",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 4834-4840",
+   "quote": "Test-phase protocol.\nThe primary metric is test-phase Sharpe ratio (annualized); secondary metrics are defined in\nAppendix D\n.\nDuring test, all learning is disabled: bandit posteriors are frozen, memory is read-only, and no evolution occurs, ensuring that test results reflect the agent’s\ngeneralized\nharness.",
+   "support_explanation": "测试禁止 posterior 更新、写记忆及演化，明确后续冻结使用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E24",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 7052-7064",
+   "quote": "Table 25\nshows the number of active procedural rules across training for each of the 5 seeds. The promotion rule (corroboration in\n≥\n3\n\\geq 3\nslow windows with consistent direction) keeps the rule pool small while the pruning rule (rolling-10 success\n<\n0.4\n<0.4\n) discards rules that lose relevance as regimes shift. Median end-of-training counts are 7–11 active rules per seed; the maximum observed at any training step is 19 (seed 456, episode 142), after which two redundant momentum/reversal rules are pruned by episode 158.\n\nTable 25:\nActive procedural-rule count over training (5 seeds). Counts are computed every 20 episodes; columns are training-episode checkpoints.",
+   "support_explanation": "附录W训练规则计数延至158/166，与140训练切分不一致；不能据此断言污染已发生。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E25",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 2013-2028",
+   "quote": "Ours\n\nAEL\n\n0.840\n±\n\\pm\n0.031\n\n0.985\n\n0.775\n\n0.715\n\n0.885",
+   "support_explanation": "主LLM routing AEL .840±.031，5种子各160条。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E26",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "lines 1998-2003",
+   "quote": "TS no reflection\n\n0.711\n±\n\\pm\n0.039",
+   "support_explanation": "同一主LLM routing TS-no-reflection .711±.039。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract (txt L78)",
+   "quote": "Mechanism studies further show that the gains are causal: reflection helps precisely when regimes demand different retrieval behavior, and is provably no-harm/no-gain when the best policy is stable.",
+   "support_explanation": "作者因果主张（reflection 仅在各 regime 需要不同检索行为时有益）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "Abstract (txt L78)",
+   "quote": "outperforms ten self-improving and non-LLM baselines on a sequential portfolio benchmark, lifting Sharpe by 27% over the strongest memory-only variant with the lowest variance among all stochastic methods",
+   "support_explanation": "摘要头条：10 个基线、+27% 相对 memory-only 变体。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "§1 Introduction (txt L170)",
+   "quote": "These mechanisms are valuable, but they usually commit to a fixed retrieval or update pattern.",
+   "support_explanation": "作者 gap：既有自改进方法固定检索/更新模式。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "§1 Introduction (txt L171)",
+   "quote": "In dynamic sequential environments, this is brittle: the memory policy that helps early may overload the planner later, while a conservative policy may miss regime-specific evidence.",
+   "support_explanation": "具体失败条件：动态序列环境里同一记忆策略早期有益、后期过载。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "§2.2 Related Work (txt L306)",
+   "quote": "None jointly evolve tools and memory with reflection-driven self-diagnosis or study credit assignment in multi-module evolution.",
+   "support_explanation": "新颖性主张：无人联合演化工具与记忆并用反思自诊断（默认配置实际只演化记忆策略）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "§1 Introduction (txt L185)",
+   "quote": "At the slow timescale, LLM reflection aggregates trajectories, diagnoses failure modes, and injects a causal frame into the planner prompt; when the current policy pool underperforms, reflection may add a new retrieval policy as a bandit arm.",
+   "support_explanation": "慢时标机制：反思诊断+注入因果框架+可新增检索策略作为 bandit 臂。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "§3.4 Code evolution (txt L867)",
+   "quote": "the new class must pass syntax validation and a smoke test before entering the pool.",
+   "support_explanation": "LLM 生成的新类需通过语法/冒烟测试才入池（弱准入门控）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "§3.4 Code evolution (txt L868)",
+   "quote": "Memory policy evolution fires periodically (every 5 slow windows, starting after window 10) only when the average Thompson Sampling reward across all policies falls below 0.4, indicating that the entire policy pool is underperforming.",
+   "support_explanation": "新策略触发条件：窗口 10 后每 5 窗且池平均奖励<0.4。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "§3.4 Code evolution (txt L869)",
+   "quote": "The LLM then designs a new retrieval policy specifying tier visibility, retrieval depth, and formatting strategy, which is added as a new bandit arm.",
+   "support_explanation": "新检索策略作为新臂加入。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "§3.4 Slow-window reflection (txt L862)",
+   "quote": "giving the predictor an interpretive frame for its evidence without polluting the memory store with noisy LLM-generated narratives.",
+   "support_explanation": "反思洞察每窗重新生成并注入提示，不写入记忆库。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "§3.1 (txt L540)",
+   "quote": "episodes are split chronologically into train/val/test, with all learning frozen at test time.",
+   "support_explanation": "按时间切分 train/val/test，测试阶段冻结学习。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "§4.1 Datasets (txt L1402)",
+   "quote": "10 sector-diverse tickers spanning 7 GICS sectors at 1-hour resolution (208 episodes: 140 train / 40 val / 28 test).",
+   "support_explanation": "金融基准：测试集仅 28 个小时柱。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "§4.2 Main Results (txt L2036)",
+   "quote": "achieves the highest Sharpe (2.13), Sortino (4.08), and Calmar (10.40), outperforming all 10 baselines with the lowest variance among all stochastic methods.",
+   "support_explanation": "主结果（5 种子）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "§4.2 (txt L2050)",
+   "quote": "The deterministic momentum-weighted baseline (1.44) outperforms all prior LLM methods on Sharpe, underscoring that LLM-based learning must overcome the noise it introduces to beat simple heuristics.",
+   "support_explanation": "平凡启发式基线被报告：动量加权 1.44 胜过所有既有 LLM 方法。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "§4.2 Why AEL improves (txt L2056)",
+   "quote": "The incremental build isolates the source of improvement: memory enables cross-episode learning (+24%), and reflection further enhances performance (+27%) by diagnosing failure patterns and filtering memory quality.",
+   "support_explanation": "增量构建：Stateless 1.35→+Memory 1.68→AEL 2.13。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "§4.6 Statistical Significance (txt L2687)",
+   "quote": "On mean Sharpe, 4 of 9 comparisons survive",
+   "support_explanation": "显著性检验仅部分比较存活。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "§4.6 (txt L2692)",
+   "quote": "(Reflexion, Meta-Reflexion, HyperAgent); the remaining baselines have large per-seed variance that inflates the pooled standard error.",
+   "support_explanation": "括号只列 3 个存活基线，与“4 of 9”不一致；其余（含 +Memory、EvoTool）均不显著。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "Appendix B Limitations (txt L4438)",
+   "quote": "The 28-episode held-out test window is short and gives an annualized Sharpe with non-trivial standard error; absolute magnitudes should be read as benchmark-specific.",
+   "support_explanation": "作者自承测试窗口短、Sharpe 标准误不小。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "Appendix A.2 R3 (txt L3207)",
+   "quote": "The 0.59 Sharpe drop from shuffling provides the cleanest evidence yet that reflection contributes",
+   "support_explanation": "打乱反思对照：2.13→1.54（5 种子，±0.47/±0.71，未给检验）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "Appendix A.4 (txt L3902)",
+   "quote": "), meaning reflection contributes no measurable lift on this benchmark.",
+   "support_explanation": "20Newsgroups：reflection 无可测增益（边界案例，作者如实报告）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "Appendix A.4 (txt L3922)",
+   "quote": "is a recipe for domains where per-regime memory style differs across regimes, not a universal classifier wrapper.",
+   "support_explanation": "作者将适用范围限定为各 regime 记忆风格不同的领域。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "Appendix A.5 (txt L3934)",
+   "quote": "The key comparison is the late route-aware regime: TS without reflection collapses to 0.206 accuracy because the initial text-only retrieval policies have no access to the endpoint-conditioned rule, while",
+   "support_explanation": "支持工单流的 R3 被设计成初始策略池缺所需策略，只有反思新增臂才能解决。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "§4.4 (txt L2168)",
+   "quote": "is most damaging: without the 15-episode warm-up, the memory bandit receives noisy early rewards that corrupt Beta posteriors irreversibly, causing premature convergence to a suboptimal retrieval policy.",
+   "support_explanation": "移除热身严重受损（−0.88）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "Appendix C (txt L4597)",
+   "quote": "These values were selected based on preliminary runs on the validation split and held fixed across all experiments.",
+   "support_explanation": "超参在验证集预选。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "§4.1 Evaluation (txt L1473)",
+   "quote": "We report four frozen test-phase metrics: Sharpe, Sortino, and Calmar ratios (risk-adjusted return from complementary perspectives) and maximum drawdown (MaxDD%); formal definitions are in",
+   "support_explanation": "指标均为冻结测试阶段指标；Table 3 中 AEL=2.13 即该测试 Sharpe，故消融（决定默认关闭 planner/tool/credit 等）在测试指标上做出。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "Appendix B (txt L4524)",
+   "quote": "can take different numeric values across blocks because the blocks correspond to different upstream protocols",
+   "support_explanation": "同名配置（如 +Memory）在不同结果块数值不同，协议不统一。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "Appendix H (txt L5287)",
+   "quote": "The results below therefore reflect the pre-fix code state and should be interpreted as an investigation of credit-method sensitivity, not as current production numbers.",
+   "support_explanation": "信用分配实验在修 bug 前完成；修复后 FCC/LLM-FCC 结果显著改变。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "Appendix E Cost (txt L4832)",
+   "quote": "(~$2 for predictions, ~$0.80 for reflection/evolution across 208 episodes).",
+   "support_explanation": "单次运行成本明细（约 $2.80）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "Appendix U (txt L6892)",
+   "quote": "and the new arm has not yet been added, reflection injects the hidden 11th arm as a new bandit arm with a uninformative Beta",
+   "support_explanation": "合成 bandit 中“反思”直接注入预置的隐藏第 11 臂，由构造决定。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "§1 Contributions (txt L186)",
+   "quote": "Evolving the other harness components, planner and tools, is supported but hurts in this short-horizon regime, so the default",
+   "support_explanation": "默认配置固定 planner 与工具，仅演化记忆策略——与“演化 harness（planner、工具、记忆）”框架叙述有落差。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "locator": "Appendix B (txt L4498)",
+   "quote": "would directly test how much of the gain comes from TS specifically vs. from the two-timescale design as a whole. This experiment is computationally large (each variant requires 5 full LLM-driven training runs) and is left for follow-up work; we discuss the qualitative trade-off in",
+   "support_explanation": "保持反思注入、仅替换 TS 为 ε-greedy/UCB1 的端到端对照未做。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "locator": "Appendix A.1 (txt L2805)",
+   "quote": "the bandit signal in this domain is noisy enough that exploitation-vs-exploration tradeoffs matter less than getting any reasonable selection policy.",
+   "support_explanation": "训练奖励上 TS 与朴素选择算法差距 <3 点。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "locator": "Appendix Q (txt L6487)",
+   "quote": "All baselines use the same LLM backbone (Claude Haiku 4.5), tool set (12 financial tools), and portfolio allocation interface. Below we describe what was kept from each original method and what was adapted.",
+   "support_explanation": "基线为作者改写版本，同骨干同工具。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E034",
+   "locator": "Appendix A.2 R1 (txt L3162)",
+   "quote": "(since the three regimes are imbalanced 23/16/10), so the LLM regime labels are well above chance.",
+   "support_explanation": "反思 regime 标签与确定性规则一致率 82% 对机会水平 39%（49 条）。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E035",
+   "locator": "Appendix A.3 (txt L3506)",
+   "quote": "We observed two rule-pair conflicts during seed 42 (one momentum/reversal rule and one valuation/momentum rule overlapping); the planner resolves these by relying on the higher-quality rule",
+   "support_explanation": "程序性规则冲突由质量加权提升而非显式合并处理。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E036",
+   "locator": "Appendix E (txt L4838)",
+   "quote": "During test, all learning is disabled: bandit posteriors are frozen, memory is read-only, and no evolution occurs",
+   "support_explanation": "测试期无学习更新。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "son55:E037",
+   "locator": "Appendix A.2 R3 (txt L3191)",
+   "quote": "A purely linguistic confound is that the reflection text could be improving the prompt simply by acting as a richer context, regardless of causal content.",
+   "support_explanation": "作者明确检验“反思只是额外上下文”的替代解释。",
+   "kind": "author_report",
+   "material_id": "M-2604.21725-v2",
+   "material_sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Appendix S Running Case",
+   "quote": "episode 83 triggers an under-threshold loss that initiates the slow-window reflection; episode 84’s reflection introduces",
+   "support_explanation": "In the flagship trace, a single under-threshold loss at episode 83 leads to a new arm at episode 84. §3.4 says memory-policy evolution fires only every 5 slow windows after window 10, when the average TS reward of all policies is below 0.4 (son55:E008). App A.1 reports the pool's mean training reward at about 0.49. The two trigger descriptions are incompatible, so the paper does not uniquely specify when the retained pool changes.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Appendix P.2 Code Evolution Examples",
+   "quote": "LLM-generated memory retrieval policy (episode 95, seed 123).",
+   "support_explanation": "The same RegimeFilteredRetrieval artefact is placed at seed 123, episode 95 here, but at seed 42, episode 84 in §3.5/App S (opus:O01).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Appendix P.2",
+   "quote": "Both artifacts were validated via AST parsing and accepted into the module pool by LinUCB, which subsequently selected them when their context features matched.",
+   "support_explanation": "Admission is attributed to LinUCB, the planner bandit, which is disabled in the main configuration. §3.2–3.4 say new memory policies enter as Thompson-Sampling arms, and §3.4 says admission requires a syntax check plus a smoke test, not AST parsing alone.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Appendix J.1",
+   "quote": "achieves only 0.46, the lowest variance among prior methods but also among the lowest means.",
+   "support_explanation": "HyperAgent is 0.46 here and 0.46±0.41 in Table 16 (opus:O05), but 0.72±0.38 in Table 2(a) and Table 5 (sol:E13), which carries the p<.001 Welch comparison. Neither value supports the abstract's 'lowest variance among all stochastic methods' for AEL (SD 0.47).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Appendix K.3 Table 16",
+   "quote": "Test result (5 seeds) 0.46 ± \\pm 0.41 2.13 ± \\pm 0.47",
+   "support_explanation": "Second HyperAgent value (0.46±0.41).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Appendix N",
+   "quote": "For the main AEL benchmark configuration, the planner pool is initialized with six built-in planners",
+   "support_explanation": "Appendix N describes a six-planner pool selected by the meta-controller for the main configuration. §3.1 fixes the planner (opus:O07). Which configuration produced 2.13 is therefore not uniquely stated; App B itself warns that the same configuration name carries different protocols across result blocks (son55:E026).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O07",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "§3.1 Which parts of the harness are learned",
+   "quote": "The planner identity, the tool set (12 tools), and all tool implementations remain fixed.",
+   "support_explanation": "Default: planner fixed.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O08",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "§3.4 Slow-window reflection",
+   "quote": "market side information (sector returns, volatility regime, cross-correlation) computed from cached price data but",
+   "support_explanation": "Only AEL's reflection receives regime side information, and its output is injected into the predictor's prompt. No baseline receives it, and the shuffled-reflection control (son55:E019) scrambles alignment without removing the information channel. Diagnosis and the information advantage are therefore not separated.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O09",
+   "material_id": "2604.21725.txt",
+   "material_hash": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "sha256": "1602847be7056b80ee1769b31ebeb5109cc17fdc2ff46fae54d44516b2f869b0",
+   "locator": "Abstract",
+   "quote": "and is provably no-harm/no-gain when the best policy is stable",
+   "support_explanation": "'Provably' rests on one empirical 20Newsgroups run (AEL 0.253 vs TS 0.254, p=.97). No proof is given.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "记忆检索策略的选择（五个初始策略：none/recent_window/full_detailed/compressed/aggressive_learner，及后续新增策略）",
+   "information": "每集标量结果 s_t∈[-1,1]（已实现组合收益）；各策略的 Beta 后验；规划器与工具固定。",
+   "operation": "每集对每个策略采样 Beta(α,β)，选最高者；观测后 α+=r，β+=1−r（均匀信用）。",
+   "output": "该集使用的检索策略（层可见性、k、格式）。",
+   "conditions": "热身 15 集；记忆条目按相关×质量×新近×层加成排序，top-5。",
+   "feedback": "环境奖励（实现收益）。",
+   "selection_rule_data": "训练窗口内在线；最终在验证集上选后验并在测试期冻结。",
+   "persistence": "Beta 后验与记忆库（三层：情节/语义/程序性）。",
+   "later_use": "后续集的检索、测试期冻结后只读使用。",
+   "claimed_effect": "Sharpe 1.35→1.68（+Memory）→2.13（AEL）。",
+   "failure_boundary": "累积后验不跟踪非平稳（E 文 A.1 自述）；短视距高噪声域；20NG 无增益。",
+   "evidence_ids": [
+    "son55:E011",
+    "son55:E015",
+    "son55:E020",
+    "son55:E036"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "（a）规划器提示中的“因果洞察”（每慢窗重生成）；（b）检索策略池（LLM 编写的新策略类）",
+   "information": "每窗每股摘要、各工具准确率、未提供给预测器的市场侧信息、最近 3 次反思。",
+   "operation": "慢窗反思→输出因果洞察+regime 标签+置信度并注入提示；当池平均奖励<0.4（窗口 10 后每 5 窗）时 LLM 设计新检索策略并作为新臂加入。",
+   "output": "洞察文本；新的 Python 检索策略类。",
+   "conditions": "新类通过 AST/语法与冒烟测试；新臂以无信息先验进入 TS。",
+   "feedback": "聚合轨迹与侧信息；池平均奖励。",
+   "selection_rule_data": "无独立验证；由 TS 在线探索决定新臂是否被采用。",
+   "persistence": "新策略类留在池中；洞察每窗覆盖。",
+   "later_use": "下一窗口规划器提示与后续集策略选择。",
+   "claimed_effect": "金融：reflection 带来 +27%（对 +Memory）；支持工单 R3 由 0.206→0.863（确定性流）。",
+   "failure_boundary": "池中旧臂无显式淘汰；触发阈值按基准调参（0.4/0.42/.58）；20NG 上无增益。",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E007",
+    "son55:E008",
+    "son55:E009",
+    "son55:E010",
+    "son55:E022"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "三层记忆（情节→语义→程序性）与程序性规则",
+   "information": "情节记录（工具使用、信号正误、结果）。",
+   "operation": "每 10 集蒸馏语义模式；跨 ≥3 窗口方向一致则晋升为程序性规则；滚动成功率 <0.4 的规则被剪枝。",
+   "output": "程序性规则（≤350 token，中位 7–11 条）。",
+   "conditions": "每层上限 500 条。",
+   "feedback": "规则调用后的成功率。",
+   "selection_rule_data": "晋升=跨窗口一致；剪枝=滚动成功率阈值。",
+   "persistence": "记忆库。",
+   "later_use": "程序性规则直接注入规划器提示。",
+   "claimed_effect": "任务条件化程序性记忆无显著差异（2.05 vs 2.13，p=0.43）。",
+   "failure_boundary": "规则冲突靠层加成权重缓解（E035）。",
+   "evidence_ids": [
+    "son55:E035"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "harness 手写固定，智能体积累经验却没学会如何使用它：用哪种检索策略、何时历史有误导、何时检索策略本身要变。",
+  "checked_gap": "具体失败条件有数据支撑（最佳固定策略因种子而异；热身/策略影响大）；但“无人联合演化工具与记忆”的新颖性表述偏弱，且默认配置并不演化工具/规划器（E030）。相关工作未覆盖已有的学习式检索路由/自适应检索/记忆价值估计类近邻。",
+  "lineage": {
+   "ancestors": [
+    "Reflexion",
+    "ExpeL",
+    "Voyager",
+    "Meta-Reflexion",
+    "Thompson Sampling/LinUCB 上下文 bandit"
+   ],
+   "closest_adjacent": [
+    "EvoTool（演化工具策略、记忆固定）",
+    "FactorMiner（技能+经验记忆）",
+    "HyperAgent（递归自修改）"
+   ],
+   "source_version": "论文所引来源均不在本批固定材料内，仅依据 2604.21725v2 正文的描述；未取得邻居原文"
+  },
+  "residue": "各 regime 偏好不同检索方式时，固定检索策略的残余损失；以及池中缺少所需策略时选择类方法无能为力。",
+  "stakes": "金融（Sharpe）与工单路由的绝对性能。",
+  "method_response": "快时标 TS 选择检索策略+慢时标反思诊断并向池中注入新策略。",
+  "remaining_gap": "长视距、真实多领域（编码/Web）验证；端到端 TS vs 其他 bandit 对照；planner/工具演化在更长视距下是否可用；对强度较大的基线的统计显著性。",
+  "evidence_ids": [
+   "son55:E003",
+   "son55:E004",
+   "son55:E005",
+   "son55:E030"
+  ],
+  "unresolved": [
+   "最近邻原文不在本批材料内，联合演化的新颖性无法核验；请总控按需补材（学习式检索路由/记忆价值类近邻）。"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus sides with son55. The paper's own framing is 'recasting memory use as online policy selection', solved with Thompson Sampling: the problem is recast as a well-studied object (a bandit) whose machinery is imported. Fit is medium because no correspondence theorem is given and A.1 concedes that cumulative TS does not track non-stationarity. Retrieved memories and the reflection insight condition a frozen LLM (adapt_via_conditioning). generative_process_redesign (sol) is dropped: the fixed component is a retrieval policy in a decision pipeline, not a stage of a generative procedure.",
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "identify an intractable problem：在非平稳序列中选择何时/如何检索经验（陈述）",
+     "recast it as a well-studied object：检索策略池上的多臂 bandit（执行）",
+     "solve with that object's machinery：Thompson Sampling Beta 后验（执行，标准用法）"
+    ],
+    "success_checks": [
+     {
+      "condition": "对应定理：bandit 解对应原问题解",
+      "status": "unmet"
+     },
+     {
+      "condition": "删除原先必需组件",
+      "status": "unmet"
+     },
+     {
+      "condition": "结构条件被明确陈述",
+      "status": "met：各 regime 偏好不同、最优策略稳定时 no-harm/no-gain"
+     },
+     {
+      "condition": "对原问题的忠实性独立验证",
+      "status": "partial：反事实重放、20NG 边界"
+     }
+    ],
+    "failure_checks": [
+     {
+      "condition": "机械套用既有求解器到新输入",
+      "status": "partial：TS 本身标准，新意在慢时标注入新臂"
+     },
+     {
+      "condition": "对象未被形式化",
+      "status": "avoided：episode、臂、奖励已定义"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E006",
+     "son55:E008",
+     "son55:E021",
+     "son55:E032"
+    ],
+    "reason": "C00/C21/C27 子卡分别针对可解释性度量、RL→序列建模、博弈均衡，与本文不对应，故子卡为空；匹配依据仅是“用成熟 bandit 求解记忆使用选择”。"
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "medium-low",
+    "tactic_steps_checked": [
+     "identify a new task：每集一个新 ticker/票据（执行）",
+     "express it as conditioning：所选策略检索的记忆+反思洞察入提示（执行）",
+     "solve at inference without parameter updates：冻结 Claude Haiku 4.5（执行）"
+    ],
+    "success_checks": [
+     {
+      "condition": "隔离条件化信号的消融",
+      "status": "met：Stateless/+Memory/打乱反思/固定单策略"
+     },
+     {
+      "condition": "污染/数据重叠分析",
+      "status": "partial：时间切分，骨干对称"
+     },
+     {
+      "condition": "更廉价基线（固定策略、动量启发式）",
+      "status": "met"
+     }
+    ],
+    "failure_checks": [
+     {
+      "condition": "对理想化假设的衰减",
+      "status": "partial：短视距高噪声，20NG 无增益"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E011",
+     "son55:E014",
+     "son55:E019",
+     "son55:E037"
+    ],
+    "reason": "条件化通道（检索+洞察）是被选择与演化的对象；非训练式，故不选 C03。"
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "make_the_improver_editable",
+    "sub": "H21",
+    "version": "taxonomy@b115a69b",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:make_the_improver_editable/S1",
+      "status": "met",
+      "note": "LLM、工具、奖励/评估固定，测试期冻结；LLM 生成代码须过验证"
+     },
+     {
+      "id": "rsi:make_the_improver_editable/S2",
+      "status": "met",
+      "note": "新策略/洞察的价值只由下游回报评价"
+     },
+     {
+      "id": "rsi:make_the_improver_editable/S6",
+      "status": "met",
+      "note": "检索策略为可执行类，作为可替换对象"
+     },
+     {
+      "id": "rsi:make_the_improver_editable/F3",
+      "status": "partial",
+      "note": "消融默认配置在测试指标上做出"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E007",
+     "son55:E008",
+     "son55:E009",
+     "son55:E025",
+     "son55:E036"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H05",
+    "version": "taxonomy@b115a69b",
+    "fit": "medium-low",
+    "condition_checks": [
+     {
+      "id": "rsi:index_experience_for_reuse/S4",
+      "status": "met",
+      "note": "策略池含 none/压缩/完整，检索是选择而非最大化"
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/S5",
+      "status": "met",
+      "note": "Stateless vs +Memory 去除存储对照"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E015",
+     "son55:E009"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "reason": "H21 (both): the retrieval-policy pool, i.e. the inner learning mechanism, is extended with new executable arms. H05 (son55, medium-low): retrieval becomes a controller decision that includes 'none'. It is taken per episode, not per step; son55's boundary proposal is kept.",
+  "revision_proposals": [
+   "H05 现以“步骤级触发检索”定义；本文是“按集选择检索策略”的 bandit，建议在 H05/H21 边界补充“检索策略选择”条目（仅提案，未改卡）。"
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "make_the_improver_editable",
+    "sub": "H21"
+   },
+   "operation_correspondence": "Memory use recast as a bandit over retrieval-policy arms; slow reflection injects new executable arms when the pool underperforms.",
+   "necessary_conditions_and_differences": "H21 requires evaluating each inner-mechanism design by downstream learning. Here new arms only enter TS with uninformative priors; there is no held-out admission gate and no retirement, and the trigger is inconsistently specified (opus:O01).",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E008",
+    "son55:E009",
+    "opus:O01"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "index_experience_for_reuse",
+    "sub": "H05"
+   },
+   "operation_correspondence": "Per-episode choice among retrieval policies, including no retrieval, conditions a frozen planner.",
+   "necessary_conditions_and_differences": "H05 is step-level triggered retrieval; this is episode-level selection.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E009"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#Reviewer-expectations-1"
+   ],
+   "applies_when": "声称固定检索设计构成瓶颈",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "Opus: card dropped from the final match. The content (side information and new-arm access not isolated) is carried by local:2604.21725-2 and E.causality.",
+   "evidence_ids": [
+    "sol:E02",
+    "sol:E08",
+    "sol:E17",
+    "sol:E19"
+   ],
+   "score_item": [
+    "G",
+    "E.causality"
+   ],
+   "origin": "sol:rs:generative_process_redesign/RE-1",
+   "note": "RS card not kept in the final match; record retained, not used."
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-3",
+   "version": "manifest-bound",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/generative_process_redesign.md#Reviewer-expectations-3"
+   ],
+   "applies_when": "同时引入bandit、reflection、层级记忆与新臂",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "Opus: card dropped from the final match. The content (no end-to-end bandit swap with reflection on) is carried by rsi:make_the_improver_editable/S3.",
+   "evidence_ids": [
+    "sol:E05",
+    "sol:E17",
+    "sol:E21"
+   ],
+   "score_item": [
+    "M",
+    "E.causality"
+   ],
+   "origin": "sol:rs:generative_process_redesign/RE-3",
+   "note": "RS card not kept in the final match; record retained, not used."
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S1",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md#Success-conditions"
+   ],
+   "applies_when": "修改学习机制时需固定锚点",
+   "applicable": true,
+   "status": "met",
+   "reason": "默认LLM、planner、12工具固定；posterior/insight/rules及检索臂为可变对象。",
+   "evidence_ids": [
+    "sol:E04",
+    "sol:E09",
+    "son55:E007",
+    "son55:E036"
+   ],
+   "score_item": [
+    "M",
+    "X"
+   ],
+   "origin": "sol:rsi:make_the_improver_editable/S1; son55:rsi:make_the_improver_editable/S1"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S6",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H21.md#Step-by-Step-1-3"
+   ],
+   "applies_when": "检索机制被外层重设计",
+   "applicable": true,
+   "status": "met",
+   "reason": "Opus (son55): retrieval policies are executable, swappable Python classes added as arms.",
+   "evidence_ids": [
+    "sol:E06",
+    "sol:E07",
+    "sol:E09",
+    "sol:E24",
+    "son55:E007",
+    "son55:E009"
+   ],
+   "score_item": [
+    "X"
+   ],
+   "origin": "sol:rsi:make_the_improver_editable/S6; son55:rsi:make_the_improver_editable/S6"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F3",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#make_the_improver_editable.F3"
+   ],
+   "applies_when": "声称留存收益而非训练拟合",
+   "applicable": true,
+   "status": "partial",
+   "reason": "正文时间切分且冻结test，但W写到166训练回合，不能无条件认定全部日志对应140/40/28协议。",
+   "evidence_ids": [
+    "sol:E10",
+    "sol:E23",
+    "sol:E24",
+    "son55:E011",
+    "son55:E018",
+    "son55:E025"
+   ],
+   "score_item": [
+    "E.holdout"
+   ],
+   "origin": "sol:rsi:make_the_improver_editable/F3; son55:rsi:make_the_improver_editable/F3"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S3",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md#Success-conditions"
+   ],
+   "applies_when": "声称比固定内层学习更强",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有memory-only和TS无reflection；强均值差不显著，关键bandit替代只做离线counterfactual replay。",
+   "evidence_ids": [
+    "sol:E14",
+    "sol:E21",
+    "sol:E26",
+    "son55:E015",
+    "son55:E017",
+    "son55:E031"
+   ],
+   "score_item": [
+    "E.causality"
+   ],
+   "origin": "sol:rsi:make_the_improver_editable/S3; son55:rsi:make_the_improver_editable/S3"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S4",
+   "version": "manifest-bound",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/make_the_improver_editable.md#Success-conditions"
+   ],
+   "applies_when": "需计入搜索/反思成本",
+   "applicable": true,
+   "status": "partial",
+   "reason": "给出约$2.80及$.80反思/evolution，但未完整配平各baseline和所有失败候选/调参成本。",
+   "evidence_ids": [
+    "sol:E22",
+    "son55:E028"
+   ],
+   "score_item": [
+    "E.cost"
+   ],
+   "origin": "sol:rsi:make_the_improver_editable/S4; son55:rsi:make_the_improver_editable/S4"
+  },
+  {
+   "id": "local:2604.21725-1",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.21725v2 abstract; Appendix A.4"
+   ],
+   "applies_when": "使用 provably no-harm/no-gain",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "200episode×5seed的分类负结果及不显著性不能证明任意任务无害；未见对应普遍形式证明。",
+   "evidence_ids": [
+    "sol:E01",
+    "sol:E18"
+   ],
+   "score_item": [
+    "E.statistics"
+   ],
+   "origin": "sol:local:2604.21725-1"
+  },
+  {
+   "id": "local:2604.21725-2",
+   "version": "manifest-bound",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2604.21725v2 Appendix A.5"
+   ],
+   "applies_when": "用support-routing证明诊断机制因果收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (son55): the support-ticket R3 regime and the synthetic hidden arm are built so that only reflection-injected policies can fix them, and the synthetic injection is scripted. The gain of the new arm is not separated from its privileged availability (opus:O08 adds the side-information channel).",
+   "evidence_ids": [
+    "sol:E11",
+    "sol:E19",
+    "sol:E25",
+    "sol:E26",
+    "son55:E022",
+    "son55:E029"
+   ],
+   "score_item": [
+    "E.causality"
+   ],
+   "origin": "sol:local:2604.21725-2; son55:local:2604.21725-2"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S2",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#make_the_improver_editable.S2"
+   ],
+   "applies_when": "声称改进者/机制可被演化",
+   "applicable": true,
+   "status": "met",
+   "reason": "新策略/洞察只按下游回报被评价。",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:make_the_improver_editable/S2"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/S5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#make_the_improver_editable.S5"
+   ],
+   "applies_when": "选择应容忍非改进步",
+   "applicable": true,
+   "status": "partial",
+   "reason": "新臂以无信息先验进入 TS 获得探索机会，但无显式淘汰旧臂。",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E010"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:make_the_improver_editable/S5"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#make_the_improver_editable.F4"
+   ],
+   "applies_when": "噪声逐代累积",
+   "applicable": true,
+   "status": "partial",
+   "reason": "[F类] 5 种子+方差+检验，如实报告多数比较不显著；噪声仍大。",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E017",
+    "son55:E018"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:rsi:make_the_improver_editable/F4"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#make_the_improver_editable.F5"
+   ],
+   "applies_when": "锚点泄漏",
+   "applicable": true,
+   "status": "met",
+   "reason": "[F类] 所有 LLM 方法同骨干、测试期无学习；基线共用工具与数据划分。",
+   "evidence_ids": [
+    "son55:E033",
+    "son55:E036"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:make_the_improver_editable/F5"
+  },
+  {
+   "id": "rsi:make_the_improver_editable/F6",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#make_the_improver_editable.F6"
+   ],
+   "applies_when": "局部演化机制被当作通用",
+   "applicable": true,
+   "status": "partial",
+   "reason": "[F类] 作者把范围限定于短视距高噪声与“各 regime 需要不同检索”的域；但摘要措辞偏强。",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E001"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:make_the_improver_editable/F6"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S4"
+   ],
+   "applies_when": "检索应有选择性",
+   "applicable": true,
+   "status": "met",
+   "reason": "策略池涵盖 none、压缩摘要、完整记录。",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:index_experience_for_reuse/S4"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#index_experience_for_reuse.S5"
+   ],
+   "applies_when": "存储需通过移除来认证",
+   "applicable": true,
+   "status": "met",
+   "reason": "Stateless vs +Memory（1.35 vs 1.68）及无检索策略对照。",
+   "evidence_ids": [
+    "son55:E015"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:index_experience_for_reuse/S5"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-1",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #1"
+   ],
+   "applies_when": "声称重述后对象解等价于原问题",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有对应定理；bandit 的平稳性假设与非平稳环境不符，作者在 A.1 承认累积后验不跟踪非平稳。",
+   "evidence_ids": [
+    "son55:E032"
+   ],
+   "score_item": "M",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-1"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-3",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #3"
+   ],
+   "applies_when": "重述需带来新识别结构",
+   "applicable": true,
+   "status": "partial",
+   "reason": "TS 为标准用法；新意是慢时标反思向池注入新臂的耦合。",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E009"
+   ],
+   "score_item": "G",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-3"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object.md Reviewer expectations #4"
+   ],
+   "applies_when": "忠实性需独立验证",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有反事实 bandit 重放、反思忠实性 3 项评估（82% 标签一致）；无真值干预。",
+   "evidence_ids": [
+    "son55:E034",
+    "son55:E019"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:reframe_as_solvable_object/RE-4"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #1"
+   ],
+   "applies_when": "声称增益来自条件化信号",
+   "applicable": true,
+   "status": "met",
+   "reason": "Stateless/+Memory/去反思/打乱反思/单固定策略逐项隔离。",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E019",
+    "son55:E037"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-1"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "对比更廉价替代",
+   "applicable": true,
+   "status": "met",
+   "reason": "固定策略与动量加权启发式（1.44）均被报告。",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:rs:adapt_via_conditioning/RE-3"
+  },
+  {
+   "id": "local:2604.21725-5",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "论文 Appendix B 自述（E017 同源）"
+   ],
+   "applies_when": "摘要头条声称相对最强 memory-only 变体 +27%",
+   "applicable": true,
+   "status": "partial",
+   "reason": "p=0.38（+Memory）在附录披露，但摘要以百分比和“最低方差”突出；括号列 3 个显著基线与“4 of 9”不符。",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E016",
+    "son55:E017"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2604.21725-1",
+   "note": "Renumbered from son55:local:2604.21725-1 (A4 hidden ID collision: the other seat used that ID for a different question)."
+  },
+  {
+   "id": "local:2604.21725-3",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "论文 Appendix B 自述"
+   ],
+   "applies_when": "报告块之间协议一致",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "同名配置在不同块数值不同；信用分配结果在修 bug 前后翻转。",
+   "evidence_ids": [
+    "son55:E026",
+    "son55:E027"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2604.21725-3"
+  },
+  {
+   "id": "local:2604.21725-4",
+   "version": "rsi-conditions@8704c7da",
+   "source_strength": "single_source",
+   "source_refs": [
+    "论文 §3.1/Table 3 与 Appendix C"
+   ],
+   "applies_when": "默认配置的选择与报告数据分离",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "关闭 planner/tool/credit 的默认由测试指标的消融决定，随后报告同一测试窗口的 2.13。",
+   "evidence_ids": [
+    "son55:E025",
+    "son55:E030",
+    "son55:E024"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2604.21725-4"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "AEL 在顺序组合基准上优于 10 个基线，Sharpe 2.13，方差最低。",
+   "setting": "10 只股票、1 小时柱，208 集（140/40/28），Claude Haiku 4.5，5 种子",
+   "baseline_control": "4 个非 LLM、5 个既有自改进方法（作者改写）、HyperAgent、增量构建变体",
+   "selection_vs_test": "时间切分，测试期冻结；默认配置依据测试指标消融选出",
+   "result_denominator": "5 种子均值±标准差；测试窗口仅 28 个柱",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E013",
+    "son55:E014",
+    "son55:E033"
+   ],
+   "counterevidence_ids": [
+    "son55:E016",
+    "son55:E017",
+    "son55:E018"
+   ],
+   "counterevidence": [
+    "仅 3 个基线显著差；对 EvoTool、+Memory 不显著；动量启发式 1.44；窗口很短。",
+    "opus:O04",
+    "opus:O05"
+   ],
+   "allowed_conclusion": "在该 28 柱测试窗口上 AEL 均值最高、对多数基线不显著；对 Reflexion/Meta-Reflexion/HyperAgent 显著优。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "反思使 Sharpe 在 memory-only 基础上再提升 27%，且反思内容（而非额外上下文）起作用。",
+   "setting": "同 C1",
+   "baseline_control": "+Memory（TS 无反思）；打乱反思变体",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "2.13 vs 1.68（p=0.38）；打乱反思 1.54±0.71",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E019",
+    "son55:E037"
+   ],
+   "counterevidence_ids": [
+    "son55:E017"
+   ],
+   "counterevidence": [
+    "均值差不显著；打乱对照未给检验，方差大。",
+    "opus:O08"
+   ],
+   "allowed_conclusion": "方向支持，统计上未确认。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "机制在支持工单路由流上泛化：比无反思 TS 准确率高 18%，比最强既有基线高 51%。",
+   "setting": "LLM 生成的工单流，8 条路由、4 个 regime；每种子 160 个分层集，5 种子；Gemini 3.1 Flash-Lite",
+   "baseline_control": "TS 无反思；5 个改写基线",
+   "selection_vs_test": "未清楚说明该流是否划分 train/test；R3 为设计上需要新策略的 regime",
+   "result_denominator": "0.840 vs 0.711/0.557；±0.03",
+   "evidence_ids": [
+    "son55:E022"
+   ],
+   "counterevidence_ids": [
+    "son55:E022"
+   ],
+   "counterevidence": "基准构造使只有反思注入才能补缺；基线为作者适配。",
+   "allowed_conclusion": "在作者构造的、需要新增策略的流上，反思新增臂显著有益；不是独立外部任务上的泛化证据。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "反思仅在各 regime 偏好不同的检索行为时有益，策略稳定时 no-harm/no-gain。",
+   "setting": "金融、支持工单、20Newsgroups、合成 bandit",
+   "baseline_control": "TS 无反思",
+   "selection_vs_test": "同上",
+   "result_denominator": "20NG：AEL 0.253 vs TS 0.254（p=0.97）",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E020",
+    "son55:E021"
+   ],
+   "counterevidence_ids": [
+    "son55:E029"
+   ],
+   "counterevidence": [
+    "合成 bandit 的“增益”由脚本注入决定，不构成独立证据；“provably”并无形式证明。",
+    "opus:O09"
+   ],
+   "allowed_conclusion": "有一个正例域（构造的）、一个真实无增益边界例；“provably no-harm”应降为经验观察。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在冻结的时间切分测试窗口上（金融 28 柱；5 种子），带记忆的 bandit+反思配置的均值最高，对 3 个较弱基线显著优，对 +Memory 与 EvoTool 不显著；在作者构造、初始池缺所需策略的工单流上，反思新增检索臂显著提升；在检索策略稳定的 20NG 上无增益。作者原主张（harness 可被学习、因果、可泛化）超出证据：默认只演化检索策略，且基准与默认配置的构造/选择存在偏向。",
+  "unresolved": [
+   "默认配置是否在测试窗口上选择过度",
+   "TS 与其他 bandit 在含反思注入时的端到端对比",
+   "支持工单流是否有留出划分",
+   "更长视距与真实编码/Web 任务",
+   "Opus: the evolution trigger and arm-admission path conflict across §3.4, §3.5, App S and App P.2 (opus:O01–O03); App N vs §3.1 disagree on the planner pool (opus:O06, opus:O07).",
+   "Opus: HyperAgent is reported as 0.72±0.38 and 0.46±0.41 (opus:O04, opus:O05).",
+   "Opus: reflection-only market side information is an uncontrolled advantage (opus:O08)."
+  ],
+  "evidence_level_note": "Both seats retained, verified. Posteriors, memory tiers, rules and evolved arms are frozen and read on a chronologically later 28-bar test (son55:E011, E036), with Stateless and +Memory store-off contrasts. improver is not supported: no matched-budget comparison shows that the evolved pool yields better later changes."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with son55. The failure condition is specific (one retrieval policy helps early and overloads later) and is backed by data: the best fixed policy differs by seed (App A.1). The nearest neighbours (Reflexion, ExpeL, Meta-Reflexion, EvoTool, FactorMiner, HyperAgent) are positioned and run as baselines, and the residue (selection fails when the pool lacks the needed policy) is stated. Not 4: the 'joint tool+memory evolution' gap does not match the memory-only default (son55:E030), and adaptive or learned retrieval-routing neighbours are absent.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E005",
+    "son55:E030",
+    "sol:E02"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3; re-checked. The division of labour is clear: the bandit consumes scalar rewards, and reflection consumes trajectories to decide whether the pool lacks an arm. The predictions are distinguishable (gain only when regimes prefer different retrieval; the 20NG boundary). Not 4: 'diagnose before prescribe', the named methodology, is never contrasted with prescribing without diagnosis, and insight injection and arm addition are not separated.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E006",
+    "son55:E010",
+    "son55:E019",
+    "son55:E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with sol. The learned quantities, TS update, tier promotion and pruning, memory caps and frozen deployment are specified. The step that changes the retained harness cannot be reconstructed uniquely. §3.4 triggers policy evolution every 5 slow windows after window 10 when the pool's average reward is below 0.4 (son55:E008). The flagship trace triggers on one under-threshold loss at episode 84 (opus:O01). The same artefact appears at seed 42 ep 84 and seed 123 ep 95 (opus:O02), and admission is credited to LinUCB rather than the TS arm mechanism (opus:O03). App N vs §3.1 disagree on whether the planner pool is active (opus:O06, O07), and App W counts training to episode 166 against a 140-bar train split (sol:E24). New arms have no held-out admission gate and old arms are never retired.",
+   "evidence_ids": [
+    "sol:E04",
+    "sol:E07",
+    "sol:E09",
+    "sol:E23",
+    "son55:E007",
+    "son55:E008",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "opus:O06"
+   ],
+   "counterevidence_ids": [
+    "sol:E10",
+    "sol:E24",
+    "opus:O07"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus sides with sol. The verifiers are objective: realised returns on a frozen test window and deterministic gold routes. Trivial baselines (EqW, momentum) are reported. son55's main reason, the 28-bar window, is a sample-size issue that A2 assigns to E.statistics. Not 4: reporting is inconsistent across blocks (HyperAgent 0.72 vs 0.46, opus:O04/O05; same configuration name with different numbers, son55:E026; pre/post-fix credit numbers), and cost-adjusted Sharpe is approximate.",
+   "evidence_ids": [
+    "sol:E10",
+    "sol:E12",
+    "sol:E20",
+    "sol:E25",
+    "son55:E014"
+   ],
+   "counterevidence_ids": [
+    "opus:O04",
+    "opus:O05",
+    "son55:E026"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus sides with sol. The design is rich: incremental build, reflection-off, shuffled reflection, single-policy runs, counterfactual replay and the 20NG boundary. Key controls for the central claim (reflection's diagnosis causes the gain) are missing. (1) Reflection alone receives market side information that flows into the predictor prompt, and shuffling does not remove it (opus:O08). (2) The support-ticket arm, and the synthetic hidden arm, are privileged by construction (son55:E022, E029). (3) Diagnose-before-prescribe is never ablated. (4) Budgets are unequal (HyperAgent about 20 evolution calls vs AEL about 400). (5) No end-to-end bandit swap is run with reflection on (sol:E21).",
+   "evidence_ids": [
+    "sol:E05",
+    "sol:E17",
+    "sol:E26",
+    "son55:E015",
+    "son55:E019",
+    "son55:E037"
+   ],
+   "counterevidence_ids": [
+    "sol:E08",
+    "sol:E14",
+    "sol:E19",
+    "sol:E21",
+    "son55:E022",
+    "son55:E029",
+    "opus:O08"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. The chronological split with frozen test (read-only memory, no evolution) is real. However, the default configuration was chosen by ablations reported on test Sharpe (son55:E025), App W runs training past the 140-bar split (sol:E24), and the support stream is scored online with no split.",
+   "evidence_ids": [
+    "son55:E011",
+    "son55:E036",
+    "sol:E10",
+    "sol:E23"
+   ],
+   "counterevidence_ids": [
+    "son55:E025",
+    "son55:E024",
+    "son55:E027",
+    "sol:E24"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats 3 (A2: multi-seed + intervals + significance tests). Five seeds, SD, 95% CI, Welch/F tests and paired bootstrap are given, and non-significance is reported honestly (+Memory p=.384, EvoTool p=.39). Not 4: n=5 with no multiple-comparison correction, '4 of 9' in the text against 3 listed, and the abstract's strong wording.",
+   "evidence_ids": [
+    "son55:E016",
+    "son55:E017",
+    "sol:E12",
+    "sol:E14",
+    "sol:E16"
+   ],
+   "counterevidence_ids": [
+    "son55:E026",
+    "opus:O09"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Per-run cost is about $2.80, with about $0.80 for reflection/evolution. Baselines are not budget-matched, and cost is reported for finance only.",
+   "evidence_ids": [
+    "son55:E028",
+    "sol:E22"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v2 text read (Appendices A–W). In scope: system_method; memory-policy posteriors, tiered memory, rules and evolved retrieval arms persist into a frozen later test. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "generative_process_redesign",
+   "son55_value": "reframe_as_solvable_object",
+   "decision": "son55",
+   "final_value": "reframe_as_solvable_object",
+   "reason": "This is the paper's own stated move ('recasting memory use as online policy selection' solved by TS).",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E008"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "reframe_as_solvable_object",
+     null
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "reframe_as_solvable_object",
+     null
+    ]
+   ],
+   "reason": "reframe plus conditioning; generative_process_redesign dropped (no generative procedure).",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E011"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "make_the_improver_editable",
+     "H21"
+    ]
+   ],
+   "son55_value": [
+    [
+     "index_experience_for_reuse",
+     "H05"
+    ],
+    [
+     "make_the_improver_editable",
+     "H21"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "index_experience_for_reuse",
+     "H05"
+    ],
+    [
+     "make_the_improver_editable",
+     "H21"
+    ]
+   ],
+   "reason": "H05 kept at medium-low fit: retrieval, including 'none', is a learned controller decision.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E015"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2604.21725-1].status",
+   "sol_value": "unmet",
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": "unmet",
+   "reason": "A4 collision. sol's local-1 (is 'provably no-harm' supported?) stays here as unmet: one empirical 20NG non-difference is not a proof (opus:O09). son55's local-1 (abstract overstates the tests) is a different question; it moves to local-5 as partial, verified.",
+   "evidence_ids": [
+    "sol:E18",
+    "opus:O09",
+    "son55:E016",
+    "son55:E017"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.21725-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Same question in both seats (new-arm privilege). Unmet: the benchmarks are constructed so that only an injected arm can succeed, and side information is unmatched (opus:O08).",
+   "evidence_ids": [
+    "son55:E022",
+    "son55:E029",
+    "sol:E19",
+    "opus:O08"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.21725-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: the same configuration name carries different numbers across blocks, and the credit results flip after the bug fix.",
+   "evidence_ids": [
+    "son55:E026",
+    "son55:E027"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2604.21725-4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: defaults were set by ablations reported on test Sharpe.",
+   "evidence_ids": [
+    "son55:E025"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-1].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: Stateless, +Memory, shuffled reflection and single-policy runs isolate the conditioning channel.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E019"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: fixed policies and the momentum heuristic are reported.",
+   "evidence_ids": [
+    "son55:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "revised",
+   "final_value": "not_applicable",
+   "reason": "Card dropped from the final match; the content is carried by local-2 and E.causality.",
+   "evidence_ids": [
+    "sol:E08",
+    "sol:E19"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "revised",
+   "final_value": "not_applicable",
+   "reason": "Card dropped from the final match; the content is carried by the improver S3 check.",
+   "evidence_ids": [
+    "sol:E21"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no correspondence result, and A.1 concedes that TS does not track non-stationarity.",
+   "evidence_ids": [
+    "son55:E032"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-3].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: standard TS use; the novelty is the coupling with reflection.",
+   "evidence_ids": [
+    "son55:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:reframe_as_solvable_object/RE-4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: counterfactual replay and reflection-faithfulness checks, with no ground-truth intervention.",
+   "evidence_ids": [
+    "son55:E034",
+    "son55:E032"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: the pool includes none, compressed and full.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: Stateless vs +Memory store-off contrast.",
+   "evidence_ids": [
+    "son55:E015"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: 5 seeds with tests; noise remains large.",
+   "evidence_ids": [
+    "son55:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F5].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: same backbone, fixed reward. The side-information issue concerns information parity (E.causality), not anchor leakage.",
+   "evidence_ids": [
+    "son55:E033",
+    "son55:E036"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/F6].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: the scope is limited to regime-varying domains, but the abstract overreaches.",
+   "evidence_ids": [
+    "son55:E021",
+    "opus:O09"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S2].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: arms and insights are valued only by downstream reward.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S5].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: new arms get exploration; old arms are never retired.",
+   "evidence_ids": [
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:make_the_improver_editable/S6].status",
+   "sol_value": "partial",
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Retrieval policies are executable, swappable classes; the condition asks for exactly that.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.G: the failure condition is evidenced and the neighbours are run as baselines.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005"
+   ],
+   "score_impact": "+3.75 vs sol (15×1/4)"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.X: the evolution trigger and admission path are contradictory across sections (opus:O01–O03, O06).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "sol:E24"
+   ],
+   "score_impact": "−5.0 vs son55 (20×1/4)"
+  },
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.E.measurement: the verifiers are objective; the 28-bar sample belongs to statistics (A2).",
+   "evidence_ids": [
+    "sol:E10",
+    "sol:E25"
+   ],
+   "score_impact": "+2.5 vs son55 (10×1/4)"
+  },
+  {
+   "field_path": "ratings.E.causality",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.causality: side information, privileged arms, the unablated diagnosis step and unequal budgets.",
+   "evidence_ids": [
+    "opus:O08",
+    "son55:E022",
+    "sol:E21"
+   ],
+   "score_impact": "−3.75 vs son55 (15×1/4)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "claims.C1 (both seats)",
+   "sol_value": "HyperAgent 0.72±0.38 used; 'lowest variance' contradicted by HyperAgent SD",
+   "son55_value": "HyperAgent 0.72 used",
+   "final_value": "HyperAgent is reported as both 0.72±0.38 (Tables 2/5) and 0.46±0.41 (App J/K, Table 16)",
+   "reason": "Neither seat noticed the two HyperAgent values (opus:O04, opus:O05). Recorded under E.measurement (sol's 3 kept). The AEL-vs-HyperAgent ordering holds under either value.",
+   "evidence_ids": [
+    "opus:O04",
+    "opus:O05",
+    "sol:E13"
+   ],
+   "score_impact": "none"
+  },
+  {
+   "field_path": "ratings.X (both seats' reasons)",
+   "sol_value": "noted 140 vs 166 and mixed optional modes",
+   "son55_value": "trigger and verification described as specified",
+   "final_value": "trigger, admission and planner-pool descriptions conflict (opus:O01–O03, O06, O07)",
+   "reason": "Neither seat cross-checked §3.4's trigger against App S, P.2 and N. This underpins the X resolution (→ sol 2).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O03",
+    "opus:O06"
+   ],
+   "score_impact": "none beyond the X resolution"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v2 text with Appendices A–W first. Initial view: in scope; retained; G 3, M 3, X 2, Em 3, Ec 2, Eh 2, Es 3, cost 2. Before opening the seats I noted the trigger and admission contradictions, the side-information channel, the HyperAgent values, the p=.384 reflection contrast and the 'provably' wording.",
+  "integrity_checks": "Both seats a1 on 2604.21725v2, material sha 1602847b…. sol is read from the committed HEAD version whose canonical hash equals conflicts.json; the working copy adds only E27 and a numeric display. son55 matches on disk. RS/domain ids valid; both claim_type system_method.",
+  "core_claim_check": "Strongest supported claim: on a 28-bar frozen test (5 seeds), bandit+reflection has the highest mean, significant over Reflexion, Meta-Reflexion and HyperAgent only. On author-built streams, a reflection-added arm helps where the pool lacks it, and 20NG shows no gain. claim_support scoped.",
+  "shared_error_review": "Agreed items re-checked: M 3, Eh 2, Es 3, cost 2 kept. Two shared omissions recorded.",
+  "rating_agreement": "G → son55; X, E.measurement, E.causality → sol. Final 62.5."
+ },
+ "input_seat_hashes": {
+  "sol": "8349cf1a75ea7317dbe3615883109f5781259c6f654e9d233a931902fed3dc21",
+  "son55": "f24591e5bf2cb34e353dfe18b158e84a61a7d4cbfa7095dc86c07fb7e5c7c700"
+ },
+ "score": {
+  "raw": 62.5,
+  "display": 62.5,
+  "lower": 62.5,
+  "upper": 62.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "db1854943bb2cabb629a51c80b5728a616266212ffdfe59faf43ec5c9ba60d03"
+}

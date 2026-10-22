@@ -1,0 +1,757 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "材料完整；属记忆基质/检索改造(B 类边缘)：无执行反馈驱动的编辑或接受/拒绝回路，不编造 retained 闭环，按其自身中心主张(记忆演化+检索提升 QA)评价。",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "H-Mem 以时间-语义树+实体知识图的混合结构建模记忆从短期到长期的演化并支持多跳检索，在 LoCoMo、LongMemEvalS、REALTALK 上取得 QA 的 SOTA，成本合理。",
+  "paper_key": "2605.15701",
+  "paper_id": "2605.15701",
+  "title": "H-Mem: A Novel Memory Mechanism for Evolving and Retrieving Agent Memory via a Hybrid Structure",
+  "version": "2605.15701v1"
+ },
+ "materials": [
+  {
+   "material_id": "M-2605.15701",
+   "url": "https://arxiv.org/html/2605.15701v1",
+   "sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-5",
+    "Appendix A (datasets, implementation, evaluation, additional experiments, stability, limitations)",
+    "Appendix B case studies",
+    "Appendix C prompts (construction, consolidation, evaluation, planning)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Appendix C 提示词大部分为逐词断行，已浏览首尾与结构"
+   ]
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "对话记忆存储的索引结构：时间-语义树(日/周/月/年四层)+实体知识图+实体画像+向量",
+   "information": "带时间戳的对话片段；LLM 抽取事件、实体、关系；无任务结果反馈",
+   "operation": "增量插入：叶节点事件→逐层在时间窗内按语义相似度(0.8/0.7/0.6)聚类并生成摘要；实体消解与关系入图",
+   "output": "混合索引",
+   "conditions": "长对话、需要多跳/时间推理",
+   "feedback": "无(非闭环)",
+   "selection_rule_data": "相似度阈值与时间窗；摘要由 LLM 生成，保留溯源链接",
+   "persistence": "持久索引，随对话增长增量更新",
+   "later_use": "在线检索读取",
+   "claimed_effect": "QA 总体 F1/Acc 提升",
+   "failure_boundary": "LLM 抽取/摘要错误可能传播；索引 token 与存储成本高",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E013"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "检索器：规划-证据-排序流程",
+   "information": "问题、索引；LLM 预测 Short/Long/Mixed 范围与时间提示",
+   "operation": "分解子查询→实体种子+多跳图扩展→自底向上搜树→按语义/时间/鲁棒性加权排序→缺失信息追问→合成答案",
+   "output": "证据链与答案",
+   "conditions": "依赖 LLM 规划",
+   "feedback": "一次“信息是否足够”的自评触发追问(无外部结果)",
+   "selection_rule_data": "F=θ1 S+θ2 T+θ3 R，权重 0.70/0.15/0.15",
+   "persistence": "n/a",
+   "later_use": "n/a",
+   "claimed_effect": "多跳/时间类提升，效率可控",
+   "failure_boundary": "规划错误与范围预测错误",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E017"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "现有记忆机制要么只有向量/树/图单一索引，缺记忆演化(短期→长期)与多跳关系的联合建模，检索不准。",
+  "checked_gap": "以分类表定义：EverMemOS 已有演化，Zep 已有多跳；H-Mem 二者兼有。该 gap 是“组合缺口”，无错误分析证明现有方法失败正出于缺少哪一项。",
+  "lineage": [
+   "MemoryBank/Mem0(向量)→MemTree/MemOS/MemoryOS/EverMemOS(树/分层，EverMemOS 含演化)→Zep(时序知识图)→H-Mem"
+  ],
+  "closest_adjacent": "EverMemOS(演化+分层，最近邻，基线)；Zep；A-Mem、多粒度记忆等相关工作仅提及。",
+  "residue": "树+图并存且检索联用；表明树最关键。",
+  "stakes": "长对话问答召回与成本。",
+  "method_response": "树负责时间/语义抽象，图负责实体多跳，检索联用。",
+  "remaining_gap": "无任务结果驱动的接受/回退；LLM 抽取/摘要错误传播；真实部署未评估。",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E022",
+   "E014"
+  ],
+  "unresolved": [
+   "该组合缺口是否为 EverMemOS 之外的主要失败来源"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "primary",
+    "fit": "weak",
+    "tactic_steps_checked": "1 规范条件化：检索证据链作为 LLM 条件(非统一任务格式)；2 参考底座：会话记忆本身而非跨任务语料；3 无上游训练，推理时检索(互补子动作)；4 留出整类别：不适用，QA 在同一对话上；5 更便宜替代：全上下文/朴素 RAG 缺位",
+    "success_failure_checks": "失败模式“忽略最简单对手(长上下文/最近邻)”命中；成功条件“条件化信号开关消融”以去树/去图近似",
+    "evidence_ids": [
+     "E004",
+     "E019",
+     "E021"
+    ],
+    "reason": "项目卡集映射记录 index_experience_for_reuse 对应 adapt_via_conditioning(检索代替参数更新)；本文操作是索引结构设计，匹配度弱，不强塞 supporting。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "",
+  "executes_pattern": true,
+  "resolves_problem": "unresolved：总体指标领先，但“缺少演化/多跳”是否为失败主因未分析。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "high",
+    "condition_checks": "S3 内容/索引解耦：事件、摘要与实体链接分层，满足；S4 选择性检索：Short/Long/Mixed+top-k+去重，满足；S5 去掉存储：仅结构消融，无无记忆/平铺基线，partial；S6 局部低成本更新：增量插入但索引 token 高，partial；F4 模型输出入库无外部门：保留溯源链接但无准入门，partial；F6 新结构形状代替论证：消融支持树与图均有用，部分避免",
+    "evidence_ids": [
+     "E003",
+     "E010",
+     "E012",
+     "E019",
+     "E013"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "low",
+    "condition_checks": "有合并/摘要的编辑操作，但无删除/no-op/更新，冲突仅在提示词中“记录”；无结果信号；无遗忘剪枝(鲁棒性只用于排序)",
+    "evidence_ids": [
+     "E003",
+     "E005"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain_namespace": "rsi",
+   "domain_main": "index_experience_for_reuse",
+   "domain_sub": "H04",
+   "operation_correspondence": "C03 的“检索最近参考实例作为推理时条件”对应 H04 的“重构记忆基质以便检索”，H-Mem 属于后者的索引设计一侧。",
+   "conditions_differences": "C03 要求按类别留出与污染审计，H04 要求结构消融+规模成本，本文只满足后者的一部分。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E019"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:index_experience_for_reuse/S3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.S3"
+   ],
+   "applies_when": "记忆存储结构化",
+   "applicable": true,
+   "status": "met",
+   "reason": "事件/摘要作为内容，实体链接与时间树作为索引，多路径可达。",
+   "evidence_ids": [
+    "E003",
+    "E004"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S4",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.S4"
+   ],
+   "applies_when": "检索注入上下文",
+   "applicable": true,
+   "status": "met",
+   "reason": "子查询范围选择、top-k 预算、去重排序；固定 Mixed 对照显示 token 节省。",
+   "evidence_ids": [
+    "E004",
+    "E017"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.S5"
+   ],
+   "applies_when": "主张存储带来增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "结构消融齐全，但无无记忆/全上下文基线；Mem0 是唯一平铺向量对照。",
+   "evidence_ids": [
+    "E019",
+    "E021"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S6",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.S6"
+   ],
+   "applies_when": "主张增量局部更新",
+   "applicable": true,
+   "status": "partial",
+   "reason": "自底向上增量插入；但索引 token/存储偏高，未见延迟整合或更新成本分解。",
+   "evidence_ids": [
+    "E003",
+    "E012"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F4",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.F4"
+   ],
+   "applies_when": "模型生成的记忆入库(F 型：met=避免)",
+   "applicable": true,
+   "status": "partial",
+   "reason": "事件/摘要均为 LLM 生成，保留指向原片段的溯源，但无准入门，无抽取错误率。",
+   "evidence_ids": [
+    "E013",
+    "E021"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:abstract_experience_into_guidance.S3"
+   ],
+   "applies_when": "存储内容源自 agent 自身结果的反思",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "记忆内容来自用户-助手对话流，不是 agent 的执行结果反思；无接地信号链路。",
+   "evidence_ids": [
+    "E001"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3 (source: reject_reviews)"
+   ],
+   "applies_when": "主张检索/条件化的独特价值",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无全上下文/朴素 RAG 基线，难判定结构价值是否相对更长上下文成立。",
+   "evidence_ids": [
+    "E021"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #6 (source: both)"
+   ],
+   "applies_when": "条件化来源质量影响结果",
+   "applicable": true,
+   "status": "partial",
+   "reason": "做了嵌入/重排规模与 top-k 敏感性并承认抽取误差，但无抽取质量-结果关系。",
+   "evidence_ids": [
+    "E013",
+    "E016"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2605.15701-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "App A.2、A.4 阈值/top-k 比较"
+   ],
+   "applies_when": "超参在评测集上选择",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "阈值方案、top-k、模型规模均在报告基准上比较，无独立开发集。",
+   "evidence_ids": [
+    "E015",
+    "E016"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2605.15701-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 4.2 vs Table 2-4"
+   ],
+   "applies_when": "正文归因需与表一致",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "正文称时间类增益最大，表中 GPT-4o-mini 时间类 Acc 与 REALTALK 时间类 Acc 低于 EverMemOS。",
+   "evidence_ids": [
+    "E009",
+    "E018"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "H-Mem 在三个长期记忆基准上取得 SOTA QA 性能",
+   "setting": "LoCoMo(1540题)、LongMemEvalS(500)、REALTALK(728)；GPT-4o-mini/4.1-mini",
+   "baseline_control": "MemoryOS、Mem0、MemTree、MemOS、Zep、EverMemOS(统一嵌入/重排/评审提示)",
+   "selection_vs_test": "超参与阈值在同一评测集上比较，无独立开发集",
+   "result_denominator": "总体 F1/Acc 均最高；时间类、开放域部分类别低于 EverMemOS",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E009",
+    "E018"
+   ],
+   "counterevidence": [
+    "E015",
+    "E016",
+    "E021"
+   ],
+   "allowed_conclusion": "在作者统一重跑条件下，总体指标领先所比六个记忆系统；缺全上下文/朴素 RAG 基线，且正文“时间类增益最大”与表不符。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "树-图混合结构中树最关键，图次之，长期记忆摘要有益",
+   "setting": "LoCoMo，GPT-4.1-mini",
+   "baseline_control": "逐项去掉",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "去树 Acc −9.3，去图 −4.2，去长期记忆 −2.5；单次",
+   "evidence_ids": [
+    "E010",
+    "E019"
+   ],
+   "counterevidence": [
+    "E021"
+   ],
+   "allowed_conclusion": "结构消融的方向一致；仅一个基准一个主干，无方差。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "该结构能建模记忆随时间的演化(短期→长期)",
+   "setting": "时间窗(日/周/月/年)+语义阈值合并",
+   "baseline_control": "去长期记忆变体",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "Acc −2.5、F1 −2.2",
+   "evidence_ids": [
+    "E003",
+    "E019"
+   ],
+   "counterevidence": [
+    "E013"
+   ],
+   "allowed_conclusion": "摘要层对检索有小幅增益；“演化”按相似度阈值合并，无过期/冲突/更新的专门评测(KU 类别结果有利但未单独归因)。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "成本在合理范围内",
+   "setting": "LoCoMo 索引时间/token/存储与检索延迟/token",
+   "baseline_control": "六个基线",
+   "selection_vs_test": "n/a",
+   "result_denominator": "图2(无数值)：索引 token 与存储偏高，低于 EverMemOS",
+   "evidence_ids": [
+    "E012"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "作者披露了更高的索引成本；数值仅为图示。"
+  },
+  {
+   "claim_id": "C5",
+   "text": "规划式记忆范围选择在不降低准确率下节省检索 token",
+   "setting": "LoCoMo",
+   "baseline_control": "固定 Mixed",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "准确率 92.01 vs 92.21，token 1.8×",
+   "evidence_ids": [
+    "E017"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "效率结论成立于单基准；准确率上规划并未更优。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "作者统一重跑的条件下，H-Mem 总体 F1/Acc 高于所比六个记忆系统；树与图均有益；但无反馈驱动留存、无独立开发集、无平铺/全上下文基线，也不构成 RSI 闭环。",
+  "author_claim_preserved": "作者主张 SOTA 与“有效建模记忆演化”保持原样，记忆演化部分仅由摘要层消融间接支持。",
+  "unresolved": [
+   "抽取/摘要错误传播",
+   "缺失基线",
+   "真实部署"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "组合缺口(树+图)而非以失败分析定义的瓶颈；最近邻 EverMemOS、Zep 被比较；对象(记忆索引)为非权重，但缺“现有方法失败源于缺演化/多跳”的证据。",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E022"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "时间窗+语义合并+实体图+鲁棒性排序有具体机制，但无执行反馈到编辑/接受的回路；艾宾浩斯参数与阈值缺乏因果论证。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "提示词、阈值、窗口、权重完整可重建；无外部准入门、版本、回退、过期，冲突仅提示词记录，抽取错误传播风险未处理。",
+   "evidence_ids": [
+    "E003",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "F1+LLM 评审为通行度量；评审模型未指明，LLM 模拟基准占 2/3，无全上下文/朴素基线做平凡性校验，基线由作者重跑，正文与表有矛盾。",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E009",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "结构消融齐全且方向一致；缺平铺/全上下文基线，单基准单主干，抽取质量等混杂未隔离。",
+   "evidence_ids": [
+    "E010",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "阈值、top-k、检索模型在报告基准上比较并据以选默认值，无独立开发集；基准本身外部。",
+   "evidence_ids": [
+    "E015",
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "三次重复评测给均值±标准差，但规划输出被固定，只度量评测管线波动；无显著性检验，REALTALK 差距小。",
+   "evidence_ids": [
+    "E011",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "如实披露索引时间/token/存储与检索延迟/token 相对基线偏高，并给出 scope 选择的 token 对照；数值为图。",
+   "evidence_ids": [
+    "E012",
+    "E017"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "树-图混合记忆总体领先且成本如实披露；但无反馈驱动留存，缺全上下文基线与独立开发集，gap 为组合缺口，证据停在 task。",
+ "score": {
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "coverage": 1.0,
+  "raw": 48.75,
+  "display": 48.8,
+  "lower": 48.75,
+  "upper": 48.75
+ },
+ "provenance": {
+  "input_hash": "84c6caf1b1a5bf8044143d994efafef3a2a03fec844b67ce505b8e4b82ac44a7",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this run; model_type taken from controller dispatch (claude-kimi type config). Blind boundary kept: no read/list of seats/ outside seats/son55/attempts/a1.",
+  "timestamp": "2026-10-22T01:53:24Z"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 1; txt line 270",
+   "quote": "Overall, these methods mainly rely on a single index (i.e., vector, tree, or graph), so they cannot accurately retrieve the relevant evidence from memory data.",
+   "support_explanation": "作者 gap：现有记忆机制依赖单一索引。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 1; txt line 269",
+   "quote": "and the graph index-based methods cannot identify the consolidated memory data due to the lack of a memory evolution mechanism.",
+   "support_explanation": "作者 gap：图索引方法缺记忆演化。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 1; txt line 285",
+   "quote": "if the semantic similarity between their memory data exceeds a predefined threshold, they could share the same parent node, whose memory summary preserves the consolidated information of these two nodes.",
+   "support_explanation": "核心操作：时间窗内按语义相似度阈值把事件合并到父节点并生成摘要。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 3.3; txt line 644",
+   "quote": "with dependency relations in an agentic manner.",
+   "support_explanation": "检索规划：把问题拆成带依赖的子查询。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 3.3; txt line 863",
+   "quote": "The memory robustness is used to reflect how likely a memory event or summary is retained during memory evolution.",
+   "support_explanation": "鲁棒性项：艾宾浩斯式衰减+强化，仅作排序先验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 4.1; txt line 1184",
+   "quote": "and all baselines with the same embedding model, re-ranking model, and LLM-as-a-judge prompt.",
+   "support_explanation": "基线在统一嵌入/重排/评审提示下运行，由作者重跑。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 4.1; txt line 1132",
+   "quote": "Since long-term memory questions often admit semantically correct yet lexically diverse responses, we additionally report LLM-Judge Accuracy following prior long-term memory QA evaluation protocols",
+   "support_explanation": "度量：F1+LLM 评审准确率。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 4.1; txt line 1120",
+   "quote": "Both LoCoMo and LongMemEvalS are constructed in controlled LLM-simulated settings.",
+   "support_explanation": "两个基准为 LLM 模拟对话；仅 REALTALK 为真实众包。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 4.2; txt line 1574",
+   "quote": "consistently outperforms the baselines, with the largest gains appearing on multi-hop and temporal questions.",
+   "support_explanation": "正文称时间类问题增益最大。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 4.3; txt line 2088",
+   "quote": "removing the tree causes the largest performance drop among all ablation variants.",
+   "support_explanation": "消融：树最关键。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "App A.5; txt line 3055",
+   "quote": "To reduce accidental variation introduced by the planning stage, we reuse the same planner outputs across the three runs, including the decomposed sub-queries and predicted memory scopes.",
+   "support_explanation": "稳定性分析复用规划输出，仅衡量评测管线波动。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Sec 4.2; txt line 2051",
+   "quote": "introduces additional indexing and retrieval costs compared with several simpler memory mechanisms, but these costs remain reasonable considering its more expressive hybrid memory structure.",
+   "support_explanation": "成本如实披露：索引/检索成本高于简单方法(图2，无数值)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "App A.6; txt line 3184",
+   "quote": "Therefore, its performance can be affected by imperfect memory-unit extraction, inaccurate query decomposition, and incorrect memory-scope prediction.",
+   "support_explanation": "作者局限：LLM 抽取/规划误差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "App A.6; txt line 3187",
+   "quote": "Third, our experiments are conducted on existing long-term memory benchmarks.",
+   "support_explanation": "作者局限：未在真实部署中评估。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "App A.2; txt line 2391",
+   "quote": "We also tested two alternative threshold schedules: a conservative schedule",
+   "support_explanation": "阈值方案在评测基准上比较。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "App A.4; txt line 2871",
+   "quote": "Therefore, we use the setting that balances F1 and LLM-Judge Accuracy as the default configuration in the main experiments.",
+   "support_explanation": "默认 top-k 依据同一基准的 F1/Acc 选定。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "App A.4 (text fragments)",
+   "quote": null,
+   "support_explanation": "固定 Mixed 策略准确率 92.21%，检索 token 约为规划式的 1.8 倍；规划式 scope 的价值在效率而非准确率。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Table 2-4 (cells split)",
+   "quote": null,
+   "support_explanation": "LoCoMo(GPT-4o-mini)总体 F1/Acc：H-Mem 56.06/88.83 vs EverMemOS 47.76/85.52；GPT-4.1-mini：55.58/92.01 vs 52.94/90.78。时间类 Acc(GPT-4o-mini)：H-Mem 80.06 < EverMemOS 82.87。LongMemEvalS 总体：58.50/89.20 vs 52.96/82.80。REALTALK：39.31/78.16 vs 36.81/75.96，时间类 Acc 74.29 < 80.56。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Table 5 (cells split)",
+   "quote": null,
+   "support_explanation": "LoCoMo 消融(GPT-4.1-mini)：完整 55.58/92.01；去树 49.76/82.73；去图 52.20/87.86；去长期记忆 53.39/89.48；去鲁棒性 53.72/89.09；去缺失信息查询 54.82/90.97；去实体画像 54.05/90.32。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Table 10 (cells split)",
+   "quote": null,
+   "support_explanation": "三次重复评测(规划输出固定、温度0)：LoCoMo F1 55.54±0.14/Acc 91.95±0.23；LongMemEvalS 58.19±0.42/88.73±0.64；REALTALK 39.03±0.31/77.61±0.63。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Full text search",
+   "quote": null,
+   "support_explanation": "全文查找：基线只有六个记忆系统；无全上下文/朴素 RAG/无记忆基线；评审 LLM 身份未说明；训练-评测无独立开发集；无统计检验；基线超参未说明是否调优；未报告记忆构建的 LLM 抽取错误率或事件级人工核验。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M-2605.15701",
+   "material_sha256": "e15eab30903ffc7d8c86d9abf2361db7e5b5600a03413efe42f8e95045e07173",
+   "locator": "Table 1",
+   "quote": null,
+   "support_explanation": "表1 分类：Mem0 向量索引；MemOS/MemTree 树；MemoryOS/EverMemOS 分层；Zep 图；EverMemOS 已有“记忆演化=Yes”，Zep “多跳=Yes”；H-Mem 为二者皆 Yes，gap 以分类表定义。",
+   "kind": "author_report"
+  }
+ ]
+}
