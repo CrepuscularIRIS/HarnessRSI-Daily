@@ -96,8 +96,8 @@ def check(run: str, batch: str, stage: str) -> list[str]:
         if d.get("status") == "needs_material" and t is not None and d.get("evidence_status") not in {"pending_material"}:
             # needs_material with a tier is allowed if partial judgement possible; flag only if marked pending elsewhere
             pass
-        if d.get("status") == "out_of_scope" and (t is not None or d.get("next_action") != "exclude"):
-            errs.append(f"{pid}: out_of_scope should have null tier and next_action=exclude")
+        if d.get("status") == "out_of_scope" and d.get("next_action") != "exclude":
+            errs.append(f"{pid}: out_of_scope must have next_action=exclude (tier may be recorded informationally)")
         if not isinstance(d.get("facts"), list) or len(d.get("facts") or []) > 2:
             errs.append(f"{pid}: facts must be <=2")
         for f in d.get("facts") or []:
