@@ -1,0 +1,827 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r21a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full HTML text incl. appendices A-E read (96,589 chars); self-evolving memory system in scope (A class).",
+ "paper": {
+  "paper_key": "2605.16233",
+  "paper_id": "2605.16233",
+  "title": "FORGE: Self-Evolving Agent Memory With No Weight Updates via Population Broadcast",
+  "version": "2605.16233v1",
+  "claim_type": "system_method",
+  "central_claim": "A staged, population-based, gradient-free protocol (Reflexion inner loop + champion broadcast + graduation) evolves prompt-injected NL memory so that LLM agents improve over zero-shot (1.7-7.7x) and isolated Reflexion (29-72%) on CybORG CAGE-2 B_line (30 steps) for four LLM families; broadcast is the critical mechanism, graduation mainly saves compute; evidence confined to CAGE-2 B_line."
+ },
+ "provenance": {
+  "input_hash": "9f07015384f2faf56a6cd49aecf6ba948620414bafa59ea9ec354018f95317ec",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to run receipts; model type per claude-kimi config (haiku slot -> claude-sonnet-5-5[1m]) as stated by controller, not probed.",
+  "timestamp": "2026-10-22T02:50:26Z"
+ },
+ "rationale": "作者报告：champion broadcast 在 CAGE-2 B_line 上优于零样本与 Reflexion；选择与评测分离但同环境、单局探针噪声大、无随机冠军/best-of-N 对照。",
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2605.16233v1",
+   "sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Method (3.1-3.3, Alg 1-2)",
+    "4 Experimental Setup (Tables 1-3)",
+    "5 Results (5.1-5.3)",
+    "6 Discussion",
+    "7 Limitations",
+    "8 Conclusion",
+    "Appendix A-E (artifact, CAGE-2, artifact examples, tau analysis, Tables 4-14)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "We propose FORGE (Failure-Optimized Reflective Graduation and Evolution), a staged, population-based protocol that evolves prompt-injected natural-language memory for hierarchical ReAct agents.",
+   "support_explanation": "Central object: prompt-injected NL memory (not weights) evolved by a staged population protocol.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Sec 3 Method intro",
+   "quote": "no external oracle or stronger model is used",
+   "support_explanation": "Same LLM acts and writes memory; no teacher distillation.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 3.2 Inner loop",
+   "quote": "This abort-and-restart cycle converts failures into a structured learning sequence",
+   "support_explanation": "Failure-triggered abort -> Reflector/Exemplifier writes Rules/Examples -> artifact appended -> episode restarts (Alg. 1).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 3.3 Champion Broadcast",
+   "quote": "its complete memory state replaces the memory of every other active instance",
+   "support_explanation": "Selection/retention rule: argmax of single-episode checkpoint return among non-graduated instances; full destructive replacement of all others.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Sec 3.3 Graduation",
+   "quote": "Graduation prevents regression by locking strong solutions before the next broadcast cycle can overwrite them, and conserves compute by excluding converged instances from further training.",
+   "support_explanation": "Only freeze/lock-in mechanism; the sole 'rollback-like' protection, triggered by one checkpoint episode return > theta=-15.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Sec 4 Evaluation Modes",
+   "quote": "To explicitly distinguish selection from reporting, we define two evaluation modes:",
+   "support_explanation": "Authors separate checkpoint (selection) from post-session evaluation (reporting).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Sec 4 Evaluation Modes",
+   "quote": "a frozen single-episode probe used during training to determine graduation and champion selection",
+   "support_explanation": "Selection signal is ONE episode in a stochastic POMDP whose per-instance SDs are 20-90 return units: noisy champion/graduation decisions.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Sec 5.1 Performance",
+   "quote": "FORGE improves over both zero-shot and Reflexion baselines for every model family under all three representations",
+   "support_explanation": "Headline result vs zero-shot and no-broadcast Reflexion (Table 3).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Sec 5.1 Broadcast vs Reflexion",
+   "quote": "FORGE improves post-session evaluation return by 29-72% over Reflexion in all 12 model-representation conditions",
+   "support_explanation": "Isolates population broadcast+graduation vs isolated Reflexion under the same inner loop.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 5.1",
+   "quote": "The no-graduation variant also outperforms Reflexion in all 12 conditions, confirming that champion broadcast is the essential mechanism.",
+   "support_explanation": "No-graduation ablation; but broadcast = selection + sharing + replication, not separated (no random-champion / best-of-N control).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 5.2 Ablation",
+   "quote": "The effect of graduation on final performance is model-dependent: removing it helps Grok and Qwen (up to 67% improvement over FORGE, Table",
+   "support_explanation": "Graduation's effect on quality is mixed, so 'graduation mainly saves compute' is only partly supported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Sec 3.2",
+   "quote": "isolated instances can accumulate counterproductive artifacts that degrade performance below the zero-shot starting point",
+   "support_explanation": "Author-stated gap: no selection pressure in single-stream Reflexion; Table 3 (Grok Rules/Mixed/Examples Reflexion below zero-shot -58.4) corroborates.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Table 3 Grok rows; Table 8 Grok rows",
+   "quote": null,
+   "quote_unavailable_reason": "Table cell values are split one-per-line in the HTML extraction; no contiguous quote.",
+   "support_explanation": "Table 3: Grok zero-shot -58.4; Reflexion Rules -79.9, Examples -64.8, Mixed -114.4 (all worse than zero-shot), FORGE -33.7/-42.7/-42.2. Shows isolated-reflection can hurt and broadcast helps.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Sec 7 Limitations",
+   "quote": "brittle single-best broadcast, checkpoint-evaluation misalignment",
+   "support_explanation": "Authors concede selection brittleness and probe/eval mismatch.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Sec 7 Limitations",
+   "quote": "indicating that the chosen threshold is not optimal and that the broader design space of harsher triggers and multi-threshold triggering remains unexplored.",
+   "support_explanation": "Failure-trigger tau sweep: tau=-11 beats the submitted tau=-1.1 (Gemini Rules -24.6 vs -30.6), tau=-2/-3 worse (2 sessions each).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Sec 4 Evaluation Modes",
+   "quote": "Gemini-2.5-Flash-Lite serves as the primary study model with 7 independent FORGE sessions per representation followed by 1-2 evaluations per instance.",
+   "support_explanation": "Replication: 7 sessions for Gemini; 3-4 for others, 2 for no-grad ablation.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Sec 7 Limitations",
+   "quote": "Cross-family findings are presented as directional evidence based on 3-4 sessions per non-Gemini model.",
+   "support_explanation": "Scope/statistics caveat acknowledged by authors.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Sec 2 Memory/Baselines",
+   "quote": "We therefore adopt Reflexion as the primary baseline and compare it against FORGE under identical model, memory representation, and training budget.",
+   "support_explanation": "Only one learned-memory baseline; ACE, Dynamic Cheatsheet, TextGrad, ExpeL, CLIN, prompt evolution not run (justified as nontrivial adaptation).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Sec 5.1 Token Cost / Sec 5.2",
+   "quote": "The no-graduation variants consume more tokens across all representations because all 10 instances remain active for all 6 stages",
+   "support_explanation": "Cost reporting incl. per-phase token tables (Table 11) and 12364.0M total tokens (Table 7).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 5.1 Cross-Model",
+   "quote": "The magnitude of improvement inversely correlates with baseline strength",
+   "support_explanation": "'Weaker models benefit more' from n=4 models; confounded with ceiling/regression-to-mean.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Sec 3.3 PBT mapping",
+   "quote": "broadcast performs full replacement rather than interpolation",
+   "support_explanation": "No merge/conflict handling by design; diversity sacrificed.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Sec 3.1",
+   "quote": "with a fixed capacity to prevent unbounded context growth",
+   "support_explanation": "Capacity bound stated, but eviction/consolidation policy not described in method text.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Sec 3.1",
+   "quote": "while the Planner has no pre-supplied action knowledge so that any strategic competence it acquires is attributable to learned artifacts",
+   "support_explanation": "Information visibility: reflection agents and ActionChooser see the environment action reference table; Planner does not.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "Sec 2 Population-Based Selection",
+   "quote": "Whereas prompt-evolution methods typically optimize a single monolithic prompt and focus on single-step tasks",
+   "support_explanation": "Closest-neighbor positioning (PromptBreeder/EvoPrompt/OPRO) by assertion only; not compared experimentally.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Sec 6 Discussion",
+   "quote": "suggests that the primary bottleneck in prompt-only adaptation is not the quality of individual reflections but the absence of a selection pressure that propagates rare discoveries to the population",
+   "support_explanation": "Author interpretation of broadcast gain; alternatives (best-of-N restart, regression to mean) untested.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Sec 5.1 Performance",
+   "quote": "although post-session evaluation means remain lower due to sampling variance",
+   "support_explanation": "Best checkpoint -3.60 is a selected extreme; authors flag post-session means are much lower (best mean -14.0 to -24.5).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "f0dec3e3b3af926d46a147fb0b31f1ee8a51b57a762c6ac74b06399cea91da07"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Dynamic prompt memory (Rules / Examples / Mixed) of Planner, Analyst, ActionChooser sub-agents; baseline = empty memory (zero-shot).",
+   "information": "Reflector/Exemplifier see the failed trajectory up to the failure step, env state, current memory, and the environment action reference table; only per-step scalar reward is the feedback; no oracle/stronger model.",
+   "operation": "Per-step reward < tau=-1.1 aborts episode; same-LLM Reflector writes a conditional heuristic or Exemplifier writes a ReAct demonstration; appended to memory; restart (up to 3 attempts/stage).",
+   "output": "Updated memory M_i per instance; after each stage a frozen single-episode checkpoint return R_i.",
+   "conditions": "Stochastic POMDP with scalar reward, scripted B_line attacker, 30-step horizon, N=10 instances, S=6 stages.",
+   "feedback": "Scalar step reward (failure trigger) + episode return (checkpoint).",
+   "selection_rule": "Champion = argmax checkpoint return among non-graduated instances; its full memory replaces all other active memories; instances with R_i > -15 graduate (frozen).",
+   "selection_data": "Single frozen checkpoint episode per instance per stage (seeded training environments); reporting uses separate post-session evaluation episodes.",
+   "persistence": "Memory files on disk re-injected into system prompts every attempt; fixed capacity; frozen at graduation; final frozen evaluation of all instances.",
+   "later_use": "Next-stage attempts and final post-session evaluation episodes (fresh episodes of the same CAGE-2/B_line task).",
+   "claimed_effect": "Mean eval return improves 1.7-7.7x over zero-shot and 29-72% over Reflexion in all 12 model-representation conditions; major-failure rate to ~1%.",
+   "failure_boundary": "Single attacker/horizon/domain; destructive full replacement; noisy one-episode selection; graduation effect model-dependent; tau not optimal; non-Gemini 3-4 sessions.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004",
+    "E005",
+    "E007",
+    "E008",
+    "E014",
+    "E022",
+    "E023"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Single-stream Reflexion in stochastic POMDPs lacks selection pressure and can accumulate counterproductive artifacts; open questions on what to remember, how to propagate memory, and cross-LLM transfer.",
+  "checked_gap": "Real and partly corroborated in-paper (isolated Reflexion worse than zero-shot for Grok in all three representations; high variance), but the residual is 'select-and-share among parallel Reflexion runs', a PBT-style move over memory; neighbours (ACE, Dynamic Cheatsheet, prompt-evolution, ExpeL/CLIN) are discussed but not run, so the improvement over the actual frontier of memory evolvers is unknown.",
+  "lineage_closest_adjacent": "ReAct -> Reflexion (2023) -> CLIN / ExpeL / Voyager / Dynamic Cheatsheet / ACE (2025) ; PBT (Jaderberg 2017) -> prompt-space PBT; PromptBreeder/EvoPrompt/OPRO for population prompt search (cited in paper, versions as cited). Versions of neighbours not fixed locally (no neighbour full texts in this pack).",
+  "residue": "Whether gain comes from broadcast per se vs best-of-N selection/replication; no test on other attackers or tasks.",
+  "stakes": "LLM defenders in CAGE-2 have strongly negative zero-shot returns, so memory improvement is materially useful in-domain.",
+  "method_response": "Population selection + broadcast replaces isolated updates; graduation freezes converged instances.",
+  "remaining_gap": "Selection reliability (one-episode probe), diversity loss, cross-environment generalization, comparison with other memory optimizers.",
+  "evidence_ids": [
+   "E012",
+   "E013",
+   "E018",
+   "E024",
+   "E025"
+  ],
+  "unresolved": [
+   "Closest neighbors not available as pinned full text in this pack; novelty vs ACE/DC/PBT-prompt methods only by author assertion."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 steps 1-5 read: no unified-schema upstream tuning phase and no category-level holdout; FORGE conditions a frozen model on injected rules/demonstrations written from its own failures. Matches the parent signature (task knowledge as conditioning, no parameter update), not C03's trained-schema tactic, so sub_id=null.",
+    "success_checks": "Conditioning-ablation: zero-shot (empty memory) vs memory present is shown; category-level holdout / contamination audit: not applicable (single task, no pretraining claim); regime characterisation: partial (weak models benefit more).",
+    "failure_checks": "Cheaper alternative (longer context / nearest-neighbour) not tested; recipe shown on one task only; multi-component pipeline ablations limited (no-graduation, tau, representation).",
+    "evidence_ids": [
+     "E001",
+     "E008",
+     "E013",
+     "E018"
+    ],
+    "reason": "Only the parent-level operation (condition on injected experience instead of retraining) is actually executed; the novel element (population broadcast) is outside this card."
+   }
+  ],
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: improvement vs zero-shot/Reflexion on one benchmark, no evidence on the generality half of the parent problem"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "snapshot:52ff96577c9c",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "fit": "high",
+    "version": "snapshot:52ff96577c9c",
+    "condition_checks": "Reflect failed trajectory into rule/example with trigger (met); grounded in env reward (met); contrast successes vs failures (unmet, failure-only); maintenance/forgetting (partial: fixed capacity only); gate on kept entries (partial: gate is on whole memory via champion, not per artifact).",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E022"
+    ]
+   },
+   {
+    "main": "population_search_executable_fitness",
+    "sub": null,
+    "fit": "medium",
+    "version": "snapshot:52ff96577c9c",
+    "condition_checks": "Population of memories, executable fitness = simulator return (met); variation = error-diagnosing reflection rather than undirected mutation (so H13 not assigned); archive/diversity: none (single-best full replacement); evaluator robustness: single-episode probe (partial).",
+    "evidence_ids": [
+     "E004",
+     "E007",
+     "E021"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   "Champion-broadcast-of-memory (explore via reflection, exploit via whole-memory replacement) sits between H00 and population search; consider a sub-condition 'population-level memory broadcast' if >=2 further full-text papers share it."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H00",
+   "operation_correspondence": "RS: express new task as conditioning, solve without parameter updates. Domain: failure reflection -> guidance store -> inject into later prompts. Both = condition frozen LLM on stored artifacts written from own experience.",
+   "necessary_conditions_and_differences": "RS card expects trained conditioning channel / category holdout; domain card expects contrast, maintenance and gating; FORGE meets grounding and injection, lacks contrast and per-entry maintenance.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S2",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md S2"
+   ],
+   "applies_when": "Claims lessons distilled from outcomes.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Reflector sees only the failed trajectory up to the failure point; no paired success/repair contrast.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md S3"
+   ],
+   "applies_when": "Any guidance store.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Per-step simulator reward triggers reflection and episode return drives champion/graduation; no LLM-judge-only signal.",
+   "evidence_ids": [
+    "E003",
+    "E007"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md S4"
+   ],
+   "applies_when": "Store grows over time.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Fixed capacity stated, artifacts appended; no stated merge/forget/conflict policy beyond whole-memory replacement.",
+   "evidence_ids": [
+    "E022",
+    "E021"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md S5"
+   ],
+   "applies_when": "Entries are published for reuse.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Gate is at whole-memory level (champion + graduation); individual artifacts are appended ungated within an instance.",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S1"
+   ],
+   "applies_when": "Claims retention is selected by measured utility.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Memory-on/off contrast exists at system level (zero-shot vs trained) and a no-broadcast control; no counterfactual per entry and selection uses one noisy episode.",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S5"
+   ],
+   "applies_when": "Gate/selection adds cost.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Token cost by phase and condition reported; graduation framed as compute saving; no-graduation cost quantified.",
+   "evidence_ids": [
+    "E019"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/population_search_executable_fitness.md S2"
+   ],
+   "applies_when": "Population search with executable fitness.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Fitness is a real simulator return (hard to game) but a single stochastic episode makes selection noisy; authors list probe/eval misalignment.",
+   "evidence_ids": [
+    "E007",
+    "E014"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:diagnose_self_improvement/S2",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/diagnose_self_improvement.md S2"
+   ],
+   "applies_when": "Claims the retained artifact causes the gain.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "No-broadcast and no-graduation ablations exist; no memory-content ablation, random-champion/best-of-N control, or memory transplant to separate selection from replication.",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3 (reject_reviews)"
+   ],
+   "applies_when": "Retrieval/conditioning claimed to add unique value.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No longer-context, nearest-neighbour memory or alternative memory optimizer (ACE/DC/TextGrad) baseline; only Reflexion.",
+   "evidence_ids": [
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #5"
+   ],
+   "applies_when": "Recipe presented as generic.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Four LLM families but one environment/attacker/horizon; authors scope evidence accordingly.",
+   "evidence_ids": [
+    "E014",
+    "E017"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2605.16233-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper limitations Sec 7"
+   ],
+   "applies_when": "Selection and reporting use the same simulator and scripted attacker.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Checkpoint (selection) vs post-session (reporting) are separated episodes, but same environment/attacker; eval-seed disjointness from training seeds not stated.",
+   "evidence_ids": [
+    "E006",
+    "E014"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2605.16233-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 9 session-level means"
+   ],
+   "applies_when": "Instances in a session share the champion memory.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Instance-level SDs overstate independence (non-graduated instances start from one memory); session-level SD given for Gemini (n=7) only; no significance tests.",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "FORGE improves mean eval return 1.7-7.7x over zero-shot.",
+   "setting": "CAGE-2 B_line, 30 steps, 4 LLMs, 3 representations",
+   "baseline_control": "Zero-shot (empty memory), 50-100 episodes/model",
+   "selection_vs_test": "Checkpoint probe for selection; post-session frozen evals for reporting; same simulator and attacker",
+   "result_denominator": "Table 3 means+SD; Gemini 7 sessions, others 3-4; 1-2 evals per instance",
+   "evidence_ids": [
+    "E006",
+    "E008",
+    "E016"
+   ],
+   "counterevidence": [
+    "E017"
+   ],
+   "allowed_conclusion": "Author-reported retained gain on a single benchmark setting."
+  },
+  {
+   "claim_id": "C2",
+   "text": "FORGE improves 29-72% over Reflexion in all 12 conditions; broadcast is the critical mechanism.",
+   "setting": "Same",
+   "baseline_control": "Isolated Reflexion (transfer_strategy individual) under same inner loop; tokens per instance lower for FORGE",
+   "selection_vs_test": "Same as C1",
+   "result_denominator": "12 model x representation cells; no significance test",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E013"
+   ],
+   "counterevidence": [
+    "E007",
+    "E025"
+   ],
+   "allowed_conclusion": "Selection+sharing among parallel Reflexion runs beats isolated runs here; mechanism not isolated from best-of-N."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Graduation mainly saves compute.",
+   "setting": "No-graduation ablation, 2 sessions per model/representation",
+   "baseline_control": "FORGE w/o graduation",
+   "selection_vs_test": "Same",
+   "result_denominator": "Table 3 w/o grad columns",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E019"
+   ],
+   "counterevidence": [
+    "E011"
+   ],
+   "allowed_conclusion": "Compute saving is clear; effect on quality is model-dependent with n=2 sessions."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Examples best return for 3/4 models; Rules ~40% fewer tokens; weaker baselines benefit more.",
+   "setting": "Representation comparison",
+   "baseline_control": "Rules vs Examples vs Mixed",
+   "selection_vs_test": "Same",
+   "result_denominator": "Gemini 7 sessions: -30.6+-37.0 / -24.5+-21.1 / -32.2+-28.1 (overlapping SD)",
+   "evidence_ids": [
+    "E016",
+    "E019",
+    "E020"
+   ],
+   "counterevidence": [
+    "E017"
+   ],
+   "allowed_conclusion": "Directional only; representation differences within noise for Gemini."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "In CAGE-2 B_line (30 steps), population champion broadcast of Reflexion-written memory yields lower-failure, higher post-session returns than empty memory and than isolated Reflexion for four LLM families (author-reported, not reproduced by us).",
+  "unresolved": [
+   "Contribution of selection vs replication (no random-champion or best-of-N control).",
+   "Generality beyond B_line; comparison with stronger memory-evolution baselines.",
+   "Statistical independence of instances and absence of significance tests."
+  ],
+  "evidence_ids": [
+   "E008",
+   "E009",
+   "E010",
+   "E014"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "真实局限（隔离 Reflexion 可低于零样本，E013）且有定位，但最近邻（ACE/DC/prompt PBT）仅文字区分未实测，残余问题边界不完整。",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E018",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E025"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "操作链（失败触发→反思→冠军广播→毕业）可重建，τ 由奖励结构推导且给出可检验预测（方差压缩/尾部）；但 broadcast=选择+复制未拆分，best-of-N 替代解释未回应。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E025"
+   ],
+   "counterevidence_ids": [
+    "E015"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "超参、算法、记忆读取（每次尝试重注入）、毕业冻结均清楚；缺回滚/冲突处理，容量淘汰策略不明，选择仅用单局探针。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E022",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E014",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "模拟器奖励与公开参照点可信，报告失败率/尾部；但单局检查点噪声大、评测每实例仅 1-2 局，评测种子是否与训练种子分离未写。",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E026"
+   ],
+   "counterevidence_ids": [
+    "E007"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有零样本、无广播 Reflexion、无毕业、τ 扫描等对照；缺随机冠军/best-of-N、记忆内容替换、其他记忆优化器对照，广播因果归因不完整。",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011"
+   ],
+   "counterevidence_ids": [
+    "E018",
+    "E025"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "选择(检查点)与报告(训练后评测)明确分离且 τ 敏感性诚实披露；但同一模拟器与同一脚本攻击者，无跨攻击者/环境留出。",
+   "evidence_ids": [
+    "E006",
+    "E014"
+   ],
+   "counterevidence_ids": [
+    "E017"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "给出 SD、失败率、Gemini 7 会话；其余 3-4 会话且 no-grad 仅 2，无显著性检验，实例非独立（共享冠军记忆）。",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "counterevidence_ids": [
+    "E017"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "分阶段 token 成本、总 12364M token、毕业节省与 no-grad 成本均报告，并与 Reflexion 同预算对比；无美元成本与失败候选之外的搜索开销拆分。",
+   "evidence_ids": [
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

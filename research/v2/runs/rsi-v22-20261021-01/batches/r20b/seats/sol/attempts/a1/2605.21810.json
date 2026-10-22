@@ -1,0 +1,924 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r20b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2605.21810",
+    "paper_id": "2605.21810",
+    "title": "Trace2Skill: Verifier-Guided Skill Evolution for Long-Context EDA Agents",
+    "version": "2605.21810v1",
+    "claim_type": "system_method",
+    "central_claim": "Trace-guided oracle–mutator–selector evolution of task-specific natural-language skills, coupled to bounded dense verifier feedback, substantially improves hard CVDP recovery without model-weight updates and provides a general test-time scaling strategy for verifiable EDA."
+  },
+  "provenance": {
+    "input_hash": "da091bfa50841d5394c9aab8127f2524d2739a4b27c229d3a2abd56a1614257f",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T02:30:30.708143+00:00",
+    "notes": "Dispatched model type sonnet -> gpt-6.1-sol; no independent model receipt or session ID exposed; actual_model left null rather than probed."
+  },
+  "materials": [
+    {
+      "material_id": "2605.21810.txt",
+      "url": "https://arxiv.org/html/2605.21810v1",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "sections_read": [
+        "Entire supplied text lines1–2849: §§1–5, AppendixA1–A6, algorithm, complete textual tables and trace excerpts; figure descriptions read; no page_images supplied"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 185–199",
+      "quote": ". Most closely related, ACE-RTL combines an RTL-specialized generator trained on large-scale RTL data with frontier-model reflection, per-problem context evolution, and parallel test-time scaling to obtain strong agentic pass rates on full CVDP categories; it reports that parallel scaling reduces average iterations to first success from 11.30 to 4.08 across four CVDP categories\n(\nDeng et al., 2026\n)\n. These systems show clear promise, but CVDP also exposes a harder recovery regime: long-context, multi-turn tasks that require repository navigation, bug localization, feature integration, RTL editing, tool invocation, and recovery from failed verification. Many such tasks fail frontier agents and provide little learning signal for agents to improve.\n\nTrace2Skill studies test-time scaling for this recovery setting. Instead of fine-tuning model weights, it evolves the natural-language skill injected into a fixed CVDP agent. The skill is a policy artifact that guides search, editing, validation, and recovery. After each rollout batch, Trace2Skill mines execution traces for pass and failure modes, asks an oracle to summarize actionable lessons, and uses an evolutionary mutator and selector to produce the next task-specific skill. Runtime dense verifier feedback is an optional black-box tool that provides additional learning signal during rollout: it returns sanitized functional observations while keeping hidden harnesses and reference solutions inaccessible. This can make failures more actionable, but may incur additional overhead when verification is compute-heavy.\n\nOur goal is therefore complementary to ACE-RTL\n(\nDeng et al., 2026\n)\n. ACE-RTL primarily asks how far a trained RTL-specialized model and evolving per-problem context can lift pass rates across broad CVDP categories. Trace2Skill asks a different question: when the seed CVDP agent fails, can execution traces from an open agent mine useful skills without model fine-tuning, including on tasks that also defeat frontier coding agents? The unit of adaptation is not only the current RTL candidate or problem context, but the reusable skill document that governs future rollouts; the evaluation correspondingly focuses on hard-failure recovery, dense behavioral credit assignment, and the relationship between learned skill content and agent execution quality.\n\nThese observations shape our design. Frontier coding agents are strong black-box baselines, but the open CVDP agent exposes traces, verifier outcomes, and skill text, making task-level adaptation interpretable and tunable. Because sparse pass/fail labels are too coarse for hard failures, we design granular metrics covering both skill quality and agent execution quality as proxy optimization targets, and show that they correlate highly with sparse pass/fail signals. Finally, hard CVDP tasks are heterogeneous: shared skills transfer unreliably, motivating task-wise evolution rather than multi-task co-optimization.",
+      "support_explanation": "Author distinguishes RTL-specialized ACE-RTL from task-specific skill evolution and motivates sparse-feedback recovery; original neighbor not independently read.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 225–231",
+      "quote": "Each CVDP task provides a repository snapshot and objective. Baseline rollouts inject a CID-specific seed skill; optimization rollouts inject the current task-specific survivor skill. We run these tool-agent rollouts through\nNeMo Gym\n: the head server launches submitted runs, the agent alternates model calls with resource-server tool execution, and the resource server returns tool observations and final verifier rewards, as shown in Appendix Figure\n6\n. A Claude Opus 4.6 tool agent then inspects files, edits RTL, compiles, simulates, and stops after a 30-turn budget or completion. The hidden verifier gives the official final pass/fail label. In dense-feedback configurations, the agent may also call\nverify_feedback\n: a budgeted black-box verifier run on a private workspace copy. It returns sanitized functional feedback while hiding reference solutions, hidden harness files, raw cocotb source/logs, hidden paths, and Docker configuration.",
+      "support_explanation": "Fixed Opus4.6 tool agent, skill injection,30-turn budget, hidden final verification and private-copy sanitized feedback.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 397–399",
+      "quote": "SkillQ scores the repaired skill text before future rollouts. It measures\nwhether a child skill preserves parent guidance and integrates oracle lessons in\nexecutable, agent-visible form:",
+      "support_explanation": "SkillQ assesses semantic skill content before future rollouts, distinct from observed execution.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 499–508",
+      "quote": "M\nkeep\nM_{\\mathrm{keep}}\nis a\nretention gate: it penalizes a proposal that drops critical oracle directives\nlearned from previous rollouts. Hidden-harness leakage, unavailable-tool advice,\ncontradictions, and semantic-floor regressions are repaired; if still present,\nthe candidate cannot survive. Overall, SkillQ favors children that add grounded\nlessons from the current generation while preserving previous-generation\nguidance and excluding harmful or rule-violating advice.",
+      "support_explanation": "Critical-directive retention, repair, semantic-floor and invalidity gates preserve task-local guidance.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 564–589",
+      "quote": "The terms are:\nV\nV\n, verifier or partial-verifier progress;\nX\nX\n, execution\nphase reached, from inspection through edit/compile/simulation;\nH\nH\n, alignment\nwith visible harness conventions;\nE\nE\n, edit quality;\nη\n\\eta\n, turn efficiency;\nand\nP\npath\nP_{\\mathrm{path}}\n, a penalty for wrong-target edits or validation. We observed undesirable stochastic behavior across repeated rollouts under the\nsame skill, so repeated measurements should penalize unstable progress. For\nrepeated rollouts under the same candidate skill, we use a lower-confidence-bound\nsummary:",
+      "support_explanation": "Agent progress combines verifier/phase/harness/edit/efficiency/path factors; four repeats estimate stochastic behavior.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 633–648",
+      "quote": "Here\nR\nR\nis the number of repeated rollouts for the candidate skill and\nσ\n\\sigma\nis the standard deviation of their\nF\nprogress\nF_{\\mathrm{progress}}\nscores. The LCB term reduces the chance that a single lucky rollout dominates selection. Statistically, the LCB term estimates uncertainty in the mean progress, so its penalty scales as\nσ\n/\nR\n\\sigma/\\sqrt{R}\n. AgentVarianceQ below instead characterizes rollout instability itself: AgentProgressQ penalizes uncertainty inside the optimization signal, while AgentVarianceQ reports how stochastic the rollout behavior was.",
+      "support_explanation": "LCB uses uncertainty of candidate mean, not independent evolutionary-run variance.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 779–799",
+      "quote": "marks an invalid or semantically regressed skill. The small\n\nϵ\n\\epsilon\nmakes SelectQ pass-dominant: one additional hidden-verifier pass\nalways outweighs dense tie-breakers, while AgentProgressQ and SkillQ rank\ncandidates with the same pass rate. Although SkillQ and the agent-quality terms\nare measured separately, SelectQ combines them because skill content and rollout\nbehavior are coupled: a semantically plausible skill is useful only if it induces\nbetter agent execution. Empirically, selecting only by SkillQ can preserve clean\nbut behaviorally stagnant guidance, while selecting only by AgentProgressQ can\nchase noisy rollout outcomes. SelectQ therefore combines semantic skill quality\nwith repeat-robust agent progress, requiring valid guidance while favoring skills\nthat improve execution.\n\n2.3.\nSkill Evolution and Traceability\n\nTrace2Skill aggregates evidence only within the current target task. A GPT-5 oracle converts the task-local rollouts into lessons about useful behaviors and repeated failures. A Claude Sonnet 4.5 mutator proposes child skills from the survivor skill, oracle lessons, cumulative lesson bank, and tool/visibility contract. Deterministic post-processing repairs or salvages useful proposals while removing unsafe or ungrounded guidance. The next generation evaluates the carried parent and repaired children under the same rollout protocol; Appendix Algorithm\n1\ngives the formal update. All stages write artifacts: raw traces, verifier outputs, feedback calls, dense metrics, oracle summaries, mutator proposals, repaired skills, and survivor decisions.",
+      "support_explanation": "Pass-dominant SelectQ, dense tie-breakers, task-local oracle lessons, mutator, deterministic repair and retained artifacts.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 804–810",
+      "quote": "First, we establish a CVDP baseline agent using unoptimized CID seed skills on 24 public, OSS-runnable long-context CVDP tasks and compare it with Codex and Claude Code under the same hidden CVDP verifier. The 24 tasks include six each from cid003 (specification-to-RTL), cid004 (RTL refinement), cid005 (code completion), and cid016 (RTL bug fixing); they avoid commercial EDA tools and use Docker, Icarus Verilog (\niverilog\n/\nvvp\n), verifier images compatible with cocotb, and the CVDP resource server. Second, we select the eight seed-CVDP failures shown in bold in Appendix Table\n4\nand study whether task-wise Trace2Skill evolution and runtime dense verifier feedback improve the CVDP agent on those hard failures. The same appendix table records which of these tasks were also failed by Claude Code and Codex.",
+      "support_explanation": "24 public OSS-runnable tasks in four CIDs; eight seed failures selected for adaptation.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 815–823",
+      "quote": "The 24-task baseline compares the unoptimized seed-skill CVDP agent, Claude Code, and native Codex under the same hidden CVDP verifier. The CVDP agent uses the CVDP harness with fixed CID seed skills and without EA or dense feedback; frontier agents use their own harnesses and receive none of our skills. For the 8-task hard subset, Table\n1\nshows the four configurations we ablate: C1 is the failed CVDP baseline agent, C2 adds dense feedback, C3 adds task-wise Trace2Skill with sparse final reward, and C4 combines task-wise Trace2Skill with dense feedback.\n\nCVDP rollouts use Claude Opus 4.6 at temperature 0.2. Oracle summarization uses GPT-5 at temperature 0.0, and mutation uses Claude Sonnet 4.5 at temperature 0.35 followed by deterministic repair. C1/C2 use four repeats per task, giving 32 baseline attempts. C3/C4 use five generations, four candidate skills per generation, and four repeats per candidate: 80 optimization rollouts per task and 640 per EA configuration. We report C3/C4 from the optimization rollouts themselves, because this study targets task-wise adaptation on the same hard tasks rather than train/test skill generalization.\n\nDense-feedback runs expose\nverify_feedback(reason)\nat most three times per rollout, only after a visible code edit, successful visible compile, and a code change since the previous call. The returned object contains sanitized pass/fail, partial test count, failure phase, and a short next-focus hint. Regression tests and telemetry check tool exposure, call-budget enforcement, sanitization, and final verifier outcomes.",
+      "support_explanation": "C1/C2 four repeats per task; C3/C4 eighty optimization rollouts per task; main results explicitly optimization not held-out; runtime tool limited to three calls with edit/compile/change conditions.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 828–842",
+      "quote": "Before using AgentQ as an EA tie-breaker, we check whether it aligns with final sparse success on seed-skill baseline rollouts. Because this calibration is run on the CVDP agent without EA, it uses agent-behavior progress only:\nF\nprogress\nF_{\\mathrm{progress}}\nfor individual rollouts and\nQ\nagent\nprog\nQ_{\\mathrm{agent}}^{\\mathrm{prog}}\nfor repeated measurements. The completed 96 baseline rollouts give a high point-biserial correlation (\nr\n=\n0.90\nr=0.90\n) and AUC of 0.982, indicating that the proxy tracks sparse pass/fail outcomes closely enough to serve as an optimization target when hard tasks otherwise provide identical zero-pass rewards.",
+      "support_explanation": "Baseline96 rollout proxy correlation0.90/AUC0.982; metric contains verifier progress, so correlation alone is not independent causal validation.",
+      "kind": "our_inference"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 927–931",
+      "quote": "Table\n2\nshows that the seed-skill CVDP agent solves 9/24 tasks, while Claude Code and Codex each solve 12/24. The frontier agents are stronger black-box pass-rate baselines, but the CVDP agent exposes the traces, skills, tools, and verifier outcomes needed for test-time scaling. The CID breakdown is also informative: aggregated across the three agents, Spec2RTL has the highest solve rate (13/18), while bug fixing (8/18), RTL refinement (7/18), and code completion (5/18) are lower. This suggests that the agents already have substantial RTL programming ability, but performance drops when success requires long-context repository localization, editing existing RTL, debugging failures, and preserving compatibility with surrounding code. The bold tasks in Appendix Table\n4\nare the eight seed-CVDP failures used for the C1–C4 ablations; the same table shows that this set includes both all-agent failures and tasks that frontier agents solved without our trace-adaptation substrate.",
+      "support_explanation": "Baseline solves9/24 versus12/24 frontier tools; own and frontier harnesses differ per §3.1.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 936–939",
+      "quote": "We next evaluate whether test-time scaling can solve the eight hard tasks that the seed CVDP agent failed. C1 is the seed-skill CVDP agent with only final sparse verification. C2 adds runtime dense verifier feedback but no skill evolution. C3 adds task-wise Trace2Skill EA under sparse final reward. C4 combines the same EA budget with runtime dense verifier feedback. This is not a train/test generalization experiment: prior shared-skill tests suggested weak transfer across heterogeneous tasks, so each condition is evaluated on the same hard-task set.\n\nTable 3.\nC1–C4 comparison on the same 8 hard tasks.",
+      "support_explanation": "Explicitly same-task adaptation, not train/test generalization.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1011–1022",
+      "quote": "Table\n3\ngives the final outcome view: C4 is strongest, solving 6/8 hard tasks with a 33.6% pass rate and the highest mean AgentQ. Dense feedback alone helps the fixed seed-skill agent but remains limited (C2: 2/8, 12.5%). Sparse Trace2Skill solves more tasks (C3: 3/8, 27.0%), while adding dense feedback to the same EA budget solves three additional tasks and raises pass rate by 6.6 percentage points (C4: 6/8, 33.6%). Thus, C1\n→\n\\rightarrow\nC2 isolates dense verifier feedback for the seed-skill agent, C1\n→\n\\rightarrow\nC3 isolates task-wise Trace2Skill under sparse final reward, and C3\n→\n\\rightarrow\nC4 is the cleanest dense-feedback comparison under matched EA budget. The result supports the central claim that dense feedback is most useful when coupled to task-wise skill evolution rather than treated only as an extra tool in an otherwise fixed seed-skill agent.",
+      "support_explanation": "Main C1–C4 outcomes:0/8,2/8,3/8,6/8 and0%,12.5%,27%,33.6%; dense EA gain6.6pp under same EA schedule. C1→C3 does not isolate skill evolution from20x rollout count.",
+      "kind": "our_inference"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1027–1037",
+      "quote": "Figure\n3\nvisualizes artifact-derived dense metrics for C3 and C4, including SelectQ, SkillQ, AgentProgressQ, and AgentVarianceQ across generations. This aggregate view is complementary to the final pass table: SelectQ is the evolutionary survivor score, SkillQ summarizes learned skill content quality, AgentProgressQ summarizes repeat-robust rollout execution quality, and AgentVarianceQ reports repeat stability. The visible uncertainty is expected in long-horizon, multi-turn LLM-agent rollouts: identical skill prompts can still induce different search, edit, and validation trajectories, so repeated samples are used to estimate mean behavior rather than relying on single-run outcomes. We aggregate over valid candidate-skill measurements, excluding invalid or semantic-floor-regressing candidates so the trend reflects viable survivor choices rather than rejected proposals.\nAcross generations, C4 is higher than C3 in SelectQ and AgentProgressQ, and SkillQ is tied at the shared seed generation before becoming higher for C4 in later generations. This suggests that runtime dense feedback improves both the learned skill content and the agent’s execution behavior, rather than only changing the final sparse pass count.\n\nFour-panel line plot comparing sparse and dense Trace2Skill evolution over generations using SelectQ, SkillQ, AgentProgressQ, and AgentVarianceQ.\n\nFour-panel line plot comparing sparse and dense Trace2Skill evolution over generations using SelectQ, SkillQ, AgentProgressQ, and AgentVarianceQ.\n\nFigure 3.\nC3 versus C4 quality dynamics on the 8 hard CVDP tasks. Points show generation-level means; error bars show SEM across valid candidate-skill measurements.",
+      "support_explanation": "Quality plots exclude invalid/regressing candidates and report SEM across valid candidate measurements, not independent search replications.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1070–1084",
+      "quote": "The boxed cells in Figure\n4\nare the C4-only breakthroughs. In C3, these tasks had zero verifier passes and no runtime dense-feedback calls. In C4, PCIe reached 1/80 passes, 802.11a reached 11/80, and NoobsCpu reached 35/80. The traces show different levels of dense-feedback dependence. For PCIe, the passing rollout first passed local pulse-merge tests, then feedback exposed hidden functional failures; after further edits, a later feedback call passed the registered\npulse_out\nvariant. For 802.11a, 9 of 11 passing rollouts invoked feedback around\nMAX_LENGTH=192\nViterbi tests and partial failures; two passing rollouts did not, so the conservative reading is that feedback improved harness alignment and oracle lessons, but was not necessary for every individual pass. For NoobsCpu, the link is strongest: all 35 passing rollouts used feedback, and representative traces show local\niverilog\n/\nvvp\nsuccess followed by verifier compile failures, then fixes to include handling, explicit file lists,\nasserts.v\n, and\nnoobs_cpu_defines.vh\nuntil feedback returned pass. Thus, dense feedback converts hidden final failures into actionable in-rollout corrections and clearer oracle/mutator lessons, while still leaving task difficulty and agent stochasticity visible.",
+      "support_explanation": "C4-only breakthrough counts1/80,11/80,35/80; feedback exposes actual hidden functional failures and induces corrections.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1089–1102",
+      "quote": "•\n\nAgent.\nLong-horizon agents can take different search, edit, and validation paths under the same skill, so mean metrics need not improve monotonically even when the best survivor skill improves. Future work should better characterize how skill text and dense feedback shape rollout variance and task success.\n\n•\n\nCompute.\nTrace2Skill is compute-intensive. A 30-turn horizon gives the agent room to recover, but it also increases rollout variance, verifier traffic, wall-clock time, and token cost. Reducing the required turn budget through better verifier scheduling, earlier stopping, and stronger procedural guidance is therefore a central systems direction.\n\n•\n\nBenchmark.\nThe OSS CVDP subset studied here is valuable, but it remains concentrated on Verilog-related coding tasks. Broader progress will require the EDA community to contribute open, executable, long-context benchmarks beyond RTL coding so that agentic methods can be compared on synthesis, timing, power, formal verification, and full-flow engineering tasks for the benefit of the wider ecosystem.",
+      "support_explanation": "Authors acknowledge trajectory stochasticity, compute intensity and narrow Verilog scope; no actual total token/time/dollar accounting here.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1595–1611",
+      "quote": "Run state\n\nTask\ncvdp_agentic_heavy_NoobsCpu-8bit_0002\n, cid005, C4 dense-feedback EA, generation 5, population 4, repeat 4. The generation produced 9 verifier passes over 16 rollouts; the best individual passed 4/4 repeats.\n\nThe task failed all three baseline agents in Table\n4\n, but the evolved C4 lineage reached nonzero and repeatable sparse passes.\n\nSelected survivor\n\nThe selected child was\nchild_gen5_1\n. Its logged values were SelectQ 1.104, sparse pass@1 1.000, robust utility 0.853, SkillQ 0.894, and AgentProgressQ 0.820. The selected skill had no missing critical directive, no contradiction, and no invalid-skill propagation.\n\nSelection is not based on a single lucky rollout alone: it combines sparse success, robust repeated progress, and skill quality while enforcing validity checks.",
+      "support_explanation": "Generation5 best selected child4/4 and9/16 total passes, with explicit validity/critical-guidance logs; this is selected training evidence.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1637–1670",
+      "quote": "Oracle lessons\n\nThe cumulative lesson bank preserved concrete rules: read submodules before wiring, use tight\niverilog\n\n→\n\\rightarrow\n\nvvp\nloops, compile\nasserts.v\nexactly once, prefer stable\n-I\ninclude roots over include churn, and use\nverify_feedback\nor build artifacts to infer expected wiring and instance names.\n\nThe oracle converts repeated rollout traces into task-local procedural memory instead of generic hardware advice.\n\nEvolved skill excerpt\n\nThe generation-5 skill explicitly allowed\nverify_feedback\n, instructed the agent to inspect\nifetch\n,\nidecode\n,\nregister_file\n, and\nexecute\n, warned about duplicate module/include handling, and required compile/run cycles after small edits.\n\nThe injected skill is an auditable artifact. It preserves durable lessons while adding task-specific guidance learned from earlier generations.",
+      "support_explanation": "Task-local lesson bank becomes next injected skill: concrete compile/include rules and named submodules.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1716–1740",
+      "quote": "Oracle diagnosis\n\nThe generation summary identified a harmful pattern: many failed rollouts relied on self-authored benches such as\nViterbiDecoder_tb2.v\n,\nViterbiDecoder_tb3.v\n,\nmini_tb.v\n, or\ndebug_tb.v\n, causing timeouts or mismatch with harness parameters. The successful rollouts aligned better with the official runner and\nverify_feedback\nevidence.\n\nDense feedback helps the oracle distinguish locally plausible behavior from hidden-verifier-aligned behavior, producing sharper lessons for the next mutation.\n\nMutation repair\n\nMutation-health logs show repaired children rather than blind rejection. A generation-3 repaired child had sanitizer repairs\nrewrote_harness_execution_to_visible_metadata\nand\nrewrote_unconfirmed_path_guidance\n; its integration coverage was 1.000 versus parent coverage 0.625, with zero missing critical directives and zero contradictions after repair.\n\nUseful semantic proposals are salvaged when possible, while hidden-harness leakage, ungrounded path guidance, or contradictory instructions are removed before the skill enters the tournament.",
+      "support_explanation": "Oracle diagnoses locally plausible but verifier-misaligned benches; mutation repair grounds paths and preserves critical directives.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 1800–1843",
+      "quote": "Scoring\n\ncombined_selection_fitness.json: ind2 child_gen4_2 pass@1=0.75 SelectQ=0.818482 robust_utility=0.559034 SkillQ=0.596722 AgentBehaviorQ=0.481760 progress_lcb95=0.432600 progress_mean=0.678400\n.\nOther candidates had SelectQ\n0.556877\n,\n0.294436\n, and\n\n0.050071\n;\nchild_gen4_2\nsurvived.\n\nOracle summary\n\noracle_feedback.md: best=0.818 mean=0.430 worst=0.050 rollouts=16 (6 pass, 10 fail)\n.\n\n[cid005] NoobsCpu-8bit_0002 avg=38% (75%, 50%, 25%, 0%) [SOMETIMES SOLVED]\n.\nKEEP: read submodules before wiring; use tight\niverilog -> vvp\n\ncycles; compile\nasserts.v\nexactly once. ADD: protected path grounding;\ncoordinate top/submodule fixes. REMOVE: prefer editing same-basename\n\nvmodel/\nmirrors; remove or guard asserts.\n\nMutator and repair\n\nmutation_handoff.md: gen4_ind2 EFFECTIVE selection +0.523 pass +0.500 progress +0.242\n.\n\nmutation_health.jsonl child_slot=1 parent=child_gen4_2 ok=true has_oracle_feedback=true similarity=0.468 coverage=1.000 parent_coverage=0.792 missing_critical=0 parent_missing=3 remove_violation=0 contradiction=0 repair_attempted=false\n.\n\nNext skill\n\nea_survivor_skill.md: Hard Rules: use only ... verify_feedback; text-only answers ignored; compile then simulate. Protected Path Grounding: edit and validate exact target files ... Do NOT write or validate only same-basename shadow paths. Iverilog Semantics: -I only affects include lookup; pass all required .v files exactly once. Asserts Handling: compile asserts.v exactly once; do not remove asserts.",
+      "support_explanation": "Literal generation4→5 artifacts connect rollout scores, selected child, KEEP/ADD/REMOVE directives and next skill.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 2392–2393",
+      "quote": "Implementation note.\nThe code carries the selected survivor into the next generation for re-evaluation, mutates that same survivor to form children, repairs and sanitizes proposed children before injection, and defers child selection until those children have their own rollouts. Thus no unevaluated child can become the next parent purely from a semantic comparison.",
+      "support_explanation": "Parent re-evaluated; no unevaluated child becomes parent from semantic comparison alone.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 2405–2427",
+      "quote": "Hidden verifier isolation\n\nExecution contracts mark the hidden verifier as unavailable to the live rollout. Dense feedback runs on a private copy; hidden harness files, raw cocotb source, Docker compose files, reference patches, and hidden paths are not written into the live agent sandbox.\n\nThe agent can use\niverilog\n,\nvvp\n, and, in dense configurations,\nverify_feedback\n; it cannot inspect or edit the hidden evaluator.\n\nSanitized dense feedback\n\nDense-feedback contracts and telemetry record bounded summaries such as pass/fail or final mode, compile/simulation status, timeout/failure phase, partial test information when available, and sanitized failure context. Raw hidden harness source and reference solutions are omitted.\n\nFeedback resembles black-box functional test feedback: enough to guide the next RTL edit, not enough to reveal the answer.\n\nMutation sanitizer\n\nMutation-health logs record allowed tools, visible-context path counts, hidden-verifier status, coverage against oracle directives, missing critical directives, contradictions, and repair actions such as rewriting hidden-harness execution guidance into visible metadata guidance.\n\nGood but defective proposals can be repaired and evaluated; unsafe or ungrounded content is prevented from propagating silently.",
+      "support_explanation": "Private-copy verifier contract, feedback sanitization and mutation sanitizer; reported artifact evidence, not independently executed audit.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 2460–2468",
+      "quote": "Dense metrics and selection\n\ngeneration_metrics.json\n,\ncombined_selection_fitness.json\n,\nrollout_model_check_*.json\n\nCompute SelectQ, SkillQ, AgentProgressQ, AgentVarianceQ, pass@1, pass@k, confidence intervals, and selected-survivor rationale.",
+      "support_explanation": "Telemetry can compute intervals but listing capabilities is not reported independent-run uncertainty.",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "2605.21810.txt",
+      "sha256": "8b827e99cc72376ad0e5f8d77d1b193d54a8d9e4ca2ab37616b584d917d844c7",
+      "locator": "lines 2722–2737",
+      "quote": "Validation tests\n\ntests/test_standard_ea_flow.py\n;\ntest_dense_progress_fitness.py\n;\ntest_skill_sanitizer.py\n;\ntest_skill_integration.py\n;\ntest_mutation_health.py\n;\ntest_traceability_artifacts.py\n; verifier-feedback smoke artifacts.\n\nCheck that the EA loop, scoring, sanitizer, proposal repair, telemetry, prompt hygiene, and dense-feedback policy behave as intended before launching long runs.",
+      "support_explanation": "Named regression tests exist in author component map; not tests run by this review.",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "SIG1",
+      "object": "Task-specific natural-language survivor skill and cumulative lesson bank",
+      "information": "All candidate success/failure tool traces, final hidden labels, dense behavior metrics and prior critical directives",
+      "operation": "GPT5 summarizes task-local lessons; Sonnet4.5 mutates parent; repair/sanitize; evaluate parent and children with four rollouts each; select pass-dominant survivor",
+      "output": "Next population of one carried survivor and repaired children, updated lesson bank and traceable skill artifacts",
+      "conditions": "Executable trustworthy verifier, expensive repeated rollouts, fixed Opus4.6 executor able to follow text",
+      "feedback": "Final correctness first; LCB progress and SkillQ tie-break among tied pass rates; semantic validity gate",
+      "selection_rule/data": "SelectQ=-1 if invalid/regressed; otherwise PassRate+epsilon*(0.6LCB+0.2meanProgress+0.2SkillQ); same target task throughout",
+      "persistence": "ea_survivor_skill.md, lesson_bank.md and generation lineage logs",
+      "later_use": "Next-generation rollouts inject retained survivor/children; parent re-evaluated, not merely copied score",
+      "claimed_effect": "Recover hard task failures without weight training",
+      "failure_boundary": "Stochastic selection and task-specific overfitting; no independent frozen-artifact replay or transfer certification",
+      "evidence_ids": [
+        "E004",
+        "E006",
+        "E007",
+        "E009",
+        "E018",
+        "E020",
+        "E021"
+      ]
+    },
+    {
+      "sig_id": "SIG2",
+      "object": "Bounded runtime verifier-feedback interface feeding execution and later skill evolution",
+      "information": "Private hidden-verifier run on edited workspace copy",
+      "operation": "Up to three calls after visible edit/compile and a new change; sanitize summaries; agent revises RTL; oracle later mines resulting trace",
+      "output": "Functional pass/fail, partial counts, failure phase and next-focus hint, without hidden source/reference",
+      "conditions": "Verifier is callable during adaptation, sanitized black-box feedback rather than inaccessible final holdout",
+      "feedback": "Same task official verifier, then final verifier label",
+      "selection_rule/data": "Budget/visibility contract permits feedback only in C2/C4; final correctness distinct from intermediate calls",
+      "persistence": "Trace observations and distilled guidance retained across generations",
+      "later_use": "Current rollout edits and future oracle/mutator lessons",
+      "claimed_effect": "Sharpen sparse-failure recovery and expose build/harness mismatch",
+      "failure_boundary": "Does not keep verifier outcomes independent from search; sanitizer correctness reported but not independently tested",
+      "evidence_ids": [
+        "E002",
+        "E009",
+        "E015",
+        "E019",
+        "E022"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "Sparse labels give little direction on hard long-context RTL failures; fixed seed skills and repeated sampling alone do not explicitly mine trace lessons into future policy text.",
+    "checked_gap": "The article specifies a genuine recovery problem and task-local skill/behavior decomposition, with trace-linked recovery examples. Novelty versus existing prompt optimizers and ACE-RTL is not independently checked from their originals.",
+    "lineage/closest_adjacent": [
+      {
+        "name": "ACE-RTL (Deng et al.,2026)",
+        "version": "Original version unresolved; current Trace2Skillv1 pinned",
+        "source": "Current article Introduction only",
+        "relation": "Trained RTL generator plus per-problem context evolution and parallel scaling; closest domain neighbor according to authors"
+      },
+      {
+        "name": "Reflexion and Voyager; evolutionary/textual prompt optimizers",
+        "version": "Original source versions unresolved",
+        "source": "Current article Introduction plus operational comparison, not independent source verification",
+        "relation": "Feedback-derived natural-language guidance and reusable skills; needed to separate standard loop from task-specific dense-feedback contribution"
+      }
+    ],
+    "residue": "Provide actionable ranking when all hard-task candidates fail, while preserving useful prior skill directives.",
+    "stakes": "Wrong target paths, compile/include conventions and hidden functional mismatches defeat locally plausible RTL solutions.",
+    "method_response": "Separate skill semantics from observed execution, use pass-dominant robust selection, sanitize mutation and runtime verifier feedback, retain task-local lessons.",
+    "remaining_gap": "No matched-budget fixed-skill rerun, simpler optimizer or no-memory control; final skill not tested independently, and full compute not reported.",
+    "evidence_ids": [
+      "E001",
+      "E004",
+      "E007",
+      "E009",
+      "E013",
+      "E015",
+      "E019"
+    ],
+    "unresolved": [
+      "Request version-pinned ACE-RTL, Reflexion, Voyager and closest trace-guided/evolutionary prompt-optimization originals; no external retrieval allowed."
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "partial at main level",
+        "tactic_steps_checked": [
+          "Frozen executor receives evolved skill as conditioning",
+          "Task-local traces systematically construct conditioning text",
+          "No upstream canonical-schema learning or shared representation/reference transfer",
+          "No category-level generalization; C03 inspected and not assigned"
+        ],
+        "success/failure_checks": {
+          "conditioning_effect": "not isolated from extra search budget",
+          "transfer": "explicitly not evaluated",
+          "regime": "eight hard failures identified",
+          "multi_component_ablations": "dense-feedback factor tested, other optimizer components not isolated"
+        },
+        "evidence_ids": [
+          "E002",
+          "E007",
+          "E009",
+          "E012",
+          "E013"
+        ],
+        "reason": "Parameter-free adaptation by injected text fits parent operation, but C03 universal schema/reference-transfer tactic is absent. Same-task optimization is narrower than parent generalization objective."
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "Partial main-level conditioning fit; domain taxonomy more precisely captures diagnostic evolutionary skill search.",
+    "executes_pattern": "partial",
+    "resolves_problem": "Task recovery reported; conditioning-specific or transferable improvement not certified."
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "population_search_executable_fitness",
+        "sub": "H15",
+        "version": "manifest-frozen",
+        "fit": "high operational / partial certification",
+        "condition_checks": [
+          {
+            "condition": "S1",
+            "status": "partial",
+            "reason": "Dense pass-dominant fitness and robust tie-breaker change search signal; improvement over simpler search untested",
+            "evidence_ids": [
+              "E007",
+              "E009"
+            ]
+          },
+          {
+            "condition": "S2",
+            "status": "partial",
+            "reason": "Final executable correctness and isolation contract; proxy correlation is partly verifier-derived, no independent proxy ranking test",
+            "evidence_ids": [
+              "E010",
+              "E022"
+            ]
+          },
+          {
+            "condition": "S3",
+            "status": "met",
+            "reason": "Skill text inside fixed runtime contract, mutation repair before use",
+            "evidence_ids": [
+              "E004",
+              "E021",
+              "E022"
+            ]
+          },
+          {
+            "condition": "S4",
+            "status": "met",
+            "reason": "Oracle mines all population traces and negative lessons",
+            "evidence_ids": [
+              "E007",
+              "E019",
+              "E020"
+            ]
+          },
+          {
+            "condition": "S5",
+            "status": "partial",
+            "reason": "Cumulative KEEP/ADD/REMOVE evidence and candidate deltas; no per-item causal validation or memory-off experiment",
+            "evidence_ids": [
+              "E018",
+              "E020"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E007",
+          "E018",
+          "E020",
+          "E021"
+        ]
+      },
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H10",
+        "version": "manifest-frozen",
+        "fit": "high operational / partial certification",
+        "condition_checks": [
+          {
+            "condition": "S1",
+            "status": "partial",
+            "reason": "KEEP/ADD/REMOVE grounded changes; precise defect-versus-execution-lapse gate not shown, hence H10 not H11",
+            "evidence_ids": [
+              "E019",
+              "E020"
+            ]
+          },
+          {
+            "condition": "S3",
+            "status": "partial",
+            "reason": "Critical-rule/semantic-floor gates and reevaluation; no independent behavior regression validation",
+            "evidence_ids": [
+              "E004",
+              "E021"
+            ]
+          },
+          {
+            "condition": "S4",
+            "status": "partial",
+            "reason": "Multiple success/failure traces summarized, but only within one target task",
+            "evidence_ids": [
+              "E007",
+              "E009"
+            ]
+          },
+          {
+            "condition": "S5",
+            "status": "met",
+            "reason": "Oracle receives full task-local population traces; next mutator receives summary and bank",
+            "evidence_ids": [
+              "E007",
+              "E020"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E007",
+          "E019",
+          "E020"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "population_search_executable_fitness",
+        "sub": "H15"
+      },
+      "operation_correspondence": "Natural-language policy conditioning is the retained genome; distilled successes/failures condition next mutation, executable rollout scores select survivor.",
+      "necessary_conditions/differences": "Parent conditioning alone does not specify evolution. C03 transfer substrate absent; H15 memory credit, memory-off test and disjoint reporting only partly/never demonstrated. H13 not selected because mutation direction uses diagnosed traces rather than undirected score-only variation.",
+      "evidence_ids": [
+        "E007",
+        "E009",
+        "E018",
+        "E020"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H10"
+      },
+      "operation_correspondence": "Trace critique rewrites a retained instruction document that later frozen-model rollouts read.",
+      "necessary_conditions/differences": "H10 better than H11: skill/execution scores are separate but explicit defect-vs-lapse attribution gate is not established. Separate validation/reporting absent.",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E019",
+        "E020",
+        "E021"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:adapt_via_conditioning/RE-1",
+      "version": "manifest-frozen",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+      ],
+      "applies_when": "Injected guidance claimed to improve a fixed executor",
+      "applicable": true,
+      "status": "partial",
+      "reason": "C1/C2 vs C3/C4 toggles evolution, but also20x optimization rollouts; no fixed-skill80-repeat comparator.",
+      "evidence_ids": [
+        "E009",
+        "E013"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-3",
+      "version": "manifest-frozen",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+      ],
+      "applies_when": "Complex conditioning search proposed as useful test-time scaling",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "No equal-budget seed rerun, raw trace context, greedy or simpler prompt-search control reported.",
+      "evidence_ids": [
+        "E009",
+        "E013"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-4",
+      "version": "manifest-frozen",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+      ],
+      "applies_when": "Multiple optimizer and feedback modules interact",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Dense-feedback factor C3/C4 tested; SkillQ/LCB/oracle/repair/lesson-bank contribution not separately ablated.",
+      "evidence_ids": [
+        "E007",
+        "E013"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-5",
+      "version": "manifest-frozen",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md"
+      ],
+      "applies_when": "General framework claimed beyond RTL",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Eight heterogeneous task-specific runs; no out-of-RTL test or cross-task evolved-skill transfer; authors narrow benchmark limitations.",
+      "evidence_ids": [
+        "E008",
+        "E012",
+        "E016"
+      ],
+      "score_item": "G"
+    },
+    {
+      "id": "rsi:population_search_executable_fitness/S2",
+      "version": "manifest-frozen",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/population_search_executable_fitness.md#S2"
+      ],
+      "applies_when": "Dense utility used as tie-breaker under executable correctness",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Final verifier correctness is leading criterion, baseline proxy correlation checked; verifier-progress feature partly shares target and no independent ranking audit.",
+      "evidence_ids": [
+        "E007",
+        "E010",
+        "E022"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "rsi:population_search_executable_fitness/S4",
+      "version": "manifest-frozen",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/population_search_executable_fitness.md#S4"
+      ],
+      "applies_when": "Search can use readable failures",
+      "applicable": true,
+      "status": "met",
+      "reason": "Both positive and negative trace lessons directly enter mutation and retained guidance.",
+      "evidence_ids": [
+        "E019",
+        "E020"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "rsi:population_search_executable_fitness/S5",
+      "version": "manifest-frozen",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/population_search_executable_fitness.md#S5"
+      ],
+      "applies_when": "Cumulative memory claimed to guide search",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Concrete bank and edit lineage exist; no memory ablation or individual lesson utility certification.",
+      "evidence_ids": [
+        "E018",
+        "E020"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:population_search_executable_fitness/H15",
+      "version": "manifest-frozen",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/sub/H15.md"
+      ],
+      "applies_when": "Distilled search history is retained",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Task-local sharing scope clear; negative lessons and candidate deltas logged, no separate final frozen skill or new-campaign test.",
+      "evidence_ids": [
+        "E009",
+        "E018",
+        "E020"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "version": "manifest-frozen",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md#S3"
+      ],
+      "applies_when": "Rewrites must preserve earlier wins",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Semantic validity, critical-rule checks and parent reevaluation; no independent empirical regression gate.",
+      "evidence_ids": [
+        "E004",
+        "E021"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2605.21810-1",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.21810v1 §3.1/§4.2"
+      ],
+      "applies_when": "Same verifier provides runtime feedback and survivor fitness",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "Private hidden source is not an independent held-out outcome; paper explicitly reports optimization rollouts, not generalization.",
+      "evidence_ids": [
+        "E009",
+        "E012",
+        "E015"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "local:2605.21810-2",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.21810v1 §2.2.3/§4.3"
+      ],
+      "applies_when": "Stochastic candidate runs and search are summarized",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Four repeats, exact breakthrough denominators and candidate SEM; no independently repeated evolution run uncertainty or significance.",
+      "evidence_ids": [
+        "E006",
+        "E009",
+        "E014",
+        "E015"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2605.21810-3",
+      "version": "manifest-frozen",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.21810v1 Table1/§4.5"
+      ],
+      "applies_when": "Compute-intensive test-time scaling compared to fixed seed",
+      "applicable": true,
+      "status": "partial",
+      "reason": "Schedule and feedback cap explicit, but no total token/dollar/wall-time or compute-matched recovery curve.",
+      "evidence_ids": [
+        "E009",
+        "E016"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CL1",
+      "text": "Trace2Skill solves hard seed-agent failures without weight updates.",
+      "setting": "Eight selected public OSS CVDP failures; fixed Opus4.6 tool agent",
+      "baseline/control": "C1 seed32 attempts; C3 sparseEA640; C4 denseEA640",
+      "selection_vs_test": "All EA measurements are search/selection on target tasks, not disjoint testing",
+      "result/denominator": "C1 0/8,0/32; C3 3/8,27.0% over640; C4 6/8,33.6% over640; percentages rounded by authors",
+      "evidence_ids": [
+        "E009",
+        "E012",
+        "E013"
+      ],
+      "counterevidence": [
+        "20x rollout count vs fixed seed; no equal-budget no-evolution run"
+      ],
+      "allowed_conclusion": "Author-reported same-task search finds more verifier-passing outputs; not proof that a frozen retained skill improves future tasks."
+    },
+    {
+      "claim_id": "CL2",
+      "text": "Dense feedback synergizes with skill evolution.",
+      "setting": "C3/C4 same population/generations/repeats",
+      "baseline/control": "Sparse versus dense feedback; C2 fixed seed feedback view",
+      "selection_vs_test": "Optimization-rollout aggregate; same verifier influences current edits and later mutation",
+      "result/denominator": "27.0→33.6%,3→6 solved/8; C4-only tasks1/80,11/80,35/80",
+      "evidence_ids": [
+        "E013",
+        "E015",
+        "E019"
+      ],
+      "counterevidence": [
+        "No formal interaction estimate/independent-run uncertainty; extra verifier access/cost; some tasks not better"
+      ],
+      "allowed_conclusion": "Within reported runs, adding runtime feedback yields three new solved tasks and6.6pp aggregate improvement; strong universal synergy not established."
+    },
+    {
+      "claim_id": "CL3",
+      "text": "Dense scores guide useful, stable skill evolution.",
+      "setting": "96 baseline rollouts for calibration; four repeats per candidate",
+      "baseline/control": "Pass/fail correlation; no proxy/LCB/SkillQ removal control",
+      "selection_vs_test": "Calibration and search-process metrics, not independent success certification",
+      "result/denominator": "r=.90,AUC=.982; selected NoobsCpu gen5child4/4,fullgen9/16",
+      "evidence_ids": [
+        "E010",
+        "E014",
+        "E017",
+        "E020"
+      ],
+      "counterevidence": [
+        "Proxy includes verifier progress; candidate-level SEM not search-run variance; best child selected on those repeats"
+      ],
+      "allowed_conclusion": "Inspectable score/skill/trace linkage and promising task-local candidate behavior; proxy causal utility and robustness remain unresolved."
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "Authors report a closed loop that persists skills/lessons and finds hidden-verifier passes on six of eight selected hard tasks within the optimization runs; dense feedback adds three solved tasks at the same EA rollout schedule. All reported EA gains are selection data, so retained/improver evidence levels are not earned. No code or experiments were run by this review.",
+    "unresolved": [
+      "Independent final frozen-skill replay and unseen tasks/verifier checks",
+      "Equal80-rollout fixed-seed control and simpler optimizer; oracle/lesson/repair/proxy ablations",
+      "Independent evolutionary-run variance, full compute accounting and verifier sanitization audit",
+      "Version-pinned nearest-neighbor original sources"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Real sparse-feedback recovery bottleneck, but independently checked optimizer/ACE-RTL novelty and broader gap coverage incomplete.",
+      "evidence_ids": [
+        "E001",
+        "E008",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Reconstructable pass-dominant selection, robust repeated progress, task-local oracle/mutator and repair target sparse-failure recovery; no independent proof of dense ranking utility.",
+      "evidence_ids": [
+        "E004",
+        "E006",
+        "E007",
+        "E019",
+        "E021"
+      ],
+      "counterevidence_ids": [
+        "E010"
+      ],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Concrete lineage, evaluated children, critical-directive protection, parent fallback/reevaluation and tool-visibility rules; exact semantic measurement/gate calibration and separate behavior regression acceptance insufficiently specified.",
+      "evidence_ids": [
+        "E004",
+        "E020",
+        "E021",
+        "E022"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "Official executable final correctness and private-copy contract are credible for task outputs; proxy calibration is partly verifier-derived and sanitizer/metric validity not independently audited.",
+      "evidence_ids": [
+        "E002",
+        "E010",
+        "E022"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "Dense-feedback C3/C4 arm has same EA schedule and trace examples; skill-evolution gain confounded by20x rollout count and no memory/proxy/simpler-optimizer controls.",
+      "evidence_ids": [
+        "E009",
+        "E013",
+        "E019"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 0,
+      "reason": "Complete text explicitly reports optimization rollouts on same target tasks; runtime oracle feedback and final verification are not disjoint certification. No protected retained-skill or transfer evaluation reported.",
+      "evidence_ids": [
+        "E009",
+        "E012",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "Entire text §§1–5 and AppendixA1–A6, especially §3.1,Table1,§4.2–4.5; no independent report split"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "Four repeated rollouts per candidate, pass/failure counts and candidate SEM provide repeated failure evidence; no independent-search seeds/intervals/significance.",
+      "evidence_ids": [
+        "E006",
+        "E009",
+        "E014",
+        "E015",
+        "E017"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "Rollout/population/generation/turn and feedback caps stated, but no total tokens/dollars/wall time or equal-compute fixed-seed baseline.",
+      "evidence_ids": [
+        "E009",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 52.5,
+    "display": "52.5",
+    "lower": 52.5,
+    "upper": 52.5,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "Complete supplied article reviewed. Task-local verifier-guided search gains supported within optimization runs; independent retained benefit and evolution-vs-sampling attribution not established.",
+  "rationale": "闭环技能与修复链可重建，密集反馈带来新解；但主结果全为同题优化轨迹，技能对照少20倍采样，不能认证留存收益。统计有重复分母，实际总成本缺失。"
+}

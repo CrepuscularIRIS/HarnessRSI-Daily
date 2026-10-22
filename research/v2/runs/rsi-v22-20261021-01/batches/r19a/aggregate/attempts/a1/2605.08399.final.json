@@ -1,0 +1,1967 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19a",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2605.08399",
+  "paper_id": "arXiv:2605.08399",
+  "title": "CoCoDA: Co-evolving Compositional DAG for Tool-Augmented Agents",
+  "version": "2605.08399v1",
+  "claim_type": "system_method",
+  "central_claim": "A single compositional code DAG (typed signature, description, pre/post spec, examples per tool) lets a small planner and its tool library co-evolve: Typed DAG Retrieval keeps prompt cost sublinear in library size, validated composite tools are folded from successful trajectories by a fixed teacher, and a DAG-induced saved-call reward trains the planner with GRPO; an 8B student matches or exceeds a 32B teacher on GSM8K and MATH and beats tool-use and library-learning baselines."
+ },
+ "provenance": {
+  "input_hash": "b41dd3e78ba1bcdc3f3f83f36ee863d972fbd513a90f1f786404f8493fb03799",
+  "input_package": "batches/r19a/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T02:52:45Z"
+ },
+ "materials": [
+  {
+   "material_id": "2605.08399.txt",
+   "url": "https://arxiv.org/html/2605.08399v1",
+   "version": "2605.08399v1",
+   "sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2605.08399.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 45–45",
+   "quote": "Tool-augmented language models can extend small language models with external executable skills, but scaling the tool library creates a coupled challenge: the library must evolve with the planner as new reusable subroutines emerge, while retrieval from the growing library must remain within a fixed context budget. Existing tool-use and skill-library methods typically treat tools as flat or text-indexed memories, causing prompt cost to grow with library size and obscuring the typed, compositional structure of executable code. We propose CoCoDA, a framework that co-evolves the planner and tool library through a single code-native structure: a compositional code DAG. Nodes are primitive or composite tools, edges encode invocation dependencies, and each node stores a typed signature, description, pre/post-condition specification, and worked examples. At inference time, Typed DAG Retrieval prunes candidates by symbolic signature unification, ranks survivors by descriptions, filters them by behavioral specifications, and disambiguates with examples, keeping expensive context materialization on progressively smaller candidate sets. At training time, successful trajectories are folded into validated composite tools, while the planner is updated with a DAG-induced reward that credits composites by their primitive expansion size. We provide theoretical results showing retrieval cost reduction, sublinear retrieval time, compositional advantage under the shaped reward, monotone co-evolution under conservative updates, and DAG well-formedness. Across mathematical reasoning, tabular analysis, and code task benchmarks, CoCoDA enables an 8B student to match or exceed a 32B teacher on GSM8K and MATH and consistently improves over strong tool-use and library-learning baselines.",
+   "support_explanation": "Original central claim: typed executable DAG jointly supports retrieval, growth and rewards; theoretical sublinearity/monotonicity and8B-vs32Bmath results claimed.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1186–1220",
+   "quote": "This section addresses axes (A) and (C) of Eq. (1). Typed DAG Retrieval is coarse-to-fine along two orthogonal axes. The first is the\nabstraction axis\ninduced by the compositional DAG: retrieval starts from the highest-level tool whose signature can cover the current subgoal and descends to children only when that composite is too broad, incompatible, or insufficiently discriminative. Thus, the retriever stops as soon as a validated composite can solve the subgoal, instead of blindly opening all lower-level subskills. The second is the\nevidence axis\ninside each candidate node: compatibility is judged using increasingly informative and increasingly expensive records, from typed signatures to descriptions, specifications, and examples. These two axes play different roles. The abstraction axis decides\nhow deep\nretrieval must go in the executable skill DAG, while the evidence axis decides\nwhich alternative implementation\nat the current abstraction level should be surfaced.\n\nThe key asymmetry is that tool compatibility becomes increasingly expensive to judge. Type compatibility is symbolic; semantic relevance requires description ranking; behavioral compatibility requires contract checking; and fine-grained disambiguation requires examples. CoCoDA orders these checks from cheapest to most expensive and pays each expensive cost only on the survivors of earlier stages.\n\nFor a query-induced subgoal, Typed DAG Retrieval constructs a nested sequence\nV\n=\nS\n0\n⊇\nS\n1\n⊇\nS\n2\n⊇\nS\n3\n⊇\nS\n4\nV=S_{0}\\supseteq S_{1}\\supseteq S_{2}\\supseteq S_{3}\\supseteq S_{4}\n. The final set\nS\n4\nS_{4}\nis surfaced to the planner or executor. Importantly, this survivor cascade is applied lazily over the DAG: a composite node is expanded into its children only if the cascade cannot certify the composite itself as a sufficient tool for the subgoal.",
+   "support_explanation": "Code-aware dependency DAG with signatures/descriptions/specifications/examples and lazy composite expansion.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1246–1257",
+   "quote": "Unification is decided symbolically on a static type lattice via an\ninverted index, so the stage incurs zero prompt-token cost; only its\nsymbolic work scales with\n|\n𝒱\n|\n|\\mathcal{V}|\n, bounded by\nCorollary\n2\n. Running it first lets every later\nLLM-billed stage operate on a much smaller survivor set.",
+   "support_explanation": "L1signature unification uses static index and noLLMprompt tokens.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1276–1292",
+   "quote": "; the planner ranks these by semantic relevance to\n\nq\nq\nand keeps the top-\nk\n2\nk_{2}\nshortlist\n𝒮\n2\n\\mathcal{S}_{2}\n. Because\ncandidates live in an invocation DAG rather than a flat pool, ranking\ncan climb to a subsuming composite or descend to a primitive needed to\ncomplete the sub-goal—structural moves that similarity-only\nhierarchies cannot make. Cost is paid on",
+   "support_explanation": "L2ranks all L1survivors before choosing topk2; small downstream shortlist does not bound initial bucket.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1319–1327",
+   "quote": "and treats them as a hard accept/reject judged by\nthe planner under the prompt of Appendix\nD.5\n: a\ncandidate is dropped if its preconditions are not satisfiable in the\ncurrent sub-goal or its postconditions do not imply the desired\noutcome. Binary verdicts admit no false positives under faithful\nspecification reading, so a surviving composite is certified as a\nmacro-action equivalent to its primitive sub-trajectory",
+   "support_explanation": "L3hard accept/reject is planner judgment of declared contracts; faithful reading is an assumption, not a measured sound equivalence verifier.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1647–1647",
+   "quote": "-T(\\tau)\\;=\\;\\sum\\nolimits_{i=1}^{T(\\tau)}\\bigl(\\Phi(t_{i})-\\mathrm{flat}(t_{i})\\bigr)\\;=\\;\\underbrace{\\sum\\nolimits_{i=1}^{T(\\tau)}\\Phi(t_{i})}_{\\text{(i) saved-call credit}}\\;-\\;\\underbrace{T_{\\text{prim}}(\\tau)}_{\\text{(ii) primitive workload}},",
+   "support_explanation": "Saved-call identity is exact but primitive workload varies across arbitrary rollouts of the same query; group subtraction cannot remove this variance. Only behavior-equivalent rewrites have invariant primitive workload.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1733–1733",
+   "quote": "R_{\\text{comp}}(\\tau)\\;=\\;\\sum\\nolimits_{i=1}^{T(\\tau)}\\Phi(t_{i})\\;=\\;\\sum\\nolimits_{i=1}^{T(\\tau)}\\bigl(\\mathrm{flat}(t_{i})-1\\bigr)",
+   "support_explanation": "Reward sums flat-size-minus-one across every call. Primitive padding yields0, but unnecessary composite calls can earn positive credit. This is analytical risk, not observed exploitation.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 1844–1857",
+   "quote": ". Library writes are gated on\n\nR\nres\nR_{\\text{res}}\nalone, so\nR\ncomp\nR_{\\text{comp}}\ncannot inject unsolved\ntrajectories into\nℒ\n\\mathcal{L}\n; it acts only on the planner.",
+   "support_explanation": "Library admission gates on task result rather than shaped reward.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 4020–4020",
+   "quote": "\\mathcal{T}^{+}_{q}\\leftarrow\\{\\tau^{(i)}\\,:\\,R_{\\text{res}}(\\tau^{(i)})\\geq\\rho\\}",
+   "support_explanation": "Algorithm1 admits trajectories whose result reward>=rho.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 4112–4112",
+   "quote": "next query sees the updated library",
+   "support_explanation": "Library change is persistent and available on next query.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 2650–2714",
+   "quote": "on a cloud VM with\n4\n4\nNVIDIA H200 GPUs. Qwen3-32B serves as the teacher for tool extraction and solution generation; smaller students are trained via GRPO. Hyperparameters and reward weights are in the appendix. Source code:\nhttps://anonymous.4open.science/r/CoCoDA-664C\n.\n\n4.1\nExperimental Settings\n\nDatasets.\nWe use six benchmarks across three categories with deterministic code-based verification: math/logical reasoning (GSM8K\n(\nCobbe et al., 2021\n)\n, MATH\n(\nHendrycks et al., 2021\n)\n), tabular analysis (WikiTableQuestions\n(\nPasupat and Liang, 2015\n)\n, FinQA\n(\nChen et al., 2021\n)\n), and code task (EvalPlus\n(\nLiu et al., 2023\n)\n, MBPP\n(\nAustin et al., 2021\n)\n). Statistics are in the appendix.\n\nComparison Methods.\nWe compare against two no-tool CoT baselines (Qwen3 student and Qwen3-32B teacher\n(\nWei et al., 2022\n)\n), three fixed-library tool-augmented methods (ReAct\n(\nYao et al., 2023\n)\n, ToRL\n(\nLi et al., 2025\n)\n, ReTool\n(\nFeng et al., 2025\n)\n), and two library-learning methods (CREATOR\n(\nQian et al., 2023\n)\n, TroVE\n(\nWang et al., 2024b\n)\n). All baselines share the student backbone and task prompts. Component-level ablations are in Section\n4.4\n.",
+   "support_explanation": "Qwen3student sizes0.6/1.7/4/8B; teacher32B; shared student backbone/task prompts and baselines, not all-resource parity.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 2740–2763",
+   "quote": "on MBPP at 0.6B), showing that the co-evolved library transfers teacher competence most effectively when student capacity is scarce. The teacher gap closes with scale: at 8B,\nCoCoDA\n\nmatches or exceeds\nthe 32B teacher on math/logic (GSM8K\n93.67\n93.67\nvs.\n93.40\n93.40\n, MATH\n63.18\n63.18\nvs.\n61.62\n61.62\n;\n⋆\n\\star\nin Table\n1\n), recovering teacher-level performance at roughly a quarter of the parameters. Comparable margins on symbolic (GSM8K, MATH) and retrieval-heavy (WTQ, FinQA) tasks indicate the library generalizes across reasoning styles rather than overfitting one skill. In contrast, library-construction baselines without a tight student–teacher loop (CREATOR, TroVE)\nunderperform\nplain CoT on math and code, confirming tool creation helps only when the library co-evolves with the learner.",
+   "support_explanation": "Teacher comparison is limited to GSM8K/MATH; teacherCoT is tool-free, while student uses teacher data and tool/RLtraining.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 3262–3276",
+   "quote": "CoCoDA (Ours)\n\n93.67\n⋆\n\n63.18\n⋆\n\n51.54\n\n40.16\n\n75.26\n\n76.39",
+   "support_explanation": "Table1 8B93.67/63.18/51.54/40.16/75.26/76.39 acrossGSM8K/MATH/WTQ/FinQA/EvalPlus/MBPP.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 3305–3349",
+   "quote": "Context Cost vs. Library Size: Code Hierarchy vs. Text Hierarchy.\n\nTDR’s novelty lies not in hierarchy itself but in exploiting properties unique to executable code.\nFixing the library at the full-\nCoCoDA\nsnapshot, we swap only the retrieval substrate and\nmeasure mean prompt-token cost for a top-\nk\nk\nset as library size sweeps from\n50\n50\nto\n1,600\n1{,}600\nnodes\n(Figure\n2(b)\n), at matched 4B-student accuracy.\nFlat retrieval\nembeds and\nranks all four annotation levels per node (no hierarchy; typical prior baseline).\nText-hierarchical\nRAG\nbuilds a RAPTOR-style summary tree over L2 descriptions (generic hierarchy).\nTyped DAG\nRetrieval (ours)\ntraverses the call-induced DAG (Algorithm\n2\n). At\n1,600\n1{,}600\nnodes,\nflat retrieval costs\n≈\n11.4\n×\n\\approx\\!11.4\\times\nTDR’s tokens and text-hierarchical RAG\n≈\n4.7\n×\n\\approx\\!4.7\\times\n,\nsince its topic-clustered tree cannot prune by typed signature or contract on abstracted sub-trajectories.",
+   "support_explanation": "Fixed4Blibrary snapshot and matched accuracy; at1600nodes flat~11.4xTDRtokens and text hierarchy~4.7x. Not universal indexed-retrieval superiority.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 3378–3384",
+   "quote": "sweeps library size with the 4B student fixed (one panel per benchmark). Accuracy rises steeply over the first\n∼\n\\sim\n200 tools and plateaus by\n∼\n\\sim\n400, while latency grows roughly linearly, so",
+   "support_explanation": "Observed latency grows roughly linearly and accuracy plateaus~400tools; finite-range efficiency not asymptotic proof.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 3435–3437",
+   "quote": "(GAR, a structural credit term for tools on verified DAG paths). Each variant retrains\nthe 4B student under identical hyperparameters, replacing only the ablated component with\nits non-structural counterpart (flat library, dense retrieval, plain reward); see",
+   "support_explanation": "Main text describes single-component ablations.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 3513–3600",
+   "quote": "w/o CTD (flat library)\n\n89.12\n\n55.74\n\n43.51\n\n26.18\n\n62.83\n\n69.47\n\n−\n3.49\n-3.49\n\nw/o TDR (flat dense retrieval)\n\n91.08\n\n57.92\n\n43.86\n\n26.61\n\n64.73\n\n71.58\n\n−\n1.79\n-1.79\n\nw/o GAR (exec-only reward)\n\n91.32\n\n57.48\n\n45.27\n\n27.74\n\n65.16\n\n71.82\n\n−\n1.40\n-1.40\n\nw/o CTD + TDR\n\n88.47\n\n54.63\n\n41.92\n\n25.38\n\n61.94\n\n68.52\n\n−\n4.64\n-4.64\n\nw/o CTD + TDR + GAR\n\n87.96\n\n54.27\n\n41.38\n\n24.83\n\n61.27\n\n67.86\n\n−\n5.18",
+   "support_explanation": "Table2 CTD/TDR/GARremoval mean losses3.49/1.79/1.40pp; full4B92.64/59.37/46.83/29.06/66.28/73.42.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E018",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 4514–4561",
+   "quote": "Validate\nt\n⋆\nt^{\\star}\nagainst\nL\n3\n,\nL\n4\nL_{3},L_{4}\nof each\nu\n∈\nCh\n⁡\n(\nt\n⋆\n)\nu\\in\\mathrm{Ch}(t^{\\star})\n\n4:\n\nif\nvalidation fails\nor\n\n𝒢\n∪\n{\nt\n⋆\n}\n\\mathcal{G}\\cup\\{t^{\\star}\\}\nnot acyclic\nthen\n\n5:\n\nreturn\n\n⊳\n\\triangleright\nreject\nt\n⋆\nt^{\\star}",
+   "support_explanation": "Candidate insertion validates child specifications/examples and acyclicity; Add/Merge/Reject retention operations. Independent general execution replay and rollback not demonstrated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E019",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 7170–7187",
+   "quote": "ρ\n\\rho\n\n0.8\n0.8\n\nResult reward\nR\nres\nR_{\\text{res}}\n\n{\n0\n,\n1\n}\n\\{0,1\\}\nvia deterministic verifier",
+   "support_explanation": "AppendixEresult reward is binary0/1, rho=.8.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E020",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 7621–7720",
+   "quote": "summarises the six benchmarks. We use the official\ntrain/test splits for GSM8K, MATH, WTQ, FinQA, and MBPP, and the full\nEvalPlus suite (extended HumanEval with hardened unit tests) for code\ngeneration. The training split is used both as the seed set\n\n𝒬\nseed\n\\mathcal{Q}_{\\text{seed}}\nand as the GRPO query stream\n𝒬\n\\mathcal{Q}\n;\nevaluation is reported on the held-out test split.\n\nTable 6:\nDataset statistics and verifier used for each benchmark.\n\nDataset\n\nTask\n\n#train\n\n#test\n\nVerifier\n\nGSM8K\n\ngrade-school math\n\n7,473\n\n1,319\n\nPython exec + exact-match on numeric answer\n\nMATH\n\ncompetition math\n\n7,500\n\n5,000\n\nPython exec + SymPy equivalence check\n\nWTQ\n\ntable QA\n\n14,152\n\n4,344\n\nSQL exec + normalized string/numeric match\n\nFinQA\n\nfinancial table QA\n\n6,251\n\n1,147\n\nPython exec + relative-error\n<\n10\n−\n3\n<10^{-3}\n\nEvalPlus\n\ncode task\n\n—\n\n164\n\nExtended HumanEval unit tests (pass@1)\n\nMBPP\n\ncode task\n\n374\n\n500\n\nCrowd-sourced unit tests (pass@1)\n\nAppendix H\nCase Studies\n\nH.1\nCascaded Retrieval on a GSM8K Query\n\nQuery.\n",
+   "support_explanation": "Official train/test splits5benchmarks; EvalPlus train—/test164, no alternate teacher/library training source identified. Test sizes1319/5000/4344/1147/164/500.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E021",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 7986–8001",
+   "quote": "reports end-to-end wall-clock training time and\nGPU-hours per student size. Latency numbers in\nFigure\n3\nare measured with a warm vLLM cache at batch\nsize\n1\n1\nand averaged over\n256\n256\nheld-out queries per benchmark; error\nbars are one standard deviation over\n3\n3\nseeds.",
+   "support_explanation": "End-to-end staged time/GPUhours and latency256heldout queries/benchmark, warmcachebatch1 described; no equally complete baseline lifecycle bills.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E022",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8052–8072",
+   "quote": "All main-table numbers are averaged over\n3\n3\nseeds (\n{\n13\n,\n42\n,\n2026\n}\n\\{13,42,2026\\}\n) and\nthe standard deviation is at most\n0.4\n0.4\non GSM8K/MATH/WTQ/FinQA and at most\n\n0.7\n0.7\non EvalPlus/MBPP.",
+   "support_explanation": "Three seeds13/42/2026; mean main results and boundedSD<=.4math/tabular,<=.7code; no per-cell intervals or paired tests.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E023",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8089–8094",
+   "quote": "is discarded. Every\ntool, including would-be composites, is stored as an independent entry;\nedges and depths are unavailable at retrieval time, and the compositional\nreward term is set to\n0\n0",
+   "support_explanation": "RemovingCTD also sets compositional reward0, so topology and reward are confounded.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E024",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8129–8145",
+   "quote": "All four annotation levels are\nconcatenated into a single text blob per node and embedded once with\n\nBAAI/bge-large-en-v1.5\n. Retrieval is top-\nk\nk\n(\nk\n=\n8\nk{=}8\n) cosine\nsimilarity to the query embedding, equivalent to what text-style\nhierarchical RAG and similarity-clustered skill memories collapse to\nwhen code-specific structure is removed. The Compositional Tool DAG and\nthe graph-aware reward are preserved.",
+   "support_explanation": "NoTDR uses concatenated metadata denseBGEembedding/top8; not a same-budget typed/spec cascade without edges.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E025",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8232–8240",
+   "quote": "biases rollouts toward\ndeep composites even when primitives would suffice, raising the rate of\n\nR\nres\n=\n0\nR_{\\text{res}}=0\nrollouts.",
+   "support_explanation": "Authors acknowledge large lambda favors unnecessary deep composites and raises failures.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E026",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8328–8374",
+   "quote": "Setting\nρ\n\\rho\ntoo low (\n≤\n0.4\n\\leq 0.4\n) admits noisy compositions and raises\nthe\nInsertTool\nrejection rate at later queries; setting\n\nρ\n=\n1.0\n\\rho=1.0\nstarves the library in early training. The value\nρ\n=\n0.8\n\\rho=0.8\n\nused in the main experiments balances library growth and purity: on MATH,\nit yields\n364\n364\nretained composites vs.\n419\n419\nat\nρ\n=\n0.5\n\\rho=0.5\n(of which\n\n112\n112\nare later overwritten by duplicates) and\n207\n207\nat\nρ\n=\n1.0\n\\rho=1.0\n.",
+   "support_explanation": "Threshold sweep claims retained counts419/364/207forrho.5/.8/1. With binary reward and>=rho these gates are identical on fixed rollouts; claimed purity/growth mechanism requires an unreported score or protocol.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E027",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8453–8500",
+   "quote": "). Moreover, there exist constants\n\n0\n<\nα\n1\n,\nα\n2\n,\nα\n3\n<\n1\n0<\\alpha_{1},\\alpha_{2},\\alpha_{3}<1\nsuch that the L1 type filter retains at most\nan\nα\n1\n\\alpha_{1}\n-fraction of\n𝒱\n\\mathcal{V}\n, the L2 semantic scan retains at most\nan\nα\n2\n\\alpha_{2}\n-fraction of its input, and the L3 constraint check retains at\nmost an\nα\n3\n\\alpha_{3}\n-fraction of its input.\n\nAssumption 2\n\n(Bounded Rewards and Verifier)\n.\n\nThe result reward\nR\nres\n​\n(\nτ\n)\n∈",
+   "support_explanation": "Assumption1 uses fixed positive pruning fractions, not fractions tending0.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E028",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 9297–9340",
+   "quote": "C_{\\text{hier}}\\;\\leq\\;\\alpha_{1}\\alpha_{2}\\,C_{\\text{flat}}+o(C_{\\text{flat}}).\n\nSince\nα\n1\n​\nα\n2\n<\n1\n\\alpha_{1}\\alpha_{2}<1\nby assumption, we conclude\n\nlim sup\nn\n→\n∞\nC\nhier\n/\nC\nflat\n≤\nα\n1\n​\nα\n2\n<\n1\n\\limsup_{n\\to\\infty}C_{\\text{hier}}/C_{\\text{flat}}\\leq\\alpha_{1}\\alpha_{2}<1\n,\nwhich is strictly less than unity and in particular\n\nC\nhier\n=\no\n⁡\n(\nC\nflat\n)\nC_{\\text{hier}}=o(C_{\\text{flat}})",
+   "support_explanation": "L.2 concludes little-o from limsup ratio<=alpha1alpha2<1; ratio1/2 is a counterexample to this inference. L2scans all matching signatures so no bounded bucket assumption means linear prompt input remains possible.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E029",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 8592–8594",
+   "quote": "a composite that dominates it in the L4 reranker score. Intuitively, new\nlibrary entries cannot crowd out previously retrieved tools unless they are\nstrictly better substitutes.",
+   "support_explanation": "L4reranker dominance is treated as substitution improvement; score dominance is not measured task-return dominance.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E030",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 11374–11395",
+   "quote": "the legacy subset of the new context is at least as rich as\n\n𝒞\nq\n(\nk\n)\n\\mathcal{C}_{q}^{(k)}\nrestricted to retained tools, so the conditional\nexpected shaped return over legacy trajectories is bounded below by\n\n𝔼\nτ\n∼\nπ\nθ\nk\n+\n1\n(\n⋅\n∣",
+   "support_explanation": "A richer legacy subset of available context does not preserve its probability under a fixed context-sensitive planner. Clipped stochasticGRPO is not a hard actual-return monotonicity gate.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E031",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "lines 11716–11764",
+   "quote": "For the logarithmic growth, every composite of depth\nd\nd\nhas at least two\nchildren of depth\n≤\nd\n−\n1\n\\leq d-1\n, so by induction the subgraph\n\n𝒢\nv\n\\mathcal{G}_{v}\nrooted at\nv\nv\ncontains at least\n2\nd\n⁡\n(\nv\n)\n2^{d(v)}\nprimitive leaves,\ngiving\nd\n⁡\n(\nv\n)\n≤\nlog\n2\n⁡\n|\n𝒱\np\n|\n≤\nlog\n2\n⁡\n|\n𝒱\n|\nd(v)\\leq\\log_{2}|\\mathcal{V}_{p}|\\leq\\log_{2}|\\mathcal{V}|",
+   "support_explanation": "Binary fan-out does not ensure2^ddistinct primitive leaves. Counterexample:p1,p2; c1=(p1,p2),ci=(c(i-1),p2) is acyclic with2children/composite and linear depth in vertexcount. Acyclicity proof can stand, logarithmic depth cannot.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "2605.08399",
+   "locator": "Abstract",
+   "quote": "scaling the tool library creates a coupled challenge: the library must evolve with the planner as new reusable subroutines emerge, while retrieval from the growing library must remain within a fixed context budget.",
+   "support_explanation": "Author gap: co-evolution of library and planner plus bounded retrieval.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "2605.08399",
+   "locator": "Sec 2.2 Related Works",
+   "quote": "a hierarchy is either code-aware or built for an LLM under a fixed context budget , never both.",
+   "support_explanation": "Positioning claim of a missing quadrant against DreamCoder/Stitch, CodeRAG, RAPTOR, Voyager/CRAFT/CREATOR/TroVE; only ReTool, ToRL, ReAct, CREATOR, TroVE are run.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "2605.08399",
+   "locator": "Sec 1 Introduction",
+   "quote": "Successful trajectories are passed to a fixed teacher abstractor, which proposes composite tools. A proposal is committed only if it preserves acyclicity and satisfies dependency and specification checks.",
+   "support_explanation": "Library edits are written by a fixed stronger teacher (Qwen3-32B), not by the student; commit gate = successful trajectory (R_res >= rho) + acyclicity + LLM-checked specs + dedup merge.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "2605.08399",
+   "locator": "Sec 1 Introduction",
+   "quote": "The planner is updated with a DAG-induced reward that credits tools by their primitive expansion size",
+   "support_explanation": "GAR: reward bonus lambda * sum (flat(t) - 1) per invoked tool, lambda=0.20.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "2605.08399",
+   "locator": "Abstract",
+   "quote": "Typed DAG Retrieval prunes candidates by symbolic signature unification, ranks survivors by descriptions, filters them by behavioral specifications, and disambiguates with examples, keeping expensive context materialization on progressively smaller candidate sets.",
+   "support_explanation": "Four-stage cascade L1-L4; only L1 is symbolic.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "2605.08399",
+   "locator": "Sec 3.2 L3",
+   "quote": "and treats them as a hard accept/reject judged by the planner under the prompt of Appendix D.5",
+   "support_explanation": "Specification filtering and semantic ranking are done by the (small) planner itself; the claim that a surviving composite is certified equivalent (Theorem 3) rests on faithful LLM reading.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.2 Main Results",
+   "quote": "CoCoDA wins every (size, benchmark) cell and beats the strongest tool-augmented baseline, ReTool, by up to",
+   "support_explanation": "Per Table 1 at 8B: margins over ReTool are +0.85 GSM8K, +1.34 MATH, +1.18 WTQ, +0.51 FinQA, +0.91 EvalPlus, +1.01 MBPP; test-set sizes range from 164 to 5,000.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.2 Main Results",
+   "quote": "recovering teacher-level performance at roughly a quarter of the parameters.",
+   "support_explanation": "Teacher row is no-tool CoT (93.40/61.62); student CoT is already 89.84/60.80 and ReTool 92.82/61.84, so MATH parity with the teacher also holds for ReTool.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.1 / App C",
+   "quote": "All baselines share the student backbone and task prompts.",
+   "support_explanation": "Training data, teacher access, cold-start SFT, steps and compute for baselines are not described.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "material_id": "2605.08399",
+   "locator": "App C Baselines",
+   "quote": "also trains a tool-integrated reasoner with GRPO-style updates and shares our RL backbone, but keeps the tool inventory frozen throughout training, isolating the contribution of library co-evolution.",
+   "support_explanation": "ReTool is the intended control for library co-evolution.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.4 Ablation",
+   "quote": "Each variant retrains the 4B student under identical hyperparameters, replacing only the ablated component with its non-structural counterpart (flat library, dense retrieval, plain reward)",
+   "support_explanation": "Component ablations (CTD/TDR/GAR) at 4B; single table without per-cell SD.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "material_id": "2605.08399",
+   "locator": "App J",
+   "quote": "equivalent to a GRPO-trained ReTool-style planner over a flat pool of tools collected from the warm-start phase.",
+   "support_explanation": "Authors state the all-off ablation equals a ReTool-style planner, yet Table 2 gives 87.96/54.27/41.38 on GSM8K/MATH/WTQ versus ReTool 4B 91.05/58.41/46.72 in Table 1.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.4 Ablation",
+   "quote": "Disabling all three barely beats plain CoT, confirming the components are complementary.",
+   "support_explanation": "All-off 4B average is within ~0.2-0.5 pts of 4B CoT on several tasks (GSM8K 87.96 vs 87.79).",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "material_id": "2605.08399",
+   "locator": "App J",
+   "quote": "so that the ablation isolates the mechanism rather than the coefficient schedule.",
+   "support_explanation": "lambda is not re-tuned per ablation; a re-tuned version is said to be within 0.3 points (not shown).",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "material_id": "2605.08399",
+   "locator": "App I",
+   "quote": "standard deviation is at most 0.4 0.4 on GSM8K/MATH/WTQ/FinQA and at most 0.7 0.7 on EvalPlus/MBPP.",
+   "support_explanation": "Three seeds {13, 42, 2026}; only upper bounds of SD given in prose, no per-cell SD in tables, none for ablation; HumanEval+ has 164 problems.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "material_id": "2605.08399",
+   "locator": "App G",
+   "quote": "We use the official train/test splits for GSM8K, MATH, WTQ, FinQA, and MBPP, and the full EvalPlus suite (extended HumanEval with hardened unit tests) for code generation.",
+   "support_explanation": "Table 6 lists EvalPlus with no training split; how the EvalPlus student/library is trained is not stated.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.3 Library Growth",
+   "quote": "Both rise sharply in the first",
+   "support_explanation": "Library size and depth saturate after about 150 steps; End-of-training libraries hold 183-364 composites, max depth 3-4, 61-158 rejected proposals (Table 5).",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.3 Scaling Analysis",
+   "quote": "while latency grows roughly linearly",
+   "support_explanation": "Accuracy plateaus by about 400 tools; the evolved libraries are at most ~380 tools, so the context-budget bottleneck in the motivation is not binding in the trained regime; Fig 2(b) sweeps to 1,600 nodes on a fixed snapshot.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "material_id": "2605.08399",
+   "locator": "Sec 4.3 Context Cost",
+   "quote": "Flat retrieval embeds and ranks all four annotation levels per node (no hierarchy; typical prior baseline).",
+   "support_explanation": "Retrieval-cost comparison at matched 4B accuracy: flat about 11.4x and RAPTOR-style text hierarchy about 4.7x TDR's tokens at 1,600 nodes (Fig 2b).",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "material_id": "2605.08399",
+   "locator": "App H.1 vs Table 5 / Table 4",
+   "quote": "1,873 1{,}873 library tools → \\to 41 41 type-compatible candidates per sub-goal.",
+   "support_explanation": "Case study cites 1,873 library tools for a GSM8K query, while Table 5 gives 309 tools (18 primitives + 291 composites) for GSM8K and Table 4 lists a 42-primitive shared set versus 14-22 primitives per benchmark in Table 5; internal numbers do not reconcile.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "material_id": "2605.08399",
+   "locator": "App L.1 Assumption 3",
+   "quote": "Intuitively, new library entries cannot crowd out previously retrieved tools unless they are strictly better substitutes.",
+   "support_explanation": "Theorem 4 (monotone co-evolution) rests on this retrieval-consistency assumption and on a trust-region GRPO lemma; it concerns the shaped objective J = R_res + lambda R_comp, and the assumption is not tested empirically.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "material_id": "2605.08399",
+   "locator": "App H.3",
+   "quote": "The deduplication prompt (Appendix D.8 ) returns MERGE",
+   "support_explanation": "Near-duplicate merging is decided by an LLM prompt; spec validation of composites is also LLM-based; only acyclicity is checked programmatically.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "material_id": "2605.08399",
+   "locator": "Sec 4 / Algorithm 1",
+   "quote": "Qwen3-32B serves as the teacher for tool extraction and solution generation; smaller students are trained via GRPO.",
+   "support_explanation": "Teacher also generates cold-start SFT demonstrations (Stage 2); the student thus receives teacher supervision twice (SFT and tool library).",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "material_id": "2605.08399",
+   "locator": "App I",
+   "quote": "Table 7 reports end-to-end wall-clock training time and GPU-hours per student size.",
+   "support_explanation": "35-98 GPU-hours for CoCoDA on 4 H200; baseline training cost not reported.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "material_id": "2605.08399",
+   "locator": "Abstract",
+   "quote": "We provide theoretical results showing retrieval cost reduction, sublinear retrieval time, compositional advantage under the shaped reward, monotone co-evolution under conservative updates, and DAG well-formedness.",
+   "support_explanation": "Five conditional results (assumptions on level costs, retrieval consistency, trust-region GRPO); theory not accompanied by checks of its assumptions.",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "material_id": "2605.08399",
+   "locator": "Tables 1-2 reading",
+   "quote": "4B (Acc GSM8K/MATH/WTQ/FinQA/EP/MBPP): full 92.64/59.37/46.83/29.06/66.28/73.42; ReTool 91.05/58.41/46.72/28.95/64.82/72.27; all-off ablation 87.96/54.27/41.38/24.83/61.27/67.86; CoT 87.79/54.10/41.67/24.93/60.4/67.00; w/o CTD -3.49, w/o TDR -1.79, w/o GAR -1.40 mean",
+   "support_explanation": "Our reading: full CoCoDA beats the fixed-inventory ReTool control by 0.1-1.6 pts at 4B; removing the structure drops 3.5-5.2 pts below the full model and 3-5 pts below ReTool, so the structural parts mainly repair the harm of a growing flat library rather than add a large gain over a fixed tool set.",
+   "kind": "our_inference",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "material_id": "2605.08399",
+   "locator": "Sec 5 Conclusion",
+   "quote": "Experiments on GSM8K and MATH show that an 8B student matches or exceeds its 32B teacher, with the largest gains at the smallest student sizes.",
+   "support_explanation": "Headline claim; gains over vanilla CoT are largest for 0.6B and shrink with scale (8B CoT already close).",
+   "kind": "author_report",
+   "material_sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "§4.4 / Table 2",
+   "quote": "mean loss isolates what code-specific hierarchy buys",
+   "support_explanation": "Table 2's Δ column is not the mean of its own per-benchmark drops. Recomputed from the cells: w/o CTD −3.46 (reported −3.49), w/o TDR −1.97 (−1.79), w/o GAR −1.47 (−1.40), w/o CTD+TDR −4.46 (−4.64), all-off −5.01 (−5.18). The −1.79 the text builds on is itself off by 0.18.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "App K, Table 8",
+   "quote": "sweeps the compositional weight",
+   "support_explanation": "The λ sweep reports GSM8K accuracy, and its λ = 0.20 value (92.64) is exactly the Table 1 4B GSM8K test score. App G uses the training split as seed set and query stream, and reports evaluation on the test split; no validation split is described. λ was therefore selected on test accuracy.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "App K",
+   "quote": "as the knee of the accuracy–cost frontier",
+   "support_explanation": "k2 = 32 is likewise chosen from GSM8K accuracy and latency, with no validation split stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "§4.3",
+   "quote": "as library size sweeps from",
+   "support_explanation": "Figure 2(b) sweeps 50 → 1,600 nodes, but the trained libraries end at 205–382 nodes (Table 5) and saturate. How the 800- and 1,600-node libraries were obtained, and what 'matched 4B accuracy' means there, is not stated.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2605.08399.txt",
+   "material_hash": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "sha256": "8fc6e8548acc2d0a5eb5c0ba08e8c74e9724d0c487f55622f2261ef6ad87c636",
+   "locator": "App G",
+   "quote": "The training split is used both as the seed set",
+   "support_explanation": "Every benchmark's seed set and GRPO stream is its training split. Table 6 lists no EvalPlus training split, yet Table 5 reports an evolved EvalPlus library (22 primitives, 183 composites, 61 rejections). Its query source is undefined.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Compositional tool DAG (primitive and composite executable tools with typed signature, description, pre/post spec, examples) that a small planner reads through a four-stage retrieval cascade; baseline = flat/fixed tool inventory (ReTool, ToRL) and flat library learners (CREATOR, TroVE)",
+   "information": "Successful training trajectories (R_res >= 0.8), current library signatures, teacher Qwen3-32B abstraction prompt; planner sees only retrieved tool cards; test tasks not used for library building",
+   "operation": "Per query: retrieve typed candidates (L1 symbolic, L2 top-32 by planner, L3 spec check, L4 example rerank), sample G=8 rollouts, GRPO on R_res + 0.2*sum(flat(t)-1); for successful rollouts the teacher proposes composites that InsertTool validates (children specs, acyclicity), dedups (MERGE) or adds",
+   "output": "Updated library (V, E, I) and updated planner weights per query step",
+   "conditions": "verifiable tasks (exec/exact-match/unit tests), typed Python-like tools, three online epochs, 64 queries per step",
+   "feedback": "deterministic verifier result and saved-call credit",
+   "selection_rule_data": "library writes require successful rollout and passing validation; planner chosen after fixed epochs; no held-out gate for composites; no retirement of tools",
+   "persistence": "tool library grows monotonically (rejected proposals dropped); planner weights saved",
+   "later_use": "retrieved on later queries and at test time via TDR",
+   "claimed_effect": "8B: GSM8K 93.67, MATH 63.18 vs ReTool 92.82/61.84 and teacher CoT 93.40/61.62; wins all 24 (size, benchmark) cells",
+   "failure_boundary": "teacher-written library; LLM-judged spec checks; dependence on typed code tools; library plateau ~400 tools; no tool retirement",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E004",
+    "son55:E005",
+    "son55:E006",
+    "son55:E007",
+    "son55:E022",
+    "son55:E023"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Planner (student LLM) weights trained with graph-aware GRPO and teacher cold-start SFT",
+   "information": "same rollouts and tool cards",
+   "operation": "SFT on teacher demonstrations over a warm library then online GRPO with saved-call reward",
+   "output": "student policy",
+   "conditions": "same",
+   "feedback": "R_res plus lambda * R_comp",
+   "selection_rule_data": "training split",
+   "persistence": "weights (outside harness scope; the library is the retained non-weight component)",
+   "later_use": "inference",
+   "claimed_effect": "w/o GAR: -1.40 mean at 4B",
+   "failure_boundary": "reward can favor deep composites when primitives would suffice (lambda too large lowers accuracy)",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E011",
+    "son55:E014"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Prior tool/skill libraries are flat or text-indexed, so prompt cost grows with library size and code structure is hidden; code-aware hierarchies are not built for token-budgeted LLM planners.",
+  "checked_gap": "Plausible but partly rhetorical: the 'missing quadrant' framing is asserted; the cost bottleneck is not binding in the trained regime (libraries 183-364 composites, accuracy plateau at ~400 tools); Voyager/CRAFT/ReGAL/TroVE-style libraries are cited but only CREATOR and TroVE are run; code-hierarchy retrieval neighbors (RAPTOR-style, CodeRAG-style) appear only in the retrieval-cost sweep.",
+  "lineage_closest_adjacent": [
+   {
+    "item": "ReTool / ToRL (RL with fixed tool inventory)",
+    "source": "baselines Table 1",
+    "solved": "RL for tool-integrated reasoning",
+    "remaining": "tool inventory is static"
+   },
+   {
+    "item": "CREATOR, TroVE, LATM, CRAFT, ReGAL, Voyager (offline or flat-text skill/tool libraries)",
+    "source": "Sec 2",
+    "solved": "tool creation from success",
+    "remaining": "flat storage, no policy coupling"
+   },
+   {
+    "item": "DreamCoder, Stitch (library learning), RAPTOR (budgeted hierarchy)",
+    "source": "Sec 2.2",
+    "solved": "code-aware or LLM-aware hierarchy, not both",
+    "remaining": "claimed unified here"
+   }
+  ],
+  "residue": "Joint growth of an executable library and a planner that uses it under bounded context.",
+  "stakes": "Prompt cost and retrieval errors as a library scales to thousands of tools.",
+  "method_response": "Typed DAG with cost-ordered cascade retrieval, validated composite insertion from teacher abstraction, and a saved-call reward.",
+  "remaining_gap": "Teacher dependence, spec validation by LLM judgment, no tool retirement, benefit over fixed-inventory RL control is about one point, scaling claim not exercised by trained libraries.",
+  "evidence_ids": [
+   "son55:E001",
+   "son55:E002",
+   "son55:E017",
+   "son55:E018"
+  ],
+  "unresolved": [
+   "Whether a static teacher-built library plus the same RL would match CoCoDA (co-evolution not isolated)"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [
+   "structural_prior_encoding"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Opus. C25 fits the operation: the planner emits typed sub-goals and tool-call traces, routes them to an executor (a sound solver) and a deterministic verifier, uses the verified outcome for credit (GRPO with R_res + R_comp), and accumulates verified by-products into reusable capital (the composite library). sol's structural_prior_encoding is kept as supporting with sub null. Acyclicity and flat-size are guaranteed by construction, but C13 requires message-passing or propagation over the wiring, and the DAG here only drives retrieval descent and reward bookkeeping.",
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "planner decomposes the query into typed sub-goals and routes each to retrieved executable tools via a structured typed artifact; execution results (verifier) close the loop and drive credit",
+     "accumulates verified composites into a reusable library (success condition on reusable capital)"
+    ],
+    "success_checks": "typed, machine-checkable handoff present (signature unification, contracts, examples); load-bearing mechanism ablated (CTD, TDR, GAR) but the all-off variant falls below the fixed-inventory ReTool control, so the ablation does not collapse to a named baseline; prompts disclosed; cost reported partly",
+    "failure_checks": "multi-stage pipeline of existing parts risk; spec checks judged by an LLM rather than a sound solver for the retrieval gate",
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E005",
+     "son55:E006",
+     "son55:E011",
+     "son55:E012"
+    ],
+    "reason": "Tool execution is the sound solver and typed sub-goals are the interface (C25 tactic); the novelty sits in the library structure and credit. The learned planner is also the ranker/spec judge, which departs from delegating verifiable work to a sound external component."
+   },
+   {
+    "main_id": "structural_prior_encoding",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "encode known executable call connectivity and exact primitive expansion statistic",
+     "construct typed invocation edges, enforce acyclicity",
+     "use topology in retrieval/reward rather than only similarity",
+     "isolate structure with ablation and justify property/scalability"
+    ],
+    "success_checks": [
+     "explicit executable topology and stable graph invariant",
+     "four student sizes and six benchmark measurements"
+    ],
+    "failure_checks": [
+     "CTD ablation also removes reward",
+     "little-o and depth proof invalid; monotonicity not certified",
+     "LLM contract equivalence not sound formal validation"
+    ],
+    "evidence_ids": [
+     "sol:E002",
+     "sol:E007",
+     "sol:E017",
+     "sol:E023",
+     "sol:E028",
+     "sol:E031"
+    ],
+    "reason": "Opus: DAG invariants (acyclicity, flat size) are kept by construction. C13 (propagation over relational wiring) is not literal, so sub is null."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "crystallize_executable_capability",
+    "sub": "H08",
+    "version": "patterns-2026-10-21",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:crystallize_executable_capability/S1",
+      "status": "partial",
+      "note": "admission needs a verified-successful trajectory, but composite spec/equivalence checks are LLM-judged"
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S3",
+      "status": "partial",
+      "note": "children specs checked at insertion; abstraction not validated on inputs it was not built from before admission, only through test performance"
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/S5",
+      "status": "partial",
+      "note": "library vs no library not directly ablated; flat-library variant and fixed-inventory ReTool control exist"
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/F3",
+      "status": "partial",
+      "note": "skills are written by a stronger fixed teacher, not by the agent"
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/F1",
+      "status": "partial",
+      "note": "library entangled with SFT, GRPO and retrieval; isolating the artifact is only through component ablations"
+     },
+     {
+      "id": "rsi:crystallize_executable_capability/F5",
+      "status": "partial",
+      "note": "dedup MERGE and spec equivalence judged by LLM prompts; acyclicity programmatic"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E003",
+     "son55:E006",
+     "son55:E011",
+     "son55:E022"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "version": "manifest-bound",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:index_experience_for_reuse/S3",
+      "status": "met",
+      "reason": "Executable content and typed/indexed metadata are separately surfaced.",
+      "evidence_ids": [
+       "sol:E002",
+       "sol:E003"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/S4",
+      "status": "met",
+      "reason": "Selective cheap-to-expensive cascade, top32before contract/example checks.",
+      "evidence_ids": [
+       "sol:E003",
+       "sol:E004",
+       "sol:E005"
+      ]
+     },
+     {
+      "id": "rsi:index_experience_for_reuse/S6",
+      "status": "partial",
+      "reason": "Local growth/index updates and finite-range savings; unconditional sublinearity lacks bounded bucket assumption.",
+      "evidence_ids": [
+       "sol:E010",
+       "sol:E014",
+       "sol:E028"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E002",
+     "sol:E003",
+     "sol:E004",
+     "sol:E014"
+    ]
+   },
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "patterns-2026-10-21",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:couple_context_and_weight_updates/S1",
+      "status": "met",
+      "note": "same rollouts feed GRPO and library insertion"
+     },
+     {
+      "id": "rsi:couple_context_and_weight_updates/S3",
+      "status": "met",
+      "note": "planner trained to condition on retrieved tool cards"
+     },
+     {
+      "id": "rsi:couple_context_and_weight_updates/F1",
+      "status": "partial",
+      "note": "weight-side GRPO and teacher SFT are substantial parts of the system"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E004",
+     "son55:E023"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "reason": "Opus, union. H08 is shared by both seats: a typed compositional skill DAG with promotion of recurring sequences. H04 (sol): restructures the store into coarse-to-fine tiers with child pointers, and the claim is certified by cost vs flat retrieval (Fig 2b). H28 (son55, boundary card): the same rollouts drive GRPO and library insertion, and the planner is trained to read the tool cards (S1, S3). Scope stays in under A3 bullet 2 and the run's ASH precedent: the library is read at deployment and has its own structural control (w/o CTD) plus a fixed-inventory control (ReTool).",
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain": {
+    "namespace": "rsi",
+    "main": "crystallize_executable_capability",
+    "sub": "H08"
+   },
+   "operation_correspondence": "Verified tool-call trajectories (delegated execution) are abstracted into typed composite tools and folded into the DAG library, which later queries retrieve and invoke.",
+   "necessary_conditions": "A deterministic verifier and an executable tool interface.",
+   "differences": "Composites are written by a fixed teacher, and equivalence is LLM-judged rather than executed (F5 unmet).",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E022",
+    "sol:E018"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:crystallize_executable_capability/S1",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H08.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Successful source is executed, but abstracted tool admission relies on declared contracts/examples rather than demonstrated independent general execution gate.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E018",
+    "sol:E005",
+    "son55:E003",
+    "son55:E022"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:crystallize_executable_capability/S1; son55:rsi:crystallize_executable_capability/S1"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S3",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H08.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Later-query persistence and five split-based benchmark results exist; no per-tool abstraction generalization/replay audit.",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E020",
+    "son55:E022",
+    "son55:E027"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:crystallize_executable_capability/S3; son55:rsi:crystallize_executable_capability/S3"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/S5",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H08.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Library/graph removal ablations retrain planner and CTD jointly disables reward; no frozen-policy old/new-library crossover.",
+   "evidence_ids": [
+    "sol:E016",
+    "sol:E017",
+    "sol:E023",
+    "son55:E010",
+    "son55:E011",
+    "son55:E026"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:crystallize_executable_capability/S5; son55:rsi:crystallize_executable_capability/S5"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/F5",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H08.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus = son55. L3 spec checks and MERGE decisions are LLM prompts; only acyclicity is programmatic. The source trajectory is executed, but the abstracted composite's equivalence is not.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E018",
+    "son55:E006",
+    "son55:E022"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:crystallize_executable_capability/F5; son55:rsi:crystallize_executable_capability/F5"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S3",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H04.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Executable content and typed/indexed metadata are separately surfaced.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:index_experience_for_reuse/S3"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S4",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H04.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Selective cheap-to-expensive cascade, top32before contract/example checks.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "sol:E005"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:index_experience_for_reuse/S4"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S6",
+   "version": "manifest-bound",
+   "source_strength": "pattern_derived",
+   "source_refs": [
+    "research/patterns/conditions.json",
+    "patterns/sub/H04.md"
+   ],
+   "applies_when": "Persistent executable composites are built, merged and retrieved for later tasks.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Local growth/index updates and finite-range savings; unconditional sublinearity lacks bounded bucket assumption.",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E014",
+    "sol:E028"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rsi:index_experience_for_reuse/S6"
+  },
+  {
+   "id": "local:2605.08399-1",
+   "version": "v2.2-frozen",
+   "source_strength": "local_protocol_or_formal_check",
+   "source_refs": [
+    "2605.08399v1§3,AppendicesE,G,I–L",
+    "research/reference/researchstudio-15-31/ideation-patterns/structural_prior_encoding.md"
+   ],
+   "applies_when": "Sublinear retrieval and depth claims",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Formal bounds require additional premises: fixed ratio<1 does not imply little-o; unbalanced/shared binaryDAG need not have logarithmic depth.",
+   "evidence_ids": [
+    "sol:E027",
+    "sol:E028",
+    "sol:E031"
+   ],
+   "score_item": "M",
+   "origin": "sol:local:2605.08399-1"
+  },
+  {
+   "id": "local:2605.08399-2",
+   "version": "v2.2-frozen",
+   "source_strength": "local_protocol_or_formal_check",
+   "source_refs": [
+    "2605.08399v1§3,AppendicesE,G,I–L",
+    "research/reference/researchstudio-15-31/ideation-patterns/structural_prior_encoding.md"
+   ],
+   "applies_when": "Retained-library generalization",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Merged (same question in both seats: EvalPlus training/library source). Partial: five official splits are separated; the EvalPlus stream is undefined (opus:O05). In addition, λ and k2 were selected on test accuracy (opus:O02, opus:O03).",
+   "evidence_ids": [
+    "sol:E020",
+    "son55:E016"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:local:2605.08399-2; son55:local:2605.08399-2"
+  },
+  {
+   "id": "local:2605.08399-3",
+   "version": "v2.2-frozen",
+   "source_strength": "local_protocol_or_formal_check",
+   "source_refs": [
+    "2605.08399v1§3,AppendicesE,G,I–L",
+    "research/reference/researchstudio-15-31/ideation-patterns/structural_prior_encoding.md"
+   ],
+   "applies_when": "Small performance gaps to strongest baseline/teacher",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Three seeds and boundedSD, but per-cell CI/paired significance absent.",
+   "evidence_ids": [
+    "sol:E022"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2605.08399-3"
+  },
+  {
+   "id": "local:2605.08399-4",
+   "version": "v2.2-frozen",
+   "source_strength": "local_protocol_or_formal_check",
+   "source_refs": [
+    "2605.08399v1§3,AppendicesE,G,I–L",
+    "research/reference/researchstudio-15-31/ideation-patterns/structural_prior_encoding.md"
+   ],
+   "applies_when": "Threshold changes claimed growth/purity",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Binary0/1 reward with>=rho admits same successes forrho.5/.8/1, conflicting with sweep interpretation unless soft scores or other rules undisclosed.",
+   "evidence_ids": [
+    "sol:E009",
+    "sol:E019",
+    "sol:E026"
+   ],
+   "score_item": "X",
+   "origin": "sol:local:2605.08399-4"
+  },
+  {
+   "id": "local:2605.08399-5",
+   "version": "v2.2-frozen",
+   "source_strength": "local_protocol_or_formal_check",
+   "source_refs": [
+    "2605.08399v1§3,AppendicesE,G,I–L",
+    "research/reference/researchstudio-15-31/ideation-patterns/structural_prior_encoding.md"
+   ],
+   "applies_when": "Efficiency and small-student comparison",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Absolute time/GPUhours and warmcachelatency reported; matched baseline whole-lifecycle teacher/build/search billing and amortization absent.",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E021"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:local:2605.08399-5"
+  },
+  {
+   "id": "local:2605.08399-6",
+   "version": "v2.2-frozen",
+   "source_strength": "local_protocol_or_formal_check",
+   "source_refs": [
+    "2605.08399v1§3,AppendicesE,G,I–L",
+    "research/reference/researchstudio-15-31/ideation-patterns/structural_prior_encoding.md"
+   ],
+   "applies_when": "Monotone co-evolution and task-aligned reward",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Workload-baseline equivalence only holds for equivalent rewrites; larger context does not preserve action probabilities; stochastic clippedGRPO not certified actual-return safe.",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E007",
+    "sol:E029",
+    "sol:E030"
+   ],
+   "score_item": "M",
+   "origin": "sol:local:2605.08399-6"
+  },
+  {
+   "id": "rsi:crystallize_executable_capability/F3",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json crystallize F3"
+   ],
+   "applies_when": "skill source is not the evolving agent",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus revised (son55 unmet). Composites are abstracted from the student's own verified successful trajectories, but by a fixed stronger teacher that also writes the SFT demonstrations. The skill source is external supervision, not a human; the failure is partly avoided.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E023"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:crystallize_executable_capability/F3"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S3",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json couple S3"
+   ],
+   "applies_when": "policy is trained to read a context artifact",
+   "applicable": true,
+   "status": "met",
+   "reason": "Planner is trained with GRPO on rollouts that include retrieved tool cards.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E023"
+   ],
+   "score_item": "M",
+   "origin": "son55:rsi:couple_context_and_weight_updates/S3"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate reviewer expectations 1"
+   ],
+   "applies_when": "added structure adds model calls",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Training GPU-hours and retrieval token cost vs library size reported; teacher calls, baseline cost and per-query end-to-end cost not reported.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E024"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:decompose_and_delegate/RE-1"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate reviewer expectations 2"
+   ],
+   "applies_when": "each component claimed to contribute",
+   "applicable": true,
+   "status": "partial",
+   "reason": "CTD/TDR/GAR ablations at 4B only; no co-evolution-off (static library) ablation; teacher access not matched for baselines.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E011",
+    "son55:E012"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:decompose_and_delegate/RE-2"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "decompose_and_delegate reviewer expectations 4"
+   ],
+   "applies_when": "generality is claimed",
+   "applicable": true,
+   "status": "met",
+   "reason": "Six benchmarks in three categories and four student sizes; all verifiable-code tasks.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E016"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rs:decompose_and_delegate/RE-4"
+  },
+  {
+   "id": "local:2605.08399-7",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "baseline fairness practice"
+   ],
+   "applies_when": "method uses a stronger teacher and SFT",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Whether ReTool/ToRL/CREATOR/TroVE received the same teacher demonstrations, tools or training steps is not stated.",
+   "evidence_ids": [
+    "son55:E009",
+    "son55:E023"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:local:2605.08399-1",
+   "note": "Renumbered from son55 local:2605.08399-1 to local:2605.08399-7: A4 hidden ID collision, because sol used local:2605.08399-1 for a different question."
+  },
+  {
+   "id": "local:2605.08399-8",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper internal consistency"
+   ],
+   "applies_when": "scalability is argued from library growth",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Trained libraries are small and plateau; case-study and Table 4/5 numbers disagree (1,873 vs 309 tools; 42 vs 14-22 primitives).",
+   "evidence_ids": [
+    "son55:E017",
+    "son55:E018",
+    "son55:E020"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:local:2605.08399-3",
+   "note": "Renumbered from son55 local-3 (A4 collision with sol's statistics question). Partial. Scored in E.measurement=2 together with the Table 2 Δ mismatch (opus:O01)."
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "CoCoDA beats strong tool-augmented and library-learning baselines in every size/benchmark cell",
+   "setting": "Qwen3 0.6B/1.7B/4B/8B, six verifiable benchmarks, 3 seeds",
+   "baseline_control": "CoT, ReAct, ToRL, ReTool, CREATOR, TroVE",
+   "selection_vs_test": "official test splits; library built on training stream",
+   "result_denominator": "margins over ReTool 0.1-2.0 pts (8B: +0.5 to +1.3); test sizes 164-5,000; SD <= 0.4/0.7",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E015",
+    "son55:E026"
+   ],
+   "counterevidence": [
+    "Margins close to 1-3 SD on large sets and inside noise on HumanEval+ (164 problems); teacher access of baselines unspecified.",
+    "opus:O02"
+   ],
+   "allowed_conclusion": "CoCoDA is consistently slightly ahead of the best RL baseline in author-reported means."
+  },
+  {
+   "claim_id": "C2",
+   "text": "An 8B student matches or exceeds the 32B teacher on GSM8K and MATH",
+   "setting": "8B student with tools vs 32B teacher CoT",
+   "baseline_control": "Teacher without tools",
+   "selection_vs_test": "test",
+   "result_denominator": "93.67 vs 93.40; 63.18 vs 61.62",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E027"
+   ],
+   "counterevidence": "Comparator is a no-tool teacher; 8B CoT is already 89.84/60.80 and ReTool 92.82/61.84.",
+   "allowed_conclusion": "Tool-integrated RL students approach a no-tool 32B teacher; not specific to the library."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Each of CTD, TDR and GAR contributes",
+   "setting": "4B student ablations",
+   "baseline_control": "flat library, flat dense retrieval, exec-only reward",
+   "selection_vs_test": "test",
+   "result_denominator": "-3.49 / -1.79 / -1.40 mean pts",
+   "evidence_ids": [
+    "son55:E011",
+    "son55:E012",
+    "son55:E013",
+    "son55:E026"
+   ],
+   "counterevidence": [
+    "All-off variant (87.96 GSM8K) is 3 pts below ReTool (91.05) although described as ReTool-like; no per-cell SD; no static-library control.",
+    "opus:O01",
+    "son55:E012"
+   ],
+   "allowed_conclusion": "Structure helps relative to an unstructured growing library; incremental benefit over a fixed inventory is about one point."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Typed DAG Retrieval keeps context cost sublinear and far below flat/text-hierarchy retrieval",
+   "setting": "fixed CoCoDA snapshot swept from 50 to 1,600 nodes at matched 4B accuracy",
+   "baseline_control": "flat retrieval, RAPTOR-style tree",
+   "selection_vs_test": "not applicable",
+   "result_denominator": "11.4x and 4.7x token ratios at 1,600 nodes",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E018",
+    "son55:E021"
+   ],
+   "counterevidence": "Sweep exceeds sizes actually evolved (<= ~380 tools); Assumption 1 constants not measured.",
+   "allowed_conclusion": "Cascade retrieval is much cheaper than flat retrieval at large synthetic library sizes."
+  },
+  {
+   "claim_id": "C5",
+   "text": "Co-evolution is monotone and DAG well-formed (theory)",
+   "setting": "Theorem 4, Corollary 5",
+   "baseline_control": "n/a",
+   "selection_vs_test": "n/a",
+   "result_denominator": "proofs under assumptions",
+   "evidence_ids": [
+    "son55:E021",
+    "son55:E025"
+   ],
+   "counterevidence": "Assumptions untested; monotone claim concerns the shaped objective, not accuracy.",
+   "allowed_conclusion": "Acyclicity by construction; monotonicity is conditional."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A teacher-built, typed executable tool DAG co-trained with a GRPO planner gives small, consistent test-accuracy gains (about 0.5-2 points) over a fixed-inventory RL tool-use baseline at four student sizes, and the cascade retrieval is much cheaper than flat retrieval at large library sizes (author-reported, 3 seeds).",
+  "not_supported": "That library co-evolution itself (vs static teacher library + RL, teacher SFT, or better RL) drives the gains; self-discovery of tools (teacher writes them); scalability in the trained regime; certified composite equivalence; fair parity of baselines; teacher-parity beyond the no-tool CoT comparison.",
+  "unresolved": [
+   "EvalPlus training source",
+   "baseline teacher access",
+   "tool-count inconsistencies",
+   "Opus: Table 2 Δ column ≠ mean of its cells (opus:O01).",
+   "Opus: λ and k2 selected on test accuracy (opus:O02, opus:O03).",
+   "Opus: the binary R_res is incompatible with the reported ρ sweep (sol:E026).",
+   "Opus: theory steps invalid (sol:E028, sol:E031)."
+  ],
+  "note": "Author-reported results only; not reproduced. Partially weight-training: library is the retained non-weight component, planner weights are trained."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = son55. Growing a library with the planner is a real problem, and the lineage is broad. But the motivating context-budget bottleneck does not bind in the regime the method produces: the trained libraries are 205–382 tools (Table 5), accuracy plateaus by about 400, and the 1,600-node regime is never reached by training (opus:O04). The 'never both' missing quadrant is the paper's own taxonomy (run precedent: H-Mem). Most named neighbours (Voyager, CRAFT, ReGAL, DreamCoder/Stitch) are not compared.",
+   "evidence_ids": [
+    "son55:E001",
+    "son55:E002",
+    "son55:E017"
+   ],
+   "counterevidence_ids": [
+    "son55:E018",
+    "opus:O04"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. The design (typed cascade, teacher-folded composites, saved-call reward) is concrete, but its stated justification is invalid in key places. Theorem 1 derives o(C_flat) from limsup ≤ α1α2 < 1, and L2 still ranks all α1·n L1 survivors (sol:E028, sol:E004). Corollary 5's log-depth argument fails on a chain (sol:E031). Theorem 4's library step treats LLM-judged L3 checks as certified equivalence, with 'no false positives under faithful reading' (sol:E005, sol:E030). The saved-call reward can credit unnecessary composites, which the authors concede for large λ (sol:E007, sol:E025). Mechanism plausible, key assumptions weak.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "son55:E004"
+   ],
+   "counterevidence_ids": [
+    "sol:E028",
+    "sol:E031",
+    "sol:E030",
+    "sol:E007",
+    "sol:E025"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. Algorithms 1–3, prompts and Table 4 are given, but the retention mechanism cannot be reconstructed as reported. The admission threshold ρ acts on a binary R_res ∈ {0,1} (Table 4), yet the ρ sweep reports 419/364/207 retained composites at 0.5/0.8/1.0, which is impossible on fixed binary rewards (sol:E019, sol:E026). Child-spec validation and dedup are LLM prompts. The EvalPlus query stream is undefined (opus:O05). There is no retirement, versioning or rollback.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E010",
+    "sol:E018",
+    "son55:E003"
+   ],
+   "counterevidence_ids": [
+    "sol:E019",
+    "sol:E026",
+    "opus:O05"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Shared-error correction (both seats 3). The verifiers are standard and deterministic, but the reported numbers do not reconcile. (1) Table 2's Δ column ≠ the mean of its cells (−1.97 vs −1.79, −4.46 vs −4.64, −5.01 vs −5.18; opus:O01). (2) The appendix equates the all-off variant with a ReTool-style planner, yet it sits 3–5 pts below ReTool (son55:E012). (3) Tool counts disagree: 1,873 vs 309, and 42 vs 14–22 primitives (son55:E020). (4) The 'upper bound' teacher is tool-free CoT. Run convention: contradictions cap at 2.",
+   "evidence_ids": [
+    "sol:E013",
+    "son55:E007",
+    "son55:E016"
+   ],
+   "counterevidence_ids": [
+    "opus:O01",
+    "son55:E012",
+    "son55:E020",
+    "son55:E008"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2, confirmed. ReTool (frozen inventory, same RL backbone) is the intended co-evolution control: CoCoDA is ahead in all 24 cells, but by 0.1–1.6 pts against SDs ≤0.4–0.7, and parity (teacher SFT, tool inventory, steps) is unstated. The component ablations are internally inconsistent with that control (all-off ≪ ReTool). w/o CTD also zeroes the reward. There is no static-library arm, and they cover 4B only.",
+   "evidence_ids": [
+    "son55:E010",
+    "son55:E011",
+    "son55:E026"
+   ],
+   "counterevidence_ids": [
+    "son55:E009",
+    "son55:E012",
+    "sol:E023"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. Five benchmarks use official train/test splits, with the library and planner built on training streams. Not 3, for two reasons. (1) EvalPlus has no training split, but an EvalPlus library was evolved from an undefined stream (opus:O05). (2) λ and k2 were selected on test accuracy: Table 8's λ = 0.20 value equals the Table 1 test score, and there is no validation split (opus:O02, opus:O03). The sensitivity in [0.1, 0.3] is ≤0.6 pts, so the bias is small but real. There is no leakage guard.",
+   "evidence_ids": [
+    "sol:E020",
+    "son55:E016"
+   ],
+   "counterevidence_ids": [
+    "opus:O02",
+    "opus:O03",
+    "opus:O05"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2, confirmed (A2 tier 2). Three named seeds with SD upper bounds (≤0.4 / ≤0.7) in prose. There are no per-cell SDs, CIs or tests, and the ablations have no SD. Several ReTool margins (e.g. 0.11 at 4B WTQ/FinQA) are below the stated SD bound.",
+   "evidence_ids": [
+    "sol:E022",
+    "son55:E015"
+   ],
+   "counterevidence_ids": [
+    "son55:E026"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. CoCoDA's stage wall-clock and GPU-hours (35–98) and the retrieval-token ratios (11.4×/4.7× at 1,600 nodes) are reported. The teacher-call cost, the baselines' training cost and any matched-budget comparison are absent, and the token-ratio regime is not one training produces (opus:O04).",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E021",
+    "son55:E024"
+   ],
+   "counterevidence_ids": [
+    "opus:O04"
+   ],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 text read (body, Tables 1–8, Appendices A–L including proofs). In scope under A3 bullet 2 (ASH precedent): the non-weight tool DAG is read at deployment and has structural and fixed-inventory controls, although planner weights are co-trained. The many internal contradictions are author-side facts priced into M/X/E, not missing material. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "structural_prior_encoding",
+   "son55_value": "decompose_and_delegate",
+   "decision": "son55",
+   "final_value": "decompose_and_delegate",
+   "reason": "See rs_pattern.reason.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E005"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "structural_prior_encoding",
+     "C13"
+    ]
+   ],
+   "son55_value": [
+    [
+     "decompose_and_delegate",
+     "C25"
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "decompose_and_delegate",
+     "C25"
+    ],
+    [
+     "structural_prior_encoding",
+     null
+    ]
+   ],
+   "reason": "son55's C25 is primary; sol's card is kept as supporting with the sub dropped (C13 not literal).",
+   "evidence_ids": [
+    "son55:E003",
+    "sol:E002"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "crystallize_executable_capability",
+     "H08"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ]
+   ],
+   "son55_value": [
+    [
+     "couple_context_and_weight_updates",
+     "H28"
+    ],
+    [
+     "crystallize_executable_capability",
+     "H08"
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "crystallize_executable_capability",
+     "H08"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ],
+    [
+     "couple_context_and_weight_updates",
+     "H28"
+    ]
+   ],
+   "reason": "Union of both seats; see domain_pattern.reason.",
+   "evidence_ids": [
+    "sol:E002",
+    "son55:E023",
+    "sol:E014"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2605.08399-1].status",
+   "sol_value": "unmet",
+   "son55_value": "unknown",
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "Different questions under one ID (A4). sol's local-1 (formal bounds need extra premises) is verified unmet (sol:E028, sol:E031). son55's local-1 (baseline parity) moves to local-7, unknown.",
+   "evidence_ids": [
+    "sol:E028",
+    "sol:E031"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2605.08399-2].status",
+   "sol_value": "partial",
+   "son55_value": "unknown",
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Same question in both seats (EvalPlus training source). As an expectation about holdout separation it is partial: five splits are clean and one is undefined. son55's 'unknown' describes the EvalPlus fact, which is priced into E.holdout=2.",
+   "evidence_ids": [
+    "sol:E020",
+    "son55:E016",
+    "opus:O05"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2605.08399-4].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "sol-only. The binary R_res makes the ρ sweep's different library sizes impossible (verified against Table 4 and App K).",
+   "evidence_ids": [
+    "sol:E019",
+    "sol:E026"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2605.08399-5].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "sol-only cost question. Verified: no baseline or teacher bill.",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E021"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2605.08399-6].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "sol-only. The workload-baseline and monotonicity steps hold only for equivalent rewrites (verified in §3.3 and L.5).",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E030"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "son55-only. GPU-hours and retrieval tokens are reported; teacher and baseline costs are not.",
+   "evidence_ids": [
+    "son55:E019",
+    "son55:E024"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "son55-only. 4B-only ablations and no static-library arm.",
+   "evidence_ids": [
+    "son55:E011",
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "son55-only. Breadth: six benchmarks in three categories and four sizes.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:couple_context_and_weight_updates/S3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "son55-only. The planner is GRPO-trained on rollouts conditioned on retrieved tool cards (App D.7).",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E023"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:crystallize_executable_capability/F3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": "partial",
+   "reason": "Teacher-written composites distilled from the student's own verified trajectories: external supervision, not a human. Partly avoided.",
+   "evidence_ids": [
+    "son55:E003",
+    "son55:E023"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:crystallize_executable_capability/F5].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Equivalence is LLM-judged, not executed. sol's 'partial' credited the executed source trajectory, which F5 does not ask about.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E022",
+    "sol:E005"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S3].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "sol-only. Executable bodies and L1–L4 index records are separate.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S4].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "sol-only. The cascade is selective (top-32 before spec/example checks).",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S6].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "sol-only. Local insertion is O(|Ch|+|E|), but sublinearity is unproven (sol:E028).",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E028"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "son55",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.G.",
+   "evidence_ids": [
+    "son55:E017",
+    "son55:E018",
+    "opus:O04"
+   ],
+   "score_impact": "−3.75 vs sol"
+  },
+  {
+   "field_path": "ratings.M",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.M. son55 noted LLM-judged equivalence and reward over-favouring but did not engage the invalid proofs that carry the sublinearity and monotonicity claims.",
+   "evidence_ids": [
+    "sol:E028",
+    "sol:E031",
+    "sol:E030"
+   ],
+   "score_impact": "−5.0 vs son55"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.X. son55 itself recorded that 'internal numbers do not reconcile'. The decisive item is the contradictory ρ gate on a binary reward.",
+   "evidence_ids": [
+    "sol:E019",
+    "sol:E026",
+    "opus:O05"
+   ],
+   "score_impact": "−5.0 vs son55"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.holdout. Both seats flagged EvalPlus; test-set selection of λ/k2 (opus:O02) decides between 2 and 3.",
+   "evidence_ids": [
+    "sol:E020",
+    "opus:O02",
+    "opus:O05"
+   ],
+   "score_impact": "−2.5 vs son55"
+  },
+  {
+   "field_path": "ratings.E.cost",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.cost.",
+   "evidence_ids": [
+    "sol:E014",
+    "son55:E024",
+    "opus:O04"
+   ],
+   "score_impact": "−1.25 vs son55"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "Both seats saw individual inconsistencies: son55 the tool counts and the all-off vs ReTool gap, sol the ρ/binary conflict. Neither applied the run's cap. Neither recomputed Table 2: its Δ column does not equal the mean of its own cells (opus:O01). With several text–table and table–table contradictions the run convention caps E.measurement at 2.",
+   "evidence_ids": [
+    "opus:O01",
+    "son55:E012",
+    "son55:E020"
+   ],
+   "score_impact": "−2.5 (sol 56.25 → 50.0 together with G; son55 66.25 → 50.0 together with M/X/E.holdout/E.cost)"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the full text first. A plausible design with consistent but tiny gains over ReTool, wrapped in invalid theory, a self-contradictory admission gate, an undefined EvalPlus stream, test-chosen λ, and table summaries that do not reconcile. Expected around 50.",
+  "integrity_checks": "Both seats a1 on 2605.08399v1, material sha 8fc6e854…; canonical seat hashes equal conflicts.json.",
+  "core_claim_check": "Table 1 margins vs ReTool and teacher, Table 2 deltas recomputed (opus:O01), Table 4/5/6/8 and App H/K cross-checked, and the Theorem 1/Corollary 5 proofs re-read.",
+  "shared_error_review": "One shared error: E.measurement 3 → 2. E.causality=2 and E.statistics=2 confirmed.",
+  "rating_agreement": "G = son55; M, X, E.holdout, E.cost = sol; E.measurement corrected. Final 50.0."
+ },
+ "input_seat_hashes": {
+  "sol": "9eb180254bb2ad9b841fea182870fa03715fe61c3c9c11316cc01b2a6af31293",
+  "son55": "7011f7d3ec888f6525e7d61abf99c565ff4d4bc31ddc9fe73cf390dd52d983ae"
+ },
+ "score": {
+  "raw": 50.0,
+  "display": 50.0,
+  "lower": 50.0,
+  "upper": 50.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "3dc84e4ad539d854c4f99fec03f8ebf54bdef3fc9440dd8013b8b6d26777b2f3"
+}

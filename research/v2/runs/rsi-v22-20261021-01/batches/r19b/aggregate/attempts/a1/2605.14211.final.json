@@ -1,0 +1,1368 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2605.14211",
+  "paper_id": "2605.14211",
+  "title": "ASH: Agents that Self-Hone in Long-Horizon Worlds",
+  "version": "2605.14211v5",
+  "claim_type": "system_method",
+  "central_claim": "Dynamic bootstrapping from retrieved, IDM-labelled internet video together with autonomously selected long-term key-moment memory enables sustained multi-hour visuomotor progression without reward shaping or action-labelled expert demonstrations.",
+  "scope_class": "A",
+  "scope_reason": "Not pure weight self-training: a non-weight key-moment classifier and observation memory bank are updated, retained and consumed in subsequent control steps; memory removal and random-frame controls are explicitly evaluated. Weight updates are substantial and remain separated from the memory conclusion under frozen A3.",
+  "scope_note": "Opus: in scope (A3 bullet 2). The key-moment memory (classifier K and per-agent bank) is a non-weight object, read by the deployed policy at every step and evaluated by memory-off and random-frame controls. Weight-side bootstrapping gains are not credited as harness evidence."
+ },
+ "provenance": {
+  "input_hash": "84c6caf1b1a5bf8044143d994efafef3a2a03fec844b67ce505b8e4b82ac44a7",
+  "input_package": "batches/r19b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T02:31:29Z"
+ },
+ "materials": [
+  {
+   "material_id": "2605.14211.txt",
+   "url": "https://arxiv.org/html/2605.14211v5",
+   "version": "2605.14211v5",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2605.14211.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 2, retrieval-augmented decision-making, lines 269",
+   "quote": "ASH uses retrieval differently: it retrieves a task-relevant training set from a much larger internet-scale corpus, then updates its weights using that data.",
+   "support_explanation": "Weight training is central; no claim of a frozen-policy or pure harness-only method is warranted.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 3, discovering key moments, lines 1725-1735",
+   "quote": "We further filter the resulting clusters by requiring each cluster contain observations from a minimum of",
+   "support_explanation": "Cluster recurrence across distinct retrieved trajectories is the admission heuristic, not measured marginal task utility. The following displayed expression specifies c_min=30 in implementation details.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 3, inference, lines 1282-1307",
+   "quote": "After executing the action, the agent appends the resulting observation-action pair to",
+   "support_explanation": "Algorithms 2 and 5 plus the adjacent inference paragraph specify append-only per-agent trajectories and key-moment banks, last-ten memory reading, timer reset and all-agent halt/resume. This supports a retained non-weight state but not cross-episode transfer.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.2, lines 2508-2515",
+   "quote": "Each method is averaged over 4 trajectories, and the shaded regions show the standard\ndeviation.",
+   "support_explanation": "Component results have trajectory spread, although four shared-policy trajectories are not four independent training runs. Memory and dynamic-trigger ablations are plotted against online-training GPU hours.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.2, lines 2513-2515",
+   "quote": "By the end of the evaluation, ASH’s long-memory component contributes 2.5 average milestones. Finally, dynamic bootstrapping allows ASH to deploy compute more efficiently by only training when it gets stuck, contributing an additional 1.5 milestones.",
+   "support_explanation": "Author-reported component effects support a memory contribution, not independently replicated effects or a context-only learner.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.5, Table 2 caption, lines 2678-2679",
+   "quote": "Average milestones achieved for key moments versus random frames as the contents of long-term memory, in Pokémon Emerald. Each value is an average over 4 runs of 4 hours.",
+   "support_explanation": "Table 2 gives 7.75 key-moment versus 6.00 random-frame milestones. It isolates content selection within fixed-schedule bootstrapping, not cross-task retention.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.5, lines 2681-2685",
+   "quote": "correspond to key moments, compared to just 0.5% of randomly sampled frames.",
+   "support_explanation": "The preceding displayed percentage is 48% of 400 sampled clusters. The measured cluster noise is a real boundary to the heuristic, not an external admission guarantee.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.1, lines 2433-2438",
+   "quote": "For our baselines, we train one policy for each environment and perform 12 runs each. Since ASH infers multiple agents at once, we perform 3 training runs per environment with",
+   "support_explanation": "N=4 agents yields 12 trajectories but only three ASH training runs and one trained baseline policy; apparent sample sizes must not be treated as equal independent seeds.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.6, lines 2727-2733",
+   "quote": "We compare the final ASH checkpoint (offline ASH) with the online run that created it (online ASH).",
+   "support_explanation": "Replay reuses the same game and primarily demonstrates retention in trained weights. It does not freeze a learned memory artifact and certify it on independent tasks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 5, lines 2741",
+   "quote": "Furthermore, as ASH was evaluated in 2D environments with discrete action spaces, it remains unclear how well ASH generalizes to 3D environments, or to those with continuous action spaces.",
+   "support_explanation": "Explicitly limits the demonstrated operating regime.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Appendix E.1, Table 6, lines 3932-4008",
+   "quote": "Average milestones reached (out of 12) at the end of the 8-hour evaluation, reported as mean",
+   "support_explanation": "Table 6 reports ASH 11.17±0.83 and 9.92±1.51 versus Voyager+Opus5 9.25±1.71 and 7.83±2.04. Body 4.1 says no baseline exceeds milestone 8/6 and introduction calls 6.5/6.0 strongest, inconsistent with this table; abstract aligns with table. Results are not silently reconciled.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4.1, lines 2447-2449",
+   "quote": "Over the 8-hour evaluation, ASH reaches milestone 12 in both environments, while no baseline exceeds milestone 8 in Pokémon or 6 in Zelda.",
+   "support_explanation": "Counterevidence to the numerical consistency of the headline comparison: Table 6 explicitly reports a stronger Voyager baseline beyond both thresholds.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Appendix C, milestone distribution, lines 3781-3783",
+   "quote": "Our evaluations are sensitive to milestone choice.",
+   "support_explanation": "Milestone counts are not uniform progress distances. The appendix audits timing over five human walkthroughs, giving a meaningful but incomplete metric validity check.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 4 baselines, lines 2418-2428",
+   "quote": "For compute parity, we allocate up to",
+   "support_explanation": "The subsequent displayed cap is 288 GPU hours, or early stopping on held-out data. Offline training caps and GPU-normalized ablations are reported, but actual end-to-end per-method video indexing, retraining, inference and foundation-model expenses are not reconciled.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 2, internet-scale behavioral cloning, lines 246",
+   "quote": "ASH departs from these approaches in two ways: it does not rely on a single statically curated training corpus or a fixed action-labeling model. Instead, ASH is an agentic system that uses the trajectories of its agents to update its IDM and retrieve data for policy bootstrapping.",
+   "support_explanation": "Authors identify specific fixed objects and compare to VPT; independent original nearest-neighbour papers are not part of this batch package.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Section 3, bootstrapping, lines 2125-2128",
+   "quote": "and the IDM, we use 10% of samples as a held-out set to prevent overfitting.",
+   "support_explanation": "A training-sample validation fraction is stated; this is not an independent held-out task/game split for the evolving memory mechanism.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 2 Related Work; txt line 269",
+   "quote": "it retrieves a task-relevant training set from a much larger internet-scale corpus, then updates its weights using that data.",
+   "support_explanation": "作者自述：改进以检索数据后更新权重完成。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 1 Intro; txt line 161",
+   "quote": "ASH uses its current trajectories to retrieve relevant examples from online video and to update its Inverse Dynamics Model (IDM).",
+   "support_explanation": "自改进回路：轨迹→检索互联网视频→更新 IDM。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 3 Bootstrapping; txt line 2067",
+   "quote": "Therefore, we use the IDM to create pseudo-actions for each sample from",
+   "support_explanation": "IDM 给检索视频打伪动作标签，策略在其上训练(权重更新)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 3 Key moments; txt line 1790",
+   "quote": "These new key moments serve a dual purpose:",
+   "support_explanation": "关键时刻同时用作长期记忆与触发自举的卡住信号。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 3 Key moments; txt line 1800",
+   "quote": "Secondly, they are used for our dynamic bootstrapping algorithm, where a bootstrap is triggered when an agent does not encounter a new key moment for",
+   "support_explanation": "触发规则：Δ 步无新关键时刻。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.2; txt line 2515",
+   "quote": "Finally, dynamic bootstrapping allows ASH to deploy compute more efficiently by only training when it gets stuck, contributing an additional 1.5 milestones.",
+   "support_explanation": "组件消融：动态自举增益 1.5 个里程碑(长记忆 2.5 在同句前文)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.5; txt line 2705",
+   "quote": "We find that replacing key moments with random frames reduces average achieved milestones by",
+   "support_explanation": "长记忆内容消融：关键时刻 7.75 vs 随机帧 6.00(表2，4 次 4 小时)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.1; txt line 2433",
+   "quote": "For our baselines, we train one policy for each environment and perform 12 runs each.",
+   "support_explanation": "ASH 3 次训练×4 智能体=12 条轨迹；基线 12 次运行。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 5 Limitations; txt line 2741",
+   "quote": "It also relies on pseudo-actions from an Inverse Dynamics Model, which will struggle to label actions that are difficult to infer from pixels.",
+   "support_explanation": "作者局限：IDM 伪标签。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "App E.2; txt line 4088",
+   "quote": "We see that more than half (52.5%) of the corpus is dirty.",
+   "support_explanation": "互联网视频语料脏数据占 52.5%(抽样200)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4 Baselines; txt line 2386",
+   "quote": "so we manually curate 400 hours of high-quality training data.",
+   "support_explanation": "VPT/BC 基线需人工策展 400 小时数据才能起步。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.4; txt line 2620",
+   "quote": "As Pokémon is a long-horizon game, we find a randomly retrieved video has only an 8% chance of being relevant training data, highlighting the challenges of naively training a policy over",
+   "support_explanation": "检索质量评估基线：随机检索相关率 8%。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 1 Intro; txt line 198",
+   "quote": "The strongest baseline gets stuck in both environments, achieving an average of",
+   "support_explanation": "引言数字(6.5/6.0)与摘要及表6(Voyager 9.25/7.83)不一致，文内自相矛盾。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "App E.1 Table 6 caption; txt line 4005",
+   "quote": "Average milestones reached (out of 12) at the end of the 8-hour evaluation, reported as mean",
+   "support_explanation": "终点里程碑均值±标准差：ASH 11.17±0.83/9.92±1.51。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.6; txt line 2731",
+   "quote": "We find that ASH does not exhibit catastrophic forgetting.",
+   "support_explanation": "离线重放最终检查点，无遗忘(仅 Pokémon 4 条轨迹)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.1; txt line 2484",
+   "quote": "Methods without an update mechanism plateau at that horizon.",
+   "support_explanation": "作者的归因：无更新机制的方法停滞。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 5 Limitations; txt line 2741",
+   "quote": "Furthermore, as ASH was evaluated in 2D environments with discrete action spaces, it remains unclear how well ASH generalizes to 3D environments, or to those with continuous action spaces.",
+   "support_explanation": "作者局限：2D 离散动作。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§4.5 Long-term Memory Analysis",
+   "quote": "we replace the w l w_{l} key moments with w l w_{l} frames sampled uniformly at random from the agent’s trajectory during inference",
+   "support_explanation": "The random-frame control is described only at inference. The paper does not say whether this arm's policy was also trained with random-frame memory. If it was trained on key-moment prefixes, the 7.75 → 6.00 drop can come from a train/inference input mismatch rather than from the value of key-moment content.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§4.5",
+   "quote": "Since we cannot perform dynamic bootstrapping with randomly sampled long memory, we compare against Bootstrapped Agent + Long Memory",
+   "support_explanation": "The content control runs under the fixed bootstrap schedule, four trajectories of four hours (Table 2). It is not the configuration that produced the headline results.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Appendix C, milestone distribution",
+   "quote": "ASH completes an average of 11.2 Pokémon milestones compared to the next best baseline which completes 9.",
+   "support_explanation": "This is a third value for the strongest baseline, after the introduction's 6.5 (the BC row) and Table 6's Voyager+Opus 5 at 9.25. Neither seat recorded it.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§4 Milestones",
+   "quote": "We derive our milestones from online walkthroughs",
+   "support_explanation": "Milestones are defined from walkthroughs. The text never says how a milestone's completion is detected during an 8-hour run: automatic RAM/state readout, a visual detector, or manual annotation.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§4.2 Component Ablations",
+   "quote": "removes both the long-term memory and dynamic bootstrapping, fixing the bootstrap interval to",
+   "support_explanation": "This is the store-off arm. 'Bootstrapped Agent' has no long-term memory channel, and '+ Long Memory' adds it back under the same fixed schedule. The +2.5 milestones (sol:E005) is this contrast. Each arm is four shared-policy trajectories.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§3 Discovering key moments",
+   "quote": "is built by applying the HDBSCAN [ 40 ] clustering algorithm over the embeddings of",
+   "support_explanation": "The non-weight classifier K is re-fitted at every bootstrap on newly retrieved video plus all previous embeddings. No arm freezes K after initialisation, so the effect of updating the memory's admission rule is never separated from the weight retraining that happens in the same bootstrap.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O07",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§3 Inference",
+   "quote": "At each step, agent n n reads the w l w_{l} most recent key moments from its memory bank",
+   "support_explanation": "The non-weight memory is read by the deployed policy at every action. This is the A3 bullet-2 fact separating ASH from the out-of-scope cases where the non-weight asset only feeds training.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O08",
+   "material_id": "2605.14211.txt",
+   "material_hash": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "§1 Introduction",
+   "quote": "The strongest baseline gets stuck in both environments, achieving an average of 6.5 6.5 and 6.0 6.0 milestones, respectively.",
+   "support_explanation": "6.5/6.0 are the BC row of Table 6. Voyager+Opus 5 is reported at 9.25/7.83 there and in the abstract (son55's finding, with the numbers).",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Key-moment classifier and per-agent long-term observation bank",
+   "information": "Pixels and observation-action histories; internet-video DINOv2 embeddings; no game-memory privileged state or action labels on internet videos. IDM uses future frames only for training-label inference, not deployed action selection.",
+   "operation": "Cluster retrieved and previously embedded frames using HDBSCAN; require recurrence across at least 30 distinct trajectories; append an encountered cluster's first matching observation to that agent's bank; prefix the last ten such observations to short memory.",
+   "output": "Persistent classifier plus bounded read window over per-agent key-moment memories",
+   "conditions": "Repeated visually coherent internet observations; HDBSCAN outlier rejection and approximate-predict; visually ambiguous actions and noisy clusters remain limitations.",
+   "feedback": "Observed trajectory progression through previously unseen clusters; no external marginal utility check per memory.",
+   "selection_rule": "Cluster recurrence and first occurrence, not held-out task gain; no explicit rollback or retirement gate.",
+   "selection_data": "Retrieved internet frames and current game observations",
+   "persistence": "Classifier is updated between bootstraps; per-agent banks persist within the multi-hour playthrough. Cross-session serialization/version rollback not specified.",
+   "later_use": "Every later policy action reads last ten key moments; memory-conditioned training uses only moments preceding the training window.",
+   "claimed_effect": "Memory adds 2.5 milestones; key moments outperform random-frame memory by 1.75 in Pokémon.",
+   "failure_boundary": "Only 48% of sampled clusters are judged key moments; semantic usefulness and cross-task transfer not guaranteed.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E005",
+    "sol:E006",
+    "sol:E007"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Training-data retrieval, IDM weights and visuomotor policy weights",
+   "information": "On-policy actions label IDM updates; visually similar internet videos provide observation-only demonstrations; final evaluation milestones are human-defined measurements, not training rewards.",
+   "operation": "When any of four agents encounters no new key moment for 20 minutes, halt all, retrieve top 100 videos per agent with one-to-one window matching, update clusters and IDM, label videos, gradient-train policy with memory, then resume current states.",
+   "output": "Updated weights and classifier for the next gameplay segment",
+   "conditions": "Useful walkthrough coverage and inferable discrete actions; repeated bootstrap compute available.",
+   "feedback": "Stuck timer determined by cluster novelty, executable game trajectories and IDM action supervision",
+   "selection_rule": "Sample-level 10% validation and at most three epochs; no held-out task-performance promotion or rollback.",
+   "selection_data": "Current playthrough and retrieved videos for that game",
+   "persistence": "Weights and classifier replace the current versions; game state and per-agent banks survive the training pause.",
+   "later_use": "Updated policy and IDM guide subsequent inference/bootstraps; final policy replay is separately tested in the same game.",
+   "claimed_effect": "Continued milestone progress over eight hours unlike fixed-weight baselines; more efficient dynamic than fixed bootstrap timing.",
+   "failure_boundary": "Depends on video availability, IDM ambiguity, two 2D discrete games; does not establish an improved improver.",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E008",
+    "sol:E009",
+    "sol:E010",
+    "sol:E014",
+    "sol:E015",
+    "sol:E016"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Static internet BC corpora and fixed IDM cannot cover new mechanics encountered hours later; bounded short context loses visually remote but decision-relevant milestones.",
+  "checked_gap": "Specific fixed data/labeler and bounded-memory bottlenecks are identifiable and probed with VPT/BC/RAEA, memory ablations and dynamic-versus-fixed bootstrapping. No exhaustive novelty audit is possible from the fixed single-paper package.",
+  "lineage": [
+   {
+    "method": "VPT",
+    "source": "2605.14211v5 Section 2, ref 4 and baseline description; original version not supplied",
+    "change": "Static IDM-labelled corpus to trajectory-triggered retrieval and IDM refresh"
+   },
+   {
+    "method": "RAEA (Zhu et al.)",
+    "source": "2605.14211v5 Section 2/4, ref 9; original version not supplied",
+    "change": "Short retrieved policy examples versus selectively stored key moments and training-set retrieval"
+   },
+   {
+    "method": "Voyager",
+    "source": "2605.14211v5 Section 2/4, ref 32; original version not supplied",
+    "change": "Text/code skill library contrasted with pixel-only policy and observation memories"
+   }
+  ],
+  "closest_adjacent": [
+   "VPT",
+   "RAEA",
+   "Voyager and bounded-memory visuomotor BC"
+  ],
+  "residue": "A policy can reach a distributional roadblock that a fixed corpus/IDM underrepresents, while visually similar current states require different actions depending on earlier events.",
+  "stakes": "Manual reward/corpus engineering and inability to sustain progress beyond early mechanics; current experiments cover only the first several game milestones.",
+  "method_response": "Use novelty-selected observation memory for disambiguation and stuck-triggered targeted video re-training for new mechanics.",
+  "remaining_gap": "No unseen-game retained-memory test, no independent semantic admission gate, no full cross-lever causal design; numerical baseline descriptions conflict within v5.",
+  "evidence_ids": [
+   "sol:E001",
+   "sol:E005",
+   "sol:E006",
+   "sol:E010",
+   "sol:E012",
+   "sol:E015"
+  ],
+  "unresolved": [
+   "Supply fixed original VPT, RAEA and closest pixel-memory/coupled-learning papers to independently check lineage and residual novelty; this request must go to both seats in a re-fixed package if used to revise judgments."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "Opus: son55's card. The paper's core move is C08: an inverse (artifact→specification) mapper (the IDM) labels naturally occurring internet video, the data is steered to the learner's current failure region (the stuck trigger), passed through a gate (one-to-one window matching, ≥30-trajectory cluster recurrence) and used for retraining, and the procedure iterates. The real target is measured directly (game milestones), and the 94% vs 8% retrieval-relevance audit links the intermediate property to the target. sol's generative_process_redesign is not kept: the 'fixed component' it names (static corpus, fixed IDM) is exactly C08's coverage defect, and C08 already describes the dynamic loop. sol's supporting adapt_via_conditioning is not kept either: the memory conditions a policy that is retrained, not one that adapts without retraining.",
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "1 语料瓶颈：静态语料不覆盖当前路障(陈述)；2 可控生成器：非生成而是检索+逆映射标注；3 质量闸：检索相关性+聚类过滤；4 迭代：每次卡住重做；5 对真实目标迁移：直接在真实游戏评测",
+    "success_failure_checks": "成功：过滤环节被消融(随机帧长记忆 vs 关键时刻)；失败：中间性质(检索相关率 94%)与下游里程碑已连接",
+    "evidence_ids": [
+     "son55:E002",
+     "son55:E003",
+     "son55:E007",
+     "son55:E012"
+    ],
+    "reason": "Opus final: IDM inverse mapping + failure-targeted retrieval + cluster/matching gate + iterate + real-target milestones = C08. Fit partial: retrieval, not synthesis, so the data cannot leave the corpus's support."
+   }
+  ],
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "version": "manifest-frozen",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "S3",
+      "status": "met",
+      "reason": "Policy explicitly trained to read the key-moment input and classifier refreshed in each bootstrap.",
+      "evidence_ids": [
+       "sol:E001",
+       "sol:E003",
+       "sol:E016"
+      ]
+     },
+     {
+      "id": "F3",
+      "status": "partial",
+      "reason": "Shared retrieved trajectories and trained memory channel show coupling, but no context-only/weight-only/coupled held-out comparison.",
+      "evidence_ids": [
+       "sol:E005",
+       "sol:E006"
+      ]
+     },
+     {
+      "id": "F5",
+      "status": "unmet",
+      "reason": "Adaptation and reported progress occur in the same gameplay stream.",
+      "evidence_ids": [
+       "sol:E008",
+       "sol:E009",
+       "sol:E016"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E001",
+     "sol:E005",
+     "sol:E016"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "version": "manifest-frozen",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "S3",
+      "status": "met",
+      "reason": "Raw observation content is distinct from embedding/cluster index.",
+      "evidence_ids": [
+       "sol:E002",
+       "sol:E003"
+      ]
+     },
+     {
+      "id": "S4",
+      "status": "met",
+      "reason": "Only last ten selected key moments condition actions.",
+      "evidence_ids": [
+       "sol:E003"
+      ]
+     },
+     {
+      "id": "S2",
+      "status": "partial",
+      "reason": "Recurrence/noise filter, but no external task-utility admission test.",
+      "evidence_ids": [
+       "sol:E002",
+       "sol:E007"
+      ]
+     },
+     {
+      "id": "S5",
+      "status": "partial",
+      "reason": "No-memory and random-content ablations within adaptive training, not independent later tasks.",
+      "evidence_ids": [
+       "sol:E005",
+       "sol:E006"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E002",
+     "sol:E003",
+     "sol:E005",
+     "sol:E006"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "reason": "Opus sides with sol. H28 is a boundary card that lists papers whose harness part is load-bearing. Its success condition S3 holds (the policy is trained to condition on the memory artifact), but its failure mode F1 (weight-side machinery carries the paper) also largely applies. H04: the content is raw frames, the index is the cluster boundaries, the read is selective (the last 10), and there is a removal control.",
+  "revision_proposals": [
+   "A3/H28 note: coupled weight+memory learners stay in scope only when the memory is read at deployment and has its own removal control (see batch notes)."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain": {
+    "namespace": "rsi",
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28"
+   },
+   "operation_correspondence": "The same stuck-triggered retrieved set D^R feeds both levers: it re-fits the non-weight key-moment classifier K and, after IDM labelling, retrains the memory-conditioned policy. That is C08's generate–gate–retrain loop over H28's shared-data interface.",
+   "necessary_conditions": "A shared retrieved stream and a policy trained to read the memory prefix.",
+   "differences": "No context-only / weight-only / coupled comparison on unseen tasks (H28 step 5). Adaptation and evaluation run on one stream (F5).",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E003",
+    "opus:O06",
+    "opus:O07"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "ideation-patterns/generative_process_redesign.md, reviewer expectations bullet 1"
+   ],
+   "applies_when": "Claiming liberation of a fixed staged-learning component improves progression",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Fixed versus dynamic schedule and memory removals exist; not a full factorial separating changed training corpus, IDM and memory.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E015"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rs:generative_process_redesign/RE-1",
+   "note": "Kept as a check question only: generative_process_redesign is not retained as a pattern match in this final record (see resolutions on *_pattern.matches)."
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md, S5; frozen conditions.json"
+   ],
+   "applies_when": "Claiming selected persistent memory improves control",
+   "applicable": true,
+   "status": "met",
+   "reason": "No-long-memory and random-frame controls directly test whether selected memory matters within the evaluated games; does not imply transfer.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:index_experience_for_reuse/S5"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S2",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md, external-write-gate condition"
+   ],
+   "applies_when": "Growing the set of memories claimed useful",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Recurrence and outlier rejection are defined, but 48% cluster validity and no utility gate limit reliability; raw observation memories do not hallucinate generated facts.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E007"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:index_experience_for_reuse/S2"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md, test-stream split failure",
+    "frozen conditions.json F5"
+   ],
+   "applies_when": "Inferring retained harness gains beyond adaptation tasks",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus (sol's status; son55 left 'unknown' as out of scope). The complete text was read: adaptation and reported progress run on the same gameplay stream, and the only replay (§4.6) re-runs the same game with frozen weights. No split is declared.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E009",
+    "sol:E016",
+    "son55:E002",
+    "son55:E008"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rsi:couple_context_and_weight_updates/F5; son55:rsi:couple_context_and_weight_updates/F5"
+  },
+  {
+   "id": "local:2605.14211-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2605.14211v5 Appendix E.1 vs Section 4.1"
+   ],
+   "applies_when": "Headline superiority rests on milestone differences",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Merged (same question in both seats). The strongest-baseline value takes three forms: 6.5/6.0 in the introduction (the BC row, opus:O08), '9' in Appendix C (opus:O03), and 9.25/7.83 in Table 6 and the abstract. §4.1's 'no baseline exceeds milestone 8' contradicts the 9.25 mean. Unmet.",
+   "evidence_ids": [
+    "sol:E011",
+    "sol:E012",
+    "son55:E013",
+    "son55:E014"
+   ],
+   "score_item": "E.measurement",
+   "origin": "sol:local:2605.14211-1; son55:local:2605.14211-1"
+  },
+  {
+   "id": "local:2605.14211-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "2605.14211v5 Section 4 implementation and 4.1/4.2"
+   ],
+   "applies_when": "Claiming compute-efficient adaptation and robust average gains",
+   "applicable": true,
+   "status": "partial",
+   "reason": "GPU cap, GPU-normalized curves and spread are provided; end-to-end actual expenditure and independent training-seed variance for all methods are not.",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E008",
+    "sol:E014"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:local:2605.14211-2"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ASH sustains progression better than adaptive/non-adaptive baselines in both games.",
+   "setting": "Two 2D games, eight gameplay hours, four concurrent ASH agents per training run; pixels/buttons only.",
+   "baseline/control": "Voyager+Opus5, VPT, offline BC and RAEA; nominal 288-GPU-hour cap for trained alternatives.",
+   "selection_vs_test": "Online progress is adaptation-stream performance; separate 10% sample validation controls training, not task holdout.",
+   "result/denominator": "Table 6: ASH 11.17±0.83/12 and 9.92±1.51/12; Voyager 9.25±1.71 and 7.83±2.04. Twelve trajectories per method, but 3 ASH training runs versus 1 baseline trained policy per game.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E011",
+    "sol:E014",
+    "sol:E016"
+   ],
+   "counterevidence": [
+    "sol:E012",
+    "opus:O03",
+    "opus:O08"
+   ],
+   "allowed_conclusion": "Author-reported within-game progression advantage; exact headline baseline contrast is internally inconsistent and broad scalability is not established."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Autonomously selected long-term memories and dynamic bootstrapping each improve progression.",
+   "setting": "Pokémon component study with four trajectories; fixed bootstrap schedule for random-versus-key memory.",
+   "baseline/control": "Bootstrapped agent without memory; fixed schedule with memory; dynamic schedule; random-frame versus key-moment memory.",
+   "selection_vs_test": "Same environment and adaptation stream; not a held-out frozen memory transfer test.",
+   "result/denominator": "Memory reported +2.5 milestones, dynamic timing +1.5; Table 2 key moments 7.75 vs random 6.00, four four-hour runs.",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E005",
+    "sol:E006"
+   ],
+   "counterevidence": [
+    "sol:E007",
+    "opus:O01",
+    "opus:O06"
+   ],
+   "allowed_conclusion": "Specific observation-memory selection helps this coupled within-game learner; neither a context-only improvement nor general retained harness transfer is isolated."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Final ASH policy does not catastrophically forget earlier game competence.",
+   "setting": "Pokémon replay from beginning, 1.3 million steps/six hours, four trajectories.",
+   "baseline/control": "Final frozen-weight policy versus online run that produced it.",
+   "selection_vs_test": "Same game, not a new task family; largely a weight-retention test.",
+   "result/denominator": "Final-policy replay progresses faster; IDM early-bootstrap movement accuracy remains roughly stable across eight bootstraps.",
+   "evidence_ids": [
+    "sol:E009"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Evidence against catastrophic forgetting in this same-game replay, not evidence that an edited improver causes better descendants."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Author-reported selected observation memory and stuck-triggered retraining improve same-game long-horizon progression in a coupled context/weight learner; selected-memory ablations support a real local harness contribution. No independent retained-memory transfer or improver-level improvement is established.",
+  "unresolved": [
+   "Numerical baseline claims in introduction/4.1 conflict with Table 6.",
+   "No held-out task evaluation of the retained non-weight artifact.",
+   "Independent nearest-neighbour source verification and complete actual-budget accounting absent.",
+   "Opus: the random-frame control is described only at inference (opus:O01), so the 1.75-milestone content effect may include train/inference mismatch.",
+   "Opus: no frozen-K arm separates the memory's feedback-driven update from weight retraining (opus:O06).",
+   "Opus: milestone detection procedure not described (opus:O04)."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Both seats (sol 3; son55 did not score under its out_of_scope reading). The bottleneck is concrete and demonstrated by the baselines plateauing: a fixed corpus and IDM do not cover later mechanics, and bounded short memory loses history needed for decisions (Appendix A, Fig. 8 example). The lineage VPT → RAEA → Voyager is explicit and empirically compared. Not 4: memory-side neighbours (memory-augmented architectures, skill libraries) are only named in one sentence.",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E010",
+    "sol:E015",
+    "son55:E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus = sol. Novelty against clusters admits memories and drives the stuck trigger. Retrieval targets the current roadblock, and the IDM's use of future frames makes labelling easier than policy learning. Each operation answers a stated failure, and the key-moment vs random-frame prediction is checkable. Not 4: 'recurring across ≥30 trajectories = key moment' is an assumption, and only 48% of sampled clusters pass the authors' key-moment check.",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E002",
+    "sol:E003",
+    "sol:E005"
+   ],
+   "counterevidence_ids": [
+    "sol:E007",
+    "sol:E010"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Opus = sol. Algorithms 1–5 plus the settings (N=4, w_s=64, w_l=10, k=100, w_r=540, c_min=30, Δ=4800, 10% held-out samples, initial checkpoints) make the loop reconstructable, including halt/resume and the per-step memory read (opus:O07). Thin points: no memory retirement other than recency, no rollback of a harmful bootstrap, and an unstated milestone detection procedure (opus:O04).",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003",
+    "sol:E007",
+    "sol:E016",
+    "opus:O07"
+   ],
+   "counterevidence_ids": [
+    "opus:O04"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol, at the run's cap for text–table contradictions. Milestones are defined (Tables 3–4), and their uneven spacing is audited against five human walkthroughs (Table 5). Retrieval and cluster quality are human-annotated. But the headline baseline magnitude is internally inconsistent: 6.5 in the introduction, '9' in Appendix C, 9.25 in Table 6, and '§4.1: no baseline exceeds 8' (opus:O08, opus:O03, sol:E011, sol:E012). Completion detection is undescribed (opus:O04).",
+   "evidence_ids": [
+    "sol:E011",
+    "sol:E013",
+    "sol:E007",
+    "opus:O03",
+    "opus:O08"
+   ],
+   "counterevidence_ids": [
+    "sol:E012",
+    "son55:E013",
+    "opus:O04"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Revised (sol 3; son55 unscored). Relevant controls exist. The memory-off arm (opus:O05) gives +2.5 milestones under the same fixed schedule, plotted against online GPU hours. Fixed vs dynamic scheduling gives +1.5, and key-moment vs random-frame memory gives 7.75 vs 6.00. Two gaps keep this at 2 rather than 3. (1) The random-frame control is stated only at inference (opus:O01), so the content effect is confounded with a train/inference mismatch. (2) No frozen-K arm isolates the retained component's feedback-driven update from the weight retraining in the same bootstrap (opus:O06). The headline baseline contrast also compares different information sources (400 h of curated data for VPT/BC, the Opus 5 API for Voyager). This follows the run convention that a clean store-off without the non-feedback arm is 2.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006",
+    "opus:O05",
+    "opus:O02"
+   ],
+   "counterevidence_ids": [
+    "opus:O01",
+    "opus:O06"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus = sol. Adaptation and reported progress share one stream (H28 F5 unmet). The 10% split is sample-level early stopping, IDM testing uses a separate playthrough, and the §4.6 replay re-runs the same game. No held-out game, and no frozen-memory transfer.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E009",
+    "sol:E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol (A2 tier 2). The main result is a mean ± std over 12 trajectories from 3 ASH training runs (one trained policy per baseline), and there are negative component outcomes. No significance test or CI. The ablations are four shared-policy trajectories, i.e. one training run per arm.",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E008",
+    "sol:E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. A 288-GPU-hour cap (4×H100) applies to all methods, the initialisation runs (3 and 9 GPU h) are stated, the ablations are plotted per online GPU hour, and Table 10 uses 96-GPU-hour runs. Missing: DINOv2 indexing of about 39k videos, the Voyager+Opus 5 API spend, and the actual ASH total.",
+   "evidence_ids": [
+    "sol:E014",
+    "sol:E004"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v5 HTML text read (body, Algorithms 1–5, Tables 1–14, Appendices A–I). In scope under A3 bullet 2. The key-moment memory (classifier K + per-agent bank) is a non-weight component that is updated at stuck-triggered bootstraps and read by the deployed policy at every step (opus:O07), with removal and content controls (opus:O05, sol:E006). This follows the run's RMM (r02b) and PsychAgent (r13b) rulings. Weight-side bootstrapping gains are not counted as harness evidence. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "paper.claim_type",
+   "sol_value": "system_method",
+   "son55_value": "component_training",
+   "decision": "sol",
+   "final_value": "system_method",
+   "reason": "In scope, so the claim type follows the author's system claim (a self-improving agent system). son55's component_training went with its out_of_scope reading.",
+   "evidence_ids": [
+    "sol:E005",
+    "opus:O07"
+   ],
+   "score_impact": "none (claim_type does not change weights)"
+  },
+  {
+   "field_path": "assessment.evidence_level",
+   "sol_value": "task",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "task",
+   "reason": "Adaptation and evaluation share one stream, and nothing is frozen and transferred, so not retained. son55's null went with out_of_scope.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E009"
+   ],
+   "score_impact": "none (label is not scored)"
+  },
+  {
+   "field_path": "assessment.claim_support",
+   "sol_value": "scoped",
+   "son55_value": "unresolved",
+   "decision": "sol",
+   "final_value": "scoped",
+   "reason": "The narrow claim is supported (selected key-moment memory plus stuck-triggered retraining improves same-game progression). The broad 'scalable recipe' is not. son55's 'unresolved' was the scope question, now resolved.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006",
+    "sol:E011"
+   ],
+   "score_impact": "none (label is not scored)"
+  },
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "generative_process_redesign",
+   "son55_value": "self_supervised_signal_engineering",
+   "decision": "son55",
+   "final_value": "self_supervised_signal_engineering",
+   "reason": "See rs_pattern.reason.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003",
+    "son55:E012"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "generative_process_redesign",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "self_supervised_signal_engineering",
+     "C08"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "self_supervised_signal_engineering",
+     "C08"
+    ]
+   ],
+   "reason": "C08 kept. sol's generative_process_redesign and adapt_via_conditioning are rejected (see rs_pattern.reason).",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003",
+    "son55:E007",
+    "son55:E012"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "couple_context_and_weight_updates",
+     "H28"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ]
+   ],
+   "son55_value": [],
+   "decision": "sol",
+   "final_value": [
+    [
+     "couple_context_and_weight_updates",
+     "H28"
+    ],
+    [
+     "index_experience_for_reuse",
+     "H04"
+    ]
+   ],
+   "reason": "son55 left this empty under out_of_scope and noted H28 fit=low because 'the memory bank is not an editable context artifact the policy is trained to read'. That is contradicted by the text: the policy is trained with K-constructed memory prefixes (Algorithm 4) and reads them at inference (opus:O07).",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E003",
+    "opus:O07"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2605.14211-2].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "sol-only question (cost accounting). Verified: there is a GPU cap and GPU-normalised curves, but no indexing/API totals.",
+   "evidence_ids": [
+    "sol:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:generative_process_redesign/RE-1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Kept as a check question (card not retained). Verified: there are fixed-vs-dynamic and memory removals, but no factorial.",
+   "evidence_ids": [
+    "sol:E005"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:couple_context_and_weight_updates/F5].status",
+   "sol_value": "unmet",
+   "son55_value": "unknown",
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "son55 left 'unknown' because it did not evaluate an out-of-scope row. The complete text shows no declared split between the adaptation and reported streams.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S2].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "sol-only. Verified: admission is cluster recurrence, not an external utility check.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:index_experience_for_reuse/S5].status",
+   "sol_value": "met",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "met",
+   "reason": "sol-only. A store-removal arm exists (opus:O05). Its weaknesses are scored in E.causality=2, not here.",
+   "evidence_ids": [
+    "sol:E005",
+    "opus:O05"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.G. son55's unknown was the out_of_scope consequence.",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E015"
+   ],
+   "score_impact": "+11.25 vs son55's unscored row"
+  },
+  {
+   "field_path": "ratings.M",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.M.",
+   "evidence_ids": [
+    "sol:E002",
+    "sol:E003"
+   ],
+   "score_impact": "+15 (row now scored)"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "reason": "See ratings.X.",
+   "evidence_ids": [
+    "sol:E003",
+    "opus:O07"
+   ],
+   "score_impact": "+15 (row now scored)"
+  },
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.measurement; Appendix C's '9' added (opus:O03).",
+   "evidence_ids": [
+    "sol:E011",
+    "opus:O03"
+   ],
+   "score_impact": "+5 (row now scored)"
+  },
+  {
+   "field_path": "ratings.E.causality",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "revised",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "Neither seat: sol's 3 is lowered because of the inference-only random-frame control and the missing frozen-K arm (opus:O01, opus:O06).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O05",
+    "opus:O06"
+   ],
+   "score_impact": "−3.75 vs sol"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "See ratings.E.holdout.",
+   "evidence_ids": [
+    "sol:E008",
+    "sol:E016"
+   ],
+   "score_impact": "+2.5 (row now scored)"
+  },
+  {
+   "field_path": "ratings.E.statistics",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.statistics.",
+   "evidence_ids": [
+    "sol:E004",
+    "sol:E008"
+   ],
+   "score_impact": "+2.5 (row now scored)"
+  },
+  {
+   "field_path": "ratings.E.cost",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "unknown",
+    "rating": null
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.cost.",
+   "evidence_ids": [
+    "sol:E014"
+   ],
+   "score_impact": "+2.5 (row now scored)"
+  },
+  {
+   "field_path": "status",
+   "sol_value": "reviewed",
+   "son55_value": "out_of_scope",
+   "decision": "sol",
+   "final_value": "reviewed",
+   "reason": "A3 bullet 2 (see reason and the a3 note). son55 flagged the long-memory ablation as a boundary item for re-check; the re-check finds the memory is read at deployment (opus:O07) and has its own removal control (opus:O05). This matches RMM (r02b), where a separately ablated non-weight memory bank kept a paper with a weight-trained module in scope.",
+   "evidence_ids": [
+    "opus:O05",
+    "opus:O07",
+    "sol:E006",
+    "son55:E007"
+   ],
+   "score_impact": "son55 null → 61.25"
+  }
+ ],
+ "shared_error_corrections": [],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v5 text first. The improvement is mostly carried by π/IDM weights, but a non-weight key-moment memory is updated, read at every step and ablated twice. Leaned in scope (A3 bullet 2), with E.causality limited by inference-only random frames and no frozen-K arm.",
+  "integrity_checks": "Both seats a1 on 2605.14211v5, material sha 506c1991…; canonical seat hashes equal conflicts.json. son55 completed identification for its excluded row.",
+  "core_claim_check": "Table 6, §4.2, Table 2, Table 9–11 and the three strongest-baseline values re-read.",
+  "shared_error_review": "No shared rating error (son55 did not score). Both seats missed Appendix C's third value (opus:O03); recorded in E.measurement.",
+  "rating_agreement": "All items = sol except E.causality (revised 3 → 2). Final 61.25."
+ },
+ "input_seat_hashes": {
+  "sol": "22eeae0f19f6a3e35ec66f67b78dbb00502a4c47e0979cdb38fdc69a4d4bf0e8",
+  "son55": "9801208e4eda0bfcca253236a3aea06bc4902c6b2a9dc918cf134799606a5ff8"
+ },
+ "score": {
+  "raw": 61.25,
+  "display": 61.3,
+  "lower": 61.25,
+  "upper": 61.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "0627248f482f6ef3bd5f7e582f50b72b1d62608a5c5c8e3effb64b9bc82b4f78"
+}

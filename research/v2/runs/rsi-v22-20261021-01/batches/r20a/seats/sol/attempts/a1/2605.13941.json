@@ -1,0 +1,1002 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r20a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2605.13941",
+    "paper_id": "2605.13941",
+    "title": "EvolveMem:Self-Evolving Memory Architecture via AutoResearch for LLM Agents",
+    "version": "2605.13941v1",
+    "claim_type": "system_method",
+    "central_claim": "LLM诊断驱动受保护的配置自演化，从最小memory baseline自主发现原动作空间外的新检索维度，提高LoCoMo/MemBench并跨benchmark正迁移，体现普适检索原则。"
+  },
+  "provenance": {
+    "input_hash": "cc9ea8804e0ee23328b339de8d7e713013a6d14f204ca3ba09aa124b8f487bb1",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T02:39:42.176173+00:00",
+    "notes": "派发配置sol(sonnet→gpt-6.1-sol)，无独立provider/session receipt可核，实际模型/会话凭据留null；未探测模型。仅固定全文/卡片；未读其他席/attempt或聚合，未运行论文代码。卡片成员论文结果只作问题来源，未作本篇证据或计分锚点。"
+  },
+  "materials": [
+    {
+      "material_id": "2605.13941.txt",
+      "url": "https://arxiv.org/html/2605.13941v1",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "sections_read": [
+        "§1–5",
+        "Appendices A–F",
+        "Algorithms 1–2",
+        "Tables 1–8",
+        "全部prompt目录与HTML footer"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 79-85",
+      "quote": "Long-term memory is essential for LLM agents that operate across multiple sessions, yet existing memory systems treat retrieval infrastructure as fixed: stored content evolves while scoring functions, fusion strategies, and answer-generation policies remain frozen at deployment. We argue that truly adaptive memory requires co-evolution at two levels: the stored knowledge and the retrieval mechanism that queries it. We present\nEvolveMem\n, a self-evolving memory architecture that exposes its full retrieval configuration as a structured action space optimized by an LLM-powered diagnosis module. In each evolution round, the module reads per-question failure logs, identifies root causes, and proposes targeted configuration adjustments; a guarded meta-analyzer applies them with automatic revert-on-regression and explore-on-stagnation safeguards. This closed-loop self-evolution realizes an AutoResearch process: the system autonomously conducts iterative research cycles on its own architecture, replacing manual configuration tuning. Starting from a minimal baseline, the process converges autonomously, discovering effective retrieval strategies including entirely new configuration dimensions not present in the original action space. On LoCoMo,\nEvolveMem\noutperforms the strongest baseline by 25.7% relative and achieves a 78.0% relative improvement over the minimal baseline. On MemBench,\nEvolveMem\nexceeds the strongest baseline by 18.9% relative. Evolved configurations transfer across benchmarks with positive rather than catastrophic transfer, indicating that the self-evolution process captures universal retrieval principles rather than benchmark-specific heuristics. Code is available at",
+      "support_explanation": "作者原主张包括自扩展新维度、优于强基线及跨benchmark通用原则。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 438-450",
+      "quote": "optimizes memory management with GRPO. MemEvolve\n[\n38\n]\njointly evolves agent knowledge and memory architecture. AutoResearchClaw\n[\n14\n]\ndemonstrates that LLMs can conduct fully autonomous research pipelines, executing the complete cycle of hypothesis generation, experimental design, and result interpretation without human intervention.\nEvolveMem\napplies this AutoResearch paradigm to a specific and previously unexplored target: the system autonomously researches its own retrieval infrastructure through iterative diagnosis-driven evolution, discovering architectural improvements that would otherwise require manual researcher effort. Unlike prior self-improving agents that optimize behavioral policies or stored content,\nEvolveMem\ntargets the retrieval mechanism itself as the research subject. Our consolidation mechanisms draw on complementary learning systems theory",
+      "support_explanation": "作者已提到MemEvolve联合演化memory架构，却仍声称retrieval是此前未探索对象；独立近邻核对缺失。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 540-560",
+      "quote": "Memory extraction.\nGiven a source conversation\nS\n=\n(\nu\n1\n,\n…\n,\nu\nT\n)\nS=(u_{1},\\ldots,u_{T})\n, a sliding window of length\nW\nW\npartitions\nS\nS\ninto overlapping segments. For each window, the extractor invokes the backbone LLM to produce a set of typed memory units, with context from the previous window to avoid duplication. Three mechanisms handle common failure modes during extraction. First, when an LLM call fails, the system retries with increasing wait intervals, preserving any partially extracted results. Second, when a window exceeds the LLM’s context limit, the system splits it into smaller sub-windows and merges their outputs. Third, a coverage verifier compares extracted memories against reference keywords from the source text and triggers re-extraction for any missing content. Together, these mechanisms substantially improve extraction coverage.",
+      "support_explanation": "从对话抽取typed unit，重试/切块与coverage重抽取构成内容侧更新。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 562-613",
+      "quote": "Consolidation.\nThree lightweight passes maintain store quality. First, deduplication merges any pair\n(\nm\ni\n,\nm\nj\n)\n(m_{i},m_{j})\nwhose Jaccard similarity over tokenized content exceeds a threshold\nτ\nJ\n\\tau_{J}\n, retaining the higher-importance unit. Second, importance decay applies a linear schedule that reduces\nι\ni\n\\iota_{i}\nby a fixed rate\nα\nd\n\\alpha_{d}\nper time unit, with a floor\nι\nmin\n\\iota_{\\min}\nto prevent useful memories from vanishing entirely. Third, entity reinforcement increments\nρ\ni\n\\rho_{i}\nby\nδ\nρ\n\\delta_{\\rho}\neach time a memory’s extracted entities co-occur with a new query, capped at\nρ\nmax\n\\rho_{\\max}\n. Both\nι\ni\n\\iota_{i}\nand\nρ\ni\n\\rho_{i}\nare carried forward as part of the memory metadata\n𝜼\n\\boldsymbol{\\eta}\nand enter the retrieval ranking in §\n3.2\n.",
+      "support_explanation": "Jaccard去重、重要性衰减及实体强化作为持久metadata进入排名。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 624-637",
+      "quote": "Retrieval views.\nGiven a query\nq\nq\n, three complementary views produce independent candidate sets: a\nlexical\nview using BM25 for exact keyword matching, a\nsemantic\nview using dense-embedding cosine similarity for conceptual matching, and a\nstructured-metadata\nview that filters by extracted entities, locations, and persons. Each view returns its own top-\nk\nk\ncandidates independently.",
+      "support_explanation": "三路检索的可重建接口。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 776-784",
+      "quote": "Query augmentation.\nTwo optional mechanisms extend the base retrieval.\nAdversarial entity-swap\nstrips detected person names from the query and re-searches by topic, then unions results with the original retrieval set.\nQuery decomposition\nuses an LLM to split multi-hop questions into single-hop sub-queries and merges the results via RRF. Both mechanisms are toggled per question category by the evolution engine.\n\nAnswer generation.\nGiven retrieved context, an answer-generation LLM produces a candidate answer under a configurable style (e.g., concise, explanatory, verifying, inferential). An optional second-pass verifier reviews low-confidence responses against the context. Per-category overrides allow the style and every retrieval parameter to be category-specific.",
+      "support_explanation": "query augmentation、答案风格和二次验证是可开关模块，不仅融合系数。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 828-871",
+      "quote": "where\nk\nsem\nk_{\\text{sem}}\n,\nk\nkw\nk_{\\text{kw}}\n,\nk\nstr\nk_{\\text{str}}\nare the number of candidates retrieved by the semantic, lexical, and structured-metadata views respectively,\nB\nctx\nB_{\\text{ctx}}\nis the maximum number of retrieved memories included in the context passed to the answer-generation LLM,\nmode\n∈\n{\nsum\n,\nweighted-sum\n,\nrrf\n}\n\\text{mode}\\in\\{\\textsc{sum},\\textsc{weighted-sum},\\textsc{rrf}\\}\nselects the fusion strategy,\n{\nw\nv\n}\n\\{w_{v}\\}\nare per-view fusion weights (used in weighted-sum mode),\nα\n\\alpha\nis the answer-generation style,\n𝒞\n\\mathcal{C}\nis the set of question categories, and\nθ\nc\n\\theta_{c}\nis a per-category sub-configuration that can override any global parameter. Every dimension is clamped to a safe range before any proposed value is applied.",
+      "support_explanation": "配置结构、全局与category覆盖及clamp边界。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 992-1006",
+      "quote": "Failure diagnosis.\nAfter each evaluation round\nr\nr\n, the system writes a per-question raw log containing every question, prediction, ground-truth answer, score, and retrieved sources. The diagnosis module invokes an LLM with a structured rubric covering common failure patterns (e.g., wrong entity retrieved, insufficient context, temporal confusion). Given the raw log and current configuration\nθ\nr\n\\theta_{r}\n, the module outputs a structured proposal\nΔ\n​\nθ\nr\n\\Delta\\theta_{r}\nspecifying which parameters to adjust and by how much. The rubric is written in terms of failure patterns rather than specific benchmarks, so newly discovered configuration dimensions become immediately usable without rubric modification. This is how the evolution mechanism is self-expanding: the diagnosis LLM can propose entirely new parameters that were not in the original action space.",
+      "support_explanation": "诊断看到全部问题/预测/真值/分数/来源；作者称rubric非benchmark特定且可扩维。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 1103-1130",
+      "quote": "projects each parameter onto its valid range. The first branch reverts to the best-so-far configuration when performance drops by more than\nτ\nrev\n\\tau_{\\text{rev}}\n, preventing a bad proposal from persisting. The second branch adds noise when the score has barely changed across two rounds, forcing exploration of new regions. The third branch is the normal case: apply the diagnosis-proposed adjustment. Threshold values are reported in Appendix\nA\n.\n\nThe engine terminates when round-over-round improvement drops below\nϵ\n\\epsilon\nor the maximum round count\nR\nmax\nR_{\\max}\nis reached, returning\nθ\n⋆\n=\narg\n⁡\nmax\nr\n⁡\nf\nr\n\\theta^{\\star}=\\arg\\max_{r}f_{r}\n. If the diagnosis identifies missing coverage in the memory store, it triggers targeted re-extraction before the next round, closing the feedback loop from evaluation back to extraction. The full procedure is summarized in Algorithm",
+      "support_explanation": "回滚、停滞探索、负改进终止与返回best配置。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 1434-1458",
+      "quote": "17:\n\nif\n\nr\n>\n0\nr>0\n\nf\nr\n−\nf\nr\n−\n1\n<\nϵ\nf_{r}-f_{r-1}<\\epsilon\n\nthen\n\n18:\n\nbreak",
+      "support_explanation": "算法1明确r>0且f_r-f_(r-1)<epsilon则break，与继续到R7的轨迹冲突。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 1480-1515",
+      "quote": "Benchmarks.\nWe evaluate on two benchmarks covering different interaction regimes:\n\n•\n\nLoCoMo\n\n[\n17\n]\n: multi-session dialogues (19–32 sessions per sample, 369–689 turns) with 5 QA categories (single-hop, temporal, multi-hop/inferential, open-domain, adversarial name-swap). We report on the full LoCoMo-10 release: 10 conversations, 1,986 QA pairs.\n\n•\n\nMemBench\n\n[\n24\n]\n: a memory-tool-use benchmark with 7 LowLevel categories (simple, comparative, aggregative, conditional, knowledge_update, post_processing, noisy). We evaluate 28 samples drawn as\n7\n​\ncategories\n×\n2\n​\ntopics\n×\n2\n​\nsamples each\n7\\text{ categories}\\times 2\\text{ topics}\\times 2\\text{ samples each}\n.\n\nProtocols & Baselines.\nLoCoMo uses token-level F1 and BLEU-1 (accuracy); MemBench uses exact-match multiple-choice accuracy.",
+      "support_explanation": "LoCoMo10/1986题与MemBench28样本，指标F1/BLEU及选择题EM。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 1554-1584",
+      "quote": "Implementation.\n\nEvolveMem\nuses SQLite/FTS5 for storage and BAAI/bge-base-en-v1.5 (768-dim) for embeddings. The initial configuration\nθ\n0\n\\theta_{0}\nuses BM25-only fusion (\nmode\n=\nsum\n\\text{mode}{=}\\textsc{sum}\n, semantic and structured views disabled),\nk\nkw\n=\n5\nk_{\\text{kw}}{=}5\n,\nB\nctx\n=\n8\nB_{\\text{ctx}}{=}8\n, with entity-swap and query decomposition disabled, providing a minimal starting point for the self-evolution process. The evolution loop runs up to\nR\nmax\n=\n7\nR_{\\max}{=}7\nrounds.",
+      "support_explanation": "BM25弱初始配置、多个模块关掉、最多7轮。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2018-2023",
+      "quote": "Comparison on LoCoMo.\nOn GPT-4o,\nEvolveMem\nachieves an overall F1 of 0.543, outperforming SimpleMem (0.432) by 25.7% relative. The largest gains appear in temporal (+63.4%) and single-hop (+68.7%) categories, driven by the recency-weighted fusion and semantic retrieval that the evolution engine activates in early rounds. On GPT-5.1,\nEvolveMem\nleads on all columns with an overall relative gain of 36.8% over SimpleMem, with temporal reaching 98.9% relative improvement. The gains are consistent across backbones, confirming that the evolved pipeline is not model-specific.",
+      "support_explanation": "GPT4o 54.3相对SimpleMem43.2、GPT5.1 57.2的作者主结果。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2146-2169",
+      "quote": "EvolveMem\n\n87.5\n\n66.7\n\n50.0\n\n67.9\n\n87.5\n\n66.7\n\n62.5\n\n71.4\n\nComparison on MemBench.\n\nEvolveMem\nattains the best overall accuracy on both backbones (67.9% on GPT-4o, 71.4% on GPT-5.1), exceeding the strongest baseline by 18.9% and 11.0% relative. Gains concentrate in Recall (+40.0% on GPT-4o) and Reasoning (+33.4%), reflecting temporal-disambiguation prompts and category-specific query decomposition discovered by the evolution engine. Robustness remains the weakest dimension; failure-log inspection localizes the gap to\npost_processing\n, where relevant memories are absent from the store, indicating a coverage limitation that retrieval-level adjustments cannot resolve.",
+      "support_explanation": "MemBench67.9/71.4与coverage限制，不能由retrieval修复不存在的memories。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2201-2257",
+      "quote": "30.5\n\nR1\n\nauto\n\nintent planning + RRF fusion\n\n35.8\n\nR2\n\nrevert\n\nMMR diversity on Cat. 3 (reverted)\n\n34.8\n\nR3\n\nauto\n\nentity-swap for Cat. 5\n\n37.2\n\nR4\n\nauto\n\nper-category answer-style flags\n\n38.5\n\nR5\n\nauto\n\nquery decomposition for Cat. 1/4\n\n38.1\n\nR6\n\nauto\n\nCat. 3 inferential subtypes + Cat. 5 entity-swap expansion\n\n45.4\n\nR7\n\nauto\n\nanswer verification + hyperparameter sweep + ctx-budget tuning\n\n54.3",
+      "support_explanation": "R0 30.5→R7 54.3，R2和R5下降但仍继续；R7同时引入验证、sweep和context tuning。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2259-2279",
+      "quote": "Table\n4\ntraces the self-evolution trajectory from\nθ\n0\n\\theta_{0}\nunder GPT-4o. Every round is fully autonomous: the diagnosis module reads the previous round’s per-question raw log, analyzes failure patterns, and proposes a targeted adjustment that the meta-analyzer validates under Eq.\n4\n. The early rounds progressively activate retrieval mechanisms that were dormant in\nθ\n0\n\\theta_{0}\n, including the semantic view (R1), entity-swap (R3), and query decomposition (R5), while also tuning fusion modes, view weights, and per-category answer styles. R2 illustrates the revert guard: the proposed change regressed overall F1, so the meta-analyzer automatically rolled back. R6 refines per-category answer styles with inferential subtype handling for Cat. 3, and R7 introduces a second-pass answer verifier together with cross-category context-budget tuning.\n\nThree configuration dimensions activated by the diagnosis LLM account for most of the gain over\nθ\n0\n\\theta_{0}\n, and each is independently verifiable in the ablation study (Table\n6\n). Adversarial entity-swap, activated at R3, strips person names from queries before retrieval and recovers a parallel evidence pool that the original lexical view discards. Query decomposition, activated at R5, splits complex multi-hop questions into single-hop sub-queries and merges the results. Answer verification, introduced at R7, runs a second LLM pass that reviews low-confidence responses against the retrieved evidence. Each was discovered by the diagnosis LLM through inspecting raw failure logs and proposing structural improvements, rather than by a benchmark-specific patch. The full trajectory from 30.5% at R0 to 54.3% at R7, a 78.0% relative improvement, is produced end-to-end by the autonomous evolution loop without manual intervention.",
+      "support_explanation": "声称各轮自主并发现entity-swap/decomposition/verification；多维共同变化。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2307-2398",
+      "quote": "Configuration\n\nLoCoMo\n\nMemBench\n\nBaseline\n\n0.305\n\n/\n\n𝒞\nL\n\\mathcal{C}_{L}\n\n(LoCoMo only)\n\n0.543\n\n0.543\n\n𝒞\nL\n​\nM\n\\mathcal{C}_{LM}\n\n(LoCoMo\n→\n\\to\nMemBench)\n\n0.593\n\n0.792\n\n𝒞\nM\n\\mathcal{C}_{M}\n\n(MemBench only)\n\n/\n\n0.679\n\nA central claim of\nEvolveMem\nis that self-evolution discovers generalizable retrieval principles rather than benchmark-specific heuristics. To test this, we evolve\n𝒞\nL\n\\mathcal{C}_{L}\non LoCoMo for seven rounds, apply it zero-shot to MemBench, then continue evolving to produce\n𝒞\nL\n​\nM\n\\mathcal{C}_{LM}\nand evaluate on both benchmarks. Table\n5\nreports the results, with\n𝒞\nM\n\\mathcal{C}_{M}\n(evolved on MemBench from scratch) as reference.\n(1) Zero-shot transfer is effective.\n\n𝒞\nL\n\\mathcal{C}_{L}\nattains 54.3% on MemBench without any MemBench-specific tuning, confirming that retrieval principles acquired on LoCoMo transfer to a benchmark with distinct question style and data distribution.\n(2) Continued evolution from a LoCoMo prior outperforms scratch evolution.\n\n𝒞\nL\n​\nM\n\\mathcal{C}_{LM}\nreaches 79.2% on MemBench, exceeding the natively evolved\n𝒞\nM\n\\mathcal{C}_{M}\n(67.9%) by 16.6% relative.\n(3) Positive rather than catastrophic transfer.\n\n𝒞\nL\n​\nM\n\\mathcal{C}_{LM}\nalso improves LoCoMo F1 from 0.543 to 0.593 (+9.2% relative), a Pareto improvement on both benchmarks.",
+      "support_explanation": "CL零样本MemBench54.3，继续演化79.2；scratch67.9；CLM回LoCoMo59.3；继续演化不等于留出。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2420-2514",
+      "quote": "EvolveMem\n\n54.3\n\n–\n\n−\n-\nExtraction quality control\n\n31.08\n\n−\n-\n23.22\n\n−\n-\nSemantic search\n\n43.98\n\n−\n-\n10.32\n\n−\n-\nLLM-powered diagnosis\n\n44.67\n\n−\n-\n9.63\n\n−\n-\nBM25 keyword search\n\n47.43\n\n−\n-\n6.87\n\n−\n-\nEntity-swap retrieval\n\n51.20\n\n−\n-\n3.10\n\n−\n-\nQuery decomposition\n\n51.46\n\n−\n-\n2.84\n\n−\n-\nStructured metadata search\n\n51.97\n\n−\n-\n2.33\n\n−\n-\nSelf-evolution\n\n52.27\n\n−\n-\n2.03\n\n−\n-\nAnswer verification\n\n52.47\n\n−\n-\n1.83",
+      "support_explanation": "表6：质量控制31.08、诊断44.67、无演化52.27、验证52.47；full54.3。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 2546-2552",
+      "quote": "LLM-powered diagnosis vs. random search.\nReplacing the diagnosis module with random perturbations over\nthe same action space costs\n−\n-\n9.63 F1, confirming that reading per-question failure logs provides meaningful\nsignal.",
+      "support_explanation": "替换诊断为同动作空间随机扰动下降9.63；未给等成本搜索曲线。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 3397-3400",
+      "quote": "Table 7:\nThe\nRetrievalConfig\ndimensions exposed to the diagnosis LLM. Per-category overrides let the engine specialize different question types without forcing a single global choice.",
+      "support_explanation": "表7明确这些配置维度暴露给诊断LLM。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4135-4145",
+      "quote": ". The per-question prediction at R3 is essentially correct but missing the connector “and”, costing 0.06 F1—a minor wording artifact rather than a content failure.\n\n(iv) R3\n→\n\\to\nR4 — polish.\nThe diagnosis LLM, reading R3’s wording-only failures, proposes a per-category answer-style override for Cat. 4 that mandates explicit list connectors. Applied via the\nper_category_overrides\nmechanism (Eq.\n2\n), the connector is restored and F1 returns to 1.00.",
+      "support_explanation": "单题F1的0.94→1由and连接词修复，提示词表面优化可获分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E022",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4280-4307",
+      "quote": "Self-evolution overhead.\n\nA full 7-round evolution on one LoCoMo sample (200 QA,\n∼\n\\sim\n900 memories) completes in 25–35 min wall clock, dominated by QA evaluation LLM calls. Each round consists of index building (\n∼\n\\sim\n5 s per sample), QA evaluation (\n∼\n\\sim\n15–20 min for 200 questions with verification enabled), and LLM-powered diagnosis (\n∼\n\\sim\n15 s per sample). Convergence detection stops evolution automatically when the best-round metric plateaus.\n\nRetrieval latency.\n\nMulti-view index construction over\n∼\n\\sim\n900 memories (SentenceTransformer encoding + BM25 index + metadata indices) completes in\n∼\n\\sim\n5 s. Per-query retrieval (semantic top-20 + BM25 top-8 + structured top-5 + entity-swap) averages 15 ms, well within interactive requirements. Enabling answer verification adds one extra LLM call per question (\n∼\n\\sim\n2–3 s).",
+      "support_explanation": "7轮总25–35分钟与每轮200题15–20分钟口径未解释；检索15ms和验证额外2–3s。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E023",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4309-4317",
+      "quote": "Storage and reproducibility.\n\nThe SQLite database with FTS5 index adds under 5 MB per 1,000 memory units; extracted memory caches (JSON with structured metadata) average 150 KB per LoCoMo sample. For every run we persist: (i) per-round config snapshot, (ii) complete\nraw_results.jsonl\ncontaining every question, prediction, reference, every metric, and retrieved sources, (iii) per-round summary, (iv) the best-so-far configuration\nθ\n⋆\n\\theta^{\\star}\nsnapshot, versioned alongside the code so that the autonomous trajectory is reproducible across runs, and (v) extracted memory cache.",
+      "support_explanation": "逐轮配置与raw_results、best配置、memory cache实际保存位置类型。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E024",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4328-4348",
+      "quote": "Compute.\n\nAll experiments were run on a single machine with an Apple M-series CPU (no GPU required for the memory system itself). LLM calls for extraction and diagnosis use GPT-5.1 via Azure OpenAI API. Answer generation uses GPT-4o for all categories. Self-evolution and consolidation are CPU-only operations.\n\nData.\n\nLoCoMo\n[\n17\n]\nis publicly available. MemBench\n[\n24\n]\nis publicly available.\n\nHyperparameters.\n\nAll evolvable hyperparameters and their valid ranges are listed in Table\n7\n. Default values were chosen based on preliminary experiments on a held-out validation set (2 LoCoMo samples) and remained fixed for all reported results.",
+      "support_explanation": "附录称抽取/诊断GPT5.1、答题全部GPT4o，和主文两答题骨干表需要说明；2个validation samples只用于默认超参数。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E025",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4471-4495",
+      "quote": "LoCoMo uses a category-aware adapter with three branches, all sharing one system message.\n\nLoCoMo: System Prompt (shared)\n\nProfessional Q&A assistant. Concise answers grounded in context. JSON output only.\n\nLoCoMo Cat. 5 Adversarial: User Prompt\n\nAnswer based on the context.\n\nIMPORTANT: This question may deliberately swap person names. The CONTEXT contains the TRUE information; answer based on the context even if the question names seem off.\n\nQuestion: {question}\n\nContext:\n\n{context}\n\nRules:\n\n1. ALWAYS provide a substantive answer, never ’not specified’.\n\n2. Answer in 1-5 words using exact facts from context.\n\nReturn JSON: {\"reasoning\":\"brief\",\"answer\":\"concise\"}",
+      "support_explanation": "LoCoMo category-aware adapter与专门的adversarial name-swap指令。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E026",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4644-4660",
+      "quote": "Verifier Strict (default): User Prompt\n\nQuestion: {question}\n\nContext:\n\n{context}\n\nCandidate answer: {candidate}\n\nReview the candidate answer. If it says ’Unknown’ or ’Not specified’, replace it with the most likely answer from the context. Format numbers as Arabic digits, years as YYYY. Keep the answer concise (1-8 words).\n\nReturn JSON: {\"reasoning\":\"brief\",\"answer\":\"final answer\"}\n\nVerifier Multi-Candidate: Instruction Swap\n\nReview the candidate answer. If it is wrong, give the correct answer. If the candidate is ’Unknown’ but the context contains any relevant fact, pick the most plausible option. Consider 2-3 candidate answers and pick the best.",
+      "support_explanation": "所谓verifier强制替换Unknown为最可能答案，属于模型答案复核而非独立正确性判定。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E027",
+      "material_id": "2605.13941.txt",
+      "sha256": "02467b04c5ee3f4ba85723f3622e2c8a1fb57c270c8f5e35abd620fda5707be0",
+      "locator": "lines 4674-4734",
+      "quote": "Diagnosis Engine: System + User Prompt\n\nYou are the diagnosis engine of a self-evolving memory system. Your job is to turn evaluation failures into a concrete next-round action that moves the system toward SOTA.\n\n## System Info\n\n- Benchmark: {benchmark}\n\n- Total memories: {total_memories}\n\n- Total questions: {total_questions}\n\n- Overall score: {overall_f1:.4f}\n\n- Zero-score count: {zero_count}/{total_questions}\n\n- Current config (JSON): {current_config}\n\n## Failure Analysis Summary\n\n{failure_summary}\n\n## Per-Category Breakdown\n\n{category_breakdown}\n\n## Sample Failures (worst cases)\n\n{sample_failures}\n\n## Tier-1 TODO checklist: levers that are still OFF in the incumbent\n\n{todo_checklist}\n\n(Dynamically generated: lists each disabled lever whose symptom is present in the current failure data. Prefer picking ONE item per round until empty.)\n\nchunk_size_on_failure, min_restatement_words.\n\n## Decision Rubric\n\n1. If many ’abstention’ failures -> raise top_k, widen max_context, consider rrf fusion.\n\n2. If many ’wrong answer’ failures with high retrieval -> lower max_context or raise weights for strongest view.\n\n3. If temporal category weakness -> enable time_decay_half_life_days.\n\n4. If adversarial category weakness -> enable_entity_swap=true.\n\n5. If multi-hop weakness -> reflection_rounds >= 1.\n\n6. If ONE category lags -> per_category_overrides (preserve gains elsewhere).\n\n7. Prefer enabling something disabled BEFORE tuning a small int.\n\n8. If residual ’Unknown’ or format-mismatch -> enable_answer_verification=true.\n\n9. LoCoMo prompt-surface flags are highest-ROI when their symptom matches; propose them early.\n\n## Output\n\nReturn JSON with ‘parameter_suggestions‘ as a flat dict of field -> new value. Fields MUST match RetrievalConfig field names exactly. Only include fields you want to change.",
+      "support_explanation": "实际诊断prompt含benchmark字段、预置TODO、实体swap/verification和LoCoMo flags，并要求参数字段精确匹配现有RetrievalConfig。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "RetrievalConfig：检索预算/融合/augmentation/答案风格/category overrides",
+      "information": "全量每题prediction、reference、metric、retrieved sources与当前配置",
+      "operation": "LLM按预置诊断rubric提出字段调整；meta-analyzer clamp、回滚或探索",
+      "output": "下一轮配置与best-so-far配置",
+      "conditions": "任务标签、可信metric与可执行字段接口；固定外层引擎",
+      "feedback": "同QA集token-F1/MCQ准确率",
+      "selection_rule": {
+        "rule": "下降超过tau回best、停滞加噪、返回最高分；算法还在任意负改进时break",
+        "data": "同批QA与真值逐轮评估；未明确独立selection/test分区"
+      },
+      "persistence": "逐轮config snapshot与best snapshot落盘",
+      "later_use": "后续评估轮和另一benchmark加载",
+      "claimed_effect": "自动替代人工调参并发现普适新机制",
+      "failure_boundary": "停止规则与多轮下降轨迹不合；新字段到执行代码的自动扩展路径未展示；oracle答案参与选择",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009",
+        "E010",
+        "E015",
+        "E023",
+        "E027"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "typed对话memory及其metadata/index",
+      "information": "对话窗口、已抽取单元、source关键词、诊断missing topics",
+      "operation": "抽取→失败重试/切块→coverage重抽取；去重/衰减/实体强化",
+      "output": "SQLite/FTS5持久memory和多view可检索元数据",
+      "conditions": "源对话包含所需事实；missing coverage可检测",
+      "feedback": "源关键词覆盖和后续QA failure",
+      "selection_rule": {
+        "rule": "高重叠保留高importance；缺漏则针对source重新抽取",
+        "data": "同批QA与真值逐轮评估；未明确独立selection/test分区"
+      },
+      "persistence": "memory数据库/cache及mutation audit",
+      "later_use": "同benchmark后轮及跨session检索",
+      "claimed_effect": "改善缺漏与检索对准",
+      "failure_boundary": "内容事实缺失无法只靠retrieval修复；LLM抽取非独立真值校验",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E014",
+        "E023"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "存储内容可更新但检索配置冻结，无法匹配不断变化的memory规模与异质问题；需要自主研究自己的retrieval。",
+    "checked_gap": "被改对象确为非权重RetrievalConfig及抽取/答案策略，存在真实诊断与保存接口；作者自己提MemEvolve和自动数据库调参，不能从概述确认此前无人改检索。",
+    "lineage": [
+      {
+        "name": "SimpleMem/MemGPT/A-MEM/SCM",
+        "source_version": "2605.13941v1 §1–2；近邻原文版本未固定",
+        "relation": "对话内容抽取、分层/图记忆与检索组织",
+        "evidence_ids": [
+          "E001",
+          "E002"
+        ]
+      },
+      {
+        "name": "MemEvolve/MemSkill/MemRL",
+        "source_version": "2605.13941v1 §2引用叙述；无邻居全文核验",
+        "relation": "memory架构、技能与运行期记忆策略演化的直接近邻",
+        "evidence_ids": [
+          "E002"
+        ]
+      },
+      {
+        "name": "LLM database tuning/Adaptive-RAG/传统混合配置搜索",
+        "source_version": "2605.13941v1 §2–3作者叙述；未独立版本化邻居",
+        "relation": "检索参数/路由优化的相邻路线",
+        "evidence_ids": [
+          "E007",
+          "E008"
+        ]
+      }
+    ],
+    "closest_adjacent": [
+      "MemEvolve",
+      "SimpleMem",
+      "MemSkill",
+      "LLM database tuning"
+    ],
+    "residue": "从每题失败确定应改哪个retrieval/answer配置，而不只调整内容或盲搜参数。",
+    "stakes": "缺漏、错实体和推理/类别差异可能令固定检索策略失配。",
+    "method_response": "typed多view substrate，显式配置动作空间，预置rubric诊断和best/revert/explore。",
+    "remaining_gap": "首创与自扩展证据不足；缺选择/报告隔离及完整自主轨迹一致性，正迁移未由目标未适应控制建立。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E008",
+      "E027",
+      "E017",
+      "E010"
+    ],
+    "unresolved": [
+      "请求共享材料包补MemEvolve、SimpleMem、MemSkill、LLM数据库调参最近邻的固定版本全文；本席未外网获取。",
+      "需要初始/最终action schema、生成新字段/执行代码的谱系及停止条件说明；源文自相矛盾不等于缺全文。",
+      "表5 transfer denominator/数据split及主表两骨干与附录Compute的角色说明缺失。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "generative_process_redesign",
+    "supporting": [],
+    "matches": [
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "明确过去固定的RAG候选生成/融合/context/answer接口",
+          "将这些接口暴露为配置设计变量",
+          "从执行失败诊断反复重设并保留best配置"
+        ],
+        "success_checks": [
+          {
+            "condition": "命名被释放的固定组件",
+            "status": "met",
+            "evidence_ids": [
+              "E007",
+              "E012"
+            ]
+          },
+          {
+            "condition": "单独验证redesign而非其他模块承担主增益",
+            "status": "partial",
+            "evidence_ids": [
+              "E018",
+              "E019"
+            ]
+          },
+          {
+            "condition": "新能力/跨域收益充分展示",
+            "status": "partial",
+            "evidence_ids": [
+              "E017",
+              "E027"
+            ]
+          }
+        ],
+        "failure_checks": [
+          {
+            "condition": "普通模块激活被包装为新结构发现",
+            "status": "present",
+            "evidence_ids": [
+              "E006",
+              "E027"
+            ]
+          },
+          {
+            "condition": "最直接强优化基线遗漏",
+            "status": "partial",
+            "evidence_ids": [
+              "E019",
+              "E002"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E007",
+          "E008",
+          "E018"
+        ],
+        "reason": "阶段化RAG生成过程把固定retrieval/conditioning界面释放为设计变量，主卡适配；C15几何表征、C23扩散内部过程、C24迭代生成latent/conditioning专门战术均不贴切，子卡null。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "主卡较宽的staged procedure定义适用，不以AutoResearch命名强配子卡。",
+    "executes_pattern": "已执行有反馈的配置重设计与保存；自主扩维部分未建立。",
+    "resolves_problem": "诊断配置搜索可提高本地评估分；固定检索是否是主要瓶颈、普适新机制是否发现尚未充分证明。"
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "make_the_improver_editable",
+        "sub": "H21",
+        "version": "manifest-bound",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "id": "H21/step1",
+            "status": "partial",
+            "reason": "外层固定、内层检索/context配置可换，但主要是已有字段/模块开关；不是展示了可自动新写代码的任意swappable学习程序。",
+            "evidence_ids": [
+              "E007",
+              "E027"
+            ]
+          },
+          {
+            "id": "H21/step2",
+            "status": "partial",
+            "reason": "以下游memory QA打分，而非独立inner-agent学习曲线；反复评估同QA。",
+            "evidence_ids": [
+              "E008",
+              "E011"
+            ]
+          },
+          {
+            "id": "H21/step3",
+            "status": "partial",
+            "reason": "失败驱动与rollback明确，停止条件却会在R2下降时提前结束。",
+            "evidence_ids": [
+              "E009",
+              "E010",
+              "E015"
+            ]
+          },
+          {
+            "id": "H21/step4",
+            "status": "unmet",
+            "reason": "选择题集与报告集未分；仅2 validation samples的默认参数选择不解决逐轮QA泄漏。",
+            "evidence_ids": [
+              "E008",
+              "E024"
+            ]
+          },
+          {
+            "id": "H21/step5",
+            "status": "partial",
+            "reason": "存在zero-shot换benchmark，但无目标未适应本系统基线，54.3低于主表最强57.1；后续79.2是适应后结果。",
+            "evidence_ids": [
+              "E017",
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E007",
+          "E008",
+          "E009",
+          "E017",
+          "E027"
+        ]
+      },
+      {
+        "main": "index_experience_for_reuse",
+        "sub": "H04",
+        "version": "manifest-bound",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "id": "H04",
+            "status": "partial",
+            "reason": "typed store、scope、独立词法/embedding/metadata索引、去重衰减具体；主要新意是检索配置，不是全新store shape；缺同原始材料flat对照和history规模曲线。",
+            "evidence_ids": [
+              "E003",
+              "E004",
+              "E005",
+              "E022"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E004",
+          "E005",
+          "E022"
+        ]
+      }
+    ],
+    "unassigned": false,
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "make_the_improver_editable",
+        "sub": "H21"
+      },
+      "operation_correspondence": "把固定的检索/context生成界面暴露为可编辑变量；H21对应内学习/检索设计搜索，H04对应被搜索机制读取的typed持久store/index。",
+      "necessary_conditions_and_differences": "不是扩散/几何生成子卡；H21适配对象层但尚不满足任意可执行学习程序和独立下游学习fitness；H04只是底层组织而非本篇全部新意。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009",
+        "E017",
+        "E027"
+      ]
+    },
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "index_experience_for_reuse",
+        "sub": "H04"
+      },
+      "operation_correspondence": "把固定的检索/context生成界面暴露为可编辑变量；H21对应内学习/检索设计搜索，H04对应被搜索机制读取的typed持久store/index。",
+      "necessary_conditions_and_differences": "不是扩散/几何生成子卡；H21适配对象层但尚不满足任意可执行学习程序和独立下游学习fitness；H04只是底层组织而非本篇全部新意。",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E022"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:generative_process_redesign/RE-1",
+      "version": "frozen-v1.0",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "rs:generative_process_redesign"
+      ],
+      "applies_when": "把总增益主要归于释放固定检索/自动演化时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "无演化52.27距full54.3仅2.03点；抽取质量控制掉23.22，支持系统组件但不支持将全部23.8点归自动演化。",
+      "evidence_ids": [
+        "E018",
+        "E012"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rs:generative_process_redesign/RE-2",
+      "version": "frozen-v1.0",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "rs:generative_process_redesign"
+      ],
+      "applies_when": "宣称替代人工/传统配置优化且为首创时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有同空间随机扰动但缺强BO/手调或等成本LLM优化对照，邻居MemEvolve等未实测对齐。",
+      "evidence_ids": [
+        "E019",
+        "E002"
+      ],
+      "score_item": "G"
+    },
+    {
+      "id": "rs:generative_process_redesign/RE-3",
+      "version": "frozen-v1.0",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "rs:generative_process_redesign"
+      ],
+      "applies_when": "同时增加多个retrieval与generation模块时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "多view/抽取/诊断/验证均消融，但一轮并改多个字段，独立开关消融降幅之和不等于联合因果效应。",
+      "evidence_ids": [
+        "E018",
+        "E015",
+        "E016"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/H21",
+      "version": "frozen-v1.0",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "rsi:make_the_improver_editable"
+      ],
+      "applies_when": "改memory/context机制且声称自主架构研究时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "目标确为经验检索机制、保存配置并回滚；未展示二阶学习收益，独立留出与新维度执行扩展链缺失。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E009",
+        "E027"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:make_the_improver_editable/F3",
+      "version": "frozen-v1.0",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "rsi:make_the_improver_editable"
+      ],
+      "applies_when": "反复据benchmark分数选择best config并报告同benchmark时",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "QA含ground truth反复驱动诊断与选择，同集成绩不能视为留出；28样本MemBench继续演化也不是独立测试。",
+      "evidence_ids": [
+        "E008",
+        "E011",
+        "E017",
+        "E024"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:index_experience_for_reuse/H04",
+      "version": "frozen-v1.0",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "rsi:index_experience_for_reuse"
+      ],
+      "applies_when": "typed store与多view组织被当作记忆架构贡献时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "索引和局部维护明确；没有在相同原始内容上随规模增长对比flat retrieval。",
+      "evidence_ids": [
+        "E004",
+        "E005",
+        "E022"
+      ],
+      "score_item": "M"
+    },
+    {
+      "id": "local:2605.13941-1",
+      "version": "frozen-v1.0",
+      "source_strength": "single_source",
+      "source_refs": [
+        "local:2605.13941-1"
+      ],
+      "applies_when": "宣称发现原动作空间外的新架构维度而非选择开关时",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "原文声称无benchmark cues与新维度自主发现，但附录prompt直接列LoCoMo flags、entity-swap、verification且仅接受已有字段。需要初始/最终schema与生成代码谱系才能确认扩维而非激活。",
+      "evidence_ids": [
+        "E008",
+        "E016",
+        "E027"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2605.13941-2",
+      "version": "frozen-v1.0",
+      "source_strength": "single_source",
+      "source_refs": [
+        "local:2605.13941-2"
+      ],
+      "applies_when": "把表4视为该伪代码端到端自主轨迹时",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "算法停止条件会在负改进R2触发；表4仍到R7，且下降1pp与严格>tau阈值的回滚口径需未四舍五入值澄清。",
+      "evidence_ids": [
+        "E010",
+        "E009",
+        "E015"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "local:2605.13941-3",
+      "version": "frozen-v1.0",
+      "source_strength": "single_source",
+      "source_refs": [
+        "local:2605.13941-3"
+      ],
+      "applies_when": "用F1/verification主张真实记忆正确性时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "标准F1和MCQ定义清楚；强制猜测verifier不是独立验证器，表面and连接词改善F1，且transfer分母与模型角色口径不足。",
+      "evidence_ids": [
+        "E011",
+        "E021",
+        "E026",
+        "E017",
+        "E024"
+      ],
+      "score_item": "E.measurement"
+    },
+    {
+      "id": "local:2605.13941-4",
+      "version": "frozen-v1.0",
+      "source_strength": "single_source",
+      "source_refs": [
+        "local:2605.13941-4"
+      ],
+      "applies_when": "随机生成/搜索的提升被当作稳定收益时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "给分母与退化轮/组件负结果，无完整搜索重复种子、CI或显著性。",
+      "evidence_ids": [
+        "E011",
+        "E015",
+        "E018"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2605.13941-5",
+      "version": "frozen-v1.0",
+      "source_strength": "single_source",
+      "source_refs": [
+        "local:2605.13941-5"
+      ],
+      "applies_when": "AutoResearch替代手调且成本可实际部署时",
+      "applicable": true,
+      "status": "partial",
+      "reason": "给检索延迟、存储与验证LLM调用开销，但7轮总25–35min和每轮15–20min未统一；无搜索总tokens/API费及等预算基线。",
+      "evidence_ids": [
+        "E022",
+        "E023"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "自演化系统优于最强memory baselines且从minimal baseline提升78%",
+      "setting": "LoCoMo10/1986QA，GPT4o/GPT5.1；MemBench28样本",
+      "baseline_control": "SimpleMem等6方法；RecentMem/MemGPT/MemoryBank/SCMemory等；BM25-only起点",
+      "selection_vs_test": "同QA的答案/分数用于迭代诊断和best选择；2样本validation只陈述默认超参数，不构成主演化轨迹的独立test。",
+      "result_denominator": "LoCoMo GPT4o F1 .543 vs .432；GPT5.1 .572 vs .418；minimal .305；MemBench67.9/71.4% of28。",
+      "evidence_ids": [
+        "E013",
+        "E014",
+        "E011",
+        "E012",
+        "E008",
+        "E024"
+      ],
+      "counterevidence": [
+        "E018",
+        "E022"
+      ],
+      "allowed_conclusion": "作者报告的同集配置优化后分数及系统优势；不是全部78%增益由演化机制造成，也不是独立泛化误差估计。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "诊断LLM自主发现原动作空间外的新配置维度、无benchmark特定patch",
+      "setting": "7轮LoCoMo轨迹与附录完整prompt目录",
+      "baseline_control": "移除LLM diagnosis→同空间随机扰动；无evolution版本",
+      "selection_vs_test": "全量failure logs含真值/分数；prompt直接接收benchmark与category",
+      "result_denominator": "random替代44.67 vs54.3；no-evolution52.27；entity-swap/decomp/verification各去除51.20/51.46/52.47。",
+      "evidence_ids": [
+        "E016",
+        "E018",
+        "E019"
+      ],
+      "counterevidence": [
+        "E027",
+        "E006",
+        "E020",
+        "E010"
+      ],
+      "allowed_conclusion": "支持结构化失败指导已有action-space调整优于该随机实现；不证实自动创建新字段/模块。benchmark-agnostic诊断表述与附录LoCoMo规则相冲突。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "跨benchmark正迁移意味着普适检索原则",
+      "setting": "LoCoMo→MemBench→回LoCoMo，GPT4o",
+      "baseline_control": "CL、CLM与MemBench scratch CM；未给目标benchmark的未适应同系统baseline",
+      "selection_vs_test": "CL→MemBench第一次是zero-shot配置应用；CLM已读取目标benchmark feedback，回LoCoMo也曾参与原搜索。",
+      "result_denominator": "CL MemBench .543；CM .679；CLM MemBench .792及LoCoMo .593；表5未明确适配/测试分区或transfer专用分母，.543/.792也非28题单次EM的整数步长。",
+      "evidence_ids": [
+        "E017",
+        "E011",
+        "E014"
+      ],
+      "counterevidence": [
+        "E008",
+        "E024"
+      ],
+      "allowed_conclusion": "配置可以跨benchmark加载并继续适应。zero-shot .543没有优于已报最强.571，未给本系统目标baseline，不能确证正迁移；继续适应后的改善不能证明普适原理。"
+    },
+    {
+      "claim_id": "C4",
+      "text": "完整自主过程有regression rollback与停滞探索，端到端到R7",
+      "setting": "算法1/式4/16及表4、附录C trace",
+      "baseline_control": "初始、regressed与best-so-far配置",
+      "selection_vs_test": "同集best-score选取",
+      "result_denominator": "R1 35.8→R2 34.8但随后R3–R7继续；R4 38.5→R5 38.1亦继续。",
+      "evidence_ids": [
+        "E009",
+        "E015",
+        "E023"
+      ],
+      "counterevidence": [
+        "E010"
+      ],
+      "allowed_conclusion": "有保存和回退设计及实例；文本算法原样不足以重建宣称的完整轨迹，需明确停机条件与分支优先级。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "task",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告在逐轮参与选择的memory QA集上，失败诊断指导的有界配置与若干检索/抽取模块提升分数；存在持久配置与跨benchmark加载。但没有足够对照证明留存配置在独立后续任务优于未适应同系统，更未证明自动自扩维或improver产生更优后续改动。",
+    "unresolved": [
+      "选择集重用与目标zero-shot基线缺失",
+      "新维度发现vs已有字段激活，benchmark-aware prompt",
+      "停止/回滚、模型角色与成本口径不一致",
+      "搜索方差与强等预算优化基线"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "固定memory检索基础设施的对象具体；但已有MemEvolve/调参谱系仅概述，全称首创和传统混合搜索不适用论断未由直接比较建立。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E007"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "失败log→字段建议→受限应用/回滚→保存后用链可重建，并区分内容漏失和检索漏失；比盲随机的可区分预测有消融。理论和新维度自主扩展论证仍薄弱。",
+      "evidence_ids": [
+        "E008",
+        "E007",
+        "E009",
+        "E019",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "主要有界字段链与快照具体，但负改进即停止的伪代码不能生成多次下降后R7轨迹；预置字段/benchmark rubric与自主扩维/通用诊断表述冲突，缺可执行扩维谱系。",
+      "evidence_ids": [
+        "E010",
+        "E015",
+        "E027",
+        "E023"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "F1/BLEU/MCQ EM可计算；verifier为强制猜测而非外部正确性核验，F1有字面格式收益；transfer分母和两骨干角色需说明。oracle选择问题只计holdout。",
+      "evidence_ids": [
+        "E011",
+        "E021",
+        "E026",
+        "E017",
+        "E024"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "随机诊断替换与各模块消融有区分力；无演化52.27接近full54.3，大部分全系统增益涉及抽取/多view，未有等调用强优化器或独立扩维控制。",
+      "evidence_ids": [
+        "E018",
+        "E019",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 0,
+      "reason": "主分就是含真值log驱动选择的题集；默认超参数的2样本validation不隔离演化数据。zero-shot换benchmark未报告优于未适应同系统，继续演化的目标分与返回旧集分不能当留出。",
+      "evidence_ids": [
+        "E008",
+        "E011",
+        "E017",
+        "E024"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "有1986/28分母、退化轮和消融负结果；主效果/搜索无种子重复、不确定区间、配对检验或失败搜索总分母。",
+      "evidence_ids": [
+        "E011",
+        "E015",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告15ms检索、验证额外调用、存储与诊断/QA时间；总7轮25–35min与每轮15–20min不自洽，未给全搜索token/API费或matched-budget frontier。",
+      "evidence_ids": [
+        "E022",
+        "E023"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 42.5,
+    "display": 42.5,
+    "lower": 42.5,
+    "upper": 42.5,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "固定全文及全部附录/提示词完整；可就作者报告与内部冲突作出八项判定，无需把作者缺控制或不自洽升级为材料缺失。",
+  "rationale": "有失败诊断、配置快照与模块消融，但主分重用选择题集；新维度发现与预置prompt、停止规则与轨迹不合，正迁移缺目标未适应对照。"
+}

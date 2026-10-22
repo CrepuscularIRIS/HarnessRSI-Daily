@@ -1,0 +1,969 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r20a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整 HTML 全文含附录 A–L；材料齐全。",
+ "paper": {
+  "paper_key": "2605.11136",
+  "paper_id": "2605.11136",
+  "title": "EVOCHAMBER: Test-Time Co-evolution of Multi-Agent System at Individual, Team, and Population Scales",
+  "version": "2605.11136v1",
+  "claim_type": "system_method",
+  "central_claim": "多智能体测试时进化不是单智能体复制N次：EvoChamber 在个体(经验/竞争力)、团队(组队与协作结构)、群体(CoDream 非对称洞见路由与生命周期)三层上无训练地共演化 agent 池，在三个异质任务流上优于最佳基线，其中非对称跨 agent 迁移是主因。",
+  "claim_scope": "Qwen3-8B(主)与 GPT-4.1-mini(验证)；三条任务流(Hard Math 382、Hard Code 422/586、AFlow-Stream 600)；在线评测、有真值奖励、niche 标签来自数据集元数据。"
+ },
+ "provenance": {
+  "input_hash": "cc9ea8804e0ee23328b339de8d7e713013a6d14f204ca3ba09aa124b8f487bb1",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref: worker subagent has no accessible run receipt; not probed per contract.",
+  "timestamp": "2026-10-22T02:28:28Z"
+ },
+ "rationale": "测试时多智能体共演化，CoDream有一致增益且披露了成本与负面分析；但无留出、单次运行、对称广播对照缺失、生命周期与池规模贡献近零。",
+ "materials": [
+  {
+   "material_id": "2605.11136",
+   "url": "https://arxiv.org/html/2605.11136v1",
+   "sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1",
+   "sections_read": [
+    "Abstract",
+    "§1-§5",
+    "Appendix A-L",
+    "Tables 1-12"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E01",
+   "material_id": "2605.11136",
+   "locator": "Abstract",
+   "quote": "a post-task protocol triggered on team failure or disagreement, in which agents collaboratively reflect, distill insights, and route them asymmetrically from strong to weak agents on the failed niche, preserving specialization while filling knowledge gaps.",
+   "support_explanation": "核心机制 CoDream：失败/分歧触发的事后协作反思，把洞见从强 agent 单向路由给该 niche 上的弱 agent。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E02",
+   "material_id": "2605.11136",
+   "locator": "Abstract",
+   "quote": "Yet prior test-time methods either confine experiences to individual agents, forfeiting cross-agent learning, or broadcast symmetrically to all agents, erasing the specialization that makes collaboration valuable.",
+   "support_explanation": "作者 gap：个体记忆无跨 agent 学习；对称广播抹平专长。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E03",
+   "material_id": "2605.11136",
+   "locator": "§3.5 CoDream",
+   "quote": "The insight is then written into every agent whose competence on that niche falls below the pool median.",
+   "support_explanation": "写入规则：低于池中位数的 agent 接收洞见(deficit gate)；洞见按 task-local/subdomain/cross-domain 分级。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E04",
+   "material_id": "2605.11136",
+   "locator": "Appendix J",
+   "quote": "The verification gate still passes these candidates because the re-attempt with meta-advice applied happens to score marginally higher than the original failure, but their contribution to future AIME performance is marginal.",
+   "support_explanation": "洞见的‘验证’只是同一任务重试得分略高于原失败；对 AIME 产出的是泛泛阅读建议，门控易放行噪声。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E05",
+   "material_id": "2605.11136",
+   "locator": "§4.1 Datasets",
+   "quote": "derived from its dataset metadata: MATH Level 4/5 vs. each AIME year for Hard Math, source benchmark for Hard Code, and domain block for AFlow-Stream.",
+   "support_explanation": "每个任务的 niche 标签直接取自数据集元数据(AIME 各年、来源基准、领域块)，是系统的输入。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E06",
+   "material_id": "2605.11136",
+   "locator": "§4.1 Datasets",
+   "quote": "The Hard Math Stream combines 262 MATH [ 10 ] Level 4/5 problems with 30 problems from each of AIME 2022–2025, totaling 382 tasks.",
+   "support_explanation": "Hard Math 流 382 题，固定顺序为 math_hard 再依次 AIME'22–'25。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E07",
+   "material_id": "2605.11136",
+   "locator": "§4.1 / Table 3 caption",
+   "quote": "Overall is the micro-average over all 586 tasks including HumanEval.",
+   "support_explanation": "Hard Code 流 §4.1 称 422 题(257 MBPP+ + 165 CodeContests)，Table 3 的 Overall 却按 586 题含全员 1.000 的 HumanEval 计，稀释差异。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E08",
+   "material_id": "2605.11136",
+   "locator": "Table 2 caption",
+   "quote": "math_hard: 262 MATH Level 4/5; AIME’22–’25: 30 problems each; Overall: micro-average over 382 tasks.",
+   "support_explanation": "Table 2：SA 0.298、SC 0.390、DyLAN 0.403、AgentNet 0.414、EvoMem 0.445、MemCollab 0.484、EvoChamber 0.639；math_hard SA 0.374→EvoChamber 0.763；AIME 单年每项仅 30 题。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E09",
+   "material_id": "2605.11136",
+   "locator": "Table 3 caption",
+   "quote": "The HumanEval column is omitted from Hard Code as all methods score 1.000;",
+   "support_explanation": "Table 3：Hard Code Overall SA .667/SC .708/AgentNet .698/EvoMem .672/MemCollab .682/EvoChamber .757；MBPP+ EvoChamber .861 低于 AgentNet .887 与 EvoMem .885；CodeContests(165题) .352 vs SC .198。AFlow-Stream Overall SA .819/AgentNet .827/EvoMem .840/MemCollab .832/EvoChamber .871；HumanEval 列 EvoChamber .830 低于 AgentNet .900、EvoMem .880、MemCollab .890。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E10",
+   "material_id": "2605.11136",
+   "locator": "Table 5 caption",
+   "quote": "(a) Ablation on AFlow-Stream: each row disables one of the method-level innovations EvoChamber introduces, mapped to the Method subsection that describes it.",
+   "support_explanation": "Table 5a(单次运行)：完整 .871；随机组队 .847(−.024)；LeadLearn 关(强制投票) .841(−.030)；去掉 CoDream .763(−.108，HotpotQA .572、DROP .480)——.763 低于单智能体 SA .819 与 EvoMem .840。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E11",
+   "material_id": "2605.11136",
+   "locator": "Appendix F",
+   "quote": "The key finding is that EvoChamber without CoDream matches SA exactly at 0.633.",
+   "support_explanation": "30 题单领域子序列：SA=w/o CoDream=0.633(19/30)，完整 0.700(21/30)；差 2 题。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E12",
+   "material_id": "2605.11136",
+   "locator": "Appendix B",
+   "quote": "Pool size has minimal impact on final accuracy.",
+   "support_explanation": "Table 7：N=3 总体 0.628 vs N=20 0.639，N=3 通过 genesis 长到 8 个 agent；多 agent 池的初始规模几乎无影响。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E13",
+   "material_id": "2605.11136",
+   "locator": "Appendix K, Table 12",
+   "quote": "Lifecycle contribution is negligible early and grows modestly in mid-to-late phases.",
+   "support_explanation": "去掉生命周期算子：早/中/晚段 Δ=+0.001/+0.007/+0.008(AFlow-Stream，单次)。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E14",
+   "material_id": "2605.11136",
+   "locator": "Appendix A",
+   "quote": "The inference cost is roughly 3.6 × 3.6\\times that of a single agent",
+   "support_explanation": "推理成本约单智能体 3.6×；称在 SC(k=5)预算的 72% 下精度更高；未给基线 EvoMem/MemCollab 的成本，进化期调用是否计入未说明。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E15",
+   "material_id": "2605.11136",
+   "locator": "§4.3",
+   "quote": "This rules out a favorable curriculum as the explanation: the gains come from the evolution mechanism, not task ordering.",
+   "support_explanation": "Hard Math 两次随机顺序：0.655 与 0.662(默认 0.639)；SA 视为顺序无关(仅单次验证)；仅 Hard Math，且 niche 标签仍给定。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E16",
+   "material_id": "2605.11136",
+   "locator": "Abstract",
+   "quote": "Starting from several identically initialized agents, four to five stable niche specialists spontaneously emerge, a structural signature of multi-agent evolution that no single-agent learner can express.",
+   "support_explanation": "‘四到五个稳定专家’：正文未给出可核对的计数。Table 6：三次运行独立锚点数 33/42/40(自 N=20 起)，平均专精指数 0.123±0.008，最大 0.272，各 niche 的专家身份随种子完全不同。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E17",
+   "material_id": "2605.11136",
+   "locator": "§4.4",
+   "quote": "This niche separation cannot come from the benchmark itself, since all AIME years are math competitions.",
+   "support_explanation": "各 AIME 年出现不同主导专家；但 niche 标签=年份且以顺序块呈现，按 niche 的 EWMA 竞争力更新天然会产生分化。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E18",
+   "material_id": "2605.11136",
+   "locator": "§4.1 Implementation",
+   "quote": "A single hyperparameter configuration is used across all three streams and both model families with no per-benchmark tuning.",
+   "support_explanation": "超参(θ=0.6、τ=10、合并 0.95、剪枝 0.8× 等)的来源或开发流未说明。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E19",
+   "material_id": "2605.11136",
+   "locator": "Appendix E.4",
+   "quote": "All streams use a fixed task order across methods to ensure comparable learning trajectories.",
+   "support_explanation": "评测即在线任务流；各方法同序；主结果为流内累计准确率，无独立留出集。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E20",
+   "material_id": "2605.11136",
+   "locator": "§4.1 Baselines",
+   "quote": "All multi-agent baselines use k = 3 k{=}3 agents to match our team size.",
+   "support_explanation": "多 agent 基线与组队规模对齐为 3；基线内部实现(EvoMem、MemCollab、AgentNet)由作者复现。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E21",
+   "material_id": "2605.11136",
+   "locator": "§4.1 Metrics",
+   "quote": "We report accuracy per stream: exact match for math, pass@1 for code, and F1 for QA.",
+   "support_explanation": "指标为精确匹配/pass@1/F1，均为可自动核验。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E22",
+   "material_id": "2605.11136",
+   "locator": "Appendix I",
+   "quote": "where math_hard base accuracy is 0.302",
+   "support_explanation": "附录称 Qwen3-8B 的 math_hard 基础准确率 0.302，而 Table 2 的 SA 为 0.374，数值前后不一致。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E23",
+   "material_id": "2605.11136",
+   "locator": "Appendix J",
+   "quote": "Over the math_hard phase, these same three agents produce 72 of 93 verified insights in the run, or 77% of the total.",
+   "support_explanation": "洞见产出高度集中：7 个 agent 产出全部 93 条，3 个产出 77%；整个流只触发 34 次 CoDream。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E24",
+   "material_id": "2605.11136",
+   "locator": "Appendix L",
+   "quote": "Each insight was generated by a specific agent during a post-task reflection session, verified by re-attempt, and routed to the appropriate experience archive.",
+   "support_explanation": "‘verified’指重试验证；未给出验证通过率或拒绝数。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E25",
+   "material_id": "2605.11136",
+   "locator": "Table 4 caption",
+   "quote": "Cross-backbone validation on the Hard Math Stream (top) and AFlow-Stream (bottom) under GPT-4.1-mini.",
+   "support_explanation": "GPT-4.1-mini：Hard Math SA .675/MemCollab .764/EvoMem .757/EvoChamber .796；AFlow SA .869/MemCollab .866/EvoMem .873/EvoChamber .888(+.019)，DROP .780 低于 SA .800。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E26",
+   "material_id": "2605.11136",
+   "locator": "Appendix J",
+   "quote": "Quality degradation on AIME. CoDream fires 7 times in the AIME phase, 4 on AIME’22 and 3 on AIME’23, with zero triggers on AIME’24 or AIME’25.",
+   "support_explanation": "最难子集上 CoDream 稀少且产出泛泛建议。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E27",
+   "material_id": "2605.11136",
+   "locator": "Appendix D",
+   "quote": "Both stores grow with the agent’s full history, with no fixed capacity limit.",
+   "support_explanation": "个体经验库与元洞见库无容量上限，仅 LLM 近重复合并。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E28",
+   "material_id": "2605.11136",
+   "locator": "Appendix E.1",
+   "quote": "Pruned agents are removed from the pool entirely and their memory stores are discarded.",
+   "support_explanation": "被剪枝 agent 的记忆整体丢弃；fork 复制父记忆；merge 合并两库——有 agent 级退休，无洞见级退休。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E29",
+   "material_id": "2605.11136",
+   "locator": "Table 1 caption",
+   "quote": "EvoChamber is the first to activate all three levels online without training.",
+   "support_explanation": "新颖性主张(‘首个’)，近邻对照用 Table 1/8 的特征勾选，不是实验。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E30",
+   "material_id": "2605.11136",
+   "locator": "Table 6 caption",
+   "quote": "Pattern is seed-invariant; identity is seed-dependent.",
+   "support_explanation": "作者承认专家身份随种子变化，只有‘出现专家’的模式可复现。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  },
+  {
+   "evidence_id": "E31",
+   "material_id": "2605.11136",
+   "locator": "Appendix I",
+   "quote": "For Qwen3-8B, CoDream ’s direct contribution on AIME is small and statistically noisy at this backbone capability.",
+   "support_explanation": "作者承认 AIME 上 CoDream 直接贡献小且噪声大。",
+   "kind": "author_report",
+   "material_sha256": "db0017fb7a5e32b2b4b0a45ab152d077d34dc8dff9c2b759c7a177344a4cd6b1"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "各 agent 的洞见/经验库(niche 桶+跨域元洞见)与 niche 竞争力 q_i(z)",
+   "information": "团队成员的完整推理轨迹、团队奖励 r_t(任务正确性)、niche 标签；强 agent 的成功轨迹可被失败成员对比。",
+   "operation": "失败(均值<0.6)或分歧时触发 CoDream 五阶段：Reflect→Contrast→Imagine→Debate→Crystallize，产出带层级与 niche 范围的洞见，经同任务重试验证，写入 niche 上竞争力低于池中位数的 agent。",
+   "output": "带标签的洞见条目；按 EWMA 更新的 q_i(z)。",
+   "conditions": "团队失败/分歧；deficit 门；洞见近重复合并(余弦 0.85)。",
+   "feedback": "r_t∈[0,1] 的任务级正确性反馈",
+   "selection_rule": "重试得分高于原失败即通过；写入对象由 deficit gate 决定。",
+   "persistence": "agent 记忆库无容量上限、全程累积。",
+   "later_use": "后续同 niche 任务按余弦检索 top-k 前置到系统提示。",
+   "claimed_effect": "去掉 CoDream AFlow −0.108(单次)；Hard Math 0.639 vs 最强基线 0.484。",
+   "failure_boundary": "AIME 上洞见泛化为阅读建议；无洞见级退休；门控易放行噪声。",
+   "evidence_ids": [
+    "E01",
+    "E03",
+    "E04",
+    "E24",
+    "E27"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "团队组成(anchor/complement/scout)与协作结构 L∈{投票,辩论,生成-批评,分解}",
+   "information": "niche 竞争力、成对协同 σ、风格重叠 ω、共享领导经验库。",
+   "operation": "anchor=niche 内最强；complement 兼顾竞争力/协同/风格差；scout 按曝光不足；leader 检索 (团队画像,任务画像)→结构 的经验并条件化 LLM 选结构。",
+   "output": "每任务的团队与结构。",
+   "conditions": "|P|>k，权重固定。",
+   "feedback": "共享团队奖励",
+   "selection_rule": "argmax 打分；LLM 条件化选择结构",
+   "persistence": "q、σ、领导经验库",
+   "later_use": "每个新任务",
+   "claimed_effect": "随机组队 −0.024；LeadLearn 关 −0.030(AFlow，单次)",
+   "failure_boundary": "池规模 N=3 与 N=20 几乎等同，组队选择的空间贡献存疑。",
+   "evidence_ids": [
+    "E10",
+    "E12"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "agent 池的名册(fork/merge/prune/genesis/specialize)",
+   "information": "滚动平均奖励、画像余弦、niche 亲和度。",
+   "operation": "每 10 任务检查：前 10% fork+persona 变异，余弦>0.95 合并，<0.8×池均值连续 10 任务剪枝，亲和度<0.4 或池<15 时生成新 agent。",
+   "output": "新名册",
+   "conditions": "固定阈值",
+   "feedback": "竞争力统计",
+   "selection_rule": "阈值规则",
+   "persistence": "池状态(被剪 agent 记忆丢弃)",
+   "later_use": "后续组队",
+   "claimed_effect": "去掉生命周期仅 +0.001~0.008 差",
+   "failure_boundary": "贡献近零；阈值来源未说明。",
+   "evidence_ids": [
+    "E13",
+    "E28"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "多智能体不是单智能体的 N 次复制；现有测试时方法要么把经验限于个体(EvoMem、AgentNet)，要么对称广播给所有 agent(MemCollab)抹平专长；RL 共训与离线结构搜索在部署时冻结。",
+  "checked_gap": "被改变的固定对象是‘经验在 agent 间的流向与池结构’：由个体私有/对称广播改为按 niche 的单向(强→弱)路由。近邻(EvoMem、MemCollab、AgentNet、DyLAN)均被实现为同 k=3 的基线，gap 具体且可比；但‘对称广播抹平专长’未在同框架内用对称广播变体直接检验。",
+  "lineage": [
+   {
+    "ancestor": "Reflexion/ExpeL 个体反思记忆",
+    "source": "§2",
+    "version": "paper v1 引用列表"
+   },
+   {
+    "ancestor": "EvoMem、AgentNet 池内个体记忆",
+    "source": "§2",
+    "version": "paper v1 引用列表"
+   },
+   {
+    "ancestor": "MemCollab 对称共享记忆",
+    "source": "§2/Appendix C",
+    "version": "paper v1 引用列表"
+   },
+   {
+    "ancestor": "AFlow/ADAS 离线工作流搜索；CoMAS/MAPoRL RL 共训",
+    "source": "§2",
+    "version": "paper v1 引用列表"
+   }
+  ],
+  "closest_adjacent": "MemCollab(对称共享)是最近邻，作者复现为基线；本地无其原文，其实现细节本席未核。",
+  "residue": "‘非对称优于对称’的因果、生命周期层收益、专长涌现是否真实未被隔离。",
+  "stakes": "若增益来自‘有跨 agent 共享’本身而非非对称，则新颖性主张缩小。",
+  "method_response": "三层状态分解+CoDream 非对称路由+生命周期算子。",
+  "remaining_gap": "无对称广播内部变体；无留出；洞见门控弱；洞见库无遗忘。",
+  "evidence_ids": [
+   "E02",
+   "E20",
+   "E29"
+  ],
+  "unresolved": [
+   "MemCollab 等基线的复现忠实度未核",
+   "‘首个’主张的穷尽检索未做"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "heterogeneous_decomposition",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "按 niche 竞争力把 agent 分为强/弱，洞见只从强者产出、写入弱者；团队按 anchor/complement/scout 角色分化；已执行‘按判别属性分区并差异化处理’。未做：先实证刻画异质性分布(niche 标签直接给定)。",
+    "success_failure_checks": "成功条件‘分区承重’：去掉 CoDream(单次)大降，但对称广播变体缺失；失败模式‘异质性只被断言’部分出现；‘缺基线隔离分解本身’部分出现(只有跨系统基线)。",
+    "evidence_ids": [
+     "E01",
+     "E03",
+     "E05",
+     "E10",
+     "E17"
+    ],
+    "reason": "实际操作是对一池异质 agent 按竞争力分区并施以非对称的产出/消费处理；唯一子卡 C04(训练产物压缩)对象不同，故子卡留空。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "主卡适配，子卡 C04 不适用。",
+  "executes_pattern": true,
+  "resolves_problem": false
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "search_agent_architecture",
+    "sub": "H18",
+    "version": "domain_cards:52ff9657",
+    "fit": "primary",
+    "condition_checks": {
+     "rsi:search_agent_architecture/S3": "met: 以任务奖励(真值正确性)而非 LLM 评语驱动组队/名册更新",
+     "rsi:search_agent_architecture/S4": "partial: LeadLearn 可选投票等简单结构，但生命周期编辑无回退",
+     "rsi:search_agent_architecture/F1": "partial: 三层同时共演化，仅在 AFlow 上对 CoDream/组队/LeadLearn 做轴级消融，个体记忆与各生命周期算子未单独消融",
+     "rsi:search_agent_architecture/H18": "step3 快慢分离(快:个体记忆，慢:每10任务名册)met；step5 超参离线调参来源未说、适应成本部分披露、第二骨干已测"
+    },
+    "evidence_ids": [
+     "E10",
+     "E13",
+     "E14",
+     "E18",
+     "E28"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "domain_cards:52ff9657",
+    "fit": "supporting",
+    "condition_checks": {
+     "rsi:abstract_experience_into_guidance/S2": "met: Contrast 阶段对失败与成功成员做差",
+     "rsi:abstract_experience_into_guidance/S3": "met: 任务奖励+重试验证作 grounding",
+     "rsi:abstract_experience_into_guidance/S4": "partial: LLM 近重复合并，无遗忘/容量约束",
+     "rsi:abstract_experience_into_guidance/H00": "step4 学习流与评测流分离：按设计合一(测试时在线更新)，仅以无状态 SA 作‘无更新’对照"
+    },
+    "evidence_ids": [
+     "E01",
+     "E04",
+     "E19",
+     "E27"
+    ]
+   }
+  ],
+  "unassigned": [
+   "LeadLearn 的 (团队,任务)→协作结构 经验检索未对应领域子卡(接近 H05/H03，但对象是结构选择)。"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "search_agent_architecture",
+   "domain_sub": "H18",
+   "operation_correspondence": "RS: 按判别属性分区、各区不同处理 ↔ 领域 H18: 在推理期按测量到的竞争力重写角色/路由/画像；对应成立于 niche 竞争力分区与 anchor/complement/scout。",
+   "necessary_conditions_and_differences": "H18 要求以结果信号门控结构编辑并保留回退；RS 要求异质性被实证刻画。本文用奖励信号门控，但 niche 标签是给定输入，且无结构回退。",
+   "evidence_ids": [
+    "E05",
+    "E10",
+    "E28"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:heterogeneous_decomposition/RE-1",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md#reviewer-expectations(item 1)"
+   ],
+   "applies_when": "引入新分区判据",
+   "applicable": true,
+   "status": "partial",
+   "reason": "分区判据是 niche 内 EWMA 竞争力+余弦风格重叠，较常规路由有差异，但与标准 bandit/competence routing 的区别未论证。",
+   "evidence_ids": [
+    "E03",
+    "E05"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-2",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md#reviewer-expectations(item 2)"
+   ],
+   "applies_when": "声称成本/效率相关",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告 3.6× 单智能体推理成本与相对 SC 的 72% token；缺基线成本与进化期调用计数。",
+   "evidence_ids": [
+    "E14"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-3",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md#reviewer-expectations(item 3)"
+   ],
+   "applies_when": "多组件差异化处理",
+   "applicable": true,
+   "status": "partial",
+   "reason": "AFlow 上单次消融 CoDream/随机组队/LeadLearn，生命周期仅在另一表；个体记忆、各生命周期算子、scout 角色无单独消融。",
+   "evidence_ids": [
+    "E10",
+    "E13"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md#reviewer-expectations(item 4)"
+   ],
+   "applies_when": "声称分解本身带来收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "没有框架内部的对称广播/均匀路由变体与非对称路由等预算对比；跨系统基线混入其他差异。",
+   "evidence_ids": [
+    "E02",
+    "E10",
+    "E20"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md#reviewer-expectations(item 5)"
+   ],
+   "applies_when": "以异质性为前提",
+   "applicable": true,
+   "status": "partial",
+   "reason": "给出专家锚点分布、洞见流向矩阵与专精指数(含三次运行)，但异质性来自给定的 niche 标签与顺序块，且‘四到五个专家’无量化支持。",
+   "evidence_ids": [
+    "E16",
+    "E17",
+    "E30"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-6",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "heterogeneous_decomposition.md#reviewer-expectations(item 6)"
+   ],
+   "applies_when": "声称瓶颈在目标区间起作用",
+   "applicable": true,
+   "status": "met",
+   "reason": "Appendix I 按基线准确率分区讨论 CoDream 何时有用，并承认 AIME 上贡献小且噪声大。",
+   "evidence_ids": [
+    "E31",
+    "E26"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:search_agent_architecture/S3",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#search_agent_architecture.S3"
+   ],
+   "applies_when": "结构性改动",
+   "applicable": true,
+   "status": "met",
+   "reason": "组队与名册更新由任务奖励/竞争力驱动，非 LLM 评语。",
+   "evidence_ids": [
+    "E03",
+    "E28"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:search_agent_architecture/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#search_agent_architecture.S4"
+   ],
+   "applies_when": "增加结构复杂度",
+   "applicable": true,
+   "status": "partial",
+   "reason": "协作结构可选简单投票；名册编辑无回退，剪枝即丢弃记忆。",
+   "evidence_ids": [
+    "E28",
+    "E10"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:search_agent_architecture/F1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#search_agent_architecture.F1"
+   ],
+   "applies_when": "多轴同时共演化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅部分轴有消融；生命周期与池规模贡献接近零，说明多轴设计并非都承重。",
+   "evidence_ids": [
+    "E12",
+    "E13"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json#abstract_experience_into_guidance.S4"
+   ],
+   "applies_when": "存储增长",
+   "applicable": true,
+   "status": "partial",
+   "reason": "仅 LLM 近重复合并；无容量上限与遗忘，洞见级无退休。",
+   "evidence_ids": [
+    "E27",
+    "E28"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H00",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H00.md#step-by-step(step4)"
+   ],
+   "applies_when": "洞见在评测流上在线写入",
+   "applicable": true,
+   "status": "partial",
+   "reason": "测试时在线更新是设计本身，用无状态 SA 作无更新对照，但没有冻结存储后的留出评测。",
+   "evidence_ids": [
+    "E19"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2605.11136-1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 5a, Appendix F"
+   ],
+   "applies_when": "称非对称路由是主因",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "需要在同一框架内比较‘对称广播 CoDream’与‘非对称 CoDream’；现仅有‘去掉 CoDream’，且去掉后 0.763 低于单智能体 0.819，说明消融混入其他组件的损伤。",
+   "evidence_ids": [
+    "E10",
+    "E11"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.11136-2",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§4.1 Datasets, §4.4"
+   ],
+   "applies_when": "称专家‘自发涌现’",
+   "applicable": true,
+   "status": "challenged_with_evidence",
+   "reason": "niche 标签由元数据给定且数据按领域块顺序到达，按 niche 的 EWMA 本身即可产生分化；专家身份随种子完全不同，‘四到五个’无计数证据。",
+   "evidence_ids": [
+    "E05",
+    "E16",
+    "E17",
+    "E30"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "local:2605.11136-3",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 2, Table 3, Table 5, Table 7"
+   ],
+   "applies_when": "单次运行的流式比较",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "基线与消融单次；AFlow +3.1pp、GPT-4.1-mini +1.9pp 量级接近流规模噪声；无置信区间/显著性。",
+   "evidence_ids": [
+    "E09",
+    "E25"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "EvoChamber 在三条任务流上优于最佳基线(Hard Math 0.639 vs 0.484，Hard Code 0.757，AFlow 0.871)。",
+   "setting": "Qwen3-8B 在线任务流，真值奖励，niche 标签给定，固定顺序；基线 k=3。",
+   "baseline_control": "SA、SC(k=5)、DyLAN、AgentNet、EvoMem、MemCollab。",
+   "selection_vs_test": "评测即在线流，无独立留出；超参来源未说明。",
+   "result_denominator": "单次运行；Hard Math 另有两次随机顺序(0.655/0.662)；流规模 382/586(或 422)/600。",
+   "evidence_ids": [
+    "E08",
+    "E09",
+    "E15",
+    "E19",
+    "E20"
+   ],
+   "counterevidence": [
+    "E07",
+    "E22",
+    "E18"
+   ],
+   "allowed_conclusion": "在作者的在线流设置下，相对其复现的基线，Hard Math 优势大且稳定，Hard Code 的优势几乎全来自 CodeContests，AFlow 优势约 3pp；统计不确定性未量化。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "非对称跨 agent 迁移(CoDream)是主要驱动。",
+   "setting": "AFlow-Stream 去掉 CoDream；30 题隔离实验。",
+   "baseline_control": "完整系统；单智能体。",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "AFlow −0.108(单次，且 .763 < SA .819)；30 题 21/30 vs 19/30。",
+   "evidence_ids": [
+    "E10",
+    "E11"
+   ],
+   "counterevidence": [
+    "E04",
+    "E31"
+   ],
+   "allowed_conclusion": "scoped：跨 agent 洞见共享在该设置下贡献最大；‘非对称’本身未被对称变体隔离。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "团队层与群体层各有独立贡献。",
+   "setting": "AFlow-Stream。",
+   "baseline_control": "随机组队、LeadLearn 关、生命周期关、池规模 3 vs 20",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "−0.024、−0.030、+0.001~0.008、−0.011(N=3)",
+   "evidence_ids": [
+    "E10",
+    "E13",
+    "E12"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "团队层有小幅贡献(单次)；生命周期与池规模几乎无贡献。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "自发涌现 4–5 个稳定 niche 专家。",
+   "setting": "Hard Math 三次运行。",
+   "baseline_control": "无",
+   "selection_vs_test": "n/a",
+   "result_denominator": "独立锚点 33/42/40，专精指数 0.123±0.008",
+   "evidence_ids": [
+    "E16",
+    "E30"
+   ],
+   "counterevidence": [
+    "E05",
+    "E17"
+   ],
+   "allowed_conclusion": "unresolved：出现 niche 相关的主导 agent 且身份随种子变，‘4–5 个稳定专家’无量化证据。"
+  },
+  {
+   "claim_id": "C5",
+   "text": "收益可迁移到 GPT-4.1-mini。",
+   "setting": "Hard Math、AFlow-Stream。",
+   "baseline_control": "SA、MemCollab、EvoMem",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "+0.107(Hard Math)、+0.019(AFlow，单次，DROP 低于 SA)",
+   "evidence_ids": [
+    "E25"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "方向一致；AFlow 上增益在噪声量级。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在带真值奖励的在线任务流中，跨 agent 的洞见共享使 Qwen3-8B 池在 Hard Math/CodeContests 等难子集上明显优于个体记忆与对称共享的复现基线；多层其余组件(生命周期、池规模)贡献近零。",
+  "unresolved": [
+   "对称广播同框架对照",
+   "无留出/超参来源",
+   "单次运行无不确定性",
+   "‘涌现专家’与给定 niche 标签的混淆",
+   "洞见门控与遗忘",
+   "基线成本"
+  ],
+  "reproduction_note": "全部为作者报告，我们未复现。"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "‘个体记忆 vs 对称广播’之间缺‘按差距定向路由’这一具体空位，最近邻被实现为同规模基线并可比；扣分：‘对称广播抹平专长’只是论断，‘首个’靠特征勾选，近邻 MemCollab 等原文本席未核。",
+   "evidence_ids": [
+    "E02",
+    "E20",
+    "E29"
+   ],
+   "counterevidence_ids": [
+    "E10"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "五阶段 CoDream、deficit 门、三层状态定义清楚，能提出区分预测(强→弱 vs 对称)；但关键假设(非对称是原因)缺同框架检验，涌现解释与给定 niche 标签混淆，门控只验证同题重试。",
+   "evidence_ids": [
+    "E01",
+    "E03",
+    "E16"
+   ],
+   "counterevidence_ids": [
+    "E04",
+    "E17"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "超参表、阈值、算子定义、推理配置、快慢速率分离均给出，agent 级 fork/merge/prune/genesis 与读取路径可重建，并分析了不起作用的区间；扣分：洞见级无退休、无容量上限，验证门弱，名册编辑无回退。",
+   "evidence_ids": [
+    "E03",
+    "E13",
+    "E28",
+    "E26"
+   ],
+   "counterevidence_ids": [
+    "E04",
+    "E27"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "精确匹配/pass@1/F1 为可核验指标，流内各方法同序同任务；扣分：Hard Code 的 Overall 含全员满分的 HumanEval 且任务数 422/586 前后不一，Appendix I 的基础准确率与 Table 2 不一致。",
+   "evidence_ids": [
+    "E21",
+    "E08"
+   ],
+   "counterevidence_ids": [
+    "E07",
+    "E22"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "跨系统基线与 AFlow 上 3 项单次消融给出方向性证据，30 题隔离实验表明 w/o CoDream=SA；但缺同框架对称广播变体，w/o CoDream 低于单智能体说明消融含其它损伤，生命周期与池规模近零，个体记忆与各算子无消融，单次运行。",
+   "evidence_ids": [
+    "E10",
+    "E11",
+    "E15"
+   ],
+   "counterevidence_ids": [
+    "E12",
+    "E13",
+    "E31"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "在线流的评测与学习同流，无独立留出；各方法同序，Hard Math 有两次随机顺序，GPT-4.1-mini 为第二骨干；扣分：超参来源与是否在评测流上调过未说明，niche 标签与奖励真值为特权信号，未报污染核查。",
+   "evidence_ids": [
+    "E15",
+    "E19",
+    "E25"
+   ],
+   "counterevidence_ids": [
+    "E05",
+    "E18"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "报告了各流规模与部分重复运行(Hard Math 三次、池规模两档)，但基线与消融单次，无标准差/置信区间/显著性；AFlow +3.1pp 与 GPT-4.1-mini +1.9pp 量级接近噪声，作者承认 AIME 上 CoDream 噪声大。",
+   "evidence_ids": [
+    "E15"
+   ],
+   "counterevidence_ids": [
+    "E09",
+    "E25",
+    "E31"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "披露 3.6× 单智能体推理成本与相对 SC 的 72% token、各阶段 token 上限与硬件；缺基线成本、进化期调用计数与墙钟。",
+   "evidence_ids": [
+    "E14"
+   ],
+   "counterevidence_ids": [
+    "E20"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 60.0,
+  "display": 60.0,
+  "lower": 60.0,
+  "upper": 60.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

@@ -35,10 +35,11 @@ def normalize_record(rec: dict) -> dict:
         for k, v in rt["E"].items():
             rt.setdefault(f"E.{k}", v)
         del rt["E"]
-    # status given as {value, reason}
+    # status given as {value, reason} or {status, reason}
     if isinstance(r.get("status"), dict):
-        r["status_reason"] = r["status"].get("reason")
-        r["status"] = r["status"].get("value")
+        st = r["status"]
+        r["status_reason"] = st.get("reason")
+        r["status"] = st.get("value") or st.get("status")
     # domain matches: main_id/sub_id aliases + rsi:/rs: prefixes
     def norm_id(v):
         if isinstance(v, str):
@@ -58,6 +59,10 @@ def normalize_record(rec: dict) -> dict:
                 m["sub"] = norm_id(m["sub"])
     rsp = r.get("rs_pattern")
     if isinstance(rsp, dict):
+        if isinstance(rsp.get("primary"), dict):
+            rsp["primary"] = rsp["primary"].get("id") or rsp["primary"].get("main_id") or rsp["primary"].get("card")
+        if isinstance(rsp.get("supporting"), list):
+            rsp["supporting"] = [x.get("id") if isinstance(x, dict) else x for x in rsp["supporting"]]
         for m in rsp.get("matches", []) or []:
             if m.get("sub_id") is not None:
                 m["sub_id"] = norm_id(m["sub_id"])

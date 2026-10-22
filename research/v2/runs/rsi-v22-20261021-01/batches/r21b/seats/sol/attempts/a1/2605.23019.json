@@ -1,0 +1,796 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r21b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "status": "reviewed",
+  "reason": "全文与全部附录已读；冻结模型的非权重 prompt/solver 留存并在静态后续测试使用，A类。作者结果非本席复现。",
+  "paper": {
+    "paper_key": "2605.23019",
+    "paper_id": "2605.23019",
+    "title": "PACE: Two-Timescale Self-Evolution for Small Language Model Agents",
+    "version": "2605.23019v1",
+    "claim_type": "system_method",
+    "central_claim": "冻结4B–14B SLM通过prompt饱和后才启动、受验证门控的control-logic演化，自主发现任务策略且可靠地优于prompt-only/code-only，无更强教师和权重更新。",
+    "scope_class": "A"
+  },
+  "provenance": {
+    "input_hash": "152494fe335af27dffd0cb3daa4e498f00de55938f1c8c974c07be520baeae22",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "派发type sonnet→gpt-6.1-sol；无独立receipt及可绑定session，未另行探测，actual_model按模板置null。",
+    "timestamp": "2026-10-22T02:52:59.942020+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2605.23019.txt",
+      "url": "https://arxiv.org/html/2605.23019v1",
+      "version": "2605.23019v1",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "sections_read": [
+        "Abstract",
+        "1–5",
+        "A.1–A.8.2",
+        "全部表格与inline solver listings",
+        "HTML尾部"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 110-112",
+      "quote": "A key observation motivating our work is that prompt updates and control-logic updates play different roles in agent improvement. As shown in Figure\n1\n, prompt-only evolution improves performance quickly but often saturates once the remaining failures stem from structural bottlenecks, such as brittle output extraction, missing validation, weak repair logic, or ineffective sampling policies. In contrast, enabling control-logic updates from the beginning is substantially less stable, since SLM-proposed structural edits can introduce regressions before the prompt has been sufficiently optimized. These results suggest that reliable SLM self-evolution should not treat prompt refinement and control-logic modification as interchangeable actions: it should first exploit low-risk prompt updates, then invoke higher-risk control-logic updates only after prompt-level gains plateau, with an explicit mechanism for validating proposed changes.",
+      "support_explanation": "具体区分 prompt 饱和与结构编辑风险。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 450-462",
+      "quote": ". At each iteration, prompt candidates are produced through three complementary channels:\n(i)\na library of handcrafted mutations that perturb the role description, reasoning directives, or sampling temperature;\n(ii)\n\nreflective\ncandidates, where the SLM first diagnoses each failure with a one-sentence root-cause analysis (e.g., factual confusion, logical gap, or format error) and a separate proposer call uses these diagnoses to generate targeted prompt revisions; and\n(iii)\n\ncrossover\ncandidates, in which the two most complementary configurations on the current Pareto front are combined by asking the SLM to unify their respective strengths into a single prompt.\n\nCandidates are evaluated on a small training mini-batch (sampled) and maintained on a Pareto front trading off accuracy against token cost. Rather than always mutating the single highest-accuracy parent, the next parent is sampled from the front with probability proportional to its failure coverage, encouraging exploration of diverse error modes. After all iterations, every front member is re-evaluated on a held-out validation split; the configuration with the best validation accuracy is retained.",
+      "support_explanation": "PE 突变、反思、交叉、Pareto front 与验证选优。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 516-518",
+      "quote": "denotes the set of admissible control-logic modifications. In practice, control-logic updates are implemented as bounded edits to the agent’s solver function, which specifies how the frozen SLM is prompted, sampled, parsed, verified, or re-executed at inference time. These edits are constrained by a fixed solver interface and resource budget, and typically affect safe-to-edit components such as output parsing and validation, retry mechanisms, inference-time configuration, self-consistency or verification passes, and lightweight routing or fallback strategies.\n\nMore specifically, PACE guides solver edits using a compact failure summary over recent errors, including extraction/runtime failures, format or constraint violations, and reasoning/content mistakes. The summary steers the next proposal toward an appropriate control-logic change, such as answer-extraction hardening, validation or retry logic, sampling adjustment, self-consistency, or verification/repair. Each candidate solver edit is treated as a proposal and is committed only if it improves held-out performance under the resource budget",
+      "support_explanation": "失败诊断→受约束 solver 编辑→验证→重做 PE。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 848-853",
+      "quote": "accepts any non-regressing candidate; larger values require stronger evidence before committing the update. In practice, we set\nδ\n=\n0.02\n\\delta{=}0.02\n, and we ensure validation comparison samples a fresh subset from the training pool, varying both size and composition across iterations. This prevents the evolution trajectory from overfitting to a fixed held-out slice and ensures that accepted control-logic updates generalize beyond any single validation draw.",
+      "support_explanation": "delta=.02；验证子集从训练池动态抽样。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 866-871",
+      "quote": "In our implementation,\nB\nB\ndenotes the evolution budget. Each run uses a frozen SLM backbone with at most 14B parameters and is capped at 20 evolution steps. We do not enforce a fixed per-query token budget during evolution; instead, we measure the inference-time cost of the evolved agent, including model calls and generated tokens, and report the resulting accuracy–cost tradeoff (Appendix\nA.6\n).",
+      "support_explanation": "实际预算为20演化步，不固定单查询 token，与理想预算形式有差距。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 1455-1462",
+      "quote": ": an agent self-evolution by using execution feedback to iteratively reflect on successes and failures, curate reusable lessons into a structured context/playbook, and improve future task performance without updating model weights. For a frontier reference, we also report\nDeepSeek-V3.2-685B\nresults on each benchmark. Note that all experiments are conducted over\n10\n10\nindependent runs with different random seeds, and we report the mean accuracy in the main context. Results with standard deviation are reported in Table\n6\nin Appendix.",
+      "support_explanation": "ACE 等近邻和十独立种子声明。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2185-2207",
+      "quote": "Common protocol.\n\nEvery benchmark is partitioned into three disjoint, seed-shuffled\nsplits. The\ntrain\nsplit is used by the inner-loop prompt\noptimizer to sample minibatches and by DSPy baselines to bootstrap\ndemonstrations. The\nvalidation\nsplit is used for\ncomparisons of candidate solvers or prompts (including the PACE\ncredit-assignment gate). The\ntest\nsplit is held out and used\nonly for the final reported numbers. All experiments use seed\n0\n0\n,\nthe\nauto=\"medium\"\nbudget preset for DSPy optimizers, and\nidentical splits across Vanilla, +PE, +PACE, GEPA, and MIPROv2 so\nthat differences reflect the method rather than the data.",
+      "support_explanation": "通用协议称三份 disjoint split/seed0，需与实现描述区分。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2287-2292",
+      "quote": "Because evolution requires repeated evaluation, we use fixed controlled subsets for training and testing rather than full benchmark test suites; the same splits are shared across all methods. For IFEval, whose official release consists of a single set of\n541\n541\nprompts without a designated train/test partition, we randomly split the full prompt set into disjoint train and test subsets using a fixed seed.\n\nValidation subsets are not fixed: at each evaluation step, the agent dynamically samples a fresh subset from the training pool, varying both size and composition across iterations to reduce overfitting to any single validation slice. This design reflects a practical deployment constraint where repeated evaluation on an identical held-out set can lead to implicit selection bias in the evolution trajectory.",
+      "support_explanation": "静态 final test 隔离，验证从训练池采样。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2430-2435",
+      "quote": "For each language, we load\nmgsm_{lang}.tsv\n, prepend a language-specific instruction prefix, pool examples across languages, shuffle with seed\n0\n0\n, and split the pooled data into 200 training, 100 validation, and 800 test examples.",
+      "support_explanation": "MGSM 跨语言 pooled 后划分，未报告按原题身份去重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2558-2562",
+      "quote": "Inference note.\nThe agent model (Qwen3.5-9B) is served locally via vLLM on 2 A100 GPUs with temperature\n0.0\n0.0\n. During evolution, validation uses single-trial evaluation on all tasks for efficiency; the final reported metrics use 4-trial evaluation. Each full 4-trial evaluation run takes approximately 8 hours per domain.",
+      "support_explanation": "tau 演化在全部任务 single trial，final 在相同任务4 trials。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 3584-3601",
+      "quote": "validation gate (solver only).\nEdits that modify the\nsolver\nfunction are run through a cheap candidate comparison (\n_compare_variant_metrics\n) against the current solver on\n12\n12\ndeterministic validation samples. If\nΔ\nAB\n≤\nτ\nAB\n\\Delta_{\\text{AB}}\\leq\\tau_{\\text{AB}}\n(\nagent.ab_gate_delta_threshold\n) the edit is rejected and the candidate code is not installed.",
+      "support_explanation": "solver-only 十二样本 gate；不保证 helper 编辑同样受保护。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 3605-3618",
+      "quote": "Post-commit structural eval.\nWhen an edit passes the validation gate and is committed, the agent records the current eval accuracy as\nstructure_eval_baseline\nand marks a pending full evaluation. The next\naction_evaluate_on_task\ncomputes\nΔ\n​\nU\nC\n\\Delta U_{C}\n, which is fed back into the credit mechanism (Section\n4.4\n) and can trigger rollback if the full-evaluation delta is negative.",
+      "support_explanation": "写入后跟踪结构 baseline，负 full-eval delta 可回退。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 3023-3043",
+      "quote": "+PACE\n\n0.889\n±\n0.007\n\\mathbf{0.889\\pm 0.007}\n\n0.909\n±\n0.012\n\\mathbf{0.909\\pm 0.012}\n\n0.803\n±\n0.021\n\\mathbf{0.803\\pm 0.021}\n\n0.761\n±\n0.012\n\\mathbf{0.761\\pm 0.012}",
+      "support_explanation": "9B PACE 四任务均值/SD .889±.007/.909±.012/.803±.021/.761±.012。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 1908-1950",
+      "quote": "MMLU\n\n83.2\n\n87.9\n\n88.9\n\n88.6\n\n88.3\n\n88.4\n\n88.3\n\n88.8\n\n88.9\n\n88.9\n\nIFEval\n\n71.8\n\n73.4\n\n76.1\n\n74.8\n\n73.1\n\n72.5\n\n72.3\n\n74.6\n\n76.1\n\n75.2",
+      "support_explanation": "两阈值消融；IFEval gate-off72.3/default76.1。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 4247-4253",
+      "quote": "Token counts in this section are estimates derived from code-level analysis of prompt templates, solver call patterns, and observed output lengths. The current implementation tracks cost via\nlen(response_text)\n(character count) rather than API-level\nusage.prompt_tokens\n/\ncompletion_tokens\n. Accuracy figures are from real evaluation runs on the respective test splits (800 samples for MMLU, 141 for IFEval).",
+      "support_explanation": "成本由源码/字符估算，非 API token 测量。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 4549-4549",
+      "quote": ") because the self-check scoring requires a separate LLM call per candidate, and the repair pass generates a full-length response. However, the accuracy gain on IFEval is substantially larger (+33.1 pp from +PE to +PACE), reflecting the high value of structural intervention for constrained-generation tasks. MGSM exhibits the highest per-query multiplier (",
+      "support_explanation": "IFEval +33.1pp 与表中+4.3pp不符，拒绝沿用文字增幅。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 5379-5386",
+      "quote": "•\n\nGraceful degradation via empirical gating.\nThe credit-assignment and validation gate mechanisms ensure that structural exploration is both\ntriggered\nand\nvalidated\nempirically. When the SLM proposes a flawed edit—which happens frequently at 9B scale—the gate rejects it without degrading the current solver. This makes the evolution process monotonically non-regressing in expectation, a property that is critical for deploying autonomous agents in practice.",
+      "support_explanation": "作者将经验 gate 外推为期望单调不回退，缺统计或理论保证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2035-2036",
+      "quote": "Table 4:\nControl-logic proposal filtering during PACE evolution, aggregated over three runs (with random seeds) per task. Each entry reports Qwen3-4B / Qwen3.5-9B. “Rej. regression” denotes rejected executable candidates with non-positive validation gain.",
+      "support_explanation": "候选失败统计为两骨干每任务三种子，不能混为主结果十种子。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2349-2350",
+      "quote": "Metric.\nWe report letter-match accuracy. The first A/B/C/D token is extracted from the model output case-insensitively, and the prediction is counted correct iff it matches the gold letter.",
+      "support_explanation": "MMLU 金标指标定义明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 2378-2386",
+      "quote": "Metrics.\nWe use the IFEval instruction checkers for length, case, keyword, format, and punctuation constraints. Each response is scored by\nstrict accuracy\n, which equals\n1.0\n1.0\nonly if all attached instructions are satisfied, and\nloose accuracy\n, the fraction of satisfied instructions. Strict accuracy is used as the optimization objective; failure feedback lists violated instruction identifiers and the loose score.",
+      "support_explanation": "IFEval 外部指令 checker/strict accuracy 定义明确。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E021",
+      "material_id": "2605.23019.txt",
+      "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+      "locator": "lines 3493-3496",
+      "quote": "Must not modify\naction_call_llm\nor\naction_call_json_format_llm",
+      "support_explanation": "调用 primitive 不可编辑。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "prompt_config（role、requirements、temperature、format）",
+      "information": "同一冻结SLM，训练mini-batch成败/诊断、validation utility/cost；没有更强teacher",
+      "operation": "mutation/reflection/crossover，在固定control logic下维护Pareto front",
+      "output": "验证选出的prompt_config",
+      "conditions": "可用执行反馈，prompt空间仍有收益",
+      "feedback": "correctness和失败根因",
+      "selection_rule": "accuracy/token Pareto；validation选最好prompt",
+      "selection_data": "train mini-batch，validation多次抽样",
+      "persistence": "agent prompt_config，结构改动后再优化",
+      "later_use": "后续轮次和final test读取",
+      "claimed_effect": "低风险早期收益",
+      "failure_boundary": "容量瓶颈/反复验证；不是无上限可迁移学习",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E008"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "solver及helper控制代码",
+      "information": "源码和失败taxonomy；调用primitive不可改",
+      "operation": "PE增量<epsilon后，诊断→Python patch→syntax/old-new compare→install；再评估可rollback",
+      "output": "留存voting/verification/repair/routing管线",
+      "conditions": "固定SLM、20outer steps，不硬限每查询token",
+      "feedback": "同子集old/new accuracy",
+      "selection_rule": "delta>.02；solver gate12样本；full-eval负增量可回退",
+      "selection_data": "动态训练池validation；tau使用全任务",
+      "persistence": "agent_module当前solver与rollback baseline",
+      "later_use": "下轮PE与最终任务执行",
+      "claimed_effect": "过滤错误结构编辑，提高final accuracy",
+      "failure_boundary": "helper gate不清，重复选择噪声、额外推理预算；无run-level非回退保证",
+      "evidence_ids": [
+        "E003",
+        "E004",
+        "E005",
+        "E010",
+        "E011",
+        "E012",
+        "E021"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "SLM prompt优化易饱和，自由code编辑不稳；frontier假设下的方法缺少两种风险的调度与验证。",
+    "checked_gap": "文内PE/CE、early-CE和gate-off及失败分类支持局部瓶颈，不仅是冻结权重的泛泛动机；未独立核邻居原文。",
+    "lineage": [
+      {
+        "name": "MIPROv2",
+        "version": "Opsahl-Ong et al.2024，本文引述",
+        "relation": "固定结构prompt/demo优化",
+        "verification": "paper_report_only"
+      },
+      {
+        "name": "GEPA/ACE",
+        "version": "Agrawal et al.2025/Zhang et al.2025，本文引述",
+        "relation": "reflection/Pareto/persistent context先例",
+        "verification": "paper_report_only"
+      },
+      {
+        "name": "Gödel Agent",
+        "version": "Yin et al.2025，本文引述",
+        "relation": "可编辑control logic的近邻",
+        "verification": "paper_report_only"
+      }
+    ],
+    "closest_adjacent": [
+      "MIPROv2",
+      "GEPA",
+      "ACE",
+      "Gödel Agent"
+    ],
+    "residue": "何时离开prompt空间及弱proposer的安全提交",
+    "stakes": "本地小模型agent的可用性/稳定性，额外计算可能抵消资源动机",
+    "method_response": "按风险分时间尺度，PE饱和后再CE，将proposal与acceptance分离",
+    "remaining_gap": "等推理预算固定策略、更独立gate、跨分布长期安全、实测成本",
+    "unresolved": [
+      "请求总控为两席共同固定GEPA/ACE/Gödel Agent原文版本以完成独立谱系/优先性核查；本次未联网。"
+    ],
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E005",
+      "E006",
+      "E014",
+      "E015"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "heterogeneous_decomposition",
+    "supporting": [
+      "adapt_via_conditioning"
+    ],
+    "outside_taxonomy": false,
+    "reason": "把编辑空间按风险分prompt与code并差异化处理；PE分支是留存conditioning。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "heterogeneous_decomposition",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "按风险分区",
+          "分别调度和门控",
+          "early-CE/阈值消融"
+        ],
+        "success_checks": [
+          "两分支可达空间不同",
+          "有分治动机和诊断"
+        ],
+        "failure_checks": [
+          "缺等推理预算uniform策略",
+          "已读C04，其高影响少数/冗余多数压缩战术不适用"
+        ],
+        "reason": "符合主卡partition→tailored treatment，非C04压缩。",
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E014"
+        ]
+      },
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "从反馈生成prompt",
+          "冻结SLM后续读取"
+        ],
+        "success_checks": [
+          "多个任务采用同类PE"
+        ],
+        "failure_checks": [
+          "已读C03，canonical schema/reference substrate与category holdout不适用",
+          "不将全部代码编辑算conditioning"
+        ],
+        "reason": "只匹配PE分支的主卡，不能强贴C03。",
+        "evidence_ids": [
+          "E002",
+          "E008"
+        ]
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "unassigned": false,
+    "revision_proposals": [],
+    "matches": [
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H12",
+        "version": "manifest-fixed",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "met",
+            "reason": "受限solver/helper编辑及primitive保护",
+            "evidence_ids": [
+              "E003",
+              "E021"
+            ]
+          },
+          {
+            "id": "S3",
+            "status": "partial",
+            "reason": "有gate/rollback，helper覆盖与训练池复用限制保护",
+            "evidence_ids": [
+              "E004",
+              "E011",
+              "E012"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E011",
+          "E012"
+        ]
+      },
+      {
+        "main": "evidence_gated_retention",
+        "sub": "H31",
+        "version": "manifest-fixed",
+        "fit": "partial",
+        "condition_checks": [
+          {
+            "id": "S1",
+            "status": "partial",
+            "reason": "paired old/new但proposal/commit池未严格分开",
+            "evidence_ids": [
+              "E004",
+              "E008"
+            ]
+          },
+          {
+            "id": "S4",
+            "status": "met",
+            "reason": "gate-off阈值消融",
+            "evidence_ids": [
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E011",
+          "E014"
+        ]
+      }
+    ]
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H12"
+      },
+      "operation_correspondence": "风险partition将代码修补留到PE饱和；随后diagnosis/patch/test/commit",
+      "necessary_conditions": "源码/失败可见、可执行固定接口/evaluator",
+      "differences": "H12是修补操作，原卡是分区调度，非标签翻译",
+      "evidence_ids": [
+        "E001",
+        "E003",
+        "E011",
+        "E012"
+      ]
+    },
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "evidence_gated_retention",
+        "sub": "H31"
+      },
+      "operation_correspondence": "高风险CE使用paired gate和incumbent fallback",
+      "necessary_conditions": "真正disjoint commit及误差控制才支持强H31",
+      "differences": "partial；12样本raw delta不是统计保证",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E011",
+        "E017"
+      ]
+    },
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H12"
+      },
+      "operation_correspondence": "联合更新管线PE分支留存prompt，并在CE后重优化",
+      "necessary_conditions": "固定权重和后续读取",
+      "differences": "只映射textual分支；不把code当纯conditioning",
+      "evidence_ids": [
+        "E002",
+        "E003"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S1",
+      "version": "manifest-fixed",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md#success-conditions",
+        "patterns/sub/H12.md#step-by-step"
+      ],
+      "applies_when": "失败诊断修改控制代码",
+      "applicable": true,
+      "status": "met",
+      "reason": "failure taxonomy、编辑目标与primitive保护可重建",
+      "evidence_ids": [
+        "E003",
+        "E011",
+        "E021"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:evidence_gated_retention/S1",
+      "version": "manifest-fixed",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "research/patterns/conditions.json#evidence_gated_retention/S1",
+        "patterns/sub/H31.md#step-by-step"
+      ],
+      "applies_when": "声称gate授权非回退更新",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有同样本old/new；但训练池复用、tau全任务，非独立授权/测试",
+      "evidence_ids": [
+        "E004",
+        "E008",
+        "E010",
+        "E011"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:evidence_gated_retention/S4",
+      "version": "manifest-fixed",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "research/patterns/conditions.json#evidence_gated_retention/S4"
+      ],
+      "applies_when": "声称验证gate本身有收益",
+      "applicable": true,
+      "status": "met",
+      "reason": "gate-off和delta sweep支持局部效果，不证明长期非回退",
+      "evidence_ids": [
+        "E014",
+        "E017"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2605.23019-1",
+      "version": "v1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.23019v1 §4.1/A.6"
+      ],
+      "applies_when": "资源受限SLM效率主张",
+      "applicable": true,
+      "status": "partial",
+      "reason": "披露推理token估算；无同预算固定voting/repair，20步非全部预算相等",
+      "evidence_ids": [
+        "E005",
+        "E015"
+      ],
+      "score_item": "E.cost"
+    },
+    {
+      "id": "local:2605.23019-2",
+      "version": "v1",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.23019v1 §4.1/Table6/A.3"
+      ],
+      "applies_when": "跨随机演化稳定性",
+      "applicable": true,
+      "status": "partial",
+      "reason": "十种子SD与部分候选失败分母；无CI/正式显著性，A.3引述CE SD与表不符",
+      "evidence_ids": [
+        "E006",
+        "E013",
+        "E018"
+      ],
+      "score_item": "E.statistics"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "3骨干4静态任务上PACE优于vanilla和单模式演化",
+      "setting": "4B/9B/14B；MMLU800/MGSM800/HotpotQA500/IFEval141 final样本",
+      "baseline/control": "vanilla/PE/CE/MIPROv2/GEPA/ACE/Gödel Agent，固定目标backbone",
+      "selection_vs_test": "静态final行隔离；动态训练池gate；MGSM题身份跨语言去重未说明",
+      "result/denominator": "作者报告12 cells最佳；9B .889/.909/.803/.761及SD",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E008",
+        "E009",
+        "E013"
+      ],
+      "counterevidence": [
+        "没有同推理预算固定策略",
+        "摘要up to9.2%与Ministral HotpotQA表中+29.8%不一致，不采用错误上界"
+      ],
+      "allowed_conclusion": "静态子集上留存solver改善，不是标准完整榜单或计算效率优势"
+    },
+    {
+      "claim_id": "C2",
+      "text": "饱和调度与gate使自主演化可靠、非回退",
+      "setting": "9B MMLU/IFEval阈值sweep；两骨干候选计数",
+      "baseline/control": "earlyCE/PEonly/gateoff",
+      "selection_vs_test": "小样本commit重复用于选择，static final另设",
+      "result/denominator": "IFEval72.3→76.1；MMLU88.3→88.9；失败候选统计每任务3runs",
+      "evidence_ids": [
+        "E004",
+        "E011",
+        "E012",
+        "E014",
+        "E018"
+      ],
+      "counterevidence": [
+        "训练池gate非disjoint audit",
+        "helper保护不全",
+        "无run-level非回退理论/统计保证"
+      ],
+      "allowed_conclusion": "调度和gate局部消融有支持，不支持部署长期安全或improver自改进"
+    },
+    {
+      "claim_id": "C3",
+      "text": "tau-bench多轮工具成功改善并超过历史frontier参考",
+      "setting": "Retail115/Airline50；当前Sonnet4.5用户模拟器；4trials",
+      "baseline/control": "vanilla/PE；历史Sonnet3.5/GPT4o非同模拟器协议",
+      "selection_vs_test": "evolution single-trial全部任务/final four-trial相同任务",
+      "result/denominator": "9B Retail pass1 .817/pass4 .661对vanilla .791/.626",
+      "evidence_ids": [
+        "E010"
+      ],
+      "counterevidence": [
+        "没有任务级holdout",
+        "4B Airline pass4 .060低于vanilla .120，不能泛称所有指标最佳",
+        "历史模拟器比较混杂"
+      ],
+      "allowed_conclusion": "同任务集上多次模拟局部收益，不等于独立transfer或frontier超越"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告冻结SLM经留存prompt/solver演化在静态后续测试子集上改善，并有调度/gate局部消融。",
+    "unresolved": [
+      "未复现",
+      "MGSM跨语言同题泄漏未审计",
+      "tau无独立任务测试",
+      "等预算归因和非回退保证未闭合",
+      "百分数/SD/split/预算多处口径不一致，优先采用明确实现和表格"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "SLM编辑风险/饱和瓶颈具体、近邻覆盖prompt/context/code；缺独立近邻全文。",
+      "evidence_ids": [
+        "E001",
+        "E006"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "两编辑分工及阈值预测可重建，固定预算形式与实现不一致。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E014"
+      ],
+      "counterevidence_ids": [
+        "E005"
+      ],
+      "search_scope": []
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "接口、语法/原语保护、安装/回退详细；helper gate覆盖和独立commit条件不完整。",
+      "evidence_ids": [
+        "E011",
+        "E012",
+        "E021"
+      ],
+      "counterevidence_ids": [
+        "E004"
+      ],
+      "search_scope": []
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "标准正确率/外部checker及分母明确；拒绝错误文字增幅，主要指标仍可解释。",
+      "evidence_ids": [
+        "E019",
+        "E020",
+        "E013"
+      ],
+      "counterevidence_ids": [
+        "E016"
+      ],
+      "search_scope": []
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "单模式/earlyCE/gateoff有局部归因，缺同推理预算固定voting/repair和完整优化成本匹配。",
+      "evidence_ids": [
+        "E014",
+        "E018"
+      ],
+      "counterevidence_ids": [
+        "E005",
+        "E015"
+      ],
+      "search_scope": []
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "静态final行隔离；训练池gate、tau全任务复用及MGSM跨语言同题未去重限制范围。",
+      "evidence_ids": [
+        "E007",
+        "E008"
+      ],
+      "counterevidence_ids": [
+        "E009",
+        "E010"
+      ],
+      "search_scope": []
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "十种子SD及部分失败计数；无CI/正式检验，A.3与表SD不符；未达3档。",
+      "evidence_ids": [
+        "E006",
+        "E013",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": []
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告推理倍数/优化成本，但由字符/代码估算非token实测；全基线及失败候选成本未完整匹配。",
+      "evidence_ids": [
+        "E005",
+        "E015"
+      ],
+      "counterevidence_ids": [
+        "E016"
+      ],
+      "search_scope": []
+    }
+  },
+  "score": {
+    "raw": 65.0,
+    "display": 65.0,
+    "lower": 65.0,
+    "upper": 65.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "rationale": "双时间尺度与可回退修补链清楚，静态留出有提升及消融；门控复用训练池、tau同任务评测，额外推理预算及成本估算限制可靠性和效率主张。"
+}

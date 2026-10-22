@@ -1,0 +1,904 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r21b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Complete HTML full text incl. appendix A.1-A.8 read; method, data splits, baselines, ablations, cost all available.",
+ "paper": {
+  "paper_key": "2605.23019",
+  "paper_id": "2605.23019",
+  "title": "PACE: Two-Timescale Self-Evolution for Small Language Model Agents",
+  "claim_type": "system_method",
+  "central_claim": "A frozen small LM (4B-14B) can self-evolve its own agent without a stronger teacher by running prompt evolution first and, only after prompt gains saturate, proposing constrained control-logic (solver code) edits that are committed solely if they pass a held-out validation gate; this yields best accuracy on all 12 backbone-benchmark cells (up to +9.2% relative over vanilla in the abstract) and improves tau-bench pass^k.",
+  "version": "2605.23019v1"
+ },
+ "provenance": {
+  "input_hash": "152494fe335af27dffd0cb3daa4e498f00de55938f1c8c974c07be520baeae22",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker by claude-kimi; model type configured by controller (agent_model=haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-22T02:51:15Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2605.23019v1",
+   "sha256": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd",
+   "chars": 93857,
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Method (3.1-3.3)",
+    "4 Experiments (4.1-4.5)",
+    "5 Conclusion",
+    "A.1 splits",
+    "A.2 tools/Table 6",
+    "A.3",
+    "A.4 edit space and safety checks",
+    "A.5 Algorithm 1",
+    "A.6 token usage",
+    "A.7 solver analysis",
+    "A.8 tau-bench analysis"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Sec 1, contribution paragraph",
+   "quote": "the SLM may propose constrained changes to safe-to-edit components of the agent pipeline, but a candidate structure is committed only if it improves over the current agent in a held-out validation while satisfying the resource budget",
+   "support_explanation": "States the proposal/acceptance separation: SLM-proposed control-logic edits are committed only through a validation gate.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Sec 2 Related Work, prompt-space paragraph",
+   "quote": "prompt-space methods cannot directly repair structural bottlenecks such as brittle parsing, missing validation, or weak retry logic, and therefore often saturate once such failures dominate",
+   "support_explanation": "Author-stated gap of prompt-space optimizers (GEPA/MIPRO/ACE class).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 2 Related Work, PACE differs paragraph",
+   "quote": "Self-referential code-evolution methods, in contrast, often allow structural changes throughout the search process, which can be unstable when the proposing model is small",
+   "support_explanation": "Author-stated gap of code-evolution methods (Godel-Agent class) for small proposers; this is the premise, supported mainly by the paper's own Fig 1 on one backbone.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 3.3.2 Empirical Validation of Solver Updates",
+   "quote": "samples a fresh subset from the training pool, varying both size and composition across iterations",
+   "support_explanation": "The validation gate data is drawn from the training pool, so it is not disjoint from the data used for prompt-candidate evaluation and failure analysis.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "App A.1 Table 5 discussion",
+   "quote": "Validation subsets are not fixed: at each evaluation step, the agent dynamically samples a fresh subset from the training pool",
+   "support_explanation": "Confirms 'validation' = dynamic subsets of the 200-example train split; the only fixed disjoint split is the test split.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "App A.1 Common protocol",
+   "quote": "only for the final reported numbers. All experiments use seed",
+   "support_explanation": "Test split is declared held out and used only for final numbers; the same sentence states a single seed (0), which conflicts with the 10-run claim in Sec 4.1.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Sec 4.1 Baselines",
+   "quote": "independent runs with different random seeds, and we report the mean accuracy in the main context",
+   "support_explanation": "Main results are means over 10 runs; Table 6 reports std. Conflicts with 'seed 0' in E006 for at least the DSPy baselines.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "App A.6 Table 9 row 'Evaluation calls'",
+   "quote": "Mini-batch (50 samples) + test-set evals",
+   "support_explanation": "The evolution-time token budget includes 'test-set evals', which leaves unclear whether the test split is touched during evolution (e.g., the post-commit full evaluation used for rollback).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "App A.1 tau-bench Inference note",
+   "quote": "During evolution, validation uses single-trial evaluation on all tasks for efficiency; the final reported metrics use 4-trial evaluation",
+   "support_explanation": "For tau-bench, evolution-time validation runs on all 115/50 tasks, the same tasks used for the reported pass^k; there is no held-out task set for the tau-bench case study.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 4.3 epsilon paragraph",
+   "quote": "shows combining prompt and control-logic search is insufficient; the transition policy matters",
+   "support_explanation": "Author interpretation of the epsilon=1.0 ablation (Qwen3.5-9B, MMLU and IFEval only; no variance reported in Table 3).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 4.2 Cost analysis",
+   "quote": "PACE incurs a one-time evolution cost of approximately 2–3M generated tokens for Qwen3.5-9B, depending on the benchmark.",
+   "support_explanation": "Reports evolution-time cost for PACE only.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Sec 4.2 Cost analysis",
+   "quote": "These results show that PACE trades additional inference-time compute for accuracy, and that the cost is concentrated in structural updates rather than prompt refinement.",
+   "support_explanation": "Evolved solvers use ~3.6x-5.2x per-query tokens (App A.6); gains are therefore confounded with extra test-time compute unless a compute-matched baseline is given.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "App A.6 footnote",
+   "quote": "Token counts in this section are estimates derived from code-level analysis of prompt templates, solver call patterns, and observed output lengths.",
+   "support_explanation": "All cost figures are estimates, not metered usage.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "App A.4 Post-commit structural eval",
+   "quote": "can trigger rollback if the full-evaluation delta is negative.",
+   "support_explanation": "A committed solver edit can be rolled back after a later full evaluation.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Sec 4.2 Comparison to single-axis evolution",
+   "quote": "prompt-only evolution saturates, control-logic-first evolution is noisy, and PACE delays structural updates until prompt gains plateau",
+   "support_explanation": "Trajectory claim for Fig 1 (one backbone, Qwen3.5-9B).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "App A.5 Algorithm 1 line 23",
+   "quote": "Classify failures into structural categories, e.g., parsing errors, validation failures, retry failures, or inference-configuration issues",
+   "support_explanation": "The proposer receives a failure taxonomy summary computed on the validation split (Alg. line 22 analyses failures on D_val), and the gate is then computed on a subset of the same D_val: proposal data and commit data overlap.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "App A.1 Table 5 caption",
+   "quote": "Results should be interpreted as within-protocol comparisons rather than standard leaderboard scores.",
+   "support_explanation": "Authors scope results to fixed controlled subsets (e.g., IFEval test n=141).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Sec 4.1 Baselines",
+   "quote": "we run prompt updates to convergence",
+   "support_explanation": "+PE baseline is PACE's own inner loop run to convergence; isolates the contribution of the control-logic phase.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Sec 4.1 Baselines",
+   "quote": "the agent may modify control logic from the start, without a dedicated prompt optimization phase",
+   "support_explanation": "+CE baseline isolates the effect of ordering; whether it uses the same validation gate is not stated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 4.1 SLM backbones",
+   "quote": "No stronger teacher model is used during evolution.",
+   "support_explanation": "Proposer and executor are the same frozen SLM, matching the central claim of no frontier teacher.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Sec 4.5 Control-Logic Proposal Filtering",
+   "quote": "Nearly all rejected executable edits have non-positive validation gain",
+   "support_explanation": "Table 4 counts proposed/executable/accepted/rejected edits (3 runs per task, 4B and 9B): the failure denominator for structural proposals is reported.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "App A.3",
+   "quote": "PACE does not inflate variance despite its two-stage search",
+   "support_explanation": "Std over multiple runs reported in Table 6; used for sigma-based arguments, but no significance test or CI.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "App A.3",
+   "quote": "The only narrow cluster is Qwen3-4B HotpotQA, where all methods sit within one",
+   "support_explanation": "Authors concede 'best on all 12 cells' includes a cell where PACE is within one sigma of Vanilla (0.776 vs 0.775).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "App A.6 Inference-time token cost",
+   "quote": "However, the accuracy gain on IFEval is substantially larger (+33.1 pp from +PE to +PACE)",
+   "support_explanation": "Internally inconsistent with Table 1/10 (IFEval Qwen3.5-9B +PE 0.718 vs +PACE 0.761, +4.3 pp); abstract's 'up to +9.2%' also disagrees with Table 1 cells such as Ministral HotpotQA +29.8%. Reporting hygiene issue.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Table 2 footnote 3",
+   "quote": "We omit the CE-only baseline because multi-turn dialogue performance is highly sensitive to prompt quality",
+   "support_explanation": "tau-bench has no CE-only or any external-optimizer baseline; only Vanilla vs +PE vs +PACE.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "App A.4 Safety constraints, validation gate",
+   "quote": "deterministic validation samples",
+   "support_explanation": "The implemented cheap A/B gate compares candidate and incumbent on 12 (number on the preceding line of the source) deterministic validation samples, versus Sec 3.3.2's 'fresh subset' and delta=0.02: with n=12 one example is 8.3 pp, so the gate is statistically very weak.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "App A.2 tool list",
+   "quote": "Run a candidate comparison of two solver or prompt variants on the same sampled validation subset to verify whether a change improves accuracy.",
+   "support_explanation": "action_compare_variants is the paired accept/reject instrument; no paired statistical test is applied.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "Sec 4.4",
+   "quote": "To validate this, we classify every failure on a 20-sample mini-batch into three categories",
+   "support_explanation": "Failure-mode shift evidence (Fig 3) is based on a 20-sample mini-batch per benchmark, a small and noisy basis for the saturation premise.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "Sec 4.2 Comparison to existing optimizers",
+   "quote": "Gödel Agent, which permits structural modification, is more competitive but still trails PACE on most benchmarks.",
+   "support_explanation": "Nearest structural-edit baseline is beaten on most cells; Godel Agent adaptation details to SLMs and its budget are not given.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E030",
+   "locator": "Sec 4.2 Quantitative Results",
+   "quote": "Across all SLM backbones, PACE achieves the best overall performance among the evaluated adaptation methods.",
+   "support_explanation": "Headline result on four static benchmarks x three backbones (Table 1).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  },
+  {
+   "evidence_id": "E031",
+   "locator": "App A.1 DSPy baselines / common protocol",
+   "quote": "identical splits across Vanilla, +PE, +PACE, GEPA, and MIPROv2",
+   "support_explanation": "Same splits used for all methods, but DSPy optimizers use the auto=\"medium\" preset while PACE has 20 outer steps and 2-3M tokens; budgets are not matched or compared.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "81a0e8c17d1932c65a42683943226940b84ffc0e0a988030dadb28412edf19bd"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Agent prompt configuration P (role, requirements, temperature, response format) of a single-module DSPy ChainOfThought program",
+   "information": "SLM sees per-failure outputs on train mini-batches; one-sentence root-cause diagnoses; Pareto front of earlier prompts; no stronger teacher",
+   "operation": "Generate prompt candidates by handcrafted mutations, SLM-reflective revisions and crossover of complementary Pareto members; evaluate on train mini-batches",
+   "output": "Pareto front (accuracy vs token cost); best-validation member retained as P",
+   "conditions": "Control logic C fixed; runs until Delta U_P <= epsilon (0.01)",
+   "feedback": "task metric on train mini-batches and dynamic validation subsets",
+   "selection_rule": "Pareto front, parent sampled by failure coverage; final front members re-evaluated on dynamic validation split; best validation accuracy retained",
+   "selection_data": "train split (200) and dynamic validation subsets drawn from the train pool",
+   "persistence": "prompt_config overwritten in agent module for the run",
+   "later_use": "re-invoked after every accepted control-logic update; final evolved agent evaluated on disjoint test split",
+   "claimed_effect": "+PE gives partial gains (e.g., Qwen3.5-9B MMLU 0.818->0.832) and saturates",
+   "failure_boundary": "saturates when failures are structural; unstable on tau-bench Airline (Qwen3-4B pass^4 0.120->0.040)",
+   "evidence_ids": [
+    "E001",
+    "E005",
+    "E018",
+    "E015"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Executable control logic C: the solver function plus helper functions (sampling n, aggregation, verify/repair, output extraction, early exit)",
+   "information": "Controller SLM reads solver source (action_read_logic), a compact failure summary over recent errors with taxonomy (extraction/format/reasoning), and may call execution tools; cannot edit LLM-call primitives",
+   "operation": "action_adjust_logic modifies/adds/deletes the solver via free-form Python within the solver contract, after saturation trigger",
+   "output": "candidate solver; if accepted becomes incumbent and prompt evolution is re-run",
+   "conditions": "Delta U_P <= epsilon; syntax compile; immutable LLM-call primitives; blacklisted primitives; cost <= B",
+   "feedback": "failure taxonomy computed on validation failures; A/B comparison to incumbent",
+   "selection_rule": "accept iff U(new,V) > U(old,V)+delta (delta=0.02) and cost<=B; A.4 cheap gate on 12 deterministic samples; post-commit full evaluation can roll back",
+   "selection_data": "validation subset V drawn from the train pool (same pool used for failure analysis)",
+   "persistence": "solver code replaced in agent_module; no archive of rejected candidates; no reuse across tasks reported",
+   "later_use": "the next prompt-evolution round and the final test evaluation use the new solver",
+   "claimed_effect": "discovers task-appropriate strategies (self-consistency+verify on MMLU, generate-score-repair on IFEval); +CE and +PACE gains of several points on MMLU/MGSM/IFEval",
+   "failure_boundary": "SLM edits often non-executable or regress (Table 4: ~20-30% of executable proposals rejected); 4B capability floor; evolved solvers cost 1.6-5.2x tokens",
+   "evidence_ids": [
+    "E001",
+    "E004",
+    "E014",
+    "E016",
+    "E021",
+    "E026"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "Scheduling controller: when to leave prompt space for structural search (prompt-saturation credit assignment)",
+   "information": "recent change in validation accuracy from the prompt tool",
+   "operation": "continue prompt evolution while Delta U_P > epsilon, else consider control-logic proposals; re-enter prompt evolution after acceptance",
+   "output": "ordering of the two adaptation actions",
+   "conditions": "epsilon=0.01 default; swept 0-1.0 on Qwen3.5-9B MMLU/IFEval",
+   "feedback": "validation accuracy delta",
+   "selection_rule": "threshold on noisy dynamic validation subsets",
+   "selection_data": "dynamic validation subsets",
+   "persistence": "none (control state within the run)",
+   "later_use": "n/a",
+   "claimed_effect": "epsilon=0 or 1.0 hurt vs 0.01 (e.g., IFEval 71.8/72.5 vs 76.1)",
+   "failure_boundary": "threshold sensitivity measured on one backbone, no variance in Table 3",
+   "evidence_ids": [
+    "E010",
+    "E015"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Prompt-space optimizers saturate on structural bottlenecks; code-evolution methods are unstable when the proposer is a small LM; nothing coordinates the two for frozen SLMs.",
+  "checked_gap": "The gap is partly real and testable: prompt-only (+PE) vs control-logic-only (+CE) comparison shows complementary gains on several cells. The 'SLM-specific instability' premise rests on Fig 1 for one backbone and Table 4 proposal-rejection rates; the claim that structural-first search is worse is not shown across backbones/benchmarks.",
+  "lineage": "ancestors: DSPy-style prompt optimization (MIPROv2, GEPA) and playbook/context evolution (ACE); self-referential code agents (Godel Agent). PACE sits between them as a scheduler plus acceptance gate.",
+  "closest_adjacent": "Godel Agent (structural self-edit, baseline), ACE (context playbook), GEPA (reflective Pareto prompt evolution; PACE's inner loop closely resembles it). Other archive/validation-gated code-editing agents (ADAS/DGM-style) and harness-patching loops are not compared; nearest neighbors are not fixed as local sources, so adjacency is from reading only the paper's citations.",
+  "residue": "Fixed-schedule two-phase search with a threshold; commit gate with tiny/overlapping validation data; no retention across tasks.",
+  "stakes": "Frozen SLM agents under local serving constraints; structural bottlenecks (parsing/validation/repair) cap prompt-only gains.",
+  "method_response": "Delay structural edits until prompt gains saturate; commit only on A/B improvement with rollback; bounded edit space.",
+  "remaining_gap": "Whether staging and gating beat compute-matched hand-designed strategies; generalization of evolved solvers beyond the evolution distribution; statistical soundness of the commit rule.",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E015",
+   "E029"
+  ],
+  "unresolved": [
+   "Matched-compute baseline (e.g., fixed self-consistency+PE) is absent.",
+   "Godel Agent/ACE adaptation to SLM backbones and their budgets are unspecified."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "heterogeneous_decomposition",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "heterogeneous_decomposition",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "Partition the improvable agent definition into prompt P vs executable control logic C (different risk, edit form, accept rule) and apply tailored treatment: cheap Pareto prompt search first, bounded gated code edits second. Sub-card C04 (compressing over-provisioned trained artifacts via sensitivity-based minority/bulk split) describes a different object and tactic, so no sub-card is assigned.",
+    "success_failure_checks": "Success cond 'heterogeneity empirically characterised' partial: Fig 3 failure-mode shift is on 20-sample mini-batches. Success cond 'partition shown load-bearing by ablation' partial: PE-only and CE-only and eps/delta sweeps on one backbone. Failure 'treatment assembled from off-the-shelf modules' partly applies: inner loop resembles GEPA, gate is plain A/B.",
+    "evidence_ids": [
+     "E015",
+     "E018",
+     "E019",
+     "E028",
+     "E010"
+    ],
+    "reason": "Operation actually executed is a differentiated schedule over two distinct components of the agent, not just mentioning both; but the discriminating property is a scalar saturation trigger rather than a derived treatment."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Closest original card is heterogeneous_decomposition; no sub-card fits the harness-evolution object, so sub_id is null.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: improves over PE-only and CE-only on most cells, but 4B HotpotQA is a null result and the saturation premise is shown only on 20-sample batches."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H13",
+    "role": "primary",
+    "fit": "high",
+    "condition_checks": "Inner loop is a prompt population with Pareto front and parent sampling by failure coverage; executable fitness is task accuracy on train mini-batches. rsi:population_search_executable_fitness/S2 (hard-to-game evaluator) met for deterministic benchmark metrics; F2 (re-skinned metaheuristic) is a risk since mutation/reflection/crossover resemble GEPA.",
+    "evidence_ids": [
+     "E005",
+     "E018"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "role": "supporting",
+    "fit": "medium",
+    "condition_checks": "Control-logic phase patches executable solver code from a failure summary with bounded edit space and replay/rollback; but the proposer gets a compact failure summary, not full raw traces (S5 partial), and edits are not accompanied by falsifiable predictions. rsi:attribute_and_patch_incumbent/S3 (retention protects earlier wins) partial: only A/B gate and later rollback.",
+    "evidence_ids": [
+     "E001",
+     "E014",
+     "E016",
+     "E026"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H31",
+    "role": "supporting",
+    "fit": "medium",
+    "condition_checks": "Propose/authorize separation present with fallback to incumbent; but H31 step 2 (split proposal data from commit data) is unmet: validation subset is drawn from the train pool and the same D_val feeds failure analysis; step 3 (statistic matched to noise) unmet with a 12-sample A/B and fixed margin.",
+    "evidence_ids": [
+     "E004",
+     "E016",
+     "E026",
+     "E027"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "population_search_executable_fitness",
+   "domain_sub": "H13",
+   "operation_correspondence": "RS 'tailored operation for the prompt partition' = H13 prompt-population search with Pareto selection under fixed control logic.",
+   "conditions_differences": "RS requires a derived discriminating property; here the partition is a design choice justified by a failure-mode shift observation.",
+   "evidence_ids": [
+    "E018",
+    "E028"
+   ]
+  },
+  {
+   "rs_main": "heterogeneous_decomposition",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "attribute_and_patch_incumbent",
+   "domain_sub": "H12",
+   "operation_correspondence": "RS 'tailored operation for the structural partition' = H12 scoped patch of harness code gated by replay/regression.",
+   "conditions_differences": "H12 assumes raw traces plus source; PACE passes a failure summary. Edit scope is constrained by templates and immutable primitives.",
+   "evidence_ids": [
+    "E001",
+    "E016",
+    "E014"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:heterogeneous_decomposition/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/heterogeneous_decomposition.md"
+   ],
+   "applies_when": "A partition into differently-treated components is claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Failure-mode distribution per phase is shown (Fig 3) but on a 20-sample mini-batch per benchmark, one backbone.",
+   "evidence_ids": [
+    "E028"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/heterogeneous_decomposition.md"
+   ],
+   "applies_when": "Each component of the differentiated treatment must be ablated",
+   "applicable": true,
+   "status": "partial",
+   "reason": "PE-only, CE-only, epsilon sweep and delta sweep exist; no ablation of individual structural edit types or of the Pareto/crossover parts of the inner loop; ablations lack variance.",
+   "evidence_ids": [
+    "E010",
+    "E018",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:heterogeneous_decomposition/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/heterogeneous_decomposition.md"
+   ],
+   "applies_when": "Baselines must isolate decomposition from added capacity",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Evolved solvers consume 3.6-5.2x tokens; no compute-matched uniform baseline (e.g., fixed self-consistency) is given, so capacity/compute confound is not isolated.",
+   "evidence_ids": [
+    "E012",
+    "E031"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S4"
+   ],
+   "applies_when": "A retention gate is part of the claim",
+   "applicable": true,
+   "status": "met",
+   "reason": "Gate is a separable component and delta=-1 (gate off) was run on Qwen3.5-9B MMLU/IFEval; IFEval drops 3.8% when disabled.",
+   "evidence_ids": [
+    "E010",
+    "E027"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S5"
+   ],
+   "applies_when": "Gate has a cost",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Evolution (2-3M tokens) and inference multipliers are reported, but as code-level estimates and not for baselines.",
+   "evidence_ids": [
+    "E011",
+    "E013"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.S3"
+   ],
+   "applies_when": "Incumbent is patched",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Edits accepted only if validation improves and rolled back on negative full evaluation, but protection of earlier wins uses a tiny/dynamic validation set.",
+   "evidence_ids": [
+    "E014",
+    "E026"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#attribute_and_patch_incumbent.F4"
+   ],
+   "applies_when": "Self-constructed validation replaces ground truth (status met = failure mode avoided)",
+   "applicable": true,
+   "status": "met",
+   "reason": "Gate uses benchmark ground-truth labels/official checkers for the static tasks; the IFEval self-check lives inside the evolved solver and does not decide acceptance.",
+   "evidence_ids": [
+    "E001",
+    "E027"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H31-step2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H31.md step 2"
+   ],
+   "applies_when": "Commit rule claimed as sound",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Proposal-side failure analysis and commit-side comparison use the same dynamic validation pool drawn from the train split.",
+   "evidence_ids": [
+    "E004",
+    "E016"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "local:2605.23019-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "paper limitations/practice: evolved solvers 3.6-5.2x inference tokens"
+   ],
+   "applies_when": "Evolved procedure multiplies test-time compute",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No fixed hand-designed self-consistency/verify baseline at matched tokens, so gains cannot be attributed to autonomous discovery rather than extra compute.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.23019-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "paper protocol"
+   ],
+   "applies_when": "Case study claims improvement for evolved agents",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "tau-bench evolution validates on the same tasks later reported, with no held-out task set and no external-optimizer baselines.",
+   "evidence_ids": [
+    "E009",
+    "E025"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2605.23019-3",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper protocol"
+   ],
+   "applies_when": "Seeds claimed",
+   "applicable": true,
+   "status": "partial",
+   "reason": "10-run means with std reported, yet appendix states a single seed 0 and DSPy baselines have unusually small std; no significance tests.",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E022"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "PACE is best on all 12 backbone-benchmark cells on four static benchmarks.",
+   "setting": "Qwen3-4B, Qwen3.5-9B, Ministral-3-14B; MMLU/MGSM/HotpotQA/IFEval fixed test subsets (800/800/500/141)",
+   "baseline_control": "Vanilla, MIPROv2, GEPA, ACE, Godel Agent, +CE, +PE",
+   "selection_vs_test": "train 200 + dynamic validation from train pool for selection; disjoint fixed test split for reporting (ambiguity: Table 9 lists 'test-set evals' during evolution)",
+   "result_denominator": "mean over 10 runs, std in Table 6; 4B HotpotQA is within one sigma of Vanilla (0.776 vs 0.775)",
+   "evidence_ids": [
+    "E030",
+    "E023",
+    "E005",
+    "E006",
+    "E007",
+    "E008"
+   ],
+   "counterevidence": "No matched-compute control; baseline budgets differ; 4B HotpotQA null.",
+   "allowed_conclusion": "On these fixed subsets PACE's mean accuracy is highest in nearly all cells; for one cell it is not distinguishable from vanilla."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Two-timescale ordering (prompt first, then gated structural edits) beats prompt-only, control-logic-only, and the naive combination.",
+   "setting": "Qwen3.5-9B MMLU and IFEval ablations; Table 1 comparisons",
+   "baseline_control": "+PE, +CE, epsilon in {0,.005,.01,.02,.05,1.0}, delta in {-1,0,.02,.05}",
+   "selection_vs_test": "test accuracy per Table 3",
+   "result_denominator": "ablations report single numbers (no std); main table has std",
+   "evidence_ids": [
+    "E010",
+    "E015",
+    "E018",
+    "E019",
+    "E027"
+   ],
+   "counterevidence": "Gate-off IFEval 72.3 vs PE 71.8 and CE 72.5 suggests the gate rather than the ordering explains most gain; IFEval n=141 so 1 item=0.7 pp.",
+   "allowed_conclusion": "Supported for one backbone on two benchmarks with small margins; ordering effect vs gate effect not cleanly separated."
+  },
+  {
+   "claim_id": "C3",
+   "text": "A frozen SLM can autonomously discover task-appropriate inference strategies, without a stronger teacher.",
+   "setting": "Evolved MMLU solver (3-way vote + verify) and IFEval solver (3 candidates + self-check + repair)",
+   "baseline_control": "none that fixes the same strategies by hand",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "Table 4: executable proposals 21-46 per task over 3 runs, accepted 17-29",
+   "evidence_ids": [
+    "E020",
+    "E021",
+    "E012"
+   ],
+   "counterevidence": "Rediscovery of self-consistency is expected from the model's prior; compute multiplier of 3.6-5.2x is not controlled.",
+   "allowed_conclusion": "A 9B SLM can generate executable solver edits that pass an A/B gate; 'autonomous discovery' of superior strategy is not separated from simply spending more test-time compute."
+  },
+  {
+   "claim_id": "C4",
+   "text": "PACE improves multi-turn tool-use success on tau-bench Retail/Airline.",
+   "setting": "Qwen3-4B, Qwen3.5-9B; 115 and 50 tasks; Sonnet 4.5 user simulator",
+   "baseline_control": "Vanilla, +PE only",
+   "selection_vs_test": "validation on the same tasks as reporting",
+   "result_denominator": "pass^k over 4 trials; no CI",
+   "evidence_ids": [
+    "E009",
+    "E025"
+   ],
+   "counterevidence": "No held-out tasks, no CE-only/external baselines, small Airline n=50.",
+   "allowed_conclusion": "Evolution on the evaluation tasks raises their pass^k; no generalization claim is supported."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "On four fixed-subset static benchmarks and three small LMs, an evolved (prompt + gated solver-code) agent attains higher mean test accuracy than vanilla, prompt-only and control-logic-only evolution and the tested optimizers, at 1.6-5.2x per-query tokens; the retained agent is evaluated on a split disjoint from the dynamic validation pool (modulo the 'test-set evals' ambiguity).",
+  "cannot_claim": "That staging rather than the gate or extra inference compute explains the gain; improver-level evidence; generalization of tau-bench results; reproduction (these are author reports, no our_run).",
+  "unresolved": [
+   "Whether test-split evaluations occur during evolution (Table 9 'test-set evals').",
+   "Seed protocol contradiction (10 runs vs seed 0)."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real, specific limitation (prompt saturation vs unstable SLM code edits) with named neighbors (GEPA, MIPROv2, ACE, Godel Agent); but the instability premise is shown on one backbone, other validation-gated code-editing agents are not compared, and PACE's inner loop is close to GEPA, so the residual bottleneck is only partly established.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E015",
+    "E029"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Operation chain is reconstructable (failure summary -> bounded solver edit -> A/B accept -> re-enter prompt tuning) and makes distinguishable predictions (epsilon extremes, gate-off) that are tested; assumptions on saturation threshold and failure-mode shift are thinly grounded (20-sample batches).",
+   "evidence_ids": [
+    "E001",
+    "E010",
+    "E016",
+    "E028"
+   ],
+   "counterevidence_ids": [
+    "E004"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Edit space, immutable primitives, syntax check, saturation gate, A/B gate, post-commit rollback and re-entry into prompt evolution are described in A.4/A.5; but gate data are drawn from the train pool and overlap with failure-analysis data (H31 step 2 unmet), the gate size is inconsistent (12 samples vs fresh subsets), and rejected candidates are not archived.",
+   "evidence_ids": [
+    "E004",
+    "E014",
+    "E016",
+    "E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Deterministic official metrics (MMLU letter match, MGSM numeric match, HotpotQA EM, IFEval strict checkers) and a fixed test split; tau-bench uses an LLM user simulator; subsets are small (IFEval n=141); cost metrics are estimates.",
+   "evidence_ids": [
+    "E017",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "PE-only, CE-only, epsilon and delta sweeps and gate-off exist, but only on one backbone/two benchmarks without variance; no compute-matched fixed-strategy control although inference tokens rise 3.6-5.2x; baseline budgets (DSPy auto=medium, Godel Agent) are unmatched/unspecified; no store-off style test of the retained solver on a different distribution.",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E031",
+    "E018",
+    "E019"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Static benchmarks report on a disjoint fixed test split while selection uses dynamic subsets of the train pool, which is sound in intent; but Table 9 lists test-set evals in evolution, tau-bench selects and reports on the same tasks, and no transfer/cross-distribution test of evolved solvers is given.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E008",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Std over 10 runs is reported for main results and a variance discussion exists, and proposal-rejection counts give a failure denominator; but ablations and tau-bench have no variance or CI, no significance tests, IFEval n=141, and the seed protocol is contradictory (10 runs vs seed 0).",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E022",
+    "E021",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Evolution cost (2-3M tokens) and per-query multipliers (1.6-5.2x) plus an accuracy-cost table are reported and the trade-off is acknowledged, but all are code-level estimates and baselines' costs are not reported, so no fairness comparison.",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013",
+    "E031"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "两时标调度(先提示后受控制逻辑)+验证门,冻结SLM,静态基准测试集与选择集分离,10次均值。缺同算力固定策略对照,门控数据与故障分析重叠且仅12样本,tau-bench无留出。判定retained/scoped。",
+ "score": {
+  "raw": 62.5,
+  "display": 62.5,
+  "lower": 62.5,
+  "upper": 62.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

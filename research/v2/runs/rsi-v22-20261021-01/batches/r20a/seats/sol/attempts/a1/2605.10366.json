@@ -1,0 +1,808 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r20a",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2605.10366",
+    "paper_id": "2605.10366",
+    "title": "EGL-SCA: Structural Credit Assignment for Co-Evolving Instructions and Tools in Graph Reasoning Agents",
+    "version": "2605.10366v1",
+    "claim_type": "system_method",
+    "central_claim": "通过结构化credit assignment共同演化指令和图算法工具，防止误更新并在四图推理benchmark获得92.0%平均成功率。"
+  },
+  "provenance": {
+    "input_hash": "cc9ea8804e0ee23328b339de8d7e713013a6d14f204ca3ba09aa124b8f487bb1",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "notes": "当前执行环境标识gpt-6.1-sol；无独立provider receipt或可验证session元数据，故null；未探测模型。",
+    "timestamp": "2026-10-22T02:26:12.963071+00:00"
+  },
+  "materials": [
+    {
+      "material_id": "2605.10366.txt",
+      "url": "https://arxiv.org/html/2605.10366v1",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "sections_read": [
+        "全文§1–5",
+        "Appendix A–J",
+        "Tables1–18",
+        "NeurIPS checklist及文末"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 175-189",
+      "quote": "Reflection-based self-improvement methods\n[\n13\n,\n14\n]\ncan refine language behavior through feedback, but they typically treat failure as a single undifferentiated signal. In graph reasoning, such undifferentiated feedback is inadequate. A failure caused by an incorrectly reconstructed constraint should improve the parsing behavior; a failure caused by choosing an unsuitable solver should improve retrieval or selection; and a failure caused by a tool-logic error should improve the tool itself. Treating all of these failures as the same learning event leads to misdirected updates and unstable training.\n\nWe argue that self-improving graph reasoning requires\nconditional adaptation over structured solve trajectories\n. The central question is not simply how to improve an agent after failure, but\nwhat should be improved, and why\n. To address this question, we conceptualize a graph reasoning agent as a dual-space system composed of two distinct but complementary halves:\nan instruction-side policy space and a tool-side program space\n. The instruction side governs how the agent reconstructs task structure, retrieves relevant capabilities, follows an interaction protocol, and formats executable inputs. The tool side contains reusable algorithmic procedures together with metadata describing their applicability. Under this view, learning no longer amounts to editing a single prompt or growing an unstructured toolbox; it becomes a problem of coordinating updates between two coupled spaces that fail for different reasons.",
+      "support_explanation": "作者所指残余是解析、选工具、工具逻辑的错误相互混淆；不是泛泛的冻结模型改进。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 749-821",
+      "quote": "To define this routing rule, we distinguish three broad error sources:\nreconstruction error\n,\nselection error\n, and\ntool-logic (algorithmic residual) error\n. These correspond to three simple questions: Was the task parsed incorrectly? Was the wrong tool chosen? Or did the chosen tool still fail even though the task and tool match were already reasonable? Concretely, we write\nℒ\nparse\n=\nd\n⁡\n(\nz\n^\n,\nz\n∗\n)\n\\mathcal{L}_{\\mathrm{parse}}=d(\\hat{z},z^{\\ast})\n,\nℒ\nsel\n=\nΔ\ncompat\n​\n(\nt\nsel\n,\nz\n^\n)\n\\mathcal{L}_{\\mathrm{sel}}=\\Delta_{\\mathrm{compat}}(t_{\\mathrm{sel}},\\hat{z})\n, and\nℒ\nalg\n=\nΔ\nverify\n​\n(\ny\n^\n,\ny\n∗\n)\n\\mathcal{L}_{\\mathrm{alg}}=\\Delta_{\\mathrm{verify}}(\\hat{y},y^{\\ast})\n, where\nd\n⁡\n(\n⋅\n,\n⋅\n)\nd(\\cdot,\\cdot)\nis a structured discrepancy measure,\nΔ\ncompat\n\\Delta_{\\mathrm{compat}}\nmeasures tool-task incompatibility, and\nΔ\nverify\n\\Delta_{\\mathrm{verify}}\ndenotes the residual verifier-level failure. The routing logic is simple: EGL-SCA blames the earliest stage that clearly failed. If parsing failed, we update the instruction side. Otherwise, if the chosen tool is incompatible with the recovered structure, we update tool selection. Otherwise, if the tool is compatible but still fails, we route the failure to tool-logic repair. If none of these conditions applies, we make no update.\nThis compact form is a conceptual summary. In the actual implementation, these conditions are instantiated by thresholded diagnostics derived from verifier evidence and trajectory-level signals.\n\nThis top-level route is still insufficient for graph reasoning, because many instruction-side failures occur at different stages of the solve process. A failure may be caused by missing required structural fields, an incorrect retrieval-or-reuse transition, a missing protocol escalation, a premature answer before execution, a malformed task input, or a failure to run a candidate tool. EGL-SCA therefore does not merely conclude that the instruction side failed; it further asks\nwhich instruction-side sub-process first deviated from a valid solve path\n. This finer localization is essential because a parsing deficiency and an execution-formatting deficiency should not trigger the same update.",
+      "support_explanation": "用 canonical 结构和兼容性/验证器信号定位最早明确失败阶段；阈值实现只概述。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 915-964",
+      "quote": "When structural credit assignment routes a failure to the instruction side, EGL-SCA performs reflective instruction mutation. Let\nC\nC\ndenote the current attribution object. A child policy is generated as\nΠ\n′\n∼\nℳ\nΠ\n​\n(\nΠ\n,\nΓ\n,\nV\n,\nC\n,\nℐ\nf\n)\n\\Pi^{\\prime}\\sim\\mathcal{M}_{\\Pi}(\\Pi;\\Gamma,V,C,\\mathcal{I}_{f})\n, where\nℳ\nΠ\n\\mathcal{M}_{\\Pi}\nis a mutation operator conditioned on the trajectory, verifier evidence, attribution result, and family-specific interface. Its purpose is not to rewrite the entire policy indiscriminately, but to produce localized, source-aligned, and verifiable repairs.\n\nWhen failure is routed to the tool side, EGL-SCA triggers tool growth or repair depending on the circumstance. If the current task lacks a compatible capability, the system may propose a new candidate tool from the current tool space; if a compatible tool exists but behaves incorrectly, the system performs tool-side repair or variation. Abstractly, we write\n\nt\n′\n∼\nℳ\n𝒯\n​\n(\n𝒯\n,\nΓ\n,\nV\n,\nC\n)\n.\nt^{\\prime}\\sim\\mathcal{M}_{\\mathcal{T}}(\\mathcal{T};\\Gamma,V,C).\n\nUnlike unconstrained code generation, any candidate tool must satisfy verifier-based acceptance before entering the reusable toolbox. This rule ensures that tool growth is grounded in observed task performance rather than drifting into an unstructured repository of unverifiable programs.",
+      "support_explanation": "不同归因触发局部指令变异或程序生成/修复，工具经 verifier 才可入库。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1005-1061",
+      "quote": ", where\nS\n⁡\n(\nP\n)\nS(P)\nis validation success,\nG\n⁡\n(\nP\n)\nG(P)\nis generality across evaluation buckets,\nR\n⁡\n(\nP\n)\nR(P)\nis protocol reliability, and\nQ\n⁡\n(\nP\n)\nQ(P)\nis a parsimony measure favoring concise, stable, and low-redundancy behavior. Rather than collapsing these criteria into one score, we retain the non-dominated frontier\n\nℱ\n=\n{\nP\n∣\n∄\nP\n′\nsuch that\n𝐅\n(\nP\n′\n)\n≻\n𝐅\n(\nP\n)\n}\n,\n\\mathcal{F}=\\{P\\mid\\nexists P^{\\prime}\\text{ such that }\\mathbf{F}(P^{\\prime})\\succ\\mathbf{F}(P)\\},\n\nwhere\n≻\n\\succ\ndenotes Pareto dominance. This rule allows training to preserve policy pairs that are not yet best in raw task success but are already stronger in stability or generality. Final benchmark evaluation is then performed with a frozen pair selected from this frontier.",
+      "support_explanation": "成功率、泛化、协议可靠性、简洁度的非支配政策对被保存，最终冻结后评测。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1534-1558",
+      "quote": "Dynamic data synthesis and curriculum.\n\nTraining instances are dynamically synthesized on-the-fly rather than sampled statically. Each episode selects a task family via deterministic round-robin across 19 categories. A generator instantiates a canonical graph, queries, and constraints based on the current difficulty and seed, which a reference algorithm solves to yield ground-truth data strictly for verifier evaluation. A rule-based verbalizer then translates the instance into a natural-language statement. The agent observes only this text; the underlying\ntask_input\nand solutions remain hidden. For the pass-based curriculum, each family’s difficulty independently advances from D1 to D4 after two successful solves at its current tier.\n\nOn the external side, we evaluate on four standardized benchmarks:\nGraphInstruct, GraphArena, NLGraph, and G-Real\n\n[\n2\n,\n3\n,\n1\n,\n26\n]\n. All main results use a verifier-centric protocol, where success is defined by structured correctness rather than surface-form similarity. See Appendix\nC\nfor benchmark and baseline protocol details, Appendix\nA\nfor implementation details, and Appendix\nI\nfor training-cost accounting.",
+      "support_explanation": "19类合成训练任务经参考算法验证，后测四个外部集。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1363-1393",
+      "quote": "EGL-SCA (Full)\n\n0.920\n\n+\n0.045\n{}_{\\!\\color[rgb]{0.1016,0.5234,0.3516}{+0.045}}\n\n0.995\n\n−\n0.005\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.005}}\n\n0.970\n\n+\n0.335\n{}_{\\!\\color[rgb]{0.1016,0.5234,0.3516}{+0.335}}\n\n0.795\n\n−\n0.205\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.205}}\n\n0.920\n\n+\n0.042\n{}_{\\!\\color[rgb]{0.1016,0.5234,0.3516}{+0.042}}",
+      "support_explanation": "Table 1(a) full四集为 .920/.995/.970/.795，平均 .920；并非逐集最优。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1217-1245",
+      "quote": "EGL-SCA (Ours) & Ablations\n\nw/o SCA Routing\n\n0.875\n\n−\n0.045\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.045}}\n\n0.995\n\n0.930\n\n−\n0.040\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.040}}\n\n0.780\n\n−\n0.015\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.015}}\n\n0.895\n\n−\n0.025\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.025}}",
+      "support_explanation": "去SCA平均 .895，为路由提供控制证据。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1279-1337",
+      "quote": "w/o Tool Growth\n\n0.885\n\n−\n0.035\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.035}}\n\n0.995\n\n0.930\n\n−\n0.040\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.040}}\n\n0.695\n\n−\n0.100\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.100}}\n\n0.876\n\n−\n0.044\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.044}}\n\nw/o Instruction Evol.\n\n0.885\n\n−\n0.035\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.035}}\n\n0.910\n\n−\n0.085\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.085}}\n\n0.885\n\n−\n0.085\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.085}}\n\n0.760\n\n−\n0.035\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.035}}\n\n0.860\n\n−\n0.060\n{}_{\\!\\color[rgb]{0.7578,0.1523,0.1758}{-0.060}}",
+      "support_explanation": "去工具增长 .876、去指令演化 .860；工具和指令各有贡献。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1769-1818",
+      "quote": "Student prompt profile\n\nweak\n\nweak\nfrozen instruction genome\n\nBudget\n\n300 planned episodes; 297 counted after 3 exclusions\n\n200 cases per benchmark\n\nAttempts\n\n2 attempts per training episode\n\n1 attempt per benchmark case\n\nToolbox policy\n\nfresh toolbox with dynamic growth and repair enabled\n\nfrozen reusable toolbox from the selected policy pair\n\nTool proposal at test time\n\nenabled during training\n\ndisabled (\n--no-propose-tool\n)\n\nSelection rule\n\nPareto over success, generality, protocol reliability, and parsimony; re-evaluated every 38 episodes\n\nfrozen pair selected under the same objective vector\n\nPopulation / concurrency\n\n4 policy pairs; at most 4 active pairs\n\nsingle frozen pair\n\nValidation / probes\n\n2 validation cases per kind; 2 tool-probe cases\n\nnone; direct benchmark evaluation",
+      "support_explanation": "Table 2报告300计划/297计数、外部各200单次、冻结工具不再提案、4政策对和2例/类验证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 2290-2300",
+      "quote": "To rigorously assess the robustness of EGL-SCA against variations in initialization and trajectory sampling, we conduct a sensitivity analysis across three independent random seeds:\n20260414\n,\n20260415\n, and\n20260416\n. Each seed instantiates a fresh dual-space learning environment to train the agent autonomously, after which the Pareto-optimal policy pair is frozen for zero-shot evaluation on the standard external benchmarks.\n\nGiven the substantial computational overhead of executing three complete training-and-evaluation lifecycles, this sweep employs a constrained budget of 150 training episodes per seed. Consequently, this analysis acts as a conservative lower-bound estimation of stability rather than a direct substitute for the primary 300-episode evaluations. Under this truncated schedule, several challenging task families do not accumulate sufficient exposure to complete curriculum promotion to the highest difficulty tier (D4).\n\nTable 8:",
+      "support_explanation": "三独立种子150episode而非主300episode，冻结后外部评测。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 2380-2393",
+      "quote": "Overall\n\n92.0\n\n91.9\n\n93.1\n\n92.3\n±\n\\pm\n0.7\n\n2216 / 2400 = 92.3",
+      "support_explanation": "三种子总体92.3±0.7，2216/2400；不是主对照差值的显著性检验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 2395-2401",
+      "quote": "Table 9:\nPooled case-level confidence intervals for the three-seed sensitivity sweep. The 95% Wilson score intervals are computed over the aggregated execution traces (\nn\n=\n600\nn=600\nper benchmark).",
+      "support_explanation": "Wilson区间按合并case计算，不能替代搜索级配对检验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 3895-3911",
+      "quote": "Episodes (Planned / Counted)\n\n300 / 297\n\nThree episodes excluded due to infrastructure or API authentication failures.\n\nSolve Attempts\n\n407\n\nAllowed at most two attempts per episode, yielding 1.37 attempts per counted episode.\n\nLLM Calls\n\n1,953\n\nAll logged calls were student-side; no coach or narrator token usage is counted.",
+      "support_explanation": "300/297，排除3基础设施/认证失败，407 attempts和1953 student calls；coach/narrator未计入。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 3913-3951",
+      "quote": "LLM Token Cost\n\nPrompt Tokens\n\n6.241M (92.7%)\n\nMajor cost driver: presenting task statements, tool metadata, and verifier evidence.\n\nCompletion Tokens\n\n0.493M (7.3%)\n\nIncludes reasoning traces, structured answers, and candidate-tool code generation.\n\nTotal Tokens\n\n6.734M\n\nCorresponds to 22.7K tokens per counted episode, or 3.45K tokens per LLM call.\n\nWall-Clock Timing\n\nTotal Elapsed Time\n\n18.02 h\n\nEnd-to-end runtime, including orchestration, API network latency, and validation.\n\nStudent Solve Time\n\n7.14 h\n\nActive time spent inside the main student reasoning and coding loop.\n\nValidation Time\n\n1.04 h\n\nTime for periodic and final Pareto selection over success, generality, and reliability.",
+      "support_explanation": "输入6.241M、输出.493M、总6.734M、18.02h及验证1.04h有账。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 3763-3771",
+      "quote": "To concretely illustrate instruction-side learning, we trace the exact lineage of the language policy during training. We compare the initial heuristic seed prompt (Genome ID:\npi_b885c1d0a7cc\n,\nvariant_1\n) against the frozen Pareto-optimal prompt selected for evaluation (Genome ID:\npi_16fa230ab432\n,\nvariant_1_mut\n). Because the final prompt’s ancestor list strictly points back to the seed, this provides a direct before-and-after ablation of a single evolutionary lineage, rather than a comparison of unrelated policies.",
+      "support_explanation": "seed到final genome ancestry是追踪而非隔离其它变量的因果ablation。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 4025-4028",
+      "quote": "Appendix J\nLimitations\n\nEGL-SCA is designed for verifier-centric graph reasoning, so its benefits are most direct when tasks admit structured checks or executable validation. Extending the same credit-assignment scheme to open-ended settings may require weaker or learned verifiers. In addition, our experiments focus on graph task families and a fixed base model, leaving broader cross-domain transfer and model-scaling behavior for future study. Finally, tool growth introduces engineering overhead for sandboxing, logging, and candidate validation, although this overhead is modest compared with the reliability gains observed in our experiments.",
+      "support_explanation": "明确固定模型、图任务、依赖结构化验证器的限制。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 3342-3348",
+      "quote": "Frozen Tool Inventory\n\nThe frozen Pareto-selected policy pair used for benchmark evaluation exposes 27 packaged tools, of which 26 were exercised at least once during the main training run. Table\n13\nand Table\n14\nsummarize each tool’s covered task family and a compact niche summary derived from the manifest",
+      "support_explanation": "27工具中26被实际训练调用，支持真实复用而非只声称存储。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1709-1717",
+      "quote": "Training budget and randomness.\n\nThe main training runs use a 200-episode budget unless otherwise stated. The curriculum comparison uses 300 episodes to compare progressive\n→\n4\n1\\!\\rightarrow\\!4\ntraining with fixed-D4 training under the same high-level protocol. All main runs are generated with seed\n20260413\n. Randomness enters through task sampling, LLM generation, candidate-tool mutation, and policy-pair selection, and all logged summaries retain the seed and run identifier.",
+      "support_explanation": "Appendix A前段称主200episode而Table2/成本为300，需澄清口径。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 1661-1669",
+      "quote": "Figure\n3\n3(c)\nanalyzes toolbox growth. The system observes 30 tool niches and packages 27 tools. More importantly, the activation rate of these tools reaches 100%, and the rolling reuse rate peaks at 100% (mean\n∼\n\\sim\n85%). This temporal dimension illustrates that EGL-SCA first covers frequent niches, consolidates tools during expansion, and rapidly enters a\nreuse-dominated regime\n. The tool side acts as a verifier-guided repository of reusable algorithmic tools rather than a static, bloated toolbox; Appendix",
+      "support_explanation": "正文100%激活率与26/27被调用存在口径差异，不把100%当一致实证。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2605.10366.txt",
+      "sha256": "56157464f52ce730eefe0e15dddae5b33b24fd3c28ad678cd0df8af0a592f02a",
+      "locator": "lines 3793-3827",
+      "quote": "Parser Rubric\n\n“Recover the graph structure and query carefully” and keep node names, edges, and query fields consistent with the task statement.\n\n“Before any execution call, build the explicit canonical nested\ntask_input\nobject with graph, query, and constraints in their declared locations.”\n\nMissing graph/query/constraint payloads before tool execution.\n\nMessage-Passing\n\nParsing\n\nNo task-family-specific rule beyond general graph reconstruction.\n\n“For message-passing tasks, copy the canonical graph and embeddings/layers exactly before tool creation or execution.”\n\nMessage-passing failures with wrong embeddings, wrong layer count, and high-difficulty parse drift.\n\nExecution Rubric\n\n“Before execution, make sure the structured input matches your understanding of the task” and keep the final answer structured.\n\n“A\nrun_tool\nor\nrun_candidate\ncall counts only when it carries an explicit\ntask_input\npayload; do not execute with missing\ntask_input\n.”\n\nCandidate/tool runs that appeared to execute but had no bound payload.",
+      "support_explanation": "局部prompt变化具体到task_input和message passing约束。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "instruction policy Π: parse/retrieve/protocol/execute",
+      "information": "训练有canonical z*、参考答案、typed接口和执行轨迹；执行器只看自然语言x；外部评测无更新。",
+      "operation": "按最早失败将诊断路由到解析、检索、协议或payload局部prompt mutation",
+      "output": "带祖先元数据的新instruction genome",
+      "conditions": "可获得结构化正确性/兼容性诊断",
+      "feedback": "verifier+trajectory",
+      "selection_rule": "每38episode以四目标Pareto重评政策对",
+      "selection_data": "合成验证2例/任务类",
+      "persistence": "政策对archive，final genome冻结",
+      "later_use": "之后训练任务及外部800题",
+      "claimed_effect": "减少无效mutations并提高协议可靠性",
+      "failure_boundary": "最早失败不保证唯一因果；无注入故障/反事实归因准确率。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E004",
+        "E009",
+        "E015",
+        "E020"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "tool program+API+applicability metadata",
+      "information": "当前任务文本、运行记录、canonical verifier诊断",
+      "operation": "缺能力时合成、工具逻辑错时修复，验证通过后加入tool view",
+      "output": "可调用Python图算法工具",
+      "conditions": "sandbox及已知答案/hidden checks",
+      "feedback": "执行、schema、exactness及约束验证",
+      "selection_rule": "执行验证入库，随政策对非支配保留",
+      "selection_data": "训练任务与2tool-probe",
+      "persistence": "27-tool frozen inventory",
+      "later_use": "26工具训练中调用，评测禁用新tool proposal",
+      "claimed_effect": "平均成功率.920",
+      "failure_boundary": "固定图schema和单backbone；没有证明开放域增长。",
+      "evidence_ids": [
+        "E003",
+        "E005",
+        "E009",
+        "E017"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "prompt与tool单独改进忽视混合失败，产生误更新。",
+    "checked_gap": "本文给路由表、trace和独立冻结对照，支持问题有操作意义；非证明此前从未联合优化。",
+    "lineage": [
+      {
+        "method": "Reflexion / ExpeL → GEPA; AFlow / AgentSquare; tool synthesis/program search",
+        "source": "2605.10366v1 §2，未固定邻居全文版本",
+        "relation": "语言反馈/验证搜索/工作流进化是祖先，本文加入图结构首错归因"
+      }
+    ],
+    "closest_adjacent": [
+      "GEPA",
+      "AgentSquare",
+      "MA-GTS"
+    ],
+    "residue": "解析/工具不匹配/算法逻辑可互相混淆，统一rewrite浪费预算。",
+    "stakes": "错误输出与协议失败、冗余工具/指令。",
+    "method_response": "verifier+typed接口→首错路由→局部变异→Pareto政策对留存。",
+    "remaining_gap": "归因正确性、frontier因果作用、不同模型/开放域及全成本匹配未立。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E007",
+      "E016"
+    ],
+    "unresolved": [
+      "关键最近邻GEPA/AgentSquare/MA-GTS独立原文未包含于固定材料包，请总控统一补材；不影响本篇内证据评价。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "heterogeneous_decomposition",
+    "supporting": [],
+    "outside_taxonomy": false,
+    "reason": "将异质失败按解析/选择/算法残差分区，施加不同编辑，符合主卡；C04专指不均质压缩/精度资源，不适合工具故障归因，sub=null。",
+    "executes_pattern": true,
+    "resolves_problem": false,
+    "matches": [
+      {
+        "main_id": "heterogeneous_decomposition",
+        "sub_id": null,
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "识别异质失败",
+          "按首错阶段分区",
+          "局部不同修复",
+          "对照w/o SCA"
+        ],
+        "success_checks": [
+          {
+            "condition": "partition load-bearing",
+            "status": "partial",
+            "evidence_ids": [
+              "E007",
+              "E008"
+            ]
+          }
+        ],
+        "failure_checks": [
+          {
+            "condition": "heterogeneity只假设/归因未验证",
+            "status": "partial",
+            "reason": "提供trace和总体消融，无归因准确率。",
+            "evidence_ids": [
+              "E002",
+              "E007"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E007"
+        ],
+        "reason": "分区导致不同处理，非仅多模块。C04全文核过但压缩步骤不适用。"
+      }
+    ]
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H09",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "operational correspondence",
+            "status": "met",
+            "reason": "首错定位于相互作用的prompt/tool链，而不是对整份文档统一rewrite；无全图反向梯度。",
+            "evidence_ids": [
+              "E002",
+              "E003",
+              "E020"
+            ]
+          },
+          {
+            "condition": "isolated mechanism certification",
+            "status": "partial",
+            "reason": "有组件消融，无frontier-vs-greedy或归因ground-truth及等token比较。",
+            "evidence_ids": [
+              "E007",
+              "E008",
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E020"
+        ]
+      },
+      {
+        "main": "crystallize_executable_capability",
+        "sub": "H07",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "operational correspondence",
+            "status": "met",
+            "reason": "训练任务中按缺失能力触发可调用工具生成、执行门控、注册并冻结复用。",
+            "evidence_ids": [
+              "E003",
+              "E009",
+              "E017"
+            ]
+          },
+          {
+            "condition": "isolated mechanism certification",
+            "status": "partial",
+            "reason": "有组件消融，无frontier-vs-greedy或归因ground-truth及等token比较。",
+            "evidence_ids": [
+              "E007",
+              "E008",
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E003",
+          "E009",
+          "E017"
+        ]
+      },
+      {
+        "main": "population_search_executable_fitness",
+        "sub": "H16",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "operational correspondence",
+            "status": "met",
+            "reason": "政策对以四目标非支配frontier保留，而非单best。",
+            "evidence_ids": [
+              "E004",
+              "E009"
+            ]
+          },
+          {
+            "condition": "isolated mechanism certification",
+            "status": "partial",
+            "reason": "有组件消融，无frontier-vs-greedy或归因ground-truth及等token比较。",
+            "evidence_ids": [
+              "E007",
+              "E008",
+              "E014"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "E004",
+          "E009"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H09"
+      },
+      "operation_correspondence": "首错定位于相互作用的prompt/tool链，而不是对整份文档统一rewrite；无全图反向梯度。",
+      "necessary_conditions": "结构化反馈、可执行检验和后续真实读取。",
+      "differences": "原C04是压缩异质性，本文只匹配父卡；H16是选择而非归因，作为领域辅助机制。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E020"
+      ]
+    },
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "crystallize_executable_capability",
+        "sub": "H07"
+      },
+      "operation_correspondence": "训练任务中按缺失能力触发可调用工具生成、执行门控、注册并冻结复用。",
+      "necessary_conditions": "结构化反馈、可执行检验和后续真实读取。",
+      "differences": "原C04是压缩异质性，本文只匹配父卡；H16是选择而非归因，作为领域辅助机制。",
+      "evidence_ids": [
+        "E003",
+        "E009",
+        "E017"
+      ]
+    },
+    {
+      "rs_main": "heterogeneous_decomposition",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "population_search_executable_fitness",
+        "sub": "H16"
+      },
+      "operation_correspondence": "政策对以四目标非支配frontier保留，而非单best。",
+      "necessary_conditions": "结构化反馈、可执行检验和后续真实读取。",
+      "differences": "原C04是压缩异质性，本文只匹配父卡；H16是选择而非归因，作为领域辅助机制。",
+      "evidence_ids": [
+        "E004",
+        "E009"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rsi:attribute_and_patch_incumbent/S1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md",
+        "research/patterns/conditions.json"
+      ],
+      "applies_when": "多部件故障需局部编辑",
+      "applicable": true,
+      "status": "met",
+      "reason": "route/table和prompt diff定位具体阶段。",
+      "evidence_ids": [
+        "E002",
+        "E020"
+      ],
+      "score_item": "X"
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/F5",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/attribute_and_patch_incumbent.md"
+      ],
+      "applies_when": "声称精确归因优于盲更",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有去路由对照，但最早失败启发式没有反事实或注入故障的正确率。",
+      "evidence_ids": [
+        "E002",
+        "E007"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "rsi:crystallize_executable_capability/S3",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/main/crystallize_executable_capability.md"
+      ],
+      "applies_when": "工具宣称跨任务复用",
+      "applicable": true,
+      "status": "met",
+      "reason": "合成训练/验证后冻结，四外部集独立运行。",
+      "evidence_ids": [
+        "E005",
+        "E009"
+      ],
+      "score_item": "E.holdout"
+    },
+    {
+      "id": "rsi:population_search_executable_fitness/H16",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "patterns/sub/H16.md"
+      ],
+      "applies_when": "宣称Pareto选择的必要性",
+      "applicable": true,
+      "status": "partial",
+      "reason": "有四目标和非支配规则，去protocol objective只部分消融，缺frontier对greedy。",
+      "evidence_ids": [
+        "E004",
+        "E009"
+      ],
+      "score_item": "E.causality"
+    },
+    {
+      "id": "local:2605.10366-1",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.10366v1 Appendix D"
+      ],
+      "applies_when": "宣称显著/稳定优于所有对照",
+      "applicable": true,
+      "status": "partial",
+      "reason": "三种子+Wilson齐，但为较短训练、只有full，未对全部对照复跑或作配对显著性。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012"
+      ],
+      "score_item": "E.statistics"
+    },
+    {
+      "id": "local:2605.10366-2",
+      "version": "manifest-bound",
+      "source_strength": "single_source",
+      "source_refs": [
+        "2605.10366v1 Appendix I"
+      ],
+      "applies_when": "声称更高学习效率",
+      "applicable": true,
+      "status": "partial",
+      "reason": "完整主run资源账有，基线和ablations匹配token/总运行成本没有。",
+      "evidence_ids": [
+        "E013",
+        "E014"
+      ],
+      "score_item": "E.cost"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "EGL-SCA achieves SOTA 92.0% average success on four benchmarks",
+      "setting": "gpt-5.4-nano, common verifier, frozen pair, 200 cases/benchmark",
+      "baseline_control": "AgentSquare .878; graph-native MA-GTS缺GraphInstruct，均值分母不同不当作同等四集比较",
+      "selection_vs_test": "合成选择vs冻结外部测试",
+      "result": "Full .920/.995/.970/.795，average .920；AgentSquare在GraphArena及G-Real更好。",
+      "denominator": "800 benchmark cases",
+      "evidence_ids": [
+        "E006",
+        "E009"
+      ],
+      "counterevidence": [
+        "E016"
+      ],
+      "allowed_conclusion": "支持固定协议四集平均较高，不证明每集最优或普适SOTA。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "SCA precisely routes failures and prevents update thrashing",
+      "setting": "main training plus frozen external ablations",
+      "baseline_control": "w/o SCA .895; w/o growth .876; w/o instruction .860",
+      "selection_vs_test": "训练诊断用于变异，外部结果不更新",
+      "result": "SCA对均值提高2.5pp；案例/metadata显示局部更新",
+      "denominator": "各外部ablation每集200；主run297计数/300计划",
+      "evidence_ids": [
+        "E002",
+        "E007",
+        "E008",
+        "E013",
+        "E020"
+      ],
+      "counterevidence": [
+        "E018",
+        "E019"
+      ],
+      "allowed_conclusion": "路由有增益证据，精确根因与防止thrashing的充分因果证据不全。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "Tool growth becomes stable reusable capability",
+      "setting": "27tool inventory, frozen external evaluation",
+      "baseline_control": "w/o tool growth vs Full",
+      "selection_vs_test": "工具仅训练生成，外部禁提案",
+      "result": "26/27训练中被用；外部平均.920 vs .876",
+      "denominator": "27 packaged;800 external examples",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E017"
+      ],
+      "counterevidence": [
+        "E019"
+      ],
+      "allowed_conclusion": "支持留存工具在后续任务有效，不支持100%激活/无限开放域。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告冻结后图任务独立测试及组件消融支持留存prompt/tool对均值的收益；不是我们运行或验证的普适SOTA/精确归因。",
+    "unresolved": [
+      "无等成本全面improver对照",
+      "200/300 budget口径及100%激活与26/27不一致",
+      "没有improver本身更新，不能判improver"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "残余是故障源混淆，列prompt optimizer/tool/workflow邻居；邻居原文未固定、独立新颖性仍待核。",
+      "evidence_ids": [
+        "E001",
+        "E002"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "双空间+首错路由能重建并提出可区分预测；阈值和oracle诊断依赖仍留假设。",
+      "evidence_ids": [
+        "E002",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "typed接口、prompt祖先、27tool清单、冻结与Pareto选择有落实；验证仅2例/类、口径200/300及激活率不一致待澄清。",
+      "evidence_ids": [
+        "E004",
+        "E009",
+        "E015",
+        "E017",
+        "E018",
+        "E019",
+        "E020"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "结构化可执行检查匹配图任务，800题分母明确；未独立验证全verifier或覆盖完整benchmark。",
+      "evidence_ids": [
+        "E005",
+        "E006",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "去路由/工具增长/指令消融有增益；缺等成本最强替代、frontier隔离和归因正确性。",
+      "evidence_ids": [
+        "E007",
+        "E008",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "合成训练选择与四冻结外部集分开，外部只文本、一次且禁提案；无显式overlap/预训练污染审计，迁移限图任务。",
+      "evidence_ids": [
+        "E005",
+        "E009",
+        "E016"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "三种子不同训练预算+mean/std+case Wilson，分母与排除可见；没有主预算对照跨seed/差值显著性，不能支持显著优于各臂。",
+      "evidence_ids": [
+        "E010",
+        "E011",
+        "E012",
+        "E013"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "主训练tokens、calls、walltime与验证单列且报告排除，但不覆盖对照成本和所有coach/narrator，效率公平性未立。",
+      "evidence_ids": [
+        "E013",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–5及Appendix A–J，特别Tables1–18；checklist已读"
+      ]
+    }
+  },
+  "score": {
+    "raw": 68.75,
+    "display": 68.8,
+    "lower": 68.75,
+    "upper": 68.75,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "材料完整并可判八项，保留作者口径矛盾与因果边界，不以此冒充缺全文。",
+  "rationale": "图结构首错路由与双空间留存链清楚，冻结外测及组件消融支持retained；精确归因、等成本替代及部分统计/报告口径仍不足。"
+}
