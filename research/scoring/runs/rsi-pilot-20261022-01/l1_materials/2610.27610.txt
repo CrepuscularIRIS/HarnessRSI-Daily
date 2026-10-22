@@ -1,0 +1,213 @@
+arXiv: 2610.27610    title: Auditing the Product, Not the Recursion: The Evaluation Evidence Behind Recursive Self-Improvement Claims
+
+[abstract]
+Recursive self-improvement (RSI) promises AI systems, such as self-evolving LLM agents, that become better at producing further improvements. Evaluating this promise requires separating product claims about the final system from process claims about the improvement process itself. Existing surveys specify the evidence these claims require, but how often studies report that evidence remains unmeasured. We examine this question through full-text coding of 114 eligible studies in a reproducible arXiv search frame frozen in October 2026, including 90 that describe their own systems as RSI. The codebook links claims to evaluation designs. Independent human coding, third-reader adjudication, and a separate blind coding of improver comparisons assess coding reliability. Among the 90 RSI studies, 90% report product evaluation beyond development tasks under a broad criterion that includes partial or unstated separation, while 60% report evaluation on tasks unused for selection. Only 22% audit two or more reruns of the full loop. In a human-coded random sample, the RSI studies show the same contrast: 45% evaluate on tasks unused for selection and 14% audit two or more reruns. Of the 26 studies claiming a better improvement procedure, 23 report a related comparison, but only 4 compare earlier and later procedures from identical starting artifacts at a matched budget. Across these results and a comparison set of established works, evidence for repeatability and improved procedures remains less developed than product evaluation. Three propositions explain how selection effects, shared evaluator errors, and changes in system state limit what product evaluations can establish. Together, the findings support a claim-indexed reporting standard that connects each claim to the evaluation design needed to test it.
+
+[intro/head from pinned fulltext]
+Auditing the Product, Not the Recursion:The Evaluation Evidence Behind Recursive Self-Improvement Claims
+
+Skip to main content
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+
+Submit in GitHub
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Contents
+
+Reading mode
+
+Colour theme
+
+License: arXiv.org perpetual non-exclusive license
+
+arXiv:2610.27610v1 [cs.LG] 20 Oct 2026
+
+Auditing the Product, Not the Recursion:
+
+The Evaluation Evidence Behind Recursive Self-Improvement Claims
+
+Zihan Chen
+
+Affiliation:
+Stevens Institute of Technology
+
+Affiliation:
+Hoboken, NJ, USA
+
+Email:
+zchen61@stevens.edu
+
+Di Zhu
+
+Affiliation:
+Stevens Institute of Technology
+
+Affiliation:
+Hoboken, NJ, USA
+
+Email:
+dzhu1@stevens.edu
+
+Lei Nico Zheng
+
+Affiliation:
+University of Massachusetts Boston
+
+Affiliation:
+Boston, MA, USA
+
+Email:
+lei.zheng@umb.edu
+
+Abstract
+
+Recursive self-improvement (RSI) promises AI systems, such as self-evolving LLM agents, that become better at producing further improvements. Evaluating this promise requires separating product claims about the final system from process claims about the improvement process itself. Existing surveys specify the evidence these claims require, but how often studies report that evidence remains unmeasured. We examine this question through full-text coding of 114 eligible studies in a reproducible arXiv search frame frozen in October 2026, including 90 that describe their own systems as RSI. The codebook links claims to evaluation designs. Independent human coding, third-reader adjudication, and a separate blind coding of improver comparisons assess coding reliability. Among the 90 RSI studies, 90% report product evaluation beyond development tasks under a broad criterion that includes partial or unstated separation, while 60% report evaluation on tasks unused for selection. Only 22% audit two or more reruns of the full loop. In a human-coded random sample, the RSI studies show the same contrast: 45% evaluate on tasks unused for selection and 14% audit two or more reruns. Of the 26 studies claiming a better improvement procedure, 23 report a related comparison, but only 4 compare earlier and later procedures from identical starting artifacts at a matched budget. Across these results and a comparison set of established works, evidence for repeatability and improved procedures remains less developed than product evaluation. Three propositions explain how selection effects, shared evaluator errors, and changes in system state limit what product evaluations can establish. Together, the findings support a claim-indexed reporting standard that connects each claim to the evaluation design needed to test it.
+
+K
+eywords
+recursive self-improvement (RSI)
+⋅
+\cdot
+
+self-evolving agents
+⋅
+\cdot
+
+LLM agents
+⋅
+\cdot
+
+evaluation methodology
+⋅
+\cdot
+
+meta-research
+⋅
+\cdot
+
+LLM-as-a-judge
+
+1
+Introduction
+
+Language models increasingly participate in the processes that improve AI systems. They revise prompts and agent harnesses, which coordinate a model’s tools and actions
+[
+1
+,
+2
+,
+3
+,
+4
+]
+. They also generate feedback for updating model weights
+[
+5
+,
+6
+,
+7
+]
+and modify data and training pipelines
+[
+8
+,
+9
+]
+. Some systems also modify the procedure that proposes changes, which we call the
+improver
+, or the evaluator that decides which changes to retain
+[
+10
+,
+11
+,
+12
+,
+13
+,
+14
+]
+. These developments motivate the ambition of recursive self-improvement (RSI): retained improvements should enable the system to produce further improvements, potentially by making the improver itself more effective.
+
+This ambition creates an evaluation problem. A higher final benchmark score establishes something about the resulting system, but it does not by itself establish how the improvement process behaves. Whether gains accumulate across rounds, recur in independent runs, or result from a better improver are distinct empirical questions. We refer to these as
+process claims
+, in contrast to a
+product claim
+about the performance of the final system. Evaluating RSI requires matching the evidence to the particular claim being made.
+
+The distinction matters because the signal used to select changes can disagree with the property the system is intended to improve. In one self-play study, a model’s own judge increasingly accepts its outputs while hidden exact-match accuracy remains unchanged
+[
+15
+]
+. In a robotics study, accepted skill changes repeatedly pass their tests, yet the target task never succeeds
+[
+16
+]
+. Both cases distinguish the
+development signal
+, which guides the loop’s choices, from an
+audit
+, which assesses the claimed improvement outside those choices. Even a successful audit of the final product leaves open whether the loop produces gains repeatably or whether its improver has become better.
+
+Recent surveys provide principles for answering these questions.
+Wu et al. [17]
+distinguish task gains, retention and transfer, and improver gains. Their evaluation protocol includes protected test tasks, repeated runs, resource-matched controls, and comparisons of earlier and later improvers from common starting states.
+Wang et al. [18]
+require audit evidence appropriate to the component being changed, while
+Chen et al. [19]
+organize feedback sources by their verification strength. These accounts establish what evidence to seek. However, they do not measure how often studies report it. The remaining question is therefore empirical:
+how closely does the reported evaluation of RSI systems match the claims made about their improvement processes?
+
+We address this question through a census of eligible studies in a reproducible arXiv search frame. We code each study from its full text, using a codebook that translates existing evaluation principles into observable features of reported experiments. The dataset covers 114 eligible studies, of which 90 describe their own loops or systems as RSI, and records each study’s claims, development signal, evaluation boundary, grader, and process controls, with source locators identifying the supporting passages.
+
+We ask three research questions. RQ1 asks, for each claim that RSI studies make, how often they report an evaluation design that bears on it. RQ2 asks whether the studies that claim a better improver report comparisons that can isolate an improver gain. RQ3 asks whether the findings hold under independent human coding and in established self-improvement research outside the search frame. We assess robustness through a random sample coded independently by a human and adjudicated by a third reader, separate blind coding of the improver comparisons, and a comparison set of 20 representative works selected by
+Wu et al. [17]
+, which we call anchor works.
+
+For RQ1, the broad product-evaluation indicator covers 90% of the 90 studies. This indicator includes partial or unstated separation from development. However, only 60% report evaluation on tasks unused for any selection. Most studies that claim accumulating gains audit across rounds, whereas repeated evaluation of the loop itself is uncommon: 22% audit two or more reruns.
+
+For RQ2, 23 of the 26 studies claiming a better improver report a related comparison. These comparisons usually favor the proposed process. However, only 4 compare an earlier and a later improver from identical starting artifacts at a matched budget. This design isolates the improver’s contribution from changes in the system on which it acts. For RQ3, the human-coded sample confirms that audited reruns are rarer than selection-independent product evaluation within the same studies (14% against 45% for its RSI studies), and the anchor works show the same pattern. Studies’ own experiments further document cases in which development gains transfer only partly, or not at all, to external evaluation.
+
+The study contributes both measurement and guidance for evaluation. First, the dataset records claims and evidence for every eligible study in the frozen search frame, including the adjudicated sample and independently coded improver comparisons. Second, the accompanying codebook makes the evaluation requirements measurable and provides evidence on coding reliability. These two resources answer RQ1–RQ3. Third, three propositions explain the limits of inferring process gains from product evidence. Finally, a reporting standard links each claim to the required evaluation, using the observed rates as a baseline.
+
+Section
+2
+positions the study relative to prior surveys and meta-research on evaluation practice. Section
+3
+defines the measured constructs, and Section
+4
+explains why product evidence cannot stand in for process evidence. Section
+5
+describes the data and methods, Section
+6
+reports the results, and Section
+7
+presents a case analysis of studies’ own experiments. Section
+8
+discusses the findings and their implications for reporting, and Section
+9
+discusses limitations and future work.
+
+2
+Related Work
+
+Our study dr

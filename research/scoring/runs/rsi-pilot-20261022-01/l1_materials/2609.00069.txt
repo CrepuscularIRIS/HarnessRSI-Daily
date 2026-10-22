@@ -1,0 +1,240 @@
+arXiv: 2609.00069    title: Auditing Harness Tampering in Self-Improving Agents
+
+[abstract]
+Self-improving agents iteratively modify their own harness to push the frontier of their performance. However, such modifications can produce illusory performance gains or compromise integrity constraints such as authorization, provenance, and completeness without genuinely improving capability. We term this phenomenon as harness tampering, which extends the concept from reward and measurement tampering to the full self-improvement lifecycle. To systematically study this problem, we propose a two-axis taxonomy that categorizes each misaligned edit by the harness functional role in which it occurs and the obligation it violates. Then we build an annotated corpus by seeding tampered-benign edit pairs into the real trajectories of self-improving agents. We adapt and benchmark diverse audit methods on tampering classification and localization tasks. Finally we systematically audit real trajectories of self-improving agents. The results demonstrate that harness tampering consistently occurs in real runs from different agents, often persists in the lineage of the best agent, and forms distinct system-specific profiles across the taxonomy.
+
+[intro/head from pinned fulltext]
+Auditing Harness Tampering in Self-Improving Agents
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+
+Learn more
+
+×
+
+Back to arXiv
+
+License: CC BY 4.0
+
+arXiv:2609.00069v1 [cs.CL] 30 Aug 2026
+
+Auditing Harness Tampering in Self-Improving Agents
+
+Xing Wang
+
+Xiaoyi Zhang
+
+Jie Shao
+
+Abstract
+
+Self-improving agents iteratively modify their own harness to push the frontier of their performance. However, such modifications can produce illusory performance gains or compromise integrity constraints such as authorization, provenance, and completeness without genuinely improving capability. We term this phenomenon as
+harness tampering
+, which extends the concept from reward and measurement tampering to the full self-improvement lifecycle. To systematically study this problem, we propose a two-axis taxonomy that categorizes each misaligned edit by the harness functional role in which it occurs and the obligation it violates. Then we build an annotated corpus by seeding tampered–benign edit pairs into the real trajectories of self-improving agents. We adapt and benchmark diverse audit methods on tampering classification and localization tasks. Finally we systematically audit real trajectories of self-improving agents. The results demonstrate that harness tampering consistently occurs in real runs from different agents, often persists in the lineage of the best agent, and forms distinct system-specific profiles across the taxonomy.
+
+University of Electronic Science and Technology of China
+
+wangxing@std.uestc.edu.cn
+
+Introduction
+
+Large language models are increasingly deployed through agent harnesses that coordinate model calls, tools, control flow, context and memory
+(
+Wang et al. 2024b
+;
+Xi et al. 2025
+;
+Zhuge et al. 2024
+)
+. In self-improving agents, the harness itself becomes an object of optimization when agent programs, workflows, or persistent state are updated to improve future performance
+(
+Gao et al. 2026
+;
+Ren et al. 2026
+;
+Hu et al. 2025
+;
+Zhang et al. 2025
+;
+Zhang et al. 2026b
+;
+Zhang et al. 2026c
+;
+Zhang et al. 2026a
+)
+. The optimization loop proposes changes, runs the changed variants on tasks, evaluates the results, and retains the selected variant. Repeating this loop allows genuine improvements in task performance to accumulate over time.
+
+Figure 1:
+Harness tampering: an edit hidden in
+Δ
+t
+\Delta_{t}
+overwrites the recorded
+accuracy.
+
+Figure 2:
+Overview. Left: the two-axis taxonomy of functional roles and obligations. (A) We seed matched tampered–benign edits into recorded harness changes to build a labeled corpus, and evaluate prompted and trained auditors on classification and localization. (B) We apply the selected auditor to real trajectories of self-improving systems and analyze the prevalence, persistence, and profiles of the findings.
+
+While this recursive self-improvement (RSI) pushes the frontier of agents’ performance, it risks exposing and amplifying an agent’s misaligned behavior when changing the harness.
+As shown in Fig.
+1
+, consider a harness change where most of edits are benign, two lines are edited to overwrite the original overall accuracy into fixed
+1.0
+before saved to the disk. This two-line edit exposes the integrity risk when changing harness.
+More generally, a change can make a variant appear improved without improving its capability, but by altering how the variant is run, how its results are measured, how they are recorded, which variant is retained, or
+what is carried into later iterations. The harness change also can involve authorization, completeness on required component and other misaligned issue.
+Prior work on reward tampering and measurement tampering examines how optimization can alter the reward mechanism or measurements used to determine success
+(
+Everitt et al. 2021
+;
+Roger et al. 2023
+;
+Atinafu and Cohen 2026
+;
+Thaman 2026
+)
+. Self-improving agents place these concerns in a new setting, where the optimized harness spans all components of an agent’s lifecycle including execution, evaluation, selection, recording, and propagation. We term this problem
+harness tampering
+.
+
+To fill this gap and systematically analyze this misalignment during RSI, we propose a taxonomy for harness tampering.
+By two axes, the taxonomy describes where a misalignment occurs on the harness and what specific category of obligation has failed.
+The functional-role axis assigns the misalignment to the harness operation in which it directly occurs (execution, evaluation, selection, recording, or propagation) on the lifecycle of self-improvement.
+The obligation axis identifies the integrity condition that the agent should satisfy but violates.
+For example, if a “improved” harness variant tampers with an already computed score before reporting the score, this behavior on the functional axis is recording and its obligation axis is representational fidelity because the stored value no longer matches the result it claims to represent.
+
+Along with the taxonomy, we adapt diverse audit methods to detect harness tampering and ask how well they classify and localize the misalignment. Since existing real harness changes carry no verified labels, we build an annotated corpus by seeding matched tampered–benign edit pairs into recorded changes from three representative RSI systems
+(
+Zhang et al. 2025
+;
+Zhang et al. 2026b
+;
+Zhang et al. 2026c
+)
+, where each pair shares a location and an apparent functional goal and differs only in whether an obligation is violated. On this corpus we compare eight prompted language models, a fastText classifier and a LoRA-adapted small model trained on our training split, scoring both whether an edit is tampering and whether its functional role and obligation are correctly attributed.
+
+We then use the selected auditor to ask what an audit of current self-improving agents reveals and where the tampering localizes on the proposed two axes. We analyze publicly released run materials from ADAS
+(
+Hu et al. 2025
+)
+, AFlow
+(
+Zhang et al. 2025
+)
+, DGM
+(
+Zhang et al. 2026b
+)
+, HyperAgents
+(
+Zhang et al. 2026c
+)
+and ScientistOne
+(
+Meng et al. 2026
+)
+, and characterize the prevalence of tampering, its persistence along the lineage of the best agent, and the system-specific profiles it forms across the taxonomy.
+
+We summarize our contributions as follows:
+
+•
+
+We propose a two-axis taxonomy for harness tampering in self-improving agents, which characterizes misalignments by the directly affected harness functional role and the violated obligation.
+
+•
+
+We curate a dataset of tampered–benign harness edits using a fault-seeding paradigm based on real self-improvement trajectories and benchmark diverse audit methods ranging from lightweight classifiers to frontier LLMs.
+
+•
+
+With selected audit methods, we audit existing self-improving agents and provide a systematic analysis of real harness tampering that occurs across the taxonomy.
+
+Related Work
+
+Self-Improving Agents and Harness Evolution
+
+Self-improving agents enhance their capabilities across iterations by optimizing different layers of their operational scaffolding
+(
+Gao et al. 2026
+;
+Fang et al. 2025
+;
+Du et al. 2026
+;
+Ning et al. 2026
+)
+.
+Early paradigms focus on optimizing task-level context and behavioral strategies, accumulating experiences in episodic memory
+(
+Shinn et al. 2023
+;
+Zhao et al. 2024
+)
+, synthesizing reusable skill libraries
+(
+Wang et al. 2024a
+)
+, or evolving natural-language prompts
+(
+Yang et al. 2024
+;
+Fernando et al. 2024
+)
+.
+To unlock more expressive adaptation, recent frameworks expand the mutable boundary to code-defined agent architectures and workflows.
+For instance, ADAS evolves algorithmic agent architectures from an explicit candidate archive
+(
+Hu et al. 2025
+)
+, AFlow iteratively searches executable workflow topologies
+(
+Zhang et al. 2025
+)
+, and DGM retains discovered coding agents within an evolutionary pool
+(
+Zhang et al. 2026b
+)
+.
+More recent systems further generalize this search space by co-evolving task agents, search algorithms, and meta-level harnesses
+(
+Zhang et al. 2026c
+;
+Lee et al. 2026
+;
+Luo et al. 2026a
+)
+, often introducing non-regression or validation checks to regulate behavioral drift
+(
+Zhang et al. 2026a
+)
+.
+
+However, expanding self-modification into the execution scaffolding introduces severe threats to evaluation validity.
+Recent studies indicate that apparent evolutionary gains often reflect benchmark overfitting or evaluation artifacts rather than genuine capability advances
+(
+Lin et al. 2026a
+;
+Wang et al. 2026b
+;
+Luo et al. 2026b
+)
+.
+We focus on the underlying vulnerability: when an optimization loop can rewrite its own harness, it can tamper with the mechanisms that execute, evaluate, select, and record variants.
+
+Tampering and Evaluation Integrity
+
+Reward and measurement tampering describe failure modes where optimization exploits the feedback channel, producing illusory gai
