@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>AutoHarness 画报</title>
+<style>
+/* 版式：黑色条码刊头 + “合成回路 | 部署闸门”左右对接的编译流水线 + 145 条学习步数条码 + 单人/双人分卡；纸白底、墨黑、信号黄，绿=合法、红=非法 */
+@page { size: 1600px 2263px; margin: 0; }
+:root{
+  --paper:#f7f6f1; --ink:#151515; --yel:#f2c230; --yel2:#fbe9a6; --ok:#2e8b57; --bad:#cf3a2b;
+  --mute:#6b6b66; --line:#d3d1c8; --card:#ffffff; --g1:#a3a39d; --g2:#3a3a38;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:2263px;overflow:hidden;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans CJK SC","Noto Sans SC",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{display:flex;flex-direction:column}
+body>*{flex-shrink:0}
+.mono{font-family:"Noto Sans Mono CJK SC",monospace}
+.top{background:var(--ink);color:#fff;padding:28px 60px 22px;position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;right:0;top:0;width:300px;height:100%;
+  background:repeating-linear-gradient(90deg,#3a3a37 0 3px,#151515 3px 7px,#55544f 7px 8px,#151515 8px 14px,#2e8b57 14px 16px,#151515 16px 22px);opacity:.9}
+.top>*{position:relative;z-index:1;max-width:1180px}
+.tags{display:flex;gap:10px;font-size:17px;font-family:"Noto Sans Mono CJK SC",monospace}
+.tags span{border:1.5px solid var(--yel);color:var(--yel);padding:2px 10px}
+.tags span.f{background:var(--yel);color:var(--ink);font-weight:700}
+h1{font-size:46px;line-height:1.18;font-weight:900;margin:12px 0 8px}
+h1 em{font-style:normal;color:var(--yel)}
+h1 code{font-family:"Noto Sans Mono CJK SC",monospace;font-size:40px;background:#2c2c2a;padding:0 10px;color:#9fe0b6}
+.sub{font-size:20px;line-height:1.5;color:#e6e4dc}
+.meta{font-size:15px;color:#a9a79f;margin-top:8px}
+.wrap{padding:0 60px;display:flex;flex-direction:column;flex:1}
+.sec{display:flex;align-items:center;gap:14px;margin:13px 0 7px}
+.sec .n{font-family:"Noto Sans Mono CJK SC",monospace;background:var(--yel);font-weight:700;padding:2px 10px;font-size:18px}
+.sec h2{font-size:28px;font-weight:900}
+.sec .r{margin-left:auto;font-size:15px;color:var(--mute)}
+.prob{display:grid;grid-template-columns:1fr 600px;gap:22px}
+.pbox{background:var(--card);border:1.5px solid var(--ink);padding:12px 18px;font-size:17.5px;line-height:1.5}
+.pbox b{color:var(--bad)}
+.quote{margin-top:10px;border:1.5px dashed var(--mute);padding:8px 12px;font-size:16px;color:#43423e;display:flex;gap:14px;align-items:center}
+.quote .big{font-size:40px;font-weight:900;color:#8d8c86;font-family:"Noto Sans Mono CJK SC",monospace}
+.obs{background:#1e1e1d;color:#d9d7cf;font-family:"Noto Sans Mono CJK SC",monospace;font-size:14.5px;line-height:1.45;padding:12px 16px;position:relative}
+.obs .h{color:var(--yel);font-family:"Noto Sans CJK SC",sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.obs pre{font-family:inherit;white-space:pre}
+.obs del{color:#ff8a7a;text-decoration-thickness:2px}
+.obs .cut{position:absolute;right:14px;bottom:12px;background:var(--bad);color:#fff;font-family:"Noto Sans CJK SC",sans-serif;font-size:14px;padding:3px 8px;font-weight:700}
+.mech{position:relative;height:540px;background:var(--card);border:2px solid var(--ink)}
+.mech svg{position:absolute;left:0;top:0}
+.forms{display:grid;grid-template-columns:1fr 1.2fr 1fr;margin-top:10px;border:1.5px solid var(--ink)}
+.forms div{padding:8px 14px;font-size:15.5px;line-height:1.45;background:var(--card)}
+.forms div+div{border-left:1.5px solid var(--ink)}
+.forms b{display:block;font-size:17px;font-family:"Noto Sans Mono CJK SC",monospace}
+.forms .main{background:var(--yel2)}
+.forms .pol{background:#ecebe6;color:#55544f}
+.panel{background:var(--card);border:1.5px solid var(--line);padding:12px 16px}
+.panel h3{font-size:21px}
+.cap{font-size:15px;color:var(--mute);line-height:1.45}
+.lg{display:flex;gap:18px;font-size:14.5px;margin-top:4px}
+.lg i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:5px}
+.bgl{stroke:#ebe9e2;stroke-width:1} .btk{font-size:13px;fill:var(--mute);font-family:"Noto Sans Mono CJK SC",monospace}
+.b1{fill:var(--g1)} .b2{fill:var(--g2)} .ev{fill:#d9a400} .ok{fill:var(--ok)}
+.cap{stroke:none} line.cap{stroke:var(--ok);stroke-width:1.5;stroke-dasharray:3 3}
+.capt{font-size:15px;font-weight:700;fill:var(--ok)}
+.mk{font-size:13.5px;font-weight:700;fill:var(--ink)} .bax{font-size:13.5px;fill:var(--mute)}
+.res{display:grid;grid-template-columns:1fr 1fr 430px;gap:16px;margin-top:10px}
+.card{background:var(--card);border:2px solid var(--ink);padding:12px 16px}
+.card h3{font-size:20px;line-height:1.3}
+.card .spec{font-family:"Noto Sans Mono CJK SC",monospace;font-size:13.5px;background:#efeee8;padding:4px 8px;margin:6px 0 8px;line-height:1.45}
+.sbar{display:flex;height:34px;border:1.5px solid var(--ink);font-size:14.5px;font-weight:700;font-family:"Noto Sans Mono CJK SC",monospace}
+.sbar div{display:flex;align-items:center;justify-content:center;color:#fff;white-space:nowrap;overflow:hidden}
+.sbar .w{background:var(--ok)} .sbar .d{background:#9a9993} .sbar .l{background:var(--bad)} .sbar .o{background:#c9c8c1;color:#3d3c38}
+.vs{font-size:16px;font-weight:700;margin:10px 0 4px;display:flex;justify-content:space-between}
+.vs span{font-weight:400;color:var(--mute);font-size:14.5px}
+.rb{display:grid;grid-template-columns:150px 1fr 56px;align-items:center;gap:8px;margin:7px 0;font-size:15px}
+.rb .t{height:24px;background:#efeee8;position:relative}
+.rb .f{height:100%;background:var(--g1)}
+.rb.me .f{background:var(--ok)} .rb.me{font-weight:900}
+.rb .v{font-family:"Noto Sans Mono CJK SC",monospace;font-weight:700;text-align:right}
+.sq{display:flex;gap:5px;margin:6px 0 2px}
+.sq i{width:22px;height:22px;display:block}
+.sq .hi{background:var(--ok)} .sq .eq{background:#9a9993} .sq .lo{background:var(--bad)}
+.foot{font-size:14px;color:var(--mute);line-height:1.45;margin-top:6px}
+.card.pol{border:2px dashed #85847e;background:#efeee9}
+.card.pol h3{color:#4a4945}
+.card.pol .big{font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px;line-height:1.6;margin:6px 0}
+.card.pol .warn{background:var(--ink);color:var(--yel);font-size:14.5px;padding:5px 9px;margin-top:6px;font-weight:700}
+.lim{display:grid;grid-template-columns:1.3fr 1fr;gap:20px}
+.lim ol{padding-left:24px;font-size:16px;line-height:1.45}
+.lim li{margin-bottom:4px} .lim li b{color:var(--bad)}
+.read{background:var(--card);border:1.5px solid var(--ink);padding:10px 16px;font-size:15.5px;line-height:1.5}
+.read h4{font-size:18px;margin-bottom:4px}
+.read .t{display:inline-block;font-size:13px;padding:0 6px;margin-right:6px;color:#fff}
+.t.au{background:var(--ok)} .t.me{background:#b88a00} .t.sk{background:#77766f}
+footer{margin-top:auto;display:flex;justify-content:space-between;gap:24px;font-size:14px;color:var(--mute);border-top:1px solid var(--line);padding:8px 0 20px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="tags"><span class="f">F0 / F1</span><span>crystallize_executable_capability</span><span>Google DeepMind</span></div>
+  <h1>让 Flash 先给自己写一道<em>合法性闸门</em>：<br>合成 <code>is_legal_action()</code>，再拿它把关</h1>
+  <div class="sub">AutoHarness：用环境返回的“非法动作”反馈，树搜索迭代改写动作合法性代码；145 个 TextArena 游戏在新随机种子上的合法率都练到 100%。被比较的是同一个小模型加不加这道闸门，以及更大的 Gemini-2.5-Pro。</div>
+  <div class="meta">Lou, Lázaro-Gredilla, Dedieu, Wendelken, Lehrach, Murphy · arXiv 2603.03329v1 · 2026-02-10</div>
+</div>
+
+<div class="wrap">
+<div class="sec"><span class="n">01 / 问题</span><h2>模型懂规则，却常常走出环境不允许的动作</h2><span class="r">摘要、§1、§4、附录 A.4–A.5</span></div>
+<div class="prob">
+  <div class="pbox">在棋类和其他文字游戏里，<b>非法动作不是“走得差”，而是直接判负或卡死</b>。常见补救是微调（慢、贵、可能伤及其他能力）或为每个游戏手写合法性检查（每来一个新游戏就要重写）。作者的做法：让 LLM 自己写这段检查代码，用环境反馈反复修，直到在没见过的随机种子上不再出非法动作。
+    <div class="quote"><span class="big">78%</span><span>作者引用：Kaggle GameArena 国际象棋赛中 Gemini-2.5-Flash 的败局有 78% 归因于非法走子。<br><b style="color:#43423e">此数来自外部赛事报告，本项目未核对。</b></span></div>
+  </div>
+  <div class="obs">
+    <div class="h">实验先把提示里的“合法走法”列表删掉（附录 A.4 原文节选）</div>
+<pre>[GAME] You are playing White in a game of Chess.
+       Make your moves in UCI format ... [e2e4].
+[GAME] Current board:
+ 8 | r n b q k b n r |      2 | P P P P P P P P |
+ 7 | p p p p p p p p |      1 | R N B Q K B N R |
+   ...
+<del>Valid moves: [g1h3], [g1f3], [b1c3], ... [a2a4]</del></pre>
+    <div class="cut">删去，否则代码可直接照抄</div>
+  </div>
+</div>
+
+<div class="sec"><span class="n">02 / 机制</span><h2>左边合成闸门，右边部署闸门</h2><span class="r">§3、§4.1、附录 B.2、C.1 · 树中数值为示意</span></div>
+<div class="mech">
+<svg width="1476" height="536" viewBox="0 0 1476 536">
+  <defs>
+    <marker id="k" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#151515"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2e8b57"/></marker>
+    <marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#cf3a2b"/></marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="34" fill="#151515"/>
+  <text x="18" y="24" font-size="18" font-weight="900" fill="#f2c230">合成阶段（训练）· 每个游戏单独做一次 · Gemini-2.5-Flash</text>
+  <rect x="880" y="0" width="596" height="34" fill="#f2c230"/>
+  <text x="898" y="24" font-size="18" font-weight="900" fill="#151515">部署阶段：harness-as-action-verifier（本文主体）</text>
+  <line x1="880" y1="0" x2="880" y2="536" stroke="#151515" stroke-width="2"/>
+
+  <!-- code tree -->
+  <text x="22" y="66" font-size="16" font-weight="700">代码假设树</text>
+  <text x="22" y="86" font-size="13.5" fill="#6b6b66">节点 = 一版代码，值 = 平均合法率（示意）</text>
+  <g font-family="Noto Sans Mono CJK SC" font-size="14">
+    <rect x="120" y="104" width="92" height="40" fill="#fff" stroke="#151515" stroke-width="2"/><text x="166" y="129" text-anchor="middle">v0 .31</text>
+    <rect x="40" y="194" width="92" height="40" fill="#fff" stroke="#151515" stroke-width="2"/><text x="86" y="219" text-anchor="middle">v1 .58</text>
+    <rect x="200" y="194" width="92" height="40" fill="#fff" stroke="#151515" stroke-width="2"/><text x="246" y="219" text-anchor="middle">v2 .44</text>
+    <rect x="20" y="284" width="92" height="40" fill="#fff" stroke="#151515" stroke-width="2"/><text x="66" y="309" text-anchor="middle">v3 .52</text>
+    <rect x="128" y="284" width="92" height="40" fill="#fbe9a6" stroke="#151515" stroke-width="3.5"/><text x="174" y="309" text-anchor="middle">v4 .86</text>
+    <rect x="236" y="284" width="92" height="40" fill="#fff" stroke="#151515" stroke-width="2"/><text x="282" y="309" text-anchor="middle">v5 .47</text>
+    <rect x="128" y="374" width="92" height="40" fill="#2e8b57" stroke="#151515" stroke-width="2"/><text x="174" y="399" text-anchor="middle" fill="#fff">v6 1.0</text>
+  </g>
+  <g stroke="#151515" stroke-width="1.6">
+    <line x1="150" y1="144" x2="96" y2="194"/><line x1="182" y1="144" x2="236" y2="194"/>
+    <line x1="76" y1="234" x2="66" y2="284"/><line x1="98" y1="234" x2="164" y2="284"/><line x1="256" y1="234" x2="276" y2="284"/>
+    <line x1="174" y1="324" x2="174" y2="374"/>
+  </g>
+  <text x="226" y="364" font-size="13.5" font-weight="700" fill="#8a6a00">← Thompson 采样选中，下一轮从这里改</text>
+  <text x="226" y="404" font-size="13.5" font-weight="700" fill="#2e8b57">← 合法率到 1.0 即停（或超时）</text>
+  <text x="22" y="456" font-size="13.5" fill="#6b6b66">兼顾探索（换一种代码结构）</text><text x="22" y="476" font-size="13.5" fill="#6b6b66">与利用（修补已部分可用的版本）</text>
+
+  <!-- loop -->
+  <g font-size="15">
+    <rect x="500" y="56" width="360" height="62" fill="#fff" stroke="#151515" stroke-width="2"/>
+    <text x="516" y="80" font-weight="900">① 10 个并行环境跑 rollout</text>
+    <text x="516" y="104" fill="#3b3b38">每次最多 1000 步，局终自动重置</text>
+    <rect x="500" y="140" width="360" height="62" fill="#fdecea" stroke="#cf3a2b" stroke-width="2"/>
+    <text x="516" y="164" font-weight="900" fill="#a3281c">② 出现非法动作或代码报错 → 立即终止</text>
+    <text x="516" y="188" fill="#3b3b38">环境给出“这一步不合法”的反馈</text>
+    <rect x="500" y="224" width="360" height="62" fill="#fff" stroke="#151515" stroke-width="2"/>
+    <text x="516" y="248" font-weight="900">③ 最多取 5 个失败步 → Critic</text>
+    <text x="516" y="272" fill="#3b3b38">把各类错误归并成一段反馈</text>
+    <rect x="500" y="308" width="360" height="62" fill="#fff" stroke="#151515" stroke-width="2"/>
+    <text x="516" y="332" font-weight="900">④ Refiner 读失败步＋原代码</text>
+    <text x="516" y="356" fill="#3b3b38">写出新一版代码，作为树的新节点</text>
+  </g>
+  <g stroke="#151515" stroke-width="2.2">
+    <line x1="680" y1="118" x2="680" y2="138" marker-end="url(#k)"/>
+    <line x1="680" y1="202" x2="680" y2="222" marker-end="url(#k)"/>
+    <line x1="680" y1="286" x2="680" y2="306" marker-end="url(#k)"/>
+  </g>
+  <path d="M500,330 C430,328 380,300 332,298" fill="none" stroke="#151515" stroke-width="2.2" marker-end="url(#k)"/>
+  <path d="M220,300 C300,250 380,90 496,86" fill="none" stroke="#8a6a00" stroke-width="2.2" stroke-dasharray="6 4" marker-end="url(#k)"/>
+  <rect x="520" y="392" width="340" height="128" fill="#fbe9a6" stroke="#151515" stroke-width="1.5"/>
+  <text x="536" y="416" font-size="15.5" font-weight="900">改哪个函数？（§3）</text>
+  <text x="536" y="442" font-size="14.5">· is_legal_action 说“合法”，环境判非法</text>
+  <text x="554" y="462" font-size="14.5" font-weight="700">→ 两个函数都改</text>
+  <text x="536" y="488" font-size="14.5">· is_legal_action 说“非法”，确实非法</text>
+  <text x="554" y="508" font-size="14.5" font-weight="700">→ 只改 propose_action</text>
+
+  <!-- deployment sieve -->
+  <rect x="930" y="58" width="300" height="60" fill="#151515"/>
+  <text x="946" y="84" font-size="16.5" font-weight="900" fill="#fff">Gemini-2.5-Flash 提议动作</text>
+  <text x="946" y="106" font-size="13.5" fill="#cfcdc5">同一个模型，同一份优化过的提示</text>
+  <g font-family="Noto Sans Mono CJK SC" font-size="15" font-weight="700">
+    <rect x="960" y="146" width="88" height="30" fill="#fff" stroke="#151515"/><text x="1004" y="167" text-anchor="middle">[e2e4]</text>
+    <rect x="1066" y="146" width="88" height="30" fill="#fff" stroke="#151515"/><text x="1110" y="167" text-anchor="middle">[e2e5]</text>
+  </g>
+  <text x="1170" y="167" font-size="13" fill="#6b6b66">示意走法</text>
+  <path d="M920,200 L1240,200 L1150,280 L1150,320 L1010,320 L1010,280 Z" fill="#fbe9a6" stroke="#151515" stroke-width="2.5"/>
+  <text x="1080" y="236" font-size="15" font-weight="900" text-anchor="middle" font-family="Noto Sans Mono CJK SC">is_legal_action(board, action)</text>
+  <text x="1080" y="262" font-size="14" text-anchor="middle">部署时代码固定不变</text>
+  <line x1="1080" y1="320" x2="1080" y2="384" stroke="#2e8b57" stroke-width="3.5" marker-end="url(#g)"/>
+  <text x="1094" y="350" font-size="15" font-weight="900" fill="#2e8b57">✓ 合法</text>
+  <rect x="980" y="388" width="200" height="54" fill="#2e8b57"/>
+  <text x="1080" y="421" font-size="17" font-weight="900" fill="#fff" text-anchor="middle">交给游戏环境</text>
+  <path d="M1240,232 C1330,232 1360,200 1360,140 C1360,96 1300,88 1236,88" fill="none" stroke="#cf3a2b" stroke-width="3" marker-end="url(#r)"/>
+  <text x="1262" y="270" font-size="15" font-weight="900" fill="#cf3a2b">✗ 非法</text>
+  <text x="1262" y="292" font-size="13.5" fill="#a3281c">带“illegal action”</text>
+  <text x="1262" y="311" font-size="13.5" fill="#a3281c">警告重新提示</text>
+  <text x="900" y="478" font-size="14" fill="#3b3b38">闸门代码由 Flash 自己合成，再用来过滤 Flash 自己的提议（作者脚注 2）。</text>
+  <text x="900" y="500" font-size="14" fill="#3b3b38">实验里去掉了“可用走法”提示，代码只能从棋盘文字和反馈中推断规则。</text>
+</svg>
+</div>
+<div class="forms">
+  <div><b>action-filter</b>代码列出全部合法动作，LLM 在其中排序挑选</div>
+  <div class="main"><b>action-verifier ← 本文主要结果</b>LLM 先提议，代码验证；不合法就带警告重问。下方 03 的单人 / 双人结果都来自这种形态</div>
+  <div class="pol"><b>harness-as-policy</b>整套策略写成代码，推理时不再调用 LLM。另一种产物，结果单列（右下灰卡）</div>
+</div>
+
+<div class="sec"><span class="n">03 / 结果</span><h2>合法率全部到 1.0；加了闸门的 Flash 在单人和双人游戏上都追平或超过 Pro</h2><span class="r">§4.1–4.3、附录表 1</span></div>
+<div class="panel">
+  <h3>145 个游戏、145 条：每条是学到合法率 1.0 所需的步数（附录表 1，按步数排序）</h3>
+  <div class="cap">测试：每个游戏 10 个新随机种子 × 1000 步，统计合法动作比例——是<b>同一游戏的新种子</b>，不是没见过的游戏。145 个游戏中位数 4 步、均值 10.3（本项目由表 1 计算）；端到端评测的 32 个游戏均值 14.5，19 个不到 10 步。</div>
+  <div class="lg"><span><i style="background:#a3a39d"></i>单人游戏（44）</span><span><i style="background:#3a3a38"></i>双人游戏（101）</span><span><i style="background:#d9a400"></i>端到端评测的 32 个（单人、双人各 16）</span><span><i style="background:#2e8b57"></i>顶部绿格：测试合法率 1.0</span></div>
+<svg width="1440" height="226" viewBox="0 0 1440 226">
+<line x1="56" y1="182.0" x2="1430" y2="182.0" class="bgl"/>
+<text x="48" y="187.0" class="btk" text-anchor="end">1</text>
+<line x1="56" y1="119.5" x2="1430" y2="119.5" class="bgl"/>
+<text x="48" y="124.5" class="btk" text-anchor="end">10</text>
+<line x1="56" y1="57.0" x2="1430" y2="57.0" class="bgl"/>
+<text x="48" y="62.0" class="btk" text-anchor="end">100</text>
+<line x1="56" y1="32" x2="1430" y2="32" class="cap"/>
+<text x="56" y="26" class="capt">145 / 145 个游戏：新种子测试合法率 = 1.0</text>
+<rect x="56.60" y="178.0" width="8.28" height="4.0" class="b1"/>
+<rect x="56.60" y="29" width="8.28" height="6" class="ok"/>
+<rect x="66.08" y="178.0" width="8.28" height="4.0" class="b1"/>
+<rect x="66.08" y="29" width="8.28" height="6" class="ok"/>
+<rect x="75.55" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="75.55" y="29" width="8.28" height="6" class="ok"/>
+<rect x="85.03" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="85.03" y="29" width="8.28" height="6" class="ok"/>
+<rect x="94.50" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="94.50" y="29" width="8.28" height="6" class="ok"/>
+<rect x="103.98" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="103.98" y="29" width="8.28" height="6" class="ok"/>
+<rect x="113.46" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="113.46" y="29" width="8.28" height="6" class="ok"/>
+<rect x="122.93" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="122.93" y="29" width="8.28" height="6" class="ok"/>
+<rect x="132.41" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="132.41" y="29" width="8.28" height="6" class="ok"/>
+<rect x="141.88" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="141.88" y="29" width="8.28" height="6" class="ok"/>
+<rect x="151.36" y="178.0" width="8.28" height="4.0" class="b1 ev"/>
+<rect x="151.36" y="29" width="8.28" height="6" class="ok"/>
+<rect x="160.83" y="178.0" width="8.28" height="4.0" class="b1"/>
+<rect x="160.83" y="29" width="8.28" height="6" class="ok"/>
+<rect x="170.31" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="170.31" y="29" width="8.28" height="6" class="ok"/>
+<rect x="179.79" y="178.0" width="8.28" height="4.0" class="b1 ev"/>
+<rect x="179.79" y="29" width="8.28" height="6" class="ok"/>
+<rect x="189.26" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="189.26" y="29" width="8.28" height="6" class="ok"/>
+<rect x="198.74" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="198.74" y="29" width="8.28" height="6" class="ok"/>
+<rect x="208.21" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="208.21" y="29" width="8.28" height="6" class="ok"/>
+<rect x="217.69" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="217.69" y="29" width="8.28" height="6" class="ok"/>
+<rect x="227.17" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="227.17" y="29" width="8.28" height="6" class="ok"/>
+<rect x="236.64" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="236.64" y="29" width="8.28" height="6" class="ok"/>
+<rect x="246.12" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="246.12" y="29" width="8.28" height="6" class="ok"/>
+<rect x="255.59" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="255.59" y="29" width="8.28" height="6" class="ok"/>
+<rect x="265.07" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="265.07" y="29" width="8.28" height="6" class="ok"/>
+<rect x="274.54" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="274.54" y="29" width="8.28" height="6" class="ok"/>
+<rect x="284.02" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="284.02" y="29" width="8.28" height="6" class="ok"/>
+<rect x="293.50" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="293.50" y="29" width="8.28" height="6" class="ok"/>
+<rect x="302.97" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="302.97" y="29" width="8.28" height="6" class="ok"/>
+<rect x="312.45" y="178.0" width="8.28" height="4.0" class="b1 ev"/>
+<rect x="312.45" y="29" width="8.28" height="6" class="ok"/>
+<rect x="321.92" y="178.0" width="8.28" height="4.0" class="b1"/>
+<rect x="321.92" y="29" width="8.28" height="6" class="ok"/>
+<rect x="331.40" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="331.40" y="29" width="8.28" height="6" class="ok"/>
+<rect x="340.88" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="340.88" y="29" width="8.28" height="6" class="ok"/>
+<rect x="350.35" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="350.35" y="29" width="8.28" height="6" class="ok"/>
+<rect x="359.83" y="178.0" width="8.28" height="4.0" class="b1"/>
+<rect x="359.83" y="29" width="8.28" height="6" class="ok"/>
+<rect x="369.30" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="369.30" y="29" width="8.28" height="6" class="ok"/>
+<rect x="378.78" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="378.78" y="29" width="8.28" height="6" class="ok"/>
+<rect x="388.26" y="178.0" width="8.28" height="4.0" class="b2"/>
+<rect x="388.26" y="29" width="8.28" height="6" class="ok"/>
+<rect x="397.73" y="163.2" width="8.28" height="18.8" class="b1"/>
+<rect x="397.73" y="29" width="8.28" height="6" class="ok"/>
+<rect x="407.21" y="163.2" width="8.28" height="18.8" class="b1 ev"/>
+<rect x="407.21" y="29" width="8.28" height="6" class="ok"/>
+<rect x="416.68" y="163.2" width="8.28" height="18.8" class="b1 ev"/>
+<rect x="416.68" y="29" width="8.28" height="6" class="ok"/>
+<rect x="426.16" y="163.2" width="8.28" height="18.8" class="b2 ev"/>
+<rect x="426.16" y="29" width="8.28" height="6" class="ok"/>
+<rect x="435.63" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="435.63" y="29" width="8.28" height="6" class="ok"/>
+<rect x="445.11" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="445.11" y="29" width="8.28" height="6" class="ok"/>
+<rect x="454.59" y="163.2" width="8.28" height="18.8" class="b1 ev"/>
+<rect x="454.59" y="29" width="8.28" height="6" class="ok"/>
+<rect x="464.06" y="163.2" width="8.28" height="18.8" class="b1"/>
+<rect x="464.06" y="29" width="8.28" height="6" class="ok"/>
+<rect x="473.54" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="473.54" y="29" width="8.28" height="6" class="ok"/>
+<rect x="483.01" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="483.01" y="29" width="8.28" height="6" class="ok"/>
+<rect x="492.49" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="492.49" y="29" width="8.28" height="6" class="ok"/>
+<rect x="501.97" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="501.97" y="29" width="8.28" height="6" class="ok"/>
+<rect x="511.44" y="163.2" width="8.28" height="18.8" class="b1 ev"/>
+<rect x="511.44" y="29" width="8.28" height="6" class="ok"/>
+<rect x="520.92" y="163.2" width="8.28" height="18.8" class="b1"/>
+<rect x="520.92" y="29" width="8.28" height="6" class="ok"/>
+<rect x="530.39" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="530.39" y="29" width="8.28" height="6" class="ok"/>
+<rect x="539.87" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="539.87" y="29" width="8.28" height="6" class="ok"/>
+<rect x="549.34" y="163.2" width="8.28" height="18.8" class="b1"/>
+<rect x="549.34" y="29" width="8.28" height="6" class="ok"/>
+<rect x="558.82" y="163.2" width="8.28" height="18.8" class="b2 ev"/>
+<rect x="558.82" y="29" width="8.28" height="6" class="ok"/>
+<rect x="568.30" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="568.30" y="29" width="8.28" height="6" class="ok"/>
+<rect x="577.77" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="577.77" y="29" width="8.28" height="6" class="ok"/>
+<rect x="587.25" y="163.2" width="8.28" height="18.8" class="b2"/>
+<rect x="587.25" y="29" width="8.28" height="6" class="ok"/>
+<rect x="596.72" y="163.2" width="8.28" height="18.8" class="b1"/>
+<rect x="596.72" y="29" width="8.28" height="6" class="ok"/>
+<rect x="606.20" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="606.20" y="29" width="8.28" height="6" class="ok"/>
+<rect x="615.68" y="152.2" width="8.28" height="29.8" class="b1 ev"/>
+<rect x="615.68" y="29" width="8.28" height="6" class="ok"/>
+<rect x="625.15" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="625.15" y="29" width="8.28" height="6" class="ok"/>
+<rect x="634.63" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="634.63" y="29" width="8.28" height="6" class="ok"/>
+<rect x="644.10" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="644.10" y="29" width="8.28" height="6" class="ok"/>
+<rect x="653.58" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="653.58" y="29" width="8.28" height="6" class="ok"/>
+<rect x="663.06" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="663.06" y="29" width="8.28" height="6" class="ok"/>
+<rect x="672.53" y="152.2" width="8.28" height="29.8" class="b2"/>
+<rect x="672.53" y="29" width="8.28" height="6" class="ok"/>
+<rect x="682.01" y="152.2" width="8.28" height="29.8" class="b1 ev"/>
+<rect x="682.01" y="29" width="8.28" height="6" class="ok"/>
+<rect x="691.48" y="144.4" width="8.28" height="37.6" class="b1"/>
+<rect x="691.48" y="29" width="8.28" height="6" class="ok"/>
+<rect x="700.96" y="144.4" width="8.28" height="37.6" class="b2 ev"/>
+<rect x="700.96" y="29" width="8.28" height="6" class="ok"/>
+<rect x="710.43" y="144.4" width="8.28" height="37.6" class="b2"/>
+<rect x="710.43" y="29" width="8.28" height="6" class="ok"/>
+<rect x="719.91" y="144.4" width="8.28" height="37.6" class="b2 ev"/>
+<rect x="719.91" y="29" width="8.28" height="6" class="ok"/>
+<rect x="729.39" y="144.4" width="8.28" height="37.6" class="b1"/>
+<rect x="729.39" y="29" width="8.28" height="6" class="ok"/>
+<rect x="738.86" y="144.4" width="8.28" height="37.6" class="b2 ev"/>
+<rect x="738.86" y="29" width="8.28" height="6" class="ok"/>
+<rect x="748.34" y="144.4" width="8.28" height="37.6" class="b2"/>
+<rect x="748.34" y="29" width="8.28" height="6" class="ok"/>
+<rect x="757.81" y="144.4" width="8.28" height="37.6" class="b1"/>
+<rect x="757.81" y="29" width="8.28" height="6" class="ok"/>
+<rect x="767.29" y="144.4" width="8.28" height="37.6" class="b1"/>
+<rect x="767.29" y="29" width="8.28" height="6" class="ok"/>
+<rect x="776.77" y="144.4" width="8.28" height="37.6" class="b2"/>
+<rect x="776.77" y="29" width="8.28" height="6" class="ok"/>
+<rect x="786.24" y="138.3" width="8.28" height="43.7" class="b2"/>
+<rect x="786.24" y="29" width="8.28" height="6" class="ok"/>
+<rect x="795.72" y="138.3" width="8.28" height="43.7" class="b2"/>
+<rect x="795.72" y="29" width="8.28" height="6" class="ok"/>
+<rect x="805.19" y="138.3" width="8.28" height="43.7" class="b2"/>
+<rect x="805.19" y="29" width="8.28" height="6" class="ok"/>
+<rect x="814.67" y="138.3" width="8.28" height="43.7" class="b2"/>
+<rect x="814.67" y="29" width="8.28" height="6" class="ok"/>
+<rect x="824.14" y="138.3" width="8.28" height="43.7" class="b2"/>
+<rect x="824.14" y="29" width="8.28" height="6" class="ok"/>
+<rect x="833.62" y="138.3" width="8.28" height="43.7" class="b2"/>
+<rect x="833.62" y="29" width="8.28" height="6" class="ok"/>
+<rect x="843.10" y="138.3" width="8.28" height="43.7" class="b1 ev"/>
+<rect x="843.10" y="29" width="8.28" height="6" class="ok"/>
+<rect x="852.57" y="138.3" width="8.28" height="43.7" class="b1 ev"/>
+<rect x="852.57" y="29" width="8.28" height="6" class="ok"/>
+<rect x="862.05" y="138.3" width="8.28" height="43.7" class="b1"/>
+<rect x="862.05" y="29" width="8.28" height="6" class="ok"/>
+<rect x="871.52" y="133.4" width="8.28" height="48.6" class="b1"/>
+<rect x="871.52" y="29" width="8.28" height="6" class="ok"/>
+<rect x="881.00" y="133.4" width="8.28" height="48.6" class="b2"/>
+<rect x="881.00" y="29" width="8.28" height="6" class="ok"/>
+<rect x="890.48" y="133.4" width="8.28" height="48.6" class="b2"/>
+<rect x="890.48" y="29" width="8.28" height="6" class="ok"/>
+<rect x="899.95" y="133.4" width="8.28" height="48.6" class="b1"/>
+<rect x="899.95" y="29" width="8.28" height="6" class="ok"/>
+<rect x="909.43" y="133.4" width="8.28" height="48.6" class="b2"/>
+<rect x="909.43" y="29" width="8.28" height="6" class="ok"/>
+<rect x="918.90" y="129.2" width="8.28" height="52.8" class="b1"/>
+<rect x="918.90" y="29" width="8.28" height="6" class="ok"/>
+<rect x="928.38" y="129.2" width="8.28" height="52.8" class="b2"/>
+<rect x="928.38" y="29" width="8.28" height="6" class="ok"/>
+<rect x="937.86" y="129.2" width="8.28" height="52.8" class="b2 ev"/>
+<rect x="937.86" y="29" width="8.28" height="6" class="ok"/>
+<rect x="947.33" y="129.2" width="8.28" height="52.8" class="b2"/>
+<rect x="947.33" y="29" width="8.28" height="6" class="ok"/>
+<rect x="956.81" y="129.2" width="8.28" height="52.8" class="b2"/>
+<rect x="956.81" y="29" width="8.28" height="6" class="ok"/>
+<rect x="966.28" y="129.2" width="8.28" height="52.8" class="b2"/>
+<rect x="966.28" y="29" width="8.28" height="6" class="ok"/>
+<rect x="975.76" y="129.2" width="8.28" height="52.8" class="b1 ev"/>
+<rect x="975.76" y="29" width="8.28" height="6" class="ok"/>
+<rect x="985.23" y="129.2" width="8.28" height="52.8" class="b1"/>
+<rect x="985.23" y="29" width="8.28" height="6" class="ok"/>
+<rect x="994.71" y="129.2" width="8.28" height="52.8" class="b1"/>
+<rect x="994.71" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1004.19" y="125.6" width="8.28" height="56.4" class="b2 ev"/>
+<rect x="1004.19" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1013.66" y="125.6" width="8.28" height="56.4" class="b2"/>
+<rect x="1013.66" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1023.14" y="122.4" width="8.28" height="59.6" class="b2"/>
+<rect x="1023.14" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1032.61" y="122.4" width="8.28" height="59.6" class="b2"/>
+<rect x="1032.61" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1042.09" y="122.4" width="8.28" height="59.6" class="b2"/>
+<rect x="1042.09" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1051.57" y="122.4" width="8.28" height="59.6" class="b1"/>
+<rect x="1051.57" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1061.04" y="119.5" width="8.28" height="62.5" class="b2"/>
+<rect x="1061.04" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1070.52" y="119.5" width="8.28" height="62.5" class="b1"/>
+<rect x="1070.52" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1079.99" y="119.5" width="8.28" height="62.5" class="b2"/>
+<rect x="1079.99" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1089.47" y="116.9" width="8.28" height="65.1" class="b2"/>
+<rect x="1089.47" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1098.94" y="116.9" width="8.28" height="65.1" class="b1 ev"/>
+<rect x="1098.94" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1108.42" y="114.6" width="8.28" height="67.4" class="b2"/>
+<rect x="1108.42" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1117.90" y="114.6" width="8.28" height="67.4" class="b2"/>
+<rect x="1117.90" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1127.37" y="114.6" width="8.28" height="67.4" class="b2"/>
+<rect x="1127.37" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1136.85" y="112.4" width="8.28" height="69.6" class="b2"/>
+<rect x="1136.85" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1146.32" y="112.4" width="8.28" height="69.6" class="b2 ev"/>
+<rect x="1146.32" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1155.80" y="108.5" width="8.28" height="73.5" class="b2 ev"/>
+<rect x="1155.80" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1165.28" y="108.5" width="8.28" height="73.5" class="b2"/>
+<rect x="1165.28" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1174.75" y="106.7" width="8.28" height="75.3" class="b2"/>
+<rect x="1174.75" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1184.23" y="105.1" width="8.28" height="76.9" class="b2"/>
+<rect x="1184.23" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1193.70" y="102.1" width="8.28" height="79.9" class="b2"/>
+<rect x="1193.70" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1203.18" y="102.1" width="8.28" height="79.9" class="b1 ev"/>
+<rect x="1203.18" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1212.66" y="100.7" width="8.28" height="81.3" class="b2"/>
+<rect x="1212.66" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1222.13" y="99.4" width="8.28" height="82.6" class="b2 ev"/>
+<rect x="1222.13" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1231.61" y="98.1" width="8.28" height="83.9" class="b1"/>
+<rect x="1231.61" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1241.08" y="96.9" width="8.28" height="85.1" class="b2 ev"/>
+<rect x="1241.08" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1250.56" y="96.9" width="8.28" height="85.1" class="b2 ev"/>
+<rect x="1250.56" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1260.03" y="93.6" width="8.28" height="88.4" class="b2"/>
+<rect x="1260.03" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1269.51" y="92.5" width="8.28" height="89.5" class="b1 ev"/>
+<rect x="1269.51" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1278.99" y="90.6" width="8.28" height="91.4" class="b2"/>
+<rect x="1278.99" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1288.46" y="89.7" width="8.28" height="92.3" class="b2"/>
+<rect x="1288.46" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1297.94" y="89.7" width="8.28" height="92.3" class="b2"/>
+<rect x="1297.94" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1307.41" y="88.8" width="8.28" height="93.2" class="b1"/>
+<rect x="1307.41" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1316.89" y="87.9" width="8.28" height="94.1" class="b2"/>
+<rect x="1316.89" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1326.37" y="87.1" width="8.28" height="94.9" class="b2 ev"/>
+<rect x="1326.37" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1335.84" y="79.9" width="8.28" height="102.1" class="b2 ev"/>
+<rect x="1335.84" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1345.32" y="79.3" width="8.28" height="102.7" class="b1"/>
+<rect x="1345.32" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1354.79" y="79.3" width="8.28" height="102.7" class="b1"/>
+<rect x="1354.79" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1364.27" y="78.7" width="8.28" height="103.3" class="b1 ev"/>
+<rect x="1364.27" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1373.74" y="77.5" width="8.28" height="104.5" class="b1"/>
+<rect x="1373.74" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1383.22" y="74.2" width="8.28" height="107.8" class="b2"/>
+<rect x="1383.22" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1392.70" y="72.3" width="8.28" height="109.7" class="b1"/>
+<rect x="1392.70" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1402.17" y="70.0" width="8.28" height="112.0" class="b2 ev"/>
+<rect x="1402.17" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1411.65" y="69.1" width="8.28" height="112.9" class="b2 ev"/>
+<rect x="1411.65" y="29" width="8.28" height="6" class="ok"/>
+<rect x="1421.12" y="48.7" width="8.28" height="133.3" class="b2"/>
+<rect x="1421.12" y="29" width="8.28" height="6" class="ok"/>
+<text x="1425.3" y="56" class="mk" text-anchor="end">最慢：Breakthrough-small 136 · Chess 64 · Othello 62 ↘</text>
+<text x="56" y="206" class="bax">← 学会最快（1 步，36 个游戏）</text>
+<text x="1430" y="206" class="bax" text-anchor="end">学会最慢 →</text>
+<text transform="translate(16,172) rotate(-90)" class="bax">学习步数（对数）</text>
+</svg>
+</div>
+
+<div class="res">
+  <div class="card">
+    <h3>双人游戏：对手是另一个模型</h3>
+    <div class="spec">16 个游戏 × 40 局，先后手各半 · 指标 = 胜 / 平 / 负率</div>
+    <div class="vs">Flash＋闸门 vs Gemini-2.5-Pro <span>16 个游戏中赢 9 个</span></div>
+    <div class="sbar"><div class="w" style="width:56.3%">胜 56.3%</div><div class="d" style="width:5.5%">平</div><div class="l" style="width:38.2%">负 38.2%</div></div>
+    <div class="vs">Flash＋闸门 vs Flash（无闸门） <span>16 个游戏中赢 12 个</span></div>
+    <div class="sbar"><div class="w" style="width:64.8%">胜 64.8%</div><div class="o" style="width:35.2%">平或负（原文未拆分）</div></div>
+    <div class="foot">“平 5.5%”是本项目推算（100 − 56.3 − 38.2），原文只给了双方胜率。</div>
+  </div>
+  <div class="card">
+    <h3>单人游戏：比平均奖励，不比胜率</h3>
+    <div class="spec">16 个游戏 × 20 局 · 指标 = 平均奖励（0–1）</div>
+    <div class="rb me"><span>Flash＋闸门</span><div class="t"><div class="f" style="width:74.5%"></div></div><span class="v">0.745</span></div>
+    <div class="rb"><span>Gemini-2.5-Pro</span><div class="t"><div class="f" style="width:70.7%"></div></div><span class="v">0.707</span></div>
+    <div class="rb"><span>Flash（无闸门）</span><div class="t"><div class="f" style="width:67.3%"></div></div><span class="v">0.673</span></div>
+    <div class="cap" style="margin-top:6px">逐游戏对 Pro：高 8 · 平 5 · 低 3</div>
+    <div class="sq"><i class="hi"></i><i class="hi"></i><i class="hi"></i><i class="hi"></i><i class="hi"></i><i class="hi"></i><i class="hi"></i><i class="hi"></i><i class="eq"></i><i class="eq"></i><i class="eq"></i><i class="eq"></i><i class="eq"></i><i class="lo"></i><i class="lo"></i><i class="lo"></i></div>
+    <div class="foot">“低 3”为推算（16 − 8 − 5）；方格按计数排列，不对应具体游戏。</div>
+  </div>
+  <div class="card pol">
+    <h3>另一种产物：Harness-as-Policy</h3>
+    <div class="cap">16 个单人游戏；训练时启发值改为含奖励，最多 256 轮，平均 89.4 轮，启发值 0.939。</div>
+    <div class="big">纯代码策略   0.870<br>GPT-5.2-High 0.844（5 次重复）<br>Gemini-2.5-Pro 0.707<br>GPT-5.2      0.635（10 次重复）</div>
+    <div class="cap">逐游戏对 GPT-5.2-High：胜 3 · 负 5 · 平 8。推理几乎零成本；两组 GPT-5.2 实验约 $640。</div>
+    <div class="warn">这是整套策略，不是闸门；不能拿来说明闸门的效果</div>
+  </div>
+</div>
+
+<div class="sec"><span class="n">04 / 边界</span><h2>能说到哪一步</h2><span class="r">§4–5 · 本项目阅读判断</span></div>
+<div class="lim">
+  <ol>
+    <li><b>端到端结果没有方差或置信区间</b>，每个游戏只有 20 或 40 局；只挑了 145 个游戏中的 32 个。</li>
+    <li><b>只和 Gemini 家族比。</b>闸门部分没有手写 harness、其他合成方法或其他模型族的对照。</li>
+    <li><b>无闸门的 Flash 是否也能“非法就重问”，原文没说。</b>如果不能，部分差距可能来自重试机会本身，而不只是代码规则。</li>
+    <li><b>“100% 合法”是同一游戏的新种子</b>，每个游戏各合成一份代码；可复用的 harness 库是作者列出的未来工作。</li>
+    <li><b>78% 败局归因</b>出自外部赛事报告，本项目没有核对，不作为本文证据。</li>
+  </ol>
+  <div class="read">
+    <h4>怎么读这张图</h4>
+    <p><span class="t au">作者结果</span>合法率、胜率、平均奖励、迭代次数、$640 均为论文报告值。</p>
+    <p style="margin-top:5px"><span class="t me">本项目计算</span>145 个游戏的中位数 / 均值、条码排序、“平 5.5%”“低 3 个”。</p>
+    <p style="margin-top:5px"><span class="t sk">示意</span>代码树中的版本号与合法率、示意走法；机制图为重绘。</p>
+    <p style="margin-top:5px">与第一期 Meta-Harness 的区别：那篇优化整套 harness、研究提议者该看什么；本篇只合成一个可验证的部件（合法性检查），按新种子合法率验收。</p>
+  </div>
+</div>
+
+<footer>
+  <span>来源：arXiv 2603.03329v1 钉定全文（正文 §1–5 与附录 A–D 已通读；图 2–7 为图片，未从文本取数）。本项目未复现、未运行代码。</span>
+  <span>HarnessRSI Daily · rsi-l1-20261022-03 第二期 · 阅读判断</span>
+</footer>
+</div>
+</body>
+</html>

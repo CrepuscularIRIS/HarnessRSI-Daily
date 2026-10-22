@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 350 checked at L2 → 228 P3-confirmed candidates → 8 posters in the Reel.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 867 checked at L2 (350 + 517 extended) → 494 P3-confirmed candidates → 15 posters across two Reel issues.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -18,7 +18,7 @@ Core question: *which non-weight component was improved, how was the change acce
 - **A short reading list and a Reel**: 228 confirmed good-question papers, of which 8 were checked against the full text and turned into source-mapped posters.
   （228 篇确认的好问题论文，其中 8 篇经原文核对做成逐数溯源的画报。）
 
-## Featured Reel — 2026-10-22（精选画报）
+## Featured Reel — Issue s001 (2026-10-22)（精选画报 · 第一期）
 
 Eight papers, eight mechanism types. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection log: [selection.md](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [Reel index](reel/README.md).
 （8 篇、8 类机制；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收。）
@@ -81,10 +81,68 @@ Naive large batches collapse the playbook (264 → 21 entries, 87.0 → 72.5); h
 </tr>
 </table>
 
+## Featured Reel — Issue s002 (2026-10-22, extended L2)（精选画报 · 第二期）
+
+Seven more papers from the extended L2 pass (517 additional full-text checks → 266 new confirmed P3), picked so that the five main cards absent from s001 all appear. Selection log: [selection-002.md](research/scoring/runs/rsi-l1-20261022-03/selection-002.md).
+（第二期出自扩展 L2：新增核对 517 篇、新增 confirmed P3 266 篇；补齐 s001 未覆盖的 5 张主卡。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.07792/poster.png"><img src="reel/2610.07792/poster.png" width="260" alt="2610.07792 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.07792">2610.07792</a> · Learning-gap yardstick</b><br>
+With a hidden, shifting serving policy, an oracle reference measures both what is never learned and what correct behavior gets broken.<br>
+隐藏漂移策略下只能从结果反馈学习；用 Oracle 参照量出学习缺口与副作用。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2604.11811/poster.png"><img src="reel/2604.11811/poster.png" width="260" alt="2604.11811 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2604.11811">2604.11811</a> · Transfer chessboard</b><br>
+6 cross-task transfers, 5 land below a generic seed harness — every task deserves its own memory harness.<br>
+6 次跨任务迁移 5 次低于通用种子——每个任务值得自己的记忆 harness。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2605.06614/poster.png"><img src="reel/2605.06614/poster.png" width="260" alt="2605.06614 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2605.06614">2605.06614</a> · Trained curator</b><br>
+Freeze the executor, train only the curator that writes the skill library — delayed curation credit finally gets a learner.<br>
+冻结执行器、只训练写技能库的 curator，让延迟的整理决策拿到学分。
+</td>
+</tr>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.05437/poster.png"><img src="reel/2610.05437/poster.png" width="260" alt="2610.05437 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.05437">2610.05437</a> · Offline edit gating</b><br>
+Telemetry cannot be replayed and carries no labels; gate each skill edit by how well it predicts already-recorded actions.<br>
+日志不可重放且无标签；用「对已记录动作的预测准确率」门控每次技能编辑。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.02920/poster.png"><img src="reel/2610.02920/poster.png" width="260" alt="2610.02920 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.02920">2610.02920</a> · Evolving defense</b><br>
+Evolve the safety harness itself against emerging attacks — the defense-side twin of Zombie Agents.<br>
+演化安全 harness 本身，Zombie Agents 的防御侧镜像。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2603.03329/poster.png"><img src="reel/2603.03329/poster.png" width="260" alt="2603.03329 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2603.03329">2603.03329</a> · Legality filter synthesis</b><br>
+Synthesize only a move-legality filter and accept it on fresh random seeds.<br>
+只合成动作合法性过滤器，在新随机种子上验收。
+</td>
+</tr>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2602.10233/poster.png"><img src="reel/2602.10233/poster.png" width="260" alt="2602.10233 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2602.10233">2602.10233</a> · Population search</b><br>
+Basin-hopping meets LLM-guided program evolution for rugged mathematical optimization.<br>
+盆地跳跃×LLM 程序进化，攻崎岖数学优化。
+</td>
+<td width="33%" align="center" valign="top"></td>
+<td width="33%" align="center" valign="top"></td>
+</tr>
+</table>
+
 ## High-Score Papers (2026)（高分论文）
 
-17 rows: the 8 Reel papers plus 9 further 2026 papers from the 228 P3-confirmed candidates, picked so that every main card and every problem family appears at least once. All 17 passed L2 (full-text check: problem real, method on target). The full pool is in [l3-candidates.tsv](research/scoring/runs/rsi-l1-20261022-03/l3-candidates.tsv).
-（17 行＝8 篇 Reel＋9 篇补充，均来自 228 篇 confirmed P3 池中的 2026 年论文；补充按“13 张主卡与各问题族都至少出现一次”挑选。）
+24 rows: the 15 Reel papers (s001 + s002) plus 9 further 2026 papers from the confirmed P3 pool, picked so that every main card and every problem family appears at least once. All 24 passed L2 (full-text check: problem real, method on target). After the extended L2 pass the confirmed pool is 494 papers, of which 402 from 2026: [l3-candidates.tsv](research/scoring/runs/rsi-l1-20261022-03/l3-candidates.tsv).
+（24 行＝两期 Reel 15 篇＋9 篇补充，全部通过 L2 全文核对；扩展核对后 confirmed P3 池为 494 篇，其中 2026 年 402 篇。）
 
 **How to read the score.** The number is only a *display view of the tier*, not a separate rating: **95** = P3 confirmed at L2 where solving the problem unlocks a new `capability`; **92** = P3 confirmed at L2 where it changes a research `judgment`. Rows with the same score are not ranked.
 （**分数只是档位的数字视图，不是另一套评分**：95＝confirmed P3 且解决后带来新能力；92＝confirmed P3 且改变研究判断。同分不排名。）
@@ -111,6 +169,13 @@ Naive large batches collapse the playbook (264 → 21 entries, 87.0 → 72.5); h
 | [Do Self-Evolving Skills Generalize…](https://arxiv.org/abs/2609.39148) `2609.39148` | **92** · P3 ✓ | [`diagnose_self_improvement`](patterns/main/diagnose_self_improvement.md)<br><sub>诊断自我改进是否真实</sub><br>[`evidence_gated_retention`](patterns/main/evidence_gated_retention.md)<br><sub>按实测证据决定留存</sub> | With model, agent and train/validation/test split held fixed, do skill-evolution gains on training tasks transfer to unseen tasks of the same kind?<br><sub>在固定模型、agent 和训练/验证/测试划分下，技能在训练任务上的进化收益能否迁移到同类未见任务？</sub> | [arXiv](https://arxiv.org/abs/2609.39148) · code — |
 | [Initialization Improves LLM-Driven…](https://arxiv.org/abs/2610.00707) `2610.00707` | **92** · P3 ✓ | [`population_search_executable_fitness`](patterns/main/population_search_executable_fitness.md)<br><sub>种群＋可执行适应度搜索</sub><br>[`diagnose_self_improvement`](patterns/main/diagnose_self_improvement.md)<br><sub>诊断自我改进是否真实</sub> | LLM-driven discovery search mode-collapses and diversity interventions do not reliably improve final quality; early candidate quality may matter more than longer exploration.<br><sub>LLM 发现搜索易模式坍缩，鼓励多样性的干预并不稳定改善最终质量，早期候选质量可能比延长探索更重要。</sub> | [arXiv](https://arxiv.org/abs/2610.00707) · code — |
 | [ActiveSaddler: Automated Curriculum…](https://arxiv.org/abs/2610.00906) `2610.00906` | **92** · P3 ✓ | [`self_generate_the_curriculum`](patterns/main/self_generate_the_curriculum.md)<br><sub>自生成课程</sub><br>[`attribute_and_patch_incumbent`](patterns/main/attribute_and_patch_incumbent.md)<br><sub>失败归因并修补现任</sub> | Under a fixed rollout budget, harness fixes keep changing which training scenarios are worth running; how should the curriculum split between revisiting unfixed failures and exploring new ones?<br><sub>固定 rollout 预算下，harness 修复使训练场景价值不断变化，如何动态分配重访未修复失败与探索新失败的课程。</sub> | [arXiv](https://arxiv.org/abs/2610.00906) · code — |
+| [ServeLearnBench: How Well Can Agents…](https://arxiv.org/abs/2610.07792) `2610.07792` | **92** · P3 ✓ | [`diagnose_self_improvement`](patterns/main/diagnose_self_improvement.md)<br><sub>诊断自我改进是否真实</sub><br>[`abstract_experience_into_guidance`](patterns/main/abstract_experience_into_guidance.md)<br><sub>经验抽象为文字指导</sub> | When a serving policy is hidden and drifts over time and feedback gives outcomes without corrections, can a harness infer and revise environment knowledge from service experience — and what does it break?<br><sub>服务策略隐含且随时间变化、反馈只给结果不给更正时，持续学习 harness 能否从服务经验推断并修订环境知识，代价是什么，会不会破坏本已正确的行为。</sub> | [arXiv](https://arxiv.org/abs/2610.07792) · [code](https://github.com/Infini-AI-Lab/ServeLearnBench) · [poster](reel/2610.07792/poster.png) |
+| [M★: Every Task Deserves Its Own…](https://arxiv.org/abs/2604.11811) `2604.11811` | **92** · P3 ✓ | [`search_agent_architecture`](patterns/main/search_agent_architecture.md)<br><sub>搜索代理结构</sub><br>[`amortize_improver_into_trained_policy`](patterns/main/amortize_improver_into_trained_policy.md)<br><sub>把改进器训练成策略</sub> | A fixed general-purpose memory harness transfers poorly across dialogue, embodied planning and specialist reasoning; memory schema, storage logic and usage instructions should be searched jointly per task.<br><sub>固定的通用记忆 harness 在对话、具身规划与专业推理之间迁移差，需要按任务联合搜索记忆 schema、存储逻辑与使用指令。</sub> | [arXiv](https://arxiv.org/abs/2604.11811) · [code](https://github.com/wbopan/mstar) · [poster](reel/2604.11811/poster.png) |
+| [SkillOS: Learning Skill Curation…](https://arxiv.org/abs/2605.06614) `2605.06614` | **95** · P3 ✓ | [`amortize_improver_into_trained_policy`](patterns/main/amortize_improver_into_trained_policy.md)<br><sub>把改进器训练成策略</sub> | In streaming tasks the effect of a skill insert/update/delete shows up only later and indirectly; how is that delayed feedback credited to curation decisions to learn a long-horizon curator?<br><sub>流式任务中，技能库插入/更新/删除的效果只在后续相关任务上延迟、间接显现，如何把这种反馈归给整理决策并学到长期有效的 curator。</sub> | [arXiv](https://arxiv.org/abs/2605.06614) · code — · [poster](reel/2605.06614/poster.png) |
+| [TeleTune: Evolving Agent Skills…](https://arxiv.org/abs/2610.05437) `2610.05437` | **95** · P3 ✓ | [`evidence_gated_retention`](patterns/main/evidence_gated_retention.md)<br><sub>按实测证据决定留存</sub><br>[`abstract_experience_into_guidance`](patterns/main/abstract_experience_into_guidance.md)<br><sub>经验抽象为文字指导</sub> | User telemetry has no target labels, cannot be replayed and interleaves many tasks — how to decide offline whether a skill-library edit actually helped?<br><sub>用户遥测没有目标标签、不能重放、且多任务交织时，怎样离线判定一次技能库修改是否有用。</sub> | [arXiv](https://arxiv.org/abs/2610.05437) · code — · [poster](reel/2610.05437/poster.png) |
+| [HASTE: Evolving Agent Harnesses…](https://arxiv.org/abs/2610.02920) `2610.02920` | **95** · P3 ✓ | [`coevolve_the_evaluator`](patterns/main/coevolve_the_evaluator.md)<br><sub>评估器协同演化</sub><br>[`attribute_and_patch_incumbent`](patterns/main/attribute_and_patch_incumbent.md)<br><sub>失败归因并修补现任</sub> | With only brief descriptions or a few samples of a new attack and no full eval set, how to keep evolving a safety harness that covers unseen variants without harming normal tasks?<br><sub>新攻击只有简短描述或少数样例、没有完整评测集时，如何持续修改安全 harness 并覆盖未见变体而不损害正常任务。</sub> | [arXiv](https://arxiv.org/abs/2610.02920) · [code](https://github.com/xxiqiao/HASTE) · [poster](reel/2610.02920/poster.png) |
+| [AutoHarness: Improving LLM Agents…](https://arxiv.org/abs/2603.03329) `2603.03329` | **95** · P3 ✓ | [`crystallize_executable_capability`](patterns/main/crystallize_executable_capability.md)<br><sub>解法固化为可执行能力</sub><br>[`attribute_and_patch_incumbent`](patterns/main/attribute_and_patch_incumbent.md)<br><sub>失败归因并修补现任</sub> | LLM agents keep emitting environment-forbidden moves (an illegal chess move forfeits the game); hand-writing a legality harness per game does not scale.<br><sub>LLM 代理常输出环境禁止的动作（非法走子直接判负），逐游戏手写合法性 harness 不可扩展，需要自动合成并在新随机种子上验收。</sub> | [arXiv](https://arxiv.org/abs/2603.03329) · code — · [poster](reel/2603.03329/poster.png) |
+| [ImprovEvolve: Basin-Hopping Meets…](https://arxiv.org/abs/2602.10233) `2602.10233` | **95** · P3 ✓ | [`population_search_executable_fitness`](patterns/main/population_search_executable_fitness.md)<br><sub>种群＋可执行适应度搜索</sub> | Asking an LLM to write a complete solver for rugged mathematical optimization in one shot overloads it; outputs generalize poorly across scales and cannot build on prior expert constructions.<br><sub>让 LLM 一次写出崎岖数学优化的完整求解程序负担过重，产物难泛化到其他规模，也不能从已有专家构造继续改进。</sub> | [arXiv](https://arxiv.org/abs/2602.10233) · code — · [poster](reel/2602.10233/poster.png) |
 
 ## Pipeline and Models（流程与模型）
 

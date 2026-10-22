@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeleTune 日志回放</title>
+<style>
+  :root {
+    --kraft: #ece3d1;
+    --kraft-d: #d9ccb2;
+    --film: #1c1b1a;
+    --frame: #faf6ec;
+    --ink: #22201c;
+    --muted: #625b4e;
+    --terra: #c0532f;
+    --terra-bg: #f7e1d6;
+    --ok: #2e7d5b;
+    --ok-bg: #e0efe6;
+    --slate: #3f5566;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--kraft); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 21px; line-height: 1.5;
+    padding: 42px 60px 30px;
+  }
+  .mono { font-family: "Noto Sans Mono CJK SC", monospace; }
+  header { display: grid; grid-template-columns: 1fr 320px; gap: 26px; align-items: end; }
+  .kicker { font-size: 18px; letter-spacing: .26em; color: var(--terra); font-weight: 800; }
+  h1 { margin: 6px 0 6px; font-size: 58px; line-height: 1.14; font-weight: 900; }
+  h1 em { font-style: normal; color: var(--terra); }
+  .sub { font-size: 23px; color: #3b362e; }
+  .label { background: var(--film); color: var(--frame); border-radius: 6px; padding: 10px 14px; font-size: 15.5px; line-height: 1.5; }
+  .label b { color: #f2b49c; font-size: 18px; }
+  .row { display: grid; gap: 22px; margin-top: 18px; }
+  .r3 { grid-template-columns: 1.15fr 1fr; }
+  .card { background: var(--frame); border: 2px solid var(--kraft-d); border-radius: 6px; padding: 14px 20px; }
+  .tag { display: inline-block; font-size: 15px; font-weight: 800; color: #fff; padding: 1px 10px; border-radius: 3px; letter-spacing: .1em; margin-bottom: 6px; }
+  .card h2 { margin: 0 0 6px; font-size: 26px; }
+  .card p { margin: 0; font-size: 20px; }
+  .note { font-size: 15px; color: var(--muted); line-height: 1.42; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+  .three div { border-left: 4px solid var(--terra); background: #fff; padding: 6px 10px; font-size: 16.5px; line-height: 1.4; }
+  .three b { display: block; font-size: 18px; }
+  /* film strip */
+  .reel { background: var(--film); border-radius: 8px; padding: 16px 20px 16px; color: var(--frame); }
+  .reel h2 { margin: 0 0 4px; font-size: 28px; color: #fff; }
+  .reel .lead { font-size: 17px; color: #d6cfbf; margin-bottom: 10px; }
+  .strip { position: relative; background: #2a2826; padding: 24px 10px; border-radius: 4px; }
+  .strip::before, .strip::after { content: ""; position: absolute; left: 6px; right: 6px; height: 12px; background: repeating-linear-gradient(90deg, #ece3d1 0 16px, transparent 16px 34px); border-radius: 2px; opacity: .85; }
+  .strip::before { top: 6px; } .strip::after { bottom: 6px; }
+  .frames { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .fr { background: var(--frame); color: var(--ink); border-radius: 3px; padding: 8px 9px; font-size: 14.5px; line-height: 1.35; min-height: 150px; position: relative; }
+  .fr .n { font-size: 13px; color: var(--muted); font-weight: 700; letter-spacing: .1em; }
+  .fr .rec { font-family: "Noto Sans Mono CJK SC", monospace; font-size: 13.5px; background: #efe8d8; padding: 3px 5px; border-radius: 3px; margin: 4px 0; word-break: break-all; }
+  .fr .pred { font-family: "Noto Sans Mono CJK SC", monospace; font-size: 13.5px; padding: 3px 5px; border-radius: 3px; word-break: break-all; }
+  .fr.okf .pred { background: var(--ok-bg); color: var(--ok); }
+  .fr.bad { box-shadow: 0 0 0 4px var(--terra); }
+  .fr.bad .pred { background: var(--terra-bg); color: var(--terra); text-decoration: line-through; }
+  .fr .mk { position: absolute; top: 6px; right: 8px; font-weight: 900; font-size: 20px; }
+  .fr.okf .mk { color: var(--ok); } .fr.bad .mk { color: var(--terra); }
+  .fr.after { opacity: .9; }
+  .tf { margin-top: 10px; font-size: 16px; color: #e9e2d2; display: flex; gap: 18px; flex-wrap: wrap; }
+  .tf span b { color: #f2b49c; }
+  .pipe { display: grid; grid-template-columns: 1fr 50px 1fr 50px 1.2fr 50px 1fr; align-items: stretch; margin-top: 14px; }
+  .pbox { background: #34312e; border: 2px solid #5a554e; border-radius: 6px; padding: 8px 12px; font-size: 15.5px; line-height: 1.4; color: #eee6d6; }
+  .pbox b { display: block; font-size: 17.5px; color: #fff; margin-bottom: 2px; }
+  .pbox.gate { border-color: #f2b49c; background: #3d2c25; }
+  .pbox.gate b { color: #f2b49c; }
+  .parr { display: flex; align-items: center; justify-content: center; color: #f2b49c; font-size: 30px; font-weight: 900; }
+  .skill { margin-top: 12px; background: var(--frame); color: var(--ink); border-left: 6px solid var(--ok); border-radius: 4px; padding: 8px 14px; font-size: 16.5px; line-height: 1.45; }
+  .skill b { color: var(--ok); }
+  /* charts */
+  .res { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 22px; }
+  .fact { display: grid; grid-template-columns: 150px 1fr 1fr; grid-template-rows: 46px 1fr 1fr; gap: 8px; margin-top: 6px; }
+  .fh { display: flex; align-items: center; justify-content: center; text-align: center; font-size: 16px; font-weight: 800; color: var(--muted); line-height: 1.25; }
+  .fc { background: #fff; border: 2px solid var(--kraft-d); border-radius: 6px; padding: 8px 10px; text-align: center; }
+  .fc .big { font-size: 46px; font-weight: 900; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .fc .sm { font-size: 14.5px; color: var(--muted); }
+  .fc.full { background: var(--ok-bg); border-color: var(--ok); }
+  .fc.full .big { color: var(--ok); }
+  .fc.none .big { color: #7b7466; }
+  .base { width: 100%; border-collapse: collapse; font-size: 16px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .base th { font-size: 13.5px; color: var(--muted); border-bottom: 2px solid var(--ink); padding: 3px 4px; text-align: center; }
+  .base td { border-bottom: 1px solid var(--kraft-d); padding: 4px 4px; text-align: center; }
+  .base td:first-child, .base th:first-child { text-align: left; }
+  .base tr.me td { color: var(--ok); font-weight: 800; background: var(--ok-bg); }
+  svg text { font-family: "Noto Sans CJK SC", sans-serif; }
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .trio .card h3 { margin: 0 0 4px; font-size: 19px; }
+  .trio .num { font-size: 32px; font-weight: 900; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .trio .num s { text-decoration: none; font-size: 21px; color: var(--muted); font-weight: 700; }
+  .trio p { font-size: 16px; margin: 4px 0 0; line-height: 1.42; }
+  .lim { border: 3px solid var(--terra); background: var(--terra-bg); border-radius: 6px; padding: 12px 22px; }
+  .lim h2 { margin: 0 0 4px; font-size: 25px; color: var(--terra); }
+  .lim ul { margin: 0; padding-left: 24px; font-size: 18.5px; line-height: 1.52; }
+  footer { position: absolute; left: 60px; right: 60px; bottom: 22px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="kicker">离线遥测 · 技能准入 · 日志回放带</div>
+    <h1>日志<em>没法重放</em>，也能给技能库把关</h1>
+    <div class="sub">TeleTune 不问“改完技能任务能否成功”，而问“改完之后，代理能否预测出用户当时真正点的那一步”——只有在留出日志上预测更准的编辑才被收下。</div>
+  </div>
+  <div class="label"><b>TeleTune</b><br>UNC Chapel Hill / Microsoft<br>arXiv 2610.05437v2<br>主实验代理 GPT-5.4；测试 WorkArena L1/L2 与 Online-Mind2Web</div>
+</header>
+
+<div class="row r3">
+  <div class="card">
+    <span class="tag" style="background:var(--terra)">问题</span>
+    <h2>用户遥测里藏着操作经验，但现成的技能学习方法都用不上</h2>
+    <div class="three">
+      <div><b>没有目标</b>日志只记点了什么，不记为什么点。</div>
+      <div><b>不能重放</b>不能请用户为了验证新技能把任务再做一遍，环境也未必可复位。</div>
+      <div><b>任务交织</b>一段日志里可能夹着几件事，没有边界标记。</div>
+    </div>
+    <p style="margin-top:8px; font-size:18.5px">执行式的技能修订（如 SkillOpt）每次编辑都靠在线跑任务验证——这一步在遥测场景里正好缺失。</p>
+  </div>
+  <div class="card">
+    <span class="tag" style="background:var(--ok)">研究动作</span>
+    <h2>把“预测已记录动作”当作准入信号</h2>
+    <p>先由同一骨干从整段轨迹推一个目标；再让代理带着当前技能库，逐步预测日志里的下一个动作，每步无论对错都把<b>真实记录的动作</b>接进历史（teacher forcing）。逐轨迹的预测准确率称为 <b>skill-guided progress Q</b>。编辑只有让留出 dev 日志上的平均 Q <b>严格上升</b>才被接受；最终库冻结后，才拿去在线环境做新任务。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="reel">
+    <h2>机制：一条日志如何变成一次技能编辑</h2>
+    <div class="lead">以下帧为示意，改写自论文 §2.2 的真实案例：记录中的用户把 “assigned to” 条件留空直接点了 Run，而预测器擅自填了一个用户名。</div>
+    <div class="strip">
+      <div class="frames">
+        <div class="fr okf"><span class="mk">✓</span><div class="n">STEP 1</div>记录<div class="rec">click('Filter')</div>预测<div class="pred">click('Filter')</div></div>
+        <div class="fr okf"><span class="mk">✓</span><div class="n">STEP 2</div>记录<div class="rec">select_option( 字段 = 'Install status')</div>预测<div class="pred">同左</div></div>
+        <div class="fr okf"><span class="mk">✓</span><div class="n">STEP 3</div>记录<div class="rec">select_option( 'Assigned to', '=')</div>预测<div class="pred">同左</div></div>
+        <div class="fr bad"><span class="mk">✗</span><div class="n">STEP 4 · 首个错误</div>记录<div class="rec">click('Run')</div>预测<div class="pred">select_option( 'Unassigned')</div></div>
+        <div class="fr after"><div class="n">STEP 5</div>历史里接的是<b>记录动作</b> click('Run')，后续照常打分</div>
+        <div class="fr after"><div class="n">…</div>CSS 选择器、nth=0 这类不可从页面推知的目标只进历史、不计分</div>
+      </div>
+    </div>
+    <div class="tf"><span><b>Q(τ, ℳ)</b> = 可计分步中预测正确的比例</span><span>每条轨迹只取<b>第一个错误</b>交给优化器（含推断目标、前 8 步动作、预测与记录）</span></div>
+    <div class="pipe">
+      <div class="pbox"><b>Reflect</b>在 train 半边日志上跑预测器，收集至多 6 个首错案例（Q 最低者优先）</div>
+      <div class="parr">→</div>
+      <div class="pbox"><b>Edit</b>同一骨干当优化器，每步至多 3 处增 / 改 / 删；看得到此前被拒的编辑</div>
+      <div class="parr">→</div>
+      <div class="pbox gate"><b>Validate · 准入门</b>候选库与当前库在同一 dev 日志上比平均 Q：严格更高才替换，否则丢弃并记入“被拒清单”</div>
+      <div class="parr">→</div>
+      <div class="pbox"><b>冻结 → 上线</b>最终库 + 按工作流挑选的 8 条示范，进入在线新任务</div>
+    </div>
+    <div class="skill"><b>被这道门收下的一条技能（GPT-5.4，WorkArena L1，原文引用）</b>：“In list filters, if the needed value is absent or no value widget is available after setting field and operator, finish the filter by running it instead of guessing a value.”</div>
+  </div>
+</div>
+
+<div class="row res">
+  <div class="card">
+    <span class="tag" style="background:var(--ok)">结果 · 两个杠杆的 2×2 析因</span>
+    <h2>技能优化是主因，工作流检索要配合技能库才起作用</h2>
+    <div class="note">GPT-5.4；同一测试任务与步数上限；三个种子均值（Table 3）。大字为 WorkArena L1，下方小字为 L2 / Online-Mind2Web。</div>
+    <div class="fact">
+      <div></div><div class="fh">随机挑 8 条示范</div><div class="fh">按工作流挑 8 条示范</div>
+      <div class="fh">不做技能优化</div>
+      <div class="fc none"><div class="big">65.1</div><div class="sm">L2 54.2 · OM2W 72.9<br>（即 Random-k 基线）</div></div>
+      <div class="fc"><div class="big">66.8</div><div class="sm">L2 52.6 · OM2W 74.3<br>单独检索：+1.7 / −1.6 / +1.4</div></div>
+      <div class="fh">做技能优化</div>
+      <div class="fc"><div class="big">83.7</div><div class="sm">L2 60.8 · OM2W 75.1<br>单独技能：+18.6 / +6.6 / +2.2</div></div>
+      <div class="fc full"><div class="big">92.3</div><div class="sm">L2 61.8 · OM2W 80.6<br>两者合用比单独技能再 +8.6</div></div>
+    </div>
+    <table class="base">
+      <tr><th>WorkArena / OM2W 成功率（%）</th><th>L1</th><th>L2</th><th>OM2W</th></tr>
+      <tr><td>Naive（不用日志）</td><td>45.6</td><td>48.0</td><td>63.9</td></tr>
+      <tr><td>AWM</td><td>75.7</td><td>51.9</td><td>71.9</td></tr>
+      <tr><td>AWM + Random-k</td><td>80.3</td><td>60.4</td><td>70.2</td></tr>
+      <tr class="me"><td>TeleTune</td><td>92.3±2.0</td><td>61.8±2.8</td><td>80.6±4.1</td></tr>
+    </table>
+    <div class="note">Table 1。L2 上领先最强基线只有 1.4（标准差 2.8）；Mistral-3.5 骨干下与最强基线持平（Table 2）。</div>
+  </div>
+  <div class="card">
+    <span class="tag" style="background:var(--slate)">离线分数 vs 在线成功（一次运行）</span>
+    <h2>dev 上的 Q 涨，在线成功率也跟着涨</h2>
+    <div class="note">WorkArena L1，GPT-5.4 的一次优化运行；Q 从未见过在线结果。重绘自 Fig.3：实心点为原文给出的数值，空心点为本项目读图近似。</div>
+    <svg viewBox="0 0 700 430" width="100%" height="430">
+      <rect x="70" y="20" width="204" height="330" fill="#f3ead7"/>
+      <rect x="274" y="20" width="406" height="330" fill="#e6edf0"/>
+      <text x="172" y="42" text-anchor="middle" font-size="16" fill="#625b4e">工作流阶段（步 1–9）</text>
+      <text x="477" y="42" text-anchor="middle" font-size="16" fill="#625b4e">技能阶段（步 10–27）</text>
+      <g stroke="#d4cbb8" stroke-width="1">
+        <line x1="70" y1="350" x2="680" y2="350"/><line x1="70" y1="267.5" x2="680" y2="267.5"/><line x1="70" y1="185" x2="680" y2="185"/><line x1="70" y1="102.5" x2="680" y2="102.5"/><line x1="70" y1="20" x2="680" y2="20"/>
+      </g>
+      <g font-size="14" fill="#625b4e" text-anchor="end">
+        <text x="62" y="355">40</text><text x="62" y="272">55</text><text x="62" y="190">70</text><text x="62" y="107">85</text><text x="62" y="25">100</text>
+      </g>
+      <g font-size="14" fill="#625b4e" text-anchor="middle">
+        <text x="84" y="372">1</text><text x="263" y="372">9</text><text x="290" y="372">10</text><text x="510" y="372">20</text><text x="666" y="372">27</text>
+        <text x="375" y="398">优化步</text>
+      </g>
+      <polyline points="84,300.5 151,288 263,288 286,202 510,185 666,168.5" fill="none" stroke="#2e7d5b" stroke-width="4"/>
+      <circle cx="84" cy="300.5" r="7" fill="#fff" stroke="#2e7d5b" stroke-width="3"/>
+      <circle cx="263" cy="288" r="8" fill="#2e7d5b"/>
+      <circle cx="286" cy="202" r="9" fill="#2e7d5b"/>
+      <circle cx="510" cy="185" r="7" fill="#fff" stroke="#2e7d5b" stroke-width="3"/>
+      <circle cx="666" cy="168.5" r="9" fill="#2e7d5b"/>
+      <text x="200" y="320" font-size="15" fill="#2e7d5b" font-weight="700">Q 51.3</text>
+      <text x="300" y="228" font-size="15" fill="#2e7d5b" font-weight="700">66.9（第 10 步首次加入 6 条技能）</text>
+      <text x="628" y="200" font-size="15" fill="#2e7d5b" font-weight="700">73.0</text>
+      <polyline points="84,162.5 286,113 510,82 666,62.4" fill="none" stroke="#c0532f" stroke-width="3" stroke-dasharray="7 5"/>
+      <g fill="#c0532f">
+        <rect x="76" y="154.5" width="16" height="16" transform="rotate(45 84 162.5)"/>
+        <rect x="278" y="105" width="16" height="16" transform="rotate(45 286 113)"/>
+        <rect x="502" y="74" width="16" height="16" transform="rotate(45 510 82)"/>
+        <rect x="658" y="54.4" width="16" height="16" transform="rotate(45 666 62.4)"/>
+      </g>
+      <g font-size="16" font-weight="800" fill="#c0532f">
+        <text x="64" y="140">74.1</text><text x="246" y="98">83.1</text><text x="472" y="68">88.7</text><text x="618" y="48">92.3</text>
+      </g>
+      <g font-size="15">
+        <line x1="90" y1="412" x2="125" y2="412" stroke="#2e7d5b" stroke-width="4"/><text x="132" y="417" fill="#22201c">dev 日志上的 Q（离线）</text>
+        <line x1="350" y1="412" x2="385" y2="412" stroke="#c0532f" stroke-width="3" stroke-dasharray="7 5"/><text x="392" y="417" fill="#22201c">在线成功率（4 个检查点）</text>
+      </g>
+    </svg>
+    <div class="note">原文：32 步中 14 步被接受，最后 5 步无接受未画；Q 在工作流阶段约 50%，步 10 由 51.3 升到 66.9，最终 73.0；在线成功率 74.1 → 83.1 → 88.7 → 92.3。只有这一次运行、4 个点，是同向，不是校准过的预测。</div>
+  </div>
+</div>
+
+<div class="row trio">
+  <div class="card">
+    <h3>任务交织：人工打断训练日志</h3>
+    <div class="num">74.8 <s>对 Random-k 75.9</s></div>
+    <p>每 2–5 个动作以概率 q 插入另一任务的片段。q=1.0 时 L1 上 TeleTune 略低于 Random-k，AWM 跌到 49.3；L2 上 TeleTune 62.1 最高。q&gt;0 的格子都是单种子（Table 7）。</p>
+  </div>
+  <div class="card">
+    <h3>离线优化的代价</h3>
+    <div class="num">174M <s>tokens</s></div>
+    <p>L1 一次优化共 173.84M token，预测器打分占 99% 以上。若改用在线验证同样 32 个候选，作者估算约 2.8B，即 16 倍；L2 约 75 倍、Mind2Web 约 5 倍——这是反事实估算，不是实测（Table 4）。</p>
+  </div>
+  <div class="card">
+    <h3>推理时更贵</h3>
+    <div class="num">636.9K <s>对 343–386K</s></div>
+    <p>L1 每回合输入 token：库有 56 条技能、约 6.4K token，每步都重发。给 Random-k 加到 30 条示范（504.2K）成功率反而 63.7（§4.2、Table 8）。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="lim">
+    <h2>限制</h2>
+    <ul>
+      <li>没有用真实用户遥测：WorkArena 训练轨迹是 oracle 专家轨迹，Mind2Web 是标注者录制，“交织”是人工构造；WorkArena 的测试题是训练模板的其他种子，不是新任务类型。</li>
+      <li>“离线 Q 与在线成功率同向”只来自 L1 一次运行的 4 个检查点；准入门保证的是“预测更像记录”，不是任务成功的证明。推断目标由整段轨迹写成，可能带入后续信息（作者用提示词限制）。</li>
+      <li>5–75 倍节省为估算；推理阶段输入 token 比基线多约 65–85%；L2 与 Mistral-3.5 上的优势很小或没有。</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <span>来源：Chen, Stengel-Eskin, Chen, Llado, Counts, Bansal, Van Durme, Jhamtani, Verma. TeleTune, arXiv:2610.05437v2。逐数溯源见 SOURCE.md。</span>
+  <span>胶片帧为示意；曲线据 Fig.3 重绘（部分读图近似）；本项目未运行或复现实验。</span>
+</footer>
+</body>
+</html>

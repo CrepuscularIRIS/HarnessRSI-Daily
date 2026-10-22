@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillOS 分层拆解</title>
+<style>
+  :root {
+    --bg: #f0eff4;
+    --ink: #20212b;
+    --muted: #5d6070;
+    --ice: #d7ecf7;
+    --ice-d: #3a7ca5;
+    --repo: #fff6dc;
+    --repo-d: #a77a12;
+    --task: #e6f2e6;
+    --task-d: #3e7b4a;
+    --coral: #e0562e;
+    --coral-bg: #fde6dc;
+    --line: #d5d3de;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 21px; line-height: 1.5;
+    padding: 42px 60px 30px;
+  }
+  header { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: end; }
+  .kicker { font-size: 18px; letter-spacing: .24em; color: var(--coral); font-weight: 800; }
+  h1 { margin: 6px 0 6px; font-size: 58px; line-height: 1.14; font-weight: 900; letter-spacing: -.01em; }
+  h1 .ice { color: var(--ice-d); } h1 .hot { color: var(--coral); }
+  .sub { font-size: 23px; color: #393b48; }
+  .idcard { background: #fff; border: 2px solid var(--line); border-radius: 10px; padding: 12px 16px; font-size: 16px; line-height: 1.5; }
+  .idcard b { font-size: 18px; }
+  .row { display: grid; gap: 22px; margin-top: 28px; }
+  .r2 { grid-template-columns: 1fr 1fr; }
+  .card { background: #fff; border-radius: 10px; padding: 14px 20px; border: 2px solid var(--line); }
+  .tag { display: inline-block; font-size: 15px; font-weight: 800; color: #fff; padding: 2px 12px; border-radius: 20px; margin-bottom: 6px; letter-spacing: .08em; }
+  .card h2 { margin: 0 0 6px; font-size: 26px; }
+  .card p { margin: 0; font-size: 20px; }
+  .note { font-size: 15px; color: var(--muted); line-height: 1.42; }
+  /* exploded view */
+  .exploded { background: #fff; border-radius: 12px; border: 2px solid var(--line); padding: 16px 22px 14px; }
+  .xv { display: grid; grid-template-columns: 1fr 360px; gap: 18px; margin-top: 6px; }
+  .stack { position: relative; padding-left: 40px; }
+  .plate { position: relative; transform: skewX(-14deg); border-radius: 10px; padding: 16px 22px 16px 28px; margin: 0 30px 0 18px; box-shadow: 10px 12px 0 rgba(30,30,50,.10); }
+  .plate > .in { transform: skewX(14deg); }
+  .plate h3 { margin: 0 0 6px; font-size: 21px; display: flex; align-items: center; gap: 10px; }
+  .plate .lvl { position: absolute; left: -64px; top: 50%; transform: translateY(-50%) skewX(14deg); font-size: 34px; font-weight: 900; color: #c3c1cf; }
+  .p-task { background: var(--task); border: 2px solid var(--task-d); }
+  .p-repo { background: var(--repo); border: 2px solid var(--repo-d); }
+  .p-exec { background: var(--ice); border: 2px solid var(--ice-d); }
+  .gapz { height: 58px; position: relative; margin-left: 120px; }
+  .gapz .v { position: absolute; top: 0; bottom: 0; border-left: 3px dashed #9a98a8; }
+  .gapz span { position: absolute; top: 10px; font-size: 15.5px; color: var(--muted); background: #fff; padding: 0 6px; white-space: nowrap; }
+  .tasks { display: flex; gap: 10px; align-items: stretch; }
+  .tk { flex: 1; background: #fff; border: 2px solid var(--task-d); border-radius: 6px; padding: 8px 6px; text-align: center; font-size: 16px; line-height: 1.3; }
+  .tk b { display: block; font-size: 18px; color: var(--task-d); }
+  .tk.first { border-style: dashed; color: var(--muted); }
+  .tk.first b { color: var(--muted); }
+  .rewardbar { margin-top: 6px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+  .rewardbar .brace { flex: 1; height: 12px; border: 3px solid var(--coral); border-top: none; border-radius: 0 0 8px 8px; margin-left: 17%; }
+  .skills { display: flex; gap: 10px; }
+  .md { flex: 1; background: #fff; border: 1px solid #d9c38a; border-radius: 4px; font-family: "Noto Sans Mono CJK SC", monospace; font-size: 14.5px; line-height: 1.35; padding: 6px 8px; }
+  .md .fm { color: #8a6a10; border-bottom: 1px dashed #d9c38a; padding-bottom: 3px; margin-bottom: 3px; }
+  .ops { display: flex; gap: 8px; margin-top: 8px; font-size: 15px; }
+  .op { padding: 1px 10px; border-radius: 4px; font-family: "Noto Sans Mono CJK SC", monospace; font-weight: 700; }
+  .op.i { background: #e2f1df; color: #2f6a35; } .op.u { background: #fff0c8; color: #8a6a10; } .op.d { background: #f9dcd5; color: #a3341c; }
+  .execline { display: flex; gap: 14px; align-items: center; font-size: 18px; }
+  .lock { font-size: 34px; }
+  /* curator column */
+  .curator { background: var(--coral-bg); border: 3px solid var(--coral); border-radius: 12px; padding: 12px 16px; position: relative; }
+  .curator h3 { margin: 0 0 4px; font-size: 23px; color: var(--coral); }
+  .curator ul { margin: 4px 0 6px; padding-left: 20px; font-size: 16.5px; line-height: 1.45; }
+  .formula { background: #fff; border-radius: 8px; padding: 8px 10px; font-size: 16px; line-height: 1.5; border: 1px solid #f0b8a5; }
+  .formula .r { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 18px; }
+  .flowarrow { font-size: 15px; color: var(--coral); font-weight: 800; margin: 8px 0; display: flex; align-items: center; gap: 8px; }
+  .flowarrow::before { content: ""; flex: 0 0 36px; height: 3px; background: var(--coral); }
+  /* results */
+  .res { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 8px; }
+  .blk h3 { margin: 0 0 6px; font-size: 19px; }
+  .brow { display: grid; grid-template-columns: 180px 1fr 92px; align-items: center; gap: 8px; height: 47px; font-size: 16.5px; }
+  .brow .lab { text-align: right; font-weight: 700; line-height: 1.15; }
+  .brow .lab small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+  .track { position: relative; height: 22px; background: #f2f1f6; border-radius: 3px; }
+  .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; }
+  .err { position: absolute; top: -5px; bottom: -5px; border-left: 2px solid #333; border-right: 2px solid #333; }
+  .err::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px solid #333; }
+  .val { font-weight: 800; font-variant-numeric: tabular-nums; font-size: 17px; }
+  .val small { font-weight: 500; color: var(--muted); font-size: 13.5px; }
+  .hot .fill { background: var(--coral); } .hot .val { color: var(--coral); }
+  .gm .fill { background: #8f7bc0; }
+  .base .fill { background: #b9b6c8; }
+  .ax { display: grid; grid-template-columns: 180px 1fr 92px; gap: 8px; font-size: 12.5px; color: var(--muted); }
+  .ax div:nth-child(2) { display: flex; justify-content: space-between; }
+  .callout { margin-top: 6px; font-size: 16px; line-height: 1.45; padding: 6px 10px; border-radius: 6px; }
+  .callout.ok { background: #e9f4ea; } .callout.warn { background: #fff4d6; }
+  .trio { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 18px; }
+  .trio .card h3 { margin: 0 0 6px; font-size: 19px; }
+  .abl { display: grid; grid-template-columns: 1fr 70px; font-size: 16.5px; row-gap: 3px; font-variant-numeric: tabular-nums; }
+  .abl .n { text-align: right; font-weight: 800; }
+  .lim { background: #2b2c38; color: #f1f0f5; border-radius: 10px; padding: 14px 22px; }
+  .lim h2 { margin: 0 0 4px; font-size: 25px; color: #ffb59c; }
+  .lim ul { margin: 0; padding-left: 24px; font-size: 19.5px; line-height: 1.6; }
+  footer { position: absolute; left: 60px; right: 60px; bottom: 22px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="kicker">技能库自演化 · 分层拆解图</div>
+    <h1>执行器<span class="ice">冻住</span>，只<span class="hot">训练</span>写技能库的那一个</h1>
+    <div class="sub">SkillOS 让一个 8B “整理者”学会插入、改写、删除技能——奖励不看它刚处理的那道题，而看<b>后面相关的题</b>做得怎样。</div>
+  </div>
+  <div class="idcard"><b>SkillOS</b>（Google Cloud AI Research / UIUC / MIT）<br>arXiv 2605.06614v1<br>整理者 Qwen3-8B · GRPO · 16×H100<br><span class="note">ALFWorld / WebShop / AIME / GPQA</span></div>
+</header>
+
+<div class="row r2">
+  <div class="card">
+    <span class="tag" style="background:var(--ink)">问题</span>
+    <h2>整理决策的信用来得晚、来得间接</h2>
+    <p>一条技能写得好不好，要等以后某道相关任务用到它才知道；删除和改写的价值更难看出。手工整理不可扩展，规则式记忆操作拿不到下游反馈，已有 RL 工作要么教代理<b>用</b>技能，要么只在很短的任务流里学操作，难以学到改写、删除这类长期决策。</p>
+  </div>
+  <div class="card">
+    <span class="tag" style="background:var(--coral)">研究动作</span>
+    <h2>把训练样本做成“一组相关任务”</h2>
+    <p>按任务属性（ALFWorld 用自带的 6 类任务类型；数学题由 Gemini-2.5-Pro 标注主题、技能、易错点）把 5–12 道相关题串成一组，库从空开始。前面的轨迹由整理者写进库，后面的题检验这些写入——<b>后续任务的平均成功率</b>成为整理决策的主奖励。执行器始终冻结，只更新整理者。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="exploded">
+    <span class="tag" style="background:#6a5fa0">机制 · 拆解图（示意）</span>
+    <div class="xv">
+      <div class="stack">
+        <div class="plate p-task"><div class="in">
+          <span class="lvl">①</span>
+          <h3>任务组 G（训练时每步采样一组，库清空）</h3>
+          <div class="tasks">
+            <div class="tk first"><b>x₁</b>空库作答<br>不计奖励</div>
+            <div class="tk"><b>x₂</b>用库作答</div>
+            <div class="tk"><b>x₃</b>用库作答</div>
+            <div class="tk"><b>x₄</b>…</div>
+            <div class="tk"><b>x|G|</b>|G| = 5–12</div>
+          </div>
+          <div class="rewardbar"><div class="brace"></div><span style="color:var(--coral); font-weight:800">r_task = x₂…x|G| 的平均成功</span></div>
+        </div></div>
+        <div class="gapz"><div class="v"></div><span style="left:14px">每道题做完 → 轨迹交给整理者</span></div>
+        <div class="plate p-repo"><div class="in">
+          <span class="lvl">②</span>
+          <h3>SkillRepo：每条技能一个 Markdown 文件</h3>
+          <div class="skills">
+            <div class="md"><div class="fm">name: search-fallback<br>description: 找不到物品时…</div>穷尽搜索 → 确认缺失 → 找替代品 → 继续</div>
+            <div class="md"><div class="fm">name: look-under-lamp<br>description: 指令含“台灯下”…</div>先找物品，再到台灯处查看</div>
+            <div class="md"><div class="fm">name: verify-then-act<br>description: 元技能…</div>先核对条件，失败时换策略</div>
+          </div>
+          <div class="ops"><span class="op i">insert_skill</span><span class="op u">update_skill</span><span class="op d">delete_skill</span><span class="note" style="align-self:center">整理者只能通过这三种函数调用改库</span></div>
+        </div></div>
+        <div class="gapz"><div class="v"></div><span style="left:14px">BM25 取回相关技能 → 放进执行器提示</span></div>
+        <div class="plate p-exec"><div class="in">
+          <span class="lvl">③</span>
+          <h3><span class="op" style="background:#3a7ca5;color:#fff">FROZEN</span>冻结执行器（训练时 Qwen3-8B，ReAct）</h3>
+          <div class="execline"><span>参数从不更新；测试时换成 Qwen3-32B、Gemini-2.5-Pro、Gemini-3.1-Flash-Lite 也照样接这个库。</span></div>
+        </div></div>
+        <div class="note" style="margin-top:8px">技能卡片内容按论文附录 Figure 17/19 的案例意译缩写，示意；层间关系按 §3 与 Algorithm 1 绘制。</div>
+      </div>
+      <div class="curator">
+        <h3><span class="op" style="background:#e0562e;color:#fff;font-size:15px">TRAINABLE</span> 整理者（唯一被训练）</h3>
+        <div style="font-size:16px">Qwen3-8B，GRPO，组大小 8，学习率 1e-6，去掉 KL 项</div>
+        <div class="flowarrow">输入</div>
+        <ul><li>刚完成任务的轨迹</li><li>执行器<b>自己判断</b>的对错（LLM 自评，非真值）</li><li>BM25 取回的相关旧技能</li></ul>
+        <div class="flowarrow">输出</div>
+        <ul><li>一串 insert / update / delete 调用 → 改写 ②</li></ul>
+        <div class="flowarrow">奖励（每组一次）</div>
+        <div class="formula"><span class="r">r = r_task + 1.0·r_fc + 0.1·r_cnt + 0.05·r_comp</span><br>
+          r_task：后续题平均成功<br>r_fc：函数调用有效率<br>r_cnt：Qwen3-32B 评委打的内容分<br>r_comp：库越精简越高，防止照抄轨迹</div>
+        <div class="note" style="margin-top:8px">同一组任务采 8 条完整整理序列，各自演化出不同的库历史，用组内相对优势更新（§3.2.2）。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <span class="tag" style="background:var(--coral)">结果 · 同执行器对照</span>
+    <h2>ALFWorld 平均成功率：只换“整理者”，执行器与检索预算不变</h2>
+    <div class="note">同一冻结执行器、同一 BM25 检索预算、同一步数上限与解码温度；3 次运行均值 ± 标准差；测试为 ALFWorld valid_seen 140 题（Table 1，附录 B.3）。“未训练整理者”= 同一 Qwen3-8B 不做 RL。</div>
+    <div class="res">
+      <div class="blk">
+        <h3>执行器 Qwen3-8B（与训练时相同）</h3>
+        <div class="brow base"><div class="lab">无记忆</div><div class="track"><div class="fill" style="width:47.9%"></div><div class="err" style="left:46.7%; width:2.4%"></div></div><div class="val">47.9<small> ±1.2</small></div></div>
+        <div class="brow base"><div class="lab">ReasoningBank<small>最强外部基线</small></div><div class="track"><div class="fill" style="width:55.7%"></div><div class="err" style="left:52.6%; width:6.2%"></div></div><div class="val">55.7<small> ±3.1</small></div></div>
+        <div class="brow base"><div class="lab">未训练整理者</div><div class="track"><div class="fill" style="width:53.1%"></div><div class="err" style="left:50.6%; width:5%"></div></div><div class="val">53.1<small> ±2.5</small></div></div>
+        <div class="brow gm"><div class="lab">Gemini-2.5-Pro<small>当整理者</small></div><div class="track"><div class="fill" style="width:50.7%"></div><div class="err" style="left:47.1%; width:7.2%"></div></div><div class="val">50.7<small> ±3.6</small></div></div>
+        <div class="brow hot"><div class="lab">SkillOS<small>RL 训练的 8B 整理者</small></div><div class="track"><div class="fill" style="width:61.2%"></div><div class="err" style="left:56.6%; width:9.2%"></div></div><div class="val">61.2<small> ±4.6</small></div></div>
+        <div class="ax"><div></div><div><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div>
+        <div class="callout ok">这里差距清楚：训练过的 8B 整理者比同基座未训练版高 8.1，比 Gemini-2.5-Pro 直接当整理者高 10.5。</div>
+      </div>
+      <div class="blk">
+        <h3>执行器 Gemini-2.5-Pro（训练时没见过）</h3>
+        <div class="brow base"><div class="lab">无记忆</div><div class="track"><div class="fill" style="width:66.4%"></div><div class="err" style="left:64.4%; width:4%"></div></div><div class="val">66.4<small> ±2.0</small></div></div>
+        <div class="brow base"><div class="lab">MemP<small>最强外部基线</small></div><div class="track"><div class="fill" style="width:74.3%"></div><div class="err" style="left:70.9%; width:6.8%"></div></div><div class="val">74.3<small> ±3.4</small></div></div>
+        <div class="brow base"><div class="lab">未训练整理者</div><div class="track"><div class="fill" style="width:70.7%"></div><div class="err" style="left:67.7%; width:6%"></div></div><div class="val">70.7<small> ±3.0</small></div></div>
+        <div class="brow gm"><div class="lab">Gemini-2.5-Pro<small>当整理者</small></div><div class="track"><div class="fill" style="width:79.3%"></div><div class="err" style="left:76.7%; width:5.2%"></div></div><div class="val">79.3<small> ±2.6</small></div></div>
+        <div class="brow hot"><div class="lab">SkillOS<small>同一个 8B 整理者</small></div><div class="track"><div class="fill" style="width:80.2%"></div><div class="err" style="left:77.1%; width:6.2%"></div></div><div class="val">80.2<small> ±3.1</small></div></div>
+        <div class="ax"><div></div><div><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div><div></div></div>
+        <div class="callout warn">迁移到更强执行器仍明显高于无记忆（+13.8）与未训练整理者（+9.5）；但与 Gemini 当整理者只差 0.9，误差棒重叠，<b>不能说更好</b>。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row trio">
+  <div class="card">
+    <h3>消融（ALFWorld，Qwen3-8B 执行器）</h3>
+    <div class="abl">
+      <span>完整 SkillOS</span><span class="n">61.2</span>
+      <span>去掉任务分组（随机任务序列）</span><span class="n" style="color:var(--coral)">57.3</span>
+      <span>去掉内容质量奖励</span><span class="n">58.6</span>
+      <span>去掉压缩奖励</span><span class="n">60.0</span>
+    </div>
+    <div class="note" style="margin-top:4px">Table 3 只报均值；去分组的 −3.9 小于完整方法自身的标准差 4.6。</div>
+  </div>
+  <div class="card">
+    <h3>整理者行为怎么变</h3>
+    <p style="font-size:16.5px; line-height:1.45">训练初期几乎全是 insert；随训练推进 update 占比上升、insert 下降，delete 一直占小头但略增（Fig.4）。库里逐渐出现验证、回退规划等“元技能”（Fig.5）。这些是过程观察，没有逐条技能的因果检验。</p>
+  </div>
+  <div class="card">
+    <h3>其他任务：增益更小</h3>
+    <p style="font-size:16.5px; line-height:1.45">Qwen3-8B 执行器：WebShop 成功率 16.5（未训练整理者 13.6，无记忆 9.8）；推理三项平均 73.8（无记忆 69.6）。AIME24/25 各只有 30 题，作者也说推理题的增益普遍小于代理任务（Table 2）。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="lim">
+    <h2>限制</h2>
+    <ul>
+      <li>ALFWorld 测试集是 valid_seen（见过的房间布局），不是未见环境；评测时整理者仍按执行器的<b>自评对错</b>在线改库，原文没有写明测试流是否从空库开始。</li>
+      <li>对比不含训练成本：整理者训练用 16 张 H100，ALFWorld 约 3 天、WebShop 约 5 天；内容奖励来自 Qwen3-32B 评委，不是人工或真值。</li>
+      <li>平均成功率在 3 次运行间的标准差为 0.7–4.6 分，部分对照（Gemini 执行器下与 Gemini 整理者、消融各项）落在噪声范围内；复合奖励也不能给单条技能的因果信用。</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <span>来源：Ouyang et al. SkillOS: Learning Skill Curation for Self-Evolving Agents, arXiv:2605.06614v1。逐数溯源见 SOURCE.md。</span>
+  <span>拆解图为示意；条形图按 Table 1 数值重绘；本项目未运行或复现实验。</span>
+</footer>
+</body>
+</html>

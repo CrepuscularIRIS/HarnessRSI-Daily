@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ServeLearnBench 成绩单</title>
+<style>
+  :root {
+    --paper: #fbfaf4;
+    --rule: #cfe0ee;
+    --margin: #e8a3a0;
+    --ink: #1f2a37;
+    --pencil: #5f6670;
+    --red: #c8312b;
+    --red-bg: #fbe9e7;
+    --blue: #1f5fa8;
+    --blue-bg: #e6eff9;
+    --green: #2f7d4f;
+    --line: #d9d4c4;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 21px; line-height: 1.5;
+    background-color: var(--paper);
+    background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 37px, var(--rule) 37px, var(--rule) 38px);
+    padding: 40px 60px 30px 132px;
+  }
+  body::before { content: ""; position: absolute; left: 100px; top: 0; bottom: 0; width: 3px; background: var(--margin); }
+  .holes { position: absolute; left: 34px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-around; }
+  .holes i { display: block; width: 30px; height: 30px; border-radius: 50%; background: #e6e2d6; box-shadow: inset 2px 2px 4px rgba(0,0,0,.18); }
+  .kai { font-family: "AR PL KaitiM GB", "Noto Serif CJK SC", serif; }
+  header { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; background: var(--paper); }
+  .sheet { font-size: 18px; letter-spacing: .3em; color: var(--pencil); border-bottom: 2px solid var(--ink); padding-bottom: 6px; display: flex; justify-content: space-between; }
+  h1 { margin: 12px 0 4px; font-size: 60px; line-height: 1.12; font-weight: 900; }
+  h1 .strike { color: var(--red); }
+  .sub { font-size: 23px; color: #3a4552; }
+  .stamp { border: 4px double var(--red); color: var(--red); border-radius: 10px; padding: 10px 14px; transform: rotate(-4deg); margin-top: 16px; background: rgba(251,250,244,.92); }
+  .stamp .big { font-size: 34px; font-weight: 900; letter-spacing: .08em; }
+  .stamp .sm { font-size: 15.5px; line-height: 1.4; color: #8e2a25; }
+  .row { display: grid; gap: 22px; margin-top: 30px; }
+  .r2 { grid-template-columns: 1fr 1fr; }
+  .card { background: #fff; border: 2px solid var(--line); border-radius: 6px; padding: 14px 20px 14px; position: relative; }
+  .q-no { position: absolute; top: -16px; left: 16px; background: var(--ink); color: #fff; font-size: 16px; font-weight: 700; padding: 2px 12px; border-radius: 3px; letter-spacing: .1em; }
+  .card h2 { margin: 6px 0 6px; font-size: 26px; }
+  .card p { margin: 0; font-size: 21px; }
+  .card ul { margin: 4px 0 0; padding-left: 22px; font-size: 20.5px; }
+  .card li { margin: 2px 0; }
+  .note { font-size: 15px; color: var(--pencil); line-height: 1.42; }
+  .pen { color: var(--red); font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-style: italic; }
+  /* mechanism */
+  .mech { display: grid; grid-template-columns: 1fr 330px; gap: 20px; }
+  .grid { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .grid th { font-weight: 700; color: var(--pencil); font-size: 14.5px; padding: 2px 0; }
+  .grid td { text-align: center; padding: 1px 0; height: 31px; }
+  .grid td.lab { text-align: left; font-size: 16px; color: #333; white-space: nowrap; padding-right: 8px; width: 290px; }
+  .dot { display: inline-block; width: 20px; height: 20px; border-radius: 50%; border: 2px solid #9aa4ae; vertical-align: middle; }
+  .dot.on { background: var(--blue); border-color: var(--blue); }
+  .dot.on.p { background: #6d8db0; border-color: #6d8db0; }
+  .phase td { padding-top: 4px; }
+  .split { display: flex; height: 26px; border-radius: 4px; overflow: hidden; font-size: 12.5px; color: #fff; font-weight: 700; margin: 0 3px; }
+  .split .s { background: #4c8a63; display: flex; align-items: center; justify-content: center; }
+  .split .t { background: #8d6a2e; display: flex; align-items: center; justify-content: center; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14.5px; color: #333; margin-top: 6px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { display: inline-block; width: 18px; height: 14px; border-radius: 2px; }
+  .sees { font-size: 17.5px; }
+  .sees h3 { margin: 4px 0 4px; font-size: 19px; }
+  .sees .yes { color: var(--green); }
+  .sees .no { color: var(--red); }
+  .sees ul { padding-left: 20px; margin: 0 0 10px; font-size: 17.5px; }
+  .freeze { border: 2px dashed var(--ink); border-radius: 6px; padding: 8px 10px; font-size: 16px; background: #f3f5f7; margin-top: 6px; }
+  /* score ruler */
+  .ruler { position: relative; height: 350px; margin: 8px 6px 0 6px; }
+  .axis { position: absolute; left: 150px; right: 10px; bottom: 30px; height: 2px; background: var(--ink); }
+  .tick { position: absolute; bottom: 8px; font-size: 13.5px; color: var(--pencil); transform: translateX(-50%); }
+  .bar { position: absolute; left: 150px; height: 26px; border-radius: 0 4px 4px 0; }
+  .blab { position: absolute; left: 0; width: 140px; text-align: right; font-size: 17px; font-weight: 700; }
+  .bval { position: absolute; font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .vline { position: absolute; top: 0; bottom: 30px; width: 0; border-left: 3px dashed; }
+  .vtag { position: absolute; top: -4px; font-size: 15px; font-weight: 800; padding: 0 6px; background: var(--paper); transform: translateX(-50%); white-space: nowrap; }
+  .gap { position: absolute; top: 10px; height: 2px; background: var(--red); }
+  .side { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 10px; }
+  .mini { border: 2px solid var(--line); border-radius: 6px; padding: 10px 14px; background: #fff; }
+  .mini h3 { margin: 0 0 4px; font-size: 18.5px; }
+  .mini .num { font-size: 30px; font-weight: 900; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .mini .num s { text-decoration: none; color: var(--pencil); font-size: 22px; font-weight: 700; }
+  .mini p { margin: 2px 0 0; font-size: 16.5px; color: #3a4552; line-height: 1.4; }
+  .lim { border: 3px solid var(--red); background: var(--red-bg); border-radius: 6px; padding: 12px 20px; }
+  .lim h2 { margin: 0 0 4px; font-size: 25px; color: var(--red); }
+  .lim ol { margin: 0; padding-left: 24px; font-size: 19.5px; line-height: 1.55; }
+  footer { position: absolute; left: 132px; right: 60px; bottom: 22px; font-size: 13.5px; color: var(--pencil); display: flex; justify-content: space-between; gap: 20px; background: var(--paper); }
+</style>
+</head>
+<body>
+<div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<header>
+  <div>
+    <div class="sheet"><span>持续学习 HARNESS · 期中测验成绩单</span><span>ServeLearnBench · arXiv 2610.07792v1</span></div>
+    <h1>会做题，<span class="strike">不等于</span>会从服务经验里学</h1>
+    <div class="sub">策略对代理隐藏、还会随时间改变：五种 harness × 六个模型，能否只凭结果反馈推断出规则？</div>
+  </div>
+  <div class="stamp">
+    <div class="big">学习缺口</div>
+    <div class="sm">告诉规则：Oracle 平均 95.4<br>不告诉也不学：Blind 14.1<br>（六模型 Hidden 均值，Table 2）</div>
+  </div>
+</header>
+
+<div class="row r2">
+  <div class="card">
+    <span class="q-no">第一题 · 问题</span>
+    <h2>现有评测把“执行能力”和“学到知识”混在一起</h2>
+    <p>有的基准直接把目标知识写进输入，有的假设环境不变。持续学习 harness（RAG、Mem0、SkillOpt、Continual Harness、Prime）都会更新记忆或技能，但<b>能更新不代表学到了可复用的知识</b>。要回答它们到底学到多少，需要规则隐藏、会变、并且能把学习收益与副作用分开计算。</p>
+  </div>
+  <div class="card">
+    <span class="q-no">第二题 · 研究动作</span>
+    <h2>两把参照尺 + 两类考题</h2>
+    <ul>
+      <li><b>Blind / Oracle</b>：同一模型、同一题目，不给规则也不学习 / 每窗直接给出当前规则 → 量出“可学的空间”。</li>
+      <li><b>Hidden-Dependent / Fully Specified</b>：前者必须靠推断规则，后者可见信息已足够 → 同时测学习收益和对已会题目的损伤。</li>
+      <li>3 个领域（Retail / Banking / Pitch）× 3 档，53 个窗口，4,508 道服务题 + 3,210 道测试题。</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <span class="q-no">第三题 · 机制图</span>
+    <h2>隐藏规则逐窗开关；每窗先“带反馈服务”，再冻结状态“无反馈考试”</h2>
+    <div class="mech">
+      <div>
+        <table class="grid">
+          <tr><th style="text-align:left">Retail L3 隐藏规则（激活 = 偏离文档）</th><th>W0</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>W7</th></tr>
+          <tr><td class="lab">Z1-A 禁止换货：音频类</td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z1-E 禁止换货：电子类</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z2-G 禁止取消：礼品卡支付</td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z2-S 禁止取消：拆分支付</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z3-O 允许原路退款</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z3-V 仅 Visa 卡允许原路退款</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z4 允许退清仓商品</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot on"></i></td></tr>
+          <tr><td class="lab">Z7-FL 禁止换货寄往佛州</td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z7-TX 禁止换货寄往得州</td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot on"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td><td><i class="dot"></i></td></tr>
+          <tr><td class="lab">Z5 / Z6 / Z8（全程激活的 3 条）</td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td><td><i class="dot on p"></i></td></tr>
+          <tr class="phase"><td class="lab" style="color:var(--pencil)">每窗 服务题 / 测试题</td>
+            <td><div class="split"><span class="s" style="flex:78">78</span><span class="t" style="flex:60">60</span></div></td>
+            <td><div class="split"><span class="s" style="flex:75">75</span><span class="t" style="flex:65">65</span></div></td>
+            <td><div class="split"><span class="s" style="flex:84">84</span><span class="t" style="flex:68">68</span></div></td>
+            <td><div class="split"><span class="s" style="flex:78">78</span><span class="t" style="flex:67">67</span></div></td>
+            <td><div class="split"><span class="s" style="flex:77">77</span><span class="t" style="flex:76">76</span></div></td>
+            <td><div class="split"><span class="s" style="flex:74">74</span><span class="t" style="flex:72">72</span></div></td>
+            <td><div class="split"><span class="s" style="flex:80">80</span><span class="t" style="flex:64">64</span></div></td>
+            <td><div class="split"><span class="s" style="flex:78">78</span><span class="t" style="flex:65">65</span></div></td></tr>
+        </table>
+        <div class="legend">
+          <span><i class="dot on"></i>该窗激活</span><span><i class="dot"></i>未激活（按文档执行）</span>
+          <span><i class="sw" style="background:#4c8a63"></i>服务题：有结果反馈，可更新状态</span>
+          <span><i class="sw" style="background:#8d6a2e"></i>测试题：从冻结状态独立作答，不回传</span>
+        </div>
+        <div class="note" style="margin-top:4px">据附录 Table 6/7/8 重绘（Retail L3 全部 12 条规则；其中 3 条全程激活合并为一行）。可以看到引入、撤销与重新出现：Z2-G 在 W1 出现、W2 撤销、W3 回归；Z4 在 W2 出现、W6 回归。</div>
+      </div>
+      <div class="sees">
+        <h3 class="yes">学习者能看到</h3>
+        <ul><li>题面与工具返回</li><li>自己的轨迹 / 回答</li><li>一个分数（结果反馈）</li><li>自己的持久状态</li></ul>
+        <h3 class="no">学习者看不到</h3>
+        <ul><li>规则描述、规则族标签</li><li>正确动作或纠错说明</li><li>题目属于 Hidden 还是 Fully Specified</li><li>测试题的轨迹与分数</li></ul>
+        <div class="freeze"><b>冻结协议（附录 B.3）</b>：服务题与计划内更新结束后冻结状态，每道测试题从同一状态独立运行，局部状态丢弃；测试结果不进入任何更新、验证或候选选择。</div>
+        <div class="note" style="margin-top:6px">例外：SkillOpt 的调度器利用了窗口分段来安排更新与重放（附录 B.2），提示词中没有窗口标签。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <span class="q-no">第四题 · 结果（有对照条件）</span>
+    <h2>Hidden 题得分：五种 harness 都落在 Blind 与 Oracle 之间，最好的也离 Oracle 很远</h2>
+    <div class="note">同一批测试题、同一模型与推理强度、同一每题预算（50 次工具调用 / 100 轮）、只给分数反馈；四个开源权重模型（Kimi K3、GLM-5.3、DeepSeek V4.1 Flash、GLM-5.3 Flash）× 九个设置等权平均，冻结状态下的测试分（Table 3）。</div>
+    <div class="ruler">
+      <div class="axis"></div>
+      <div class="tick" style="left:150px">0</div>
+      <div class="tick" style="left:calc(150px + (100% - 160px) * .25)">25</div>
+      <div class="tick" style="left:calc(150px + (100% - 160px) * .5)">50</div>
+      <div class="tick" style="left:calc(150px + (100% - 160px) * .75)">75</div>
+      <div class="tick" style="left:calc(150px + (100% - 160px))">100</div>
+      <div class="vline" style="left:calc(150px + (100% - 160px) * .138); border-color:#7a8591"></div>
+      <div class="vtag" style="left:calc(150px + (100% - 160px) * .138); color:#55606b; top:-4px">Blind 13.8</div>
+      <div class="vline" style="left:calc(150px + (100% - 160px) * .945); border-color:var(--green)"></div>
+      <div class="vtag" style="left:calc(150px + (100% - 160px) * .945); color:var(--green)">Oracle ≈94.5</div>
+
+      <div class="blab" style="top:44px">Prime</div>
+      <div class="bar" style="top:44px; width:calc((100% - 160px) * .617); background:var(--blue)"></div>
+      <div class="bval" style="top:44px; left:calc(158px + (100% - 160px) * .617); color:var(--blue)">61.7</div>
+      <div class="blab" style="top:100px">CH</div>
+      <div class="bar" style="top:100px; width:calc((100% - 160px) * .577); background:var(--blue)"></div>
+      <div class="bval" style="top:100px; left:calc(158px + (100% - 160px) * .577); color:var(--blue)">57.7</div>
+      <div class="blab" style="top:156px">RAG</div>
+      <div class="bar" style="top:156px; width:calc((100% - 160px) * .434); background:#7d9cbf"></div>
+      <div class="bval" style="top:156px; left:calc(158px + (100% - 160px) * .434); color:#4d6a8c">43.4</div>
+      <div class="blab" style="top:212px">SkillOpt</div>
+      <div class="bar" style="top:212px; width:calc((100% - 160px) * .398); background:#7d9cbf"></div>
+      <div class="bval" style="top:212px; left:calc(158px + (100% - 160px) * .398); color:#4d6a8c">39.8</div>
+      <div class="blab" style="top:268px">Mem0</div>
+      <div class="bar" style="top:268px; width:calc((100% - 160px) * .383); background:#7d9cbf"></div>
+      <div class="bval" style="top:268px; left:calc(158px + (100% - 160px) * .383); color:#4d6a8c">38.3</div>
+      <div class="pen" style="position:absolute; top:170px; left:calc(150px + (100% - 160px) * .70); font-size:26px; line-height:1.25;">离 Oracle 还差<br>约 33–56 分</div>
+    </div>
+    <div class="note">Blind / Oracle 两条线由本项目按 Table 2 中上述四个模型的 Avg. H 求均值（论文正文给的是六模型均值 14.1 / 95.4）；“差约 33–56 分”是 94.5 减各 harness 分数的本项目算术。</div>
+    <div class="side">
+      <div class="mini">
+        <h3>最难的一档也最诚实</h3>
+        <div class="num">59.6 <s>/ 中位 22.0</s></div>
+        <p>Retail L3（规则反转、撤销、重新出现）：28 个模型–harness 组合里最好的是 GLM-5.3 + CH 59.6，中位数 22.0（§1、Table 2）。</p>
+      </div>
+      <div class="mini">
+        <h3>适应会伤到已会的题</h3>
+        <div class="num">98.9 <s>→ 89.5–95.5</s></div>
+        <p>Retail Fully Specified：Blind 98.9，所有学习 harness 都更低；Banking 91.7 对 83.6–86.2，只有 Prime 95.2、Mem0 92.7 不降（§5.2，四模型均值）。</p>
+      </div>
+      <div class="mini">
+        <h3>推断规则很贵</h3>
+        <div class="num">$2,479 <s>对 $102</s></div>
+        <p>Kimi K3 上 Prime 与 Oracle 的总成本（Table 2）；推断隐藏策略的成本是照着已披露策略做的 4–101 倍（§1）。</p>
+      </div>
+    </div>
+    <p style="margin-top:10px; font-size:18px;"><b>附带观察（相关，非因果）</b>：五种 harness 的探索 AUC（同一策略下尝试过的不同答案数）为 Prime 1.16、CH 1.02、RAG 0.88、Mem0 0.65、SkillOpt 0.51，与 Hidden 得分排序完全一致（Spearman ρ=1.00，只有 5 个点；harness–领域–档位 30 格上 ρ=0.75，§5.3、附录 D.3）。</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="lim">
+    <h2>阅卷说明 · 这份成绩单不能说明什么</h2>
+    <ol>
+      <li>每个格子只跑一次，没有标准误或置信区间（Table 3 注）；30 个组合中有 2 个因成本未跑（Opus 5 与 GPT-5.6 Terra 无 Prime）。</li>
+      <li>五种 harness 保留各自的更新频率、重放方式、状态容量与学习侧算力，作者明言<b>不是等预算比较</b>；Prime 自带更强的代码代理运行时，CH 与 Prime 的差距含运行时差异（附录 B.2）。不能据此说某种架构因果更强。</li>
+      <li>探索与得分同序只是相关；Pitch 由固定的 GLM-5.3 Flash 评委打分；Fully Specified 的下降相对的是 Blind，Opus 5 在 Blind 下对 Banking 的已知规则题也会自行猜测限制（附录 D.6），所以不全是“学习造成的损伤”。</li>
+    </ol>
+  </div>
+</div>
+
+<footer>
+  <span>来源：Zheng, Di, Sadhukhan, Jin, Chen. ServeLearnBench (CMU / Amazon), arXiv:2610.07792v1。数字逐条见 SOURCE.md。</span>
+  <span>规则网格据附录表格重绘；条形图为论文表格数值重绘；本项目未运行或复现实验。</span>
+</footer>
+</body>
+</html>
