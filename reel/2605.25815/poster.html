@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>EvoMap 审计画报</title>
+<style>
+/* 版式：审计类，报纸式“声称 vs 实测”双栏核查，逐条盖章；新闻纸 + 黑 + 印章红 */
+@page { size: 1600px 2263px; margin: 0; }
+:root{ --paper:#f4efe3; --ink:#161412; --red:#b3121f; --mute:#6f675c; --rule:#1614122e; --hi:#fff6c9; --card:#fbf8f0; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:2263px;overflow:hidden;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans CJK SC","Noto Sans SC",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.serif{font-family:"Noto Serif CJK SC","Noto Serif SC",serif}
+.mono{font-family:"Noto Sans Mono CJK SC",monospace}
+.wrap{padding:36px 60px 26px}
+.mast{border-top:8px solid var(--ink);border-bottom:2px solid var(--ink);padding:10px 0 8px;display:flex;justify-content:space-between;align-items:baseline;font-size:17px;letter-spacing:2px}
+.mast b{font-family:"Noto Serif CJK SC",serif;font-size:26px;letter-spacing:6px}
+h1{font-family:"Noto Serif CJK SC",serif;font-size:56px;line-height:1.2;font-weight:900;margin:18px 0 10px}
+h1 u{text-decoration:none;background:linear-gradient(transparent 62%,#f2c94c 62%)}
+.dek{font-size:23px;line-height:1.6;color:#2c2925}
+.byline{margin-top:10px;font-size:15px;color:var(--mute);border-bottom:1px solid var(--ink);padding-bottom:10px}
+/* 核查表 */
+.ck{margin-top:14px}
+.ckh{display:grid;grid-template-columns:360px 1fr 160px;gap:0;font-size:17px;font-weight:700;letter-spacing:2px;border-bottom:3px double var(--ink);padding:6px 0}
+.row{display:grid;grid-template-columns:360px 1fr 160px;border-bottom:1px solid var(--rule);padding:18px 0;align-items:center}
+.claim{padding-right:22px;font-family:"Noto Serif CJK SC",serif;font-size:23px;line-height:1.45}
+.claim small{display:block;font-family:"Noto Sans CJK SC",sans-serif;font-size:15px;color:var(--mute);margin-top:4px;line-height:1.4}
+.meas{border-left:1px solid var(--rule);padding:0 22px;font-size:19px;line-height:1.6}
+.meas .n{font-family:"Noto Serif CJK SC",serif;font-weight:900;font-size:36px;color:var(--red);margin-right:4px}
+.stamp{justify-self:center;transform:rotate(-8deg);border:3px solid var(--red);color:var(--red);font-weight:900;font-size:22px;padding:6px 10px;text-align:center;line-height:1.25;border-radius:4px;letter-spacing:1px}
+.stamp.gray{border-color:var(--mute);color:var(--mute)}
+/* 验证堆叠条 */
+.feat{display:grid;grid-template-columns:1.15fr 1fr;gap:30px;margin-top:22px}
+.box{border:2px solid var(--ink);background:var(--card);padding:16px 20px}
+.box h2{font-family:"Noto Serif CJK SC",serif;font-size:26px;font-weight:900;margin-bottom:4px}
+.box .k{font-size:16px;color:var(--mute);margin-bottom:12px;line-height:1.45}
+.stack{display:flex;height:96px;border:2px solid var(--ink)}
+.stack div{display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:15px;line-height:1.2;text-align:center;border-right:2px solid var(--ink)}
+.stack div:last-child{border-right:0}
+.stack b{font-size:24px;font-family:"Noto Serif CJK SC",serif}
+.brk{display:grid;grid-template-columns:66fr 16fr 2.2fr 15.8fr;font-size:13px;color:var(--mute);margin-top:4px}
+.bounds{margin-top:12px;font-size:17px;line-height:1.6}
+.bounds b{color:var(--red)}
+.den{margin-top:14px;border-top:3px double var(--ink);padding-top:10px}
+.den h3{font-size:19px;margin-bottom:6px}
+.den table{width:100%;border-collapse:collapse;font-size:16px}
+.den td{padding:5px 6px;border-bottom:1px dotted var(--mute);vertical-align:top;line-height:1.4}
+.den td:first-child{white-space:nowrap;font-weight:700;width:110px}
+/* 元数据干预 */
+.pr{position:relative;height:100px;margin:10px 14px 0}
+.pr .bar{position:absolute;left:0;right:0;top:36px;height:12px;background:linear-gradient(90deg,#e7e0cf,#b9ad94)}
+.pr .lab{position:absolute;bottom:0;font-size:13px;color:var(--mute)}
+.mk{position:absolute;top:0;transform:translateX(-50%);text-align:center;font-size:14px;line-height:1.2;width:110px}
+.mk b{display:block;font-family:"Noto Serif CJK SC",serif;font-size:21px}
+.mk i{display:block;width:3px;height:30px;background:var(--ink);margin:2px auto 0}
+.mk.r b{color:var(--red)} .mk.r i{background:var(--red)}
+.mk span{display:block;margin-top:18px}
+.loo .r{display:grid;grid-template-columns:150px 1fr 130px;gap:10px;align-items:center;margin:7px 0;font-size:17px}
+.loo .t{height:20px;background:#e7e0cf;position:relative}
+.loo .f{position:absolute;right:0;top:0;height:100%;background:var(--red)}
+.loo .v{font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px;text-align:right}
+.fx{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.fx .s{border:2px solid var(--red);padding:12px 10px;font-size:15px;line-height:1.4;text-align:center;background:#fff}
+.fx .s b{display:block;font-size:18px;font-family:"Noto Serif CJK SC",serif}
+.fx .s span{display:block;font-size:15px;margin:6px 0}
+.fx .s em{font-style:normal;color:var(--red);font-weight:700;font-size:14px}
+.fx .s.ok{border-color:var(--mute)} .fx .s.ok em{color:var(--mute)}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:28px}
+.col{border-top:3px solid var(--ink);padding-top:8px;font-size:18px;line-height:1.6}
+.col h3{font-family:"Noto Serif CJK SC",serif;font-size:23px;margin-bottom:4px}
+.col .red{color:var(--red);font-weight:700}
+.foot{margin-top:14px;border-top:2px solid var(--ink);padding-top:8px;font-size:14px;color:var(--mute);display:flex;justify-content:space-between;gap:20px}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="mast"><span>HarnessRSI · 精选 Reel</span><b>审 计 版</b><span>F2 / F5 · 证据门控留存 · 诊断自改进</span></div>
+
+<h1>排名分和验证日志都由代理<u>自己报</u>：<br>对共享技能网络 EvoMap 的实地审计</h1>
+<p class="dek">EvoMap 让代理把可复用的“资产”（Gene 规范 + Capsule 实现 + 进化事件）发布到中心 Hub，用 GDI 分数决定晋升与排名，并要求本地验证命令通过。作者抓取 47 天快照，并在真实平台上做元数据单字段干预。结果显示：自报元数据和空验证都担保不了共享资产的质量，平台的“留存门”在实际运行中基本没有起作用。</p>
+<div class="byline mono">arXiv:2605.25815v4（2026-08-06）· Ye, Zhang, He, Peng, Tyson · HKUST（广州）· 快照 2026-02-11 至 03-30：799,389 Gene · 792,481 Capsule · 128,054 代理 · 92,414 悬赏</div>
+
+<div class="ck">
+  <div class="ckh"><span>平台的设计声称</span><span style="padding-left:22px">论文的实测</span><span style="text-align:center">核查结论</span></div>
+  <div class="row">
+    <div class="claim">共享 Hub 让代理复用彼此已验证的解法<small>Reusability · §4</small></div>
+    <div class="meas"><span class="n">98%</span>资产从未被调用；被调用的 Capsule 有 97% 成功复用。59% 资产不属于任何语义簇；簇内被调用比例平均 0.31%，且 92.8% 的被调用资产比簇内 90% 同类更早创建（暴露时间更长，作者承认有混杂）。</div>
+    <div class="stamp">复用<br>稀少</div>
+  </div>
+  <div class="row">
+    <div class="claim">积分奖励有价值的贡献，优胜资产随时间浮现<small>Evolution · §5.1</small></div>
+    <div class="meas"><span class="n">75%</span>资产获晋升，但前 10% 代理占全部晋升资产的 82.1%；只有 19% 的代理有资产被复用过。悬赏解决率 18%，前 10% 代理拿走 74% 的悬赏积分。奖励与“发布”绑定，而不是与“被采用”绑定。</div>
+    <div class="stamp">奖励<br>发布量</div>
+  </div>
+  <div class="row">
+    <div class="claim">GDI 按四个维度综合评价质量：内在 0.35 · 使用 0.30 · 社交 0.20 · 新鲜度 0.15<small>Evolution · §5.2 式(1)(2)</small></div>
+    <div class="meas">用实测 GDI 回归四个分量：0.35 · 0.29 · 0.17 · 0.10（R²=0.995）。但 <span class="n" style="font-size:24px">99%</span>资产使用分 &lt;0.1、99% 零投票，73% 创建不满 30 天，后三维几乎没有区分度，<b>排名实际由“内在分”决定</b>；而内在分 6 项里有 5 项是自报元数据。</div>
+    <div class="stamp">实为<br>一维</div>
+  </div>
+  <div class="row">
+    <div class="claim">资产必须在沙盒中通过 Gene 规定的验证命令才保存<small>Auditability · §6.1</small></div>
+    <div class="meas">验证命令由发布者自己写，Hub 不独立执行。按 Gene 分类：66.0% 没有任何验证，18.2% 只有恒通过的平凡命令（如 <span class="mono">console.log('ok')</span>、<span class="mono">node --version</span>），合法验证最多 15.8%。见下方拆解。</div>
+    <div class="stamp">门形同<br>虚设</div>
+  </div>
+</div>
+
+<div class="feat">
+  <div class="box">
+    <h2>“84% 绕过验证”应该拆开看</h2>
+    <div class="k">Gene 验证命令质量（Table 1）· 静态正则 + 无 Capsule 的空 Node.js 沙盒两阶段分类</div>
+    <div class="stack">
+      <div style="width:66%;background:#2a2622;color:#fff"><b>66.0%</b>没有任何验证命令</div>
+      <div style="width:16%;background:var(--red);color:#fff"><b>16.0%</b>平凡·静态识别</div>
+      <div style="width:2.2%;background:#e0767f"></div>
+      <div style="width:15.8%;background:var(--card)"><b>15.8%</b>“合法”</div>
+    </div>
+    <div class="brk"><span></span><span></span><span style="white-space:nowrap">↑2.2% 沙盒识别</span><span></span></div>
+    <div class="bounds">摘要的“84%”= 66.0% <b>无验证</b> + 18.2% <b>平凡验证</b>。前者是缺失，不是“用空测试骗过”。<br>静态规则只抓已知模式，16.0% 是<b>下界</b>；空沙盒失败只说明脚本依赖缺失的 Capsule，15.8% 是“合法”的<b>上界</b>，不代表功能正确。</div>
+    <div class="den"><h3>同一个 84%，原文里出现了三种分母</h3>
+      <table>
+        <tr><td>摘要</td><td>“over 84% of <b>approved assets</b> bypass quality checks using vacuous tests”</td></tr>
+        <tr><td>§6.1 / Table 1</td><td>按 <b>Genes</b> 统计，三类合计 100%；但正文称 18.2% 是“在提供了命令的 Gene 中”的比例，与表不符</td></tr>
+        <tr><td>§8 结论</td><td>“84% of <b>agents</b> bypass these safeguards”</td></tr>
+      </table></div>
+  </div>
+  <div class="box">
+    <h2>只改自报元数据，排名就会变</h2>
+    <div class="k">新注册代理发布语义近似、措辞不同的载荷（论文摘要改写）；每种配置约 30 次独立发布（3 轮 × 10）；读回平台给出的 GDI（Table 2、Table 5）</div>
+    <div class="pr">
+      <div class="bar"></div>
+      <div class="mk" style="left:1.6%;width:70px"><b>23.9</b><i></i><span>1.6%</span></div>
+      <div class="mk" style="left:65%"><b>38.6</b><i></i><span>65%</span></div>
+      <div class="mk r" style="left:75.3%"><b>40.2</b><i></i><span>75.3%</span></div>
+      <div class="mk" style="left:85%;color:var(--mute)"><b>43.5</b><i style="background:var(--mute)"></i><span>85%</span></div>
+    </div>
+    <div class="k" style="margin-top:4px">横轴：GDI 在已晋升 Capsule 中的百分位（0–100，按比例）；标记上方为 GDI 均值。<br><b style="color:var(--ink)">23.9</b> 全部填最差 · <b style="color:var(--ink)">38.6</b> 各字段取真实中位值 · <b style="color:var(--red)">40.2</b> 全部填最优 · <b>43.5</b> 平台上已有的 6 个全优 Capsule</div>
+    <div style="font-size:16px;font-weight:700;margin:6px 0 2px">从“全部最优”起，每次只把一个字段改成最差（Δ内在分 → GDI）</div>
+    <div class="loo">
+      <div class="r"><span>改动规模 F×L</span><div class="t"><div class="f" style="width:100%"></div></div><span class="v">−0.122 → 36.0</span></div>
+      <div class="r"><span>触发信号数 T</span><div class="t"><div class="f" style="width:81%"></div></div><span class="v">−0.099 → 36.8</span></div>
+      <div class="r"><span>摘要长度</span><div class="t"><div class="f" style="width:71%"></div></div><span class="v">−0.087 → 37.2</span></div>
+      <div class="r"><span>连续成功次数</span><div class="t"><div class="f" style="width:63%"></div></div><span class="v">−0.077 → 37.5</span></div>
+      <div class="r"><span>自报置信度</span><div class="t"><div class="f" style="width:57%"></div></div><span class="v">−0.070 → 37.8</span></div>
+    </div>
+    <div class="bounds" style="font-size:15px">“改动了几个文件几行”影响最大，而 Hub 不要求上传完整版本历史，无法核验。平台上已有 6 个 Capsule 恰好满足全部最优配置：平均 GDI 43.53（第 85 百分位），平均调用 3.0（第 99 百分位）；这是相关观察，不是因果证据。</div>
+  </div>
+</div>
+
+<div class="box" style="margin-top:22px">
+  <h2>内在分怎么算：6 项里 5 项由发布者自己填</h2>
+  <div class="k">GDI<sub>I</sub> = 6 项归一化分数的平均（附录 B 式(3)、Table 3）；新注册代理的声誉默认 R=50</div>
+  <div class="fx">
+    <div class="s"><b>置信度</b><span class="mono">clip(C,0,1)</span><em>自报</em></div>
+    <div class="s"><b>连续成功</b><span class="mono">min(S/10,1)</span><em>自报</em></div>
+    <div class="s"><b>改动规模</b><span class="mono">max(0,1−F·L/1000)</span><em>自报 · 无版本史可核</em></div>
+    <div class="s"><b>触发信号数</b><span class="mono">min(T/5,1)</span><em>自报</em></div>
+    <div class="s"><b>摘要长度</b><span class="mono">min(ℓ/200,1)</span><em>自报</em></div>
+    <div class="s ok"><b>发布者声誉</b><span class="mono">clip(R/100,0,1)</span><em>平台统计他人执行成功率</em></div>
+  </div>
+  <div class="bounds" style="font-size:16px">敏感度扫描（Table 4）：其他字段固定在中位值，只把连续成功次数从 P25 调到 P75，GDI 从 34.5 升到 37.9（百分位 39.9→61.9）；置信度在整个经验范围内几乎不影响分数（Δ内在分 0.009）。</div>
+</div>
+<div class="grid3">
+  <div class="col"><h3>这项审计测到了什么</h3>
+    仅凭自报字段就能抬高平台分数和排名分位；共享库的准入验证可以是空的或恒通过的。这是“留存门把元数据当证据”在真实系统里失效的实地记录。</div>
+  <div class="col"><h3>没有测到什么</h3>
+    <span class="red">元数据干预只看平台给的 GDI</span>，没有测资产被下游代理采用后是否有用或有害；15.8% 不是功能正确率；早入场与被调用的关联混杂了暴露时长；每种配置的 GDI 只报均值，没有标准差。</div>
+  <div class="col"><h3>对 harness 留存门的含义</h3>
+    （本项目阅读判断）共享技能或经验库的晋升与排名，应改为由独立方执行验证、用真实复用结果打分；可审计元数据只能作为索引，不能当作改进证据。作者给出的建议是用 Git 检查文件变更、由平台执行验证。</div>
+</div>
+
+<div class="foot"><span>来源：arXiv:2605.25815v4 §2–8、附录 B–I。数字均出自原文正文与表格；堆叠条、刻度尺、留一条形为本项目重绘/示意。作者在真实平台发布了标注 test 的实验资产且无法删除（§6.2）。本项目未运行任何实验，也未对平台做任何操作。另：引言称“128K daily active agents”，数据节写 128,054 个代理。</span><span class="mono" style="white-space:nowrap">reel/2605.25815 · L2 l2b09</span></div>
+</div></body></html>

@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milkyway 前置信号画报</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #14213d;
+    --muted: #5d6779;
+    --line: #d9dee7;
+    --navy: #1f4fa3;
+    --navy-bg: #e7eef9;
+    --orange: #c8742a;
+    --grey: #8a94a3;
+    --shade: #eef1f6;
+    --warn: #8f2d2d;
+    --warn-bg: #fbeeee;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden;
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK HK", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 22px; line-height: 1.5;
+    padding: 0 64px 34px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  header { background: var(--ink); color: #fff; margin: 0 -64px; padding: 30px 64px 22px;
+           display: grid; grid-template-columns: 1fr 380px; gap: 30px; align-items: end; }
+  .kicker { font-size: 20px; letter-spacing: .14em; color: #9fc0ff; font-weight: 700; }
+  h1 { margin: 4px 0 6px; font-size: 54px; line-height: 1.15; font-weight: 800; }
+  .sub { font-size: 24px; color: #c9d3e6; }
+  .meta { font-size: 17px; color: #c9d3e6; text-align: right; line-height: 1.55; }
+  .meta b { color: #fff; }
+  .row2 { display: grid; grid-template-columns: 1fr 1.15fr; gap: 24px; }
+  .box { border: 2px solid var(--line); border-radius: 10px; padding: 16px 22px; }
+  .box h2 { margin: 0 0 6px; font-size: 25px; }
+  .box p { margin: 0; font-size: 21px; }
+  .tag { display: inline-block; font-size: 16px; font-weight: 700; padding: 1px 10px; border-radius: 4px; margin-right: 8px;
+         vertical-align: 3px; color: #fff; }
+  .tag.q { background: var(--ink); } .tag.a { background: var(--navy); } .tag.m { background: #4b6b2f; }
+  .tag.r { background: var(--orange); } .tag.l { background: var(--warn); }
+  .axis { font-weight: 700; color: var(--navy); }
+  .sig { border: 2px solid var(--ink); border-radius: 10px; padding: 16px 22px 10px; }
+  .sig h2 { margin: 0 0 4px; font-size: 25px; }
+  .note { font-size: 15.5px; color: var(--muted); }
+  .ladders { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: -8px; }
+  .legend { display: flex; gap: 28px; font-size: 18px; align-items: center; margin: 4px 0 6px; flex-wrap: wrap; }
+  .sw { display: inline-block; width: 36px; height: 0; vertical-align: middle; margin-right: 6px; }
+  .res { display: grid; grid-template-columns: 1.45fr 1fr; gap: 24px; }
+  table { border-collapse: collapse; width: 100%; font-size: 19px; }
+  th, td { padding: 6px 7px; border-bottom: 1px solid var(--line); text-align: center; font-variant-numeric: tabular-nums; }
+  th { font-size: 15.5px; color: var(--muted); border-bottom: 2px solid var(--ink); }
+  td:first-child, th:first-child { text-align: left; }
+  td.fh { color: var(--navy); font-weight: 800; }
+  .sameday { margin-top: 10px; font-size: 17.5px; line-height: 1.5; background: #f3f5f9; border-radius: 8px; padding: 8px 12px; }
+  .case { background: var(--navy-bg); border-radius: 10px; padding: 14px 20px; font-size: 18.5px; }
+  .case h3 { margin: 0 0 6px; font-size: 21px; }
+  .case table { font-size: 17.5px; }
+  .case td, .case th { padding: 4px 6px; }
+  .case th { white-space: nowrap; }
+  .limits { border: 2px solid var(--warn); background: var(--warn-bg); border-radius: 10px; padding: 14px 22px; }
+  .limits h2 { margin: 0 0 4px; font-size: 25px; color: var(--warn); }
+  .limits ol { margin: 0; padding-left: 26px; font-size: 19px; line-height: 1.45; }
+  footer { margin-top: auto; font-size: 15px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px;
+           display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">F4 · 标签延迟下的留存 ｜ 信号时序图</div>
+    <h1>结果揭晓之前没有标签，<br>靠什么修订 harness？</h1>
+    <div class="sub">Milkyway：同一道未决题的多次重访之间，证据与预测的变化本身就是信号</div>
+  </div>
+  <div class="meta">
+    <b>Harnessing Pre-Resolution Signals for Future Prediction Agents</b><br>
+    Wei, Gao, Han 等<br>
+    arXiv:2604.15719<b>v3</b>（2026-05-08）
+  </div>
+</header>
+
+<div class="row2">
+  <div class="box">
+    <h2><span class="tag q">问题</span>标签来得晚，而且太粗</h2>
+    <p>未来预测题只能用截至预测时刻的公开信息作答。结果要等揭晓后才有，而且只告诉对错，不告诉过程中该追踪什么、该核实什么、哪里该保持不确定（§1、§3.1）。</p>
+  </div>
+  <div class="box">
+    <h2><span class="tag a">研究动作</span>用“重访之间的差异”写有界补丁</h2>
+    <p>每个检查点产出一份固定格式的笔记；从第 2 次起比较前后笔记，每个检查点至多写一次补丁（add / revise / deprecate / 空）进题内 harness 的三条轴：<span class="axis">F</span> 因素追踪、<span class="axis">E</span> 证据处理、<span class="axis">U</span> 不确定性。只存程序性指导，不存答案和原始证据（§3.2–3.3、附录 A）。</p>
+  </div>
+</div>
+
+<div class="sig">
+  <h2><span class="tag m">机制</span>每个时刻能拿到什么信号</h2>
+  <svg viewBox="0 0 1470 462" width="100%" role="img" aria-label="前置信号时序图">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f4fa3"/></marker>
+      <linearGradient id="ev" x1="0" x2="1"><stop offset="0" stop-color="#cfdcf2"/><stop offset="1" stop-color="#1f4fa3"/></linearGradient>
+    </defs>
+    <g font-family="Noto Sans CJK SC, sans-serif" font-size="18" fill="#14213d">
+      <!-- 写入前阴性对照区 -->
+      <rect x="292" y="44" width="412" height="412" fill="#eef1f6"/>
+      <text x="498" y="66" text-anchor="middle" font-size="16" fill="#5d6779">写入前：三组都还没有可用的 harness → 内置阴性对照</text>
+      <!-- 时间刻度 -->
+      <g font-weight="700" text-anchor="middle">
+        <text x="360" y="30">T-4d</text><text x="590" y="30">T-3d</text><text x="820" y="30">T-2d</text><text x="1050" y="30">T-1d</text>
+        <text x="1330" y="30" fill="#8f2d2d">结果揭晓</text>
+      </g>
+      <g stroke="#b7c0cf" stroke-dasharray="4 5"><line x1="360" y1="40" x2="360" y2="456"/><line x1="590" y1="40" x2="590" y2="456"/><line x1="820" y1="40" x2="820" y2="456"/><line x1="1050" y1="40" x2="1050" y2="456"/></g>
+      <line x1="1330" y1="40" x2="1330" y2="456" stroke="#8f2d2d" stroke-width="3"/>
+      <!-- 泳道标签 -->
+      <g font-weight="700" font-size="18">
+        <text x="0" y="108">公开证据</text>
+        <text x="0" y="188">预测 z<tspan font-size="13" dy="5">t</tspan><tspan dy="-5"> ＋ 检查点笔记 n</tspan><tspan font-size="13" dy="5">t</tspan></text>
+        <text x="0" y="268">前置信号 I<tspan font-size="13" dy="5">t</tspan></text>
+        <text x="0" y="348">harness 写入</text>
+        <text x="0" y="428">结果标签 y</text>
+      </g>
+      <g font-size="14" fill="#5d6779">
+        <text x="0" y="130">只能用截至当时的信息</text>
+        <text x="0" y="290">比较 n₁…n<tspan font-size="11" dy="4">t</tspan><tspan dy="-4">（t≥2）</tspan></text>
+        <text x="0" y="370">Δ<tspan font-size="11" dy="4">t</tspan><tspan dy="-4"> → H</tspan><tspan font-size="11" dy="4">t+1</tspan><tspan dy="-4">，唯一跨检查点状态</tspan></text>
+      </g>
+      <!-- L1 证据楔形 -->
+      <polygon points="300,102 1300,82 1300,122 300,108" fill="url(#ev)" opacity=".85"/>
+      <!-- L2 笔记 -->
+      <g text-anchor="middle" font-size="16">
+        <circle cx="360" cy="182" r="20" fill="#fff" stroke="#14213d" stroke-width="2.5"/><text x="360" y="188">n₁</text>
+        <circle cx="590" cy="182" r="20" fill="#fff" stroke="#14213d" stroke-width="2.5"/><text x="590" y="188">n₂</text>
+        <circle cx="820" cy="182" r="20" fill="#fff" stroke="#14213d" stroke-width="2.5"/><text x="820" y="188">n₃</text>
+        <circle cx="1050" cy="182" r="20" fill="#fff" stroke="#14213d" stroke-width="2.5"/><text x="1050" y="188">n₄</text>
+      </g>
+      <!-- L3 信号 -->
+      <text x="360" y="268" text-anchor="middle" font-size="15" fill="#5d6779">只有一份笔记，无从比较</text>
+      <g text-anchor="middle" font-size="16" fill="#fff" font-weight="700">
+        <polygon points="590,240 618,262 590,284 562,262" fill="#4b6b2f"/><text x="590" y="268">I₂</text>
+        <polygon points="820,240 848,262 820,284 792,262" fill="#4b6b2f"/><text x="820" y="268">I₃</text>
+        <polygon points="1050,240 1078,262 1050,284 1022,262" fill="#4b6b2f"/><text x="1050" y="268">I₄</text>
+      </g>
+      <text x="1200" y="258" text-anchor="middle" font-size="14" fill="#4b6b2f">预测分歧 ＋ 诊断发现</text>
+      <text x="1200" y="278" text-anchor="middle" font-size="14" fill="#4b6b2f">（不是答案，是过程诊断）</text>
+      <!-- L4 写入 -->
+      <rect x="560" y="322" width="60" height="40" rx="6" fill="#1f4fa3"/><text x="590" y="348" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Δ₂</text>
+      <line x1="622" y1="342" x2="784" y2="342" stroke="#1f4fa3" stroke-width="3" marker-end="url(#a)"/>
+      <rect x="788" y="318" width="64" height="48" rx="6" fill="#fff" stroke="#1f4fa3" stroke-width="3"/><text x="820" y="348" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4fa3">H₃</text>
+      <text x="703" y="330" text-anchor="middle" font-size="14" fill="#1f4fa3">首个非空 harness</text>
+      <rect x="854" y="322" width="44" height="40" rx="6" fill="#1f4fa3"/><text x="876" y="348" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">Δ₃</text>
+      <line x1="900" y1="342" x2="1014" y2="342" stroke="#1f4fa3" stroke-width="3" marker-end="url(#a)"/>
+      <rect x="1018" y="318" width="64" height="48" rx="6" fill="#fff" stroke="#1f4fa3" stroke-width="3"/><text x="1050" y="348" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4fa3">H₄</text>
+      <text x="820" y="392" text-anchor="middle" font-size="14" fill="#1f4fa3">T-2d 起才被预测消费</text>
+      <!-- L5 标签 -->
+      <rect x="1180" y="398" width="290" height="50" rx="6" fill="#fbeeee" stroke="#8f2d2d" stroke-width="2"/>
+      <text x="1325" y="420" text-anchor="middle" font-size="15" fill="#8f2d2d" font-weight="700">y 到达：打分 ＋ 结果后检查</text>
+      <text x="1325" y="440" text-anchor="middle" font-size="13.5" fill="#8f2d2d">本文未单独量化这一步</text>
+      <text x="820" y="428" text-anchor="middle" font-size="15" fill="#5d6779">揭晓前任何时刻都拿不到 y：真实结果只用于事后评分</text>
+    </g>
+  </svg>
+  <div class="note">示意：本项目按 §3、附录 A.4 算法 1 与附录 C.4 Table 7 说明自绘。笔记编号对应 4 个检查点。</div>
+</div>
+
+<div>
+  <div class="legend">
+    <b style="font-size:21px">同条件梯度（附录 C.4 Table 7 数值重绘）</b>
+    <span><span class="sw" style="border-top:5px solid #1f4fa3"></span>FH typed F/E/U harness</span>
+    <span><span class="sw" style="border-top:3px dashed #8a94a3"></span>GH 同字节、同写入次数的自由文本记忆</span>
+    <span><span class="sw" style="border-top:3px solid #c8742a"></span>NH 无持久状态，只重复预测</span>
+  </div>
+  <div class="ladders">
+<!--LADDERS-->
+<div class="lad"><svg viewBox="0 0 350 280" width="100%" role="img" aria-label="GPT-5.4 · 05-05 · n=35">
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="40" y="40" width="122" height="190" fill="#eef1f6"/>
+<text x="101" y="56" font-size="13" fill="#6a7486" text-anchor="middle">写入前</text>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#14213d">GPT-5.4 · 05-05 · n=35</text>
+<line x1="40" y1="230.0" x2="340" y2="230.0" stroke="#dde2ea"/>
+<text x="34" y="234.0" font-size="13" fill="#6a7486" text-anchor="end">40</text>
+<line x1="40" y1="170.6" x2="340" y2="170.6" stroke="#dde2ea"/>
+<text x="34" y="174.6" font-size="13" fill="#6a7486" text-anchor="end">50</text>
+<line x1="40" y1="111.2" x2="340" y2="111.2" stroke="#dde2ea"/>
+<text x="34" y="115.2" font-size="13" fill="#6a7486" text-anchor="end">60</text>
+<line x1="40" y1="51.9" x2="340" y2="51.9" stroke="#dde2ea"/>
+<text x="34" y="55.9" font-size="13" fill="#6a7486" text-anchor="end">70</text>
+<text x="56" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-4d</text>
+<text x="146" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-3d</text>
+<text x="236" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-2d</text>
+<text x="326" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-1d</text>
+<polyline points="56,173.0 146,172.4 236,182.5 326,168.2" stroke="#c8742a" stroke-width="3" fill="none"/>
+<polyline points="56,192.0 146,181.3 236,168.2 326,156.4" stroke="#8a94a3" stroke-width="3" stroke-dasharray="7 5" fill="none"/>
+<polyline points="56,206.2 146,167.7 236,119.6 326,123.1" stroke="#1f4fa3" stroke-width="5" fill="none"/>
+<text x="332" y="113.1" font-size="15" font-weight="700" fill="#1f4fa3" text-anchor="end">58.0</text>
+<text x="332" y="188.2" font-size="14" fill="#c8742a" text-anchor="end">50.4</text>
+</g></svg></div>
+<div class="lad"><svg viewBox="0 0 350 280" width="100%" role="img" aria-label="GPT-5.4 · 05-06 · n=28">
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="40" y="40" width="122" height="190" fill="#eef1f6"/>
+<text x="101" y="56" font-size="13" fill="#6a7486" text-anchor="middle">写入前</text>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#14213d">GPT-5.4 · 05-06 · n=28</text>
+<line x1="40" y1="230.0" x2="340" y2="230.0" stroke="#dde2ea"/>
+<text x="34" y="234.0" font-size="13" fill="#6a7486" text-anchor="end">40</text>
+<line x1="40" y1="170.6" x2="340" y2="170.6" stroke="#dde2ea"/>
+<text x="34" y="174.6" font-size="13" fill="#6a7486" text-anchor="end">50</text>
+<line x1="40" y1="111.2" x2="340" y2="111.2" stroke="#dde2ea"/>
+<text x="34" y="115.2" font-size="13" fill="#6a7486" text-anchor="end">60</text>
+<line x1="40" y1="51.9" x2="340" y2="51.9" stroke="#dde2ea"/>
+<text x="34" y="55.9" font-size="13" fill="#6a7486" text-anchor="end">70</text>
+<text x="56" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-4d</text>
+<text x="146" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-3d</text>
+<text x="236" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-2d</text>
+<text x="326" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-1d</text>
+<polyline points="56,152.8 146,110.1 236,208.6 326,106.5" stroke="#c8742a" stroke-width="3" fill="none"/>
+<polyline points="56,135.0 146,152.8 236,114.2 326,88.7" stroke="#8a94a3" stroke-width="3" stroke-dasharray="7 5" fill="none"/>
+<polyline points="56,170.6 146,96.4 236,116.0 326,70.3" stroke="#1f4fa3" stroke-width="5" fill="none"/>
+<text x="332" y="60.3" font-size="15" font-weight="700" fill="#1f4fa3" text-anchor="end">66.9</text>
+<text x="332" y="126.5" font-size="14" fill="#c8742a" text-anchor="end">60.8</text>
+</g></svg></div>
+<div class="lad"><svg viewBox="0 0 350 280" width="100%" role="img" aria-label="Qwen3.5 · 05-06 · n=28">
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="40" y="40" width="122" height="190" fill="#eef1f6"/>
+<text x="101" y="56" font-size="13" fill="#6a7486" text-anchor="middle">写入前</text>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#14213d">Qwen3.5 · 05-06 · n=28</text>
+<line x1="40" y1="230.0" x2="340" y2="230.0" stroke="#dde2ea"/>
+<text x="34" y="234.0" font-size="13" fill="#6a7486" text-anchor="end">40</text>
+<line x1="40" y1="170.6" x2="340" y2="170.6" stroke="#dde2ea"/>
+<text x="34" y="174.6" font-size="13" fill="#6a7486" text-anchor="end">50</text>
+<line x1="40" y1="111.2" x2="340" y2="111.2" stroke="#dde2ea"/>
+<text x="34" y="115.2" font-size="13" fill="#6a7486" text-anchor="end">60</text>
+<line x1="40" y1="51.9" x2="340" y2="51.9" stroke="#dde2ea"/>
+<text x="34" y="55.9" font-size="13" fill="#6a7486" text-anchor="end">70</text>
+<text x="56" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-4d</text>
+<text x="146" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-3d</text>
+<text x="236" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-2d</text>
+<text x="326" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-1d</text>
+<polyline points="56,132.0 146,101.8 236,99.4 326,110.1" stroke="#c8742a" stroke-width="3" fill="none"/>
+<polyline points="56,138.0 146,132.6 236,127.9 326,60.8" stroke="#1f4fa3" stroke-width="5" fill="none"/>
+<text x="332" y="50.8" font-size="15" font-weight="700" fill="#1f4fa3" text-anchor="end">68.5</text>
+<text x="332" y="130.1" font-size="14" fill="#c8742a" text-anchor="end">60.2</text>
+</g></svg></div>
+<div class="lad"><svg viewBox="0 0 350 280" width="100%" role="img" aria-label="GLM-5.1 · 05-06 · n=28">
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="40" y="40" width="122" height="190" fill="#eef1f6"/>
+<text x="101" y="56" font-size="13" fill="#6a7486" text-anchor="middle">写入前</text>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#14213d">GLM-5.1 · 05-06 · n=28</text>
+<line x1="40" y1="230.0" x2="340" y2="230.0" stroke="#dde2ea"/>
+<text x="34" y="234.0" font-size="13" fill="#6a7486" text-anchor="end">40</text>
+<line x1="40" y1="170.6" x2="340" y2="170.6" stroke="#dde2ea"/>
+<text x="34" y="174.6" font-size="13" fill="#6a7486" text-anchor="end">50</text>
+<line x1="40" y1="111.2" x2="340" y2="111.2" stroke="#dde2ea"/>
+<text x="34" y="115.2" font-size="13" fill="#6a7486" text-anchor="end">60</text>
+<line x1="40" y1="51.9" x2="340" y2="51.9" stroke="#dde2ea"/>
+<text x="34" y="55.9" font-size="13" fill="#6a7486" text-anchor="end">70</text>
+<text x="56" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-4d</text>
+<text x="146" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-3d</text>
+<text x="236" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-2d</text>
+<text x="326" y="252" font-size="14" fill="#14213d" text-anchor="middle">T-1d</text>
+<polyline points="56,108.3 146,87.5 236,97.0 326,81.6" stroke="#c8742a" stroke-width="3" fill="none"/>
+<polyline points="56,140.9 146,93.4 236,75.6 326,48.9" stroke="#1f4fa3" stroke-width="5" fill="none"/>
+<text x="332" y="38.9" font-size="15" font-weight="700" fill="#1f4fa3" text-anchor="end">70.5</text>
+<text x="332" y="101.6" font-size="14" fill="#c8742a" text-anchor="end">65.0</text>
+</g></svg></div>
+<!--/LADDERS-->
+  </div>
+  <div class="note">纵轴为 FutureWorld 得分。灰底为写入前检查点。开源骨干的 GH 对照未完成，所以没有画出。</div>
+</div>
+
+<div class="res">
+  <div class="box">
+    <h2><span class="tag r">同条件结果</span>T-4d → T-1d 的提升 Δ（Table 2）</h2>
+    <table>
+      <thead><tr><th>格（单次运行）</th><th>n</th><th>Δ NH</th><th>Δ GH</th><th>Δ FH</th><th>FH−NH</th><th>FH−GH</th><th>T-1d 端点差<br>FH−NH</th></tr></thead>
+      <tbody>
+        <tr><td>GPT-5.4 · 05-05</td><td>35</td><td>+0.9</td><td>+6.0</td><td class="fh">+14.0</td><td class="fh">+13.1</td><td class="fh">+8.0</td><td>+7.6</td></tr>
+        <tr><td>GPT-5.4 · 05-06</td><td>28</td><td>+7.8</td><td>+7.8</td><td class="fh">+16.9</td><td class="fh">+9.1</td><td class="fh">+9.1</td><td>+6.1</td></tr>
+        <tr><td>Qwen3.5 · 05-06</td><td>28</td><td>+3.7</td><td>—</td><td class="fh">+13.0</td><td class="fh">+9.3</td><td>—</td><td>+8.3</td></tr>
+        <tr><td>GLM-5.1 · 05-06</td><td>28</td><td>+4.5</td><td>—</td><td class="fh">+15.5</td><td class="fh">+11.0</td><td>—</td><td>+5.5</td></tr>
+      </tbody>
+    </table>
+    <div class="note" style="margin-top:6px">格内固定：骨干、scaffold、工具、题目、日程、已揭晓子集、200K 有效上下文、每检查点 50 次工具调用；只改变题内持久状态（§4.3）。T-1d 主代理的工具调用与提示 token 在 NH 的 ±5% 以内（Table 9）。端点差：05-05 由 Table 7 计算（58.0−50.4），其余取自 Table 8。</div>
+    <div class="sameday"><b>同日重复对照</b>（同一证据快照，GPT-5.4，n=28，附录 C.4 Table 10），R1→R2→R3→R4（R4−R1）：<br>
+      NH 54.4→40.1→32.5→52.9（−1.5）；GH 57.0→46.8→42.9→44.8（−12.2）；<b style="color:#1f4fa3">FH 51.0→41.5→43.6→56.7（+5.7）</b><br>
+      日历时间固定时 NH/GH 没有提升；FH 的提升不到其日历梯度 Δ 的一半。</div>
+  </div>
+  <div class="case">
+    <h3>案例：harness 改的是取证路线，不是答案（Table 3）</h3>
+    <div>河北省级<b>迁入</b>占比，真值 4.48。T-4d 时 harness 为空，预测锚定在错口径的排名统计上；NH/GH 到 T-1d 仍停在约 27。</div>
+    <table style="margin-top:6px">
+      <thead><tr><th>检查点</th><th>写入</th><th>FH</th><th>NH</th><th>GH</th></tr></thead>
+      <tbody>
+        <tr><td>T-4d</td><td>—（空）</td><td>35.20</td><td>0.98</td><td>27.10</td></tr>
+        <tr><td>T-3d</td><td>U：没有同口径锚点前，限制置信度</td><td>5.46</td><td>33.60</td><td>28.10</td></tr>
+        <tr><td>T-2d</td><td>E：排名页是错口径，先去实时迁入目的地省级视图</td><td>5.23</td><td>27.50</td><td>27.10</td></tr>
+        <tr><td>T-1d</td><td>复用，不再新写</td><td class="fh">5.24</td><td>27.18</td><td>27.30</td></tr>
+      </tbody>
+    </table>
+    <div class="note" style="margin-top:4px">单个已揭晓题的定性例子，写入内容按原文意译。</div>
+  </div>
+</div>
+
+<div class="limits">
+  <h2><span class="tag l">限制</span>这些条件之外不要外推</h2>
+  <ol>
+    <li><b>留存只在题内：</b>harness 不跨题，作者不主张跨题学习；结果揭晓后的检查没有单独量化（§5、附录 A.5）。</li>
+    <li><b>样本小、单次运行、无置信区间：</b>每格 n=28–35。同日对照里 NH 在各轮之间从 54.4 摆到 32.5，可见单格噪声不小（我们的阅读）。</li>
+    <li><b>Δ 差里含起点差：</b>FH 在 T-4d（三组都还没有写入）起点偏低，所以 T-1d 端点差 +7.6/+6.1/+8.3/+5.5 小于 Δ 差 +13.1/+9.1/+9.3/+11.0。</li>
+    <li><b>主表不是消融：</b>Table 1 中基线在预热后冻结，Milkyway 在题内更新，协议不同；开源骨干缺 GH 对照；Table 9 只统计主代理开销。</li>
+  </ol>
+</div>
+
+<footer>
+  <span>来源：arXiv 2604.15719v3 钉定全文（§1–5、附录 A、B、C.1–C.6）。数字为作者报告值，本项目未复现。</span>
+  <span>HarnessRSI Daily · rsi-l1-20261022-03 · 阅读判断，非审稿结论</span>
+</footer>
+</body>
+</html>

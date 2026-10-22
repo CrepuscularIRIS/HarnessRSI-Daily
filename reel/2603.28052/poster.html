@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>Meta-Harness 画报</title>
+<style>
+/* 版式：系统类，蓝图纸上的管线/数据流；横向主流程 + 三条反馈通道对照 + 留出验证 */
+@page { size: 1600px 2263px; margin: 0; }
+:root{
+  --paper:#f3f0e6; --grid:rgba(31,58,147,.07); --ink:#1b2a4e; --blue:#1f3a93; --blue2:#4f6fd1;
+  --green:#1f7a52; --grey:#8a8f9c; --warn:#c2410c; --card:#fffdf7; --rule:#c9cbd6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:2263px;overflow:hidden;color:var(--ink);
+  font-family:"Noto Sans CJK SC","Noto Sans SC",sans-serif;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:32px 32px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.mono{font-family:"Noto Sans Mono CJK SC",monospace}
+.wrap{padding:44px 60px 30px}
+.top{display:grid;grid-template-columns:1fr 330px;gap:30px;align-items:start}
+.badge{display:inline-block;border:2px solid var(--blue);color:var(--blue);font-size:19px;padding:3px 12px;letter-spacing:2px;font-weight:700}
+h1{font-size:48px;line-height:1.2;margin:12px 0 8px;font-weight:900;color:var(--ink)}
+h1 span{color:var(--green)}
+.sub{font-size:23px;line-height:1.5;color:#33415f}
+.meta{font-size:16px;color:var(--grey);margin-top:10px;line-height:1.5}
+.stamp{border:2px solid var(--ink);background:var(--card);padding:16px 18px;font-size:17px;line-height:1.55}
+.stamp b{display:block;font-size:19px;margin-bottom:6px;color:var(--blue)}
+.stamp .row{display:flex;justify-content:space-between;border-top:1px dashed var(--rule);padding:4px 0}
+.label{display:flex;align-items:center;gap:14px;margin:18px 0 10px}
+.label .fig{background:var(--blue);color:#fff;font-size:16px;font-weight:700;padding:3px 10px;letter-spacing:1px}
+.label h2{font-size:29px;font-weight:900}
+.label .r{margin-left:auto;font-size:16px;color:var(--grey)}
+.card{background:var(--card);border:1.5px solid var(--ink);padding:16px 20px}
+/* 问题：压缩比 */
+.prob{display:grid;grid-template-columns:1fr 1.15fr;gap:24px}
+.prob p{font-size:21px;line-height:1.55}
+.prob p b{color:var(--warn)}
+.lg{font-size:17px}
+.lg .r{display:grid;grid-template-columns:150px 1fr 70px;align-items:center;gap:10px;margin:2px 0}
+.lg .t{height:18px;background:#e7e5dc;position:relative}
+.lg .f{height:100%;background:var(--grey)}
+.lg .v{text-align:right;font-family:"Noto Sans Mono CJK SC",monospace}
+.lg .me .f{background:var(--green)} .lg .me{font-weight:900;color:var(--green)}
+.note{font-size:15px;color:var(--grey);margin-top:6px;line-height:1.45}
+/* 主流程 */
+.flow{position:relative;height:330px}
+.flow svg{position:absolute;left:0;top:0}
+.node{position:absolute;background:var(--card);border:2px solid var(--ink);padding:12px 14px;font-size:18px;line-height:1.45}
+.node h3{font-size:21px;margin-bottom:4px}
+.node.fs{border-color:var(--green);border-width:3px}
+.node.fs h3{color:var(--green)}
+.node .mono{font-size:15px;color:#2b3a5c}
+.tagx{position:absolute;font-size:16px;color:var(--blue);background:var(--paper);padding:0 6px;font-weight:700}
+/* 通道对照 */
+.lanes{display:grid;grid-template-columns:1.45fr 1fr;gap:24px}
+.lane{display:grid;grid-template-columns:200px 1fr 210px;align-items:center;gap:14px;margin:12px 0}
+.lane .nm{font-size:19px;font-weight:700;line-height:1.3}
+.lane .nm small{display:block;font-size:14px;color:var(--grey);font-weight:400}
+.pipe{position:relative;height:56px;display:flex;align-items:center}
+.pipe .tube{height:var(--h);width:100%;background:repeating-linear-gradient(90deg,var(--c) 0 26px,transparent 26px 32px);border-radius:3px}
+.lane .res{font-size:17px;line-height:1.35}
+.lane .res b{font-size:32px;font-family:"Noto Sans Mono CJK SC",monospace}
+.cmp{font-size:17px;width:100%;border-collapse:collapse}
+.cmp td,.cmp th{padding:5px 8px;border-bottom:1px solid var(--rule);text-align:right}
+.cmp th{font-weight:400;color:var(--grey);font-size:15px}
+.cmp td:first-child,.cmp th:first-child{text-align:left}
+.cmp tr.me td{font-weight:900;color:var(--green)}
+/* 留出 */
+.hold{display:grid;grid-template-columns:1fr 1.35fr 0.95fr;gap:20px}
+.hold h4{font-size:20px;margin-bottom:6px}
+.hold .k{font-size:15px;color:var(--grey);margin-bottom:8px;line-height:1.4}
+.big{font-size:40px;font-weight:900;font-family:"Noto Sans Mono CJK SC",monospace;color:var(--green)}
+.big small{font-size:18px;color:var(--grey);font-weight:400}
+.hl{font-size:17px;line-height:1.5}
+.tag-ok,.tag-mid,.tag-no{display:inline-block;font-size:14px;font-weight:700;padding:1px 8px;margin-bottom:6px}
+.tag-ok{background:var(--green);color:#fff}.tag-mid{background:#d9a514;color:#231a00}.tag-no{background:var(--warn);color:#fff}
+/* 迭代日志 */
+.log{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--ink);background:var(--card)}
+.log div{padding:12px 14px;font-size:16px;line-height:1.45;border-right:1px dashed var(--rule)}
+.log div:last-child{border-right:0}
+.log b{display:block;font-size:18px;margin-bottom:3px}
+.log .n{font-family:"Noto Sans Mono CJK SC",monospace;font-weight:900;font-size:22px}
+.bad{color:var(--warn)} .good{color:var(--green)}
+.lim{margin-top:16px;display:grid;grid-template-columns:150px 1fr;border-top:3px solid var(--ink);padding-top:12px;gap:16px}
+.lim h2{font-size:28px;color:var(--warn);font-weight:900;line-height:1.2}
+.lim ol{font-size:17px;line-height:1.5;columns:2;column-gap:30px;padding-left:22px}
+.lim li{break-inside:avoid;margin-bottom:5px}
+.foot{margin-top:12px;font-size:14px;color:var(--grey);display:flex;justify-content:space-between;gap:20px}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="top">
+  <div>
+    <span class="badge">系统类 · F1 / F5 · 归因与修补现任 harness</span>
+    <h1>别给提议者看摘要：<span>让它自己翻原始执行轨迹</span></h1>
+    <p class="sub">Meta-Harness 把所有历史候选的源码、分数和完整执行轨迹放进文件系统，由编码代理按需 grep / cat 后提出新的 harness 代码。同样的评估次数下，能读原始轨迹的接口明显好于只给分数或摘要的接口。</p>
+    <p class="meta mono">arXiv:2603.28052v1（2026-03-30）· Lee, Nair, Zhang, Lee, Khattab, Finn · Stanford / KRAFTON / MIT</p>
+  </div>
+  <div class="stamp"><b>实验规格</b>
+    <div class="row"><span>提议者</span><span>Claude Code + Opus-4.6</span></div>
+    <div class="row"><span>被包装模型</span><span>冻结（随域而定）</span></div>
+    <div class="row"><span>一次典型搜索</span><span>约 20 轮 · 60 个候选</span></div>
+    <div class="row"><span>选择依据</span><span>只看 search set</span></div>
+    <div class="row"><span>测试集</span><span>最后对前沿评估一次</span></div>
+    <div class="row"><span>harness 形态</span><span>单文件 Python</span></div>
+  </div>
+</div>
+
+<div class="label"><span class="fig">问题</span><h2>harness 的错要过很多步才显现，压缩后的反馈找不到源头</h2></div>
+<div class="prob">
+  <div class="card"><p>一个“存什么、何时取、怎么给模型看”的决定，可能在许多推理步之后才让任务失败。只给标量分数、只给上一个候选或给一段 LLM 摘要，<b>会把定位失败所需的细节压缩掉</b>。作者把这看作现有文本优化器为可扩展性做的取舍，而不是长程依赖没有用的证据（§1）。</p></div>
+  <div class="card lg">
+    <div style="font-size:17px;font-weight:700;margin-bottom:6px">每轮可用反馈上下文（MTok / iter，对数刻度；Table 1 作者估计）</div>
+    <div class="r"><span>OPRO</span><div class="t"><div class="f" style="width:9%"></div></div><span class="v">0.002</span></div>
+    <div class="r"><span>GEPA</span><div class="t"><div class="f" style="width:23%"></div></div><span class="v">0.008</span></div>
+    <div class="r"><span>Feedback Descent</span><div class="t"><div class="f" style="width:27%"></div></div><span class="v">0.012</span></div>
+    <div class="r"><span>TextGrad</span><div class="t"><div class="f" style="width:30%"></div></div><span class="v">0.015</span></div>
+    <div class="r"><span>AlphaEvolve</span><div class="t"><div class="f" style="width:34%"></div></div><span class="v">0.022</span></div>
+    <div class="r"><span>TTT-Discover</span><div class="t"><div class="f" style="width:36%"></div></div><span class="v">0.026</span></div>
+    <div class="r me"><span>Meta-Harness</span><div class="t"><div class="f" style="width:100%"></div></div><span class="v">10.0</span></div>
+    <div class="note">各方法取其论文中最大设置的估计值，跨任务合并；条长按 log10 绘制，起点 0.001（示意比例）。</div>
+  </div>
+</div>
+
+<div class="label"><span class="fig">机制</span><h2>搜索回路：历史全部落盘，由提议者自己决定读什么</h2><span class="r">示意 · 按 §3、Fig.2、Algorithm 1 与附录 A.1 重绘</span></div>
+<div class="flow">
+  <svg width="1480" height="330" viewBox="0 0 1480 330">
+    <defs><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#1b2a4e"/></marker>
+    <marker id="g" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#1f7a52"/></marker></defs>
+    <path d="M440,95 L560,95" stroke="#1f7a52" stroke-width="5" marker-end="url(#g)" fill="none"/>
+    <path d="M440,140 L560,140" stroke="#1f7a52" stroke-width="2" stroke-dasharray="6 5" fill="none"/>
+    <path d="M920,110 L1020,110" stroke="#1b2a4e" stroke-width="3" marker-end="url(#a)" fill="none"/>
+    <path d="M1250,190 L1250,250 L230,250 L230,205" stroke="#1b2a4e" stroke-width="3" marker-end="url(#a)" fill="none"/>
+    <path d="M1250,250 L1250,295 L1060,295" stroke="#c2410c" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a)" fill="none"/>
+  </svg>
+  <div class="node fs" style="left:0;top:10px;width:440px;height:192px">
+    <h3>文件系统 𝒟：全部历史</h3>
+    <div class="mono">runs/cand_017/harness.py<br>runs/cand_017/scores.json<br>runs/cand_017/traces/*.json<br>runs/cand_018/ …<br>（可达约 1000 万 token / 次评估）</div>
+    <div style="font-size:16px;margin-top:6px;color:#33415f">不做父代选择规则，任何旧候选都可读</div>
+  </div>
+  <div class="tagx" style="left:452px;top:62px">grep · cat</div>
+  <div class="tagx" style="left:452px;top:150px">按需读取</div>
+  <div class="node" style="left:560px;top:10px;width:360px;height:192px">
+    <h3>提议者（编码代理）</h3>
+    每轮读取文件中位数 <b>82</b> 个（69–99）<br>
+    <span style="color:var(--green)">源码 41%</span> · <span style="color:var(--green)">执行轨迹 40%</span><br>
+    分数/摘要 6% · 其他 13%<br>
+    <span style="font-size:15px;color:var(--grey)">附录 A.1，TerminalBench-2 一次 10 轮搜索的统计</span>
+  </div>
+  <div class="node" style="left:1020px;top:10px;width:460px;height:178px">
+    <h3>提出 k 个新 harness → 评估</h3>
+    先过接口校验（导入、实例化、小样本调用）<br>
+    再在 <b>search set</b> 上完整评估<br>
+    代码、推理记录、分数写入新目录
+  </div>
+  <div class="tagx" style="left:520px;top:237px">循环：新目录回到 𝒟，下一轮可读</div>
+  <div class="node" style="left:760px;top:268px;width:300px;height:56px;border-style:dashed;border-color:var(--warn);font-size:16px;padding:6px 12px">搜索结束：Pareto 前沿<br>才上测试集（提议者看不到）</div>
+</div>
+
+<div class="label"><span class="fig">结果</span><h2>同评估次数，只换提议者看到的信息</h2><span class="r">文本分类 · GPT-OSS-120B · search set（Table 3、Table 4）</span></div>
+<div class="lanes">
+  <div class="card">
+    <div class="lane"><div class="nm">只给分数<small>分数 ✓ 源码 ✓ 摘要 ✗ 轨迹 ✗</small></div><div class="pipe"><div class="tube" style="--h:8px;--c:var(--grey)"></div></div><div class="res">中位 <b>34.6</b><br>最佳 41.3 · 26 次超零样本</div></div>
+    <div class="lane"><div class="nm">分数 + LLM 摘要<small>分数 ✓ 源码 ✓ 摘要 ✓ 轨迹 ✗</small></div><div class="pipe"><div class="tube" style="--h:16px;--c:var(--blue2)"></div></div><div class="res">中位 <b>34.9</b><br>最佳 38.7 · 23 次超零样本</div></div>
+    <div class="lane"><div class="nm" style="color:var(--green)">完整接口<small>分数 ✓ 源码 ✓ 原始执行轨迹 ✓</small></div><div class="pipe"><div class="tube" style="--h:38px;--c:var(--green)"></div></div><div class="res" style="color:var(--green)">中位 <b>50.0</b><br>最佳 56.7 · 39 次超零样本</div></div>
+    <div class="note">完整接口的中位候选已高于两种消融的最佳候选；摘要没有找回信号，最佳值反而更低。管道粗细为示意，不代表 token 数。“超零样本次数”为原文 “runs whose accuracy exceeded the zero-shot baseline”。每个条件各一次搜索。</div>
+  </div>
+  <div class="card">
+    <div style="font-size:17px;font-weight:700;margin-bottom:4px">同一提议者、同评估预算下的其他优化器</div>
+    <table class="cmp">
+      <tr><th>方法</th><th>中位</th><th>最佳</th></tr>
+      <tr><td>GEPA</td><td>32.6</td><td>40.2</td></tr>
+      <tr><td>Best-of-N（无搜索结构）</td><td>34.0</td><td>44.2</td></tr>
+      <tr><td>TTT-Discover</td><td>34.1</td><td>45.6</td></tr>
+      <tr><td>OpenEvolve</td><td>39.1</td><td>43.3</td></tr>
+      <tr class="me"><td>Meta-Harness</td><td>50.0</td><td>56.7</td></tr>
+    </table>
+    <div class="note">“同预算”指候选评估次数相同，不是提议者 token 相同；提议者读 82 个文件的成本未计入对照。</div>
+  </div>
+</div>
+
+<div class="label"><span class="fig">留出</span><h2>搜到的 harness 拿到搜索之外还剩多少</h2></div>
+<div class="hold">
+  <div class="card">
+    <span class="tag-ok">留出测试集</span>
+    <h4>文本分类 3 数据集（Table 2）</h4>
+    <div class="big">48.6 <small>平均准确率</small></div>
+    <div class="hl">ACE 40.9（+7.7）· MCE 40.0 · few-shot(all) 40.8<br>附加上下文 <b>11.4K</b>，ACE 50.8K<br>另 9 个未见数据集平均 73.1，ACE 70.2（Table 5）</div>
+  </div>
+  <div class="card">
+    <span class="tag-ok">未见题目</span> <span class="tag-mid">模型部分未见</span>
+    <h4>检索增强数学：250 题搜索 → 200 道 IMO 级新题（Table 6）</h4>
+    <table class="cmp">
+      <tr><th>pass@1（3 次平均）</th><th>无检索</th><th>BM25</th><th>Dense k=5</th><th>Meta-H</th></tr>
+      <tr><td>GPT-OSS-20B<span style="color:var(--warn)">（选择用模型）</span></td><td>47.6</td><td>48.9</td><td>46.7</td><td>50.6</td></tr>
+      <tr><td>其余 4 个未见模型均值*</td><td>30.8</td><td>34.7</td><td>35.9</td><td>35.8</td></tr>
+      <tr class="me"><td>5 模型平均</td><td>34.1</td><td>37.5</td><td>38.1</td><td>38.8</td></tr>
+    </table>
+    <div class="note">*本项目由 Table 6 逐项计算。相对无检索 +4.7，但相对 BM25 只 +1.3、相对 Dense k=5 +0.7；4 个未见模型上与 Dense k=5 持平（35.8 vs 35.9），Gemini-3-Flash 上低于 BM25（46.3 vs 46.6）。</div>
+  </div>
+  <div class="card">
+    <span class="tag-no">非留出</span>
+    <h4>TerminalBench-2（Table 7）</h4>
+    <div class="hl">搜索与评估用<b>同一套 89 题</b>，作者称其为 discovery 问题。<br>Opus-4.6：76.4，Terminus-KIRA 74.7<br>Haiku-4.5：37.6，Goose 35.5<br>他方数字取自公开榜单，不是本地同条件重跑；相对 KIRA 只在 7/89 题上有增益。</div>
+  </div>
+</div>
+
+<div class="label"><span class="fig">案例</span><h2>为什么要原始轨迹：一次搜索日志里的归因</h2><span class="r">TerminalBench-2 · 附录 A.2 · 基线 KIRA 64.4%（该搜索设置）</span></div>
+<div class="log">
+  <div><b>第 1–2 轮</b><span class="n bad">58.9 / 57.8</span><br>两个不同的结构修复都附带同一份清理型 prompt 改写，均退步</div>
+  <div><b>第 3 轮：识别混杂</b><span class="n">63.3</span><br>推断共同因素是 prompt 改写，单独保留结构修复，退步明显变小</div>
+  <div><b>第 4–6 轮</b><span class="n bad">仍退步</span><br>继续改完成流程与等待逻辑，得出“改 prompt / 控制流风险高”</div>
+  <div><b>第 7 轮：纯增量</b><span class="n good">本轮最佳</span><br>首轮前注入环境快照（语言、包管理器、/app 列表），不改其他方法</div>
+</div>
+
+<div class="lim">
+  <h2>限制</h2>
+  <ol>
+    <li>接口消融只在文本分类的 search set 上，每个条件一次搜索，没有方差。</li>
+    <li>只用一个提议者（Claude Code + Opus-4.6）；作者自己指出换提议者的效果尚未研究。</li>
+    <li>TerminalBench 搜索与报告同一套题，不能当泛化证据。</li>
+    <li>数学“5 个留出模型”中 GPT-OSS-20B 就是选择 harness 用的模型；数学 search set 在 §4.2 写 250 题，附录 D 写 88 题。</li>
+    <li>对照只匹配评估次数，不匹配提议者 token 和墙钟成本。</li>
+    <li>迭代日志是定性案例，不是“轨迹访问导致收益”的受控证明。</li>
+  </ol>
+</div>
+<div class="foot"><span>来源：arXiv:2603.28052v1 正文 §1–5、附录 A–D。流程图与管道为本项目示意，数字均出自原文表格；“4 个未见模型均值”为本项目计算。未运行任何实验，不构成复现。</span><span class="mono" style="white-space:nowrap">reel/2603.28052 · L2 l2b06</span></div>
+</div></body></html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zombie Agents 画报</title>
+<style>
+  :root {
+    --bg: #121418;
+    --panel: #1b1f26;
+    --panel2: #222832;
+    --ink: #eceef1;
+    --muted: #a3abb8;
+    --line: #353c48;
+    --red: #ff4d4d;
+    --red-dim: #5a1e22;
+    --amber: #ffb547;
+    --amber-dim: #4a3818;
+    --safe: #5fd0a8;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden;
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK HK", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 22px; line-height: 1.5;
+    padding: 0 64px 36px;
+    display: flex; flex-direction: column; gap: 26px;
+  }
+  .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", monospace; }
+  .hazard { height: 22px; margin: 0 -64px; background: repeating-linear-gradient(-45deg, var(--amber) 0 26px, #121418 26px 52px); }
+  header { display: grid; grid-template-columns: 1fr 380px; gap: 30px; align-items: end; }
+  .kicker { font-size: 20px; letter-spacing: .14em; color: var(--amber); font-weight: 700; }
+  h1 { margin: 8px 0 8px; font-size: 62px; line-height: 1.14; font-weight: 800; }
+  h1 em { font-style: normal; color: var(--red); }
+  .sub { font-size: 24px; color: var(--muted); }
+  .meta { font-size: 17px; color: var(--muted); text-align: right; line-height: 1.55; }
+  .meta b { color: var(--ink); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .box { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 24px; }
+  .box h2 { margin: 0 0 8px; font-size: 25px; }
+  .box p { margin: 0; font-size: 21.5px; }
+  .tag { display: inline-block; font-size: 16px; font-weight: 700; padding: 1px 10px; border-radius: 4px; margin-right: 8px; vertical-align: 3px; }
+  .tag.q { background: var(--ink); color: var(--bg); }
+  .tag.a { background: var(--amber); color: #1a1205; }
+  .tag.m { background: var(--red); color: #fff; }
+  .tag.r { background: var(--safe); color: #0b2a20; }
+  .tag.l { background: #8d96a5; color: #111; }
+  .chain { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 24px 12px; }
+  .chain h2 { margin: 0 0 6px; font-size: 25px; }
+  .note { font-size: 15.5px; color: var(--muted); }
+  .persist { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .pcard { background: var(--panel2); border-left: 6px solid var(--red); border-radius: 8px; padding: 16px 22px; font-size: 20px; }
+  .pcard h3 { margin: 0 0 6px; font-size: 23px; }
+  .pcard dl { display: grid; grid-template-columns: 70px 1fr; gap: 4px 12px; margin: 0; }
+  .pcard dt { color: var(--amber); font-weight: 700; }
+  .pcard dd { margin: 0; }
+  .pcard .num { color: var(--red); font-weight: 800; font-size: 26px; }
+  .mit { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; }
+  .setup ul { margin: 0; padding-left: 22px; font-size: 19.5px; line-height: 1.55; }
+  .rec { margin-top: 10px; padding: 10px 14px; border: 1px dashed var(--safe); border-radius: 8px; font-size: 18px; color: #cfe9df; }
+  .limits { background: #191c22; border: 2px solid #8d96a5; border-radius: 10px; padding: 16px 24px; }
+  .limits h2 { margin: 0 0 6px; font-size: 25px; }
+  .limits ol { margin: 0; padding-left: 26px; font-size: 20.5px; line-height: 1.55; }
+  footer { margin-top: auto; font-size: 15px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px;
+           display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+<div class="hazard"></div>
+
+<header>
+  <div>
+    <div class="kicker">F4 · 安全审计 ｜ 攻击链路 + 缓解前后</div>
+    <h1>一次网页注入，写进记忆后<br><em>跨会话</em>持续控制代理</h1>
+    <div class="sub">Zombie Agents：自演化代理的“正常记忆写入”就是攻击面</div>
+  </div>
+  <div class="meta">
+    <b>Zombie Agents: Persistent Control of Self-Evolving LLM Agents via Self-Reinforcing Injections</b><br>
+    Yang, He, Ji, Hooi, Dong（NUS）<br>
+    arXiv:2602.15654<b>v2</b>（2026-03-05）
+  </div>
+</header>
+
+<div class="row2">
+  <div class="box">
+    <h2><span class="tag q">问题</span>逐会话的安全检查还够不够？</h2>
+    <p>普通提示注入只在当前上下文里生效，会话一重置就消失。自演化代理会把会话内容写进长期记忆：只读的不可信网页一旦经正常更新被存下来，就可能在之后<b>无关的</b>会话里被当作指令（§1–2.3）。</p>
+  </div>
+  <div class="box">
+    <h2><span class="tag a">研究动作</span>黑盒、只靠可控网页的两阶段攻击</h2>
+    <p>攻击者拿不到模型、记忆和工具配置，只能发布网页。论文分“感染/触发”两阶段，针对滑窗（FIFO）与检索记忆（RAG）各设计持久化载荷，再与四种标准间接注入和三种提示防护对比（§2.3–4.1）。</p>
+  </div>
+</div>
+
+<div class="chain">
+  <h2><span class="tag m">攻击链路</span>感染 → 驻留 → 触发 → 自我强化</h2>
+  <svg viewBox="0 0 1470 560" width="100%" role="img" aria-label="Zombie Agent 攻击链路示意">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a3abb8"/></marker>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ff4d4d"/></marker>
+    </defs>
+    <g font-family="Noto Sans CJK SC, sans-serif" font-size="19" fill="#eceef1">
+      <text x="0" y="22" font-size="19" font-weight="700" fill="#ffb547">PHASE Ⅰ · 感染（某次良性会话）</text>
+      <!-- 第一行 x: 0,295,590,885,1180 宽 270 -->
+      <g>
+        <rect x="0" y="38" width="262" height="112" rx="8" fill="#2a303b" stroke="#4a5363"/>
+        <text x="16" y="72" font-weight="700">❶ 用户发起良性任务</text><text x="16" y="102" fill="#a3abb8" font-size="17">如：找运动鞋折扣码</text>
+        <rect x="302" y="38" width="262" height="112" rx="8" fill="#2a303b" stroke="#4a5363"/>
+        <text x="318" y="72" font-weight="700">❷ 检索当前记忆</text><text x="318" y="102" fill="#a3abb8" font-size="17">此时记忆仍干净</text>
+        <rect x="604" y="38" width="262" height="112" rx="8" fill="#2a303b" stroke="#4a5363"/>
+        <text x="620" y="72" font-weight="700">❸ 工具浏览网页</text><text x="620" y="102" fill="#a3abb8" font-size="17" class="mono">read_url(…)</text>
+        <rect x="906" y="38" width="262" height="112" rx="8" fill="#5a1e22" stroke="#ff4d4d" stroke-width="2"/>
+        <text x="922" y="72" font-weight="700">❹ 读到攻击者网页</text><text x="922" y="102" fill="#ffc2c2" font-size="17">隐藏的指令型载荷 Z</text>
+        <rect x="1208" y="38" width="262" height="112" rx="8" fill="#5a1e22" stroke="#ff4d4d" stroke-width="2"/>
+        <text x="1224" y="72" font-weight="700">❺ 记忆演化 F<tspan font-size="14" dy="5">M</tspan><tspan dy="-5"> 写入</tspan></text><text x="1224" y="102" fill="#ffc2c2" font-size="17">走的是正常更新流程</text>
+        <text x="1224" y="128" fill="#ffc2c2" font-size="17">攻击者无需任何记忆写权限</text>
+        <line x1="262" y1="94" x2="298" y2="94" stroke="#a3abb8" stroke-width="2.5" marker-end="url(#ar)"/>
+        <line x1="564" y1="94" x2="600" y2="94" stroke="#a3abb8" stroke-width="2.5" marker-end="url(#ar)"/>
+        <line x1="866" y1="94" x2="902" y2="94" stroke="#ff4d4d" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="1168" y1="94" x2="1204" y2="94" stroke="#ff4d4d" stroke-width="2.5" marker-end="url(#arr)"/>
+      </g>
+      <!-- 记忆带 -->
+      <line x1="1339" y1="150" x2="1339" y2="206" stroke="#ff4d4d" stroke-width="3" marker-end="url(#arr)"/>
+      <rect x="0" y="210" width="1470" height="96" rx="48" fill="#3a1418" stroke="#ff4d4d" stroke-width="2.5"/>
+      <text x="735" y="250" text-anchor="middle" font-size="24" font-weight="800">长期记忆 M：载荷 Z 驻留</text>
+      <text x="735" y="284" text-anchor="middle" font-size="18" fill="#ffc2c2">滑窗缓冲（FIFO）或向量库（RAG）· 会话重置不会清除</text>
+      <text x="735" y="346" text-anchor="middle" font-size="19" font-weight="700" fill="#ffb547">PHASE Ⅱ · 触发（之后的、无关的会话）</text>
+      <g>
+        <rect x="0" y="366" width="262" height="112" rx="8" fill="#2a303b" stroke="#4a5363"/>
+        <text x="16" y="400" font-weight="700">❶ 新会话、新任务</text><text x="16" y="430" fill="#a3abb8" font-size="17">如：查航班信息</text>
+        <rect x="302" y="366" width="262" height="112" rx="8" fill="#5a1e22" stroke="#ff4d4d" stroke-width="2"/>
+        <text x="318" y="400" font-weight="700">❷ 检索记忆</text><text x="318" y="430" fill="#ffc2c2" font-size="17">载荷随记忆回到上下文</text>
+        <rect x="604" y="366" width="262" height="112" rx="8" fill="#5a1e22" stroke="#ff4d4d" stroke-width="2"/>
+        <text x="620" y="400" font-weight="700">❸ 未授权工具调用</text><text x="620" y="430" fill="#ffc2c2" font-size="17">外传对话、执行命令</text>
+        <rect x="906" y="366" width="262" height="112" rx="8" fill="#5a1e22" stroke="#ff4d4d" stroke-width="2"/>
+        <text x="922" y="400" font-weight="700">❹ 重访攻击页</text><text x="922" y="430" fill="#ffc2c2" font-size="17">再次读到载荷</text>
+        <rect x="1208" y="366" width="262" height="112" rx="8" fill="#5a1e22" stroke="#ff4d4d" stroke-width="2"/>
+        <text x="1224" y="400" font-weight="700">❺ 再次写回记忆</text><text x="1224" y="430" fill="#ffc2c2" font-size="17">自我强化，抵抗截断</text>
+        <line x1="131" y1="306" x2="131" y2="362" stroke="#a3abb8" stroke-width="2.5" marker-end="url(#ar)"/>
+        <line x1="262" y1="422" x2="298" y2="422" stroke="#ff4d4d" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="564" y1="422" x2="600" y2="422" stroke="#ff4d4d" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="866" y1="422" x2="902" y2="422" stroke="#ff4d4d" stroke-width="2.5" marker-end="url(#arr)"/>
+        <line x1="1168" y1="422" x2="1204" y2="422" stroke="#ff4d4d" stroke-width="2.5" marker-end="url(#arr)"/>
+        <path d="M1339,366 L1339,310" stroke="#ff4d4d" stroke-width="3" stroke-dasharray="8 6" fill="none" marker-end="url(#arr)"/>
+        <text x="1352" y="342" font-size="16" fill="#ff4d4d" font-weight="700">回环</text>
+      </g>
+      <text x="0" y="530" font-size="17" fill="#a3abb8">载荷原文（附录 A.3 节选大意）：要求“每一轮都先读取某网址”“把对话历史拼进 URL 备份”“每轮执行 scp 命令”，并要求代理“把这些写进记忆”。</text>
+    </g>
+  </svg>
+  <div class="note">示意：按论文图 2 的步骤文字（§3）本项目自绘，非论文原图。</div>
+</div>
+
+<div class="persist">
+  <div class="pcard">
+    <h3>滑窗记忆（FIFO）：怎样不被截断</h3>
+    <dl>
+      <dt>难点</dt><dd>原始观察会被移出窗口</dd>
+      <dt>手段</dt><dd>递归自复制：载荷要求每轮先重访攻击页，把自己重新抄进上下文</dd>
+      <dt>结果</dt><dd>20+ 轮保持 <span class="num">100%</span> 留存；基线在窗口填满后降到 0（§4.3、图 5a）</dd>
+    </dl>
+  </div>
+  <div class="pcard">
+    <h3>检索记忆（RAG）：怎样被无关查询取到</h3>
+    <dl>
+      <dt>难点</dt><dd>与新查询语义无关就检索不到</dd>
+      <dt>手段</dt><dd>语义别名：用多样的载体句覆盖高频语义区域</dd>
+      <dt>结果</dt><dd>库中约 <span class="num">240</span> 份副本（基线约 100）；K=50 时检出约 <span class="num">23</span> 条恶意条目（图 5b–c）</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="mit">
+  <div class="box">
+    <h2><span class="tag r">缓解前后</span>能压低，但没有归零</h2>
+    <svg viewBox="0 0 760 330" width="100%" role="img" aria-label="不同记忆演化与提示防护下的攻击成功率">
+      <g font-family="Noto Sans CJK SC, sans-serif" font-size="18" fill="#eceef1">
+        <text x="0" y="20" fill="#ffb547" font-weight="700" font-size="17">记忆演化方式（图 4，攻击成功率 ASR）</text>
+        <!-- 刻度：x=210 为 0，每 1% = 5px，100% = 710 -->
+        <g stroke="#353c48"><line x1="210" y1="34" x2="210" y2="182"/><line x1="460" y1="34" x2="460" y2="182"/><line x1="710" y1="34" x2="710" y2="182"/></g>
+        <text x="0" y="66">原始历史</text>
+        <rect x="210" y="46" width="385" height="30" fill="#ff4d4d"/><text x="605" y="68" font-weight="800" fill="#ff4d4d">约 77%</text>
+        <text x="0" y="114">言语反思</text>
+        <rect x="210" y="94" width="60" height="30" fill="#ffb547"/><text x="280" y="116" font-weight="800" fill="#ffb547">约 12%</text>
+        <text x="0" y="162">精炼经验</text>
+        <rect x="225" y="142" width="60" height="30" fill="#ffb547" opacity=".45"/><rect x="210" y="142" width="15" height="30" fill="#ffb547"/>
+        <text x="295" y="164" font-weight="800" fill="#ffb547">约 3–15%</text>
+        <text x="210" y="200" font-size="14" fill="#a3abb8" text-anchor="middle">0</text>
+        <text x="460" y="200" font-size="14" fill="#a3abb8" text-anchor="middle">50%</text>
+        <text x="710" y="200" font-size="14" fill="#a3abb8" text-anchor="middle">100%</text>
+        <text x="0" y="240" fill="#ffb547" font-weight="700" font-size="17">三种提示词防护（图 6：Sandwich / Instructional / Spotlight）</text>
+        <rect x="210" y="256" width="300" height="30" fill="none" stroke="#ff4d4d" stroke-width="2" stroke-dasharray="6 4"/>
+        <rect x="210" y="256" width="300" height="30" fill="#ff4d4d" opacity=".35"/>
+        <text x="0" y="278">加防护后</text>
+        <text x="522" y="278" font-weight="800" fill="#ff4d4d">仍 &gt;60%</text>
+        <text x="0" y="318" font-size="16" fill="#a3abb8">较无防护只降约 10–15%（原文未注明是百分点还是相对值）</text>
+      </g>
+    </svg>
+    <div class="note">按 §4.2、§4.4 文中约数绘制，非论文原图；“3–15%”画成区间。原文用约 15% 的命令执行成功率说明：恶意动作仍可能被“结晶”成永久规则。</div>
+  </div>
+  <div class="box setup">
+    <h2><span class="tag l">实验条件</span>结论成立的范围</h2>
+    <ul>
+      <li>模型：Gemini-2.5-Flash、GLM-4.7-Flash</li>
+      <li>滑窗：诱饵暴露 K=3 轮 → 无关触发 M=20 轮</li>
+      <li>RAG：库 3,000 条；诱饵暴露 <b>K=300</b> 轮 → M=20 轮</li>
+      <li>3 个随机种子取平均；触发任务来自 insta-150k-v1</li>
+      <li>工具：search / read_url / execute_command</li>
+      <li>基线：Naive、Context Ignoring、Escape、Fake Completion 四种间接注入（无持久化设计）</li>
+    </ul>
+    <div class="rec">作者建议（未做实验）：把记忆当作可信计算基；写入与检索时隔离不可信数据；记忆条目带来源；对受检索记忆影响的工具调用做策略检查（§6）。</div>
+  </div>
+</div>
+
+<div class="limits">
+  <h2><span class="tag l">限制</span>别把它读成“任何代理一次即沦陷”</h2>
+  <ol>
+    <li><b>暴露是被保证的：</b>诱饵任务迫使代理访问恶意页；RAG 需要 300 轮暴露，不是一次自然感染。</li>
+    <li><b>滑窗持久性依赖攻击源一直在线：</b>载荷靠每轮重访攻击页续命；没有测试攻击页下线或禁止重访后的情况，也没有冻结记忆的成对对照。</li>
+    <li><b>“不影响正常效用”未量化：</b>摘要称保留良性任务质量，正文没有给出效用数字。</li>
+    <li><b>案例是定性演示：</b>医疗、购物案例写“单次暴露”即感染，与定量实验的暴露次数不同；只测了提示词类防护。</li>
+  </ol>
+</div>
+
+<footer>
+  <span>来源：arXiv 2602.15654v2 钉定全文（§1–6、附录 A）。数字为作者报告值（多为文中约数），本项目未复现、未运行攻击代码。</span>
+  <span>HarnessRSI Daily · rsi-l1-20261022-03 · 阅读判断</span>
+</footer>
+<div class="hazard" style="margin-top:0"></div>
+</body>
+</html>

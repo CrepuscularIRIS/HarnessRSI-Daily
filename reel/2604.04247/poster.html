@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Combee 画报</title>
+<style>
+  :root {
+    --bg: #fffaf0;
+    --ink: #2b2112;
+    --muted: #6f6250;
+    --line: #e7dcc4;
+    --honey: #e8a317;
+    --honey-bg: #fdf0cf;
+    --naive: #b8432f;
+    --combee: #1d6b8a;
+    --combee-bg: #e3f0f5;
+    --warn: #7a3b12;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden;
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK HK", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 22px; line-height: 1.5;
+    padding: 46px 64px 34px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  header { display: grid; grid-template-columns: 1fr 360px; gap: 30px; align-items: end;
+           border-bottom: 8px solid var(--honey); padding-bottom: 16px; }
+  .kicker { font-size: 20px; letter-spacing: .14em; color: #a06e05; font-weight: 700; }
+  h1 { margin: 6px 0 6px; font-size: 58px; line-height: 1.15; font-weight: 800; }
+  h1 em { font-style: normal; color: var(--naive); }
+  .sub { font-size: 24px; color: var(--muted); }
+  .meta { font-size: 17px; color: var(--muted); text-align: right; line-height: 1.55; }
+  .meta b { color: var(--ink); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .box { background: #fff; border: 2px solid var(--line); border-radius: 12px; padding: 16px 22px; }
+  .box h2 { margin: 0 0 6px; font-size: 25px; }
+  .box p { margin: 0; font-size: 21px; }
+  .tag { display: inline-block; font-size: 16px; font-weight: 700; padding: 1px 10px; border-radius: 4px; margin-right: 8px;
+         vertical-align: 3px; color: #fff; }
+  .tag.q { background: var(--ink); } .tag.a { background: var(--combee); } .tag.m { background: var(--honey); color: #2b2112; }
+  .tag.r { background: #5a7d2a; } .tag.l { background: var(--warn); }
+  .hero { display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px; }
+  .hero .box h2 { font-size: 26px; }
+  .note { font-size: 15.5px; color: var(--muted); line-height: 1.45; }
+  .over { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .stat { background: var(--honey-bg); border-radius: 8px; padding: 8px 12px; }
+  .stat .k { font-size: 16px; color: var(--muted); }
+  .stat .v { font-size: 30px; font-weight: 800; line-height: 1.2; }
+  .stat .v s { color: var(--muted); font-weight: 600; font-size: 24px; text-decoration: none; }
+  .stat .v b { color: var(--naive); }
+  table { border-collapse: collapse; width: 100%; font-size: 19.5px; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: center; font-variant-numeric: tabular-nums; }
+  th { font-size: 15.5px; color: var(--muted); border-bottom: 2px solid var(--ink); }
+  td:first-child, th:first-child { text-align: left; }
+  tr.cb td { background: var(--combee-bg); font-weight: 800; color: var(--combee); }
+  tr.bad td { color: var(--naive); }
+  tr.sep td { border-top: 2px solid var(--ink); }
+  .limits { border: 2px solid var(--warn); background: #fbeee2; border-radius: 12px; padding: 14px 22px; }
+  .limits h2 { margin: 0 0 4px; font-size: 25px; color: var(--warn); }
+  .limits ol { margin: 0; padding-left: 26px; font-size: 19.5px; line-height: 1.5; }
+  footer { margin-top: auto; font-size: 15px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px;
+           display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">F0 / F5 · 规模化失败 ｜ 规模–质量曲线 + 分叉</div>
+    <h1>一次并行吸收的轨迹越多，<br>学到的提示反而<em>越空</em></h1>
+    <div class="sub">Combee：把“一次聚合全部反思”换成分层并行扫描，让大批量提示学习不被上下文过载压垮</div>
+  </div>
+  <div class="meta">
+    <b>Combee: Scaling Parallel Prompt Learning for Self-Improving LLM Agents</b><br>
+    Li, He, Zhang 等；Stoica, Gonzalez, Zou<br>
+    arXiv:2604.04247<b>v2</b>（2026-09-25）
+  </div>
+</header>
+
+<div class="row2">
+  <div class="box">
+    <h2><span class="tag q">问题</span>“上下文过载”：窗口没满，质量先塌</h2>
+    <p>ACE、GEPA 这类“生成-反思-更新”提示学习是按串行或低并行设计的。把一批反思一次性交给聚合 LLM 时，批越大，它越只保留泛泛的模式，丢掉具体、高价值的条目。这一现象在全部反思都放得进 128K 窗口时仍然出现（§2.2）。</p>
+    <div class="over">
+      <div class="stat"><div class="k">Formula · ACE 条目数（批 1→100）</div><div class="v"><s>264</s> → <b>21</b></div></div>
+      <div class="stat"><div class="k">Formula 准确率（批 1→100）</div><div class="v"><s>87.0%</s> → <b>72.5%</b></div></div>
+      <div class="stat"><div class="k">FiNER 条目数（随批增大）</div><div class="v"><s>246</s> → <b>11</b></div></div>
+      <div class="stat"><div class="k">命中 ≥3 次的高价值条目</div><div class="v"><s>19</s> → <b>0</b> <span style="font-size:15px;color:#6f6250;font-weight:400">Formula</span></div></div>
+    </div>
+  </div>
+  <div class="box">
+    <h2><span class="tag a">研究动作</span>Map → Shuffle → 两级 Reduce</h2>
+    <svg viewBox="0 0 680 300" width="100%" role="img" aria-label="Combee 聚合示意">
+      <g font-family="Noto Sans CJK SC, sans-serif" font-size="16" fill="#2b2112">
+        <text x="0" y="18" font-weight="700" fill="#b8432f">朴素并行</text>
+        <g fill="#f4c96a">
+          <rect x="0" y="30" width="22" height="22"/><rect x="26" y="30" width="22" height="22"/><rect x="52" y="30" width="22" height="22"/><rect x="78" y="30" width="22" height="22"/><rect x="104" y="30" width="22" height="22"/><rect x="130" y="30" width="22" height="22"/><rect x="156" y="30" width="22" height="22"/><rect x="182" y="30" width="22" height="22"/>
+        </g>
+        <text x="214" y="48" font-size="15" fill="#6f6250">…n 条反思</text>
+        <line x1="300" y1="41" x2="372" y2="41" stroke="#b8432f" stroke-width="3"/><polygon points="372,34 386,41 372,48" fill="#b8432f"/>
+        <rect x="392" y="22" width="130" height="40" rx="6" fill="#fff" stroke="#b8432f" stroke-width="2.5"/><text x="457" y="48" text-anchor="middle">1 次聚合</text>
+        <line x1="522" y1="41" x2="552" y2="41" stroke="#b8432f" stroke-width="3"/><polygon points="552,34 566,41 552,48" fill="#b8432f"/>
+        <text x="572" y="38" font-size="15" fill="#b8432f">少量泛化提醒</text><text x="572" y="58" font-size="15" fill="#b8432f">具体条目丢失</text>
+        <line x1="0" y1="82" x2="680" y2="82" stroke="#e7dcc4" stroke-width="2"/>
+        <text x="0" y="108" font-weight="700" fill="#1d6b8a">Combee</text>
+        <text x="0" y="138" font-size="15" fill="#6f6250">Map</text>
+        <g fill="#f4c96a"><rect x="40" y="122" width="18" height="18"/><rect x="62" y="122" width="18" height="18"/><rect x="84" y="122" width="18" height="18"/><rect x="106" y="122" width="18" height="18"/></g>
+        <text x="0" y="186" font-size="15" fill="#6f6250">Shuffle</text>
+        <text x="60" y="186" font-size="15">复制 ×2 再打乱</text>
+        <g fill="#f4c96a" stroke="#1d6b8a" stroke-width="1"><rect x="40" y="200" width="16" height="16"/><rect x="58" y="200" width="16" height="16"/><rect x="76" y="200" width="16" height="16"/><rect x="94" y="200" width="16" height="16"/><rect x="112" y="200" width="16" height="16"/><rect x="130" y="200" width="16" height="16"/><rect x="148" y="200" width="16" height="16"/><rect x="166" y="200" width="16" height="16"/></g>
+        <text x="0" y="262" font-size="15" fill="#6f6250">Reduce</text>
+        <rect x="230" y="110" width="160" height="40" rx="6" fill="#fff" stroke="#1d6b8a" stroke-width="2.5"/><text x="310" y="136" text-anchor="middle">组 1：√n 条</text>
+        <rect x="230" y="160" width="160" height="40" rx="6" fill="#fff" stroke="#1d6b8a" stroke-width="2.5"/><text x="310" y="186" text-anchor="middle">组 2：√n 条</text>
+        <text x="310" y="222" text-anchor="middle" font-size="20" fill="#1d6b8a">⋮</text>
+        <rect x="230" y="232" width="160" height="40" rx="6" fill="#fff" stroke="#1d6b8a" stroke-width="2.5"/><text x="310" y="258" text-anchor="middle">组 √n</text>
+        <g stroke="#1d6b8a" stroke-width="2" fill="none"><path d="M190,208 C210,208 210,130 228,130"/><path d="M190,208 L228,180"/><path d="M190,208 C210,208 210,252 228,252"/></g>
+        <g stroke="#1d6b8a" stroke-width="2.5" fill="none"><path d="M390,130 C430,130 430,190 460,190"/><path d="M390,180 L460,190"/><path d="M390,252 C430,252 430,190 460,190"/></g>
+        <rect x="462" y="166" width="140" height="48" rx="6" fill="#1d6b8a"/><text x="532" y="196" text-anchor="middle" fill="#fff" font-weight="700">二级合并</text>
+        
+        <text x="532" y="236" text-anchor="middle" font-size="15" fill="#1d6b8a">→ 更新 playbook</text>
+        <text x="230" y="294" font-size="14" fill="#6f6250">每次聚合调用只看约 √n 条；另有动态批大小控制器按延迟曲线选批</text>
+      </g>
+    </svg>
+    <div class="note">示意：按 §3.1–3.3 与图 3 文字自绘，非论文原图。Combee 是叠在 ACE / GEPA 之上的扩展层，不改变它们的生成与更新机制。</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="box">
+    <h2><span class="tag m">规模–质量曲线</span>批大小过了某一点，两条路分叉</h2>
+    <svg viewBox="0 0 900 500" width="100%" role="img" aria-label="Formula 数据集 GEPA 批大小与准确率">
+      <g font-family="Noto Sans CJK SC, sans-serif" font-size="16" fill="#2b2112">
+        <!-- y: 0.60→420, 0.90→40 -->
+        <g stroke="#efe6d3"><line x1="80" y1="40" x2="860" y2="40"/><line x1="80" y1="103.3" x2="860" y2="103.3"/><line x1="80" y1="166.7" x2="860" y2="166.7"/><line x1="80" y1="230" x2="860" y2="230"/><line x1="80" y1="293.3" x2="860" y2="293.3"/><line x1="80" y1="356.7" x2="860" y2="356.7"/></g>
+        <line x1="80" y1="420" x2="860" y2="420" stroke="#2b2112" stroke-width="2"/>
+        <line x1="80" y1="40" x2="80" y2="420" stroke="#2b2112" stroke-width="2"/>
+        <g text-anchor="end" font-size="15" fill="#6f6250">
+          <text x="72" y="45">0.90</text><text x="72" y="108">0.85</text><text x="72" y="172">0.80</text><text x="72" y="235">0.75</text><text x="72" y="298">0.70</text><text x="72" y="362">0.65</text><text x="72" y="425">0.60</text>
+        </g>
+        <g text-anchor="middle" font-size="15" fill="#6f6250">
+          <text x="131" y="444">5</text><text x="290" y="444">10</text><text x="449" y="444">20</text><text x="500" y="444">25</text><text x="659" y="444">50</text><text x="701" y="444">60</text><text x="778" y="444">84</text><text x="818" y="444">100</text>
+        </g>
+        <text x="470" y="474" text-anchor="middle" font-size="16">每次更新聚合的轨迹数（批大小，对数轴）</text>
+        <text x="20" y="232" font-size="16" transform="rotate(-90 20 232)" text-anchor="middle">Formula 准确率</text>
+        <!-- 基座 LLM -->
+        <line x1="80" y1="369.3" x2="860" y2="369.3" stroke="#6f6250" stroke-dasharray="4 6" stroke-width="2"/>
+        <text x="856" y="362" text-anchor="end" font-size="15" fill="#6f6250">不做提示学习的基座 LLM 0.640</text>
+        <!-- 分叉区 -->
+        <rect x="500" y="40" width="360" height="380" fill="#fdf0cf" opacity=".55"/>
+        <text x="680" y="62" text-anchor="middle" font-size="16" fill="#a06e05" font-weight="700">分叉区：批 &gt; 25</text>
+        <!-- 朴素并行 -->
+        <polyline points="131,97 290,90.7 500,97 659,154 818,264.2" fill="none" stroke="#b8432f" stroke-width="4"/>
+        <g fill="#b8432f"><circle cx="131" cy="97" r="6"/><circle cx="290" cy="90.7" r="6"/><circle cx="500" cy="97" r="6"/><circle cx="659" cy="154" r="6"/><circle cx="818" cy="264.2" r="7"/></g>
+        <text x="818" y="292" text-anchor="middle" font-weight="700" fill="#b8432f">0.723</text>
+        <text x="818" y="312" text-anchor="middle" font-size="14" fill="#b8432f">360 s</text>
+        <text x="645" y="160" text-anchor="end" font-size="15" fill="#b8432f">0.810 · 510 s</text>
+        <text x="131" y="128" text-anchor="middle" font-size="14" fill="#b8432f">0.855 · 2981 s</text>
+        <text x="290" y="122" text-anchor="middle" font-size="14" fill="#b8432f">0.860 · 1894 s</text>
+        <!-- shuffle+scan 固定批 -->
+        <polyline points="449,91.9 500,95.7 659,100.8 701,104.6" fill="none" stroke="#1d6b8a" stroke-width="4"/>
+        <g fill="#fff" stroke="#1d6b8a" stroke-width="3"><circle cx="449" cy="91.9" r="6"/><circle cx="500" cy="95.7" r="6"/><circle cx="659" cy="100.8" r="6"/><circle cx="701" cy="104.6" r="6"/></g>
+        <text x="659" y="84" text-anchor="middle" font-size="15" fill="#1d6b8a">0.852 · 510 s</text>
+        <!-- Combee 动态 -->
+        <polygon points="778,94 783,105 795,106 786,114 789,126 778,119 767,126 770,114 761,106 773,105" fill="#1d6b8a"/>
+        <text x="790" y="150" text-anchor="middle" font-weight="700" fill="#1d6b8a">Combee 0.845</text>
+        <text x="790" y="170" text-anchor="middle" font-size="14" fill="#1d6b8a">动态选批 84 · 338 s</text>
+        <!-- 图例 -->
+        <g font-size="16">
+          <line x1="110" y1="196" x2="150" y2="196" stroke="#b8432f" stroke-width="4"/><text x="158" y="202">朴素并行 GEPA</text>
+          <line x1="110" y1="226" x2="150" y2="226" stroke="#1d6b8a" stroke-width="4"/><text x="158" y="232">固定批 + shuffle / scan</text>
+          <polygon points="130,248 134,256 143,257 136,263 138,272 130,267 122,272 124,263 117,257 126,256" fill="#1d6b8a"/><text x="158" y="266">Combee（动态批）</text>
+        </g>
+      </g>
+    </svg>
+    <div class="note">按附录 E Table 8 / Table 6 数值重绘（非论文原图），为单次代表性运行；DeepSeek-V3.1，GEPA，Formula。三次重复（Table 4）：Combee 0.857±0.005 / 459 s，批 10 为 0.857±0.007 / 2071 s，批 80 为 0.771±0.005。</div>
+  </div>
+  <div class="box">
+    <h2><span class="tag m">同图换 ACE</span>分叉更早</h2>
+    <svg viewBox="0 0 520 330" width="100%" role="img" aria-label="Formula 数据集 ACE 批大小与准确率">
+      <g font-family="Noto Sans CJK SC, sans-serif" font-size="15" fill="#2b2112">
+        <!-- y: 0.60→280, 0.90→30 -->
+        <g stroke="#efe6d3"><line x1="60" y1="30" x2="500" y2="30"/><line x1="60" y1="113.3" x2="500" y2="113.3"/><line x1="60" y1="196.7" x2="500" y2="196.7"/></g>
+        <line x1="60" y1="280" x2="500" y2="280" stroke="#2b2112" stroke-width="2"/><line x1="60" y1="30" x2="60" y2="280" stroke="#2b2112" stroke-width="2"/>
+        <g text-anchor="end" font-size="14" fill="#6f6250"><text x="54" y="35">0.90</text><text x="54" y="118">0.80</text><text x="54" y="201">0.70</text><text x="54" y="285">0.60</text></g>
+        <g text-anchor="middle" font-size="14" fill="#6f6250"><text x="90.5" y="300">5</text><text x="185.3" y="300">10</text><text x="280" y="300">20</text><text x="374.7" y="300">40</text><text x="430.2" y="300">60</text><text x="469.5" y="300">80</text></g>
+        <text x="280" y="324" text-anchor="middle" font-size="14">批大小（对数轴）</text>
+        <line x1="60" y1="246.7" x2="500" y2="246.7" stroke="#6f6250" stroke-dasharray="4 6" stroke-width="2"/>
+        <text x="496" y="240" text-anchor="end" font-size="13" fill="#6f6250">基座 0.640</text>
+        <polyline points="90.5,96.7 185.3,105 280,150.8 405.3,159.2 430.2,184.2" fill="none" stroke="#b8432f" stroke-width="3.5"/>
+        <g fill="#b8432f"><circle cx="90.5" cy="96.7" r="5"/><circle cx="185.3" cy="105" r="5"/><circle cx="280" cy="150.8" r="5"/><circle cx="405.3" cy="159.2" r="5"/><circle cx="430.2" cy="184.2" r="5"/></g>
+        <text x="430" y="208" text-anchor="middle" fill="#b8432f" font-weight="700">0.715</text>
+        <polyline points="280,71.7 374.7,88.3 430.2,96.7 469.5,92.5" fill="none" stroke="#1d6b8a" stroke-width="3.5"/>
+        <g fill="#fff" stroke="#1d6b8a" stroke-width="2.5"><circle cx="280" cy="71.7" r="5"/><circle cx="374.7" cy="88.3" r="5"/><circle cx="430.2" cy="96.7" r="5"/></g>
+        <polygon points="469.5,82 473.5,90 482,91 475.5,97 477.5,106 469.5,101 461.5,106 463.5,97 457,91 465.5,90" fill="#1d6b8a"/>
+        <text x="280" y="62" text-anchor="middle" fill="#1d6b8a" font-weight="700">0.850</text>
+        <text x="460" y="72" text-anchor="middle" fill="#1d6b8a" font-weight="700">0.825</text>
+      </g>
+    </svg>
+    <div class="note">按 Table 8 重绘。ACE 上动态选批（批 80，0.825 / 3510 s）<b>不如</b>固定批 20 + shuffle/scan（0.850 / 5450 s）；朴素批 5 为 0.820 / 9464 s。</div>
+    <div class="note" style="margin-top:8px">去掉增广洗牌（p=1）的消融：Formula 上 GEPA 0.803 → 0.857，ACE 0.825 → 0.855（Table 3）。</div>
+  </div>
+</div>
+
+<div class="box">
+  <h2><span class="tag r">同条件结果</span>代理任务：质量接近串行，学习时间缩短一个数量级</h2>
+  <table>
+    <thead><tr><th>AppWorld · ReAct · DeepSeek-V3.1 · 90 个训练任务 → Test-Normal</th><th>批</th><th>playbook token</th><th>训练时间</th><th>学习成本</th><th>TGC</th><th>SGC</th><th>平均</th></tr></thead>
+    <tbody>
+      <tr><td>ReAct（不学习）</td><td>–</td><td>–</td><td>0</td><td>$0</td><td>63.7</td><td>42.9</td><td>53.3</td></tr>
+      <tr><td>+ ACE 串行</td><td>1</td><td>1,578</td><td>86 min</td><td>$1.62</td><td>66.1</td><td>50.0</td><td>58.1</td></tr>
+      <tr><td>+ ACE 朴素并行</td><td>10</td><td>2,329</td><td>19 min</td><td>$1.50</td><td>72.0</td><td>58.9</td><td>65.4</td></tr>
+      <tr class="bad"><td>+ ACE 朴素并行</td><td>40</td><td>526</td><td>5 min</td><td>$1.40</td><td>66.7</td><td>44.6</td><td>55.7</td></tr>
+      <tr class="cb"><td>+ Combee</td><td>40</td><td>6,887</td><td>7 min</td><td>$1.67</td><td>70.8</td><td>60.7</td><td>65.8</td></tr>
+      <tr class="sep"><td><b>Terminal-Bench 2.0</b> · Terminus-2 · 60 条离线轨迹 → 29 个留出任务，3 次平均</td><td>批</td><td>playbook token</td><td>训练时间</td><td>学习成本</td><td colspan="3">Accuracy@1</td></tr>
+      <tr><td>Terminus-2（不学习）／ + ACE 串行</td><td>– / 1</td><td>– / 9,067</td><td>0 / 42.4 min</td><td>$0 / $0.24</td><td colspan="3">32.2% / <b>37.9%</b></td></tr>
+      <tr class="bad"><td>+ ACE 朴素并行</td><td>30</td><td>3,150</td><td>2.1 min</td><td>$0.13</td><td colspan="3">31.0%</td></tr>
+      <tr class="cb"><td>+ Combee</td><td>30</td><td>8,023</td><td>2.4 min</td><td>$0.17</td><td colspan="3">35.6%</td></tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:6px">Table 1、Table 2。“17×”指 Terminal-Bench 学习阶段时间（42.4 → 2.4 min）；AppWorld 相对串行为 12×（86 → 7 min）。</div>
+</div>
+
+<div class="limits">
+  <h2><span class="tag l">限制</span>收益主要在速度，不在质量上限</h2>
+  <ol>
+    <li><b>AppWorld 上朴素批 10 已达 65.4，接近 Combee 的 65.8：</b>同质量下的收益主要是时间（7 对 19 分钟）。串行 ACE 58.1 反而低于批 5/10，原文没有注明 AppWorld 的重复次数。</li>
+    <li><b>Terminal-Bench 上仍有精度代价：</b>35.6% 低于串行的 37.9%。</li>
+    <li><b>成本只算了学习阶段：</b>Terminal-Bench 用离线轨迹，附录 H 省略了生成阶段；更大 playbook 带来的推理开销没有匹配。</li>
+    <li><b>规模有限：</b>代理任务只有 90 / 60 条训练数据，千级轨迹与更深层级没有测（附录 B）；曲线图为单次代表性运行，同一配置在不同表中数值不同（如 0.845 与 0.857）。</li>
+  </ol>
+</div>
+
+<footer>
+  <span>来源：arXiv 2604.04247v2 钉定全文（§1–6、附录 B、E、G、H）。数字为作者报告值，本项目未复现。</span>
+  <span>HarnessRSI Daily · rsi-l1-20261022-03 · 阅读判断，非审稿结论</span>
+</footer>
+</body>
+</html>

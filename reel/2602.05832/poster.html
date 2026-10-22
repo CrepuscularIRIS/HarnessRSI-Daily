@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>UI-Mem 画报</title>
+<style>
+/* 版式：机制类——左侧纵向因果链，右侧组内优势算例与“信号消失”示意曲线，下方结果阶梯 */
+@page { size: 1600px 2263px; margin: 0; }
+:root{
+  --bg:#fbf6ef; --ink:#2a1f2d; --mag:#b5179e; --org:#f77f00; --vio:#5a189a; --mute:#8a7d86;
+  --card:#ffffff; --soft:#f6e9f2; --line:#e6d6df; --teal:#0f766e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:2263px;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans CJK SC","Noto Sans SC",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.mono{font-family:"Noto Sans Mono CJK SC",monospace}
+.hero{background:linear-gradient(115deg,var(--vio) 0%,var(--mag) 58%,var(--org) 100%);color:#fff;padding:40px 60px 30px}
+.hero .k{font-size:19px;letter-spacing:3px;opacity:.9}
+.hero h1{font-size:50px;line-height:1.22;margin:12px 0 10px;font-weight:900}
+.hero p{font-size:22px;line-height:1.5;max-width:1450px;opacity:.96}
+.hero .meta{font-size:15px;opacity:.82;margin-top:10px}
+.body{padding:22px 60px 26px}
+.main{display:grid;grid-template-columns:600px minmax(0,1fr);gap:30px}
+h2{font-size:28px;font-weight:900;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+h2 .dot{width:16px;height:16px;border-radius:50%;background:var(--mag);display:inline-block}
+h2 small{font-size:15px;color:var(--mute);font-weight:400;margin-left:auto}
+/* 因果链 */
+.chain{position:relative;padding-left:46px}
+.chain:before{content:"";position:absolute;left:18px;top:14px;bottom:20px;width:4px;background:linear-gradient(var(--mute),var(--mag),var(--teal))}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:18px;line-height:1.5}
+.step:before{content:attr(data-n);position:absolute;left:-46px;top:10px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;font-weight:900;font-size:19px;display:flex;align-items:center;justify-content:center}
+.step b.t{display:block;font-size:20px;margin-bottom:2px}
+.step.bad{border-left:6px solid var(--org)}
+.step.bad:before{background:var(--org)}
+.step.fix{border-left:6px solid var(--teal);background:#effaf8}
+.step.fix:before{background:var(--teal)}
+.step .src{font-size:14px;color:var(--mute)}
+.ev{display:inline-block;font-size:13px;font-weight:700;border-radius:3px;padding:0 7px;margin-left:6px;vertical-align:2px}
+.ev.m{background:#ffe8cc;color:#9a4a00}.ev.a{background:#ece4f3;color:var(--vio)}
+.sub3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.sub3 div{border-radius:8px;padding:6px 8px;font-size:15px;line-height:1.35;text-align:center}
+/* 优势算例 */
+.groups{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.g h4{font-size:18px;margin-bottom:8px}
+.cells{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.cell{border-radius:8px;text-align:center;padding:6px 2px;font-size:14px;line-height:1.3}
+.cell .r{font-family:"Noto Sans Mono CJK SC",monospace;font-size:20px;font-weight:900;display:block}
+.adv{margin-top:8px;font-size:15px;line-height:1.45}
+.adv .mono{font-weight:900}
+.zero{color:var(--org);font-weight:900}
+.formula{margin-top:12px;background:var(--soft);border-radius:10px;padding:10px 16px;font-size:16px;line-height:1.55}
+.curve{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.cap{font-size:14px;color:var(--mute);line-height:1.45;margin-top:4px}
+/* 结果阶梯 */
+.res{display:grid;grid-template-columns:1.25fr 1fr;gap:26px;margin-top:22px}
+.lad .r{display:grid;grid-template-columns:270px 1fr 64px;gap:10px;align-items:center;margin:6px 0;font-size:17px}
+.lad .tr{height:24px;background:#f0e6ec;border-radius:12px;position:relative}
+.lad .f{height:100%;border-radius:12px;background:#c9b8c4}
+.lad .v{font-family:"Noto Sans Mono CJK SC",monospace;font-weight:900;font-size:20px;text-align:right}
+.lad .me .f{background:linear-gradient(90deg,var(--mag),var(--org))}
+.lad .me{font-weight:900}
+.lad .ab .f{background:repeating-linear-gradient(45deg,#e7a6d6 0 8px,#f3cfe8 8px 16px)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.kv{font-size:17px;line-height:1.6}
+.kv b{color:var(--mag)}
+.chk{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.chk .panel h3{font-size:20px;margin-bottom:6px}
+.chk ul{list-style:none;font-size:17px;line-height:1.5}
+.chk li{padding-left:22px;position:relative;margin-bottom:4px}
+.chk li.y:before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:900}
+.chk li.n:before{content:"✗";position:absolute;left:0;color:var(--org);font-weight:900}
+.chk li.q:before{content:"?";position:absolute;left:2px;color:var(--vio);font-weight:900}
+.lim{margin-top:16px;background:var(--ink);color:#f6eef3;border-radius:12px;padding:14px 22px;display:grid;grid-template-columns:130px 1fr;gap:16px}
+.lim h3{font-size:26px;color:#ffb35c;line-height:1.25}
+.lim ul{font-size:17px;line-height:1.5;columns:2;column-gap:28px;padding-left:18px}
+.lim li{break-inside:avoid;margin-bottom:4px}
+.foot{margin-top:10px;font-size:14px;color:var(--mute);display:flex;justify-content:space-between;gap:20px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="k">HarnessRSI · 精选 Reel · 机制类 · F2 / F3 · 上下文与权重成对更新</div>
+  <h1>同组 rollout 全对或全错，GRPO 就没有梯度：<br>UI-Mem 让同一组拿到强弱不同的记忆指导</h1>
+  <p>手机 GUI 在线强化学习里，结果奖励稀疏，一组采样常常全部失败；而给每条 rollout 都加强记忆指导，又可能让全组都成功。两种情况下组内优势都为零。UI-Mem 在同一组里分层注入“强 / 弱 / 无”指导，并让分层记忆随策略持续更新。</p>
+  <p class="meta mono">arXiv:2602.05832v1（2026-02-05）· Xiao, Wang, Wang, Liu, Chai, Pan, Zhou, Chen, Wen, Li · CUHK MMLab / vivo AI Lab · ui-mem.github.io</p>
+</div>
+
+<div class="body">
+<div class="main">
+  <div>
+    <h2><span class="dot"></span>因果链</h2>
+    <div class="chain">
+      <div class="step" data-n="1"><b class="t">奖励稀疏、轨迹很长</b>只有终局给 r∈{0,1}，任务常超过 10 步；做对了中间几步、最后一步错，仍得 0。<div class="src">§1、附录 A</div></div>
+      <div class="step bad" data-n="2"><b class="t">全组失败 → 优势全为 0<span class="ev m">实测</span></b>每题采样 G=4 条；全失败时组内方差为 0，式(6)的优势消失。vanilla GRPO 的组内奖励方差“频繁塌到接近 0”，成功率剧烈波动。<div class="src">§3.1、§4.4 Fig.7</div></div>
+      <div class="step bad" data-n="3"><b class="t">每条都加强指导 → 全组成功，同样为 0<span class="ev a">作者论证</span></b>另外，代理可能学会照外部计划执行，而不是把技能学进参数。原文只有消融支持：去掉分层、全部给完整指导时成绩“显著下降”（数值未在正文给出）；组内方差曲线没有画这一条件。<div class="src">§1、§3.3、Fig.5</div></div>
+      <div class="step fix" data-n="4"><b class="t">修法：同组分层 + 逐步撤除</b>
+        <div class="sub3">
+          <div style="background:#fbe3f3"><b>强</b><br>工作流 + 子任务技能 + 失败模式</div>
+          <div style="background:#fff0de"><b>弱</b><br>只给工作流</div>
+          <div style="background:#eef0f2"><b>无</b><br>无记忆，测内化程度</div>
+        </div>
+        <div style="margin-top:8px">按每题成功率 EMA 线性调整比例：越熟练，强指导越少、无指导越多；无指导成功另有加分 α，并加子任务进度奖励。</div><div class="src">§3.3 式(2)–(5)</div></div>
+      <div class="step fix" data-n="5"><b class="t">记忆随策略自更新</b>每轮用奖励模型判定成败，再由 LLM 从成功轨迹抽工作流/技能、从失败轨迹抽首个失败子任务的诊断，参数化为模板（如 {{filename}}）后合并入库；检索用 UCB 打分。<div class="src">§3.2、§3.4、附录 D–G</div></div>
+    </div>
+  </div>
+
+  <div>
+    <h2><span class="dot" style="background:var(--org)"></span>一组 4 条 rollout 的优势怎么算<small>示意 · 按式(6)手算的玩具例子</small></h2>
+    <div class="groups">
+      <div class="g"><h4>全失败（无指导）</h4>
+        <div class="cells"><div class="cell" style="background:#eef0f2"><span class="r">0</span>无</div><div class="cell" style="background:#eef0f2"><span class="r">0</span>无</div><div class="cell" style="background:#eef0f2"><span class="r">0</span>无</div><div class="cell" style="background:#eef0f2"><span class="r">0</span>无</div></div>
+        <div class="adv">方差 0 → A = <span class="zero mono">0, 0, 0, 0</span><br>没有学习信号</div></div>
+      <div class="g"><h4>全成功（都给强指导）</h4>
+        <div class="cells"><div class="cell" style="background:#fbe3f3"><span class="r">1</span>强</div><div class="cell" style="background:#fbe3f3"><span class="r">1</span>强</div><div class="cell" style="background:#fbe3f3"><span class="r">1</span>强</div><div class="cell" style="background:#fbe3f3"><span class="r">1</span>强</div></div>
+        <div class="adv">方差 0 → A = <span class="zero mono">0, 0, 0, 0</span><br>同样没有学习信号</div></div>
+      <div class="g" style="border:2px solid var(--teal)"><h4 style="color:var(--teal)">分层（强 / 弱 / 无 / 无）</h4>
+        <div class="cells"><div class="cell" style="background:#fbe3f3"><span class="r">1.0</span>强</div><div class="cell" style="background:#fff0de"><span class="r">0.6</span>弱</div><div class="cell" style="background:#eef0f2"><span class="r">0</span>无</div><div class="cell" style="background:#eef0f2"><span class="r">0</span>无</div></div>
+        <div class="adv">均值 0.4 · 标准差 0.42 →<br>A = <span class="mono" style="color:var(--teal)">+1.41, +0.47, −0.94, −0.94</span></div></div>
+    </div>
+    <div class="formula">式(6)：A<sub>i</sub> = (R<sub>i</sub> − mean R) / (std R + ε)。玩具例子取总体标准差、忽略 ε；奖励 1.0 / 0.6 / 0 借用附录 H 图 14 的三档示例（同一任务在强、弱、无指导下的结果），真实训练中的奖励还含进度奖励和无指导加分，且每组强弱无比例由课程动态决定。</div>
+
+    <div class="curve">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px">训练中组内奖励方差的形状（示意）</div>
+      <svg width="100%" height="300" viewBox="0 0 880 250" preserveAspectRatio="xMidYMid meet">
+        <line x1="60" y1="210" x2="860" y2="210" stroke="#2a1f2d" stroke-width="2"/>
+        <line x1="60" y1="20" x2="60" y2="210" stroke="#2a1f2d" stroke-width="2"/>
+        <text x="66" y="236" font-size="15" fill="#8a7d86">训练步 →</text>
+        <text x="34" y="150" font-size="15" fill="#8a7d86" transform="rotate(-90 34 150)">组内方差 →</text>
+        <path d="M60,90 C120,70 160,82 220,78 S340,66 400,74 S520,82 580,76 S720,70 860,80" fill="none" stroke="#0f766e" stroke-width="5"/>
+        <path d="M60,206 L110,205 L120,170 L130,206 L240,205 L250,182 L262,206 L380,206 L392,160 L404,206 L520,205 L532,188 L544,206 L660,206 L672,176 L684,206 L860,205" fill="none" stroke="#f77f00" stroke-width="4"/>
+        <rect x="560" y="110" width="290" height="62" rx="8" fill="#fff" stroke="#e6d6df"/>
+        <line x1="575" y1="130" x2="615" y2="130" stroke="#0f766e" stroke-width="5"/><text x="624" y="136" font-size="16" fill="#2a1f2d">UI-Mem：方差保持在“健康水平”</text>
+        <line x1="575" y1="156" x2="615" y2="156" stroke="#f77f00" stroke-width="4"/><text x="624" y="162" font-size="16" fill="#2a1f2d">vanilla GRPO：多数时间接近 0</text>
+      </svg>
+      <div class="cap">只画原文 Fig.7(b) 的文字描述（基线“频繁塌到接近 0”，UI-Mem“保持健康方差”），无坐标数值，<b>不是原图数据</b>。注意：对照组是无记忆的 vanilla GRPO（全失败塌缩），不是“全部强指导”（全成功塌缩）。</div>
+    </div>
+    <div class="panel kv" style="margin-top:14px">
+      <h2 style="font-size:22px"><span class="dot" style="background:var(--org)"></span>推理时检索：训练过才用得上</h2>
+      未训练模型直接检索记忆：47.6 → <b>52.6</b>；vanilla GRPO 后再检索：53.0 → <b>55.2</b><br>
+      UI-Mem 训练后再检索：8B 66.8 → <b>71.1</b>，4B 58.2 → <b>62.5</b>（Table 1、3）<br>
+      <span style="color:var(--mute)">作者解读：只给上下文不够，模型需要先学会怎么用它。本项目注：这三组差值来自不同训练流程，并不是对“检索”单独做的受控对照。</span>
+    </div>
+  </div>
+</div>
+
+<div class="res">
+  <div class="panel lad">
+    <h2 style="font-size:24px"><span class="dot"></span>同骨干对照：AndroidWorld 成功率<small>Qwen3-VL-8B · Table 3 · Fig.5</small></h2>
+    <div class="r"><span>Qwen3-VL-8B 原始</span><div class="tr"><div class="f" style="width:47.6%"></div></div><span class="v">47.6</span></div>
+    <div class="r"><span>仅推理时检索记忆（不训练）</span><div class="tr"><div class="f" style="width:52.6%"></div></div><span class="v">52.6</span></div>
+    <div class="r"><span>vanilla GRPO</span><div class="tr"><div class="f" style="width:53.0%"></div></div><span class="v">53.0</span></div>
+    <div class="r"><span>GRPO + 推理时检索</span><div class="tr"><div class="f" style="width:55.2%"></div></div><span class="v">55.2</span></div>
+    <div class="r"><span>GRPO + 经验回放</span><div class="tr"><div class="f" style="width:56.5%"></div></div><span class="v">56.5</span></div>
+    <div class="r"><span>GRPO + 进度奖励</span><div class="tr"><div class="f" style="width:57.3%"></div></div><span class="v">57.3</span></div>
+    <div class="r ab"><span>消融：用原始轨迹代替抽象记忆</span><div class="tr"><div class="f" style="width:58.2%"></div></div><span class="v">58.2</span></div>
+    <div class="r ab"><span>消融：训练中不更新记忆</span><div class="tr"><div class="f" style="width:62.9%"></div></div><span class="v">62.9</span></div>
+    <div class="r me"><span>UI-Mem（推理时不检索）</span><div class="tr"><div class="f" style="width:66.8%"></div></div><span class="v">66.8</span></div>
+    <div class="cap" style="font-size:15px">UI-Mem 本身含进度奖励，所以“记忆引导”部分的较公平对照是 GRPO + 进度奖励（+9.5）。推理时再检索记忆为 71.1（Table 1）。“去分层”“只用单一层级记忆”的消融在 Fig.5，正文未给数值。</div>
+  </div>
+  <div>
+    <div class="panel kv" style="margin-bottom:12px">
+      <h2 style="font-size:22px"><span class="dot" style="background:var(--teal)"></span>其他证据</h2>
+      <b>4B 也成立：</b>Qwen3-VL-4B 45.3 → UI-Mem-4B 58.2<br>
+      <b>AndroidLab（8B）：</b>SR 34.8 → 43.5，Sub-SR 45.3 → 52.7；MobileRL 42.5<br>
+      <b>5 个训练中未出现的 App</b>（Bluecoins、Cantook、Maps.me、Pi-Music、Zoom）：不检索时持平或优于基线，检索后进一步提升（Fig.6，正文无数值）
+    </div>
+    <div class="panel kv">
+      <h2 style="font-size:22px"><span class="dot" style="background:var(--vio)"></span>附录 C：训练奖励器核对</h2>
+      Qwen2.5-VL-72B 把截图转文字 → DeepSeek-V3 判断关键状态是否达成。<br>
+      准确率 <b>0.900</b>，直接用 MLLM 打分 0.724；P 0.909 · R 0.943 · F1 0.902（Table 4）。<br>
+      <span style="color:var(--mute)">测试奖励另由 AndroidWorld 系统状态程序判定，与训练奖励器无关。</span>
+    </div>
+  </div>
+</div>
+
+<div class="chk">
+  <div class="panel"><h3>补读附录 C 后确认的</h3><ul>
+    <li class="y">文本化两段式校验比直接看截图更准（0.900 vs 0.724），所选组合 F1 0.902。</li>
+    <li class="y">进度奖励来自 DeepSeek-V3 对 essential states 的判定（附录 B 模板）。</li>
+    <li class="n">训练奖励器仍有约 10% 判错（按其自报准确率），对 GRPO 的影响未分析。</li>
+  </ul></div>
+  <div class="panel"><h3>附录 C 没有回答的</h3><ul>
+    <li class="q">验证集规模、来源与标注方式均未报告。</li>
+    <li class="q">F1 0.902 与 P/R 的调和平均（≈0.926）不符，平均方式未说明。</li>
+    <li class="q">训练查询源（含 AndroidLab）与测试任务的去重<b>不在附录 C</b>，全文未见。</li>
+  </ul></div>
+</div>
+
+<div class="lim">
+  <h3>限制</h3>
+  <ul>
+    <li>无种子、无方差报告；每组只有 G=4 条，比例与阈值的具体值未给。</li>
+    <li>训练查询取自 AMEX / AndroidLab / UI-Genie，AndroidLab 主表部分在分布内；以 AndroidWorld 为主结论。</li>
+    <li>附录 B 的训练记忆示例是 Markor，AndroidWorld 也含该应用（本项目判断）：AndroidWorld 更像“未见任务”，不是“未见 App”。</li>
+    <li>奖励器、抽取器（Seed1.8）、参数化（DeepSeek-V3）的调用成本未报告，与基线的算力不匹配。</li>
+    <li>方差曲线只证明全失败塌缩被缓解；全成功塌缩一侧只有整体成绩消融，没有直接的方差测量。</li>
+  </ul>
+</div>
+<div class="foot"><span>来源：arXiv:2602.05832v1 正文 §1–4、附录 A–H（含附录 C 全文）。因果链与玩具算例、方差曲线为本项目示意；条形数值取自 Table 1–3 与 §4.4 正文。未运行任何实验，不构成复现。</span><span class="mono" style="white-space:nowrap">reel/2602.05832 · L2 l2b05</span></div>
+</div>
+</body></html>

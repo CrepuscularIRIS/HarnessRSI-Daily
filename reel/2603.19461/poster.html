@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyperagents 画报</title>
+<style>
+  :root {
+    --paper: #f6f3ec;
+    --ink: #1d232b;
+    --muted: #5b6470;
+    --line: #d6d0c3;
+    --fixed: #6b7380;      /* A：固定 meta */
+    --fixed-bg: #e9eaec;
+    --edit: #0f7c6e;       /* B：可编辑 meta */
+    --edit-bg: #dcefeb;
+    --warn: #a4471d;
+    --warn-bg: #f7e4d8;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden;
+    font-family: "Noto Sans CJK SC", "Noto Sans CJK HK", "Droid Sans Fallback", sans-serif;
+    color: var(--ink); font-size: 22px; line-height: 1.5;
+    padding: 56px 64px 40px;
+    display: flex; flex-direction: column; gap: 30px;
+  }
+  .serif { font-family: "Noto Serif CJK SC", "Noto Serif CJK HK", serif; }
+  header { display: grid; grid-template-columns: 1fr 360px; gap: 30px; align-items: end;
+           border-bottom: 3px solid var(--ink); padding-bottom: 18px; }
+  .kicker { font-size: 20px; letter-spacing: .12em; color: var(--edit); font-weight: 700; }
+  h1 { margin: 6px 0 6px; font-size: 64px; line-height: 1.12; font-weight: 700; }
+  .sub { font-size: 25px; color: var(--muted); }
+  .meta { font-size: 17px; color: var(--muted); text-align: right; line-height: 1.55; }
+  .meta b { color: var(--ink); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .box { border: 2px solid var(--line); border-radius: 10px; padding: 20px 24px; background: #fffdf8; }
+  .box h2 { margin: 0 0 6px; font-size: 25px; }
+  .box p { margin: 0; font-size: 23px; }
+  .tag { display: inline-block; font-size: 16px; font-weight: 700; padding: 1px 10px; border-radius: 4px;
+         color: #fff; margin-right: 8px; vertical-align: 3px; }
+  .tag.q { background: var(--ink); } .tag.a { background: var(--edit); }
+  .tag.m { background: #8a6d1d; } .tag.r { background: #34507a; } .tag.l { background: var(--warn); }
+  /* 分屏时间线 */
+  .split-head { display: grid; grid-template-columns: 1fr 210px 1fr; gap: 0; align-items: stretch; }
+  .lane-title { padding: 12px 20px; font-size: 26px; font-weight: 700; color: #fff; border-radius: 10px 10px 0 0; }
+  .lane-title small { display: block; font-size: 17px; font-weight: 400; opacity: .92; }
+  .lane-title.A { background: var(--fixed); } .lane-title.B { background: var(--edit); }
+  .spine-title { text-align: center; font-size: 17px; color: var(--muted); align-self: center; line-height: 1.3; }
+  .split { display: grid; grid-template-columns: 1fr 210px 1fr; position: relative; }
+  .cell { padding: 22px 22px; font-size: 22px; line-height: 1.45; border-bottom: 1px dashed #c9c2b2; }
+  .cell.A { background: var(--fixed-bg); }
+  .cell.B { background: var(--edit-bg); }
+  .cell .big { font-size: 42px; font-weight: 800; line-height: 1.15; }
+  .cell.A .big { color: #4a515c; } .cell.B .big { color: var(--edit); }
+  .cell .lbl { font-size: 17.5px; color: var(--muted); }
+  .node { display: inline-block; border: 2px solid currentColor; border-radius: 6px; padding: 0 8px; margin: 2px 4px 2px 0;
+          font-size: 19.5px; background: #fff; }
+  .cell.A .node { color: #4a515c; } .cell.B .node { color: var(--edit); }
+  .node.lock { border-style: dashed; }
+  .spine { position: relative; display: flex; align-items: center; justify-content: center; text-align: center;
+           font-size: 18px; font-weight: 700; color: var(--ink); padding: 8px 10px; line-height: 1.3; }
+  .spine::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; margin-left: -2px; background: var(--ink); z-index: 0; }
+  .spine span { position: relative; z-index: 1; background: var(--paper); border: 2px solid var(--ink); border-radius: 18px; padding: 6px 10px; }
+  .spine.end::before { bottom: 50%; }
+  .schem { font-size: 15px; color: var(--muted); margin-top: 6px; }
+  /* 结果区 */
+  .results { display: grid; grid-template-columns: 1.18fr 1fr; gap: 26px; }
+  table { border-collapse: collapse; width: 100%; font-size: 20.5px; }
+  th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+  th { font-size: 16px; color: var(--muted); font-weight: 700; border-bottom: 2px solid var(--ink); }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.num small { color: var(--muted); font-size: 14px; }
+  tr.hl td { background: var(--edit-bg); font-weight: 700; }
+  tr.fx td { background: var(--fixed-bg); }
+  .foot { font-size: 16.5px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+  .limits { border: 2px solid var(--warn); background: var(--warn-bg); border-radius: 10px; padding: 14px 22px; }
+  .limits h2 { margin: 0 0 6px; font-size: 25px; color: var(--warn); }
+  .limits ol { margin: 0; padding-left: 26px; font-size: 21px; line-height: 1.55; }
+  .limits li { margin: 5px 0; }
+  footer { margin-top: auto; font-size: 15px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px;
+           display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="kicker">F3 · 可编辑的改进器 ｜ A/B 分屏演变时间线</div>
+    <h1 class="serif">改进器自己，能不能也被改进？</h1>
+    <div class="sub">Hyperagents：把 task agent 与 meta agent 合成一个可自改的程序，对照“meta 永远是初始版本”的同一系统</div>
+  </div>
+  <div class="meta">
+    <b>Hyperagents</b><br>
+    Zhang, Zhao, Yang, Foerster, Clune 等<br>
+    arXiv:2603.19461<b>v1</b>（2026-03-19）<br>
+    代码：github.com/facebookresearch/Hyperagents
+  </div>
+</header>
+
+<div class="row2">
+  <div class="box">
+    <h2><span class="tag q">问题</span>“会做题 ⇒ 会改自己”只在写代码时成立</h2>
+    <p>DGM 的自改进依赖一个假设：评测任务与自我修改都是编码，所以任务能力提升等于改进能力提升。论文评审、奖励设计等非代码任务不满足这一点，而 DGM 生成改进指令的那一步是手写且不可改的（§1–2）。</p>
+  </div>
+  <div class="box">
+    <h2><span class="tag a">研究动作</span>只放开一个变量：meta 能否被改</h2>
+    <p>DGM-H 让 hyperagent 同时改 task 与 meta 代码；对照组 <b>DGM-H w/o self-improve</b> 全程把 meta 固定为初始 meta，仍保留归档、父代选择与评估流程。外环（父代选择、评估）在两组中都固定（§3–4.1）。</p>
+  </div>
+</div>
+
+<div>
+  <div class="split-head">
+    <div class="lane-title A">A ｜ 固定 meta<small>DGM-H w/o self-improve：只有 task agent 在变</small></div>
+    <div class="spine-title">同一初始 agent<br>同 100 代预算</div>
+    <div class="lane-title B">B ｜ 可编辑 meta（hyperagent）<small>DGM-H：改进机制本身也在变</small></div>
+  </div>
+  <div class="split">
+    <div class="cell A">
+      <span class="node">task T₀：单次 FM 调用直接作答</span><span class="node lock">meta M₀ 🔒</span><br>
+      M₀ 读仓库与历史评估，决定改哪里
+    </div>
+    <div class="spine"><span>第 0 代</span></div>
+    <div class="cell B">
+      <span class="node">hyperagent H₀ = (T₀, M₀)</span><br>
+      同一个 Python 程序：改 task 的代码也可以改 meta 自己
+    </div>
+
+    <div class="cell A">
+      M₀ → T₁ → T₂ → … → T<sub>k</sub><br>
+      <span class="node lock">meta 始终 = M₀ 🔒</span>
+      <div class="lbl">“进步”只能落在 task 侧</div>
+    </div>
+    <div class="spine"><span>演化中<br>（归档保留踏脚石）</span></div>
+    <div class="cell B">
+      H₀ → H₁ → … → H<sub>k</sub>，meta 随之改变。论文举出的自生成部件：<br>
+      <span class="node">PerformanceTracker 跨代记录指标</span><span class="node">持久记忆：洞见·因果假设·下一步计划</span>
+      <div class="lbl">§5.2 / 附录 E.3 的代码片段；属定性例证</div>
+    </div>
+
+    <div class="cell A">
+      <div class="lbl">留出测试 · 5 次运行中位数</div>
+      论文评审 <span class="big">0.0</span>　奖励设计 <span class="big">0.213</span>
+    </div>
+    <div class="spine"><span>第 100 代</span></div>
+    <div class="cell B">
+      <div class="lbl">留出测试 · 5 次运行中位数</div>
+      论文评审 <span class="big">0.710</span>　奖励设计 <span class="big">0.372</span>
+    </div>
+
+    <div class="cell A">
+      <div class="lbl">带 meta 换到未见域，冻结 meta 跑 50 代（imp@50）</div>
+      初始 meta <span class="big">0.0</span>　DGM-custom 迁移 meta <span class="big">0.0</span>
+    </div>
+    <div class="spine end"><span>迁移：IMO 级<br>数学评分</span></div>
+    <div class="cell B">
+      <div class="lbl">带 meta 换到未见域，冻结 meta 跑 50 代（imp@50）</div>
+      DGM-H 迁移 hyperagent <span class="big">0.630</span>
+      <div class="lbl">相对初始 meta 显著（p&lt;0.05）</div>
+    </div>
+  </div>
+  <div class="schem">示意：本页自绘的分屏流程，非论文原图；格内数字取自 §5.1–5.2 正文。迁移时搬走的是 task+meta 整套代码。</div>
+</div>
+
+<div class="results">
+  <div class="box">
+    <h2><span class="tag r">同条件结果</span>留出测试集，100 代，5 次独立运行</h2>
+    <table>
+      <thead><tr><th>方法（中位数，95% bootstrap CI）</th><th>论文评审</th><th>奖励设计</th></tr></thead>
+      <tbody>
+        <tr><td>初始 agent</td><td class="num">0.0</td><td class="num">0.060</td></tr>
+        <tr><td>DGM 原版（编码专用指令生成）</td><td class="num">0.0 <small>0.0–0.510</small></td><td class="num">0.0 <small>0.0–0.090</small></td></tr>
+        <tr><td>DGM-custom（人工按域定制）</td><td class="num">0.590 <small>0.570–0.650</small></td><td class="num">0.348 <small>0.305–0.385</small></td></tr>
+        <tr class="fx"><td>A 固定 meta（w/o self-improve）</td><td class="num">0.0 <small>0.0–0.130</small></td><td class="num">0.213 <small>0.180–0.348</small></td></tr>
+        <tr><td>去掉归档（w/o open-ended）</td><td class="num">0.0 <small>0.0–0.560</small></td><td class="num">0.116 <small>0.0–0.348</small></td></tr>
+        <tr class="hl"><td>B 可编辑 meta（DGM-H）</td><td class="num">0.710 <small>0.590–0.750</small></td><td class="num">0.372 <small>0.355–0.436</small></td></tr>
+      </tbody>
+    </table>
+    <div class="foot">Wilcoxon 符号秩检验：B 对 A、DGM 原版、去归档均 p&lt;0.05；<b>B 对 DGM-custom p&gt;0.05，不显著</b>。自改模型 Claude 4.5 Sonnet；评估模型：论文评审 GPT-4o、奖励设计 Claude 4.5 Sonnet（附录 D.1）。按验证分（无验证集时按训练分）选出最佳 agent 再测（§5.1）。</div>
+  </div>
+  <div class="box">
+    <h2><span class="tag m">改进能力迁移</span>imp@50 · IMO 级数学评分</h2>
+    <svg viewBox="0 0 620 330" width="100%" role="img" aria-label="imp@50 柱状图">
+      <g font-family="Noto Sans CJK SC, sans-serif" font-size="17" fill="#1d232b">
+        <!-- 轴：0 → y=270, 0.8 → y=30 ；每 0.1 = 30px -->
+        <line x1="70" y1="270" x2="600" y2="270" stroke="#1d232b" stroke-width="2"/>
+        <line x1="70" y1="30" x2="70" y2="270" stroke="#1d232b" stroke-width="2"/>
+        <g fill="#5b6470" font-size="15" text-anchor="end">
+          <text x="62" y="275">0</text><text x="62" y="215">0.2</text><text x="62" y="155">0.4</text>
+          <text x="62" y="95">0.6</text><text x="62" y="35">0.8</text>
+        </g>
+        <g stroke="#e2dccf"><line x1="70" y1="210" x2="600" y2="210"/><line x1="70" y1="150" x2="600" y2="150"/><line x1="70" y1="90" x2="600" y2="90"/></g>
+        <!-- 柱 0：用细线标零值 -->
+        <rect x="95" y="266" width="90" height="4" fill="#6b7380"/>
+        <line x1="140" y1="270" x2="140" y2="270" stroke="#1d232b"/>
+        <text x="140" y="256" text-anchor="middle" font-weight="700">0.0</text>
+        <rect x="220" y="266" width="90" height="4" fill="#6b7380"/>
+        <line x1="265" y1="270" x2="265" y2="231" stroke="#1d232b" stroke-width="2"/><line x1="255" y1="231" x2="275" y2="231" stroke="#1d232b" stroke-width="2"/>
+        <text x="265" y="222" text-anchor="middle" font-weight="700">0.0</text>
+        <rect x="345" y="266" width="90" height="4" fill="#6b7380"/>
+        <text x="390" y="256" text-anchor="middle" font-weight="700">0.0</text>
+        <rect x="470" y="81" width="90" height="189" fill="#0f7c6e"/>
+        <line x1="515" y1="108" x2="515" y2="81" stroke="#1d232b" stroke-width="2"/><line x1="505" y1="108" x2="525" y2="108" stroke="#1d232b" stroke-width="2"/>
+        <text x="515" y="70" text-anchor="middle" font-weight="800" font-size="20" fill="#0f7c6e">0.630</text>
+        <g font-size="15" text-anchor="middle" fill="#1d232b">
+          <text x="140" y="292">初始 meta</text><text x="140" y="311">DGM 算法</text>
+          <text x="265" y="292">初始 meta</text><text x="265" y="311">DGM-H 算法</text>
+          <text x="390" y="292">DGM-custom</text><text x="390" y="311">迁移 meta</text>
+          <text x="515" y="292" font-weight="700">DGM-H</text><text x="515" y="311" font-weight="700">迁移 hyperagent</text>
+        </g>
+      </g>
+    </svg>
+    <div class="foot">按 §5.2 正文数值重绘（非论文原图）；须线为 95% CI 上界（DGM-H 为 0.540–0.630）。meta 全程冻结，只看它“产出更好 task agent”的能力；评估模型 o4-mini。继续演化 200 代：迁移起点 0.640 对从头 0.610，<b>p&gt;0.05</b>（§5.3）。</div>
+  </div>
+</div>
+
+<div class="limits">
+  <h2><span class="tag l">限制</span>读结论前先看这几条</h2>
+  <ol>
+    <li><b>起点门槛很低：</b>初始 agent 在论文评审、IMO 评分上得 0，是因为输出格式不合规（§5.1、§5.2）；迁移 hyperagent 在新域起点也是 0，所以 imp@50 = 0.630 里含“先把格式修好”这一步。</li>
+    <li><b>对人工定制不显著：</b>B 对 DGM-custom 的中位数更高但 p&gt;0.05；200 代复利实验 0.640 对 0.610 也不显著。</li>
+    <li><b>等迭代 ≠ 等成本：</b>100 代自改约 33M token，计入评估约 88.6M token（附录 D.2）；未给出与各对照的总成本匹配。</li>
+    <li><b>迁移的不是单独的 meta：</b>搬走的是 task+meta 整体代码；父代选择与评估外环固定，不可自改（§3、§7）。</li>
+  </ol>
+</div>
+
+<footer>
+  <span>来源：arXiv 2603.19461v1 钉定全文（§1–5.3、§7、附录 D.1–D.4）。数字均为作者报告值，本项目未复现。</span>
+  <span>HarnessRSI Daily · run rsi-l1-20261022-03 · 阅读判断，非审稿结论</span>
+</footer>
+</body>
+</html>

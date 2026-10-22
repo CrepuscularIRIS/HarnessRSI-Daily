@@ -4,7 +4,22 @@
 
 核心问题：**究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？** 收录边界见 [EVIDENCE](docs/EVIDENCE.md)。
 
-> 2026-10-22：现有评分、排名、选题与 Reel 已统一撤下。原文和已归纳领域卡保留；当前没有新版有效榜单或 Reel。此次维护未启动重评分，详情见 [重置核查](docs/RESET_2026-10-22.md)。
+> 2026-10-22：旧版评分与 Reel 已撤下（[重置核查](docs/RESET_2026-10-22.md)）；同日按 problem-core-v1.1 完成全量重评（1597 篇，run [rsi-l1-20261022-03](research/scoring/runs/rsi-l1-20261022-03/progress.md)），并发布本期 Reel 8 篇（见下方精选）。
+
+## 2026 精选（confirmed P3，经 Opus 原文核对）
+
+问题优先两层评价：好问题（P3=成立且开放、解决后改变能力或判断）＋子卡条件核对。下表为本期 Reel 终选 8 篇；全部 confirmed P3 候选池（228 篇）见 [l3-candidates.tsv](research/scoring/runs/rsi-l1-20261022-03/l3-candidates.tsv)。
+
+| 论文 | 好问题 | 命中领域卡 | 画报 |
+|---|---|---|---|
+| [Are Not Always Faithful Self-Evolvers](https://arxiv.org/abs/2601.22436) · [code](https://github.com/Dreamcatcher0622/Faithfulness) | 冻结骨干的自演化代理收益是否真的依赖所留存经验的语义内容？七类内容干预证伪「记忆有效即在用记忆」 | `diagnose_self_improvement` · `index_experience_for_reuse` | [Reel](reel/2601.22436/) |
+| [Meta-Harness](https://arxiv.org/abs/2603.28052) · [code](https://github.com/stanford-iris-lab/meta-harness-tbench2-artifact) | harness 搜索的后果延迟多步出现——提议者需要按需读原始轨迹，而非只看标量分数或压缩摘要 | `attribute_and_patch_incumbent` · `make_the_improver_editable` | [Reel](reel/2603.28052/) |
+| [UI-Mem](https://arxiv.org/abs/2602.05832) | 移动 GUI 在线 GRPO 中，每条 rollout 都获强记忆指导会让组内优势信号消失；经验要随策略更新 | `couple_context_and_weight_updates` · `abstract_experience_into_guidance` | [Reel](reel/2602.05832/) |
+| [Behind EvoMap](https://arxiv.org/abs/2605.25815) | 共享自演化技能网络的发布奖励与自报验证日志，实测担保不了被复用资产的质量（84% 拆解为 66% 无验证＋18% 平凡验证） | `diagnose_self_improvement` · `evidence_gated_retention` | [Reel](reel/2605.25815/) |
+| [Hyperagents](https://arxiv.org/abs/2603.19461) · [code](https://github.com/facebookresearch/Hyperagents) | 「任务求解提升＝自修改能力提升」在非代码领域不成立——把 meta agent 本身做成可编辑对象 | `make_the_improver_editable` | [Reel](reel/2603.19461/) |
+| [Zombie Agents](https://arxiv.org/abs/2602.15654) | 只读网页经正常记忆更新写入长期记忆后，一次间接注入能否在无关后续会话持续控制代理（77%→3–15%） | `diagnose_self_improvement` · `index_experience_for_reuse` | [Reel](reel/2602.15654/) |
+| [Pre-Resolution Signals](https://arxiv.org/abs/2604.15719) | 未来预测题在结果揭晓前没有标签——用对同一未决问题多次重访的信号修订持久 harness | `abstract_experience_into_guidance` · `evidence_gated_retention` | [Reel](reel/2604.15719/) |
+| [Combee](https://arxiv.org/abs/2604.04247) | 大量并行轨迹学提示时，单次聚合过多反思导致上下文过载与质量崩塌；收益主要是速度 | `abstract_experience_into_guidance` | [Reel](reel/2604.04247/) |
 
 ## 使用流程
 

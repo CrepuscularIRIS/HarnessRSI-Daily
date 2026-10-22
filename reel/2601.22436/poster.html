@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1600">
+<title>经验忠实度画报</title>
+<style>
+/* 版式：测量-反证（假设 → 干预 → 观测矩阵 → 反证 → 边界）；深色实验记录本配色 */
+@page { size: 1600px 2263px; margin: 0; }
+:root{
+  --bg:#15171c; --panel:#1d2028; --line:#343947; --ink:#e9e6df; --mute:#9aa0ab;
+  --raw:#f2a93b; --cond:#7fb7c9; --red:#ff6b5e; --ok:#9bd17c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:2263px;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans CJK SC","Noto Sans SC",sans-serif;overflow:hidden;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.mono{font-family:"Noto Sans Mono CJK SC",monospace}
+.wrap{padding:44px 60px 30px}
+.kicker{font-size:22px;letter-spacing:4px;color:var(--mute)}
+.kicker b{color:var(--red);font-weight:700}
+h1{font-size:60px;line-height:1.15;margin:12px 0 10px;font-weight:900;letter-spacing:1px}
+h1 em{font-style:normal;color:var(--raw)}
+.sub{font-size:25px;line-height:1.45;color:#cfcac0;max-width:1400px}
+.meta{margin-top:14px;font-size:19px;color:var(--mute)}
+.hyp{margin-top:22px;display:grid;grid-template-columns:200px 1fr 260px;border:2px solid var(--red);border-radius:6px;overflow:hidden}
+.hyp .tag{background:var(--red);color:#15171c;font-weight:900;font-size:28px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3}
+.hyp .claim{padding:14px 26px;font-size:30px;font-weight:700}
+.hyp .claim small{display:block;font-size:20px;font-weight:400;color:var(--mute);margin-top:6px}
+.hyp .verdict{border-left:2px dashed var(--red);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--red);font-weight:900;text-align:center;line-height:1.3}
+.sec{margin-top:22px}
+.sech{display:flex;align-items:baseline;gap:16px;margin-bottom:14px}
+.sech .n{font-size:20px;color:#15171c;background:var(--ink);padding:2px 10px;border-radius:3px;font-weight:900}
+.sech h2{font-size:32px;font-weight:900}
+.sech .note{font-size:18px;color:var(--mute);margin-left:auto}
+.two{display:grid;grid-template-columns:1.32fr 1fr;gap:26px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+/* 矩阵 */
+table.mx{width:100%;border-collapse:separate;border-spacing:6px}
+table.mx th{font-size:17px;color:var(--mute);font-weight:400;text-align:center;padding:4px}
+table.mx th.row{text-align:left;font-size:20px;color:var(--ink);font-weight:700;width:150px;line-height:1.3}
+table.mx td{height:62px;text-align:center;font-size:20px;border-radius:6px;font-weight:700;line-height:1.25}
+.dn{background:rgba(242,169,59,.88);color:#1a1205}
+.dn2{background:rgba(242,169,59,.5);color:#1a1205}
+.flat{background:transparent;border:2px dashed var(--cond);color:var(--cond)}
+.na{background:#23262f;color:#555b68;font-weight:400!important}
+.legend{display:flex;gap:16px;margin-top:8px;font-size:16px;color:var(--mute);flex-wrap:wrap}
+.legend i{display:inline-block;width:22px;height:16px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.key{margin-top:12px;padding:10px 16px;border-left:5px solid var(--cond);background:#232833;font-size:20px;line-height:1.45}
+.key b{color:var(--cond)}
+/* 干预样例 */
+.ex{font-size:18px;line-height:1.45}
+.ex .lab{display:inline-block;min-width:96px;font-weight:900;font-size:17px;padding:1px 8px;border-radius:3px;margin-right:8px}
+.ex .r{background:var(--raw);color:#1a1205}
+.ex .c{background:var(--cond);color:#0f1a1e}
+.ex p{margin:9px 0;color:#d6d2ca}
+.ex code{font-family:"Noto Sans Mono CJK SC",monospace;color:#fff;background:#2a2e38;padding:1px 6px;border-radius:3px;font-size:16px}
+.scope{margin-top:14px;font-size:18px;color:var(--mute);line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+.scope b{color:var(--ink)}
+/* 条形图 */
+.bars{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.bar{display:grid;grid-template-columns:250px 1fr 140px;align-items:center;gap:12px;margin:7px 0;font-size:20px}
+.bar .t{color:#d6d2ca;line-height:1.25}
+.bar .t small{display:block;color:var(--mute);font-size:16px}
+.bar .track{height:30px;background:#262a33;border-radius:4px;position:relative}
+.bar .fill{height:100%;border-radius:4px}
+.bar .v{font-weight:900;font-size:24px;text-align:right}
+.ctx{font-size:17px;color:var(--mute);margin-bottom:6px;line-height:1.45}
+.ctx b{color:var(--ink)}
+/* 反证 */
+table.tb{width:100%;border-collapse:collapse;font-size:20px}
+table.tb th,table.tb td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:center}
+table.tb th{color:var(--mute);font-weight:400;font-size:17px}
+table.tb td:first-child,table.tb th:first-child{text-align:left}
+table.tb tr.base td{color:var(--ink);font-weight:900}
+.fm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:6px}
+.fm div{background:#232833;border-radius:6px;padding:12px 14px;font-size:18px;line-height:1.45}
+.fm div b{display:block;font-size:20px;color:var(--cond);margin-bottom:4px}
+.lim{margin-top:22px;border:2px solid #4a5060;border-radius:8px;padding:14px 22px;display:grid;grid-template-columns:110px 1fr;gap:20px}
+.lim .h{font-size:30px;font-weight:900;color:var(--red);line-height:1.2}
+.lim ul{list-style:none;columns:2;column-gap:30px;font-size:17px;line-height:1.45}
+.lim li{break-inside:avoid;margin-bottom:5px;padding-left:18px;position:relative}
+.lim li:before{content:"▸";position:absolute;left:0;color:var(--red)}
+.take{margin-top:16px;font-size:20px;line-height:1.45;padding:10px 20px;background:#262019;border-left:6px solid var(--raw)}
+.take b{color:var(--raw)}
+.foot{margin-top:12px;font-size:15px;color:#7d8390;line-height:1.5;display:flex;justify-content:space-between;gap:30px}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="kicker">HarnessRSI · 精选 Reel · <b>证伪类</b> · F1 诊断自改进</div>
+<h1>自演化代理的收益，<em>不一定</em>来自它读到的经验内容</h1>
+<p class="sub">对 4 个冻结骨干的自演化框架做经验内容干预：扰动原始轨迹（raw）会明显降分；把压缩经验（condensed）换成乱码、无关文本，聚合成功率却几乎不变——即使它是唯一提供的经验。</p>
+<p class="meta mono">arXiv:2601.22436v3（2026-06-12）· Zhao, Wang, Zhang, Deng, Zhao, Che, Qin, Liu · 哈工大 / SMU · github.com/Dreamcatcher0622/Faithfulness</p>
+
+<div class="hyp">
+  <div class="tag">被检验的<br>默认假设</div>
+  <div class="claim">“加上记忆分数变高” ⇒ “代理在按记忆内容做决策”
+    <small>论文定义 experience faithfulness：扰动所给经验后，代理行为是否随之因果改变（§1）</small></div>
+  <div class="verdict">对 condensed<br>经验不成立</div>
+</div>
+
+<div class="sec two">
+  <div>
+    <div class="sech"><span class="n">1</span><h2>观测矩阵：扰动后成功率是否下降</h2></div>
+    <div class="panel">
+      <table class="mx">
+        <tr><th></th><th>整体<br>移除</th><th>Empty<br>去内容</th><th>Shuffle<br>乱序</th><th>Irrelevant<br>换无关</th><th>Corrupt<br>改关键词</th><th>Filler<br>换乱码</th></tr>
+        <tr><th class="row" style="color:var(--raw)">raw 原始轨迹<br><span style="font-size:16px;color:var(--mute);font-weight:400">ExpeL · DC · G-Memory</span></th>
+          <td class="dn">明显下降</td><td class="dn">明显下降</td><td class="dn2">部分下降<br><span style="font-size:15px;font-weight:400">随设置而异</span></td><td class="dn">明显下降</td><td class="na">未设</td><td class="na">未设</td></tr>
+        <tr><th class="row" style="color:var(--cond)">condensed 摘要<br><span style="font-size:16px;color:var(--mute);font-weight:400">与 raw 同时提供</span></th>
+          <td class="flat">轻微</td><td class="flat">近乎不变</td><td class="na">未设</td><td class="flat">近乎不变</td><td class="flat">近乎不变</td><td class="flat">近乎不变</td></tr>
+        <tr><th class="row" style="color:var(--cond)">condensed-only<br><span style="font-size:16px;color:var(--mute);font-weight:400">ReasoningBank · WebArena</span></th>
+          <td class="dn">一致下降</td><td class="flat">弱敏感</td><td class="na">未设</td><td class="flat">轻微或<br>略升</td><td class="flat">轻微或<br>略升</td><td class="flat">轻微或<br>略升</td></tr>
+      </table>
+      <div class="legend"><span><i style="background:var(--raw)"></i>成功率明显下降＝行为依赖内容</span><span><i style="border:2px dashed var(--cond)"></i>几乎不变＝内容未被因果使用</span><span><i style="background:#23262f"></i>该类经验未设此干预</span></div>
+      <div class="key">关键一行是第三行：<b>拿掉整块摘要会降分，但把摘要内容换成乱码不会</b>——收益可能来自“有一块文本”这一格式/位置信号，而非摘要语义（§4.2 作者解读）。</div>
+      <div class="scope">示意：按原文 §4.1–4.3 与附录 D.3–D.5 的文字结论归纳，<b>非原图数值</b>；知识密集任务（GPQA、MMLU-Pro、FEVER）上两类经验敏感度接近，不在此矩阵的概括内。</div>
+    </div>
+  </div>
+  <div>
+    <div class="sech"><span class="n">2</span><h2>研究动作：只动内容，不动外壳</h2></div>
+    <div class="panel ex">
+      <p>同一道 HotpotQA 题的经验槽位（附录 Table 3，节选）：</p>
+      <p><span class="lab r">raw 原文</span>Action 1: <code>Search[Fleetwood Sheppard]</code> … Action 3: <code>Finish[…]</code></p>
+      <p><span class="lab r">Shuffle</span>同样的步骤，顺序打乱</p>
+      <p><span class="lab c">cond 原文</span>“遇到同名歧义时，按精确名称再查一次以核实身份……”</p>
+      <p><span class="lab c">Corrupt</span>“遇到 conflicting <code>[CORRUPTED_561]</code> ambiguous… <code>[ERROR_INFO]</code>”</p>
+      <p><span class="lab c">Irrelevant</span>“Literature contains various genres and styles.”</p>
+      <p><span class="lab c">Filler</span><code>1. … $$$ ###</code>　<code>2. *** … ***</code></p>
+      <p><span class="lab c">Empty</span>只保留“以下是你在类似任务上积累的经验：”</p>
+      <div class="scope"><b>范围</b>　框架：ExpeL（离线）、Dynamic Cheatsheet、ReasoningBank（在线）、G-Memory（多代理）· 骨干：GPT-4o(-mini)、GPT-5.2、Gemini-2.5-Flash / 3-Pro、Claude-Sonnet-4.6、Qwen3 1.7B–235B · 9 个基准（问答、数学、ALFWorld、WebArena、WebShop）· 骨干全程冻结</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sech"><span class="n">3</span><h2>同条件对照：一个多代理设置里的实际数字</h2><span class="note">据原文附录 D.5 文字数值重绘 · 单次报告，无方差</span></div>
+  <div class="bars">
+    <div class="panel">
+      <div class="ctx"><b>G-Memory · Qwen3-235B-A22B · ALFWorld</b>　同一框架、同一骨干、同一环境，仅替换某一类经验</div>
+      <div class="bar"><div class="t">未干预</div><div class="track"><div class="fill" style="width:78.4%;background:#cfcac0"></div></div><div class="v">78.4</div></div>
+      <div class="bar"><div class="t">condensed → Filler 乱码</div><div class="track"><div class="fill" style="width:77.6%;background:var(--cond)"></div></div><div class="v" style="color:var(--cond)">77.6</div></div>
+      <div class="bar"><div class="t">执行 raw → Empty</div><div class="track"><div class="fill" style="width:71.6%;background:rgba(242,169,59,.6)"></div></div><div class="v" style="color:var(--raw)">−6.8</div></div>
+      <div class="bar"><div class="t">参考 raw → Irrelevant</div><div class="track"><div class="fill" style="width:47.8%;background:var(--raw)"></div></div><div class="v" style="color:var(--raw)">47.8</div></div>
+    </div>
+    <div class="panel">
+      <div class="ctx"><b>同一模式在更强骨干上复现</b>（附录 D.3 / D.5）</div>
+      <div class="bar"><div class="t">GPT-5.2 · G-Memory · ALFWorld<small>执行 raw → Shuffle</small></div><div class="track"><div class="fill" style="width:47%;background:var(--raw)"></div></div><div class="v" style="color:var(--raw)">75.4→47.0</div></div>
+      <div class="bar"><div class="t">Claude-Sonnet-4.6 · ExpeL · HotpotQA<small>各 condensed 干预</small></div><div class="track"><div class="fill" style="width:56%;background:var(--cond);opacity:.35"></div><div class="fill" style="position:absolute;top:0;left:0;width:47%;background:var(--cond)"></div></div><div class="v" style="color:var(--cond)">53→47–56</div></div>
+      <div class="ctx" style="margin-top:14px">原文称 raw 干预在同一设置下“波动大得多”，但正文未给逐项数值。另：Qwen3 1.7B→32B 放大骨干、而 ExpeL 摘要由骨干自己生成，condensed 仍不敏感（§4.4）——不能只归因于“摘要写得差”。</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec two" style="grid-template-columns:1fr 1.15fr">
+  <div>
+    <div class="sech"><span class="n">4</span><h2>反证边界：raw 也会失灵</h2></div>
+    <div class="panel">
+      <div class="ctx">ExpeL · Qwen3-32B · 每基准抽 100 题 · 精确匹配（Table 2）</div>
+      <table class="tb">
+        <tr><th>条件</th><th>2WikiMultiHopQA</th><th>Musique</th></tr>
+        <tr class="base"><td>未干预</td><td>62</td><td>48</td></tr>
+        <tr><td style="color:var(--raw)">raw 三种干预</td><td>63–65</td><td>43–47</td></tr>
+        <tr><td style="color:var(--cond)">condensed 四种干预</td><td>63–65</td><td>44–47</td></tr>
+      </table>
+      <div class="ctx" style="margin-top:10px">任务可由预训练先验解决时，<b>两类经验都不再产生可见的因果作用</b>；作者据此把任务类型列为第三个成因（§5.3）。</div>
+    </div>
+  </div>
+  <div>
+    <div class="sech"><span class="n">5</span><h2>加了摘要反而失败的样例如何分布</h2></div>
+    <div class="panel">
+      <div class="ctx">ReasoningBank · WebArena · 仅统计“去掉 condensed 成功、加上后失败”的样例（Table 1）</div>
+      <div class="fm">
+        <div><b>偏离任务目标</b>Gemini-2.5-Flash 18.8–45.2%<br>Qwen3-32B 61.9–79.2%<br>Qwen3-14B 60.9–86.7%</div>
+        <div><b>套用不符的先验</b>按摘要假定页面布局/元素，不看当前页面；Gemini 27.3–33.3%</div>
+        <div><b>过早下结论</b>摘要说“应该存在”便跳过核验；Gemini 22.6–50.0%</div>
+      </div>
+      <div class="ctx" style="margin-top:10px">此外作者用逐层梯度归因（IG 近似）观察到 condensed 段贡献普遍偏低、当前轨迹在深层占主导（§5.2）——<b>这是相关性证据，不是独立因果检验</b>。</div>
+    </div>
+  </div>
+</div>
+
+<div class="lim">
+  <div class="h">结论<br>边界</div>
+  <ul>
+    <li>未报告方差、种子或置信区间；“近乎不变”是对聚合成功率的描述，不等于动作序列相同。</li>
+    <li>收益与忠实度被拆开：condensed 仍可能“有用”（移除会降分），只是用的不是它的语义。</li>
+    <li>各框架沿用官方设置，离线/在线、检索条数和温度不同（附录 C），不是统一冻结测试协议。</li>
+    <li>失败类型统计按“去掉成功、加上失败”条件选样，比例不能外推为总体错误率。</li>
+    <li>知识密集与多跳问答上 raw 同样不敏感，结论依赖任务类型。</li>
+    <li>骨干数量：摘要写 13 个，§3.1 写 10 个，按列表计为 13；不影响主结论。</li>
+  </ul>
+</div>
+
+<div class="take"><b>对 harness 设计的含义（本项目阅读判断）：</b>评估记忆/经验组件时，“加上后分数涨”只说明这块上下文有用；要声称“代理学会了用经验”，至少需要同格式的内容干预对照（Empty / Irrelevant / Filler）。</div>
+
+<div class="foot"><span>来源：arXiv:2601.22436v3 正文 §1–5、附录 C–D；数值均出自原文文字或表格，矩阵与条形为本项目重绘/示意，非原论文图。未运行任何实验，不构成复现。</span><span class="mono" style="white-space:nowrap">reel/2601.22436 · L2 l2b05</span></div>
+</div></body></html>
