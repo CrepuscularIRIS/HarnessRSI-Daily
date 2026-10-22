@@ -1,3 +1,5 @@
+> 历史领域构建/范围筛查资料，保留用于理解已有语料；不是当前评分提示词。当前唯一入口为 [research/scoring](scoring/README.md)，不要求重新抽取全部签名。
+
 # Paper signature schema (stage 3)
 
 One JSON object per A/B paper, extracted from the full text (arXiv HTML; abstract + intro + method + experiments + limitations). These signatures are the raw material for pattern discovery (stage 4), the Harness analogue of RS's "signature extraction → pattern discovery → operational pattern cards".

@@ -1,56 +1,30 @@
 # HarnessRSI Daily
 
-基于执行反馈改变并留存非权重组件：prompt、skill、tool、workflow、memory/playbook、agent 代码、评测器与配置。A 类是闭环；B 类是可直接用于闭环的组件。纯权重训练、单次回答内自我纠错和没有留存变化的通用框架不在范围内。
+从论文中识别具体的研究方法和可信证据，积累可复用的领域 pattern，挑出少数值得深入阅读的工作。
 
-核心问题：**究竟改进了哪个非权重组件，反馈如何产生候选，如何接受并留存，之后的任务是否因此变好？**
+核心问题：**究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？** 收录边界见 [EVIDENCE](docs/EVIDENCE.md)。
 
-> **2026-10-21 重置：旧分数、榜单、Reel 和双席评审批次已归档，全部退出当前展示。**
-> 模式卡与来源保留。当前没有有效的新版分数；v2 权重是待校准的设计草案，不是已验证的论文质量量尺。
+> 2026-10-22：现有评分、排名、选题与 Reel 已统一撤下。原文和已归纳领域卡保留；当前没有新版有效榜单或 Reel。此次维护未启动重评分，详情见 [重置核查](docs/RESET_2026-10-22.md)。
 
-## 从这里开始
+## 使用流程
 
-| 内容 | 入口与状态 |
+Grok 收集候选 → 6.1 Sol 按已有领域 pattern 批量评分 → 少量候选 → Opus 5.5 核对原文并制作 Reel。
+
+| 内容 | 入口 |
 |---|---|
-| 模式卡 | [overview](patterns/overview.md)，13 张主卡、36 张子卡；保留原有逆向产物 |
-| 原始语料 | `research/corpus.jsonl`，本次盘点 1,594 条；收录不等于判定通过 |
-| 新打分设计 | [SCORE_SPEC](research/SCORE_SPEC.md)：本领域权重、等级与待校准边界 |
-| 本地 Claude Code | [LOCAL_SCORING_PROMPT](docs/agents/LOCAL_SCORING_PROMPT.md)：逐篇读全文与校准 |
-| Grok 收集 | [GROK_PROMPT](docs/agents/GROK_PROMPT.md)：只收有一手证据的候选 |
-| 新流程 | [PIPELINE](docs/PIPELINE.md)；[维护规则](docs/MAINTAINING.md)；[收录范围](docs/EVIDENCE.md) |
-| Reel 重做 | [REEL_PROMPT](docs/agents/REEL_PROMPT.md)：先做单篇机制叙述，再设计图解 |
-| 整理记录 | [RESET](../ArxivDaily-archive/2026-10-22-method-change/docs/RESET_2026-10-21.md)；[旧产物归档（仅本地，不在远端）](../ArxivDaily-archive/2026-10-21-reset/README.md) |
+| 领域模式卡 | [patterns/overview](patterns/overview.md)；评分依据是这些卡的机制、条件、失败模式和审稿期望 |
+| 新版评分 | [规则](research/scoring/SCORE_SPEC.md) · [本领域配置](research/scoring/PROFILE.md) |
+| CC 执行 | [启动提示词](docs/agents/START_CC.md) · [完整批量提示词](research/scoring/SOL_BATCH_PROMPT.md) |
+| 精选 Reel | [选题](research/scoring/SELECTION.md) · [Opus 制作](research/scoring/OPUS_REEL_PROMPT.md) · [成品入口](reel/README.md) |
+| 候选收集 | [Grok 提示词](docs/agents/GROK_PROMPT.md) · [inbox](inbox/README.md) |
 
-## 新评分：先 gap / 模式 / 期望，再核主张证据
+默认 CC 内置 4 个评分 Subagent 并行，model type 使用已配置的 6.1 Sol，每批通常 10–20 篇，完成一批立即补派；不另起无头 Claude。Opus 只负责少量候选核对与 Reel。
 
-[方法依据](docs/DESIGN_BASIS.md)借鉴 ResearchStudio Idea 与 Open Scientist；[逐篇工作表](research/REVIEW_WORKSHEET.md)记录改了什么、怎样保留、提升是否被支持。
+评分顺序是论文操作 → 相关领域卡 → 适用判据 → 论文证据 → 得分。G/M/X/E 只汇总这些判断。原 ResearchStudio 15＋31 保留为方法来源，不是逐篇评分 taxonomy；匹配卡数、录用率、代码链接和名气不加分。
 
-| 轴 | 权重上限 |
-|---|---:|
-| G：Gap 与问题位置 | 15 |
-| M：方法质量与 problem-fit | 20 |
-| X：机制执行与模式条件 | 20 |
-| E：主张的证据支撑 | 45 |
+初步材料足够即可简评，缺材料不冒充低分。通常每期不到 10 篇 Reel；先核对、后制作，不把全部论文做成海报墙。
 
-权重是待校准提案。G/M/X/E 总分与 claim_support、evidence_level 分开；匹配模式不直接加分，无审稿仍用有来源的审稿期望。
-[动态选题](docs/REEL_SELECTION.md)：先过最低分，再控制篇数，默认一期最多 9 篇；不足可少做，调阈值不改原分数。
-只有入选论文交给 ResearchStudio Reel 做画报，展示只包含成品 QA 通过的精选。
-
-## claude-kimi / Claude Code 批量评分
-
-旧启动指令已归档（../ArxivDaily-archive/2026-10-22-method-change/）；v2.2 双席流水线已停用，等新打分方式规格。[总控提示词](docs/agents/LOCAL_SCORING_PROMPT.md)可直接交给 claude-kimi（Claude Code）：每批默认5篇、每轮并行2批，6.1 Sol＋Sonnet 5.5 独立初评，Opus 5.5 逐篇聚合，轮次验收后继续，最后由总控提交。
-每篇必做 [原15+31识别与领域映射](research/PATTERN_PROTOCOL.md)；固定原卡已随仓库提供，不能混用原卡与领域卡 ID。
-[GLM 5.3 Reel 提示词](docs/agents/REEL_PROMPT.md)只处理入选名单。model type 已配置，直接沿用；本次只写文档，未启动批次，评分规则仍待校准。
-
-## 当前工作边界
-
-Grok 找候选并写 inbox → 本地核对来源/去重/入库 → Claude Code 读完整材料、做小样本校准 →
-冻结 rubric 后重新评分 → 动态阈值与数量筛选 → 入选论文重做 Reel。
-
-- 原有 `research/fulltext/` 是经过裁剪的历史文本缓存，不保证覆盖附录；新打分必须核对材料完整性。
-- 原有 `research/screen.jsonl`、`research/patterns/assignments.jsonl` 是历史分档/适配线索，不能直接代替新的判断。
-- 建议 CC 安装 Open Scientist，支持 gap 诊断、模式/期望维护与独立审阅；日常评审使用冻结资产，缺口才返回研究循环。
-- `make check` 只做离线结构检查。旧 `make score` / `make board` 和旧脚本入口会明确拒绝运行。
-- inherited arXiv digest 的关键词相关性分数不属于论文质量分数，见 [digest 用法](../ArxivDaily-archive/2026-10-22-method-change/docs/digest-pipeline.md)。
+维护说明：[PIPELINE](docs/PIPELINE.md) · [MAINTAINING](docs/MAINTAINING.md)。`make check` 只验证本地结构，不代表科学结论正确。
 
 ## Credits and license
 
