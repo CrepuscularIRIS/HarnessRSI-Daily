@@ -22,7 +22,7 @@ def main() -> int:
     corpus = {json.loads(l)["arxiv"]: json.loads(l) for l in open(REPO / "research/corpus.jsonl")}
 
     rows = []
-    for f in sorted((run_dir / "batches").glob("l2b*.jsonl")):
+    for f in sorted((run_dir / "batches").glob("l2*.jsonl")):
         for line in open(f):
             line = line.strip()
             if not line:
