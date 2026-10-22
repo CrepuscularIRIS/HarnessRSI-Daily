@@ -1,0 +1,906 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r21a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full HTML text incl. Appendices A-D read (62,012 chars). Scope is borderline (PPO trains weights) but the evaluated retained component is the non-weight visual memory evolved from rollouts, so in scope as a coupled system (rubric A3). Figures (Fig 4-9) are images and were not inspectable.",
+ "paper": {
+  "paper_key": "2605.17933",
+  "paper_id": "2605.17933",
+  "title": "AtlasVA: Self-Evolving Visual Skill Memory for Teacher-Free VLM Agents",
+  "version": "2605.17933v1",
+  "claim_type": "system_method",
+  "central_claim": "AtlasVA stores reusable experience for VLM agents as a three-layer visual skill memory (spatial heatmaps, visual exemplars, symbolic text), evolves danger/affinity atlases teacher-free from trajectory statistics plus grid heuristics, and reuses them as potential-style dense shaping rewards for PPO; a 3B Qwen2.5-VL agent reaches 0.93 average success on Sokoban, FrozenLake, 3D navigation and PrimitiveSkill, above GPT-5 (0.69), o3 (0.71) and VAGEN (0.78), with each of memory, evolution and shaping contributing."
+ },
+ "provenance": {
+  "input_hash": "9f07015384f2faf56a6cd49aecf6ba948620414bafa59ea9ec354018f95317ec",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to run receipts; model type per claude-kimi config (haiku slot -> claude-sonnet-5-5[1m]) as stated by controller, not probed.",
+  "timestamp": "2026-10-22T03:04:21Z"
+ },
+ "rationale": "作者报告：3B 模型 0.93 超 GPT-5；但图谱依赖模拟器特权状态与手工 BFS/死角启发式，基线未获同等信息，主表无种子/区间，消融数值仅在图中，成本未测。",
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2605.17933v1",
+   "sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 AtlasVA (3.1-3.5)",
+    "4 Experiments (4.1-4.3; Tables 1-2)",
+    "5 Conclusion/Limitations",
+    "Appendix A (math, Alg 1)",
+    "Appendix B (prompt)",
+    "Appendix C (C.1-C.6, Tables 3-5)",
+    "Appendix D (D.1-D.3)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 4-9 are images; ablation/learning-curve values not available in extracted text"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "we propose AtlasVA , a teacher-free visual skill memory framework that organizes memory into three complementary layers: spatial heatmaps, visual exemplars, and symbolic text skills",
+   "support_explanation": "Central object: three-layer visual skill memory injected into the VLM prompt.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Abstract",
+   "quote": "AtlasVA further evolves danger and affinity atlases directly from trajectory statistics and lightweight grid heuristics, and reuses these self-evolving atlases as potential-based shaping rewards for reinforcement learning.",
+   "support_explanation": "Memory evolved from rollouts and reused as RL reward: a context-and-weights coupled system.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 3.1",
+   "quote": "AtlasVA leverages this privileged representation exclusively during training to construct and evolve persistent spatial priors across episodes; the deployed VLM policy relies solely on visual inputs",
+   "support_explanation": "Privileged simulator GridState (positions, obstacles, targets) drives atlas evolution and rewards during training.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 4.2 Efficacy in Spatial Reasoning",
+   "quote": "which computes topological features (e.g., BFS fields and corner traps) on-the-fly for the new layout",
+   "support_explanation": "For unseen validation layouts the heuristic branch (BFS fields, corner traps) builds the maps at inference; how the layout is obtained without privileged state is not described.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Sec 3.3",
+   "quote": "we extract topological features from the current layout, such as corner-like deadlock regions and Breadth-First Search distances to target objects",
+   "support_explanation": "Static heuristic branch encodes goal-distance (BFS) and deadlock knowledge by hand.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "App C.5",
+   "quote": "this privileged state access is strictly confined to the offline atlas evolution and reward computation pipeline during training",
+   "support_explanation": "Author claim of train-only privilege.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "App C.5",
+   "quote": "At evaluation time, the VLM policy does not receive any of these low-level states.",
+   "support_explanation": "Author claim; reconcile with E004 (maps for unseen layouts built on-the-fly) is left unresolved.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Sec 3.3",
+   "quote": "This scheduling coefficient provides safe, cold-start exploration guided by static geometry in early stages, while smoothly transitioning to experience-driven refinement in later stages without risking catastrophic forgetting",
+   "support_explanation": "Blend M_final=(1-beta_k)M_heuristic+beta_k M_stat with beta annealed 0->1; statistics are layout-position specific.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Sec 3.5",
+   "quote": "the danger penalty acts as a heuristic safety constraint that intentionally alters the optimal policy to prioritize safe navigation over hazardous shortcuts",
+   "support_explanation": "Danger term is non-potential and changes the optimum; affinity potential also changes over training (non-stationary), so policy-invariance of PBRS does not apply.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 4.1",
+   "quote": "To prevent information leakage, all memory components (heatmaps, exemplars, and text skills) are evolved exclusively using trajectories from the training environments, keeping validation sets strictly separated for zero-shot evaluation.",
+   "support_explanation": "Declared train/validation separation for memory evolution.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 4.2 Overall Performance",
+   "quote": "AtlasVA achieves state-of-the-art performance across all evaluated benchmarks with an average success rate of 0.93 (Table 2 ).",
+   "support_explanation": "Headline result: 3B PPO-trained agent 0.93 vs GPT-5 0.69, o3 0.71, VAGEN 0.78.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Table 2",
+   "quote": "AtlasVA 0.79 0.83 0.85 0.87 0.86 1.00 1.00 1.00 1.00 1.00 0.93",
+   "support_explanation": "Table 2 row: 1.00 on all five PrimitiveSkill tasks; single numbers, no seeds or intervals, per-cell episode counts not stated (many baseline cells are multiples of 1/8, suggesting about 8 episodes in some cells).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Table 2",
+   "quote": "VAGEN [ 41 ] 0.61 0.71 0.78 0.80 0.79 1.00 0.88 0.88 0.88 0.50 0.78",
+   "support_explanation": "Strongest trained baseline (RL with sparse reward, no atlas memory/shaping); no baseline gets the same heuristic/BFS information.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Sec 4.1 Datasets",
+   "quote": "In addition to its standard tasks (Place, Stack, Drawer, and Align), we introduce a new Swap task, which requires the agent to exchange the positions of two cubes.",
+   "support_explanation": "Authors add a new task on which AtlasVA is trained; baselines' Swap numbers come from unspecified protocol.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Sec 4.2 Learning Efficiency",
+   "quote": "The baseline, relying solely on textual rules (Layer 3), struggles to exceed a 0.25 success rate in the 2D Sokoban environment due to severe modality mismatch and sparse feedback.",
+   "support_explanation": "The only 'text-centric memory' comparison is the authors' own L3-only variant; SkillRL/XSkill/ExpeL are not run, and whether the baseline gets dense shaping is unclear.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Sec 4.3 Atlas Evolution",
+   "quote": "Disabling off-policy updates (w/o Atlas Evolution) restricts the agent to static rules.",
+   "support_explanation": "Atlas-evolution ablation; magnitudes appear only in Figure 5 (image, not in the pinned text).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Fig 5 caption",
+   "quote": "Removing the visual skill memory (VSM), atlas evolution, or dense reward shaping consistently degrades performance across all spatial benchmarks.",
+   "support_explanation": "Five-way component ablation exists but numerical values are not auditable from the text.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "App C.3",
+   "quote": "we clarify that these symbolic rules do not require any proprietary Teacher LLM (e.g., GPT-4) to generate or summarize",
+   "support_explanation": "Layer 3 is built from the environment rulebook, i.e. hand-authored static text, not learned from experience.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Table 1",
+   "quote": "L3 Text Text Principles & mistakes Per-episode summarization ## Learned Principles",
+   "support_explanation": "Table 1 says L3 is updated by per-episode summarization, App C.3 says it is static from the rulebook: inconsistent description of the text layer's update rule.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 4.3 Exemplar Pool",
+   "quote": "Our implementation caps the pool at 6 exemplars, which it populates within the first 40 training steps",
+   "support_explanation": "Bounded exemplar pool with FIFO eviction and DINOv2 retrieval; keyframe selection criterion ('inflection points') is described only qualitatively.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "App C.4",
+   "quote": "We empirically found that tasks requiring high-precision, long-horizon coordinate manipulation (e.g., PrimitiveSkill) benefit from stronger visual guidance",
+   "support_explanation": "lambda_danger/lambda_affinity tuned per environment (0.05 / 0.1 / 0.3) while memory hyperparameters are said to be shared; tuning data not stated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "App C.4",
+   "quote": "a stage-success delta is folded into the Affinity Gain for multi-step PrimitiveSkill manipulations",
+   "support_explanation": "Task-specific shaping heuristics added for 3D navigation (rotation bonus) and PrimitiveSkill (stage success), i.e. hand-engineered rewards.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Sec 4.1",
+   "quote": "We adopt Qwen2.5-VL-3B-Instruct as the base vision-language model. AtlasVA is optimized via Proximal Policy Optimization (PPO) with Generalized Advantage Estimation (GAE).",
+   "support_explanation": "Weights are PPO-trained; gains conflate weight learning, shaping, and memory.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "Sec 4 RQ1",
+   "quote": "Does visual skill memory enable a compact 3B-parameter VLM agent to surpass significantly larger proprietary models on spatially intensive tasks?",
+   "support_explanation": "The RQ compares a task-trained, privileged-state-shaped 3B model with zero-shot proprietary models.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Sec 1",
+   "quote": "Their common recipe is to summarize successful or failed trajectories into text, retrieve the relevant summaries for a new state, and then rely on a strong teacher model to refine the memory over time.",
+   "support_explanation": "Author characterization of SkillRL/XSkill; teacher cost is asserted but never measured.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Sec 5 Limitations",
+   "quote": "A primary limitation is the projection of table-top 3D manipulation into 2.5D visual priors",
+   "support_explanation": "Only stated limitation; privileged-state dependence, new-task generalization and cost are not discussed.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "Sec 4.2 Learning Efficiency",
+   "quote": "In contrast, AtlasVA rapidly climbs to approximately 0.80 success within 140 training steps.",
+   "support_explanation": "Only training-efficiency number (steps); no GPU-hours/wall-clock/token comparison.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "App C.6",
+   "quote": "the capacity of the visual exemplar pool (3 positive and 3 negative cases), were kept consistent across all environments",
+   "support_explanation": "Shared memory hyperparameters; fixed capacity, no learned utility-based retention.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "Sec 2.2",
+   "quote": "AtlasVA circumvents these bottlenecks by shifting online adaptation entirely to visual atlases, which evolve directly from trajectory statistics without requiring external teacher supervision.",
+   "support_explanation": "Author positioning against SkillRL/XSkill/Reflexion/ExpeL/Mem0.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "6bb02c75fbccf1d571533326e13123b7ae1dbb5253bcb105c91c5ea68b288829"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Visual skill memory used in the policy prompt: from text-only skill/summary memory to RGB danger/affinity heatmaps + exemplar frames + text rules; baseline = text-only (Layer 3) memory.",
+   "information": "Training: privileged simulator GridState (positions, layout, targets) and rollout logs (terminal failure positions, successful paths), screenshots. Inference: RGB observation + rendered memory; unseen layouts get maps from the heuristic branch computed on the fly.",
+   "operation": "EMA (alpha=0.85) of batch danger maps (terminal failure positions) and affinity maps (visit frequency on successful paths) blended with static BFS/corner heuristics via beta_k annealed 0->1; exemplar pool of inflection keyframes (3+/3-, DINOv2 retrieval, FIFO eviction); text skills from the rulebook.",
+   "output": "Rendered heatmap images and exemplar frames injected as <image> tokens; updated atlas after each rollout batch.",
+   "conditions": "Grid-like or grid-projectable spatial tasks with accessible simulator state at training time.",
+   "feedback": "Trajectory success/failure statistics; sparse binary environment reward.",
+   "selection_rule": "No admission gate: all batch statistics are EMA-blended; exemplars chosen as inflection frames and evicted FIFO; text pruning every 10 updates (criterion unspecified).",
+   "selection_data": "Training environments only (validation layouts held out).",
+   "persistence": "Atlas tensors, exemplar pool and text skills kept across training; frozen at validation.",
+   "later_use": "Prompted at every step during training and evaluation; also defines shaping potential for PPO.",
+   "claimed_effect": "Average success 0.93 vs 0.78 (VAGEN), faster convergence than text-only variant.",
+   "failure_boundary": "Position-specific statistics do not transfer across layouts (heuristic branch must carry unseen layouts); 2.5D projection limit; privileged state dependence.",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004",
+    "E005",
+    "E008",
+    "E010",
+    "E020",
+    "E028"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Reward function of the PPO policy (weights are trained): atlas-derived dense reward r_visual = lambda_d*r_danger + lambda_a*r_affinity (+ format penalty, task-specific bonuses).",
+   "information": "Atlas values at consecutive positions p_t, p_{t+1} (privileged coordinates), sparse env reward.",
+   "operation": "Affinity potential difference (BFS-based gradient) and non-potential danger penalty added to env reward; scaled per environment (0.05-0.3).",
+   "output": "Shaped reward for PPO.",
+   "conditions": "Spatial tasks where position and goal distance are known to the trainer.",
+   "feedback": "Atlas (itself updated from the policy's rollouts).",
+   "selection_rule": "n/a (reward, not retained edit).",
+   "selection_data": "Training environments.",
+   "persistence": "Reward function is recomputed from the evolving atlas.",
+   "later_use": "PPO updates throughout training.",
+   "claimed_effect": "Escape local optima, faster convergence.",
+   "failure_boundary": "Non-stationary potential voids PBRS invariance; danger term alters optimum by design.",
+   "evidence_ids": [
+    "E002",
+    "E009",
+    "E021",
+    "E022",
+    "E023"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Text-centric agent memory loses spatial structure, depends on proprietary teacher LLMs, and textual rewards give delayed, ungrounded feedback for spatial RL.",
+  "checked_gap": "A real modality-mismatch argument for spatial tasks, but (i) the two non-weight neighbours it targets (SkillRL, XSkill) are not run, so the residual vs the actual frontier is unmeasured; (ii) teacher cost is asserted, not measured; (iii) 'teacher-free' is achieved by hand-coded BFS/deadlock heuristics and privileged simulator state, which moves the dependence rather than removing it.",
+  "lineage_closest_adjacent": "Reflexion -> ExpeL/Mem0 -> SkillRL (2026), XSkill (2026), VAGEN (2025, strongest trained baseline), PBRS (Ng 1999). Versions as cited; no neighbour full texts in this pack.",
+  "residue": "Whether the evolving statistics, rather than static heuristics + shaping, produce gains on unseen layouts.",
+  "stakes": "Spatial long-horizon VLM agents (Sokoban deadlocks, manipulation).",
+  "method_response": "Visual memory + heuristic/statistic atlas + dense shaping in one loop.",
+  "remaining_gap": "Perception-only deployment, cross-layout transfer of learned statistics, evolving non-grid tasks.",
+  "evidence_ids": [
+   "E015",
+   "E025",
+   "E029",
+   "E005",
+   "E026"
+  ],
+  "unresolved": [
+   "SkillRL/XSkill are not available as pinned text and not run as baselines.",
+   "How layout-based maps are produced at evaluation time."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C26",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": "C26 steps 1-3 read: step 1 (diagnose missing supervision as comparative/dense rather than categorical) - sparse terminal reward vs dense per-step signal: executed; step 2 (harvest non-human source that encodes the comparison; prefer in-distribution) - rollout statistics plus privileged BFS heuristics: executed but source is not purely self-generated; step 3 (re-granularize credit assignment to step level) - affinity potential differences: executed. Not preference-pair based; closer to C26's 'typed dense rewards' arm.",
+    "success_checks": "Mechanistic diagnosis of why sparse reward fails: partial (local optima claim); intervention-validated causal link: ablation w/o Dense Reward exists but values only in a figure; guarantee: none (PBRS invariance explicitly not applicable to danger term).",
+    "failure_checks": "Missing isolating baselines (RL with oracle BFS shaping and no memory): present; gain cost not justified (no cost): present; reliance on privileged information/assumptions unavailable at deployment: present.",
+    "evidence_ids": [
+     "E002",
+     "E003",
+     "E009",
+     "E021",
+     "E022"
+    ],
+    "reason": "The manufactured signal is a dense reward derived from trajectory statistics and grid heuristics; the card fits the shaping operation, not the visual memory injection."
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 read earlier in this batch: heatmaps/exemplars are injected as retrieved conditioning at inference without per-task weight updates, but the policy is also PPO-trained to read them (closer to the card's trained-conditioning success condition), no category-level holdout beyond the validation layouts.",
+    "success_checks": "Conditioning channel trained as first-class input: met (VSM in prompt during PPO); category-level holdout: partial (novel validation layouts); contamination audit: not applicable.",
+    "failure_checks": "Cheaper alternative (text-only L3, hint-free) only against own variant; manual per-task engineering of shaping (lambda per env): present.",
+    "evidence_ids": [
+     "E001",
+     "E010",
+     "E015"
+    ],
+    "reason": "A distinct operation (visual memory as prompt conditioning) from the reward-shaping operation."
+   }
+  ],
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: gains reported on authored benchmark selection; attribution to the memory modality rather than shaping/heuristics not auditable"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "snapshot:52ff96577c9c",
+  "matches": [
+   {
+    "main": "couple_context_and_weight_updates",
+    "sub": "H28",
+    "fit": "high",
+    "version": "snapshot:52ff96577c9c",
+    "condition_checks": "One rollout stream serves both levers (met); distinct typed jobs (memory = spatial priors/reward source, weights = policy; ablations separable in principle); policy trained to condition on the context artifact (met); internalization shrinks context (not applicable; bounded pool); memory pays for itself (not shown); declared adaptation vs reported split (met: training vs validation layouts). Boundary: touches weights.",
+    "evidence_ids": [
+     "E002",
+     "E010",
+     "E017",
+     "E023"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C26",
+   "domain_namespace": "rsi",
+   "domain_main": "couple_context_and_weight_updates",
+   "domain_sub": "H28",
+   "operation_correspondence": "RS: harvest a dense reward from rollout-derived structure and train the policy on it. Domain: adapt context from rollouts, train weights on the same rollouts, re-adapt context for the updated model. Both = rollout statistics feed a weight update and a persistent artifact.",
+   "necessary_conditions_and_differences": "RS card expects self-generated in-distribution signals and an isolating baseline; domain card expects typed lever jobs and a declared split. AtlasVA uses privileged heuristics and lacks the isolating control.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E010"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:couple_context_and_weight_updates/S1",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md S1"
+   ],
+   "applies_when": "Context and weights are both updated.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Same on-policy rollouts update the atlas/exemplars and drive PPO with atlas-derived rewards.",
+   "evidence_ids": [
+    "E002",
+    "E023"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S2",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md S2"
+   ],
+   "applies_when": "Lever-wise claims.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Five-way ablation (VSM, heatmap, exemplar, atlas evolution, dense reward) is designed, but values are only in Figure 5 and memory vs reward roles overlap (the atlas defines the reward).",
+   "evidence_ids": [
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/S3",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md S3"
+   ],
+   "applies_when": "Policy consumes a context artifact.",
+   "applicable": true,
+   "status": "met",
+   "reason": "VSM is part of the observation during PPO; atlas revised from successes and failures.",
+   "evidence_ids": [
+    "E001",
+    "E008"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F1",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md F1"
+   ],
+   "applies_when": "Weight-side machinery may carry the paper (failure-mode check: status = failure avoided).",
+   "applicable": true,
+   "status": "partial",
+   "reason": "PPO training plus per-environment shaping coefficients are large, weight-side contributors; memory-modality attribution depends on figure-only ablations.",
+   "evidence_ids": [
+    "E021",
+    "E022",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/couple_context_and_weight_updates.md F5"
+   ],
+   "applies_when": "Test-time evolution with no declared split (failure-mode check: status = failure avoided).",
+   "applicable": true,
+   "status": "met",
+   "reason": "Memory evolved on training environments only; validation layouts are held out and memory is not updated at evaluation.",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S1"
+   ],
+   "applies_when": "Entries retained by measured utility.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "EMA blends all batch statistics; exemplars chosen by heuristic keyframes and evicted FIFO; no counterfactual utility per entry.",
+   "evidence_ids": [
+    "E008",
+    "E020",
+    "E028"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #2"
+   ],
+   "applies_when": "Gain claimed to come from the manufactured signal.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "w/o Dense Reward ablation exists; no equal-budget baseline with the same oracle-BFS shaping but no memory, nor memory without shaping at matched PPO budget (values absent).",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #1"
+   ],
+   "applies_when": "Signal claimed general.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Four environments but one base model, one RL algorithm, per-environment reward coefficients, a self-introduced Swap task.",
+   "evidence_ids": [
+    "E014",
+    "E021",
+    "E023"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #5"
+   ],
+   "applies_when": "Cost of generating the signal must be justified.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Teacher-free is argued to save API cost but no cost for either side is measured; only steps-to-0.80 is given.",
+   "evidence_ids": [
+    "E025",
+    "E027"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #6"
+   ],
+   "applies_when": "Method relies on information unavailable at deployment.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Training uses privileged simulator state (positions, BFS to goal); test-time source of layout for the heuristic map is not described.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E007"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "Conditioning claimed to add unique value.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No baseline receives the same heatmap/BFS information (e.g. VLM prompted with the same maps, or RL with the same shaping); text-only comparison is the authors' own L3 variant.",
+   "evidence_ids": [
+    "E013",
+    "E015",
+    "E024"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.17933-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 2; Sec 4 RQ1"
+   ],
+   "applies_when": "A task-trained model with privileged-derived guidance is compared to zero-shot proprietary models.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "GPT-5/o3/Claude rows are zero-shot without memory, atlas or training; the comparison cannot support 'visual memory lets 3B surpass larger models'.",
+   "evidence_ids": [
+    "E011",
+    "E013",
+    "E024"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.17933-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 2"
+   ],
+   "applies_when": "Per-cell success rates reported without counts.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No episode counts, seeds, or intervals in text or captions; 1.00 on five PrimitiveSkill tasks and multiples of 1/8 in baselines imply very small n.",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2605.17933-3",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 1, App C.3"
+   ],
+   "applies_when": "Text layer is advertised as self-evolving.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Table 1 lists per-episode summarization; App C.3 states static rules from the rulebook; the L3 layer is not shown to evolve.",
+   "evidence_ids": [
+    "E018",
+    "E019"
+   ],
+   "score_item": "X"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "A 3B AtlasVA agent attains 0.93 average success, above GPT-5 (0.69), o3 (0.71) and VAGEN (0.78).",
+   "setting": "Sokoban, FrozenLake, 3D Navigation, PrimitiveSkill (Place, Stack, Drawer, Align, Swap)",
+   "baseline_control": "Zero-shot proprietary/open VLMs; VAGEN (RL, sparse reward)",
+   "selection_vs_test": "Memory evolved on training environments; validation layouts held out",
+   "result_denominator": "Single numbers per cell; episode counts unstated; Swap introduced by authors",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E012",
+    "E013",
+    "E014"
+   ],
+   "counterevidence": [
+    "E004",
+    "E003",
+    "E024"
+   ],
+   "allowed_conclusion": "Task-trained, privileged-state-shaped 3B agent outperforms listed baselines in the authors' benchmark selection; attribution to visual memory unestablished."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Each of VSM, atlas evolution and dense shaping contributes; atlas can be bootstrapped from raw statistics without teacher LLM.",
+   "setting": "Component ablations on all four benchmarks",
+   "baseline_control": "w/o VSM, w/o Heatmap, w/o Exemplar, w/o Atlas Evolution, w/o Dense Reward",
+   "selection_vs_test": "Presumably validation",
+   "result_denominator": "Figure 5 (values not in text)",
+   "evidence_ids": [
+    "E016",
+    "E017"
+   ],
+   "counterevidence": [
+    "E005",
+    "E008"
+   ],
+   "allowed_conclusion": "Authors report consistent degradation; magnitudes and hence relative contributions not auditable; evolution's role on unseen layouts is unclear because statistics are layout-specific."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Dense visual shaping accelerates convergence (0.80 success in 140 steps vs text-only baseline <=0.25).",
+   "setting": "Sokoban, PrimitiveSkill learning curves (Fig 4)",
+   "baseline_control": "Text-only (w/ L3) variant",
+   "selection_vs_test": "Training curves on validation",
+   "result_denominator": "Single curves",
+   "evidence_ids": [
+    "E015",
+    "E027"
+   ],
+   "counterevidence": [
+    "E009"
+   ],
+   "allowed_conclusion": "Faster learning versus an under-specified text-only baseline; shaping vs memory not separated."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A PPO-trained 3B VLM whose prompt carries rollout-evolved danger/affinity heatmaps and exemplar frames and whose reward is shaped by the same atlas outperforms zero-shot larger VLMs and a sparse-reward RL baseline on the authors' four spatial benchmarks (author-reported, no uncertainty); the separate value of visual memory vs shaping vs hand-coded BFS/deadlock heuristics is not auditable.",
+  "unresolved": [
+   "Test-time source of layout/BFS maps and information parity with baselines.",
+   "Magnitudes of the five ablations (figure-only).",
+   "Comparison with SkillRL/XSkill-style text memory and with oracle-shaped RL without memory.",
+   "Evaluation counts and variance.",
+   "Cost."
+  ],
+  "evidence_ids": [
+   "E010",
+   "E011",
+   "E016",
+   "E017"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "文本记忆丢失空间结构、依赖教师LLM、文本奖励不稠密，缺口对空间任务成立；但直接近邻 SkillRL/XSkill 未实测，教师成本仅断言，'无教师'靠手写 BFS/死角启发式与特权状态实现。",
+   "evidence_ids": [
+    "E025",
+    "E029",
+    "E005"
+   ],
+   "counterevidence_ids": [
+    "E015",
+    "E003"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "EMA 图谱+启发式混合、势函数奖励、示例池的链条清楚，策略被训练去读取记忆；但按位置统计无法跨布局迁移（未见布局靠启发式分支），演化如何帮助泛化缺机理，势函数随训练变化不满足 PBRS 不变性。",
+   "evidence_ids": [
+    "E001",
+    "E008",
+    "E009"
+   ],
+   "counterevidence_ids": [
+    "E004",
+    "E008"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "EMA/β调度、示例池容量与DINOv2检索、提示模板、特权API表均清楚；但无准入门控或版本/回滚，L3 更新规则前后矛盾，关键帧选择与剪枝标准含糊，测试时图谱来源未交代。",
+   "evidence_ids": [
+    "E008",
+    "E020",
+    "E028"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E004"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "成功率为确定性模拟器判据；但每格回合数未述、多处 1.00 饱和、自设 Swap 任务、基线提示/重试协议不详、图表值无法核对。",
+   "evidence_ids": [
+    "E011",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "设有五项组件消融与文本仅L3对照，设计合理；但数值仅在图中、无同预算'同样BFS塑形无记忆'或给基线同样热图的对照、未跑 SkillRL/XSkill，零样本闭源模型对比信息不对等。",
+   "evidence_ids": [
+    "E016",
+    "E017",
+    "E015"
+   ],
+   "counterevidence_ids": [
+    "E013",
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "记忆仅用训练环境演化、验证布局严格留出且报告零样本迁移；但验证曲线可能用于选点、各环境λ经验调节、测试时启发式图谱的布局来源与特权信息关系未解。",
+   "evidence_ids": [
+    "E010"
+   ],
+   "counterevidence_ids": [
+    "E004",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "主表为单点成功率，全文与附录未见种子数、回合数、重复运行或区间；图为图像无法核对。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": [
+    "Sec 4.1-4.3",
+    "Table 2",
+    "Figure 4-9 captions",
+    "Appendix C.4-C.6 Tables 3-5",
+    "Appendix D"
+   ]
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "仅给出'140步达0.80'与硬件(8×RTX6000 Ada)；声称省教师API成本但未测量，无GPU时/墙钟/token 对比。",
+   "evidence_ids": [
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E025"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 46.25,
+  "display": 46.3,
+  "lower": 46.25,
+  "upper": 46.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

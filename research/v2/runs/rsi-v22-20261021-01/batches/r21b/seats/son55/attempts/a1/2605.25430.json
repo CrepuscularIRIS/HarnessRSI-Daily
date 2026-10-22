@@ -1,0 +1,900 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r21b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Complete HTML full text incl. appendices A-E (training details, reward design, baselines, skill examples, prompts and judge rubrics) read; no page images.",
+ "paper": {
+  "paper_key": "2605.25430",
+  "paper_id": "2605.25430",
+  "title": "CODESKILL: Learning Self-Evolving Skills for Coding Agents",
+  "claim_type": "component_training",
+  "central_claim": "Skill extraction, evolution and skill-bank maintenance for coding agents can be reformulated as a learnable management policy (Qwen3.5-4B, SFT warm-up then GRPO with a hybrid reward of rubric-based skill quality plus alignment-gated execution gain of a frozen downstream agent); on EnvBench, SWE-Bench Verified and Terminal-Bench 2 it raises average pass rate by 11.03 over no-skill and 5.10 over the strongest prompt-based or memory baseline while keeping a compact bank.",
+  "version": "2605.25430v2"
+ },
+ "provenance": {
+  "input_hash": "152494fe335af27dffd0cb3daa4e498f00de55938f1c8c974c07be520baeae22",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker by claude-kimi; model type configured by controller (agent_model=haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-22T02:58:45Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2605.25430v2",
+   "sha256": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f",
+   "chars": 76250,
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Method (3.1-3.3)",
+    "4.1 Setup incl. test-time skill bank construction",
+    "Table 1",
+    "4.2 Main results",
+    "Table 2 and 4.3 ablation/analysis",
+    "5 Conclusion",
+    "Appendix A training",
+    "Appendix B reward design",
+    "Appendix C experimental details",
+    "Appendix D skill examples",
+    "Appendix E prompts and judge rubrics"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "existing skill construction and maintenance methods often rely on fixed prompts and heuristic update rules, leaving it unclear how knowledge should be selected, abstracted, and maintained to best serve downstream agents",
+   "support_explanation": "Author gap: the fixed object is the skill-management procedure (prompts/heuristics), which the paper makes learnable.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Sec 1 Introduction",
+   "quote": "it remains unclear what evidence should be extracted, how abstract a skill should be, and how the skill bank should be revised",
+   "support_explanation": "Specific unresolved design questions that motivate learning the manager; supported indirectly by the prompted-manager baselines.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 1 Introduction",
+   "quote": "extracts reusable procedural knowledge as skills, evolves existing skills based on new or failed experience, and maintains the skill bank by adding useful candidates, merging redundant ones, or dropping unhelpful skills.",
+   "support_explanation": "Operation space of the manager: extract, evolve, add/merge/drop (plus skip).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 1 Introduction",
+   "quote": "we first warm-start it with supervised data constructed from coding-agent trajectories and teacher-generated skill operations, and then optimize it with Group Relative Policy Optimization (GRPO) using feedback from a frozen downstream coding agent",
+   "support_explanation": "The improver is a weight-trained policy (SFT from GPT-5.4-mini teacher targets, then GRPO); the retained product is a non-weight markdown skill bank used by a frozen agent.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Sec 3.3.2 Attribution-Aware Hybrid Reward Design",
+   "quote": "However, quality reward alone is not execution-grounded, since a skill may look plausible but remain unused or ineffective.",
+   "support_explanation": "Motivates the execution reward R_E = verifier score with the skill minus a 4-run no-skill baseline, gated by an LLM-judged alignment factor R_A.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Sec 3.3.2",
+   "quote": "It provides a practical proxy for skill-level credit assignment by discounting execution feedback when the rollout does not reflect the skill",
+   "support_explanation": "Alignment gating is described as a proxy for credit assignment; its validity (LLM judge) is not itself measured.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Sec 3.3.2 reward formula",
+   "quote": "We then run a skill-conditioned rollout",
+   "support_explanation": "Execution reward uses a single skill-conditioned rollout per sampled operation, compared with a 4-run baseline mean.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Appendix B",
+   "quote": "Specifically, we run the frozen Qwen3.5-35B-A3B coding policy four times on each instance without injected skills, and use the average verifier score as the baseline score.",
+   "support_explanation": "Baseline-relative execution reward with a 4-sample no-skill baseline.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Sec 4.1 Benchmarks",
+   "quote": "For SWE-Bench Verified, we randomly sample 150 of the 500 Verified instances for evaluation and use the remaining 350 for RL training.",
+   "support_explanation": "Manager training/evaluation instances are disjoint for SWE-Bench Verified and EnvBench; Terminal-Bench 2 is untouched by training (OOD).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 4.1 Benchmarks",
+   "quote": "covering 107 JVM and 43 Python repositories, and split the remaining 844 repositories evenly for SFT trajectory collection and RL training.",
+   "support_explanation": "Test sizes: 107 + 43 EnvBench repos, 150 SWE-Bench instances; Terminal-Bench 2 size is not stated (reported percentages imply ~85 tasks). One extra success on EnvBench-Python is 2.3 points.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 4.1 Test-Time Skill Bank Construction",
+   "quote": "We construct the skill bank through two preparatory passes over the test set before final evaluation.",
+   "support_explanation": "The evaluated skill bank is built from rollouts and verifier outcomes on the test instances themselves (leave-one-out by provenance), so the bank is transductive with respect to the test set.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Sec 4.1 Test-Time Skill Bank Construction",
+   "quote": "During final evaluation, we exclude any skill whose provenance includes the current test instance to prevent access to knowledge derived from that instance.",
+   "support_explanation": "Only same-instance provenance is excluded; skills derived from other test instances (e.g., sibling issues of the same repository in SWE-Bench Verified) remain visible.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Sec 5 Conclusion",
+   "quote": "Future work could extend this framework to strictly streaming task settings and evaluate the end-to-end cost of skill acquisition, maintenance, and use.",
+   "support_explanation": "Authors concede the setting is not strictly streaming and that end-to-end cost was not evaluated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Appendix C Baselines",
+   "quote": "The prompt-based skill-management baseline is designed as an adaptation of recent automatic skill-bank methods to software-engineering tasks.",
+   "support_explanation": "Prompt baseline reuses the same pipeline, action space, prompts, retrieval and decoding as CODESKILL with the learned policy replaced by fixed prompts: a clean learned-vs-prompted contrast, but not the original SkillRL/AutoSkill systems.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Appendix C Baselines",
+   "quote": "Since the original implementation is not publicly available, we implement a high-level reproduction.",
+   "support_explanation": "Subtask-memory baseline is the authors' own reproduction.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Sec 4.2 Comparison with Baselines",
+   "quote": "achieves the best pass rate on all benchmark groups, improving over the strongest baseline by 14.5% relative gain on average.",
+   "support_explanation": "Headline comparison under the Qwen3.5-35B-A3B frozen policy; single run per cell, no intervals.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Sec 4.2 Generalization across Tasks",
+   "quote": "improves Terminal-Bench 2 pass rate from 25.88 to 36.47 over no-skill",
+   "support_explanation": "OOD benchmark gain for the manager never trained on Terminal-Bench 2 (but the TB2 bank is still built from TB2 test rollouts, E011).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Sec 4.2 Generalization across Tasks",
+   "quote": "does not improve over no-skill on Terminal-Bench 2. This suggests that supervised warmup alone may not generalize reliably to unseen SWE task types",
+   "support_explanation": "SFT-only manager does not beat no-skill on TB2, an informative negative result separating RL from SFT.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Sec 4.2 Generalization across Policies",
+   "quote": "improving over the no-skill baseline by 9.82 and over the strongest prompt-based or memory baseline by 3.76",
+   "support_explanation": "Transfer of the manager (trained with Qwen3.5-35B-A3B rewards) to a GPT-5.4-mini frozen policy; one additional policy only.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 4.3 Lifecycle Ablation",
+   "quote": "The additional performance gain may partly arise from reducing redundant or conflicting skills",
+   "support_explanation": "Maintenance halves the bank (1252 -> 676 skills) with +0.8 average pass rate (39.53 -> 40.35) and a Java drop; the mechanism is hypothesized, not tested.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Sec 4.3 Reward Optimization Dynamics",
+   "quote": "affects outcomes only after its skills are retrieved, injected, and followed in long-horizon software tasks, making the environment reward noisy.",
+   "support_explanation": "Authors acknowledge noisy execution reward; reward rises from 0.004 to 0.158 over RL steps.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Appendix A Table 4",
+   "quote": "210 hours",
+   "support_explanation": "RL stage takes ~210 hours (SFT ~20 hours) on 4xH100; frozen-policy rollout, judge and test-time bank-construction costs are not tabulated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Sec 4.1 Implementation Details",
+   "quote": "GPT-5.4-mini is also used as the LLM-as-judge for quality and alignment rewards.",
+   "support_explanation": "Rubric quality and alignment rewards come from the same model family that supplies SFT teacher targets and a prompted baseline backbone.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "Appendix C Skill Retrieval",
+   "quote": "skills generated from the same evaluation instance are filtered out to avoid same-instance leakage.",
+   "support_explanation": "Leakage guard is same-instance only; retrieval is by dense MiniLM similarity within the same benchmark and granularity.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Sec 4.1 Baselines",
+   "quote": "This baseline follows the common design of prior automatic skill-bank management methods",
+   "support_explanation": "Neighbors (SkillRL, AutoSkill) are approximated by a prompt pipeline rather than run as published.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Sec 4.1 Implementation Details",
+   "quote": "GPT-5.4-mini is used as the teacher model to generate supervised targets from trajectory evidence and skill-bank context for skill extraction and skill-bank maintenance",
+   "support_explanation": "SFT teacher is GPT-5.4-mini; the 4B student then outperforms the GPT-5.4-mini prompted pipeline after RL.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_hash": "b4c2542b3cc2f51cd5cb32eed52ef1a3161b1fefcaf08bea1c2dc2b2969ef46f"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Skill bank B of markdown skills (title, granularity, when_to_apply, rules) at two granularities: task-level and event-driven; manager policy M_theta = Qwen3.5-4B (LoRA SFT then GRPO)",
+   "information": "Normalized reasoning-action-observation trajectories (single or 2-3 related) with outcomes, plus retrieved similar skills from the bank; the frozen coding agent is not modified",
+   "operation": "Policy outputs one operation: generate/skip (extraction), evolve/skip (revision of one aligned skill), add/merge/drop (maintenance against retrieved similar skills)",
+   "output": "Updated bank; merged skills replace the target",
+   "conditions": "Skill text must avoid repo names/paths/identifiers; provenance tracked through evolution and merging",
+   "feedback": "Trajectory outcomes at inference of the manager; at training, execution gain and rubric/alignment judgments",
+   "selection_rule": "Admission/merge/drop are decided by the policy's own output; no execution-based admission test or regression budget at deployment",
+   "selection_data": "none at deployment (policy judgment); training uses RL pool",
+   "persistence": "Bank persists across the instance stream; maintenance prunes by merge/drop",
+   "later_use": "Dense retrieval (MiniLM) over title/when_to_apply/rules: task-level skills once at start, event-driven skills online from local signals; injected into the frozen agent's prompt",
+   "claimed_effect": "Qwen3.5-35B-A3B policy average pass 29.32 -> 40.35, bank 1252 -> 676 skills after maintenance",
+   "failure_boundary": "Not strictly streaming; bank built with test-set passes; single frozen policy for rewards; cost of acquisition not evaluated",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E011",
+    "E012",
+    "E013",
+    "E024"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Parameters of the skill manager (the improver), trained to produce skills that help a frozen downstream agent",
+   "information": "Group of G=6 sampled operations per prompt; reverse-retrieved training task instance for each produced skill; no-skill baseline from 4 rollouts; LLM judge rubrics (GPT-5.4-mini)",
+   "operation": "GRPO with reward R = lambda*R_Q + R_A*R_E (lambda=0.25); skip/add/drop use quality reward only; three-stage curriculum extraction -> +evolution -> +maintenance",
+   "output": "Trained manager checkpoint",
+   "conditions": "Verifiable task feedback sparse; reward noisy (acknowledged)",
+   "feedback": "Verifier improvement over per-instance no-skill baseline, gated by judged behavioural alignment, plus dense rubric quality score",
+   "selection_rule": "Policy-gradient update; no held-out gate on skills",
+   "selection_data": "RL pool of 660 unique instances disjoint from evaluation instances",
+   "persistence": "Weights",
+   "later_use": "Used to build banks on evaluation benchmarks, including OOD Terminal-Bench 2 and a second frozen policy (GPT-5.4-mini)",
+   "claimed_effect": "RL beats SFT-only (34.54 -> 40.35 average) and prompted managers",
+   "failure_boundary": "Reward components not ablated; LLM judge validity not audited; one frozen policy used for reward",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E018",
+    "E021",
+    "E023"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "Test-time bank construction protocol",
+   "information": "No-skill rollouts of all evaluation instances, then skill-conditioned rollouts, both with verifier outcomes",
+   "operation": "Two preparatory passes over the evaluation set: extract skills from no-skill rollouts, then evolve using skill-conditioned rollouts, each candidate passing maintenance; final run excludes skills whose provenance includes the current instance",
+   "output": "Per-benchmark skill banks of 676-1252 skills",
+   "conditions": "Same pipeline for baselines (prompt-managed and subtask memory)",
+   "feedback": "Rollout outcomes on other evaluation instances",
+   "selection_rule": "Manager decisions",
+   "selection_data": "the evaluation instances themselves",
+   "persistence": "Bank",
+   "later_use": "Final evaluation on the same instances with provenance filtering",
+   "claimed_effect": "Shown as lifecycle simulation of experience accumulation",
+   "failure_boundary": "Cross-instance information flow inside the test set is not separated from procedural-skill transfer",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E013"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Existing skill construction/maintenance relies on fixed prompts and heuristics, so what to extract, how abstract to write it and how to revise the bank are not adapted to the downstream agent.",
+  "checked_gap": "Plausible and testable: prompted pipelines with a small backbone gain little (Qwen3.5-4B prompted ~ no-skill) while stronger prompted backbones gain more, indicating dependence on manager quality; but the specific failure of fixed prompts (what they get wrong) is not diagnosed beyond aggregate comparison, and the 'learned manager' idea has near neighbours that train memory/skill curators from downstream utility.",
+  "lineage": "Reflective/episodic memory (Reflexion, retrieval of cases) -> automatic skill banks (SkillRL, AutoSkill, subtask memory) -> RL-trained memory/skill managers.",
+  "closest_adjacent": "Prompt-based skill-bank managers (approximated), subtask-level memory (own reproduction), and RL-trained curators in other domains; the paper does not compare against those trained-curator neighbors.",
+  "residue": "Learned manager unproven vs matched-budget alternatives; independence of evaluation from the bank source.",
+  "stakes": "Quality of procedural memory for long-horizon SWE agents where trajectories mix reusable and accidental details.",
+  "method_response": "Train the manager with baseline-relative execution reward gated by alignment and a rubric-quality term, over a lifecycle curriculum.",
+  "remaining_gap": "Streaming evaluation, cost accounting, reward-component attribution, multiple frozen policies in training.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E014",
+   "E025"
+  ],
+  "unresolved": [
+   "Which reward term and which lifecycle stage drives the RL gain is not ablated.",
+   "Whether gains reflect procedural skills or cross-instance leakage within the test set is not separated."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C26",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C26 steps: missing supervision is a quality/utility score for skills (no gold skills) - done; harvest a non-human source encoding the comparison - done (frozen-agent execution gain vs no-skill baseline, plus LLM rubric judge); granularity matched to credit assignment - partly (per-operation reward, alignment gate), but no pairwise/step-level construction; optimize with preference/score objective - GRPO on scalar reward (not DPO/contrastive); demonstrate attribution to the signal vs extra fine-tuning - partial (SFT-vs-RL only, no reward-term ablation).",
+    "success_failure_checks": "Failure 'swap the reward model for an LLM judge' partly applies since a rubric judge supplies the dense term; success 'causal link validated by intervention' unmet for reward components; 'generalizes beyond model family' partial (one extra policy, one OOD benchmark).",
+    "evidence_ids": [
+     "E004",
+     "E005",
+     "E006",
+     "E008",
+     "E018",
+     "E023"
+    ],
+    "reason": "The paper manufactures its training signal from the frozen agent's execution improvement and rubric judgments rather than gold skills; sub-card C26 is the nearest sibling (C07 internal-state signals and C08 generate-and-filter data do not match)."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Closest original card is self_supervised_signal_engineering (sub C26, partial).",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: RL manager outperforms SFT and prompted managers at the reported single-run level, but attribution to the reward design and independence from test-set bank construction are unresolved."
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "amortize_improver_into_trained_policy",
+    "sub": "H26",
+    "role": "primary",
+    "fit": "high",
+    "condition_checks": "H26 steps: finite action set (generate/evolve/add/merge/drop/skip) met; credit path through downstream use partly met (reward from skill-conditioned rollout on a reverse-retrieved instance, not the originating episode); couple writer and reader unmet (reader frozen, not co-trained); separate evolution from evaluation unmet (two preparatory passes over test instances); ablate the artifact: trained vs prompted curator met, store-removed (no-skill) met, store-frozen variant absent. Named H26 leakage failure (preparatory passes over test tasks) applies directly.",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E008",
+     "E011",
+     "E012",
+     "E014"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02",
+    "role": "supporting",
+    "fit": "medium",
+    "condition_checks": "Skills are mined from trajectories into structured markdown packages with trigger conditions, deduplicated and merged before reuse (H02 step: extraction followed by deduplication/merging/quality filtering) - met; portability across agents shown on two policies; no versioned packaging beyond provenance.",
+    "evidence_ids": [
+     "E003",
+     "E019",
+     "E024"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "role": "supporting",
+    "fit": "medium",
+    "condition_checks": "Admission/retirement exist as add/merge/drop under a shrinking bank, but decisions are made by the policy, not by a marginal-gain replay or regression budget (H30 steps 2-3 unmet); no versioned rollback; ungoverned-accumulation comparison is the extraction-only ablation (1252 skills, 37.88 avg).",
+    "evidence_ids": [
+     "E003",
+     "E020"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C26",
+   "domain_namespace": "rsi",
+   "domain_main": "amortize_improver_into_trained_policy",
+   "domain_sub": "H26",
+   "operation_correspondence": "RS 'manufacture a scalar reward from non-human sources and optimize the model against it' = H26 'reward the curator by what a later consumer does with the written skill'.",
+   "conditions_differences": "C26 emphasizes preference pairs/granularity; here the reward is a baseline-relative execution gain times a judged alignment factor plus a rubric term, optimized by GRPO.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E008"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#amortize_improver_into_trained_policy.S1"
+   ],
+   "applies_when": "A trained improver is rewarded",
+   "applicable": true,
+   "status": "met",
+   "reason": "Execution reward is the improvement relative to an instance-specific 4-run no-skill baseline, separating skill effect from task difficulty.",
+   "evidence_ids": [
+    "E008"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S2",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#amortize_improver_into_trained_policy.S2"
+   ],
+   "applies_when": "Curator reward from downstream use",
+   "applicable": true,
+   "status": "met",
+   "reason": "Reward is computed from a rollout of the frozen agent that is given the generated skill on a reverse-retrieved instance, gated by alignment with the skill's trigger.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#amortize_improver_into_trained_policy.S3"
+   ],
+   "applies_when": "Writer and reader should stay aligned",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "The reader (frozen Qwen3.5-35B-A3B) is not co-trained; a second policy is only used at evaluation.",
+   "evidence_ids": [
+    "E004",
+    "E019"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/F4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#amortize_improver_into_trained_policy.F4"
+   ],
+   "applies_when": "Composite proxy reward (status partial = failure partly present)",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Reward mixes a judged quality term (lambda 0.25) with a gated execution term; the terms are not ablated, so which term does the work is unknown.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/H26-step4",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H26.md step 4"
+   ],
+   "applies_when": "Separate evolution from evaluation: never let bank construction touch test instances",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Banks are built by two preparatory passes over the evaluation instances using their rollouts and verifier outcomes; only same-instance provenance is excluded.",
+   "evidence_ids": [
+    "E011",
+    "E012",
+    "E024"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/H26-step5",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H26.md step 5"
+   ],
+   "applies_when": "Trained vs prompted curator and store-removed variants are expected",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Learned manager vs prompted manager with identical pipeline/retrieval, SFT vs RL and a no-skill baseline are reported; no store-frozen variant, no matched-budget curator comparison, training cost only for the manager.",
+   "evidence_ids": [
+    "E014",
+    "E018",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S1"
+   ],
+   "applies_when": "Retention decisions need a counterfactual",
+   "applicable": true,
+   "status": "partial",
+   "reason": "The counterfactual (with/without skill) exists in training reward but not in deployment-time admission, which is by policy output alone.",
+   "evidence_ids": [
+    "E003",
+    "E008"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S3",
+   "version": "conditions.json",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json#evidence_gated_retention.S3"
+   ],
+   "applies_when": "Governance should demonstrably fix a named silent failure",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Maintenance shrinks the bank 46% with +0.8 average pass rate (and a Java decrease); the redundancy/conflict explanation is only hypothesized.",
+   "evidence_ids": [
+    "E020"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "A manufactured signal replaces gold supervision",
+   "applicable": true,
+   "status": "partial",
+   "reason": "SFT-only vs RL and prompted pipelines isolate learning from prompting, but there is no ablation of execution reward, alignment gate or quality reward.",
+   "evidence_ids": [
+    "E018",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "Signal generalization beyond tuning family",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Held-out Terminal-Bench 2 and a second frozen policy are reported; rewards still come from one frozen policy (Qwen3.5-35B-A3B) and one judge family.",
+   "evidence_ids": [
+    "E017",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "Deployment realism: no access to test-set information",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Test-time bank construction uses rollouts and outcomes of the other test instances.",
+   "evidence_ids": [
+    "E011",
+    "E012"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/self_supervised_signal_engineering.md"
+   ],
+   "applies_when": "Cost of the manufactured-signal loop is justified",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Manager training time is reported (~230 h), but frozen-agent rollout, judge and test-time construction costs are not, and the authors defer end-to-end cost to future work.",
+   "evidence_ids": [
+    "E013",
+    "E022"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2605.25430-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "paper protocol"
+   ],
+   "applies_when": "Small benchmark subsets and single runs",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "EnvBench-Python has 43 instances; differences between methods are a handful of tasks and no seeds/intervals are given.",
+   "evidence_ids": [
+    "E010",
+    "E016"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2605.25430-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper protocol"
+   ],
+   "applies_when": "Neighbor baselines are re-implemented",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Prompt-managed baseline shares pipeline/prompts/retrieval with the proposed method (good control) but approximates published systems; subtask memory is a high-level reproduction.",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "CODESKILL improves average pass rate by 11.03 over no-skill and 5.10 over the strongest prompt/memory baseline (Qwen3.5-35B-A3B frozen policy).",
+   "setting": "EnvBench (43 Python, 107 JVM), SWE-Bench Verified (150), Terminal-Bench 2 (OOD)",
+   "baseline_control": "no-skill, subtask memory, prompt-based skill management (Qwen3.5-4B and GPT-5.4-mini backbones), SFT-CODESKILL",
+   "selection_vs_test": "manager trained on disjoint instances, but skill bank built from test-set passes with provenance exclusion",
+   "result_denominator": "single run; macro-average of four benchmark columns; per-cell differences of a few instances",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E012",
+    "E016"
+   ],
+   "counterevidence": "Cross-instance information within the test set is not separated from procedural-skill transfer; no intervals.",
+   "allowed_conclusion": "In a leave-one-out-by-provenance transductive protocol, the RL-trained manager yields a higher-scoring bank than SFT-only or prompted managers on these subsets."
+  },
+  {
+   "claim_id": "C2",
+   "text": "The learned manager generalizes to an OOD benchmark and a different frozen policy.",
+   "setting": "Terminal-Bench 2 (not in training); GPT-5.4-mini policy",
+   "baseline_control": "no-skill and strongest baseline",
+   "selection_vs_test": "manager untouched by TB2; bank still built from TB2 test rollouts",
+   "result_denominator": "TB2 25.88 -> 36.47 (about 31 vs 22 of ~85 tasks, inferred); policy transfer avg +9.82",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019"
+   ],
+   "counterevidence": "Under GPT-5.4-mini, prompted GPT-5.4-mini management is slightly higher on SWE-Bench Verified (56.67 vs 56.00).",
+   "allowed_conclusion": "The manager transfers to a new benchmark's task distribution and one other downstream policy at the single-run level."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Maintenance keeps the bank compact without hurting performance, and each lifecycle component helps.",
+   "setting": "Table 2 ablation with Qwen3.5-35B-A3B",
+   "baseline_control": "event-only, task-only, extraction-only, +evolution, full lifecycle",
+   "selection_vs_test": "test",
+   "result_denominator": "single run; average 37.88 -> 39.53 -> 40.35; Java drops from 41.12 (extraction) to 38.32 (full)",
+   "evidence_ids": [
+    "E020"
+   ],
+   "counterevidence": "Gains per stage are 0.8-1.7 points on the macro-average and not uniform across benchmarks.",
+   "allowed_conclusion": "Bank halves with a small average change; the benefit of maintenance beyond compaction is not isolated."
+  },
+  {
+   "claim_id": "C4",
+   "text": "The hybrid, alignment-gated reward is what enables effective RL for skill management.",
+   "setting": "GRPO training",
+   "baseline_control": "SFT-only manager",
+   "selection_vs_test": "n/a",
+   "result_denominator": "no ablation of reward terms",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E018"
+   ],
+   "counterevidence": "No quality-only, execution-only or ungated-execution variants are reported.",
+   "allowed_conclusion": "RL with the hybrid reward beats SFT-only; the role of each reward term is not shown."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A Qwen3.5-4B manager trained with SFT then GRPO using frozen-agent execution gain and rubric judgments produces skill banks that, under a protocol that builds banks from the evaluation stream with same-instance exclusion, raise a frozen coding agent's pass rate above no-skill, SFT-only and the authors' prompted/subtask-memory baselines on EnvBench, SWE-Bench Verified and Terminal-Bench 2 (author-reported single runs).",
+  "cannot_claim": "That gains reflect transferable procedural skill rather than within-test-set information flow; that the hybrid reward or alignment gate is responsible; statistical reliability; improver-level superiority at matched cost; streaming-setting performance.",
+  "unresolved": [
+   "Cross-instance leakage in the test-set bank.",
+   "Reward-term attribution.",
+   "End-to-end cost."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real limitation (fixed prompts/heuristics for skill management) with named neighbors, and the prompted-backbone dependence is visible; but the failure of fixed prompts is not diagnosed beyond aggregate comparison, trained-curator neighbors are not compared, and neighbors such as SkillRL/AutoSkill are only approximated by a prompt pipeline.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E014",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Operation space, retrieval/usage, curriculum and a baseline-relative, alignment-gated reward directly target the credit-assignment problem for skills; mechanism is reconstructable and distinguishes itself from prompted pipelines; assumptions on judged alignment and single-rollout reward noise are thin.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E008",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Schema, operations, prompts, rubrics, retrieval and provenance tracking are specified, and maintenance (add/merge/drop) provides compaction; but admission is by policy judgment without execution gate, regression budget or rollback, the reader is not coupled, and several retrieval parameters (top-k) are not given.",
+   "evidence_ids": [
+    "E003",
+    "E011",
+    "E012",
+    "E024"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Verifier-based pass rates on EnvBench/SWE-Bench Verified/Terminal-Bench 2 with fixed agents; LLM judges are used only in training; reasoning-step comparison on common solved subsets. Small subsets (43 Python repos) limit resolution and Terminal-Bench 2 size is unstated.",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Informative controls exist (prompted managers with the same pipeline, SFT vs RL, lifecycle ablation, no-skill), but no ablation of the hybrid reward terms or alignment gate, no negative-control (random/shuffled) skills, no matched-budget curator, and bank-size/retrieval confounds.",
+   "evidence_ids": [
+    "E014",
+    "E018",
+    "E020",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Manager training and evaluation instances are disjoint and Terminal-Bench 2 is OOD for the manager, but the evaluated banks are built from rollouts and outcomes of the evaluation instances (two preparatory passes), with only same-instance provenance excluded: a named H26 leakage pattern that blurs the claimed held-out gain.",
+   "evidence_ids": [
+    "E009",
+    "E011",
+    "E012",
+    "E013",
+    "E017"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Test sizes for EnvBench and SWE-Bench are stated but results are single runs without seeds or intervals; many per-cell differences correspond to a few instances; reward curve is noisy by the authors' own account.",
+   "evidence_ids": [
+    "E010",
+    "E016",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Manager SFT (~20 h) and RL (~210 h on 4xH100) are reported, but frozen-agent reward rollouts, judge calls, test-time bank construction and baseline costs are not, and the authors defer end-to-end cost evaluation to future work.",
+   "evidence_ids": [
+    "E013",
+    "E022"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "RL训练的技能管理策略(提取/演化/维护)+执行增益×对齐门控奖励,管理器训练与评测实例分离,但评测库由测试集预备两遍轨迹构建(仅排除同实例)。无奖励项消融,单次运行小样本。判定retained/scoped。",
+ "score": {
+  "raw": 57.5,
+  "display": 57.5,
+  "lower": 57.5,
+  "upper": 57.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

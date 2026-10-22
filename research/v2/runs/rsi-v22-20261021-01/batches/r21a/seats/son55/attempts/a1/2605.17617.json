@@ -1,0 +1,973 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r21a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "Full HTML text read (44,939 chars; the paper has no appendix); retained workflow-graph store with execution-informed reinforcement is in scope (A class for ATR, B class for trace-to-graph compilation).",
+ "paper": {
+  "paper_key": "2605.17617",
+  "paper_id": "2605.17617",
+  "title": "GraphMind: From Operational Traces to Self-Evolving Workflow Automation",
+  "version": "2605.17617v2",
+  "claim_type": "system_method",
+  "central_claim": "GraphMind builds action-centric workflow graphs from human operational traces, executes them with multi-agent traversal, and evolves them through Adaptive Traversal Reinforcement (ATR); on 93 held-out production incidents it beats an Agentic Summary-RAG baseline (mitigation reach 98.5% vs 90.9%, hallucination 3.8% vs 22.7%, 4x KQL throughput, 8x less retrieval context), ATR reduces hallucination by 26%, and a 12-week field study shows 97% of scored conversations yield actionable results."
+ },
+ "provenance": {
+  "input_hash": "9f07015384f2faf56a6cd49aecf6ba948620414bafa59ea9ec354018f95317ec",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker has no access to run receipts; model type per claude-kimi config (haiku slot -> claude-sonnet-5-5[1m]) as stated by controller, not probed.",
+  "timestamp": "2026-10-22T02:57:33Z"
+ },
+ "rationale": "作者报告：轨迹建图在时间留出集上优于摘要RAG；ATR自进化增益小（CI重叠、n=4/条件、评审信号LLM裁判、沉积/评测集分离未述），现场研究无对照。",
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2605.17617v2",
+   "sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Work",
+    "3 Pillar 1 (3.1-3.3)",
+    "4 Pillar 2 (Alg 1)",
+    "5 Pillar 3 ATR (5.1-5.4)",
+    "6 Evaluation (6.1-6.3; Tables 2-4)",
+    "7 Deployment study",
+    "8 Conclusions/Future work",
+    "9 GenAI disclosure"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "We present GraphMind, a system that constructs, executes, and evolves action-centric workflow graphs with minimal human effort.",
+   "support_explanation": "Central object: workflow graph (typed Domain/Problem/Action nodes) built from human traces, traversed by agents, and reinforced.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Abstract",
+   "quote": "Third, Adaptive Traversal Reinforcement (ATR) reinforces successful traversal paths, enabling execution-informed graph adaptation.",
+   "support_explanation": "The self-evolution component: execution feedback -> reinforcement weights on graph.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Sec 5.2 Reinforcement Deposition",
+   "quote": "Reinforcement is deposited only when quality reaches threshold",
+   "support_explanation": "Retention gate: trajectory quality Q>=0.8; deposit Q/|T| uniformly on every node and edge of the trajectory.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "Sec 5.2 Eq. 6",
+   "quote": "usefulness is LLM-judged, groundedness measures evidence support, and user feedback, when available, takes precedence",
+   "support_explanation": "Reward signal Q is mostly model-judged (usefulness, groundedness); no executable ground truth in the loop.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "Sec 5.3 Temporal Decay",
+   "quote": "Decay removes stale reinforcement, prevents premature convergence, and enables adaptation to infrastructure changes.",
+   "support_explanation": "Only forgetting mechanism: multiplicative decay of weights (nodes/edges are not removed).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Sec 5.4",
+   "quote": "when a successful traversal consecutively visits unlinked nodes, a new LEADS_TO edge is synthesized, capturing cross-incident sequences discovered online",
+   "support_explanation": "Structural edit retained in graph; synthesized edges are gated only by the same Q>=0.8 trajectory success, no separate validation.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "Sec 6.3 Impact on Online Traversal",
+   "quote": "Although confidence intervals overlap for some individual metrics, improvements are directionally consistent across all four metrics and all four independent runs per condition, indicating a robust signal rather than statistical noise.",
+   "support_explanation": "ATR on/off effect is small and the authors rely on direction rather than a test (4 runs per condition).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "Sec 6.3 Impact on Online Traversal",
+   "quote": "this accuracy gain is not free : reinforced traversal explores more paths and executes more actions",
+   "support_explanation": "ATR cost disclosed: ~8% higher latency and ~1.5 more investigation rounds.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "Table 3 caption",
+   "quote": "95% CI over 4 runs (2 per method)",
+   "support_explanation": "Headline comparison vs Agentic Summary-RAG rests on 2 runs per method over 93 incidents.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "Sec 6.2",
+   "quote": "Test incidents are drawn exclusively from tickets filed after this date, ensuring a strict temporal split with no information leakage.",
+   "support_explanation": "Graph built from 1,330 incidents before Feb 2026; test incidents after: temporal holdout for the graph store.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "Sec 6.2 baseline",
+   "quote": "Both systems use the same agentic orchestration loop and benefit from LLM-based preprocessing; the key difference is knowledge representation",
+   "support_explanation": "Representation-controlled comparison (graph vs per-incident summaries); not an ATR control.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "Sec 6.2 blind review",
+   "quote": "two domain experts conducted blind reviews of 19 matched incidents (the maximum feasible due to expert-availability constraints)",
+   "support_explanation": "Expert validation small (n=19, 2 reviewers): 4.95 vs 3.68.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "Sec 6.2 metrics",
+   "quote": "Hallucination Rate , the fraction of conclusions not grounded in executed diagnostic evidence",
+   "support_explanation": "Primary quality metric; the grader (LLM vs human) for the 93-incident table is not stated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "Sec 6.2 metrics",
+   "quote": "an LLM-judged 1–5 score comparing recommended actions against the human resolution log",
+   "support_explanation": "Usefulness is LLM-judged and is also a component of the deposition score Q (Eq. 6): shared judge between evaluation and training signal.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "Sec 6.3 footnote/text",
+   "quote": "Notably, evaluation incidents may involve different problem categories than those encountered during deposition, testing whether reinforcement generalizes beyond the deposited paths.",
+   "support_explanation": "Authors suggest deposition vs evaluation incidents differ, but which incidents supplied the 90 deposition trajectories and whether they overlap the 163 evaluation incidents is not specified.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Sec 6.3 Graph Evolution",
+   "quote": "retaining all reinforcement",
+   "support_explanation": "Graph-evolution study run with decay rho=0 and alpha=0: decay and exploit/explore parameters are not evaluated.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Sec 6.3 Graph Evolution",
+   "quote": "After six epochs, 289 new edges are synthesized as traversals discover cross-incident action sequences, growing the total to 20,182.",
+   "support_explanation": "Only 6 epochs x 15 trajectories = 90 trajectories; 289 synthesized edges (+1.5%); no accuracy audit of synthesized edges.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "Sec 6.3 Graph Evolution",
+   "quote": "indicating concentration on frequently successful paths while maintaining a long tail of alternatives",
+   "support_explanation": "Node Gini 0.60 / edge Gini 0.32 after six epochs: reinforcement concentrates.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "Sec 7 Outcomes",
+   "quote": "Among the 62 scored conversations, manual outcome classification shows that 26% of conversations",
+   "support_explanation": "Field study: 62 of 143 scored; 26% definitive root cause, 71% useful evidence, 3% none; no control arm or pre/post comparison.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "Sec 7 Outcomes",
+   "quote": "The mean usefulness score is 3.10/5, with 79% rated",
+   "support_explanation": "Mean field usefulness 3.10/5 (lower than the 3.49 offline LLM-judged score, different scales/judges).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Sec 7 Failure Analysis",
+   "quote": "coverage gaps (45% of failures): incidents involving recently deployed services or rare failure modes not yet represented in the graph",
+   "support_explanation": "Named failure boundary of the store: coverage; telemetry expiry 35%, cross-team 20%.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "Sec 7 Lessons Learned",
+   "quote": "A perfect seed graph is difficult to achieve",
+   "support_explanation": "Extractor errors remain; ATR is expected to compensate but no experiment tests ATR repairing seed-graph errors.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "Sec 6.1",
+   "quote": "we invited domain experts to annotate 30 incident tickets (71 problem nodes, 191 action nodes, 262 edges) as ground truth",
+   "support_explanation": "Extraction validated on 30 tickets: node F1 0.93, edge F1 0.92 (RESOLVES 0.86).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "Sec 6.1 Cost and Latency",
+   "quote": "Average cost is $0.22/incident (15.7 LLM calls",
+   "support_explanation": "Offline construction cost per incident; median 1.3 min.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "Contributions",
+   "quote": "(mean 3.9K vs. 32K tokens per graph load)",
+   "support_explanation": "Retrieval-context cost reported (8x less than Agentic Summary-RAG).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "Sec 6.2 Cross-Domain",
+   "quote": "a spreadsheet formula benchmark (124 held-out samples, 6 runs)",
+   "support_explanation": "Spreadsheet transfer: 19.1+-1.9 vs 17.2+-1.5 Pass@1 for Trace-RAG: overlapping intervals.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "Sec 6.2 Orchestration comparison",
+   "quote": "this comparison therefore measures how well a general-purpose orchestrator utilizes GraphMind’s graph, rather than a controlled baseline comparison",
+   "support_explanation": "GHC comparison is explicitly not a controlled baseline.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "Sec 2 Related Work",
+   "quote": "treat the knowledge base as static after construction",
+   "support_explanation": "Author-stated gap against neighbouring systems (manual artifacts, flat skill libraries, static KBs).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "Contributions",
+   "quote": "to our knowledge the first production-deployed system that jointly constructs, executes, and reinforces action-centric workflow graphs from operational traces",
+   "support_explanation": "Novelty claim by assertion; Trace2Skill is the only skill-evolution neighbour named; Agent Workflow Memory-style systems are not discussed in the text read.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E030",
+   "locator": "Sec 8 Future Work",
+   "quote": "applying negative reinforcement to suppress edges along failed trajectories could accelerate convergence",
+   "support_explanation": "Failed trajectories not used: no demotion/retirement of harmful edges (open work).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E031",
+   "locator": "Sec 3.3",
+   "quote": "When new traces arrive, existing cluster representatives are removed and all original members re-enabled (de-clustering).",
+   "support_explanation": "Incremental maintenance of the store: global re-clustering on each update; originals kept and disabled (reversible).",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E032",
+   "locator": "Sec 2 ACO",
+   "quote": "These methods optimize over fixed, well-defined search spaces with clear objective functions; GraphMind adapts the reinforcement-and-decay intuition",
+   "support_explanation": "ACO is an analogy, not a reduction with guarantees; the objective (Q) is a model-judged score.",
+   "kind": "author_report",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E033",
+   "locator": "Table 3 and Table 4",
+   "quote": null,
+   "quote_unavailable_reason": "Table cells with math markup are split across lines; no contiguous quote.",
+   "support_explanation": "Table 3 (93 incidents): mitigation reach 98.5 vs 90.9, hallucination 3.8 vs 22.7, usefulness 3.49 vs 3.32, KQL 10.0 vs 2.5. Table 4 (163 incidents): reach 93.3 vs 92.0, hallucination 7.8 vs 10.5, usefulness 3.366 vs 3.331, KQL 17.2 vs 15.1.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  },
+  {
+   "evidence_id": "E034",
+   "locator": "Eq. 7 (Sec 5.2)",
+   "quote": null,
+   "quote_unavailable_reason": "Equation rendered as markup fragments; no contiguous quote.",
+   "support_explanation": "Delta-phi(x)=Q(T)/|T| for every x in the trajectory: uniform credit across all visited nodes/edges, no counterfactual or per-step attribution.",
+   "kind": "our_inference",
+   "material_id": "M1",
+   "material_sha256": "63b099d8d76cb53033ac2143489f454a290f0dfdce89ef2141e7cb7470c47be5"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Knowledge store for incident investigation: from per-incident playbooks/summaries to a deduplicated typed workflow graph (Domain/Problem/Action, CAUSES/RESOLVES/LEADS_TO/BELONGS_TO).",
+   "information": "Human resolution traces (tickets, text/images/tables converted to text); LLM extractor with schema in prompt; embeddings; no execution feedback at this stage.",
+   "operation": "LLM extraction -> canonicalization (regex masking) -> agglomerative clustering with representative nodes -> index update; de-cluster and re-cluster on new traces.",
+   "output": "Graph of ~13,344 active nodes / 19,893 edges from 1,330 incidents.",
+   "conditions": "Operational domain with abundant expert traces; extractor F1 0.93 on 30 tickets.",
+   "feedback": "None (offline).",
+   "selection_rule": "Clustering threshold (0.01 used); no quality gate on extracted nodes beyond pruning stage.",
+   "selection_data": "Human traces before Feb 2026.",
+   "persistence": "Cloud graph DB + vector index; original members disabled not deleted.",
+   "later_use": "Bounded m-hop traversal by agents on later incidents.",
+   "claimed_effect": "Higher reach, lower hallucination, 8x less context than per-incident summaries.",
+   "failure_boundary": "Coverage gaps (45% of field failures), implicit actions, jargon; telemetry expiry.",
+   "evidence_ids": [
+    "E001",
+    "E010",
+    "E011",
+    "E021",
+    "E023",
+    "E031"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Reinforcement weights phi on graph nodes/edges and the edge set (synthesized LEADS_TO edges).",
+   "information": "Full trajectory (visited nodes/edges/observations); quality score Q from LLM-judged usefulness, groundedness, optional user score.",
+   "operation": "If Q>=0.8 deposit Q/|T| on every node/edge in the trajectory; periodic multiplicative decay; synthesize LEADS_TO edges between consecutively visited unlinked nodes.",
+   "output": "Updated phi and edges that bias probabilistic subgraph expansion (log-compressed weights, alpha) and annotate planner context.",
+   "conditions": "Repeated incident triage where past successful paths predict future ones.",
+   "feedback": "Self-judged trajectory quality (no executable ground truth).",
+   "selection_rule": "Threshold deposit; no counterfactual credit; failed trajectories ignored.",
+   "selection_data": "90 trajectories (6 epochs x 15) for the evolution study; deposition vs evaluation incident sets not specified.",
+   "persistence": "phi stored in graph with decay; edges persist.",
+   "later_use": "Next traversals sample edges with probability proportional to [log(1+phi)]^alpha.",
+   "claimed_effect": "Hallucination 10.5% -> 7.8% (-26% relative); reach 92.0 -> 93.3; KQL success 15.1 -> 17.2; +8% latency.",
+   "failure_boundary": "Over-concentration (Gini), no negative reinforcement, decay untested, small n.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E015",
+    "E016",
+    "E017",
+    "E030",
+    "E034"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Manually authored playbooks/skills are costly, brittle, retrieval-inefficient and miss the long tail; operational traces are underused; existing knowledge bases are static after construction.",
+  "checked_gap": "The store-format inefficiency (verbose per-incident summaries, 32K vs 3.9K tokens) is concrete and evidenced. The 'static after construction' self-evolution gap is asserted; the paper shows only a small, statistically thin ATR effect and does not test whether ATR repairs seed-graph errors. Neighbours such as Trace2Skill are named but not run; memory-graph/agent-workflow-memory systems are not discussed in the text read.",
+  "lineage_closest_adjacent": "Process mining -> LLM trace-to-workflow extraction; GraphRAG/Han 2025; Trace2Skill (Ni 2026); agentic RAG (Singh 2025); ACO (Dorigo 1996) for reinforcement-and-decay. Versions as cited; no neighbour full texts in this pack.",
+  "residue": "Whether execution-time reinforcement adds measurable value over a static graph under proper statistics; credit assignment inside trajectories.",
+  "stakes": "On-call incident triage across four production database services.",
+  "method_response": "Action-centric graph with bounded traversal plus ACO-style reinforcement and decay.",
+  "remaining_gap": "Negative reinforcement, domain-specific channels, coverage growth, validated edge synthesis (acknowledged as future work).",
+  "evidence_ids": [
+   "E025",
+   "E028",
+   "E029",
+   "E030",
+   "E032",
+   "E033"
+  ],
+  "unresolved": [
+   "Closest self-evolving-workflow neighbours not available as pinned text; novelty claim not verifiable here.",
+   "Which incidents fed ATR deposition vs the 163 evaluation incidents."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "C03 steps read: no unified conditioning-format training and no category-level holdout; GraphMind conditions a frozen LLM on retrieved typed subgraphs (retrieved instances as conditioning) and edits the retrieval substrate. unify_into_shared_representation/C18 was also read and rejected as supporting: no uniform model or shared-space bridge, only a shared graph schema for extraction.",
+    "success_checks": "Conditioning vs no-conditioning contrast: not run (no store-off agent); temporal holdout: met for the static store; regime characterization: partial (coverage-gap analysis).",
+    "failure_checks": "Cheaper alternative (raw Trace-RAG) not run on incidents (token arithmetic only); single domain for headline plus one weak transfer test.",
+    "evidence_ids": [
+     "E001",
+     "E010",
+     "E011",
+     "E026"
+    ],
+    "reason": "Only the parent-level operation (condition on retrieved experience, no weight updates) is executed; graph construction and ATR are outside the card."
+   }
+  ],
+  "executes_pattern": "partial",
+  "resolves_problem": "partial: retrieval efficiency problem addressed with evidence; self-evolution problem only directionally"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "version": "snapshot:52ff96577c9c",
+  "matches": [
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H04",
+    "fit": "high",
+    "version": "snapshot:52ff96577c9c",
+    "condition_checks": "Graph/cluster substrate with linking, promotion by representative nodes and reversible disabling (met); retrieval selective and bounded (met); content/index decoupled (met); store certified by removing it (unmet, only alternative stores compared); writes gated by external check (partial: LLM-judged Q).",
+    "evidence_ids": [
+     "E001",
+     "E011",
+     "E025",
+     "E031"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H29",
+    "fit": "medium",
+    "version": "snapshot:52ff96577c9c",
+    "condition_checks": "Utility-like credit assigned to entries from outcomes (met in form: reinforcement phi); counterfactual baseline behind credit (unmet: uniform Q/|T|); retirement of harmful entries (unmet: decay only, negative reinforcement future work); ablatable gate (met: uniform-weight control).",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E030",
+     "E034"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "index_experience_for_reuse",
+   "domain_sub": "H04",
+   "operation_correspondence": "RS: express the task as conditioning built from retrieved instances. Domain: store experience in a structured substrate and retrieve selectively for reuse. Both = frozen LLM conditioned on a retrieved structured store.",
+   "necessary_conditions_and_differences": "RS card expects training the conditioning channel and category holdout; domain card expects gated writes and store-off certification. GraphMind meets selective retrieval and temporal holdout; lacks store-off and cheaper-baseline runs.",
+   "evidence_ids": [
+    "E001",
+    "E010",
+    "E011"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:index_experience_for_reuse/S2",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md S2"
+   ],
+   "applies_when": "Store grows from system outputs.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Graph nodes come from human traces; ATR deposits and synthesized edges are gated by Q>=0.8 that is mostly LLM-judged, not by an executable test.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S3",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md S3"
+   ],
+   "applies_when": "Structured store with index.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Cluster representatives with inherited edges, vector index over typed nodes, graph edges as separate access paths.",
+   "evidence_ids": [
+    "E031"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S4",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md S4"
+   ],
+   "applies_when": "Retrieval injected into agent context.",
+   "applicable": true,
+   "status": "met",
+   "reason": "Bounded m-hop expansion, k_p/k_a sensitivity grid, 3.9K vs 32K tokens per load.",
+   "evidence_ids": [
+    "E025"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md S5"
+   ],
+   "applies_when": "Claims the store drives gains.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Alternative stores compared (summaries), but no no-store agent or store-off ablation of the graph itself.",
+   "evidence_ids": [
+    "E011",
+    "E033"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/index_experience_for_reuse.md F3"
+   ],
+   "applies_when": "Store updated from the evaluated stream (failure-mode check: status = failure avoided).",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Static graph built before the temporal cut; whether ATR deposition used the evaluation incidents is not stated.",
+   "evidence_ids": [
+    "E010",
+    "E015"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S1"
+   ],
+   "applies_when": "Entries credited by outcome.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Credit is trajectory-level and uniform over visited nodes/edges; no with/without-entry contrast.",
+   "evidence_ids": [
+    "E034",
+    "E003"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S2"
+   ],
+   "applies_when": "Store accumulates entries.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Decay forgets weights but nothing is retired; failed trajectories unused; ATR evolution study ran with decay=0.",
+   "evidence_ids": [
+    "E005",
+    "E016",
+    "E030"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/F3",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md F3"
+   ],
+   "applies_when": "Self-reinforcing loop (failure-mode check: status = failure avoided).",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Reinforcement concentrates on already-successful paths (Gini 0.60) judged by an LLM; exploration (alpha) and user feedback precedence mitigate but no fixed external referee is shown.",
+   "evidence_ids": [
+    "E004",
+    "E018"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "snapshot",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S5"
+   ],
+   "applies_when": "Mechanism adds cost.",
+   "applicable": true,
+   "status": "met",
+   "reason": "ATR overhead disclosed (+8% latency, +1.5 rounds); construction and context costs reported.",
+   "evidence_ids": [
+    "E008",
+    "E024",
+    "E025"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3"
+   ],
+   "applies_when": "Retrieval conditioning claimed to add unique value.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Trace-RAG compared only via token arithmetic on incidents (run only on SpreadsheetBench); longer-context/no-retrieval agent not run.",
+   "evidence_ids": [
+    "E026",
+    "E033"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-5",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #5"
+   ],
+   "applies_when": "Recipe presented as generic.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "One production domain plus SpreadsheetBench with overlapping intervals (19.1+-1.9 vs 17.2+-1.5).",
+   "evidence_ids": [
+    "E026"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-6",
+   "version": "card-order",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #6"
+   ],
+   "applies_when": "Quality/coverage of conditioning source matters.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Extraction error analysis, clustering-threshold study and field failure analysis (coverage 45%) given; no controlled coverage sweep.",
+   "evidence_ids": [
+    "E021",
+    "E023"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2605.17617-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Eq. 6 and Sec 6.2 metrics"
+   ],
+   "applies_when": "Training signal and evaluation metric share a judge.",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Usefulness is LLM-judged both inside Q (deposition) and in the reported usefulness metric; hallucination/reach graders for the tables not stated; expert review n=19.",
+   "evidence_ids": [
+    "E004",
+    "E013",
+    "E014",
+    "E012"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2605.17617-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 4"
+   ],
+   "applies_when": "Small self-evolution effect reported as improvement.",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "4 runs per condition, overlapping intervals, no test; claim framed as 26% relative reduction.",
+   "evidence_ids": [
+    "E007",
+    "E033"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2605.17617-3",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 6.3"
+   ],
+   "applies_when": "Retained effect claimed on later incidents.",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Not stated which incidents provided the 90 deposition trajectories relative to the 163 evaluation incidents.",
+   "evidence_ids": [
+    "E015",
+    "E017"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "GraphMind beats Agentic Summary-RAG on mitigation reach, hallucination, usefulness, KQL throughput with 8x less retrieval context.",
+   "setting": "93 held-out production incidents after Feb 2026; GPT-5.2",
+   "baseline_control": "Agentic Summary-RAG with the same orchestration loop and LLM preprocessing",
+   "selection_vs_test": "Graph built from 1,330 earlier incidents; test strictly later",
+   "result_denominator": "Table 3: 4 runs (2 per method) with 95% CI; expert review n=19",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E011",
+    "E012",
+    "E013",
+    "E025",
+    "E033"
+   ],
+   "counterevidence": [
+    "E014"
+   ],
+   "allowed_conclusion": "Graph store from traces beats summary store under temporal split in this domain; LLM-judge dependence and n=2 runs/method limit precision."
+  },
+  {
+   "claim_id": "C2",
+   "text": "ATR reduces hallucination rate by 26% and lets the graph learn from execution feedback.",
+   "setting": "163 recent incidents, 8 runs; 6 epochs x 15 trajectories deposition",
+   "baseline_control": "Uniform weights (no reinforcement)",
+   "selection_vs_test": "Deposition/evaluation separation not stated",
+   "result_denominator": "Table 4: 10.5+-2.3 -> 7.8+-2.1 hallucination; reach 92.0 -> 93.3; overlapping CIs",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E015",
+    "E017",
+    "E033"
+   ],
+   "counterevidence": [
+    "E004",
+    "E016"
+   ],
+   "allowed_conclusion": "Directional, small gain at ~8% latency cost; not statistically established; retained-improvement status unresolved."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Field study: 97% of scored conversations yield actionable results within interactive latency.",
+   "setting": "194 conversations over 12 weeks; 143 native, 62 scored",
+   "baseline_control": "None",
+   "selection_vs_test": "Live usage; no randomization",
+   "result_denominator": "62 scored of 143; 26% definitive root cause; mean usefulness 3.10/5",
+   "evidence_ids": [
+    "E019",
+    "E020",
+    "E021"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Adoption and plausible utility; no causal attribution to graph or ATR."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A deduplicated action-centric workflow graph built from earlier human traces gives better grounded investigations than per-incident summary retrieval on later incidents in this production setting (author-reported, n=2 runs per method); ATR adds at most a small, statistically unestablished gain at higher latency.",
+  "unresolved": [
+   "Whether ATR (execution-informed evolution) causes the claimed improvement.",
+   "Deposition/evaluation incident separation.",
+   "Independent (non-LLM) grading of hallucination and reach.",
+   "Generality beyond incident triage."
+  ],
+  "evidence_ids": [
+   "E007",
+   "E009",
+   "E010",
+   "E015"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "存储格式低效（32K vs 3.9K token）具体且有证据；但'建图后静态'的自进化缺口只是断言，最近邻（Trace2Skill等）未实测、相关记忆图/工作流记忆系统未讨论。",
+   "evidence_ids": [
+    "E025",
+    "E028",
+    "E029",
+    "E033"
+   ],
+   "counterevidence_ids": [
+    "E030",
+    "E032"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "trace→类型化图→有界遍历→ACO式沉积/衰减的链条清晰且与问题匹配；但 ATR 的信用分配均匀(Q/|T|)、依赖 LLM 评分，为何降低幻觉缺乏机理验证，未对比简单频次先验。",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E006",
+    "E025"
+   ],
+   "counterevidence_ids": [
+    "E032",
+    "E034"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "构建/去聚类/维护与下一轮读取(按φ采样、注入planner)描述清楚；但合成边无独立验证、无版本/回滚、衰减在演化实验中为0、不淘汰节点、沉积与评测集分离未述。",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E006",
+    "E031"
+   ],
+   "counterevidence_ids": [
+    "E016",
+    "E030"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "时间切分与专家标注抽取评测较好；但幻觉/到达率判定者未说明、usefulness 为 LLM 评分且同时用于沉积信号 Q、专家评审仅 n=19、KQL 非空结果是粗代理。",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E013",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "同编排下对比摘要RAG隔离了知识表示，ATR 有均匀权重对照；缺无库基线、Trace-RAG 实跑、边合成/衰减/频次先验消融，ATR 效应小且置信区间重叠。",
+   "evidence_ids": [
+    "E011",
+    "E007"
+   ],
+   "counterevidence_ids": [
+    "E016",
+    "E027"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "静态图相对测试集的严格时间留出；ATR 沉积集与评测集（163 例）关系未述，跨域仅 SpreadsheetBench 且区间重叠。",
+   "evidence_ids": [
+    "E010",
+    "E026"
+   ],
+   "counterevidence_ids": [
+    "E015"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "报告多次运行的95%CI与敏感性网格，但头条对比每方法仅2次运行、ATR 每条件4次且CI重叠、无显著性检验。",
+   "evidence_ids": [
+    "E007",
+    "E009"
+   ],
+   "counterevidence_ids": [
+    "E007"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "报告构建成本($0.22/事件)、上下文token(3.9K vs 32K)、延迟与 ATR 额外开销(+8%延迟/+1.5轮)；缺在线每次调查总 token/成本对比。",
+   "evidence_ids": [
+    "E008",
+    "E024",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 56.25,
+  "display": 56.3,
+  "lower": 56.25,
+  "upper": 56.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

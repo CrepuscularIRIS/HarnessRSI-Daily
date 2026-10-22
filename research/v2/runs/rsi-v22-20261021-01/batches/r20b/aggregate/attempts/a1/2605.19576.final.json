@@ -1,0 +1,1926 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r20b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2605.19576",
+  "paper_id": "2605.19576",
+  "version": "2605.19576v3",
+  "title": "Library Drift: Diagnosing and Fixing a Silent Failure Mode in Self-Evolving LLM Skill Libraries",
+  "claim_type": "system_method",
+  "central_claim": "Unbounded skill accumulation without lifecycle management causes library drift; trace-level diagnostics isolate it and retirement, a bounded bank and meta-skill authoring prior prevent drift, improve held-out performance and provide a non-divergence guarantee."
+ },
+ "provenance": {
+  "input_hash": "da091bfa50841d5394c9aab8127f2524d2739a4b27c229d3a2abd56a1614257f",
+  "input_package": "batches/r20b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T03:02:41Z"
+ },
+ "materials": [
+  {
+   "material_id": "2605.19576.txt",
+   "url": "https://arxiv.org/html/2605.19576v3",
+   "version": "2605.19576v3",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2605.19576.txt",
+   "sections_read": [
+    "Opus: pinned text read in full before opening seat records (abstract, method, experiments, all tables, appendices); targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E001",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 73–86",
+   "quote": "Self-evolving skill libraries face a silent failure mode we term\n\nlibrary drift\n: unbounded skill accumulation without\noutcome-driven lifecycle management causes retrieval degradation,\nfalse-positive injections, and performance stagnation. Recent\nevaluation confirms the symptom (LLM-authored skills deliver\n+0.0pp gain while human-curated ones deliver\n+16.2pp; SkillsBench\n(\nLi et al., 2026\n)\n), yet the underlying\nmechanism has not been isolated.",
+   "support_explanation": "Authors posit unbounded accumulation as the mechanism, not merely a training-free skill-library contribution.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E002",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 243–270",
+   "quote": "Voyager\n(\nWang et al., 2023\n)\npioneered the ever-growing\nexecutable skill library in Minecraft;\nExpeL\n(\nZhao et al., 2024\n)\nextracts textual insights from\ntrajectories but lacks outcome-driven retirement;\nAutoManual\n(\nChen et al., 2024\n)\ncompiles instruction manuals;\nCASCADE\n(\nHuang et al., 2025\n)\npairs meta-skills with cumulative\ncreation; AutoSkill\n(\nYang et al., 2026\n)\nadds versioning but\ndoes not retire on measured per-task contribution.",
+   "support_explanation": "Author-positioned lineage: Voyager, ExpeL, AutoManual, CASCADE and AutoSkill; originals not independently checked.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E003",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 483–496",
+   "quote": "A1 (no skill injection):\nThe Router is forced to\n\nnone\n: the full pipeline (synthesizer, critic, curator)\nstill runs, but no skill is ever injected into the solver prompt.\nThe critic produces 0 calls because no skill-attributed failures\nexist to judge.\nResult: +0.002\n±\n\\pm\n0.005 gain (the no-skill floor). This\nisolates the routing effect: skill creation alone, without\ninjection, produces no gain.",
+   "support_explanation": "Injection-off is a retained-artifact control; flat performance with unused skills does not establish accumulation-induced harmful injection.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E004",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 498–538",
+   "quote": "A4 (harsh retirement):\nEvidence floor\nN\nmin\nN_{\\min}\nreduced\nfrom 100 to 20; threshold\nτ\n\\tau\ntightened to 0.0. Result:\n\n−\n-\n0.019\n±\n\\pm\n0.010,\nbelow\nthe no-skill baseline. The\nlibrary actively harms performance. With only 20 trials, the\nHoeffding deviation is\nϵ\n≈\n0.44\n\\epsilon\\approx 0.44\n; skills with true\ncontribution\nc\n∈\n[\n−\n0.44\n,\n0\n]\nc\\in[-0.44,0]\nare prematurely retired on\nunlucky draws, while genuinely harmful skills may survive early\nrounds before enough evidence accumulates. The bank collapses to\n2 active skills, and the router’s 18.9% engagement means it\nrarely injects, yet when it does, the surviving skills hurt.",
+   "support_explanation": "Harsh retirement changes both evidence floor and threshold; erosion is not an unbounded/no-retirement control.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E005",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 613–620",
+   "quote": "\\hat{c}(s)=\\frac{\\text{successes}(s)-\\text{failures}(s)}{\\text{trials}(s)}\n\n(2)\n\ncomputed from the evidence log (capsules where\ns\ns\nwas injected).",
+   "support_explanation": "The quantity named contribution is observed success-minus-failure conditional on injection, not an effect relative to no skill.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E006",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 638–654",
+   "quote": "For every failure capsule, a separate Critic LLM call produces a\nstructured verdict:\nhelped\n,\nhurt\n,\n\nneutral\n, or\ninapplicable\n, plus a pattern label\nand confidence. These verdicts serve dual purpose: (1) synthesis\nsubstrate (clusters of\n≥\n\\geq\n3 failures sharing a canonical pattern\ntrigger new skills), and (2) early-warning diagnostic. A rising proportion of",
+   "support_explanation": "Critic verdicts and recurrent failures generate skill candidates; no independent calibration of attribution is shown.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E007",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 715–737",
+   "quote": "\\hat{c}(s)\\leq-\\tau\n. The Default uses\nN\nmin\n=\n100\nN_{\\min}=100\n,\n\nτ\n=\n0.10\n\\tau=0.10\n, conservative enough that useful skills survive\nstochastic noise (Hoeffding\nϵ\n≈\n0.20\n\\epsilon\\approx 0.20\n) but\naggressive enough that harmful skills are eventually removed.\nThis directly addresses the “accumulation without quality signal”\nstage of drift.",
+   "support_explanation": "Default conservative retirement uses 100 trials and threshold 0.10.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E008",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 742–750",
+   "quote": "A hard cap\nC\nC\n(Default: 50) forces the curator to evict the\nlowest-contribution skill when synthesis would exceed the cap.\nThis directly addresses the “retrieval degradation” stage: by\nbounding the bank, retrieval precision cannot decay with\nunbounded growth. Combined with retirement, it provides a formal\nnon-divergence guarantee:",
+   "support_explanation": "Size cap and lowest-contribution eviction are concrete membership operations.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E009",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 800–816",
+   "quote": "A meta-skill document constrains the Synthesizer to produce\nstylistically consistent skills. This addresses the “silent\ninjection harm” stage at its source: by enforcing structural\nhomogeneity, fewer harmful or redundant skills are born in the\nfirst place, reducing the load on downstream retirement. Ablation\nA3 (no meta-skill) shows that removing it costs 43% of the\nDefault’s gain; it is the single most valuable component.\n\nSurprisingly, explicit deduplication mechanisms (pattern\ncanonicalisation, A5; cover-guard, A6) are\nnot\nnecessary\ngiven the meta-skill: A5 and A6 slightly\nexceed\nthe\nDefault. The meta-skill subsumes explicit dedup at this scale, a\ndesign insight relevant to any system with LLM-authored artifacts.",
+   "support_explanation": "Meta-skill is an authoring prior; explicit deduplication can be unnecessary, a useful negative result.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E010",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 824–845",
+   "quote": "We evaluate on\nMBPP+ hard-100\n: from the 378-task MBPP+\ntest split\n(\nLiu et al., 2023\n)\n, we discard tasks that Claude\nOpus 4.7 solves on all 5 baseline seeds (\n∼\n\\sim\n273 tasks) and\nrandomly sample 100 from the remainder (60 train / 40 eval, fixed\nseed). This isolates tasks where a skill library can plausibly\nhelp. All LLM calls use Claude Opus\n4.7; embeddings use Cohere embed-v4 (both via Amazon Bedrock). The Solver is a single direct\nLLM call with no execution feedback, no self-refinement, and no\ntool use, isolating the skill library’s contribution. Each run is\n100 rounds; we report mean\n±\n\\pm\nstd over 3 seeds.",
+   "support_explanation": "100 selected hard tasks, 60/40 split, frozen single-call solver, three seeds; no task-level execution feedback to solver.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E011",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 856–870",
+   "quote": "Baseline\n: round-0 pass@1 (no skill active in any condition; cross-condition\nvariation is sampling noise from\nn\n=\n40\nn\\!=\\!40\neval tasks; gain is computed\nwithin each run, cancelling this).\n\nGain\n: mean(last 10)\n−\n-\nmean(first 10) of held-out pass@1.",
+   "support_explanation": "Round-zero baseline and rolling last10-minus-first10 gain have different reference windows; do not add gain to round-zero baseline.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E012",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 899–924",
+   "quote": "Default\n\n0.258\n±\n\\pm\n0.047\n\n0.658\n±\n\\pm\n0.042\n\n+\n+\n0.328\n±\n\\pm\n0.018\n\n73\n\n50\n\n89\n\n4299",
+   "support_explanation": "Default table row reports gain 0.328±0.018, 50 active and 89 retired skills.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E013",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 1264–1298",
+   "quote": "A5 (no canonicalisation) raises\nτ\ncanon\n\\tau_{\\text{canon}}\nto 1.0,\ndisabling pattern dedup. A6 (no cover-guard) disables\nduplicate-cluster skipping. Both slightly\nexceed\nthe\nDefault: A5\n+\n+\n0.374, A6\n+\n+\n0.363 (vs. Default\n+\n+\n0.328;\nwithin\n±\n2\n​\nσ\n\\pm 2\\sigma\nat\nn\n=\n3\nn\\!=\\!3\n). The meta-skill’s authoring\nguidance enforces enough stylistic consistency that the explicit\nfilter’s false positives discard more useful skills than\nduplicates it prevents, a transferable design insight for any\nsystem with LLM-authored artifacts.",
+   "support_explanation": "A5/A6 modestly exceed default; dedup superiority is not established.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E014",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 1328–1338",
+   "quote": "The Default uses\n∼\n\\sim\n14.5k LLM calls per 100 rounds (10k solver\n+ 4.3k critic + 152 synthesis), 43% more than the no-skill\nbaseline (A1, 10k calls). Wall time is 6.5 h vs. A1’s\n2.3 h (2.8\n×\n\\times\n). The solver dominates cost in all\nconditions (63–99% of total calls).",
+   "support_explanation": "Authors openly report ~14.5k calls, 43% call overhead, 6.5h vs 2.3h; budgets not matched.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E015",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 1455–1466",
+   "quote": "(i) One benchmark (MBPP+ hard-100); generalization to broader\ndomains (multi-step agents, SWE-Bench) is left to future work.\n(ii) Single model (Claude Opus 4.7); cross-model stability not\nestablished.\n(iii) The diagnostic thresholds (when to intervene) are empirically\nchosen; principled calibration is future work.\n(iv) We hypothesize that drift signals (contribution scores,\n\nhurt\nverdicts) become more sensitive in multi-step agents\nwhere per-step verdicts can isolate which step a stale skill\nharmed; empirical validation is future work.",
+   "support_explanation": "One benchmark/model; calibration and multi-step transfer remain future work.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E016",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 1505–1526",
+   "quote": "Ratchet operates a five-phase loop per round:\n(1)\nEval\n: routes active skills on held-out tasks;\n(2)\nTrain\n: same pipeline on train split, generating\nfailure substrate;\n(3)\nCritic\n: per-failure attribution verdict (LLM call);\n(4)\nSynthesizer\n: clusters failures by canonical pattern,\nauthors new skills from clusters with\n≥\n\\geq\n3 members;\n(5)\nCurator\n: computes contribution scores, retires\nunder-performers, enforces cap.",
+   "support_explanation": "Eval and train precede critic and curator; text does not explicitly restrict curator contribution log to train-only capsules.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E017",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 2018–2055",
+   "quote": "every surviving skill has\nc\n⁡\n(\ns\n)\n≥\n−\nτ\n−\nϵ\nc(s)\\geq-\\tau-\\epsilon\n. Tasks\nrouted to a surviving skill have expected pass probability\n\n≥\np\n0\n​\n(\nx\n)\n−\nτ\n−\nϵ\n\\geq p_{0}(x)-\\tau-\\epsilon\n; tasks routed to\nnone\n\nachieve\np\n0\n​\n(\nx\n)\np_{0}(x)",
+   "support_explanation": "Proof equates surviving-skill average contribution with taskwise treatment improvement; this implication is not supplied by Eq2. Newly admitted skills below Nmin also survive without the stated bound.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "sol:E018",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 2083–2125",
+   "quote": "With Default values (\nτ\n=\n0.10\n\\tau=0.10\n,\nN\nmin\n=\n100\nN_{\\min}=100\n,\nC\n=\n50\nC=50\n,\n\nδ\n=\n10\n−\n3\n\\delta=10^{-3}\n):\nϵ\n≈\n0.20\n\\epsilon\\approx 0.20\n, floor\n=\n𝔼\n⁡\n[\np\n0\n]\n−\n0.35\n=\\mathbb{E}[p_{0}]-0.35\n. The bound is loose at our scale (the\nsystem gains +0.328 rather than losing 0.35) but rules out\nunbounded degradation.",
+   "support_explanation": "Claimed bound is very loose; for p0=0.258 its lower bound is negative even if assumptions held.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E019",
+   "material_id": "2605.19576.txt",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "lines 1655–1697",
+   "quote": "Appendix C\nPer-Seed Results\n\nTable 3:\nPer-seed rolling-mean gain and peak on MBPP+ hard-100.\n\nCondition\n\nSeed\n\nBaseline\n\nPeak\n\nGain\n\nDefault\n\n42\n\n0.225\n\n0.675\n\n+\n+\n0.303\n\n7\n\n0.225\n\n0.600\n\n+\n+\n0.340\n\n13\n\n0.325\n\n0.700",
+   "support_explanation": "Appendix supplies per-seed results; full paper reports three-seed means/std but no significance test or confidence interval.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "locator": "Abstract",
+   "quote": "unbounded skill accumulation without outcome-driven lifecycle management causes retrieval degradation, false-positive injections, and performance stagnation.",
+   "support_explanation": "作者中心主张：库漂移=无生命周期管理的无界技能累积导致检索退化与停滞。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "locator": "§3.2",
+   "quote": "unbounded growth degrades retrieval until injections become harmful",
+   "support_explanation": "“bloat”子模式的定义。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "locator": "§3.2",
+   "quote": "prevented in our Default by the active-cap",
+   "support_explanation": "“bloat”仅被声明由 cap 预防，文中没有去 cap/去退役的复现实验。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "locator": "§3.3 A1",
+   "quote": "The Router is forced to none : the full pipeline (synthesizer, critic, curator) still runs, but no skill is ever injected into the solver prompt.",
+   "support_explanation": "A1：保持全流程但禁用注入的 store-off 对照，是文中最干净的控制。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "locator": "§3.3 A4",
+   "quote": "The bank collapses to 2 active skills, and the router’s 18.9% engagement means it rarely injects, yet when it does, the surviving skills hurt.",
+   "support_explanation": "A4：过严退役使库塌陷并低于无技能基线——复现的是“侵蚀”，不是“累积”。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "locator": "§3.3 A4",
+   "quote": "The effect is consistent across all three seeds",
+   "support_explanation": "A4 三个种子一致为负。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "locator": "§5.1",
+   "quote": "conservative enough that useful skills survive stochastic noise",
+   "support_explanation": "退役规则：N_min=100、τ=0.10 的 Hoeffding 论证（范围与独立性假设见 E010）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "locator": "§5.2",
+   "quote": "forces the curator to evict the lowest-contribution skill when synthesis would exceed the cap",
+   "support_explanation": "容量上限 C=50 的淘汰规则。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "locator": "§4.1",
+   "quote": "computed from the evidence log (capsules where s s was injected)",
+   "support_explanation": "贡献分仅由被注入该技能的任务的成败计算（Eq.2 为 (成功−失败)/试次），无无技能反事实。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "locator": "App. D / §5.2 Prop.1",
+   "quote": "Tasks routed to a surviving skill have expected pass probability",
+   "support_explanation": "命题 1 证明把 ĉ≥−τ−ε 当作相对 p0 的差，而 ĉ 的定义是绝对 2p−1，且 Hoeffding 取 [0,1] 值域——our_inference。",
+   "kind": "our_inference",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "locator": "App. D",
+   "quote": "The bound is loose at our scale (the system gains +0.328 rather than losing 0.35) but rules out unbounded degradation.",
+   "support_explanation": "作者自述界松（−0.35）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "locator": "§6.1",
+   "quote": "we discard tasks that Claude Opus 4.7 solves on all 5 baseline seeds",
+   "support_explanation": "任务筛选：去掉该模型 5 次全对的题，再抽 100 题。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "locator": "§6.1",
+   "quote": "randomly sample 100 from the remainder (60 train / 40 eval, fixed seed)",
+   "support_explanation": "60 训练/40 评测；评测集每轮重复使用。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "locator": "§6.1",
+   "quote": "The Solver is a single direct LLM call with no execution feedback, no self-refinement, and no tool use, isolating the skill library’s contribution.",
+   "support_explanation": "单次调用、无工具，隔离技能库贡献。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "locator": "§6.1",
+   "quote": "Each run is 100 rounds; we report mean",
+   "support_explanation": "100 轮、3 个种子（42/7/13）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "locator": "§6.2",
+   "quote": "lifts pass@1 from 0.258 baseline to 0.584 late-window mean (peak 0.658)",
+   "support_explanation": "主结果；同表 A1 增益 +0.002（见 §3.3）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "locator": "Table 1 caption",
+   "quote": "cross-condition variation is sampling noise from",
+   "support_explanation": "基线跨条件波动来自 n=40 评测集采样噪声（0.200–0.325）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "locator": "§5.3",
+   "quote": "Ablation A3 (no meta-skill) shows that removing it costs 43% of the Default’s gain; it is the single most valuable component.",
+   "support_explanation": "元技能先验是最大单项贡献（去除损失 43%）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "locator": "§5.3",
+   "quote": "The meta-skill subsumes explicit dedup at this scale",
+   "support_explanation": "A5/A6 去掉去重略高于默认，设计假设被反驳。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "locator": "§6.3",
+   "quote": "the cap primarily controls variance rather than mean performance at this scale",
+   "support_explanation": "A7 翻倍 cap 均值不变，仅方差更大——cap 的均值效应未被证明。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "locator": "§6.3",
+   "quote": "confirming the LLM gate contributes beyond tf-idf",
+   "support_explanation": "A2 说明 LLM 门控在检索之外有贡献（约 24% 增益）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "locator": "§1/§2",
+   "quote": "none pairs outcome-driven retirement with a bounded active-cap, the two mechanisms our ablation analysis identifies as load-bearing for preventing drift.",
+   "support_explanation": "“退役+cap 承重”的结论依据：文中没有 retire-off 或 cap-off 的消融。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "locator": "§8",
+   "quote": "which mechanisms are load-bearing (retirement, meta-skill) and which are safely removed (explicit dedup)",
+   "support_explanation": "作者结论列出退役为承重机制。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "locator": "§6.4",
+   "quote": "43% more than the no-skill baseline",
+   "support_explanation": "默认设置的调用量比无技能基线多 43%。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "locator": "§6.4",
+   "quote": "Wall time is 6.5 h vs. A1’s 2.3 h",
+   "support_explanation": "墙钟 6.5h 对 2.3h；A8 为 10.1h。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "locator": "§7 Limitations",
+   "quote": "One benchmark (MBPP+ hard-100); generalization to broader domains (multi-step agents, SWE-Bench) is left to future work.",
+   "support_explanation": "单基准。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "locator": "§7 Limitations",
+   "quote": "Single model (Claude Opus 4.7); cross-model stability not established.",
+   "support_explanation": "单模型。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "locator": "§7 Limitations",
+   "quote": "The diagnostic thresholds (when to intervene) are empirically chosen",
+   "support_explanation": "阈值经验选取，且 A1–A8 与默认值共用同一 40 题评测集。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "locator": "App. A",
+   "quote": "routes active skills on held-out tasks",
+   "support_explanation": "每轮先在评测集上路由；证据日志是否含评测胶囊未说明。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "locator": "App. B Table 2",
+   "quote": "Rollback persistence Consecutive rounds 5",
+   "support_explanation": "超参表含回滚参数，正文未描述回滚机制。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "locator": "§7",
+   "quote": "The trace-level diagnostics detected drift before end-task metrics declined.",
+   "support_explanation": "诊断先于终端指标的声称（A4，库塌陷发生于第 30 轮）。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "locator": "§1",
+   "quote": "LLM-authored skills deliver +0.0pp over no-skill baselines while human-curated ones deliver +16.2pp.",
+   "support_explanation": "动机症状来自外部 SkillsBench。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "locator": "§7 Expected vs unexpected",
+   "quote": "refuting our design assumption that explicit dedup would help",
+   "support_explanation": "作者如实报告设计假设被反驳。",
+   "kind": "author_report",
+   "material_id": "2605.19576.txt",
+   "material_sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "Table 1 caption (A1 row: Active 42, Retired 15, Critic 0)",
+   "quote": "A1 has 42 active because the pipeline still synthesises skills, they are just never injected",
+   "support_explanation": "With 0 critic calls and no injection, 42 skills were synthesised and 15 retired. Synthesis is defined over critic-verdict clusters (opus:O02), and retirement needs n(s) ≥ N_min injected trials (opus:O03); the cap (50) was not reached. The A1 row is inconsistent with the stated mechanism.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "§3.3 A1",
+   "quote": "The critic produces 0 calls because no skill-attributed failures exist to judge.",
+   "support_explanation": "Paired with §4.2: verdict clusters are the synthesis substrate.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "§5.1",
+   "quote": "trials have accumulated and the empirical contribution",
+   "support_explanation": "Retirement requires n(s) ≥ N_min trials (100 by default); a never-injected skill has n(s)=0.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O04",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "Appendix A Router",
+   "quote": "followed by an LLM gate",
+   "support_explanation": "Every routed task makes an LLM gate call. The §6.4 tally of 14.5k = 10k solver + 4.3k critic + 152 synthesis (opus:O05) omits these router-gate calls.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O05",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "§6.4",
+   "quote": "14.5k LLM calls per 100 rounds (10k solver + 4.3k critic + 152 synthesis), 43% more than the no-skill baseline (A1, 10k calls)",
+   "support_explanation": "Cost tally used by both seats; router-gate calls are not itemised.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O06",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "§8 Conclusion",
+   "quote": "The bottleneck in self-evolving skill libraries is not the author; it is the librarian.",
+   "support_explanation": "This framing is contradicted by the paper's own A3: removing the authoring prior costs 43% of the gain and is 'the single most valuable component' (opus:O07). Meanwhile retirement/cap are never removed, so the librarian's role is not isolated.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O07",
+   "material_id": "2605.19576.txt",
+   "material_hash": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "sha256": "f8039e8cb962aa076877379ce530b2e4317743a87c496e34caf07f8a55b53ba0",
+   "locator": "§5.3",
+   "quote": "it is the single most valuable component",
+   "support_explanation": "The authoring prior (meta-skill) is the largest measured component.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "SIG1",
+   "object": "Persistent natural-language skill bank and meta-skill",
+   "information": "Task prompts, solver outputs, executable pass/fail capsules and critic pattern/verdict/confidence",
+   "operation": "Retrieve up to10 tf-idf plus10 embedding neighbors, LLM gate selects one or none; cluster failures; synthesize max2 skills/round after >=3 same-pattern failures; retire/evict",
+   "output": "Updated bounded skill bank plus append-only evidence log",
+   "conditions": "Frozen Opus4.7 single-call coding solver; default active cap50; retirement after100 trials at score<=-0.10",
+   "feedback": "MBPP+ outcomes and LLM failure attribution",
+   "selection_rule/data": "Conditional injection outcome score; lowest-score cap eviction; no paired no-skill credit or explicit admission quarantine",
+   "persistence": "Skill bank/meta-skill and evidence log across100 rounds",
+   "later_use": "Router injects one retained skill on later train/eval tasks",
+   "claimed_effect": "Prevent harmful drift and improve held-out pass@1",
+   "failure_boundary": "Harsh retirement hurts; one model and hard-task subset; causal interpretation of credit and proof not justified",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E006",
+    "sol:E007",
+    "sol:E008",
+    "sol:E010",
+    "sol:E016"
+   ]
+  },
+  {
+   "sig_id": "SIG2",
+   "object": "Library-drift diagnosis",
+   "information": "Ablations and router/retirement/critic traces",
+   "operation": "Disable injection; lower retirement floor and threshold; remove meta-skill/dedup; double cap; refresh meta-skill",
+   "output": "Three-seed gain and bank-state comparisons",
+   "conditions": "Same benchmark/model, but no matched total call budget",
+   "feedback": "Rolling mean pass@1 and operational traces",
+   "selection_rule/data": "40 repeatedly evaluated instances, 60 train instances",
+   "persistence": "Interventions target persistent bank and improver prior",
+   "later_use": "Governance playbook",
+   "claimed_effect": "Isolate unbounded accumulation mechanism and safe correction",
+   "failure_boundary": "No uncapped/no-retirement condition; A1 is a null routing control and A4 is over-retirement, not bloat",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "sol:E011",
+    "sol:E013",
+    "sol:E014"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Growing LLM-authored libraries may stagnate or regress; existing systems allegedly lack outcome-driven retirement plus bounded cap.",
+  "checked_gap": "Concrete unanswered questions are which retained entries help and whether conservative retirement prevents harm. The paper shows injection matters and aggressive retirement can hurt, but does not isolate the asserted unbounded-accumulation causal chain. Prior novelty claims remain author positioning.",
+  "lineage/closest_adjacent": [
+   {
+    "name": "Voyager (Wang et al.,2023)",
+    "version": "Version not pinned in supplied citation",
+    "source": "Current paper §2, not independently read",
+    "relation": "Executable accumulating skill bank"
+   },
+   {
+    "name": "ExpeL (Zhao et al.,2024), AutoSkill (Yang et al.,2026), CASCADE (Huang et al.,2025)",
+    "version": "Versions unresolved",
+    "source": "Current paper §2 only",
+    "relation": "Textual insights, versioning and meta-skill creation adjacent to governance"
+   },
+   {
+    "name": "SkillsBench (Li et al.,2026)",
+    "version": "Version unresolved",
+    "source": "Current paper abstract/introduction only",
+    "relation": "Skill authoring performance symptom; not independent support for Ratchet mechanism"
+   }
+  ],
+  "residue": "Outcome-aware library governance and source-of-drift identification, rather than the generic frozen-model improvement premise.",
+  "stakes": "Harmful stored advice may compound in later tasks; multi-step extension not evaluated.",
+  "method_response": "Log per-entry outcomes, retire conservatively, cap membership and constrain authoring; diagnose with intervention and trace metrics.",
+  "remaining_gap": "Marginal credit, admission replay, no-retirement/uncapped control, train-only gate provenance, valid safety argument and independent transfer remain open.",
+  "evidence_ids": [
+   "sol:E001",
+   "sol:E002",
+   "sol:E003",
+   "sol:E004",
+   "sol:E005",
+   "sol:E015",
+   "sol:E017"
+  ],
+  "unresolved": [
+   "Nearest-neighbor originals and versions unavailable in assigned package; request source-pinned Voyager/ExpeL/AutoSkill/CASCADE/SkillsBench texts for independent lineage comparison. No external lookup performed."
+  ]
+ },
+ "rs_pattern": {
+  "primary": "assumption_audit_and_pivot",
+  "supporting": [
+   "controlled_diagnostic_design"
+  ],
+  "outside_taxonomy": false,
+  "reason": "Revised. The paper names the load-bearing implicit assumption of Voyager-style libraries ('compounding': each deposited skill helps) and pivots the budgeted retention rule. Append-only becomes outcome-driven retirement with an evidence floor and a hard cap, plus a re-derived certificate (Prop. 1). That is C11's object (which elements stay in a budgeted selection) and its documented failure shape: a guarantee that does not hold up (contribution ≠ treatment effect; vacuous floor E[p0]−0.35) and no 'revert the pivot' arm (no retirement-off / uncapped control). son55 picked the right parent but left sub=null; sol's controlled_diagnostic_design/C02 is kept as supporting for the trace-diagnostics and null-injection contribution. C02 fit is partial because no controlled instance set is built. sol's supporting adapt_via_conditioning is not kept: conditioning a frozen solver on stored skills is the shared substrate, not this paper's move.",
+  "matches": [
+   {
+    "main_id": "assumption_audit_and_pivot",
+    "sub_id": "C11",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "主卡：识别隐含假设（“技能累积即复利”）→违反它以展示新行为（漂移/停滞）→给出新保证（命题 1，非发散界）。成功条件“先于正结果给出先前方法恰因该假设失败的明确失败刻画”未满足（无无治理累积基线）；“松弛条件配匹配下界”不适用。C01/C05/C11/C19/C28/C29 的父类子卡分别针对安全定位、可识别性、选择规则、统计证书、分布式协议、收敛保证，均不对应。",
+    "success_failure_checks": "失败模式“松弛不产生新可达结果”不适用；“证明基于未检验假设”相关——命题 1 的推导存在值域/定义问题（E010）。",
+    "evidence_ids": [
+     "son55:E001",
+     "son55:E004",
+     "son55:E005",
+     "son55:E010"
+    ],
+    "reason": "Opus final: the budgeted-retention rule (which skills stay) is pivoted from append-only to outcome-driven retirement + cap with a Hoeffding certificate (C11). Execution partial: the pivot is never reverted, and the certificate equates success-minus-failure with a treatment effect."
+   },
+   {
+    "main_id": "controlled_diagnostic_design",
+    "sub_id": "C02",
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "Names accumulation/routing/governance as potential driver",
+     "Injection-off is an explicit null intervention",
+     "Executable coding outcomes give external target metric",
+     "Reports negative erosion branch",
+     "No intervention independently varies unbounded accumulation; generality restricted"
+    ],
+    "success/failure_checks": {
+     "matched_control": "partial: budget and two-knob retirement change not isolated",
+     "independent_anchor": "partial: executable end-task outcomes, uncalibrated LLM attribution",
+     "scope_boundary": "one benchmark/model acknowledged"
+    },
+    "evidence_ids": [
+     "sol:E003",
+     "sol:E004",
+     "sol:E010",
+     "sol:E014",
+     "sol:E015"
+    ],
+    "reason": "Opus: kept as supporting. A null-injection control (A1) and trace diagnostics that decompose a conflated end-task metric. No constructed instance set, and no accumulation-isolating intervention."
+   }
+  ],
+  "executes_pattern": "partial",
+  "resolves_problem": "scoped"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "manifest-frozen",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "condition": "S1",
+      "status": "unmet",
+      "reason": "Eq2 is conditional outcome, no counterfactual credit",
+      "evidence_ids": [
+       "sol:E005"
+      ]
+     },
+     {
+      "condition": "S2",
+      "status": "partial",
+      "reason": "Authoring prior, conservative retirement and cap; no quarantined replay admission",
+      "evidence_ids": [
+       "sol:E007",
+       "sol:E008",
+       "sol:E009"
+      ]
+     },
+     {
+      "condition": "S3",
+      "status": "partial",
+      "reason": "Erosion and routing null shown; unbounded accumulation not isolated",
+      "evidence_ids": [
+       "sol:E003",
+       "sol:E004"
+      ]
+     },
+     {
+      "condition": "S4",
+      "status": "partial",
+      "reason": "Several separable knobs but no retirement-off and uncapped controls",
+      "evidence_ids": [
+       "sol:E003",
+       "sol:E004",
+       "sol:E013"
+      ]
+     },
+     {
+      "condition": "S5",
+      "status": "met",
+      "reason": "Calls and wall time disclosed",
+      "evidence_ids": [
+       "sol:E014"
+      ]
+     },
+     {
+      "condition": "S6",
+      "status": "unmet",
+      "reason": "Survival bound lacks valid credit-to-treatment and immature-skill steps",
+      "evidence_ids": [
+       "sol:E005",
+       "sol:E017",
+       "sol:E018"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E005",
+     "sol:E007",
+     "sol:E008",
+     "sol:E014"
+    ]
+   },
+   {
+    "main": "diagnose_self_improvement",
+    "sub": "H32",
+    "version": "manifest-frozen",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "condition": "S1",
+      "status": "partial",
+      "reason": "Null intervention cleanly disables uptake, but bloat and erosion differ",
+      "evidence_ids": [
+       "sol:E003",
+       "sol:E004"
+      ]
+     },
+     {
+      "condition": "S2",
+      "status": "met",
+      "reason": "Skill injection disabled directly",
+      "evidence_ids": [
+       "sol:E003"
+      ]
+     },
+     {
+      "condition": "S3",
+      "status": "partial",
+      "reason": "60/40 split stated, gate data provenance unresolved",
+      "evidence_ids": [
+       "sol:E010",
+       "sol:E016"
+      ]
+     },
+     {
+      "condition": "S4",
+      "status": "met",
+      "reason": "Over-retirement harm and dedup null effects prominently reported",
+      "evidence_ids": [
+       "sol:E004",
+       "sol:E013"
+      ]
+     }
+    ],
+    "evidence_ids": [
+     "sol:E003",
+     "sol:E004",
+     "sol:E010",
+     "sol:E013"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H31",
+    "version": "conditions@8704c7da",
+    "fit": "partial",
+    "condition_checks": [
+     {
+      "id": "rsi:evidence_gated_retention/S6",
+      "status": "partial",
+      "note": "有 Hoeffding 非发散论证，但值域/独立性/定义有缺陷"
+     }
+    ],
+    "evidence_ids": [
+     "son55:E007",
+     "son55:E010",
+     "son55:E011"
+    ]
+   }
+  ],
+  "unassigned": [
+   "元技能作者先验（风格一致性）作为入库源头约束，与现有 H 卡无直接对应"
+  ],
+  "reason": "Union. H30: authoring prior + retirement + hard cap is the card's S2 profile. H32: null-injection and governance perturbations. H31 (son55): the N_min evidence floor with a stated Hoeffding non-divergence bound is a statistical commit/retire rule, though its certificate is invalid. Fit partial.",
+  "revision_proposals": [
+   "H30 可补“作者先验可能比显式去重更承重”的条件（提案，不在批内改卡）"
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "assumption_audit_and_pivot",
+   "rs_sub": "C11",
+   "domain": {
+    "namespace": "rsi",
+    "main": "evidence_gated_retention",
+    "sub": "H30"
+   },
+   "operation_correspondence": "C11's pivot of a budgeted keep/evict rule corresponds to H30's governed admission/retirement with a hard size bound.",
+   "necessary_conditions": "Per-entry credit that measures marginal effect; a revert-the-pivot control (retirement-off / uncapped).",
+   "differences": "Eq. 2 is success-minus-failure among injected tasks, not a contrast with no skill. Neither control is run, so the certificate and the 'load-bearing' claim are not bound to the pivot.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E007",
+    "sol:E008",
+    "sol:E017",
+    "son55:E022"
+   ]
+  },
+  {
+   "rs_main": "controlled_diagnostic_design",
+   "rs_sub": "C02",
+   "domain": {
+    "namespace": "rsi",
+    "main": "diagnose_self_improvement",
+    "sub": "H32"
+   },
+   "operation_correspondence": "Disable retained-skill injection (A1) or perturb governance (A4–A8) and read frozen-solver outcomes and bank traces.",
+   "necessary_conditions": "One-axis interventions with an independent anchor (executable MBPP+ tests).",
+   "differences": "A4 changes two knobs, and no intervention varies unbounded accumulation (the named driver).",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "sol:E013",
+    "son55:E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rs:controlled_diagnostic_design/RE-1",
+   "version": "manifest-frozen",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/controlled_diagnostic_design.md reviewer expectation 1"
+   ],
+   "applies_when": "Claiming a causal library-drift mechanism",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Injection-off isolates uptake; harsh retirement tests erosion, not unbounded bloat.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rs:controlled_diagnostic_design/RE-1"
+  },
+  {
+   "id": "rs:controlled_diagnostic_design/RE-2",
+   "version": "manifest-frozen",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/controlled_diagnostic_design.md reviewer expectation 2"
+   ],
+   "applies_when": "Broad failure-mode generality claim",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Only one model and benchmark; multi-step extrapolation remains a hypothesis.",
+   "evidence_ids": [
+    "sol:E015"
+   ],
+   "score_item": "G",
+   "origin": "sol:rs:controlled_diagnostic_design/RE-2"
+  },
+  {
+   "id": "rs:controlled_diagnostic_design/RE-3",
+   "version": "manifest-frozen",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/controlled_diagnostic_design.md reviewer expectation 3"
+   ],
+   "applies_when": "Comparing governance recipe with null baseline",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Null baseline present, total budget not matched.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E014"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rs:controlled_diagnostic_design/RE-3"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "manifest-frozen",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/adapt_via_conditioning.md reviewer expectation 2"
+   ],
+   "applies_when": "Calling later outcomes held-out",
+   "applicable": true,
+   "status": "partial",
+   "reason": "60/40 split documented; no explicit train-only curator provenance or overlap audit.",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E016"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:rs:adapt_via_conditioning/RE-2",
+   "note": "Kept as a check question only: adapt_via_conditioning is not retained as an RS match in this final record (see resolutions on rs_pattern.matches)."
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "manifest-frozen",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md S1",
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "Interpreting outcome score as entry contribution and safety guarantee",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus = sol. S1 asks for a counterfactual behind every credit. Eq. 2 is success-minus-failure on injected tasks with no no-skill contrast. A1 is a system-level store-off, not a per-entry credit.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E017",
+    "son55:E009"
+   ],
+   "score_item": "E.measurement",
+   "origin": "sol:rsi:evidence_gated_retention/S1; son55:rsi:evidence_gated_retention/S1"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H30",
+   "version": "manifest-frozen",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H30.md steps1–5"
+   ],
+   "applies_when": "Governing persistent bank membership",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Retirement/cap described; no candidate quarantine, balanced regression replay or clearly protected promotion data.",
+   "evidence_ids": [
+    "sol:E007",
+    "sol:E008",
+    "sol:E016"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:evidence_gated_retention/H30"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S3",
+   "version": "manifest-frozen",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "Fix asserted specifically for harmful unbounded accumulation",
+   "applicable": true,
+   "status": "partial",
+   "reason": "No uncapped or no-retirement ablation; A7 only doubles cap.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "sol:E013",
+    "son55:E003",
+    "son55:E005",
+    "son55:E022"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:evidence_gated_retention/S3; son55:rsi:evidence_gated_retention/S3"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S5",
+   "version": "manifest-frozen",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "Governance requires extra calls",
+   "applicable": true,
+   "status": "met",
+   "reason": "Calls and wall-time overhead reported openly.",
+   "evidence_ids": [
+    "sol:E014",
+    "son55:E024",
+    "son55:E025"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:rsi:evidence_gated_retention/S5; son55:rsi:evidence_gated_retention/S5"
+  },
+  {
+   "id": "local:2605.19576-1",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Current paper Eq2 and Appendix D"
+   ],
+   "applies_when": "Formal non-divergence guarantee invoked",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Conditional outcome does not imply delta from p0; below-evidence-floor skills can survive with arbitrary harm. Even stated numerical bound is vacuous at observed baseline.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E017",
+    "sol:E018"
+   ],
+   "score_item": "M",
+   "origin": "sol:local:2605.19576-1"
+  },
+  {
+   "id": "local:2605.19576-2",
+   "version": "manifest-frozen",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Current paper §6.1/Table3"
+   ],
+   "applies_when": "Stochastic evolution gains reported",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Three seeds and std/per-seed results provided; no CI or hypothesis test, only one split.",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E019"
+   ],
+   "score_item": "E.statistics",
+   "origin": "sol:local:2605.19576-2"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention.S2"
+   ],
+   "applies_when": "库持续增长",
+   "applicable": true,
+   "status": "met",
+   "reason": "准入先验+退役+硬上限",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E018"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:evidence_gated_retention/S2"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S4",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention.S4"
+   ],
+   "applies_when": "门控可消融",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有 A4/A7，无退役关闭或 cap 关闭",
+   "evidence_ids": [
+    "son55:E020",
+    "son55:E022",
+    "son55:E023"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:evidence_gated_retention/S4"
+  },
+  {
+   "id": "rsi:diagnose_self_improvement/S1",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json diagnose_self_improvement.S1"
+   ],
+   "applies_when": "诊断类主张",
+   "applicable": true,
+   "status": "partial",
+   "reason": "A1 精准；A4 双旋钮",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rsi:diagnose_self_improvement/S1"
+  },
+  {
+   "id": "rsi:diagnose_self_improvement/S3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json diagnose_self_improvement.S3"
+   ],
+   "applies_when": "评测与循环分离",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Opus revision of son55's 'unknown'. The known parts settle the status: there is a 60/40 split, the scorer is frozen (MBPP+ tests), and leakage is not tested. The open question (whether the curator's evidence log includes eval capsules) stays recorded and is scored in E.holdout=1.",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E029"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:rsi:diagnose_self_improvement/S3"
+  },
+  {
+   "id": "rsi:diagnose_self_improvement/S4",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json diagnose_self_improvement.S4"
+   ],
+   "applies_when": "有负/意外结果",
+   "applicable": true,
+   "status": "met",
+   "reason": "A4 与 A5/A6 作为发现报告",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E033"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:rsi:diagnose_self_improvement/S4"
+  },
+  {
+   "id": "rs:assumption_audit_and_pivot/RE-6",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "assumption_audit_and_pivot.md Success conditions #1/#5"
+   ],
+   "applies_when": "主张某隐含假设导致先前方法失败",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Unmet. The prior approaches' failure (ungoverned accumulation degrading performance) is asserted from SkillsBench and never reproduced in the paper's own setting.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003"
+   ],
+   "score_item": "G",
+   "origin": "son55:rs:assumption_audit_and_pivot/RE-1",
+   "note": "Renumbered from son55 'RE-1'. Its content ('establish failure cases of prior approaches before the positive result') is the card's 6th reviewer expectation; RE-1 is the tightness/lower-bound expectation (added by Opus below)."
+  },
+  {
+   "id": "local:2605.19576-3",
+   "version": "1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "本文 §6.1, §7"
+   ],
+   "applies_when": "评测题经由同一模型筛选",
+   "applicable": true,
+   "status": "partial",
+   "reason": "筛选使基线偏低存在回归均值风险；A1 的 +0.002 平坦线提供控制",
+   "evidence_ids": [
+    "son55:E012",
+    "son55:E004",
+    "son55:E017"
+   ],
+   "score_item": "E.measurement",
+   "origin": "son55:local:2605.19576-1",
+   "note": "Renumbered from son55 local:2605.19576-1 (A4 hidden ID collision: the other seat used that ID for a different question). Question: task filtering by the same model and regression to the mean (A1 controls it)."
+  },
+  {
+   "id": "rs:assumption_audit_and_pivot/RE-1",
+   "version": "card",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "ideation-patterns/assumption_audit_and_pivot.md Reviewer expectations #1"
+   ],
+   "applies_when": "A guarantee is offered for the pivoted rule",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus-added (literal RE-1). Prop. 1 has no tightness or matching bound. With p0 ≈ 0.258 the floor E[p0]−0.35 is negative, so the bound is vacuous at the paper's own scale (authors call it 'loose').",
+   "evidence_ids": [
+    "sol:E018",
+    "son55:E011"
+   ],
+   "score_item": "M",
+   "origin": "opus"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Outcome-driven governance improves held-out pass@1 by rolling gain0.328.",
+   "setting": "MBPP+ hard100,60 train/40 eval,Opus4.7,100 rounds,3 seeds",
+   "baseline/control": "A1 injection-off gain0.002±0.005; default round-zero baseline0.258±0.047",
+   "selection_vs_test": "Separate task split stated, but evaluation capsules exclusion from curator and final untouched test not established",
+   "result/denominator": "Default rolling last10−first10 gain0.328±0.018 on40 evaluation tasks; 50 active and89 retired skills; late-window0.584 in abstract is not identical to round0+gain",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E010",
+    "sol:E011",
+    "sol:E012"
+   ],
+   "counterevidence": [
+    "sol:E014",
+    "sol:E016",
+    "opus:O04",
+    "son55:E029"
+   ],
+   "allowed_conclusion": "Author-reported reuse benefit within this repeated hard-task split, not clean final-transfer or budget-matched superiority."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Triggers isolate drift caused by unbounded accumulation and prove recipe prevents it.",
+   "setting": "A1,A4,A7 and trace diagnostics",
+   "baseline/control": "A1 no injection; A4 lower evidence floor and changed threshold; A7 doubles cap rather than removing it",
+   "selection_vs_test": "Repeated eval stream",
+   "result/denominator": "A4 negative rolling gain over3 seeds, only2 active skills",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "sol:E013"
+   ],
+   "counterevidence": [
+    "sol:E005",
+    "sol:E015",
+    "opus:O06",
+    "opus:O07"
+   ],
+   "allowed_conclusion": "Routing is necessary for benefits and premature retirement may harm; no established causal reproduction of unbounded bloat or calibrated early-warning accuracy."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Bounded cap and retirement ensure non-divergence relative to no-skill floor.",
+   "setting": "Proposition1 and AppendixD",
+   "baseline/control": "No-skill p0",
+   "selection_vs_test": "Analytical statement, no implementation proof",
+   "result/denominator": "Claimed bound p0−0.35",
+   "evidence_ids": [
+    "sol:E017",
+    "sol:E018"
+   ],
+   "counterevidence": [
+    "sol:E005",
+    "sol:E007"
+   ],
+   "allowed_conclusion": "Not established: observational success imbalance is not treatment contribution, immature entries are exempt from retirement, average entry value does not imply taskwise improvement."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Meta-skill prior matters and explicit dedup is not necessary at this scale.",
+   "setting": "A3,A5,A6 within3-seed experiment",
+   "baseline/control": "Default vs no meta, no canon, no cover guard",
+   "selection_vs_test": "Same repeated40-task eval",
+   "result/denominator": "A5 gain0.374,A6 0.363 vs default0.328; authors acknowledge within2sigma",
+   "evidence_ids": [
+    "sol:E009",
+    "sol:E013"
+   ],
+   "counterevidence": [
+    "sol:E015",
+    "opus:O01"
+   ],
+   "allowed_conclusion": "Useful conditional design observations, not statistically established universal rankings."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A frozen solver can benefit from a repeatedly reused skill bank on the stated train/eval split; over-aggressive retirement hurts across three seeds. Conditional practical result only, with unresolved evaluator-to-curator provenance.",
+  "unresolved": [
+   "No independently checked nearest-neighbor originals",
+   "No no-retirement/uncapped causal control",
+   "No explicit exclusion of eval outcomes from membership credit or untouched final evaluation",
+   "Invalid steps in claimed safety proof; no actual replication or code execution performed",
+   "Opus: Table 1's A1 row (42 synthesised / 15 retired with 0 critic calls and 0 injections) is inconsistent with the stated synthesis and retirement rules (opus:O01–O03).",
+   "Opus: the 14.5k-call tally omits per-task LLM router-gate calls (opus:O04).",
+   "Opus: the authoring prior, not the librarian, is the largest measured component, contrary to the conclusion's framing (opus:O06, opus:O07)."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. Lifecycle governance is a real, sourced concern (survey, SkillsBench), and neighbours are named with specific differences. But the gap premise (unbounded accumulation causes drift) is not demonstrated in the paper's own setting: A1 is injection-off and A4 is over-governance. The cited symptom (LLM-authored skills +0.0pp) is an authoring finding, and the paper's own A3 makes authoring the largest component (opus:O06/O07). The problem position is therefore partly contradicted by its own evidence.",
+   "evidence_ids": [
+    "sol:E001",
+    "sol:E002",
+    "son55:E032"
+   ],
+   "counterevidence_ids": [
+    "sol:E003",
+    "sol:E004",
+    "opus:O06",
+    "opus:O07"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2, confirmed. The feedback → synthesis → retirement/cap mechanism is concrete. But Eq. 2 is not a treatment effect relative to p0, harder-task skills are retired by construction, and Prop. 1's proof equates the two.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E007",
+    "sol:E008",
+    "son55:E009"
+   ],
+   "counterevidence_ids": [
+    "sol:E017",
+    "son55:E010"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. Router, synthesis trigger, retirement floor, cap and hyperparameters are given, and code is linked. Key retention conditions are unclear or contradictory. Rollback appears only in the hyperparameter table, with no trigger data or semantics (son55:E030). Whether the curator's evidence log excludes eval capsules is unstated (sol:E016). Table 1's A1 row contradicts the synthesis/retirement rules (opus:O01–O03).",
+   "evidence_ids": [
+    "sol:E006",
+    "sol:E007",
+    "sol:E008",
+    "sol:E016"
+   ],
+   "counterevidence_ids": [
+    "son55:E030",
+    "opus:O01"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. MBPP+ pass@1 with executable tests is credible, and the single-call solver isolates the library. But the diagnostic metrics the paper offers as a contribution are unvalidated: Eq. 2 is labelled 'contribution' but measures conditional success, and the early-warning claim rests on one case (A4). The A1 table row is internally inconsistent (opus:O01). This is the run's cap of 2 for table–mechanism contradictions.",
+   "evidence_ids": [
+    "sol:E005",
+    "sol:E010",
+    "sol:E011",
+    "son55:E014"
+   ],
+   "counterevidence_ids": [
+    "opus:O01",
+    "son55:E031"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2, confirmed. A1 (same pipeline, injection off) is a strong store-off control, and A2/A3 attribute the gate and the meta-skill. There is no retirement-off or uncapped arm, so 'retirement and cap are load-bearing' is untested; A7 doubles the cap and keeps the mean. A4 changes two knobs, and there is no external ungoverned baseline.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E013",
+    "son55:E018",
+    "son55:E021"
+   ],
+   "counterevidence_ids": [
+    "sol:E004",
+    "son55:E020",
+    "son55:E022"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus = sol. The 60/40 split is stated and skill content comes from train failures, but the method's selection step may read the evaluation set. The router injects on the 40 eval tasks every round (Appendix A Eval phase), Eq. 2 is computed from 'capsules where s was injected' with no train-only restriction, and the undocumented rollback likely monitors the same score. The same 40 tasks are reused across 100 rounds, all 9 conditions and empirically chosen thresholds. Tasks are filtered by the same model, contamination is not checked, and there is one benchmark. The paper's 'held-out' label is thus not protected.",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E016",
+    "son55:E013",
+    "son55:E028"
+   ],
+   "counterevidence_ids": [
+    "son55:E029",
+    "son55:E030"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2, confirmed (A2 tier 2): 3 seeds with std and a per-seed table, and negative results. No CI or test, n=40 eval tasks.",
+   "evidence_ids": [
+    "sol:E019",
+    "son55:E006",
+    "son55:E015"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Opus = sol. Calls and wall time are disclosed (Default vs A1, A8 10.1 h). But the 14.5k tally omits per-task LLM router-gate calls (opus:O04/O05), there is no token/dollar accounting, and no budget-matched alternative.",
+   "evidence_ids": [
+    "sol:E014",
+    "son55:E024",
+    "son55:E025",
+    "opus:O05"
+   ],
+   "counterevidence_ids": [
+    "opus:O04"
+   ],
+   "search_scope": []
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v3 text read (§1–8, Appendices A–D). In scope (a non-weight skill bank governed by execution outcomes). All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "controlled_diagnostic_design",
+   "son55_value": "assumption_audit_and_pivot",
+   "decision": "son55",
+   "final_value": "assumption_audit_and_pivot",
+   "reason": "See rs_pattern.reason (C11 sub added by Opus).",
+   "evidence_ids": [
+    "son55:E001",
+    "sol:E017",
+    "son55:E022"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     "C03"
+    ],
+    [
+     "controlled_diagnostic_design",
+     "C02"
+    ]
+   ],
+   "son55_value": [
+    [
+     "assumption_audit_and_pivot",
+     null
+    ]
+   ],
+   "decision": "revised",
+   "final_value": [
+    [
+     "assumption_audit_and_pivot",
+     "C11"
+    ],
+    [
+     "controlled_diagnostic_design",
+     "C02"
+    ]
+   ],
+   "reason": "son55's parent with Opus's C11 sub, plus sol's C02 as supporting. sol's adapt_via_conditioning/C03 is not kept (generic substrate).",
+   "evidence_ids": [
+    "son55:E001",
+    "sol:E003",
+    "sol:E017"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "diagnose_self_improvement",
+     "H32"
+    ],
+    [
+     "evidence_gated_retention",
+     "H30"
+    ]
+   ],
+   "son55_value": [
+    [
+     "diagnose_self_improvement",
+     "H32"
+    ],
+    [
+     "evidence_gated_retention",
+     "H30"
+    ],
+    [
+     "evidence_gated_retention",
+     "H31"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "diagnose_self_improvement",
+     "H32"
+    ],
+    [
+     "evidence_gated_retention",
+     "H30"
+    ],
+    [
+     "evidence_gated_retention",
+     "H31"
+    ]
+   ],
+   "reason": "Union; H31 added from son55 (domain_pattern.reason).",
+   "evidence_ids": [
+    "sol:E007",
+    "sol:E018",
+    "son55:E011"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2605.19576-1].status",
+   "sol_value": "unmet",
+   "son55_value": "partial",
+   "decision": "revised",
+   "final_value": {
+    "local:2605.19576-1": "unmet",
+    "local:2605.19576-3": "partial"
+   },
+   "reason": "A4 ID collision: sol's -1 is the Prop. 1 guarantee check (unmet, confirmed: the conditional outcome does not bound the change from p0, and the bound is vacuous). son55's -1 is a different question (task filtering / regression to the mean) and is renumbered -3 with status partial (A1's flat line controls it).",
+   "evidence_ids": [
+    "sol:E017",
+    "sol:E018",
+    "son55:E012",
+    "son55:E004"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2605.19576-2].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "sol-only statistics question; verified (3 seeds, no CI/test).",
+   "evidence_ids": [
+    "sol:E019"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-2].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Card not retained; kept as a check question (60/40 split documented, no overlap audit).",
+   "evidence_ids": [
+    "sol:E010",
+    "sol:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:assumption_audit_and_pivot/RE-1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "revised",
+   "final_value": {
+    "rs:assumption_audit_and_pivot/RE-1": "unmet",
+    "rs:assumption_audit_and_pivot/RE-6": "unmet"
+   },
+   "reason": "son55's 'RE-1' quoted the card's 6th expectation (establish failure cases first) and is renumbered RE-6, unmet. Opus also evaluated the literal RE-1 (tightness/matching bound): unmet, since the Prop. 1 floor is vacuous at p0 ≈ 0.258.",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E003",
+    "sol:E018"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:controlled_diagnostic_design/RE-1].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Kept (C02 supporting). Injection-off isolates uptake; accumulation is never varied.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E004"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:controlled_diagnostic_design/RE-2].status",
+   "sol_value": "unmet",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "One model, one benchmark.",
+   "evidence_ids": [
+    "sol:E015"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:controlled_diagnostic_design/RE-3].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Null baseline present; compute not matched.",
+   "evidence_ids": [
+    "sol:E003",
+    "sol:E014"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:diagnose_self_improvement/S1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "A1 is a targeted cut; A4 changes two knobs.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:diagnose_self_improvement/S3].status",
+   "sol_value": null,
+   "son55_value": "unknown",
+   "decision": "revised",
+   "final_value": "partial",
+   "reason": "See expectation override (known facts settle partial; the open provenance question is scored in E.holdout).",
+   "evidence_ids": [
+    "son55:E013",
+    "son55:E029",
+    "sol:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:diagnose_self_improvement/S4].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "A4 and A5/A6 are reported as findings.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E033"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/H30].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "sol",
+   "final_value": "partial",
+   "reason": "Retirement and cap are described; no quarantine, regression replay or train-only promotion data.",
+   "evidence_ids": [
+    "sol:E007",
+    "sol:E008",
+    "sol:E016"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S1].status",
+   "sol_value": "unmet",
+   "son55_value": "partial",
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "See expectation override.",
+   "evidence_ids": [
+    "sol:E005",
+    "son55:E009"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S2].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Authoring prior + conservative retirement + hard cap are all present (the S2 profile). Their effectiveness is a separate question (S3/S4).",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E018"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S4].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "A4/A7 vary knobs; no retirement-off/cap-off.",
+   "evidence_ids": [
+    "son55:E020",
+    "son55:E022"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.G",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.G; Opus adds that the paper's own A3 contradicts its framing.",
+   "evidence_ids": [
+    "sol:E001",
+    "opus:O06",
+    "opus:O07"
+   ],
+   "score_impact": "−3.75 vs son55"
+  },
+  {
+   "field_path": "ratings.X",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.X; son55's 3 does not weigh the rollback/provenance gaps it lists or the A1 contradiction (opus:O01).",
+   "evidence_ids": [
+    "sol:E016",
+    "son55:E030",
+    "opus:O01"
+   ],
+   "score_impact": "−5 vs son55"
+  },
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.measurement. son55's 3 credits pass@1 but not the unvalidated diagnostic metrics or the inconsistent A1 row.",
+   "evidence_ids": [
+    "sol:E005",
+    "opus:O01"
+   ],
+   "score_impact": "−2.5 vs son55"
+  },
+  {
+   "field_path": "ratings.E.holdout",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "reason": "See ratings.E.holdout. son55 lists the same concerns (eval reuse, unknown capsule provenance, thresholds, contamination). Together they put the core selection step on the eval set, which places the rating below the anchor-2 'relevant results with gaps' level.",
+   "evidence_ids": [
+    "sol:E016",
+    "son55:E029",
+    "son55:E028"
+   ],
+   "score_impact": "−2.5 vs son55"
+  },
+  {
+   "field_path": "ratings.E.cost",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 3
+   },
+   "decision": "sol",
+   "final_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "reason": "See ratings.E.cost (router-gate calls missing from the tally).",
+   "evidence_ids": [
+    "sol:E014",
+    "opus:O04"
+   ],
+   "score_impact": "−1.25 vs son55"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings (X, E.measurement) — both seats' evidence",
+   "error": "Neither seat noticed that Table 1's A1 row (42 synthesised / 15 retired, 0 critic calls, 0 injections) contradicts the stated synthesis (critic-verdict clusters) and retirement (n(s) ≥ N_min) rules.",
+   "correction": "Recorded as counterevidence for X and E.measurement (both final 2).",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "score_impact": "none beyond the sol-side ratings"
+  },
+  {
+   "field_path": "ratings.E.cost — both seats' reason",
+   "error": "Both seats took the 14.5k-call tally as the full overhead; it omits per-task LLM router-gate calls.",
+   "correction": "Added to E.cost (final 2).",
+   "evidence_ids": [
+    "opus:O04",
+    "opus:O05"
+   ],
+   "score_impact": "none beyond the sol-side rating"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "In scope; a strong A1 store-off control. The drift mechanism (accumulation) is never reproduced, retirement/cap are never removed, Eq. 2 is not a contribution, Prop. 1 is vacuous, eval capsule provenance is unclear, and the A1 row is inconsistent. Expected about G2 M2 X2 Em2 Ec2 Eh1 Es2 Ecost2.",
+  "integrity_checks": "Both seats a1 on 2605.19576v3, text sha f8039e8c…; canonical seat hashes equal conflicts.json.",
+  "core_claim_check": "Table 1, §3.3, §5.1–5.3, §6.1–6.4, Appendices A–D re-read; A1 row cross-checked against the mechanism.",
+  "shared_error_review": "Two shared omissions recorded (A1 row; router-gate calls).",
+  "rating_agreement": "Five disputed items → sol; three shared items confirmed. Final 47.5."
+ },
+ "input_seat_hashes": {
+  "sol": "3c130f9b417567b4d3cbfd34fd5d74095fc26adda719c7af066bf47d838d9a60",
+  "son55": "5151ae70491a7479dbdc3cad59f48cf3404f787b19947da53c3eae5c7df06e41"
+ },
+ "score": {
+  "raw": 47.5,
+  "display": 47.5,
+  "lower": 47.5,
+  "upper": 47.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "e94455d2f2cba58b457be44a6ce860c850af1f42db1a24561c26ad81913b0559"
+}
