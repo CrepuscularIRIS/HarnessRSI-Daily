@@ -1,0 +1,1159 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r13b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "完整 HTML 全文含附录 A-E 已读，足以八项判定。",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "Meta-Harness：用一个能通过文件系统检索全部历史候选的源码、分数与执行轨迹的 agentic proposer（Claude Code + Opus-4.6）在代码空间搜索 harness，可自动做 harness 工程。作者原话：'richer access to prior experience can enable automated harness engineering'；具体声称：在线文本分类较 ACE +7.7 点且上下文 token 少 4×，数学检索 harness 在五个留出模型上平均 +4.7 点，TerminalBench-2 超过最佳手工 baseline。",
+  "version": "2603.28052v1",
+  "paper_key": "2603.28052",
+  "paper_id": "2603.28052",
+  "title": "Meta-Harness: End-to-End Optimization of Model Harnesses"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "locator": "Abstract",
+   "quote": "an outer-loop system that searches over harness code for LLM applications. It uses an agentic proposer that accesses the source code, scores, and execution traces of all prior candidates through a filesystem.",
+   "support_explanation": "系统对象与核心机制：搜索对象是 harness 代码，proposer 为 agentic，看全历史。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E002",
+   "locator": "Abstract",
+   "quote": "On retrieval-augmented math reasoning, a single discovered harness improves accuracy on 200 IMO-level problems by 4.7 points on average across five held-out models.",
+   "support_explanation": "摘要中的数学主张；相对基线为 No Retriever。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E003",
+   "locator": "Abstract",
+   "quote": "On agentic coding, discovered harnesses surpass the best hand-engineered baselines on TerminalBench-2.",
+   "support_explanation": "摘要中 TB2 主张；§4.3 说明搜索与最终评测在同一基准上。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E004",
+   "locator": "1 Introduction",
+   "quote": "However, these methods are poorly matched to harness engineering because they typically operate with short-horizon or heavily compressed feedback",
+   "support_explanation": "作者定位的 gap：已有文本优化器反馈压缩过度。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E005",
+   "locator": "1 Introduction",
+   "quote": "the available context per optimization step ranges from only 100 to 30,000 tokens ( Table 1 ), far below the diagnostic footprint of harness search.",
+   "support_explanation": "gap 量化：邻居每步 0.002-0.026 MTok，对比本文 10 MTok（Table 1），同时也说明本文 proposer 读取的 token 量级远大于对照。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E006",
+   "locator": "Table 1",
+   "quote": "Meta-Harness Full all logs and scores 10.0 10.0",
+   "support_explanation": "Table 1 末行：历史=Full、日志=全部、MTok/iter=10.0；邻居最大 0.026（TTT-Discover）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E007",
+   "locator": "3 Meta-Harness search loop",
+   "quote": "imposes no parent-selection rule: the proposer is free to inspect any prior harness and its execution trace when proposing new ones.",
+   "support_explanation": "选择规则：无父代选择规则；种群+Pareto 前沿由评测分数产生。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E008",
+   "locator": "3 Meta-Harness search loop",
+   "quote": "The proposer never sees test-set results; its only feedback comes from the search set , the subset of task instances used to evaluate candidate harnesses during search",
+   "support_explanation": "信息可见性：proposer 只见搜索集与搜索期轨迹。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E009",
+   "locator": "3 Practical implementation",
+   "quote": "In our experiments, each harness is a single-file Python program that modifies task-specific prompting, retrieval, memory, and orchestration logic.",
+   "support_explanation": "留存对象：单文件 Python harness（非权重）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E010",
+   "locator": "3 Practical implementation",
+   "quote": "The proposer is guided by a minimal domain-specific skill that describes where to write new harnesses, how to inspect previous harnesses and their execution traces, and what files it can and cannot modify.",
+   "support_explanation": "proposer 受手写 skill 引导；skill 不在循环内被改写。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E011",
+   "locator": "3 Practical implementation",
+   "quote": "In our experiments, a typical run evaluates roughly 60 harnesses over 20 iterations.",
+   "support_explanation": "典型规模；但 §4.1 为 40 个候选、§4.2 为 109 个候选，说明各域规模不同。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E012",
+   "locator": "4.1",
+   "quote": "We ran 20 evolution iterations with two candidates per iteration, producing 40 candidate harnesses.",
+   "support_explanation": "文本分类搜索预算：40 个候选。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E013",
+   "locator": "4.1 Comparison vs text optimizers",
+   "quote": "select candidates solely based on search-set performance, and hold out the test sets until the final evaluation.",
+   "support_explanation": "文本分类的选择/测试划分：候选仅按搜索集选取，测试集最后才用。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E014",
+   "locator": "4.1 Comparison vs text optimizers",
+   "quote": "we give each method the same budget of proposal harness evaluations.",
+   "support_explanation": "对照预算按评测次数匹配，而非按 proposer token 匹配（见 E005/E006）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E015",
+   "locator": "4.1",
+   "quote": "independent samples from the seed with no search structure; a compute-matched control for whether search matters at all.",
+   "support_explanation": "Best-of-N 作为无搜索结构的算力匹配对照。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E016",
+   "locator": "Table 4",
+   "quote": "Text classification accuracies of the harnesses proposed by different text optimizers (search set).",
+   "support_explanation": "优化器对比表的标题明确是 search set，而非测试集。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E017",
+   "locator": "Table 4",
+   "quote": "GEPA [ 1 ] 32.6 40.2 Best-of-N 34.0 44.2 OpenEvolve [ 43 ] 39.1 43.3 TTT-Discover [ 54 ] 34.1 45.6 Meta-Harness 50.0 56.7",
+   "support_explanation": "搜索集上候选的 median/best：Meta-Harness 50.0/56.7，对照最高 median 39.1、best 45.6。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E018",
+   "locator": "4.1 ablation",
+   "quote": "scores-only reaches 34.6 median and 41.3 best accuracy, while scores-plus-summary reaches 34.9 median and 38.7 best. By contrast, Meta-Harness reaches 50.0 median and 56.7 best accuracy",
+   "support_explanation": "信息接入消融（scores-only / scores+summary / 含原始 traces）：全历史原始轨迹是增益来源，单次搜索，搜索集指标。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E019",
+   "locator": "4.1 Comparison vs state-of-the-art harnesses",
+   "quote": "reaches 48.6% accuracy, outperforming ACE by 7.7 points and MCE by 8.6 points.",
+   "support_explanation": "测试集主结果（Table 2 平均）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E020",
+   "locator": "4.1 Comparison vs state-of-the-art harnesses",
+   "quote": "uses only 11.4K context tokens, versus 50.8K for ACE and 28.5K for MCE.",
+   "support_explanation": "部署期上下文成本显著更低。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E021",
+   "locator": "Table 2",
+   "quote": "ACE [ 59 ] † 16.0 77.8 77.8 29.0 29.0 40.9 40.9 50.8 50.8 Meta-Harness 14.0 14.0 86.8 45.0 48.6 11.4 11.4",
+   "support_explanation": "分数据集：USPTO 上 ACE(16.0) 高于 Meta-Harness(14.0)；增益主要来自 Law (45.0 vs 29.0)。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E022",
+   "locator": "4.1 OOD",
+   "quote": "The selected Meta-Harness system achieves the best average accuracy (73.1%), outperforming ACE (70.2%) and all few-shot baselines",
+   "support_explanation": "九个未参与搜索的数据集上的平均准确率；单次、无区间。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E023",
+   "locator": "4.2",
+   "quote": "We use Meta-Harness to optimize a harness for 40 iterations over a 250-problem search set of Olympiad-difficulty math problems (OlympiadBench + Omni-MATH hard), producing 109 candidate retrieval harnesses.",
+   "support_explanation": "数学检索：搜索集 250 题、109 候选。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E024",
+   "locator": "4.2",
+   "quote": "We carefully deduplicated and decontaminated it against both evaluation benchmarks and the search set",
+   "support_explanation": "检索语料已对评测集与搜索集去重去污染。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E025",
+   "locator": "4.2",
+   "quote": "report accuracy averaged over three samples per problem.",
+   "support_explanation": "数学评测协议：每题 3 次采样平均；无置信区间。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E026",
+   "locator": "4.2 Results / Table 6",
+   "quote": "outperforming BM25 retrieval by 1.3 points overall, while avoiding the regressions observed with dense retrieval and random few-shot prompting across several models.",
+   "support_explanation": "相对 BM25 仅 +1.3；BM25 本身已 +3.4（Table 6），所以 +4.7 大部分来自检索本身。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E027",
+   "locator": "Table 6",
+   "quote": "BM25 Retrieval 30.2 ( +7.2 ) 29.2 ( +0.4 ) 32.8 ( +4.2 ) 46.6 ( +4.0 ) 48.9 ( +1.3 ) 37.5 ( +3.4 ) Meta-Harness 31.7 ( +8.7 ) 30.4 ( +1.6 ) 34.9 ( +6.3 ) 46.3 ( +3.7 ) 50.6 ( +3.0 ) 38.8 ( +4.7 )",
+   "support_explanation": "逐模型：Gem-3F 上 Meta-Harness(46.3) 低于 BM25(46.6)；平均差 1.3 点，200 题×3 采样无不确定性。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E028",
+   "locator": "4.3",
+   "quote": "For this experiment, we perform search and final evaluation on the same 89-task benchmark.",
+   "support_explanation": "TB2 无留出：搜索集=评测集。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E029",
+   "locator": "4.3",
+   "quote": "the benchmark is small and expensive enough that introducing a separate split would materially weaken the search signal. We additionally check for overfitting by manual inspection and regex-based audits for task-specific string leakage into evolved harnesses.",
+   "support_explanation": "作者对 TB2 无留出的理由与唯一缓解（人工检查+regex 审计）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E030",
+   "locator": "4.3 Results",
+   "quote": "Meta-Harness discovers a harness achieving 76.4% pass rate, surpassing the hand-engineered Terminus-KIRA (74.7%)",
+   "support_explanation": "TB2 Opus-4.6 结果：+1.7 点（89 任务≈1.5 题），对照数值来自官方榜单而非同条件重跑。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E031",
+   "locator": "Appendix B.3",
+   "quote": "Compared to Terminus-KIRA, the discovered harness gains on 7 of 89 tasks, with the largest improvements on protein-assembly and path-tracing",
+   "support_explanation": "增益只来自 89 个任务中的 7 个。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E032",
+   "locator": "Appendix A.2",
+   "quote": "both regress sharply from the 64.4% Terminus-KIRA baseline.",
+   "support_explanation": "搜索中的 Terminus-KIRA 基线为 64.4%，而 Table 7 榜单数值为 74.7%：两者差 10 点且未解释（单次运行噪声/配置差异），说明 TB2 对照口径不统一（our_inference）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E033",
+   "locator": "4.3 Results",
+   "quote": "however, we were unable to reproduce their reported result from the publicly available code alone",
+   "support_explanation": "未超过的榜单项 ForgeCode（81.8%）被排除理由：无法复现。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E034",
+   "locator": "Appendix A.1",
+   "quote": "The proposer reads a median of 82 files per iteration (range 69-99)",
+   "support_explanation": "TB2 搜索中 proposer 实际大量读取历史。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E035",
+   "locator": "4.3 Qualitative behavior",
+   "quote": "This provides qualitative evidence that filesystem access enables the proposer to inspect prior experience in enough detail to form causal hypotheses and revise the harness accordingly.",
+   "support_explanation": "机制证据为定性轨迹（附录 A），未做 agentic vs 非 agentic 的受控比较。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E036",
+   "locator": "5 Discussion",
+   "quote": "A search run completes in a few hours of wall-clock time",
+   "support_explanation": "成本仅以墙钟时间概述，无 token/美元总账。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E037",
+   "locator": "Appendix D",
+   "quote": "iterating on the skill text had a larger effect on search quality than changing iteration count or population size.",
+   "support_explanation": "人工打磨 skill 是显著杠杆；其影响未被量化消融。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E038",
+   "locator": "Appendix D",
+   "quote": "Harnesses proposed during the search should pass this test before being fully evaluated.",
+   "support_explanation": "候选先过轻量接口验证再全量评测（Algorithm 1 'passes interface validation'）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E039",
+   "locator": "Appendix D",
+   "quote": "50-100 examples in our classification experiments, 88 problems for math retrieval",
+   "support_explanation": "附录给出的数学搜索集大小为 88 题，与 §4.2 的 250 题搜索集不一致，文中未解释（our_inference：可能指子集，需核对）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E040",
+   "locator": "5 Discussion",
+   "quote": "a broader study of how the effect varies across proposer agents remains for future work.",
+   "support_explanation": "作者承认仅测试了单一 proposer（Claude Code）。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  },
+  {
+   "evidence_id": "E041",
+   "locator": "Appendix B.1",
+   "quote": "reports the Pareto frontier of non-dominated variants from the main search, all selected solely by search-set performance.",
+   "support_explanation": "文本分类的候选前沿全部按搜索集选取。",
+   "kind": "author_report",
+   "material_id": "2603.28052",
+   "material_sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "任务专属 harness 程序 H（单文件 Python：提示构造、检索、记忆、编排）；被冻结 LLM M 包裹；proposer（Claude Code+Opus-4.6+手写 skill）不被编辑",
+   "information": "proposer 通过文件系统可见全部历史候选的源码、分数、执行轨迹（按需 grep/cat；TB2 搜索中中位读 82 个文件/迭代）；看不到测试集结果",
+   "operation": "检查历史 → 推断失败原因 → 提出 k 个新 harness（局部编辑到整体重写）→ 轻量接口验证 → 在搜索集评测 → 新目录落盘日志",
+   "output": "population 与 accuracy-context Pareto 前沿上的 harness；最终在前沿候选上做测试集评测",
+   "conditions": "单一强 proposer；搜索集需难且小（约 50 次全量评测）；评测在 proposer 之外自动化",
+   "feedback": "搜索集分数（含上下文成本）与完整执行轨迹",
+   "selection_rule": "无父代选择规则；按搜索集分数/Pareto 保留；每文选定一个 harness 报告（文本分类为最高准确率前沿点）；无回退/回归守卫",
+   "persistence": "每个候选一个目录（代码+分数+轨迹）；最终 harness 代码（TB2 已公开）",
+   "later_use": "后续迭代中 proposer 读取全部历史；最终 harness 在测试任务/留出模型上运行",
+   "claimed_effect": "文本分类 +7.7 点且 token 少 4×；数学 +4.7（对无检索）；TB2 76.4% (Opus-4.6)；见 E019-E030",
+   "failure_boundary": "TB2 无留出；数学相对 BM25 仅 +1.3；单次搜索无方差；proposer 单一；成本未折算",
+   "evidence_ids": [
+    "E001",
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E013",
+    "E034",
+    "E038"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "被发现的 harness 在部署期的行为（留存产物）",
+   "information": "文本分类：在线累积带标签样本记忆；数学：词法路由+BM25 四路检索；TB2：在 Terminus-KIRA 上加环境快照 bootstrap",
+   "operation": "分类：先草稿再检索 confirmers/challengers 验证，或 label primer+coverage+对比对；数学：路由到子领域检索策略；TB2：首轮 LLM 调用前注入环境快照",
+   "output": "每次调用的 prompt 构造与（分类）记忆更新",
+   "conditions": "每任务重置的 harness 状态；分类 harness 内部状态随在线样本增长",
+   "feedback": "not_applicable（部署期）",
+   "selection_rule": "not_applicable",
+   "persistence": "harness 源码（100-1000 行）",
+   "later_use": "测试任务/未见模型",
+   "claimed_effect": "见 S1",
+   "failure_boundary": "发现的 harness 仅在搜索域内验证；OOD 仅分类九个数据集；数学增益主要来自检索本身",
+   "evidence_ids": [
+    "E009",
+    "E022",
+    "E026",
+    "E031"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "harness 靠手工设计；已有文本优化器反馈被压缩（无记忆、只看标量分数、或短模板/摘要），无法把下游失败回溯到早期 harness 决策。",
+  "checked_gap": "大体成立且被量化：Table 1 给出邻居每步 0.002-0.026 MTok 对本文 10 MTok；并有信息接入消融直接检验 '压缩反馈缺失关键信号'（Table 3）。扣分点：对比的 '非压缩' 对象总是 agentic 全历史，未单独检验 '同样全历史但非 agentic proposer' 的情形。",
+  "lineage": "OPRO/TextGrad/ProTeGi（标量或当前候选反馈）→ GEPA/Feedback Descent（摘要/比较反馈）→ AlphaEvolve/OpenEvolve/TTT-Discover（程序数据库+分数，固定变异/选择）→ ADAS 类 meta-agent 与记忆设计搜索（[20][57][50]，档案/固定脚手架）→ 本文（无档案规则、无父代选择、proposer 是 coding agent，文件系统全历史）。以上邻居的原文不在固定材料中，描述采用本文 Table 1 与附录 E 的转述。",
+  "closest_adjacent": "GEPA（轨迹反馈、单候选）；OpenEvolve/AlphaEvolve（带分数的程序库）；meta-agent 设计搜索 [20]；记忆设计搜索 [57][50]。",
+  "residue": "未证明全历史访问与 'agentic 选择性读取' 各自的贡献；成本（proposer 10M token/评测）与 skill 人工调优的作用未量化；除 Claude Code 外 proposer 未测。",
+  "stakes": "harness 差异可造成 6× 性能差（引文 [47]）；人工迭代耗时。",
+  "method_response": "文件系统暴露全历史、proposer 为 coding agent、代码空间搜索，且不强加搜索结构。",
+  "remaining_gap": "多种子/多 proposer 稳健性、成本匹配对比、TB2 之外的独立留出验证、skill 自动化（目前人工调试）。",
+  "evidence_ids": [
+   "E004",
+   "E005",
+   "E006",
+   "E018",
+   "E035",
+   "E037",
+   "E040"
+  ],
+  "unresolved": "近邻方法的原文未固定在本批材料中，无法核对其反馈通道是否真的比本文所述更窄；不据此断言新颖性。"
+ },
+ "rs_pattern": {
+  "primary": "generative_process_redesign",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "generative_process_redesign",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "weak-moderate",
+    "tactic_steps_checked": "原卡定义：把迭代式生成过程中惯例上固定的成分（含 'conditioning granularity'）视为自由设计变量并重新设计。本文把迭代搜索中 proposer 的反馈通道（压缩分数/摘要 → 全历史原始轨迹）当作被默认固定的成分并释放；成功条件对照：点名被释放成分（是）；单一承重机制的消融使收益坍塌（Table 3：scores-only 34.6 vs 50.0 median，是）；效率收益（匹配对手所需评测 0.1×、上下文 token 4×少，是）；不重训（冻结模型，是）；理论解释（无，仅定性轨迹）。C24 子卡为扩散/流匹配等生成骨干的条件接口，对象类别不同，故子卡 null。",
+    "success_failure_checks": "命中失败模式：'基线是否是最强且公平的'（优化器对比仅在搜索集、proposer token 不匹配）部分命中；'新增多模块无逐项消融'（agentic proposer、skill、Pareto、接口验证只消融了信息接入）部分命中。",
+    "evidence_ids": [
+     "E004",
+     "E005",
+     "E006",
+     "E017",
+     "E018",
+     "E014"
+    ],
+    "reason": "操作形态是 '释放被默认压缩的反馈接口'，与 conditioning-granularity 描述同构；但原卡面向生成骨干，非优化器循环，所以仅弱-中适配。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "无子卡适配（C24 对象不同）；主卡弱-中适配，已在 matches 说明。",
+  "executes_pattern": "generative_process_redesign: partial-yes（点名被释放成分、做了单变量信息接入消融、有效率收益；缺机理/理论与更强的公平对照）",
+  "resolves_problem": "partial：Table 3 在文本分类搜索集上显示压缩反馈确实更差；但 '问题已被关闭' 的泛化性（数学/TB2、多 proposer、成本匹配）未证明。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "cards@52ff9657",
+    "fit": "moderate-high",
+    "condition_checks": "H12.step1 暴露原始证据：met（全历史源码+轨迹+分数）；S5 proposer 看原始证据：met；S6 通用 improver：met（三域同一循环）；S3 保护早期收益/回滚：unmet（无回归守卫，靠 Pareto 与 proposer 自觉）；H12.step4 在独立划分上晋升：partial（分类/数学有搜索-测试划分；TB2 无）；step3 范围与可证伪预测：未作为机制要求，仅在轨迹中出现。",
+    "evidence_ids": [
+     "E001",
+     "E007",
+     "E008",
+     "E034",
+     "E035",
+     "E038"
+    ]
+   },
+   {
+    "main": "search_agent_architecture",
+    "sub": "H17",
+    "version": "cards@52ff9657",
+    "fit": "moderate",
+    "condition_checks": "离线搜索一次、部署冻结设计：符合；H17.step2 搜索/评测分离：分类、数学符合，TB2 不符；step4 优化器成本与匹配推理预算：partial（上下文成本报告好，proposer 成本未折算）；step5 种子方差：unmet。注意：搜索对象是 harness 程序而非 '模块拓扑'，与 H17 的 '设计空间' 表述仅部分重合。",
+    "evidence_ids": [
+     "E009",
+     "E013",
+     "E028",
+     "E014"
+    ]
+   },
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "version": "cards@52ff9657",
+    "fit": "moderate",
+    "condition_checks": "基因组为可执行代码、LLM 变异、可执行评估器、Pareto 保留：符合；H14.step2 缩小进化单元：不符（整文件重写）；step5 报告方差：unmet；本文的搜索层贡献（不设搜索结构、全历史）与 S1 一致。",
+    "evidence_ids": [
+     "E007",
+     "E012",
+     "E023"
+    ]
+   }
+  ],
+  "unassigned": "手写 skill 的人工调试属于 improver 侧编辑，但未进入循环，故不映射 make_the_improver_editable。",
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12"
+   },
+   "operation_correspondence": "原卡：释放被默认固定的反馈/条件化粒度 ↔ H12.step1：把压缩反馈换成对全部候选源码与轨迹的选择性访问；二者对应同一操作：改变 proposer 条件化的信息粒度。",
+   "necessary_conditions_and_differences": "H12 还要求范围受限的补丁、可证伪预测、回滚与独立划分晋升；本文只满足部分（无回滚、TB2 无划分）；原卡要求的理论解释本文缺。",
+   "evidence_ids": [
+    "E001",
+    "E018",
+    "E035"
+   ]
+  },
+  {
+   "rs_main": "generative_process_redesign",
+   "rs_sub": null,
+   "domain": {
+    "namespace": "rsi",
+    "main": "search_agent_architecture",
+    "sub": "H17"
+   },
+   "operation_correspondence": "搜索设计空间（harness 代码）并冻结一个设计部署 ↔ 原卡 '重新设计迭代过程的组成'；对应较弱，仅在 '把可自动搜索的对象扩大到整份程序' 一点上相通。",
+   "necessary_conditions_and_differences": "H17 强调搜索塑形原语与种子方差/成本；本文塑形原语是 '全历史访问' 而不是档案/代理模型。",
+   "evidence_ids": [
+    "E009",
+    "E007"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S5"
+   ],
+   "applies_when": "proposer 基于执行轨迹诊断",
+   "applicable": true,
+   "status": "met",
+   "reason": "proposer 获得全部历史源码、分数、原始轨迹；Table 3 的受控消融直接显示原始轨迹是承重信息。",
+   "evidence_ids": [
+    "E001",
+    "E018",
+    "E034"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S6",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S6"
+   ],
+   "applies_when": "被补丁对象是某类 artifact",
+   "applicable": true,
+   "status": "met",
+   "reason": "方法针对 '被冻结 LLM 外的 harness 代码' 这类对象，在分类/数学/终端三域使用同一循环，而非单一交付物。",
+   "evidence_ids": [
+    "E009",
+    "E012",
+    "E023"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S3"
+   ],
+   "applies_when": "编辑会覆盖或回归早期收益",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无自动回归守卫或回滚；靠 Pareto 保留与 proposer 自行读取历史；附录 A 可见连续 6 次回归后才转向。",
+   "evidence_ids": [
+    "E007",
+    "E032"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json attribute_and_patch_incumbent.S1"
+   ],
+   "applies_when": "编辑范围应匹配失败机制",
+   "applicable": true,
+   "status": "partial",
+   "reason": "proposer 自行决定局部编辑或重写，附录 A 轨迹显示其识别混淆并隔离结构修复，但仅是单个运行的定性叙述。",
+   "evidence_ids": [
+    "E035"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/H12.step4",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "patterns/sub/H12.md step 4"
+   ],
+   "applies_when": "声称留存补丁在未参与提出或晋升的任务上有效",
+   "applicable": true,
+   "status": "partial",
+   "reason": "分类与数学有搜索/测试划分且数学语料去污染；TB2 搜索集=评测集，仅靠人工检查与 regex 审计。",
+   "evidence_ids": [
+    "E013",
+    "E024",
+    "E028",
+    "E029"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S1",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.S1"
+   ],
+   "applies_when": "论文声称搜索层面的贡献",
+   "applicable": true,
+   "status": "met",
+   "reason": "贡献在搜索输入的信息粒度（全历史）而非换一种元启发式；有对 OpenEvolve/TTT-Discover/GEPA 的同条件对比（搜索集）。",
+   "evidence_ids": [
+    "E007",
+    "E017"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json population_search_executable_fitness.S2"
+   ],
+   "applies_when": "评估器驱动选择压力",
+   "applicable": true,
+   "status": "partial",
+   "reason": "分类/数学评估器为真实数据集指标，较难刷；TB2 评估器为官方基准但与最终评测同集；regex 审计检查字符串泄漏。",
+   "evidence_ids": [
+    "E024",
+    "E028",
+    "E029"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H14.step5",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "patterns/sub/H14.md step 5"
+   ],
+   "applies_when": "进化搜索的结果需要报告分布而非单次最优",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "只报告单次搜索内候选分布（median/best）；无独立搜索种子的方差，也无最终选定 harness 的置信区间。",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E041"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rsi:search_agent_architecture/S6",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "conditions.json search_agent_architecture.S6"
+   ],
+   "applies_when": "冻结设计应在发现它的地方之外得到验证",
+   "applicable": true,
+   "status": "partial",
+   "reason": "文本分类有 9 个 OOD 数据集；数学有 4 个未见模型与新题；TB2 无。未见 proposer 之外的第二任务家族稳健性。",
+   "evidence_ids": [
+    "E022",
+    "E002",
+    "E028"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:search_agent_architecture/H17.step4",
+   "version": "v2.2-frozen",
+   "source_strength": "domain_card_condition",
+   "source_refs": [
+    "patterns/sub/H17.md step 4"
+   ],
+   "applies_when": "声称搜索成本与手工/其他搜索相比有利",
+   "applicable": true,
+   "status": "partial",
+   "reason": "评测次数匹配并报告了部署期上下文成本；proposer 读取量级（10 MTok/评测）远高于对照（≤0.026），总 token/美元未给，仅称 '几小时'。",
+   "evidence_ids": [
+    "E006",
+    "E014",
+    "E036"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #1"
+   ],
+   "applies_when": "声称释放某固定成分带来收益",
+   "applicable": true,
+   "status": "met",
+   "reason": "Table 3 将反馈通道在 scores-only / +summary / 全轨迹间切换，增益坍塌至 ~35。",
+   "evidence_ids": [
+    "E018"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-2",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(reject_reviews)",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #2"
+   ],
+   "applies_when": "与强基线比较",
+   "applicable": true,
+   "status": "partial",
+   "reason": "对手工 ACE/MCE（测试集）和 OpenEvolve/GEPA/TTT-Discover（仅搜索集）比较；数学与强 BM25 比较，TB2 与榜单项比较但口径不统一。",
+   "evidence_ids": [
+    "E016",
+    "E019",
+    "E026",
+    "E030"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #3"
+   ],
+   "applies_when": "同时引入多个组件",
+   "applicable": true,
+   "status": "partial",
+   "reason": "agentic proposer、文件系统、手写 skill、Pareto、接口验证并存，仅消融了信息接入；未分离 '非 agentic 同信息' 与 skill 的作用。",
+   "evidence_ids": [
+    "E010",
+    "E018",
+    "E037"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(reject_reviews)",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #5"
+   ],
+   "applies_when": "收益可能来自算力/规模而非重设计",
+   "applicable": true,
+   "status": "partial",
+   "reason": "评测次数匹配并有 Best-of-N 对照；proposer token 量级差异（Table 1）与 skill 打磨作为混淆未被排除。",
+   "evidence_ids": [
+    "E005",
+    "E014",
+    "E015",
+    "E037"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:generative_process_redesign/RE-6",
+   "version": "rs-15-31",
+   "source_strength": "rs_card_reviewer_expectation(both)",
+   "source_refs": [
+    "generative_process_redesign.md Reviewer expectations #6"
+   ],
+   "applies_when": "效率-质量权衡",
+   "applicable": true,
+   "status": "met",
+   "reason": "给出 accuracy-context Pareto 前沿（Table 9）并披露不占优的数据集（USPTO 上 ACE 更高）与搜索中的回归。",
+   "evidence_ids": [
+    "E021",
+    "E032",
+    "E041"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2603.28052-1",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 4 caption 与 Table 1"
+   ],
+   "applies_when": "声称优于其他文本优化器",
+   "applicable": true,
+   "status": "partial",
+   "reason": "应在测试集或独立留出上、且按 proposer token/成本匹配的预算比较；本文只在搜索集上、只按评测次数匹配比较。",
+   "evidence_ids": [
+    "E014",
+    "E016",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2603.28052-2",
+   "version": "paper-specific",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§4.3 与 Appendix A.2"
+   ],
+   "applies_when": "TB2 结果对比榜单项并声称超越",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "搜索内 Terminus-KIRA 基线 64.4% 与榜单 74.7% 相差 10 点未解释；最终 76.4% 的 +1.7 点（≈1.5 题）在单次运行下不可区分于噪声，且搜索即评测。",
+   "evidence_ids": [
+    "E028",
+    "E030",
+    "E031",
+    "E032"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "在线文本分类：发现的 harness 比 ACE 高 7.7 点且上下文 token 少 4×",
+   "setting": "GPT-OSS-120B；USPTO-50k/S2D/LawBench；搜索 20 迭代×2 候选；种子含 ACE/MCE",
+   "baseline_control": "手工 harness：zero/few-shot、ACE、MCE",
+   "selection_vs_test": "搜索集选择；测试集仅最终评测",
+   "result_denominator": "平均 48.6 vs ACE 40.9 / MCE 40.0；USPTO 14.0 vs ACE 16.0；ctx 11.4K vs 50.8K；单次搜索",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E019",
+    "E020",
+    "E021"
+   ],
+   "counterevidence": "单次搜索、无测试集区间；USPTO 不占优；增益主要来自 Law",
+   "allowed_conclusion": "在该设置的一次搜索中，所选 harness 在测试集平均优于 ACE/MCE 且用更少上下文"
+  },
+  {
+   "claim_id": "C2",
+   "text": "优于现有文本优化器（匹配对手只需 0.1× 评测，终点高 >10 点）",
+   "setting": "同上；同 proposer 配置、同评测次数",
+   "baseline_control": "OpenEvolve、TTT-Discover(PUCT)、GEPA、Best-of-N",
+   "selection_vs_test": "全程搜索集（Table 4 明示 search set）",
+   "result_denominator": "median 50.0 vs ≤39.1；best 56.7 vs ≤45.6",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E016",
+    "E017"
+   ],
+   "counterevidence": "未在测试集比较；proposer 读取 token 量级远大于对照；对照结构与输入与 agentic 全历史同时不同",
+   "allowed_conclusion": "在搜索集上，同评测次数下 Meta-Harness 的候选分布更高；token 匹配与测试集未验证"
+  },
+  {
+   "claim_id": "C3",
+   "text": "原始执行轨迹访问是关键成分",
+   "setting": "文本分类搜索集；三种 proposer 接口",
+   "baseline_control": "scores-only、scores+summary",
+   "selection_vs_test": "搜索集",
+   "result_denominator": "median/best 34.6/41.3、34.9/38.7、50.0/56.7；>ZS 26/23/39 候选",
+   "evidence_ids": [
+    "E018"
+   ],
+   "counterevidence": "单次运行；仅文本分类；仍为 agentic 与全历史同时变",
+   "allowed_conclusion": "在该搜索设置里，去掉原始轨迹显著降低候选质量；这是全文最强的因果证据"
+  },
+  {
+   "claim_id": "C4",
+   "text": "发现的分类 harness 泛化到 OOD 数据集",
+   "setting": "9 个搜索中未见的分类数据集",
+   "baseline_control": "zero/few-shot、ACE",
+   "selection_vs_test": "未参与搜索",
+   "result_denominator": "平均 73.1 vs ACE 70.2 vs few-shot(32) 69.6；9 个中胜 6 个",
+   "evidence_ids": [
+    "E022"
+   ],
+   "counterevidence": "单次、无区间；差距 2.9 点",
+   "allowed_conclusion": "在这 9 个数据集上平均略优，幅度小、不确定性未量化"
+  },
+  {
+   "claim_id": "C5",
+   "text": "数学检索 harness 在五个留出模型上平均 +4.7 点",
+   "setting": "250 题搜索集；200 题留出（IMO-AnswerBench 子集等）；5 个模型",
+   "baseline_control": "No Retriever、Dense、随机 few-shot、BM25",
+   "selection_vs_test": "按 GPT-OSS-20B 搜索集选定；其余四模型未见",
+   "result_denominator": "+4.7（对无检索）；BM25 +3.4；Dense k=5 +4.0；对 BM25 仅 +1.3；Gem-3F 上低于 BM25",
+   "evidence_ids": [
+    "E002",
+    "E023",
+    "E024",
+    "E025",
+    "E026",
+    "E027",
+    "E039"
+   ],
+   "counterevidence": "增益大部分来自检索本身；差距无区间；搜索集大小口径不一致",
+   "allowed_conclusion": "检索使五模型平均提高 ~3-5 点；被发现的路由策略相对 BM25 的增量约 1 点，未证显著"
+  },
+  {
+   "claim_id": "C6",
+   "text": "TerminalBench-2 上超过最佳手工 harness 并在 Haiku-4.5 上排名第一",
+   "setting": "89 任务；Opus-4.6 与 Haiku-4.5；搜索与评测同一基准",
+   "baseline_control": "榜单上的 Terminus-KIRA 等（非同条件重跑）",
+   "selection_vs_test": "无划分",
+   "result_denominator": "76.4 vs 74.7（Opus）；37.6 vs 35.5（Haiku）；7/89 任务获益",
+   "evidence_ids": [
+    "E003",
+    "E028",
+    "E029",
+    "E030",
+    "E031",
+    "E032",
+    "E033"
+   ],
+   "counterevidence": "搜索即评测；搜索内基线 64.4% 与榜单 74.7% 不一致；单次运行",
+   "allowed_conclusion": "这是 discovery 性质的选择集结果（task 级），不构成留出泛化证据"
+  },
+  {
+   "claim_id": "C7",
+   "text": "更丰富的先验经验访问能实现自动 harness 工程（总主张）",
+   "setting": "三域，单一 proposer",
+   "baseline_control": "见各项",
+   "selection_vs_test": "分类/数学有划分，TB2 无",
+   "result_denominator": "见各项",
+   "evidence_ids": [
+    "E001",
+    "E018",
+    "E035",
+    "E040"
+   ],
+   "counterevidence": "单一 proposer；无种子方差；成本未折算",
+   "allowed_conclusion": "在文本分类搜索设置中受控证据强；跨域一般化为作者论断，数学/终端增益较小或非留出"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在在线文本分类上，一次 Meta-Harness 搜索得到的 harness 在 3 个测试集上平均优于 ACE/MCE（48.6 vs 40.9/40.0）且部署上下文更短，并在 9 个未见数据集上平均略优；受控消融（搜索集）显示 proposer 访问原始执行轨迹是该搜索质量的关键。数学检索 harness 相对 BM25 仅约 +1.3 点，TB2 为搜索即评测的选择集结果。作者的 '自动 harness 工程由丰富经验访问使能' 总主张在跨域意义上更宽。",
+  "unresolved": "独立搜索种子方差；agentic vs 非 agentic proposer；proposer token/美元成本匹配；skill 打磨的作用；TB2 独立留出；其他 proposer。",
+  "improver_or_online_note": "improver 层未被编辑（proposer 与 skill 固定，skill 由人调试），故不判 improver；留存对象为 harness 代码，在留出任务/模型上有收益（分类、数学），故判 retained。"
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "gap 具体且量化（邻居 0.002-0.026 MTok/步 vs 10 MTok；压缩反馈使下游失败无法回溯），最近邻覆盖 OPRO/TextGrad/GEPA/AlphaEvolve/Feedback Descent/TTT-Discover，并说明差异；扣分：近邻原文未固定、与 ADAS/记忆设计搜索等 coding-agent 近邻只作简略区分，'非 agentic 同信息' 的残余未被分离。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E040"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "机制清楚：agentic proposer + 文件系统选择性读取 + 代码空间；信息接入消融给出可区分的预测（scores-only/摘要 ≈35，轨迹 ≈50）；附录 A 展示混淆识别的定性证据；扣分：agentic 选择与全历史本身、skill 的贡献未分离，机制证据主要是定性。",
+   "evidence_ids": [
+    "E001",
+    "E007",
+    "E018",
+    "E035",
+    "E037"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "操作链可重建（Algorithm 1、目录布局、接口验证、Pareto、选择规则、skill 作用、实现提示）；保留/回退薄：无回归守卫与回滚、无版本之外的过期/冲突处理，选定 harness 的挑选未形式化；适用与失败边界在附录 D 有说明。",
+   "evidence_ids": [
+    "E007",
+    "E008",
+    "E009",
+    "E010",
+    "E038"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "分类/数学用标准数据集指标与去污染语料，TB2 用官方基准；Pareto 同时报告准确率与上下文成本；有 Best-of-N 与 few-shot-all 等平凡基线。扣分：数学证明类题目的评分协议仅引用先前工作；TB2 对照数值来自榜单而非同条件重跑，搜索内基线 64.4% 与榜单 74.7% 不一致；各表上下文单位（tokens vs characters）混用。",
+   "evidence_ids": [
+    "E015",
+    "E020",
+    "E024",
+    "E032",
+    "E041"
+   ],
+   "counterevidence_ids": [
+    "E032"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "有直接匹配中心主张的受控消融（Table 3）、同 proposer 配置同评测次数的优化器对比、Best-of-N 算力匹配对照；扣分：优化器对比仅搜索集且 proposer token 量级不匹配、agentic vs 全历史未分离、数学相对 BM25 的发现策略增量只有约 1 点而强替代（检索本身）占大头、无任何多种子重复。",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E017",
+    "E018",
+    "E026",
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E026",
+    "E027"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "文本分类：搜索集选择、测试集最后使用，另有 9 个 OOD 数据集；数学：新题+4 个未见模型+语料去污染。扣分：摘要中的 TB2 主张是搜索即评测（仅 regex 审计），搜索集大小口径（250 vs 88）不一致，选定 harness 只来自单次搜索。",
+   "evidence_ids": [
+    "E013",
+    "E022",
+    "E024",
+    "E028",
+    "E029",
+    "E039"
+   ],
+   "counterevidence_ids": [
+    "E028",
+    "E039"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "报告了单次搜索内候选分布（median/best、>ZS 计数）、数学 3 次采样平均、披露了 Dense/随机 few-shot 的回归与 USPTO 不占优；但无独立搜索种子方差，无测试集置信区间，OOD 与 TB2 的 1-3 点差距在样本量下不可判定。",
+   "evidence_ids": [
+    "E018",
+    "E021",
+    "E025",
+    "E027",
+    "E031"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "部署期上下文成本报告充分（11.4K vs 50.8K/28.5K），评测次数匹配，Table 1 披露 proposer 每评测 ~10M token 数量级；但 proposer 总 token/美元、Claude Code 调用费用未给，仅称 '几小时'，对照未按 proposer 成本匹配。",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E014",
+    "E020",
+    "E036"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "全历史文件系统访问的代码空间搜索，信息接入消融有力；分类/数学有留出，TB2搜索即评测；单次搜索无方差、成本未折算，数学相对BM25仅+1.3。",
+ "provenance": {
+  "input_hash": "b4101aab7a6a53fbf7d10443f07752da150c1dd7ce6ccaad756de6926bcbc218",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to worker in this environment; model type per controller dispatch (agent_model=haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-22T00:08:03Z"
+ },
+ "materials": [
+  {
+   "material_id": "2603.28052",
+   "url": "https://arxiv.org/html/2603.28052v1",
+   "sha256": "b8927d8ab9de483ed0c311d0a7ca555b486e3fb01df26d78dbbb478d83284cbb",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction + Table 1",
+    "2 Related Work",
+    "3 Method + Algorithm 1",
+    "4.1 text classification (Tables 2-5, Fig 3-4)",
+    "4.2 math retrieval (Table 6)",
+    "4.3 TerminalBench-2 (Table 7)",
+    "5 Discussion",
+    "Appendix A (file access stats, qualitative trajectory)",
+    "Appendix B (discovered harnesses, Table 9)",
+    "Appendix C (datasets, corpus)",
+    "Appendix D (implementation tips)",
+    "Appendix E (extended related work)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "score": {
+  "raw": 72.5,
+  "display": 72.5,
+  "lower": 72.5,
+  "upper": 72.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ }
+}

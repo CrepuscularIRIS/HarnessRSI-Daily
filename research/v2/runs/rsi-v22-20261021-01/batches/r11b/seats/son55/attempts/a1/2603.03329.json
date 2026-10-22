@@ -1,0 +1,949 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r11b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "全文含附录完整可读；harness 合成属 B 类组件（非部署后持续闭环），按自身主张评价。",
+ "paper": {
+  "paper_key": "2603.03329",
+  "paper_id": "2603.03329",
+  "title": "AutoHarness: improving LLM agents by automatically synthesizing a code harness",
+  "version": "2603.03329v1",
+  "claim_type": "system_method",
+  "central_claim": "LLM（Gemini-2.5-Flash）可借助环境反馈，用少量迭代的代码精炼树搜索为每个游戏自动合成代码 harness（动作过滤/验证/策略），消除非法动作，使小模型胜过大模型，且更具成本效益。"
+ },
+ "provenance": {
+  "input_hash": "88ce2f786fde104aad2f5ea3b5113bdaf6323fc1fbe4139fb385b74e8c1e679f",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref null: not exposed to the worker in this runtime; model_type taken from controller dispatch (agent_model=haiku slot -> claude-sonnet-5-5[1m]).",
+  "timestamp": "2026-10-21T23:17:15Z"
+ },
+ "materials": [
+  {
+   "material_id": "M1",
+   "url": "https://arxiv.org/html/2603.03329v1",
+   "sha256": "8695c22d97417fd2aaf353e4a03e3fb730525036d7bb8d6d2302ae99449320b8",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related work",
+    "3 Method",
+    "4 Experimental results (4.1-4.3)",
+    "5 Conclusion",
+    "Appendix A (games, Table 1)",
+    "Appendix B (prompts)",
+    "Appendix C (signatures)",
+    "Appendix D (code snippets)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M1",
+   "locator": "Abstract",
+   "quote": "prevents all illegal moves in 145 different TextArena games (both 1-player and 2-player), enabling the smaller Gemini-2.5-Flash model to outperform larger models, such as Gemini-2.5-Pro.",
+   "support_explanation": "中心主张：自动合成的代码 harness 在 145 个游戏上消除非法动作，使小模型胜过大模型。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M1",
+   "locator": "1 Introduction",
+   "quote": "in the recent Kaggle GameArena chess competition, 78% of Gemini-2.5-Flash losses were attributed to illegal moves.",
+   "support_explanation": "gap 的外部证据：Kaggle GameArena 国际象棋中 78% 的 Flash 败局源于非法走子。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M1",
+   "locator": "1 Introduction",
+   "quote": "Hand-designed harnesses are brittle and labor-intensive, requiring additional work for every new game.",
+   "support_explanation": "作者 gap：手写 harness 脆弱且逐游戏费工；微调昂贵。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M1",
+   "locator": "3 Method / Fig. 1",
+   "quote": "our approach maintains multiple code hypotheses in a tree structure, and uses Thompson sampling to choose which node to refine next,",
+   "support_explanation": "搜索：代码假设树+汤普森采样选择待精炼节点，启发值为合法动作准确率（沿用 Tang et al. 2024）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M1",
+   "locator": "3 Method / Fig. 1",
+   "quote": "is done with a base LLM, given feedback from the environment (critic) about whether the previous attempted moves were legal or not, and what reward they produced (if any)",
+   "support_explanation": "变异算子=基座 LLM；反馈=环境对动作是否合法及奖励的判定（critic），属可获得的外部信号。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M1",
+   "locator": "4.1 Training",
+   "quote": "At each iteration, we use 10 parallel environments and roll out to at most 1000 steps (with auto environment resetting).",
+   "support_explanation": "训练设置：10 并行环境、≤1000 步；遇非法动作即终止；每次至多取 5 个失败步给 Critic 汇总。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M1",
+   "locator": "4.1 Training",
+   "quote": "Training ends when the heuristic value (i.e. the legal action success rate) reaches 1.0, or we time out.",
+   "support_explanation": "停止条件：训练期合法率达 1.0 或超时；因此测试期'100%'是对停止条件的外部验证（在新种子上）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M1",
+   "locator": "4.1 Training",
+   "quote": "On average, training ends after 14.5 tree search iterations, while 19/32 games end in less than 10 iterations.",
+   "support_explanation": "作者报告平均 14.5 次树搜索迭代。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M1",
+   "locator": "Appendix Table 1 caption",
+   "quote": "The 32 games used for end-to-end agent eval are marked with *.",
+   "support_explanation": "我方用附录表 1 复算：32 个星标游戏的学习步数均值=14.5、19/32 <10，与 4.1 一致；全部 145 游戏均值=10.3，因此 14.5 仅针对评测的 32 个游戏。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M1",
+   "locator": "4.1 Training",
+   "quote": "to novel test rollouts (of length 1000, across 10 random random seeds per game), and measuring the fraction of legal actions.",
+   "support_explanation": "合法率在每游戏 10 个新种子的 1000 步测试轨迹上度量；但文中未说明被测动作来自 LLM 提议还是 propose_action，即未区分 is_legal_action 的召回/误拒。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M1",
+   "locator": "4 Experimental results",
+   "quote": "we modified some games by manually removing any form of “Available Moves” hints in the observation string",
+   "support_explanation": "为提高难度去掉了部分游戏的'可用动作'提示；被改动的游戏与评测基线是否同样无提示，材料中未说明清楚。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M1",
+   "locator": "4.2 Evaluation",
+   "quote": "For reasons of efficiency, we focus our results on 16 1P games and 16 2P games, rather than using all 145 games.",
+   "support_explanation": "评测只用 32/145 个游戏，挑选标准未说明（我方推断：存在选择自由度）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M1",
+   "locator": "4.2 Evaluation",
+   "quote": "For 2P games, we run 40 matches with random seeds, split evenly between our method being the first or second player, and we use the average win/draw/loss rate as the evaluation metrics.",
+   "support_explanation": "2P：每游戏 40 局、先后手平衡；1P：每游戏 20 局取平均奖励。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M1",
+   "locator": "4.2 Evaluation",
+   "quote": "We see that our approach enables a much smaller Gemini-2.5-Flash to win 9/16 games (overall win rate of 56.3%)",
+   "support_explanation": "2P：对 Gemini-2.5-Pro 赢 9/16 个游戏，总胜率 56.3% vs 38.2%（作者报告）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M1",
+   "locator": "4.2 Evaluation",
+   "quote": "On average, we achieve 0.745 reward, in comparison to 0.707 (Gemini-2.5-Pro) and 0.673 (Gemini-2.5-Flash).",
+   "support_explanation": "1P：0.745 vs Pro 0.707 vs Flash 0.673；8/16 游戏更高、5/16 持平；无不确定性。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M1",
+   "locator": "3 Method",
+   "quote": "and, if invalid, repeats the process with a new prompt that includes an “illegal action” warning message;",
+   "support_explanation": "harness-as-action-verifier 在判为非法时重新提示 LLM 重试——推理时调用次数多于单次提示基线，文中未量化重试次数/成本。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M1",
+   "locator": "4.3 Harness-as-Policy",
+   "quote": "We train Harness-as-Policy using our code synthesis method with Gemini-2.5-Flash to a maximum of 256 iterations. On average, training takes 89.4 iterations and achieves a heuristic value of 0.939.",
+   "support_explanation": "策略模式：最多 256 次迭代，平均 89.4，终值启发 0.939（含奖励的启发 H=0.5+0.5r）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M1",
+   "locator": "4.3 Harness-as-Policy",
+   "quote": "which are repeated 10 and 5 times, for cost reasons.",
+   "support_explanation": "GPT-5.2 与 GPT-5.2-High 每游戏仅重复 10 与 5 次（本法 20 次）。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M1",
+   "locator": "4.3 Harness-as-Policy",
+   "quote": "our approach achieves the highest average reward (0.870), outperforming all other agents including",
+   "support_explanation": "策略模式 16 个 1P 游戏平均奖励 0.870 vs GPT-5.2-High 0.844 vs Pro 0.707 vs GPT-5.2 0.635（作者报告）；差距 0.026 在 5 次重复下无区间。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M1",
+   "locator": "4.3 Harness-as-Policy",
+   "quote": "Per game, we win 3/16 games while GPT-5.2-High wins 5/16, and we tie the remaining 8/16 (details in the appendix).",
+   "support_explanation": "逐游戏：本法胜 3、GPT-5.2-High 胜 5、平 8——平均更高来自并列和个别差距。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M1",
+   "locator": "4.3 Harness-as-Policy",
+   "quote": "Since Harness-as-Policy generates pure (Python) code, our test time cost is nearly zero, while the GPT-5.2 and GPT-5.2-High experiments cost approximately $640.",
+   "support_explanation": "测试期成本对比：策略≈0 vs 基线约 $640；但训练期（89.4 次迭代的 LLM 调用）成本未报。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M1",
+   "locator": "4.2 Evaluation",
+   "quote": "We use the same optimized prompt in all experiments.",
+   "support_explanation": "各 LLM 基线共用同一优化提示。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M1",
+   "locator": "2 Related work",
+   "quote": "Our method integrates these concepts into a structured tree search using Thompson sampling, following",
+   "support_explanation": "作者承认搜索算法沿用 Tang et al. 2024，创新在应用于 harness 合成而非搜索算法。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M1",
+   "locator": "5 Conclusion",
+   "quote": "so that the whole system becomes recursively self-improving.",
+   "support_explanation": "作者自述'递归自改进'是未来工作；当前是每游戏独立离线合成的组件，不是部署后持续自改进。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M1",
+   "locator": "5 Conclusion",
+   "quote": "Currently we generate a separate harness for each environment (game).",
+   "support_explanation": "每个游戏独立合成一份 harness；无跨游戏复用库。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "M1",
+   "locator": "Appendix B.2",
+   "quote": "Make sure to only produce code that is safe to execute",
+   "support_explanation": "生成代码的执行安全仅靠提示词约束，文中未述沙盒。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "M1",
+   "locator": "4 Experimental results",
+   "quote": "but exclude the 9 games whose action space is free-form text / dialog",
+   "support_explanation": "排除 9 个自由文本/对话动作空间的游戏——范围边界。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "M1",
+   "locator": "Appendix B.1 / 4.2",
+   "quote": "(Without this modification, the harness can just copy the list of legal actions from the prompt.",
+   "support_explanation": "作者说明有提示时 harness 可直接复制合法列表，因此去提示是更严的测试。",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "每游戏一份 Python 代码 harness：propose_action(board) 与 is_legal_action(board, action)（action-verifier 模式），包裹 Gemini-2.5-Flash；基线=同模型无 harness",
+   "information": "游戏名/描述/动作空间说明、文本棋盘、环境对动作的合法性与奖励反馈（Critic 汇总≤5 个失败步）；部分游戏的'可用动作'提示被移除",
+   "operation": "代码假设树；汤普森采样依启发值（合法率）选节点；LLM 依反馈精炼：判合法却非法→改两个函数，判非法→只改 propose_action；合法率到 1.0 或超时停止",
+   "output": "冻结的代码 harness，部署为：LLM 提议→is_legal_action 验证→不合法则带警告重试",
+   "conditions": "需可交互、能给出动作合法性的环境；限定输出签名",
+   "feedback": "环境合法/非法与奖励（外部可获得，非自评）",
+   "selection_rule/data": "树内节点按平均合法动作准确率；训练到合法率 1.0；无独立选择集",
+   "persistence": "每游戏一份代码文件（树节点保存）；部署时固定",
+   "later_use": "该游戏的所有后续对局",
+   "claimed_effect": "145 游戏合法率 100%（新种子测试）；Flash+harness 在 2P 对 Pro 胜率 56.3%，1P 奖励 0.745 vs 0.707",
+   "failure_boundary": "自由文本动作游戏被排除；每游戏单独合成；合法性≠策略强度；重试成本未计",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E010",
+    "E016",
+    "E025",
+    "E027"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "harness-as-policy：由代码直接选择动作，推理期不调用 LLM",
+   "information": "同上，启发值 H=0.5+0.5r（合法时），0（非法时）；奖励稀疏、只在终局",
+   "operation": "同一树搜索，最多 256 次迭代，平均 89.4",
+   "output": "纯 Python 策略",
+   "conditions": "仅 1P 游戏（2P 需世界模型/搜索）",
+   "feedback": "环境奖励",
+   "selection_rule/data": "启发值最高节点；评测实例/种子与训练的划分材料未说明",
+   "persistence": "每游戏代码",
+   "later_use": "评测与部署",
+   "claimed_effect": "16 个 1P 游戏平均奖励 0.870，高于 GPT-5.2-High 0.844 与 Pro 0.707，测试成本≈0",
+   "failure_boundary": "确定性谜题上可能记忆具体实例解；2P 未覆盖",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019",
+    "E020",
+    "E021"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "LLM 作为 agent 常提出被环境严格禁止的动作；手写 harness 脆弱且逐游戏费工，微调昂贵。",
+  "checked_gap": "被改变的对象是'包裹 LLM 的外部 harness 代码'，由人手写改为 LLM 依环境反馈合成。Kaggle 国际象棋 78% 败局源于非法走子提供了外部来源的具体瓶颈；harness 合成的最近邻谱系（Code as Policies、Voyager、Eureka、AlphaEvolve、Lehrach 2025 代码世界模型）有提及。",
+  "lineage/closest_adjacent": "Code as Policies(Liang 2023)、Voyager(可执行技能库)、Eureka(奖励函数进化)、AlphaEvolve、Reflexion、Tang 2024(Thompson 采样代码树，直接沿用)、Lehrach 2025(生成完整世界模型代码)；材料内无这些原文，仅作者概括，无与手写 harness、规则提示或线性迭代精炼的并列实验。",
+  "residue": "合法性解决后，胜负取决于策略；harness-as-verifier 仍依赖 LLM 策略，政策模式仅 1P。",
+  "stakes": "弱模型在严格环境中的可靠性，以及用小模型一次合成换取免调用推理的成本优势。",
+  "method_response": "把 harness 生成视为程序搜索：环境反馈作 critic，汤普森采样树搜索，三种 harness 形态（过滤/验证/策略）。",
+  "remaining_gap": "未回答：树搜索/Thompson 的必要性、与手写 harness 与规则提示的对比、评测种子与训练的划分、训练成本、跨游戏复用与蒸馏回基座。",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E023",
+   "E024"
+  ],
+  "unresolved": [
+   "近邻原文未固定，无法核对 Tang 2024 与 Code-as-Policies 中已含的机制",
+   "评测的 32 个游戏如何选出"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [],
+  "outside_taxonomy": false,
+  "reason": "",
+  "executes_pattern": "yes",
+  "resolves_problem": "partial",
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": "S1 责任边界：LLM 负责策略/提议，合法性交给外部可验证代码(有)；S2 机器可检查的中间工件：is_legal_action/propose_action 可执行代码，由环境检验(有)；S3 以求解器输出闭环、并在构建中应用：环境合法性/奖励反馈驱动精炼(有)；S4 消融验证反馈步骤：无；S5 成本与超越玩具实例：测试期成本报告、训练成本缺、145 游戏覆盖较广",
+    "success_failure_checks": "成功条件：typed 可验证工件(met)、可获得信号闭环(met)、命名结构性失败原因(78% 非法走子，met)；失败模式：无消融隔离机制(present)、成本未量化(partial)",
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E005",
+     "E006",
+     "E016"
+    ],
+    "reason": "实际操作是让 LLM 产出可被环境逐步验证的可执行程序并以其反馈闭环构建，同时把合法性这一可验证子问题委托给代码，吻合 C25 的核心。"
+   }
+  ]
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "unassigned": [],
+  "revision_proposals": [],
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "version": "bound-by-domain_cards_hash",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:population_search_executable_fitness/S2",
+      "status": "met",
+      "note": "环境给出精确合法性，难以刷；奖励稀疏"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S3",
+      "status": "met",
+      "note": "进化单元为固定签名内的小函数"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S4",
+      "status": "met",
+      "note": "变异以环境错误信息为依据"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/H14.step4",
+      "status": "partial",
+      "note": "汤普森采样分配评估；无冗余子代过滤；成本只部分报告"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/H14.step5",
+      "status": "partial",
+      "note": "合法率在新种子上测；奖励评测划分未述；无方差"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/F1",
+      "status": "partial",
+      "note": "搜索算法沿用既有工作，创新在应用对象"
+     }
+    ],
+    "evidence_ids": [
+     "E004",
+     "E005",
+     "E006",
+     "E007",
+     "E010",
+     "E023"
+    ],
+    "reason": "基因=可执行代码，评估器=环境，LLM 变异+树搜索保留，与 H14 同构；H14 的'泛化循环套新领域'失败模式部分存在。"
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "bound-by-domain_cards_hash",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "partial",
+      "note": "Critic 汇总≤5 个失败步，非完整轨迹+源码"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/H12.step3",
+      "status": "unmet",
+      "note": "无带可证伪预测的限域补丁"
+     }
+    ],
+    "evidence_ids": [
+     "E005",
+     "E006"
+    ],
+    "reason": "对失败步骤诊断后修补 harness 函数，类似 H12，但无回归检查与限域编辑纪律。"
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain_namespace": "rsi",
+   "domain_main": "population_search_executable_fitness",
+   "domain_sub": "H14",
+   "operation_correspondence": "LLM 产出可执行代码工件，由环境（求解器/校验器）逐步检验，反馈回到下一轮精炼",
+   "necessary_conditions": "C25 需消融证明验证反馈 load-bearing 并计成本；H14 需评测器可信、划分、方差。本文有可信评测器，缺消融与方差",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E010"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:population_search_executable_fitness/S1",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "声称贡献在搜索层而非领域",
+   "applicable": true,
+   "status": "partial",
+   "reason": "搜索沿用 Tang 2024 的 Thompson 树，贡献在把它用于 harness 合成与三种形态；无搜索层创新或与线性精炼的对照。",
+   "evidence_ids": [
+    "E004",
+    "E023"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "评测器须可信且不易被刷",
+   "applicable": true,
+   "status": "met",
+   "reason": "合法性由环境精确判定；奖励评测用环境奖励，与 LLM 自评无关。",
+   "evidence_ids": [
+    "E005",
+    "E007"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S3",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "进化单元要小且在脚手架中",
+   "applicable": true,
+   "status": "met",
+   "reason": "进化的是固定签名的两个函数；策略模式放宽了脚手架。",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S4",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "变异需基于评测器所见",
+   "applicable": true,
+   "status": "met",
+   "reason": "Critic 汇总环境判定的失败步，Refiner 据此改码。",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F1",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "通用进化循环用于新领域",
+   "applicable": true,
+   "status": "partial",
+   "reason": "覆盖 145 个游戏且问题重定位为 harness，但算法本身无新意；缺搜索层面的对照。",
+   "evidence_ids": [
+    "E023"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/H14.step5",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/sub/H14.md"
+   ],
+   "applies_when": "选择与报告分离且报告方差",
+   "applicable": true,
+   "status": "partial",
+   "reason": "合法率用 10 个新种子测；奖励评测的实例/种子与训练是否分离未述；无方差、无训练重复。",
+   "evidence_ids": [
+    "E010",
+    "E013",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "提案者应看到原始证据",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Critic 汇总≤5 个失败步并附错误信息，提案者读代码+摘要，不含全部历史。",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"
+   ],
+   "applies_when": "多阶段委派增加了成本",
+   "applicable": true,
+   "status": "partial",
+   "reason": "报告了学习步数(14.5/89.4)与测试期 $640 对比；训练的 token/美元与 verifier 模式的重试次数未报。",
+   "evidence_ids": [
+    "E008",
+    "E017",
+    "E021"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"
+   ],
+   "applies_when": "每个组件的边际贡献消融",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无汤普森树 vs 线性/并行精炼、无 Critic/Refiner 分离、无反馈信息量的消融。",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"
+   ],
+   "applies_when": "披露提示词与实现",
+   "applicable": true,
+   "status": "met",
+   "reason": "附录给出 LLM-as-policy 提示、代码精炼提示、函数签名与两个示例 harness。",
+   "evidence_ids": [
+    "E026"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-4",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"
+   ],
+   "applies_when": "不止于单一基准",
+   "applicable": true,
+   "status": "partial",
+   "reason": "145 个游戏来自同一 TextArena 框架，排除自由文本动作；评测聚焦 32 个。",
+   "evidence_ids": [
+    "E012",
+    "E027"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md"
+   ],
+   "applies_when": "与统一端到端基线公平比较",
+   "applicable": true,
+   "status": "partial",
+   "reason": "与 Flash、Pro、GPT-5.2 比较；本法在验证器内可重试，LLM 调用预算未对齐，且无手写 harness 或规则提示的基线。",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E016",
+    "E022"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2603.03329-1",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "single_source",
+   "source_refs": [
+    "论文 4.2 节"
+   ],
+   "applies_when": "只在 145 游戏的子集上做对战评测",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "16+16 个游戏的选择标准未述，存在挑选自由度。",
+   "evidence_ids": [
+    "E012"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2603.03329-2",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "single_source",
+   "source_refs": [
+    "论文 4.1 节"
+   ],
+   "applies_when": "'100% 合法'依赖测量协议",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "未说明被测动作来自 LLM 还是 propose_action，无法判断 is_legal_action 对 LLM 非法提议的召回及对合法动作的误拒率。",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2603.03329-3",
+   "version": "bound-by-expectations_hash",
+   "source_strength": "single_source",
+   "source_refs": [
+    "论文 4.3 节"
+   ],
+   "applies_when": "确定性谜题上的代码策略",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "评测实例/种子与训练是否不同未说明，代码策略可能记忆具体实例解。",
+   "evidence_ids": [
+    "E017",
+    "E019"
+   ],
+   "score_item": "E.holdout"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "合成的 harness 在 145 个游戏上消除非法动作",
+   "setting": "TextArena 145 游戏（排除9个自由文本），每游戏 10 新种子×1000 步测试",
+   "baseline/control": "无（合法率绝对指标）",
+   "selection_vs_test": "训练到合法率 1.0 停止；测试种子新",
+   "result/denominator": "全部 145 个游戏 1.0；平均 14.5 次迭代(32 评测游戏)",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E008",
+    "E009",
+    "E010"
+   ],
+   "counterevidence": [
+    "测量协议未说明被测动作来源",
+    "部分游戏被去提示且被改动游戏未列"
+   ],
+   "allowed_conclusion": "在作者测量下合法率为 100%；测量语义有待澄清。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "Flash+harness 胜过 Pro",
+   "setting": "2P 16 游戏×40 局；1P 16 游戏×20 局",
+   "baseline/control": "Flash、Pro（同一优化提示）",
+   "selection_vs_test": "评测游戏子集挑选标准未述",
+   "result/denominator": "2P 胜 9/16、胜率 56.3% vs 38.2%；1P 0.745 vs 0.707 vs 0.673，8/16 更高 5/16 持平",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014",
+    "E015",
+    "E016"
+   ],
+   "counterevidence": [
+    "无不确定性",
+    "重试使 LLM 调用数多于基线"
+   ],
+   "allowed_conclusion": "在所选 32 个游戏上平均占优；优势主要来自避免非法动作。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "harness-as-policy 平均奖励高于 Pro 与 GPT-5.2-High",
+   "setting": "16 个 1P 游戏，各 20 次（GPT-5.2-High 仅5次）",
+   "baseline/control": "GPT-5.2、GPT-5.2-High、Pro、Flash",
+   "selection_vs_test": "训练/测试实例划分未述",
+   "result/denominator": "0.870 vs 0.844 vs 0.707 vs 0.635；本法胜3、基线胜5、平8",
+   "evidence_ids": [
+    "E017",
+    "E018",
+    "E019",
+    "E020"
+   ],
+   "counterevidence": [
+    "与 GPT-5.2-High 差 0.026，n=5，无区间",
+    "确定性谜题可能被记忆"
+   ],
+   "allowed_conclusion": "与 GPT-5.2-High 难分高下，显著高于 Pro；精确排序未证。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "更具成本效益",
+   "setting": "测试期成本",
+   "baseline/control": "GPT-5.2 系列",
+   "selection_vs_test": "-",
+   "result/denominator": "测试期≈0 vs $640；训练成本未报",
+   "evidence_ids": [
+    "E021",
+    "E017"
+   ],
+   "counterevidence": [
+    "训练期 LLM 调用成本缺失"
+   ],
+   "allowed_conclusion": "推理期成本显著更低；总成本未知。"
+  },
+  {
+   "claim_id": "C5",
+   "text": "汤普森采样树搜索是有效的精炼机制",
+   "setting": "无对照",
+   "baseline/control": "无",
+   "selection_vs_test": "-",
+   "result/denominator": "仅有合法率-迭代曲线",
+   "evidence_ids": [
+    "E004",
+    "E023"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "未被检验。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "对每个游戏独立合成的 Python harness 在新随机种子的 1000 步测试上被作者报告为 100% 合法（145 游戏），在 32 个所选游戏上 Flash+harness 平均优于 Gemini-2.5-Pro，1P 策略模式平均奖励 0.870；这是'离线合成并冻结的 harness 在后续对局中带来提升'的 retained 证据，不涉及改进器自身。",
+  "unresolved": [
+   "树搜索/Thompson 的必要性",
+   "重试预算对齐",
+   "游戏子集选择",
+   "合法率测量协议",
+   "策略模式训练/测试实例划分",
+   "训练成本",
+   "与手写 harness/规则提示的比较"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "非法走子是被外部数据(Kaggle 78%)证实的具体瓶颈，被替换的对象(人手写 harness)明确；最近邻已列但无并列对照，未对照手写 harness、规则提示或线性精炼。",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "环境反馈→Critic 汇总→LLM 改码→汤普森选节点→合法率到 1.0 的链条直接对准问题，三种 harness 形态定位清楚；树搜索相对朴素精炼的差异预测未给出。",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E007"
+   ],
+   "counterevidence_ids": [
+    "E023"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "训练设置、停止条件、签名、提示与示例代码披露较完整，可重建；缺 Critic 提示、选择最终节点与采样先验细节、沙盒安全，范围边界(自由文本游戏、2P 策略)清楚。",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E025",
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E026"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "合法性与奖励由环境精确判定，可信；扣分：合法率的测量对象(被测动作来源、误拒)不明，评测子集选择未述，部分游戏被改动。",
+   "evidence_ids": [
+    "E005",
+    "E007",
+    "E010",
+    "E013"
+   ],
+   "counterevidence_ids": [
+    "E011",
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Flash vs Flash+harness 同模型对比能归因到 harness，但无树搜索/Critic/反馈量的消融，重试预算未对齐，无手写 harness 或规则提示基线；优势主要来自合法性而非策略。",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E019"
+   ],
+   "counterevidence_ids": [
+    "E016",
+    "E022"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "合法率在每游戏 10 个新种子上测；奖励评测与训练实例的划分未述，32/145 游戏子集选择自由，确定性谜题的记忆风险未排查。",
+   "evidence_ids": [
+    "E010",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E017"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "给出每游戏 20/40 局的样本量，但无区间、无训练重复；与 GPT-5.2-High 的 0.026 差距在其仅 5 次重复下无统计支撑。",
+   "evidence_ids": [
+    "E013",
+    "E018"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E020"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "报告了每游戏学习步数(均值 14.5/89.4)与策略模式测试期 $640 vs ≈0 的对比；缺训练 token/美元、verifier 模式的重试调用数、与基线的预算对齐。",
+   "evidence_ids": [
+    "E008",
+    "E017",
+    "E021"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 65.0,
+  "display": 65.0,
+  "lower": 65.0,
+  "upper": 65.0,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "环境反馈驱动的代码harness树搜索，合法率100%与1P/2P优势来自可信评测器；但无搜索/组件消融、重试预算未对齐、评测游戏子集选择未述、无区间、训练成本缺。"
+}

@@ -1,0 +1,408 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r12a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "Frozen rubric A3: the updated object (shared reasoner/rubricator policy weights) and the rubric product are weights-side; rubrics are regenerated per rollout, used once as auxiliary reward or inference hint, and never persisted or reused as a prompt/skill/memory/evaluator artifact. This is weight training with a self-generated reward (SCORE_SPEC: weight-only training without retained non-weight change is out of scope). Dissent note for aggregator: domain card H24 lists rubric-as-reward members, so a boundary reading is possible; no score is given and the card is not edited.",
+ "paper": {
+  "paper_key": "2602.10885",
+  "paper_id": "2602.10885",
+  "title": "Reinforcing Chain-of-Thought Reasoning with Self-Evolving Rubrics",
+  "version": "2602.10885v1",
+  "claim_type": "component_training",
+  "central_claim": "RLCER rewards chain-of-thought with self-proposed rubrics, kept when their satisfaction correlates with final-answer correctness, and evolves the rubric generator by rewarding the fraction of valid rubrics, outperforming outcome-only RLVR and giving inference-time hints."
+ },
+ "provenance": {
+  "input_hash": "f92b687b710e74957bbdcbf2224740f264f5c349d730eba51e9f1970841734c3",
+  "rubric_version": "frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref=null: worker subagent has no accessible run receipt; model_type from controller dispatch (agent_model=haiku slot mapped to claude-sonnet-5-5[1m]). Quotes verified mechanically against pinned material under whitespace normalization (multi-line HTML-extraction fragments joined by single spaces).",
+  "timestamp": "2026-10-21T23:45:16Z"
+ },
+ "materials": [
+  {
+   "material_id": "2602.10885-text",
+   "url": "https://arxiv.org/html/2602.10885v1",
+   "sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "sections_read": [
+    "Abstract",
+    "1 Introduction",
+    "2 Related Works",
+    "3 Preliminaries",
+    "4 Methodology",
+    "5 Experiments (5.1-5.5)",
+    "Limitations/Conclusion",
+    "Implementation details, prompts, case study"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figures 5-7 are images (values not in text)"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Abstract",
+   "quote": "which enhances the outcome-centric RLVR by rewarding CoTs with self-proposed and self-evolving rubrics.",
+   "support_explanation": "Central contribution is a reward-shaping scheme inside RLVR weight training; the evaluated artifact is the trained policy.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 4.1 Key Idea",
+   "quote": "while their roles are distinguished by different prompts",
+   "support_explanation": "Reasoner and rubricator are the same policy parameters under different prompts: the evolving \"rubric generator\" lives in weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 4.5 Two-Role Optimization",
+   "quote": "Gradients from both roles are aggregated to update the same set of parameters",
+   "support_explanation": "The only state changed by feedback is the shared policy weights.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 1 Introduction",
+   "quote": "Additionally, we encourage the rubricator to self-evolve its rubric generation capability by rewarding the fraction of valid rubrics among its proposals",
+   "support_explanation": "Rubric evolution = RL on the rubricator role (a weight update), with a validity reward from outcome correlation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 4.2 Rubricator",
+   "quote": "The rubrics generated under the rubricator role will then be used for judging the CoT quality through an external verifier",
+   "support_explanation": "Rubrics are generated per (question, CoT) and consumed immediately by a frozen verifier; no rubric store, archive or version is described anywhere in the material.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 5.1",
+   "quote": "by performing supervised fine-tuning on correctly formatted data obtained via reject sampling from a stronger teacher model",
+   "support_explanation": "Cold start uses a stronger teacher (Doubao-Seed-1.6-thinking) for reasoner and rubricator data and the verifier is distilled from it.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 5.3",
+   "quote": "training with RLCER outperforms the vanilla RLVR across multiple datasets and multiple model sizes on average.",
+   "support_explanation": "Headline result (author-reported, single table, no variance).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Sec 5.5",
+   "quote": "we explicitly employ these self-proposed rubrics as in-prompt hints, and evaluate the model’s reasoning performance under this setup.",
+   "support_explanation": "The only non-weight use of rubrics is regenerated on the fly as inference hints; nothing is persisted or reused across tasks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Limitations",
+   "quote": "our method is still quite limited to the RLVR domain, leaving the effectiveness of rewarding with self-proposed rubrics on non-verifiable domains unknown.",
+   "support_explanation": "Scope limit stated by authors.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2602.10885-text",
+   "material_sha256": "ffeaeb5a42a66223fb3576cceee3df49e26071de525868fb8d673636c71b4e22",
+   "locator": "Limitations",
+   "quote": "the introduction of the rubricator role increases the rollout burden and thereby requires more training time.",
+   "support_explanation": "Cost acknowledged qualitatively only.",
+   "kind": "author_report"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "policy weights shared by reasoner and rubricator roles (PPO); transient per-sample rubrics are the intermediate product",
+   "information": "question, CoT, ground-truth answer (for validity), frozen distilled verifier judging rubric satisfaction",
+   "operation": "rubricator proposes rubrics per (question, CoT); a rubric is valid if its satisfaction correlates with answer correctness across 8 rollouts (threshold 0.2) and is discriminative; CoT reward = normalized score of satisfied valid rubrics; rubricator reward = fraction valid",
+   "output": "role-specific rewards for a joint policy update",
+   "conditions": "verifiable-answer domains (math); cold-started models",
+   "feedback": "answer correctness plus rubric-satisfaction correlation",
+   "selection_rule": "per-question validity filter (computed fresh each step)",
+   "persistence": "not_applicable beyond weights: no rubric store, archive or version",
+   "later_use": "none for rubrics except optional regenerated inference hints",
+   "claimed_effect": "outperforms vanilla RLVR on average across 7 benchmarks for 4B/8B",
+   "failure_boundary": "RLVR domain only; extra rollout cost",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E005",
+    "E008",
+    "E009"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "CoT is rarely rewarded; process reward models need heavy labeling and go stale; static rubrics mismatch evolving behavior.",
+  "checked_gap": "Gap is plausible but not the harness-level gap of this corpus: it concerns the reward signal inside weight training.",
+  "lineage": "RLVR -> rubric rewards (static) -> self-proposed rubrics in multi-role self-evolving RL",
+  "closest_adjacent": [
+   "RuscaRL / Rubrics-as-Rewards / DR-Tulu (static rubrics)",
+   "Absolute Zero / SPICE (multi-role self-evolve)"
+  ],
+  "residue": "not assessed (out of scope)",
+  "stakes": "reasoning quality beyond final-answer reward",
+  "method_response": "self-proposed, validity-filtered rubric reward",
+  "remaining_gap": "not assessed",
+  "evidence_ids": [
+   "E001",
+   "E004"
+  ],
+  "unresolved": [
+   "scope boundary vs domain card H24"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C26",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "manufactured scalar reward from the policy itself, filtered by correlation with the verifiable outcome (curation stage)"
+    ],
+    "success_failure_checks": [
+     "filter shown load-bearing: rubricator-reward ablation w/o evolving is run (Figure 6, figure-only)"
+    ],
+    "evidence_ids": [
+     "E004",
+     "E005"
+    ],
+    "reason": "Self-manufactured dense reward with an outcome-anchored filter; optimizer is PPO not a preference objective, so only partial."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Partial match recorded for the scope discussion only.",
+  "executes_pattern": true,
+  "resolves_problem": "not assessed"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "coevolve_the_evaluator",
+    "sub": "H24",
+    "version": "cards@52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "S1",
+      "status": "met",
+      "note": "retention test = correlation with answer correctness plus std"
+     },
+     {
+      "id": "S2",
+      "status": "partial",
+      "note": "verifier is a separate frozen distilled model, but the rubric writer and reasoner share weights"
+     },
+     {
+      "id": "H24-step5",
+      "status": "partial",
+      "note": "rubric quality checked via correlation trend; cost only qualitative"
+     }
+    ],
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E010"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   {
+    "target": "coevolve_the_evaluator / H24 scope note",
+    "proposal": "State whether weight-updating members with per-rollout, non-persisted rubrics are in the corpus scope or should carry the boundary tag used for H22/H26/H28; evaluate against rubric A3. Proposal only; no card edited in this batch.",
+    "status": "proposal"
+   }
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C26",
+   "domain_namespace": "rsi",
+   "domain_main": "coevolve_the_evaluator",
+   "domain_sub": "H24",
+   "operation_correspondence": "Self-generated criteria filtered by outcome correlation become dense reward.",
+   "conditions_or_differences": "Domain card assumes an evolving evaluator artifact; here nothing is retained outside weights.",
+   "evidence_ids": [
+    "E004",
+    "E005"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:coevolve_the_evaluator/S1",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "rubrics serve as reward",
+   "applicable": false,
+   "status": "unknown",
+   "reason": "Recorded for the aggregator; item not scored because the paper is out of scope. Retention test is per-question correlation.",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": null
+  },
+  {
+   "id": "rsi:coevolve_the_evaluator/S2",
+   "version": "conditions.json@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "research/patterns/conditions.json"
+   ],
+   "applies_when": "rubrics serve as reward",
+   "applicable": false,
+   "status": "unknown",
+   "reason": "Not scored (out of scope). Anchor = answer correctness; verifier is separate and frozen.",
+   "evidence_ids": [
+    "E002",
+    "E006"
+   ],
+   "score_item": null
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Self-proposed, self-evolving rubrics improve RLVR.",
+   "setting": "Qwen3-4B/8B-Base cold-started, DAPO-Math-17k, 1500 steps, PPO",
+   "baseline_control": "RLVR from same SFT checkpoint",
+   "selection_vs_test": "math training, math + GPQA tests",
+   "result_denominator": "avg@16 pass@1 on AIME24/25, AMC23, GPQA-D, 3x100 SuperGPQA; single run",
+   "evidence_ids": [
+    "E007"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "Not assessed for score; weight-training claim, author-reported."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "Not rated (out of scope). Author-reported: PPO with auxiliary self-proposed rubric reward scores higher on average than outcome-only RLVR on seven reasoning benchmarks.",
+  "not_supported": [],
+  "unresolved": [
+   "scope ruling",
+   "no variance reported"
+  ],
+  "author_vs_our": "All author_report.",
+  "scope_ruling": "out_of_scope per rubric A3"
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "out_of_scope: not rated",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": null,
+  "display": null,
+  "lower": 0.0,
+  "upper": 100.0,
+  "coverage": 0.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "rationale": "更新对象与产物均为权重，评分细则A3判范围外；rubric每次rollout重新生成，无留存的非权重组件，故不评分。"
+}

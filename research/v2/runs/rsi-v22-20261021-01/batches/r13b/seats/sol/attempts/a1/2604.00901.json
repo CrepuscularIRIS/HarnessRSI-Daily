@@ -1,0 +1,809 @@
+{
+  "schema_version": "radar-review-v2.2",
+  "run_id": "rsi-v22-20261021-01",
+  "batch_id": "r13b",
+  "attempt_id": "a1",
+  "seat": "sol",
+  "paper": {
+    "paper_key": "2604.00901",
+    "paper_id": "2604.00901",
+    "version": "2604.00901v2",
+    "title": "Experience as a Compass: Multi-agent RAG with Evolving Orchestration and Agent Prompts",
+    "claim_type": "system_method",
+    "central_claim": "HERA通过经验库引导的合作拓扑演化与role-aware prompt evolution实现无权重更新的多agent RAG持续改善、OOD稳健性及token效率。",
+    "scope_class": "A"
+  },
+  "provenance": {
+    "input_hash": "b4101aab7a6a53fbf7d10443f07752da150c1dd7ce6ccaad756de6926bcbc218",
+    "rubric_version": "frozen-v1.0",
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+    "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+    "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+    "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+    "model_type": "sol(gpt-6.1-sol)",
+    "actual_model": null,
+    "session_id": null,
+    "receipt_ref": null,
+    "timestamp": "2026-10-22T00:15:55.148151+00:00",
+    "notes": "按配置sonnet→gpt-6.1-sol；无可核验provider/session receipt字段，保留null，不探测模型。"
+  },
+  "materials": [
+    {
+      "material_id": "2604.00901.txt",
+      "url": "https://arxiv.org/html/2604.00901v2",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "sections_read": [
+        "Abstract",
+        "§1–7",
+        "Tables 1–3",
+        "Appendices A–H including prompts/pseudocode/failure cases"
+      ],
+      "complete": true,
+      "missing_sections": []
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 413-438",
+      "quote": "The orchestrator’s optimization is inspired by Group Relative Policy Optimization (GRPO)\n(\nShao et al., 2024\n;\nCai et al., 2025\n)\n, which updates a policy by comparing sampled actions within a group. Unlike the training-free GRPO\n(\nCai et al., 2025\n)\n, we extend the idea beyond token-level generation, lifting optimization\nfrom token generation to cooperation topology\n. Operating over a structured action space of agent topologies\nΓ\n\\Gamma\n, the orchestrator performs group-based optimization at the level of global strategy. Given a query\nq\nq\n, it samples a group of candidate agent sequences. Each sequence is executed by invoking the corresponding agents, producing a trajectory\nτ\ni\n\\tau_{i}\n, which is subsequently evaluated to obtain a reward. Instead of relying on scalar advantages, we adopt a hierarchical comparison: trajectories are first ranked by downstream task performance (\ne.g\n.\n, F1 score), and then by efficiency, measured as the total number of input and output tokens consumed across all agents. The orchestrator is then prompted to articulate the reasons for relative success and failure across the group, producing a set of natural language insights",
+      "support_explanation": "在候选拓扑真实执行后按任务分数与token排序，不更新权重。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E002",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 477-526",
+      "quote": ", which accumulates semantic advantages derived from reflective comparisons of successful and failed trajectories, serving as both an episodic memory and an optimization medium for the orchestrator.\n\nℰ\n\\mathcal{E}\nis charatcerized with a\nProfile–Insight–Utility\nstructure\n(\nc\n,\nz\n,\nu\n)\n(c,z,u)\n, where\nc\nc\ndenotes the\nquery characteristics or types\n,\nz\nz\nis the natural language\ninsight\n, and\nu\nu\nrepresents the\nutility\n, measuring the empirical success rate of\nz\nz\n- that is, how often the insight is successfully applied in subsequent agent orchestration.\nℰ\n\\mathcal{E}\nis updated online through consolidation operations:\nADD\ninserts insights that are distinct from any existing entries;\nMERGE\ncombines semantically similar or complementary entries,\n\nPRUNE\nremoves conflicting or low-utility insights to maintain generalizable insights while preventing uncontrolled growth, and\n\nKEEP\nleaves\nℰ\n\\mathcal{E}\nunchanged.",
+      "support_explanation": "Profile–Insight–Utility存储及ADD/MERGE/PRUNE/KEEP。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E003",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 528-545",
+      "quote": "Experience as a Prior.\nGiven a query\nq\nq\n, the orchestrator first analyzes its characteristics and retrieves a set of relevant insights from\nℰ\n\\mathcal{E}\n. Retrieval balances two objectives: maximizing empirical\nutility\n\nu\nu\n, which favors insights that have historically led to successful coordination, and maintaining\ndiversity\n, achieved by selecting insights that are semantically distinct from those already chosen and that have lower prior usage frequency. The retrieved insights inform the orchestrator’s selection and sequencing of agents, guiding multi-step execution toward high-performing strategies. By combining high-utility and diverse insights, the orchestrator biases execution to maximize task accuracy while minimizing token consumption. In this manner,\nℰ\n\\mathcal{E}\nserves as a structured, experience-driven prior, enabling contextual policy improvement and without modifying the underlying LLM.",
+      "support_explanation": "后续query读取经验改变选人和顺序。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E004",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 1730-1742",
+      "quote": "presents the ablation results of\nHERA\non the test set using Qwen-3-14B as the backbone (Llama-3.1-8 results are provided in Appendix\nF.2\n). Removing the experience library yields consistent but moderate performance declines across datasets (typically\n↓\n\\downarrow\n6% to 15% relative accuracy), highlighting its role in improving knowledge guiding and cross-instance generalization. In contrast, omitting prompt evolution leads to substantially larger and more variable declines on multi-hop QA (up to\n↓\n\\downarrow\n30% relative on 2WikiQA for both backbones), where precise decomposition and trajectory control are essential. On ambiguity-intensive datasets AmbigQA, prompt evolution introduces a recall-oriented bias: improving F1 while occasionally reducing EM, whereas the experience library promotes precision through grounded outputs, revealing a systematic EM–F1 trade-off. These patterns are consistent across backbones, indicating that the functional contributions of each component are largely model-agnostic. Importantly, the full\nHERA\nframework consistently outperforms both ablations by a non-additive margin, indicating a positive interaction effect: improved reasoning behaviors from prompt evolution enhance the quality of stored experiences, which in turn reinforce subsequent reasoning through stronger grounding. Overall, the results demonstrate that prompt evolution and the experience library target complementary failure modes: procedural correctness versus epistemic reliability, and that their synergy is critical for robust multi-hop reasoning.",
+      "support_explanation": "经验库与prompt evolution分别消融，报告相互作用；不能单独证明具体编辑操作。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E005",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 1687-1710",
+      "quote": "(i) Consistent gains over SOTA iterative and agentic RAG baselines\n.\nHERA\nachieves an average of 38.69% gains on all datasets compared against recent SOTA, demonstrating the effectiveness of experience-guided orchestration for interleaved reasoning and retrieval. Best AmbigQA performance highlights\nHERA\n’s robustness to queries with multiple plausible interpretations.\n(ii) Robust OOD performance.\n\nHERA\nranks second on Bamboogle (F1\n−\n5.4\n%\n-5.4\\%\nvs. ExSearch) and first on HoVer (\n+\n64.95\n%\n+64.95\\%\nvs. CORAG), reflecting the transferability of the accumulated experience library and evolving agent behaviors. In contrast, most prior approaches relying on heuristic planning or fixed iterative retrieval generalize poorly beyond in-distribution data.\n(iii) Efficiency as gradient-free optimization\n.\nHERA\nsurpasses RL-fine-tuned multi-agent RAG methods, such as MMAO-RAG, showing that semantic group-wise advantages enable stable, consistent improvements across tasks and distribution shifts without costly model updates.",
+      "support_explanation": "作者广泛增益、OOD及梯度自由效率原主张。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E006",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 1753-1769",
+      "quote": "Dynamics of Token Consumption\n\nWe visualize the token consumption throughout the learning process by Locally Weighted Scatterplot Smoothing (LOWESS)\n(\nCleveland, 1981\n;\nDang et al., 2025\n)\n. Figure\n3\nillustrates token usage trends on HotpotQA and 2WikiQA as representative tasks.\n(i) Exploration–Exploitation Transition\n. On HotpotQA, token consumption follows a non-monotonic trajectory. Early spikes reflect an exploratory phase in which the orchestrator activates multiple agents, constructs extended reasoning traces, and performs redundant steps to optimize performance. As experience accumulates, token usage declines monotonically, marking a transition to exploitation: low-efficiency agents are pruned, and reasoning chains are shortened. A subsequent plateau indicates convergence toward an efficient token budget. In contrast, 2WikiQA exhibits no initial exploratory peak, suggesting that transferable priors from previously accumulated reasoning experience support efficient agent orchestration with minimal trial-and-error.\n(ii) Functional Contributions.\nToken usage dynamics are tightly coupled with\nHERA\n’s experience library and prompt evolution. The library accumulates high-utility and generalizable experience, while evolving prompts enables agents to elevate their performance. Together, they drive emergent computational frugality, enabling high reasoning performance without explicit token-based penalties.",
+      "support_explanation": "学习过程token动态及定性解释，不是总训练成本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E007",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 1777-1804",
+      "quote": "Figure\n4\ncompares multi-hop QA performance against token consumption. Key observations include:\n(i) Superior Performance–Efficiency Trade-off\n. Across all datasets,\nHERA\nconsistently dominates the performance–efficiency frontier, achieving higher F1 scores with controlled token budgets. This demonstrates that gains arise from efficient reasoning trajectories instead of brute-force context scaling.\n\n(ii) Backbone-Specific Patterns.)\n\nHERA\nwith Qwen-3-14B achieves the highest absolute performance, whereas\nHERA\nwith Llama-3.1-8 consistently minimizes token consumption (\n∼\n\\sim\n4.7k–6.6k across most datasets) while preserving competitive F1 scores, indicating favorable computational efficiency.\n(iii) Consistent performance and efficiency gains over baselines\n. CORAG uses the largest number of tokens across most datasets (up to\n20\n​\nk\n+\n20k+\n) without converting these costs into sustainable reasoning improvements or effective knowledge reuse, resulting in suboptimal F1 (\ne.g\n.\n, 20.30 on MusiQue and 40.82 on HoVer). AceSearcher occupies an intermediate position, balancing moderate token usage and performance.",
+      "support_explanation": "推理token效率比较；不包含全部候选搜索与反思成本。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E008",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 2431-2431",
+      "quote": "This represents a reward-filtered empirical distribution instead of a properly normalized probabilistic posterior.",
+      "support_explanation": "EM附录明确非正规化概率后验。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E009",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 2513-2521",
+      "quote": "which implicitly increases the probability mass on high-performing structures by enriching the conditioning context (experience library).\n\nR\n⁡\n(\nτ\n)\nR(\\tau)\nhere serves as a heuristic surrogate rather than a proper probabilistic objective.",
+      "support_explanation": "奖励仅heuristic surrogate，不能推出单调提升定理。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E010",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 2641-2643",
+      "quote": "\\pi^{*}(\\Gamma\\mid q)\\propto\\pi_{\\text{base}}(S\\mid q)\\cdot\\exp\\Bigl(\\frac{f_{\\mathcal{E}}(\\Gamma,q)}{\\beta}\\Bigr).\n\nThe frozen base model therefore serves as an implicit KL anchor, preventing policy collapse and ensuring that the updated distribution stays within the support of the original model. This stability property is absent in unconstrained policy gradient methods, where aggressive updates can destabilise the base distribution.",
+      "support_explanation": "KL形式的理论解释，未给真实上下文更新的KL界。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E011",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 3195-3272",
+      "quote": "We standardize decoding and prompting across baselines to ensure fair comparison. For LLMs Qwen-3-4B, 8B, and 14B\n(\nYang et al., 2025a\n)\n, Qwen2.5-Instruct-7B\n(\nHui et al., 2024\n)\n, LLaMA3.1-8B\n(\nGrattafiori et al., 2024\n)\n, and GPT-4o-mini\n(\nHurst et al., 2024\n)\n, we follow official guidance. We set\nt\n​\ne\n​\nm\n​\np\n​\ne\n​\nr\n​\na\n​\nt\n​\nu\n​\nr\n​\ne\n=\n0.6\n,\nt\n​\no\n​\np\n−\np\n=\n0.95\n,\nt\n​\no\n​\np\n−\nk\n=\n20\n,\na\n​\nn\n​\nd\n​\nm\n​\ni\n​\nn\n−\np\n=\n0\ntemperature=0.6,top-p=0.95,top-k=20,andmin-p=0\n.",
+      "support_explanation": "附录E统一解码temperature .6，与正文分阶段温度需澄清。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E012",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 3055-3138",
+      "quote": "Table 2:\nStatistics of datasets.\n\nDataset\n\nTrain\n\nVal\n\nTest\n\nTotal\n\nReasoning\n\n2WikiQA\n\n154K\n\n16K\n\n22K\n\n192K\n\n2-hop (cross-doc)\n\nHotpotQA\n\n90K\n\n7.4K\n\n7.4K\n\n105K\n\n2-hop (bridge/comp)\n\nMuSiQue\n\n19K\n\n2.4K\n\n2.4K\n\n24K\n\n2–4 hop (compositional)\n\nBamboogle\n\n–\n\n–\n\n125\n\n125\n\nMulti-hop (adversarial)\n\nHoVer\n\n13K\n\n1.8K\n\n2.7K\n\n18K\n\n2–4 hop (verification)\n\nAmbigQA\n\n10K\n\n2K\n\n2K\n\n14K",
+      "support_explanation": "提供数据集标准划分规模，不等于实际curated训练/评测实例清单。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E013",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 4391-4427",
+      "quote": "for\neach\n(\nc\n,\nz\n,\nu\n)\n∈\nℰ\n(c,\\,z,\\,u)\\in\\mathcal{E}\n\ndo\n\n17:\n\nif\n\nz\nz\nwas used\nand\noutcome\n=\n=\nsuccess\nthen\n\n18:\n\nu\n←\nu\n+\n1\nu\\leftarrow u+1",
+      "support_explanation": "算法utility只在成功时加1；与正文经验success rate定义不一致。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E014",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 4700-4745",
+      "quote": "10:\n\n𝒩\ni\n.\nρ\n←\nρ\nvar\n\\mathcal{N}_{i}.\\rho\\leftarrow\\rho^{\\text{var}}\n\n11:\n\nτ\nvar\n←\nReExecute\n​\n(\nτ\n,\n𝒩\ni\n)\n\\tau^{\\text{var}}\\leftarrow\\textsc{ReExecute}(\\tau,\\,\\mathcal{N}_{i})\n\n⊳\n\\triangleright\nreplay full trajectory with variant prompt\n\n12:\n\nresults\n.\nAppend\n​\n(\n(\n,\n,\n,\n,\n,\n)\n)\n\\text{results}.\\textsc{Append}\\bigl((\\rho^{\\text{var}},\\,\\tau^{\\text{var}},\\,\\textsc{Eval}(\\tau^{\\text{var}}))\\bigr)",
+      "support_explanation": "单个agent变体重跑全轨迹，提供局部反事实信号。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E015",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 4825-4852",
+      "quote": "17:\n\nρ\ni\nt\n+\n1\n←\nΠ\n𝒞\n​\n(\nρ\ni\nt\n⊕\nΔ\n​\nρ\ni\n)\n\\rho_{i}^{t+1}\\leftarrow\\Pi_{\\mathcal{C}}\\!\\left(\\rho_{i}^{t}\\oplus\\Delta\\rho_{i}\\right)\n\n⊳\n\\triangleright\nproject onto length and coherence constraints\n𝒞\n\\mathcal{C}",
+      "support_explanation": "最终prompt按长度与一致性投影，未列独立接受阈值与回退。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E016",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 5092-5119",
+      "quote": "Case 3 (Fig.\n11\n) requires computing the temporal intersection of two activity periods, which demands not just parallel retrieval but a subsequent arithmetic-logical operation on the retrieved intervals. The system correctly decomposes the query and retrieves accurate individual activity periods: 1914–1938 for Hutchison and 1921–1944 for Howard. However, the Answer Generator returns “1914–1944” — the union of the two intervals rather than their intersection (which would correctly be 1921–1938).\nThis failure reveals a fundamental limitation: the system lacks an explicit set-theoretic reasoning module. This suggests that for questions requiring numerical or logical operations over retrieved facts, a dedicated symbolic computation step is necessary. The failure is not a retrieval failure but a reasoning composition failure — a distinction with important implications for system design.\n\nH.4\nCase 4 - Intersection Multi-hop QA\n\nFigure 12:\nCase 4 - Intersection Multi-hop QA\n\nFor Case 4 (Fig.\n12\n), which is a Intersection Multi-Hop type, the error illustrates a critical challenge in handling multi-entity property overlap. The pipeline’s goal is to identify a property that applies to both Pavel Alexandrov and Valentin Turchin. Here, the intended property is “Soviet”. However, the Query Rewriter reformulated the query around “what they were known for,” shifting focus to professional achievements (mathematician, computer scientist) rather than shared nationality or affiliation. Consequently, the Retriever retrieved evidence on their careers, and the Evidence Selector highlighted disciplinary roles, leading the Conclude Agent to output “scientists.”\n\nInsights from this case:\n\n•\n\nIntersection multi-hop questions require careful alignment of the property type, for example nationality, affiliation, or field must be explicitly targeted; otherwise, retrieval can be biased toward more salient but irrelevant attributes.\n\n•\n\nParallel entity retrieval is insufficient if the property semantics are ambiguous, as each agent may return correct facts individually, but the intersection reasoning fails if the property dimension differs.\n\n•\n\nConclude Agent reasoning is sensitive to initial decomposition: even small shifts in question framing (profession vs. nationality) propagate to a semantically plausible but incorrect intersection.",
+      "support_explanation": "失败案例明确组合推理与问题改写错误。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E017",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 1610-1644",
+      "quote": "Ours\n\nHERA (Qwen-3-14B)\n\n55.38\n\n52.50\n\n63.03\n\n60.02\n\n59.50\n\n64.77\n\n27.19\n\n26.57\n\n35.82\n\n54.43\n\n48.74\n\n67.81\n\n49.01\n\n46.46\n\n60.53\n\n67.35",
+      "support_explanation": "主表Qwen HERA六benchmark值；Bamboogle F1 60.53、HoVer accuracy 67.35。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E018",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 1372-1404",
+      "quote": "ExSearch (Qwen2.5-7B)\n\n55.04\n\n45.11\n\n58.22\n\n44.83\n\n44.03\n\n51.56\n\n22.73\n\n19.58\n\n27.10\n\n–\n\n—\n\n–\n\n56.12\n\n51.27\n\n63.80\n\n66.62",
+      "support_explanation": "ExSearch Bamboogle F1 63.80及HoVer 66.62；并非HERA所有指标均最优。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E019",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 2120-2167",
+      "quote": "Prompt Optimization and Evolution\n\nAutomatic Prompt Optimization treats prompts as a black-box search over seeds, feedback, candidate generation and selection\n(\nRamnath et al., 2025\n)\n.\nProgrammatic frameworks\n(\nKhattab et al., 2024\n)\ncompile LM pipelines and optimize prompts offline using user metrics, while textual backpropagation\n(\nYuksekgonul et al., 2025\n;\nHu et al., 2024\n;\nMa et al., 2025\n)\nutilizes natural-language feedback to refine collaboration protocols and behavioral instructions. Recent work jointly optimizes agentic structures and prompts\n(\nTian et al., 2025\n;\nMurthy et al., 2025\n;\nSpiess et al., 2025\n)\n, using search-based strategies\n(\nZhang et al., 2024\n)\n, genetic algorithms\n(\nAgrawal et al., 2026\n)\nand treats prompt optimization as experience-driven adaptation\n(\nYao et al., 2022\n;\nShinn et al., 2023\n;\nZhao et al., 2024\n;\nPei et al., 2025\n;\nXie et al., 2026\n)\n.",
+      "support_explanation": "作者承认DSPy、TextGrad及联合结构prompt优化邻近谱系。",
+      "kind": "author_report"
+    },
+    {
+      "evidence_id": "E020",
+      "material_id": "2604.00901.txt",
+      "sha256": "12427e2608132c81ac79dce9d45022367c657ff222a76954eec9060bb8c94277",
+      "locator": "lines 931-963",
+      "quote": "Implementation Details.\nWe consider core agents commonly employed in RAG: Query Decomposer, Retriever, Answer Generator, Query Rewriter, Evidence Selector, Context Validator, Reflect Agent, and Conclude Agent. We use Wikipedia as the corpus, returning top-\n5\npassages per step for multi-step retrieval and top-\n10\nfor single-turn methods via the BGE retriever\n(\nXiao et al., 2024\n)\n. We use Llama-3.1-8\n(\nGrattafiori et al., 2024\n)\nand Qwen-3-14B\n(\nYang et al., 2025a\n)\nas the backbone LLMs for the orchestrator and GPT-4o-mini for agents. All backbones remain frozen during learning and inference. To highlight data efficiency, we first use GPT-4o to annotate queries from 2WikiQA, HotpotQA, AmbigQA, and MusiQue along\nreasoning type\n(bridge, intersection, comparison, temporal multi-hop, ambiguous) and\ncomplexity\n(easy, medium, hard). Based on these annotations, we perform stratified, difficulty-aware sampling to construct a curated training set that ensures balanced coverage across reasoning categories while preserving distributional diversity (statistics in Appendix\nD\n). Generative sampling uses temperature 0.9 during group rollouts, and\n0.0\n/\n0.3\n0.0/0.3\nfor in-distribution and OOD evaluation, respectively. (Pseudocode for\nHERA\nis provided in Appendix\nG\n).",
+      "support_explanation": "正文模型、检索器、训练抽样与分阶段解码设置。",
+      "kind": "author_report"
+    }
+  ],
+  "signatures": [
+    {
+      "sig_id": "S1",
+      "object": "orchestration经验库与查询条件拓扑",
+      "information": "query profile、候选执行轨迹、F1、input/output tokens",
+      "operation": "组内成功/失败对比→提炼insights→ADD/MERGE/PRUNE/KEEP→按profile及utility检索",
+      "output": "可编辑经验库和新query拓扑",
+      "conditions": "有任务评分且组中同时含成功失败；固定模型和agent池",
+      "feedback": "任务F1优先、token次级",
+      "selection_rule": "任务表现排序；编辑由LLM管理，未明确独立新条目验收门槛",
+      "data": "ID训练query的候选轨迹；训练子集大小及评测冻结细节未给清",
+      "persistence": "跨训练query保存Profile–Insight–Utility条目",
+      "later_use": "后续query读取库来决定agent子集、顺序、依赖",
+      "claimed_effect": "改善跨实例合作与token效率",
+      "failure_boundary": "utility正文称success rate，算法仅计成功次数；无明确失败归一化、上限和回退",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003",
+        "E013"
+      ]
+    },
+    {
+      "sig_id": "S2",
+      "object": "角色agent prompts",
+      "information": "全局失败轨迹、orchestrator归因、近期失败buffer、prompt变体重放",
+      "operation": "定位失败agent→多轴prompt变体→重跑整轨迹→抽取战术规则/行为原则→投影合并",
+      "output": "跨query保留的角色prompt",
+      "conditions": "LLM归因可信；保留核心角色与工具契约",
+      "feedback": "变体重放任务分数与token",
+      "selection_rule": "对比后按长度/一致性整合，未报告独立holdout接受/回滚条件",
+      "data": "ID训练query的候选轨迹；训练子集大小及评测冻结细节未给清",
+      "persistence": "agent prompt替换",
+      "later_use": "后续拓扑调用改后agent",
+      "claimed_effect": "修复角色特异错误",
+      "failure_boundary": "归因准确性与改后整体退化未独立验证",
+      "evidence_ids": [
+        "E014",
+        "E015",
+        "E004"
+      ]
+    }
+  ],
+  "gap": {
+    "author_gap": "固定合作流水线无法同时修复全局拓扑与局部角色行为，纯标量反馈难归因，参数训练成本高。",
+    "checked_gap": "真实可操作对象是经验conditioning与角色prompt；冻结权重不是独有gap。联合结构/prompt优化与training-free GRPO已有，本文层级协同的剩余贡献需更强分轴对照。",
+    "lineage": [
+      {
+        "name": "training-free GRPO (Cai et al. 2025)",
+        "source": "本文§3.1，2604.00901v2",
+        "verified": "仅核本文作者描述，邻居原文未提供"
+      },
+      {
+        "name": "DSPy/TextGrad及联合结构prompt优化",
+        "source": "本文§6，2604.00901v2",
+        "verified": "仅核本文相关工作，邻居原文未提供"
+      }
+    ],
+    "closest_adjacent": [
+      "training-free GRPO",
+      "TextGrad",
+      "joint structure-and-prompt optimization"
+    ],
+    "residue": "如何把跨轨迹合作经验与局部角色修复分别归因并稳定留存。",
+    "stakes": "多hop QA错误会在依赖链传播；仅扩上下文或固定多agent不能保证正确。",
+    "method_response": "组内对比生成可编辑经验先验，角色变体重放生成局部修复并写回。",
+    "remaining_gap": "语义advantage是否优于简单经验/优化器、utility归一化、回退及完整成本/评测冻结未解决。",
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E014",
+      "E019"
+    ],
+    "unresolved": [
+      "请求总控提供同一共享输入包中的training-free GRPO (Cai et al. 2025)及最近联合结构/prompt优化原文，才能独立核最近邻差异；当前不阻塞受限评审。"
+    ]
+  },
+  "rs_pattern": {
+    "primary": "adapt_via_conditioning",
+    "supporting": [
+      "generative_process_redesign"
+    ],
+    "matches": [
+      {
+        "main_id": "adapt_via_conditioning",
+        "sub_id": "C03",
+        "role": "primary",
+        "fit": "high",
+        "tactic_steps_checked": [
+          "经验提炼为可检索context",
+          "frozen LLM读取后改变执行"
+        ],
+        "success_checks": [
+          "两种backbone、ID/OOD评价",
+          "库off消融"
+        ],
+        "failure_checks": [
+          "污染与评测冻结边界未充分给清",
+          "额外构建预算未匹配"
+        ],
+        "evidence_ids": [
+          "E002",
+          "E003",
+          "E004",
+          "E020"
+        ],
+        "reason": "经验条目作为非权重conditioning channel改变后续合作；不是把GRPO参数优化本身归入此卡。"
+      },
+      {
+        "main_id": "generative_process_redesign",
+        "sub_id": null,
+        "role": "supporting",
+        "fit": "medium",
+        "tactic_steps_checked": [
+          "拓扑候选群执行比较",
+          "失败驱动角色prompt重放"
+        ],
+        "success_checks": [
+          "库/prompt两轴消融"
+        ],
+        "failure_checks": [
+          "EM/KL仅解释非算法改进证明"
+        ],
+        "evidence_ids": [
+          "E001",
+          "E014",
+          "E008",
+          "E009"
+        ],
+        "reason": "把固定生成工作流变为候选比较与分层修复；现有子卡的具体生成顺序/中间表征操作不精确贴合，故sub=null。"
+      }
+    ],
+    "outside_taxonomy": false,
+    "reason": "固定策略被跨query经验conditioning替代，并重设计工作流生成过程。",
+    "executes_pattern": true,
+    "resolves_problem": false
+  },
+  "domain_pattern": {
+    "namespace": "rsi",
+    "matches": [
+      {
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01",
+        "version": "manifest-bound",
+        "fit": "high",
+        "condition_checks": [
+          {
+            "condition": "显式编辑维护及后续读取",
+            "status": "met",
+            "reason": "ADD/MERGE/PRUNE/KEEP及profile检索。"
+          },
+          {
+            "condition": "独立编辑门控与长期有界维护",
+            "status": "partial",
+            "reason": "任务分数grounding，但utility定义不一致，缺操作级消融和规模测试。"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E002",
+          "E003",
+          "E013"
+        ]
+      },
+      {
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H09",
+        "version": "manifest-bound",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "condition": "从compound trajectory定位角色并重放",
+            "status": "met",
+            "reason": "失败归因和单agent变体全轨迹执行。"
+          },
+          {
+            "condition": "归因校验、回滚及干净认证",
+            "status": "partial",
+            "reason": "有prompt-off消融；无归因vs随机修复对照和明确回退。"
+          }
+        ],
+        "evidence_ids": [
+          "E014",
+          "E015",
+          "E004"
+        ]
+      },
+      {
+        "main": "search_agent_architecture",
+        "sub": null,
+        "version": "manifest-bound",
+        "fit": "medium",
+        "condition_checks": [
+          {
+            "condition": "结构是可执行评分的变量",
+            "status": "met",
+            "reason": "候选agent子集、顺序、依赖被执行打分。"
+          },
+          {
+            "condition": "H17/H18精确时序",
+            "status": "unknown",
+            "reason": "非单一冻结拓扑故不套H17；用有标签query训练且测试更新/冻结未明，不强称H18无标签在线机制。"
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E020"
+        ]
+      }
+    ],
+    "unassigned": [],
+    "revision_proposals": []
+  },
+  "pattern_mapping": [
+    {
+      "rs_main": "adapt_via_conditioning",
+      "rs_sub": "C03",
+      "domain": {
+        "namespace": "rsi",
+        "main": "abstract_experience_into_guidance",
+        "sub": "H01"
+      },
+      "operation_correspondence": "成功/失败提炼→编辑经验库→新query检索conditioning",
+      "necessary_conditions": "经验来自任务反馈且以后实际读取",
+      "differences": "原卡不必学习持久store；领域卡要求维护/门控，本文操作级证据不足",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E003"
+      ]
+    },
+    {
+      "rs_main": "generative_process_redesign",
+      "rs_sub": null,
+      "domain": {
+        "namespace": "rsi",
+        "main": "attribute_and_patch_incumbent",
+        "sub": "H09"
+      },
+      "operation_correspondence": "全局执行失败归因到角色，再以全轨迹重放检查局部变体",
+      "necessary_conditions": "组件归因和重放接口可信",
+      "differences": "不是完整文本反传梯度；更多orchestrator选择性归因，未验证归因准确性",
+      "evidence_ids": [
+        "E014",
+        "E015"
+      ]
+    }
+  ],
+  "expectations": [
+    {
+      "id": "rs:adapt_via_conditioning/RE-1",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+      ],
+      "applies_when": "声称经验conditioning带来收益",
+      "applicable": true,
+      "status": "partial",
+      "reason": "经验库off与prompt evolution off存在，但编辑policy、随机同长度guidance和计算匹配未隔离。",
+      "evidence_ids": [
+        "E004"
+      ],
+      "score_item": [
+        "E.causality"
+      ]
+    },
+    {
+      "id": "rs:adapt_via_conditioning/RE-2",
+      "version": "manifest-bound",
+      "source_strength": "observed_in_reviews",
+      "source_refs": [
+        "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+      ],
+      "applies_when": "声称跨query和OOD泛化",
+      "applicable": true,
+      "status": "partial",
+      "reason": "给标准split和两个OOD任务，但实际构建实例、去重、测试时冻结/继续更新的协议不明。",
+      "evidence_ids": [
+        "E012",
+        "E020"
+      ],
+      "score_item": [
+        "E.holdout"
+      ]
+    },
+    {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/main/abstract_experience_into_guidance.md"
+      ],
+      "applies_when": "经验库跨query增长",
+      "applicable": true,
+      "status": "partial",
+      "reason": "维护词汇完整；utility成功次数vs成功率矛盾，未量化长期存储规模。",
+      "evidence_ids": [
+        "E002",
+        "E013"
+      ],
+      "score_item": [
+        "X"
+      ]
+    },
+    {
+      "id": "rsi:attribute_and_patch_incumbent/H09",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "patterns/sub/H09.md#step-by-step"
+      ],
+      "applies_when": "复合系统失败导致组件修改",
+      "applicable": true,
+      "status": "partial",
+      "reason": "变体重放提供相关反馈；未校验LLM错误归因或独立的接受/回滚。",
+      "evidence_ids": [
+        "E014",
+        "E015"
+      ],
+      "score_item": [
+        "X",
+        "E.causality"
+      ]
+    },
+    {
+      "id": "local:2604.00901-1",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "本文§3.3与Appendix A"
+      ],
+      "applies_when": "声称EM/KL保证稳定持续改进",
+      "applicable": true,
+      "status": "unmet",
+      "reason": "附录承认heuristic surrogate和非正规后验；KL最优解形式不能保证实际prompt更新接近原分布或单调收益。",
+      "evidence_ids": [
+        "E008",
+        "E009",
+        "E010"
+      ],
+      "score_item": [
+        "M"
+      ]
+    },
+    {
+      "id": "local:2604.00901-2",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "本文§5.3与Appendix E/G"
+      ],
+      "applies_when": "声称gradient-free/token效率",
+      "applicable": true,
+      "status": "partial",
+      "reason": "报告推理token，但候选群、重放、经验管理总token、训练query数和G/T未给；无全预算公平比较。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E011"
+      ],
+      "score_item": [
+        "E.cost"
+      ]
+    },
+    {
+      "id": "local:2604.00901-3",
+      "version": "manifest-bound",
+      "source_strength": "common_practice",
+      "source_refs": [
+        "本文实验及Appendix F/H"
+      ],
+      "applies_when": "以多数据集主表宣称广泛稳定提升",
+      "applicable": true,
+      "status": "partial",
+      "reason": "给数据集规模与反例，但主结果无seed/CI/显著性、搜索失败分母。",
+      "evidence_ids": [
+        "E012",
+        "E016",
+        "E017",
+        "E018"
+      ],
+      "score_item": [
+        "E.statistics",
+        "E.measurement"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C1",
+      "text": "HERA在所有数据集较近期SOTA平均提升38.69%，支持稳健泛化。",
+      "setting": "四ID QA + Bamboogle/HoVer OOD；Qwen3-14B/Llama3.1-8B orchestrator、GPT4o-mini执行agent",
+      "baseline_control": "多种RAG/agentic RAG；模型规模与执行agent组成不全相同",
+      "selection_vs_test": "声称curated ID train和test/OOD；具体实例、冻结及重叠审计不足",
+      "result_denominator": "Qwen F1 Hotpot63.03/2Wiki64.77/MusiQue35.82/Ambig67.81/Bamboogle60.53；HoVer Acc67.35；标准split规模不替代实际评测分母",
+      "evidence_ids": [
+        "E005",
+        "E017",
+        "E020",
+        "E012"
+      ],
+      "counterevidence": [
+        "E018"
+      ],
+      "allowed_conclusion": "作者报告多个任务较强表现，Bamboogle低于ExSearch63.80；38.69%汇总的基线/分母不清，不能据此宣称全指标SOTA或干净零样本泛化。"
+    },
+    {
+      "claim_id": "C2",
+      "text": "经验库与role-aware prompt evolution互补改善后续合作。",
+      "setting": "两种orchestrator，test set消融",
+      "baseline_control": "移除库；移除prompt evolution",
+      "selection_vs_test": "构建/评测细节不够明确，不能认证严格无污染",
+      "result_denominator": "正文库移除相对降幅6–15%；prompt evolution最大约30%；具体图数不从缺失页图臆造",
+      "evidence_ids": [
+        "E004",
+        "E003",
+        "E014"
+      ],
+      "counterevidence": [
+        "E013",
+        "E015"
+      ],
+      "allowed_conclusion": "有retained artifact相关的跨实例收益与粗粒度消融；不能归因于语义advantage/utility维护/归因policy分别优于简单替代。"
+    },
+    {
+      "claim_id": "C3",
+      "text": "EM/KL结构保证稳定一致改进且无需昂贵训练。",
+      "setting": "附录理论解释和token效率曲线",
+      "baseline_control": "推理token对照；没有完整训练/候选搜索等预算对照",
+      "selection_vs_test": "学习曲线不等于独立测试证明",
+      "result_denominator": "Llama推理约4.7k–6.6k tokens；未汇总全部演化成本",
+      "evidence_ids": [
+        "E007",
+        "E010"
+      ],
+      "counterevidence": [
+        "E008",
+        "E009"
+      ],
+      "allowed_conclusion": "可理解为启发式context policy iteration；既不是实际更新收敛证明，也不是总生命周期成本优势证明。"
+    }
+  ],
+  "assessment": {
+    "evidence_level": "retained",
+    "claim_support": "scoped",
+    "strongest_supported_claim": "作者报告持久经验库/角色prompt参与后续query且移除两者各会降低多数据集表现；这是retained层相关证据，不是improver本身递归变强或理论稳定改进证明。",
+    "unresolved": [
+      "实际训练/测试样本及冻结协议不完整",
+      "utility计数/成功率矛盾",
+      "缺独立seed与全搜索成本",
+      "缺邻居全文；无独立复现"
+    ]
+  },
+  "ratings": {
+    "G": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "定位合作拓扑与角色prompt固定的真实局限，已列联合优化/文本反馈最近邻；但对训练自由GRPO与联合结构prompt优化的剩余差异未充分对照。",
+      "evidence_ids": [
+        "E001",
+        "E019"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "M": {
+      "status": "resolved",
+      "rating": 3,
+      "reason": "组对比→库conditioning及归因重放→prompt整合明确对准宏/微失配；但EM/KL保证被作者自身heuristic限定，局部修复可靠性是未验证假设。",
+      "evidence_ids": [
+        "E001",
+        "E002",
+        "E014",
+        "E008",
+        "E009"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "X": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "主要操作与持久化读取可重建；utility定义不一致，G/T/维护阈值及独立接受回滚缺失，冻结时序不明。",
+      "evidence_ids": [
+        "E002",
+        "E003",
+        "E013",
+        "E015"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "E.measurement": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "EM/F1及任务accuracy为相关指标，表内支持多个数据集收益；总体38.69%口径、HoVer低基线以及正文/附录解码说明不够清楚，不能照单全收广泛最优。",
+      "evidence_ids": [
+        "E017",
+        "E018",
+        "E005",
+        "E011"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "E.causality": {
+      "status": "resolved",
+      "rating": 2,
+      "reason": "库off与prompt evolution off两backbone消融支持两组件相关贡献；缺同预算prompt-only/替代curator与归因对照，不隔离具体机制。",
+      "evidence_ids": [
+        "E004",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "E.holdout": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "列ID train/test和OOD任务，但curated子集大小/ID去重、库与prompt测试冻结及OOD是否继续用F1更新未清，干净留出主张弱。",
+      "evidence_ids": [
+        "E012",
+        "E020",
+        "E003"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "E.statistics": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "报告标准数据规模和失败案例/Bamboogle负结果；全文含A–H未见主表置信区间、跨演化seed/顺序重复或显著性。",
+      "evidence_ids": [
+        "E012",
+        "E016",
+        "E018"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    },
+    "E.cost": {
+      "status": "resolved",
+      "rating": 1,
+      "reason": "有推理token与动态曲线；候选组和角色重放/反思/库管理、失败候选等全成本未计清，baseline全预算未匹配。",
+      "evidence_ids": [
+        "E006",
+        "E007",
+        "E014"
+      ],
+      "counterevidence_ids": [],
+      "search_scope": [
+        "全文§1–7及Appendices A–H；主表1/3、实现E、伪代码G、失败案例H"
+      ]
+    }
+  },
+  "score": {
+    "raw": 50.0,
+    "display": 50.0,
+    "lower": 50.0,
+    "upper": 50.0,
+    "coverage": 1.0,
+    "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+  },
+  "status": "reviewed",
+  "reason": "完整版本含附录已读；可判在范围内并给受限分数，原稿自身报告缺陷不是缺材料。",
+  "rationale": "库与角色prompt确有持久化和消融，但维护定义、评测冻结、机制对照及演化总成本不足；EM/KL仅启发式解释，不能支撑稳定持续改进。"
+}

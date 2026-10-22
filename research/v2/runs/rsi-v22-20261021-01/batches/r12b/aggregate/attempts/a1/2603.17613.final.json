@@ -1,0 +1,1630 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r12b",
+ "attempt_id": "a1",
+ "seat": "opus55",
+ "paper": {
+  "paper_key": "2603.17613",
+  "paper_id": "2603.17613",
+  "title": "VeriAgent: A Tool-Integrated Multi-Agent System with Evolving Memory for PPA-Aware RTL Code Generation",
+  "version": "2603.17613v1",
+  "claim_type": "system_method",
+  "central_claim": "VeriAgent: a PPA-aware tool-integrated multi-agent framework (Programmer, Correctness, PPA agents with EDA tools) plus an Evolved Memory Mechanism (Rule/Structure/EDA-Signal memory nodes managed by insert/refine/discard) that enables continual improvement without retraining; maintains functional correctness and gives large PPA gains on VerilogEval and RTLLM."
+ },
+ "provenance": {
+  "input_hash": "14b0f98ce19936cd4f3ed62aa84e95b30948ec95cf7696dbbd51133650597330",
+  "input_package": "batches/r12b/manifest.json",
+  "rubric_version": "frozen v1.0 (calibration/rubric_frozen.md)",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "fable(claude-opus-5-5[1m])",
+  "aggregate_model": "fable(claude-opus-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "Opus aggregate seat via the configured claude-kimi type fable; no route probing. actual_model/session_id/receipt_ref are null because the subagent runtime exposes no verifiable provider receipt to this worker.",
+  "seat_attempts": {
+   "sol": "a1",
+   "son55": "a1"
+  },
+  "timestamp": "2026-10-22T00:02:20Z"
+ },
+ "materials": [
+  {
+   "material_id": "2603.17613.txt",
+   "url": "https://arxiv.org/html/2603.17613v1",
+   "version": "2603.17613v1",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "local_path": "research/fulltext/review-runs/rsi-v22-20261021-01/materials/2603.17613.txt",
+   "sections_read": [
+    "Opus: pinned text read before opening seat records (abstract, method, experiments, all tables, appendices; long proof derivations skimmed) ; targeted re-reads for every disputed field"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "sol:E01",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§2.1",
+   "quote": "Through this mechanism, the system gradually improves both correctness and physical quality without modifying model parameters.",
+   "support_explanation": "非权重闭环声明，区别权重训练。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E02",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§2.3.1",
+   "quote": "Each memory unit is represented as a structured memory node consisting of trigger conditions, guidance, and metadata.",
+   "support_explanation": "可留存对象与接口。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E03",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§2.3.2",
+   "quote": "The selected memory nodes are then activated, and their guidance fields are injected into the prompt of the agents to guide the next generation step.",
+   "support_explanation": "后续读取机制。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E04",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§2.3.3",
+   "quote": "the Memory Manager continuously evolves the memory pool after each task execution.",
+   "support_explanation": "跨task写回机制，符合范围但不单独证明retained效果。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E05",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§2.3.3",
+   "quote": "If the candidate node captures a previously unseen optimization pattern, it is directly inserted into the memory bank. If the node corresponds to an existing memory entry but provides improved or more precise guidance, the corresponding memory node is updated. Otherwise, the candidate node is considered redundant and discarded.",
+   "support_explanation": "LLM决定insert/refine/discard，无实测边际收益门。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E06",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.1",
+   "quote": "The evaluation pipeline uses Yosys and OpenROAD through NanGate45 process technology simulations.",
+   "support_explanation": "测量由EDA工具支持，但不是silicon验证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E07",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.1",
+   "quote": "The Programmer Agent interacts with the Correctness Agent and the PPA Agent for at most two rounds respectively.",
+   "support_explanation": "明确重试上限，不是总预算。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E08",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.1",
+   "quote": "Memory retrieval and triggering are performed by selecting the top-3 most relevant memory nodes from the memory bank based on semantic matching by LLM prompting.",
+   "support_explanation": "top3语义检索接口。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E09",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 3",
+   "quote": "VeriAgent (Full)\n\n5.119\n\n8.539\n\nw/o Memory\n\n3.839\n\n6.541\n\nw/o Tool Feedback\n\n3.344\n\n5.189\n\nw/o PPA Analyzer\n\n2.724\n\n3.405",
+   "support_explanation": "两模型memory-off下降，后面是累积消融。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E10",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.3",
+   "quote": "All ablation variants use the same base LLM, prompt templates, interaction rounds, and evaluation protocol as the full VeriAgent system.",
+   "support_explanation": "基础控制相同但curator调用不匹配。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E11",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.3",
+   "quote": "The ablation variants are constructed progressively, where each configuration removes one additional component based on the previous variant.",
+   "support_explanation": "非独立组件消融，不能逐项隔离所有交互。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E12",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.2",
+   "quote": "between two methods by comparing their PPA scores on tasks where both methods successfully produce synthesizable designs.",
+   "support_explanation": "win-rate分母是共同成功任务，有选择性。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E13",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2",
+   "quote": "asyn_fifo\n\n0.72 / 1397.032 / 7.67e-05\n\nN/A\n\nN/A\n\nN/A",
+   "support_explanation": "失败有报告，非零失败；均值如何处理缺失不清。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E14",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.2",
+   "quote": "The relative PPA score is obtained by normalizing each design with respect to the original reference implementation provided by the benchmark.",
+   "support_explanation": "乘积型相对PPA是代理，功耗设置/失败惩罚未完整披露。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E15",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§4.1",
+   "quote": "However, these approaches typically treat tool feedback as one-shot information and lack mechanisms to retain and reuse optimization knowledge across multiple iterations.",
+   "support_explanation": "作者对VeriOpt/VeriPPA差异的自述，非独立核对。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "sol:E16",
+   "material_id": "2603.17613v1.txt",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 1, VeriAgent rows",
+   "quote": "VeriAgent\n\nGPT-4o\n\n86.7\n\n90.2\n\n90.2\n\n78.2\n\n85.9\n\n89.1\n\n100.0\n\n72.4\n\nGemini3-pro-preview\n\n97.9\n\n99.3\n\n99.3\n\n98.1\n\n98.7\n\n98.7\n\n100.0\n\n89.7",
+   "support_explanation": "功能正确性数值直接表格支持；列顺序由Table1表头给出。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E001",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Abstract",
+   "quote": "In this work, we propose a PPA-aware, tool-integrated multi-agent framework for high-quality verilog code generation.",
+   "support_explanation": "Central system claim.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E002",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Abstract",
+   "quote": "A dedicated memory manager dynamically maintains the memory pool",
+   "support_explanation": "Evolved Memory Mechanism: memory manager maintains a pool of structured nodes from execution trajectories.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E003",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.1 para 2",
+   "quote": "existing systems generally lack a long-term optimization memory mechanism",
+   "support_explanation": "Author gap: no accumulation/refinement of optimization knowledge across design iterations.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E004",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.2.3.1",
+   "quote": "Each memory unit is represented as a structured memory node consisting of trigger conditions, guidance, and metadata.",
+   "support_explanation": "Node schema: trigger, guidance, metadata (three types: Rule, Structure, EDA Signal).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E005",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.2.3.2",
+   "quote": "Specifically, the context description together with all candidate triggers are provided to the LLM, which acts as a semantic selector to identify the most relevant triggers and memory nodes.",
+   "support_explanation": "Read path: LLM selects triggers over the whole candidate list; top-3 nodes are injected (Sec.3.1).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E006",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.2.3.3",
+   "quote": "Beyond memory activation during generation, the Memory Manager continuously evolves the memory pool after each task execution.",
+   "support_explanation": "Write path runs after every task; the paper does not separate construction tasks from evaluated tasks.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E007",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.2.3.3",
+   "quote": "Otherwise, the candidate node is considered redundant and discarded.",
+   "support_explanation": "Decide(insert/refine/discard) is an LLM judgement; there is no measured-utility admission, retirement, versioning or size bound.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E008",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.2.2",
+   "quote": "The Correctness Agent ensures functional validity by executing testbenches and analyzing simulation results.",
+   "support_explanation": "Testbench simulation is inside the generation loop; whether it is the benchmark's scoring testbench is not stated.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E009",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.1 Metrics",
+   "quote": "considered successfully solved if at least one candidate passes all provided testbenches",
+   "support_explanation": "pass@k scored with 'provided testbenches' - the same artifact type used for in-loop feedback (our reading).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E010",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.1 Implementation",
+   "quote": "The Programmer Agent interacts with the Correctness Agent and the PPA Agent for at most two rounds respectively.",
+   "support_explanation": "At most two feedback rounds; memory top-3 by LLM matching in the same paragraph.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E011",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.1 Implementation",
+   "quote": "we employ a smaller model (",
+   "support_explanation": "Retrieval/triggering use a smaller model (GPT-4o-mini) to cut cost; no cost numbers given.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E012",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.1 Implementation",
+   "quote": "as the backbone models and the sampling temperature is set to 0.8.",
+   "support_explanation": "Sampled generation at T=0.8; one set of numbers reported, no seeds.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E013",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.1 Evaluation Metrics",
+   "quote": "The evaluation pipeline uses Yosys and OpenROAD through NanGate45 process technology simulations.",
+   "support_explanation": "PPA flow: Yosys/OpenROAD/NanGate45 on RTLLM v2.0 following Chen et al. 2025.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E014",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.1 Benchmarks",
+   "quote": "The benchmark includes 50 problems covering combinational and sequential circuits, arithmetic modules, and control logic.",
+   "support_explanation": "RTLLM has 50 problems; Table 2 lists 44 designs (our count).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E015",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 PPA Scores",
+   "quote": "The relative PPA score is obtained by normalizing each design with respect to the original reference implementation provided by the benchmark.",
+   "support_explanation": "Stated definition; reported scores equal the ratio of column geometric means (Table 2) over different valid-design subsets (our recomputation: 44 original, 38 ChipSeek, 32 GPT-4o, 41 Gemini).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E016",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 caption",
+   "quote": "N/A indicates no functionally correct and synthesizable design.",
+   "support_explanation": "Failures are visible in Table 2: our count of N/A is 12 (VeriAgent gpt-4o), 3 (gemini3), 6 (ChipSeek-R1) of 44 rows.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "son55:E017",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 div_16bit Original",
+   "quote": "5.18 / 760.228 / 0.027",
+   "support_explanation": "Original div_16bit delay/area/power.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E018",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 div_16bit VeriAgent gpt-4o",
+   "quote": "5.35 / 755.706 / 1.71e-05",
+   "support_explanation": "Same delay and area as the original but ~1,600x lower power; implausible for a structurally similar combinational divider, suggests a protocol difference between columns (our inference).",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "son55:E019",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 div_16bit ChipSeek-R1",
+   "quote": "5.57 / 745.332 / 0.0234",
+   "support_explanation": "ChipSeek-R1 power stays at the original order of magnitude, unlike VeriAgent.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E020",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 adder_8bit",
+   "quote": "0.35 / 51.072 / 3.14e-05",
+   "support_explanation": "Original adder_8bit; VeriAgent shows 0.3 / 49.21 / 1.12e-06 (28x lower power at near-identical area).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E021",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 Geometric Mean Original",
+   "quote": "0.417 / 142 / 2.65e-05",
+   "support_explanation": "Original geometric means.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E022",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 Geometric Mean VeriAgent gpt-4o",
+   "quote": "0.362 / 122 / 6.89e-06",
+   "support_explanation": "Delay x1.15 and area x1.16 better but power x3.85 lower; the power term supplies most of the 5.1x score.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E023",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 Geometric Mean VeriAgent gemini3",
+   "quote": "0.294 / 109 / 5.72e-06",
+   "support_explanation": "Gemini: delay x1.42, area x1.30, power x4.6 relative to original.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E024",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2 adder_16bit ChipSeek-R1",
+   "quote": "0.07 / 93.632 / 4.44e-05",
+   "support_explanation": "ChipSeek-R1 adder delays of 0.07 ns (vs original 0.84 ns) are implausible for a 16-bit adder, hinting that this column's numbers come from a different flow.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E025",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 PPA Scores",
+   "quote": "Overall, VeriAgent achieves the best results on most individual metrics as well as the highest mean relative PPA score.",
+   "support_explanation": "Headline: Relative PPA 1.000 (original), 2.196 (ChipSeek-R1), 5.119 (gpt-4o), 8.539 (gemini3).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E026",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 win rate",
+   "quote": "between two methods by comparing their PPA scores on tasks where both methods successfully produce synthesizable designs.",
+   "support_explanation": "Win rate is conditioned on tasks where both succeeded; VeriPPA numbers copied from its paper under a different protocol.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E027",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 win rate",
+   "quote": "Since VeriOpt uses a different evaluation protocol and dataset from ours and does not release detailed implementation information, we compare the results of VeriPPA reported in its original paper for comparison.",
+   "support_explanation": "Cross-protocol comparison to VeriPPA; VeriOpt not compared.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E028",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.3 Ablation",
+   "quote": "The ablation variants are constructed progressively, where each configuration removes one additional component based on the previous variant.",
+   "support_explanation": "Cumulative ablation: Full 5.119/8.539 -> w/o Memory 3.839/6.541 -> w/o Tool Feedback 3.344/5.189 -> w/o PPA Analyzer 2.724/3.405 (GPT-4o/Gemini).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E029",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.3 Ablation",
+   "quote": "Removing the memory module leads to a noticeable performance drop, indicating that accumulated design experience plays an important role in guiding optimization.",
+   "support_explanation": "Memory contribution is ~23-25% of the relative PPA score in this ablation.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E030",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.3 Ablation",
+   "quote": "While an ideal system could rely on a manually curated memory bank designed by hardware experts",
+   "support_explanation": "No comparison to a static/expert-curated memory or to a non-evolving memory.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E031",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 Functional",
+   "quote": "In contrast, our framework directly leverages modern closed-source foundation models and achieves very high correctness.",
+   "support_explanation": "Functional comparison pits tool/testbench-feedback agent against training-based small models and direct prompting.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E032",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 Functional",
+   "quote": "Overall, these results suggest that functional correctness on current benchmarks is approaching saturation on existing benchmarks.",
+   "support_explanation": "Authors concede saturation; Direct Gemini3 already 91.7/94.9 on VerilogEval-Human pass@1/10.",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "son55:E033",
+   "material_id": "mat:2603.17613",
+   "material_sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Sec.3.2 win rate",
+   "quote": "successfully optimizes only a small subset of tasks, while our framework consistently produces valid implementations for a significantly larger portion of the benchmark.",
+   "support_explanation": "Valid-implementation claim vs Table 2 N/A counts (12 for gpt-4o).",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "opus:O01",
+   "material_id": "2603.17613.txt",
+   "material_hash": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2, 'Geometric Mean' row, ChipSeek-R1 column",
+   "quote": "0.329 / 112 / 1.93e-05",
+   "support_explanation": "Opus recomputation from the 44 per-design rows. The reported Geometric Mean reproduces only for Original (0.417/141.5/2.65e-5, n=44). Over each column's valid designs: ChipSeek-R1 0.310/92.9/1.80e-5 (n=38) vs reported 0.329/112/1.93e-5; VeriAgent-gpt-4o 0.345/129.3/5.85e-6 (n=32) vs 0.362/122/6.89e-6; VeriAgent-gemini3 0.286/103.5/5.31e-6 (n=41) vs 0.294/109/5.72e-6.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O02",
+   "material_id": "2603.17613.txt",
+   "material_hash": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "§3.2 PPA Scores",
+   "quote": "The relative PPA score is obtained by normalizing each design with respect to the original reference implementation provided by the benchmark.",
+   "support_explanation": "Opus recomputation. Per-design normalisation against Original, over designs valid in both, gives geometric means of 2.49 (ChipSeek-R1), 9.44 (gpt-4o) and 9.99 (gemini3); arithmetic means are 280/154/129. Neither matches the reported 2.196/5.119/8.539, which equal the ratio of the reported column GMs (2.21/5.16/8.56) over unequal design sets.",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "opus:O03",
+   "material_id": "2603.17613.txt",
+   "material_hash": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "sha256": "9ebe9986d3f0303fdcb5d32d86a4e6f9f96f8160e6b1c93c43d4d1fd2e886553",
+   "locator": "Table 2, comparator_3bit, VeriAgent columns",
+   "quote": "0.1 / 11.704 / 3.03e-07",
+   "support_explanation": "Identical delay and area to Original (0.1 / 11.704) with 17× lower power (5.26e-06 → 3.03e-07). The same pattern holds for barrel_shifter and ROM. This suggests different power-estimation conditions, not design differences; div_16bit shows 1579×.",
+   "kind": "our_inference"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Memory bank of structured nodes (trigger, guidance, metadata) of three types: Rule, Structure, EDA Signal",
+   "information": "Full task trajectory T: spec, generated RTL, modification steps, simulation feedback, PPA results; existing node triggers",
+   "operation": "GenerateNodes(T) -> top-K similar by LLM prompt -> LLM Decide(insert / refine / discard)",
+   "output": "Updated memory pool after each task",
+   "conditions": "Runs for every executed task; K and thresholds unspecified; node count/size unreported",
+   "feedback": "Tool-verified simulation and synthesis outcomes, abstracted into semantic signals by the Correctness/PPA agents",
+   "selection_rule_data": "LLM judgement of novelty/refinement; no measured marginal utility, no held-out gate, no retirement/size bound",
+   "persistence": "In-pool across tasks; no versioning, provenance, rollback or expiry; initial memory state not stated",
+   "later_use": "Before each generation step an LLM selects top-3 nodes by trigger and injects their guidance into agent prompts",
+   "claimed_effect": "Removing memory lowers relative PPA 5.119->3.839 (GPT-4o) and 8.539->6.541 (Gemini)",
+   "failure_boundary": "Not discussed; no node examples, prompts or failure cases shown",
+   "evidence_ids": [
+    "son55:E002",
+    "son55:E004",
+    "son55:E005",
+    "son55:E006",
+    "son55:E007",
+    "son55:E029"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Closed-loop generation workflow Programmer -> Correctness Agent (testbench) -> PPA Agent (Yosys/OpenROAD)",
+   "information": "Simulation logs, timing/area/power reports summarized into semantic signals; testbench possibly the scoring one",
+   "operation": "Programmer refines RTL for at most two rounds per feedback agent; PPA step only after functional pass",
+   "output": "Final Verilog per task (pass@k candidates)",
+   "conditions": "Closed-source backbones GPT-4o / Gemini-3-Pro at T=0.8",
+   "feedback": "Tool outputs",
+   "selection_rule_data": "Functional pass then PPA analysis; selection among k samples by tests",
+   "persistence": "None per task except via S1",
+   "later_use": "n/a",
+   "claimed_effect": "Functional 98.1 pass@1 VerilogEval-Human (Gemini); relative PPA 5.1x/8.5x",
+   "failure_boundary": "12/44 (gpt-4o) and 3/44 (gemini) designs have no valid result in Table 2",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009",
+    "son55:E010",
+    "son55:E013",
+    "son55:E016"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "RTL generation ignores PPA, uses EDA feedback shallowly as one-shot signals, and has no long-term optimization memory (E003).",
+  "checked_gap": "PPA-awareness and tool use are concrete gaps; the 'no memory' part is a transplant of generic insert/refine/discard agent memory (as in H01 members) to RTL; nothing shows the memory, rather than the LLM+tools, is the binding bottleneck.",
+  "lineage": {
+   "ancestors": [
+    "RTL LLMs (RTLCoder, CodeV, OriGen, CraftRTL)",
+    "training-free multi-agent RTL (Zhao 2025b, ChatDev-style)",
+    "Reflexion-style self-feedback"
+   ],
+   "frontier": "ChipSeek-R1 (RL, PPA), VeriPPA and VeriOpt (in-context PPA optimization)"
+  },
+  "closest_adjacent": [
+   {
+    "name": "ChipSeek-R1 (Chen 2025)",
+    "source_version": "cited in-paper only; numbers reproduced inside Table 2, flow identity unverified",
+    "solved": "RL for functional+PPA in RTL",
+    "unsolved": "per VeriAgent: depends on small trained models"
+   },
+   {
+    "name": "VeriPPA (Thorat 2025)",
+    "source_version": "cited in-paper only; compared via original-paper numbers",
+    "solved": "ICL PPA optimization",
+    "unsolved": "no automated experience accumulation (author view)"
+   },
+   {
+    "name": "VeriOpt (Tasnia 2025)",
+    "source_version": "cited in-paper only; not compared",
+    "solved": "ICL PPA optimization",
+    "unsolved": "same"
+   }
+  ],
+  "residue": "Whether evolving memory adds value beyond tool-in-the-loop prompting, on tasks not used to build it, is unknown.",
+  "stakes": "PPA quality decides industrial usability of RTL generation.",
+  "method_response": "EDA tools in the loop plus semantic abstraction of reports plus a trigger-guidance memory evolved from trajectories.",
+  "remaining_gap": "Memory construction/eval separation, cost, variance, aggregation and power-measurement consistency, prompts/node examples.",
+  "evidence_ids": [
+   "son55:E003",
+   "son55:E024",
+   "son55:E027"
+  ],
+  "unresolved": "Request controller to pin ChipSeek-R1, VeriPPA, VeriOpt originals to check flow identity and numbers."
+ },
+ "rs_pattern": {
+  "primary": "decompose_and_delegate",
+  "supporting": [
+   "adapt_via_conditioning"
+  ],
+  "matches": [
+   {
+    "main_id": "decompose_and_delegate",
+    "sub_id": "C25",
+    "role": "primary",
+    "fit": "medium",
+    "tactic_steps_checked": [
+     "step1 name unreliable sub-problem and sound solver: executed (functional sim + synthesis/PPA as exact solvers; E008, E013)",
+     "step2 typed machine-checkable artifact: partial (RTL code is executable; reports are LLM-summarized into semantic signals, not typed)",
+     "step3 close the loop mid-construction with solver output: executed (<=2 rounds each; E010)",
+     "step4 ablate verification feedback: partial (cumulative 'w/o Tool Feedback' removes memory too; E028)",
+     "step5 account for solver cost and privileged-signal disclosure: missing (no cost; testbench provenance unstated; E008, E009)"
+    ],
+    "success_checks": [
+     "single load-bearing mechanism isolated: partial (PPA Agent removal has the largest effect, E028)",
+     "obtainable signals drive the loop: met"
+    ],
+    "failure_checks": [
+     "assembly of off-the-shelf agents: partly present",
+     "single benchmark family: present (RTL only)",
+     "cost unmeasured: present"
+    ],
+    "evidence_ids": [
+     "son55:E008",
+     "son55:E009",
+     "son55:E010",
+     "son55:E013",
+     "son55:E028"
+    ],
+    "reason": "Opus confirms son55. The LLM emits an executable RTL artifact, which is routed to sound external solvers (simulation testbenches, Yosys/OpenROAD synthesis), and their outputs close the loop during construction (≤2 rounds each). That is C25. The paper's own ablation makes this loop load-bearing (removing tool feedback/PPA agent costs more than removing memory)."
+   },
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": null,
+    "role": "supporting",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "retrieved guidance injected into prompts without weight updates: executed (E005)",
+     "cheaper conditioning baseline and source-quality sensitivity: missing (E030)"
+    ],
+    "success_checks": [],
+    "failure_checks": [
+     "no cheaper alternative compared: present"
+    ],
+    "evidence_ids": [
+     "son55:E005",
+     "son55:E030"
+    ],
+    "reason": "Supporting (sol's primary). Trigger-matched memory guidance injected into prompts conditions the frozen generator. Sub null as in both seats: there is no canonical cross-task schema and no upstream phase teaching the model to read it."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "decompose_and_delegate/C25 for the tool-in-the-loop generation; adapt_via_conditioning for the retained memory read path. Identification only; the memory is still the in-scope retained object.",
+  "executes_pattern": true,
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "rsi-assets@52ff9657",
+    "fit": "high",
+    "condition_checks": [
+     "S3 grounding signal: met (tool outcomes)",
+     "S4 explicit maintenance: partial (insert/refine/discard only)",
+     "S5 gate on kept entries: unmet (LLM judgement)",
+     "F2 new domain is the novelty: partial"
+    ],
+    "evidence_ids": [
+     "son55:E004",
+     "son55:E006",
+     "son55:E007"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H00",
+    "version": "rsi-assets@52ff9657",
+    "fit": "medium",
+    "condition_checks": [
+     "lesson extraction from outcome with trigger condition: executed (E004)",
+     "contrast of success vs failure: not described",
+     "store-off ablation: met (w/o Memory) but cumulative",
+     "construction vs evaluation stream: not reported"
+    ],
+    "evidence_ids": [
+     "son55:E004",
+     "son55:E006",
+     "son55:E028"
+    ]
+   }
+  ],
+  "unassigned": false,
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "decompose_and_delegate",
+   "rs_sub": "C25",
+   "domain_namespace": "rsi",
+   "domain_main": "abstract_experience_into_guidance",
+   "domain_sub": "H01",
+   "operation_correspondence": "RS: tool/solver output closes the loop on an artifact. rsi: the same tool outcomes become trigger-conditioned memory nodes curated by insert/refine/discard and re-injected.",
+   "required_conditions_differences": "RS requires ablation of verification feedback and cost accounting; rsi H01 requires an outcome gate on edits and ablating the curator with separated streams; neither is met.",
+   "evidence_ids": [
+    "son55:E007",
+    "son55:E008",
+    "son55:E028"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:abstract_experience_into_guidance/S4",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#Success conditions"
+   ],
+   "applies_when": "声称记忆演化带来持续RTL优化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "局部更新与拒绝重复候选明确，无界限/遗忘/冲突恢复。",
+   "evidence_ids": [
+    "sol:E05",
+    "son55:E007"
+   ],
+   "score_item": "X",
+   "origin": "sol:rsi:abstract_experience_into_guidance/S4; son55:rsi:abstract_experience_into_guidance/S4"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/H01-step5",
+   "version": "manifest-fixed",
+   "source_strength": "single_source",
+   "source_refs": [
+    "patterns/sub/H01.md#Step-by-Step 5"
+   ],
+   "applies_when": "声称记忆演化带来持续RTL优化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus: sol's 'H01' and son55's 'H01-step5' ask the same question. Step 5 requires ablating the curator, not just the store, and separating the construction and evaluation streams. w/o Memory removes the whole store, there is no append-only/frozen/expert-memory arm, and the streams are not separated. sol's 'partial' credits the store ablation, which step 5 explicitly says is insufficient.",
+   "evidence_ids": [
+    "sol:E09",
+    "sol:E10",
+    "sol:E11",
+    "son55:E006",
+    "son55:E030"
+   ],
+   "score_item": "E.causality",
+   "origin": "sol:rsi:abstract_experience_into_guidance/H01; son55:rsi:abstract_experience_into_guidance/H01-step5"
+  },
+  {
+   "id": "local:2603.17613-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§2.3.3; §3.1–3.3"
+   ],
+   "applies_when": "声称记忆演化带来持续RTL优化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "需交代构建顺序与memory freeze并测试未参与构建任务；全文未报告。",
+   "evidence_ids": [
+    "sol:E04",
+    "son55:E006"
+   ],
+   "score_item": "E.holdout",
+   "origin": "sol:local:2603.17613-1; son55:local:2603.17613-1"
+  },
+  {
+   "id": "local:2603.17613-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Table 2; §3.2"
+   ],
+   "applies_when": "声称记忆演化带来持续RTL优化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Opus: the same aggregate-metric question in both seats. The headline Relative PPA does not follow its stated per-design definition (opus:O02). The reported column GMs do not reproduce from Table 2 for three of four columns (opus:O01), and they are taken over unequal valid subsets (44/38/32/41) with failures excluded. Unmet, not partial.",
+   "evidence_ids": [
+    "sol:E12",
+    "sol:E13",
+    "sol:E14",
+    "son55:E015",
+    "son55:E016",
+    "son55:E018",
+    "son55:E022",
+    "son55:E024"
+   ],
+   "score_item": "E.measurement",
+   "origin": "sol:local:2603.17613-2; son55:local:2603.17613-2"
+  },
+  {
+   "id": "local:2603.17613-3",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "§3.1; §3.3"
+   ],
+   "applies_when": "声称记忆演化带来持续RTL优化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "轮数相同不等token/tool/curator成本相同；无总成本表。",
+   "evidence_ids": [
+    "sol:E07",
+    "sol:E10"
+   ],
+   "score_item": "E.cost",
+   "origin": "sol:local:2603.17613-3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S3",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Store built from outcomes",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "met",
+   "reason": "Nodes derive from trajectories whose correctness/PPA outcomes come from simulators and synthesis.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E006"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S3"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/S5",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#success-conditions"
+   ],
+   "applies_when": "Entries gate reuse",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Admission is an LLM Decide call; no test that a node helps on any task.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:abstract_experience_into_guidance/S5"
+  },
+  {
+   "id": "rsi:abstract_experience_into_guidance/F2",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/abstract_experience_into_guidance.md#failure-modes"
+   ],
+   "applies_when": "Known loop in a new vertical",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "partial",
+   "reason": "Domain-specific trigger types (code structure, EDA signals) are tailored, but the extract-decide-inject loop is generic.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E007"
+   ],
+   "score_item": "G",
+   "origin": "son55:rsi:abstract_experience_into_guidance/F2"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S1",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md#success-conditions"
+   ],
+   "applies_when": "Credit behind retention",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No memory-on/off counterfactual credits individual nodes.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:evidence_gated_retention/S1"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/F1",
+   "version": "rsi-assets@52ff9657",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "patterns/main/evidence_gated_retention.md#failure-modes"
+   ],
+   "applies_when": "Infrastructure offered as the gate",
+   "applicable": true,
+   "polarity": "avoid_failure",
+   "status": "partial",
+   "reason": "The memory manager structure is the gate; its decisions are not evidence-based.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_item": "X",
+   "origin": "son55:rsi:evidence_gated_retention/F1"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-1",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#reviewer-expectations"
+   ],
+   "applies_when": "Delegated tools add cost",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No latency, call count, token or synthesis-time numbers; only a note that a smaller model handles retrieval.",
+   "evidence_ids": [
+    "son55:E011"
+   ],
+   "score_item": "E.cost",
+   "origin": "son55:rs:decompose_and_delegate/RE-1"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-2",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#reviewer-expectations"
+   ],
+   "applies_when": "Multi-component pipeline",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "partial",
+   "reason": "Progressive ablation exists but is cumulative and single-run, so component effects are order-dependent.",
+   "evidence_ids": [
+    "son55:E028"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:decompose_and_delegate/RE-2"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#reviewer-expectations"
+   ],
+   "applies_when": "Prompt-based pipeline",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No agent or memory-manager prompts, node examples or hyperparameters (K, thresholds) are given.",
+   "evidence_ids": [
+    "son55:E005"
+   ],
+   "score_item": "X",
+   "origin": "son55:rs:decompose_and_delegate/RE-3"
+  },
+  {
+   "id": "rs:decompose_and_delegate/RE-5",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/decompose_and_delegate.md#reviewer-expectations"
+   ],
+   "applies_when": "Compare to simpler unified baseline",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "Table 2 has no direct-LLM or PPA-prompted single-agent column; functional baseline lacks feedback rounds.",
+   "evidence_ids": [
+    "son55:E031",
+    "son55:E025"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:decompose_and_delegate/RE-5"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-15-31@3fc06b62",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "research/reference/researchstudio-15-31/ideation-patterns/adapt_via_conditioning.md#reviewer-expectations"
+   ],
+   "applies_when": "Retrieved-guidance claim",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No static/expert-curated or non-evolving memory comparison despite the authors naming it.",
+   "evidence_ids": [
+    "son55:E030"
+   ],
+   "score_item": "E.causality",
+   "origin": "son55:rs:adapt_via_conditioning/RE-3"
+  },
+  {
+   "id": "local:2603.17613-5",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec.2.2, Sec.3.1"
+   ],
+   "applies_when": "Oracle testbench in the loop",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unknown",
+   "reason": "Correctness Agent runs testbenches and pass@k uses 'provided testbenches'; identity is not disclosed.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E009"
+   ],
+   "score_item": "E.holdout",
+   "origin": "son55:local:2603.17613-3",
+   "note": "A4: son55's local-3 (in-loop testbench identity) renumbered; sol's local-3 is cost."
+  },
+  {
+   "id": "local:2603.17613-4",
+   "version": "local-1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "Sec.3.1"
+   ],
+   "applies_when": "Sampled (T=0.8) agentic runs",
+   "applicable": true,
+   "polarity": "satisfy",
+   "status": "unmet",
+   "reason": "No repeated runs, std or CI; one number per cell.",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_item": "E.statistics",
+   "origin": "son55:local:2603.17613-4"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "VeriAgent maintains very high functional correctness on VerilogEval and RTLLM v1.1.",
+   "setting": "GPT-4o and Gemini-3-Pro-Preview, T=0.8, pass@1/5/10 and Syn@5/Func@5",
+   "baseline_control": "Training-based RTL models and Direct prompting of the same backbones",
+   "selection_vs_test": "Testbench simulation feedback inside the loop; pass@k scored with 'provided testbenches'",
+   "result_denominator": "Gemini: Human pass@1 91.7->98.1, Machine 88.8->97.9; GPT-4o RTLLM Func@5 72.4 (below ChipSeek-R1 82.8)",
+   "evidence_ids": [
+    "son55:E031",
+    "son55:E032"
+   ],
+   "counterevidence": [
+    "son55:E008",
+    "son55:E009"
+   ],
+   "allowed_conclusion": "Feedback-equipped agents score higher than direct prompting on saturated benchmarks; attribution to the memory or to hidden-test feedback is not possible."
+  },
+  {
+   "claim_id": "C2",
+   "text": "VeriAgent delivers significant PPA improvements (Relative PPA 5.119 / 8.539 vs ChipSeek-R1 2.196).",
+   "setting": "RTLLM v2.0, Yosys + OpenROAD, NanGate45, 44 listed designs",
+   "baseline_control": "Original benchmark designs and ChipSeek-R1 (flow identity unverified)",
+   "selection_vs_test": "Memory evolves on the same benchmark",
+   "result_denominator": "Valid designs 44 / 38 / 32 / 41 for original / ChipSeek-R1 / gpt-4o / gemini3",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E022",
+    "son55:E023",
+    "son55:E025"
+   ],
+   "counterevidence": [
+    "son55:E016",
+    "son55:E018",
+    "son55:E019",
+    "son55:E020",
+    "son55:E024",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "allowed_conclusion": "Under the authors' tables, VeriAgent's mean power-weighted PPA ratio is higher than ChipSeek-R1's; magnitude and attribution are unreliable until the power/delay measurements are explained."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Evolved memory contributes to improvement without retraining.",
+   "setting": "Cumulative ablation on PPA score",
+   "baseline_control": "w/o Memory (same rounds and base LLM)",
+   "selection_vs_test": "Not separated",
+   "result_denominator": "single runs: 5.119->3.839, 8.539->6.541",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E029"
+   ],
+   "counterevidence": [
+    "son55:E006",
+    "son55:E030",
+    "son55:E012"
+   ],
+   "allowed_conclusion": "Disabling the memory manager lowers the reported score by ~23-25% in one run each; retained, transferable improvement is not shown."
+  },
+  {
+   "claim_id": "C4",
+   "text": "VeriAgent beats VeriPPA and ChipSeek-R1 in pairwise win rate on overlapping tasks.",
+   "setting": "Fig.2 (image)",
+   "baseline_control": "VeriPPA numbers from its paper",
+   "selection_vs_test": "n/a",
+   "result_denominator": "Only tasks where both succeed",
+   "evidence_ids": [
+    "son55:E026",
+    "son55:E027"
+   ],
+   "counterevidence": [
+    "son55:E033"
+   ],
+   "allowed_conclusion": "Not checkable from text; cross-protocol and conditional on both-success."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "Feedback-equipped agents (testbench + synthesis loops) report higher functional pass rates than direct prompting on saturated benchmarks, and lower delay/area than the reference implementations on many RTLLM v2.0 designs (per-design raw values). The headline Relative PPA (5.119/8.539) and the memory ablation that uses it cannot be reproduced from Table 2 (opus:O01, opus:O02), and the power column is not comparable across columns (opus:O03). Retained, transferable memory gains are not shown.",
+  "claim_support_note": "Scoped (sol), not unresolved (son55): the author claim is kept and narrowed to what the per-design table supports. The memory-attribution part stays open in 'unresolved'.",
+  "unresolved": [
+   "Memory construction vs evaluation streams; initial memory; order.",
+   "Whether the in-loop testbenches are the scoring testbenches.",
+   "Power-estimation conditions per column; the GM/Relative PPA computation.",
+   "Flow identity for ChipSeek-R1 and VeriPPA numbers; Figure 2 contents (image only).",
+   "Cost; seeds; prompts and node examples."
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. PPA neglect, shallow tool feedback and no accumulation are concrete limitations with neighbours named (VeriPPA, VeriOpt, ChipSeek-R1). The memory gap is generic agent memory transplanted, and the neighbours are cited, not studied.",
+   "evidence_ids": [
+    "son55:E003",
+    "sol:E15"
+   ],
+   "counterevidence_ids": [
+    "son55:E027"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. Tool-in-the-loop plus trigger-conditioned memory is coherent, but there is no account or node example of why memory should raise PPA, and retention is an unexamined LLM Decide call.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E007",
+    "sol:E05"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. The node schema, read path and insert/refine/discard are described. Prompts, K beyond top-3, thresholds, initial memory, size and task order are absent, and there is no gate, versioning or retirement.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E005",
+    "son55:E006",
+    "son55:E010"
+   ],
+   "counterevidence_ids": [
+    "son55:E007",
+    "son55:E008"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Opus sides with son55 and extends the reason. The tools (Yosys/OpenROAD, NanGate45) are standard, but the headline measurement is not reproducible. (i) The reported Geometric Mean row reproduces only for Original, not for ChipSeek-R1 or either VeriAgent column (opus:O01). (ii) Relative PPA does not equal the stated per-design normalisation; it equals a ratio of column GMs over unequal valid subsets (opus:O02, son55:E015). (iii) Power drops 17× at identical delay and area (opus:O03) and 1579× for div_16bit (son55:E017, son55:E018), which points to non-comparable power conditions. (iv) VeriPPA is compared across protocols. sol's 2 notes the power-activity and aggregation questions but does not test them. This is r11a's TTE level, where reported numbers contradict the stated protocol.",
+   "evidence_ids": [
+    "son55:E013",
+    "son55:E021",
+    "opus:O01",
+    "opus:O02",
+    "opus:O03"
+   ],
+   "counterevidence_ids": [
+    "son55:E015",
+    "son55:E016",
+    "son55:E018",
+    "son55:E022",
+    "son55:E024",
+    "son55:E027"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Both seats 2; re-checked. w/o Memory with the same LLM, prompts and rounds on two backbones is the relevant store-off toggle. The ablation is cumulative and single-run, with no static/expert memory or curator-off arm, and tool/PPA components explain more of the score. The metric's reproducibility is counted under E.measurement only (A2).",
+   "evidence_ids": [
+    "son55:E028",
+    "son55:E029",
+    "sol:E10"
+   ],
+   "counterevidence_ids": [
+    "son55:E030",
+    "son55:E031"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "Both seats 0; re-checked. Memory evolves 'after each task execution' on the benchmarks being reported, with no construction/evaluation split, freeze, initial-memory or order disclosure. Whether the in-loop testbenches are the scoring testbenches is unstated.",
+   "evidence_ids": [],
+   "counterevidence_ids": [
+    "son55:E006",
+    "son55:E008",
+    "son55:E009"
+   ],
+   "search_scope": [
+    "§2.3 Memory (all subsections)",
+    "§3.1 Setup (benchmarks, metrics, implementation)",
+    "§3.3 Ablation",
+    "no appendix exists in the pinned v1 text"
+   ]
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Both seats 1 (A2 ladder): benchmark sizes and per-design N/A failures are visible; there are no seeds, variance, CI or tests despite T=0.8 sampling.",
+   "evidence_ids": [
+    "son55:E016",
+    "sol:E13"
+   ],
+   "counterevidence_ids": [
+    "son55:E012"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "not_reported",
+   "rating": 0,
+   "reason": "Both seats 0; re-checked. There are no LLM-call, token, wall-clock or synthesis-time figures for agents, memory manager or EDA runs; the smaller-model remark is intent, not measurement.",
+   "evidence_ids": [],
+   "counterevidence_ids": [
+    "son55:E011"
+   ],
+   "search_scope": [
+    "§3.1 Implementation Details",
+    "§3.2 Main Results",
+    "§3.3 Ablation",
+    "whole v1 text (no appendix)"
+   ]
+  }
+ },
+ "status": "reviewed",
+ "reason": "Complete pinned v1 text read (no appendix exists; Figures 1–2 are images). In scope (A3): a non-weight structured memory is edited after each task from EDA/testbench feedback and injected into later generations. claim_type system_method. All eight items resolved.",
+ "resolutions": [
+  {
+   "field_path": "assessment.claim_support",
+   "sol_value": "scoped",
+   "son55_value": "unresolved",
+   "decision": "sol",
+   "final_value": "scoped",
+   "reason": "The author claim (memory + tools improve correctness and PPA) can be kept and narrowed to the per-design table and functional pass rates. son55's 'unresolved' items are carried in assessment.unresolved. claim_support is not scored.",
+   "evidence_ids": [
+    "sol:E16",
+    "son55:E013",
+    "opus:O02"
+   ],
+   "score_impact": "none (not scored)"
+  },
+  {
+   "field_path": "rs_pattern.primary",
+   "sol_value": "adapt_via_conditioning",
+   "son55_value": "decompose_and_delegate",
+   "decision": "son55",
+   "final_value": "decompose_and_delegate",
+   "reason": "See rs_pattern: the tool-in-the-loop artifact/solver loop is C25 and is load-bearing in the paper's own ablation. The memory read path is kept as supporting adapt_via_conditioning.",
+   "evidence_ids": [
+    "son55:E008",
+    "son55:E010",
+    "son55:E028"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "rs_pattern.matches",
+   "sol_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ]
+   ],
+   "son55_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "decompose_and_delegate",
+     "C25"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "adapt_via_conditioning",
+     null
+    ],
+    [
+     "decompose_and_delegate",
+     "C25"
+    ]
+   ],
+   "reason": "Follows primary; adapt_via_conditioning sub null as in both seats.",
+   "evidence_ids": [
+    "son55:E005",
+    "son55:E013"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "domain_pattern.matches",
+   "sol_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ]
+   ],
+   "son55_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ],
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ]
+   ],
+   "decision": "son55",
+   "final_value": [
+    [
+     "abstract_experience_into_guidance",
+     "H00"
+    ],
+    [
+     "abstract_experience_into_guidance",
+     "H01"
+    ]
+   ],
+   "reason": "H01 is kept (both seats): an LLM Decide call chooses insert/refine/discard over existing entries. H00 is added: nodes are extracted from the agent's own outcome trajectories with explicit trigger conditions, H00's extraction step. Same pairing as the run precedents for extract-then-curate stores (r06b Training-Free GRPO, r07a ArcMemo).",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E006",
+    "son55:E007"
+   ],
+   "score_impact": "none (patterns never score)"
+  },
+  {
+   "field_path": "expectations[local:2603.17613-2].status",
+   "sol_value": "partial",
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "The same aggregate-metric question in both seats. The Opus recomputation (opus:O01, opus:O02) shows the headline does not follow its definition and the GM row does not reproduce, so unmet.",
+   "evidence_ids": [
+    "son55:E015",
+    "son55:E022",
+    "opus:O01",
+    "opus:O02"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2603.17613-3].status",
+   "sol_value": "unmet",
+   "son55_value": "unknown",
+   "decision": "sol",
+   "final_value": "unmet",
+   "reason": "A4 ID collision: sol's local-3 is cost and son55's local-3 is testbench identity. Final local-3 = cost, unmet (no cost table; matches son55's decompose RE-1 'unmet'). son55's question moved to local-5 (status unknown, kept).",
+   "evidence_ids": [
+    "sol:E07",
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[local:2603.17613-4].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no repeated runs, std or CI; one number per cell at T=0.8.",
+   "evidence_ids": [
+    "son55:E012"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:adapt_via_conditioning/RE-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: there is no static/expert-curated or non-evolving memory comparison, although the authors name it as the ideal.",
+   "evidence_ids": [
+    "son55:E030"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no latency, call, token or synthesis-time numbers.",
+   "evidence_ids": [
+    "son55:E011"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: the progressive ablation is cumulative and single-run, so component effects are order-dependent.",
+   "evidence_ids": [
+    "son55:E028"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-3].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: no agent or memory-manager prompts, node examples or thresholds in the text.",
+   "evidence_ids": [
+    "son55:E005"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rs:decompose_and_delegate/RE-5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: Table 2 has no direct-LLM or PPA-prompted single-agent column.",
+   "evidence_ids": [
+    "son55:E031",
+    "son55:E025"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/F2].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Verified: domain-specific trigger types are tailored, but the extract–decide–inject loop is generic.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/H01].status",
+   "sol_value": "partial",
+   "son55_value": null,
+   "decision": "revised",
+   "final_value": {
+    "moved_to": "rsi:abstract_experience_into_guidance/H01-step5",
+    "status": "unmet"
+   },
+   "reason": "sol's tactic-level 'H01' check (partial) asks H01 step 5's question (curator ablation plus separated streams). Merged. Final unmet: step 5 says a store-only ablation is insufficient.",
+   "evidence_ids": [
+    "sol:E09",
+    "son55:E030"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/H01-step5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: w/o Memory removes the store, not the curator, and the construction and evaluation streams are not separated.",
+   "evidence_ids": [
+    "son55:E006",
+    "son55:E030"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S3].status",
+   "sol_value": null,
+   "son55_value": "met",
+   "decision": "son55",
+   "final_value": "met",
+   "reason": "Verified: nodes derive from trajectories whose correctness and PPA outcomes come from simulation and synthesis.",
+   "evidence_ids": [
+    "son55:E004",
+    "son55:E006"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:abstract_experience_into_guidance/S5].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Verified: admission is an LLM Decide call with no outcome test of a node.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/F1].status",
+   "sol_value": null,
+   "son55_value": "partial",
+   "decision": "son55",
+   "final_value": "partial",
+   "reason": "Kept as a check question (card not matched). The memory-manager structure stands in for a gate, and its decisions are not evidence-based.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "expectations[rsi:evidence_gated_retention/S1].status",
+   "sol_value": null,
+   "son55_value": "unmet",
+   "decision": "son55",
+   "final_value": "unmet",
+   "reason": "Kept as a check question. No memory-on/off counterfactual credits individual nodes.",
+   "evidence_ids": [
+    "son55:E007"
+   ],
+   "score_impact": "none (expectations are not scored directly)"
+  },
+  {
+   "field_path": "ratings.E.measurement",
+   "sol_value": {
+    "status": "resolved",
+    "rating": 2
+   },
+   "son55_value": {
+    "status": "resolved",
+    "rating": 1
+   },
+   "decision": "son55",
+   "final_value": 1,
+   "reason": "See ratings.E.measurement. The GM row is non-reproducible for 3/4 columns (opus:O01), the headline definition is not followed (opus:O02), and power anomalies at identical delay/area (opus:O03) put this at the r11a TTE level (1), not 2.",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02",
+    "opus:O03",
+    "son55:E018"
+   ],
+   "score_impact": "−2.5 vs sol (10×1/4)"
+  }
+ ],
+ "shared_error_corrections": [
+  {
+   "field_path": "ratings.E.measurement.reason",
+   "sol_value": "2 (aggregation rule unclear)",
+   "son55_value": "1 (ratio of column GMs over unequal subsets)",
+   "final_value": 1,
+   "reason": "Neither seat recomputed Table 2. The reported Geometric Mean row itself does not reproduce from the per-design rows for ChipSeek-R1 or either VeriAgent column (opus:O01). Recorded in the reason; the rating equals son55's.",
+   "evidence_ids": [
+    "opus:O01",
+    "opus:O02"
+   ],
+   "score_impact": "none beyond the son55 resolution"
+  },
+  {
+   "field_path": "expectations[local:2603.17613-3].id",
+   "sol_value": "local-3 = cost",
+   "son55_value": "local-3 = testbench identity",
+   "final_value": "local-3 = cost; local-5 = testbench identity",
+   "reason": "A4 ID collision. Renumbered.",
+   "evidence_ids": [
+    "son55:E008",
+    "sol:E07"
+   ],
+   "score_impact": "none"
+  }
+ ],
+ "aggregate_status": "accepted_final",
+ "aggregate_review": {
+  "initial_judgment_before_seat_scores": "Read the whole v1 text first. Initial view: in scope (an edited, re-injected memory). I recomputed Table 2: valid designs 44/38/32/41, GMs not reproducible for 3 columns, Relative PPA ≠ per-design definition, and power anomalies at identical delay/area. Em 1. Memory builds on the scored benchmark (Eh 0), no cost (0), single runs (Es 1), store-off ablation present but cumulative (Ec 2), G/M/X 2.",
+  "integrity_checks": "Both seats a1 on 2603.17613v1, material sha 9ebe9986…; canonical seat hashes equal conflicts.json; RS/domain ids valid.",
+  "core_claim_check": "The strongest supported claim is functional gains on saturated benchmarks plus raw per-design delay/area improvements. The headline PPA ratio and memory attribution are not reproducible. evidence_level task (memory evolves on the scored stream).",
+  "rating_agreement": "G, M, X, Ec, Eh, Es, Ecost agree and were re-checked; Em resolved to son55 with an extended reason."
+ },
+ "input_seat_hashes": {
+  "sol": "583130141ca46b257af5e00cb4f3fe042f44624969b4adeb1542dacbe6f09b8e",
+  "son55": "3364236eacda6293efe5bfdc62c79190e758b0d17f49b1c0bddda55d3ab6dd18"
+ },
+ "score": {
+  "raw": 38.75,
+  "display": 38.8,
+  "lower": 38.75,
+  "upper": 38.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "formula": "S=(15G+20M+20X+10Em+15Ec+10Eh+5Es+5Ecost)/4"
+ },
+ "final_record_hash": "f8bf4654cc19660b19ab24b3772ae28690202f45c1dbd3f59eb4c9b5bba24ccd"
+}
