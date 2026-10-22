@@ -18,7 +18,7 @@
 | Grok 收集 | [GROK_PROMPT](docs/agents/GROK_PROMPT.md)：只收有一手证据的候选 |
 | 新流程 | [PIPELINE](docs/PIPELINE.md)；[维护规则](docs/MAINTAINING.md)；[收录范围](docs/EVIDENCE.md) |
 | Reel 重做 | [REEL_PROMPT](docs/agents/REEL_PROMPT.md)：先做单篇机制叙述，再设计图解 |
-| 整理记录 | [RESET](archive/2026-10-22-method-change/docs/RESET_2026-10-21.md)；[旧产物归档](archive/2026-10-21-reset/README.md) |
+| 整理记录 | [RESET](../ArxivDaily-archive/2026-10-22-method-change/docs/RESET_2026-10-21.md)；[旧产物归档（仅本地，不在远端）](../ArxivDaily-archive/2026-10-21-reset/README.md) |
 
 ## 新评分：先 gap / 模式 / 期望，再核主张证据
 
@@ -37,7 +37,7 @@
 
 ## claude-kimi / Claude Code 批量评分
 
-旧启动指令已归档（archive/2026-10-22-method-change/）；v2.2 双席流水线已停用，等新打分方式规格。[总控提示词](docs/agents/LOCAL_SCORING_PROMPT.md)可直接交给 claude-kimi（Claude Code）：每批默认5篇、每轮并行2批，6.1 Sol＋Sonnet 5.5 独立初评，Opus 5.5 逐篇聚合，轮次验收后继续，最后由总控提交。
+旧启动指令已归档（../ArxivDaily-archive/2026-10-22-method-change/）；v2.2 双席流水线已停用，等新打分方式规格。[总控提示词](docs/agents/LOCAL_SCORING_PROMPT.md)可直接交给 claude-kimi（Claude Code）：每批默认5篇、每轮并行2批，6.1 Sol＋Sonnet 5.5 独立初评，Opus 5.5 逐篇聚合，轮次验收后继续，最后由总控提交。
 每篇必做 [原15+31识别与领域映射](research/PATTERN_PROTOCOL.md)；固定原卡已随仓库提供，不能混用原卡与领域卡 ID。
 [GLM 5.3 Reel 提示词](docs/agents/REEL_PROMPT.md)只处理入选名单。model type 已配置，直接沿用；本次只写文档，未启动批次，评分规则仍待校准。
 
@@ -50,7 +50,7 @@ Grok 找候选并写 inbox → 本地核对来源/去重/入库 → Claude Code 
 - 原有 `research/screen.jsonl`、`research/patterns/assignments.jsonl` 是历史分档/适配线索，不能直接代替新的判断。
 - 建议 CC 安装 Open Scientist，支持 gap 诊断、模式/期望维护与独立审阅；日常评审使用冻结资产，缺口才返回研究循环。
 - `make check` 只做离线结构检查。旧 `make score` / `make board` 和旧脚本入口会明确拒绝运行。
-- inherited arXiv digest 的关键词相关性分数不属于论文质量分数，见 [digest 用法](archive/2026-10-22-method-change/docs/digest-pipeline.md)。
+- inherited arXiv digest 的关键词相关性分数不属于论文质量分数，见 [digest 用法](../ArxivDaily-archive/2026-10-22-method-change/docs/digest-pipeline.md)。
 
 ## Credits and license
 
