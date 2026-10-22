@@ -1,0 +1,828 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "2605.06822",
+  "paper_id": "arXiv:2605.06822",
+  "title": "SHARP: A Self-Evolving Human-Auditable Rubric Policy for Financial Trading Agents",
+  "version": "2605.06822v1",
+  "claim_type": "system_method",
+  "central_claim": "Replacing free-form prompt optimization with a bounded, human-readable rubric of condition-action rules, evolved by an attribution agent (diagnose worst P&L days, map to rule IDs), atomic rule edits, and a walk-forward validation gate, turns generic initial heuristics into robust out-of-sample trading strategies (10-20 pp average lift for compact models) while keeping the policy auditable."
+ },
+ "provenance": {
+  "input_hash": "b41dd3e78ba1bcdc3f3f83f36ee863d972fbd513a90f1f786404f8493fb03799",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref null: worker has no runtime receipt; model_type is the configured slot (haiku slot lock -> claude-sonnet-5-5[1m] per dispatcher instruction).",
+  "timestamp": "2026-10-22T01:45:47Z"
+ },
+ "materials": [
+  {
+   "material_id": "2605.06822",
+   "url": "https://arxiv.org/html/2605.06822v1",
+   "sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114",
+   "sections_read": [
+    "abstract",
+    "1 Intro",
+    "2 Related Work",
+    "3 Method (rubric, evolution loop, inference)",
+    "4 Experiments (Tables 1-3, ablations A1-A3)",
+    "5 Discussion",
+    "6 Conclusion",
+    "App A setup",
+    "App B algorithm",
+    "App C initial rubric",
+    "App D static baseline (Table 4)",
+    "App E sector diffs",
+    "App F free-form example",
+    "App G attribution trace"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure image contents (Fig 1-3 plots) not in text; LLM-baseline implementation details are not described in the appendix"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2605.06822",
+   "locator": "Abstract",
+   "quote": "optimizers cannot reliably distinguish systematic logic flaws from stochastic market variance, inevitably leading to policy drift.",
+   "support_explanation": "Author gap: free-form prompt optimization under noisy delayed P&L suffers credit-assignment failure.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2605.06822",
+   "locator": "Sec 2 Related Work",
+   "quote": "these methods treat the prompt as a monolithic string.",
+   "support_explanation": "Nearest neighbors named: ATLAS (OPRO for trading), FinCon, GEPA-style optimizers, MIPRO; only FinCon, FinHEAR, Lopez-Lira are run as baselines.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2605.06822",
+   "locator": "Sec 3.2",
+   "quote": "is a self-reported attribution rather than a formally deterministic trace; nevertheless, it provides a tractable credit assignment mechanism absent in free-form prompt optimization.",
+   "support_explanation": "Activated-rule trace is LLM self-reported, so the symbolic credit assignment is not verified by an engine.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2605.06822",
+   "locator": "Sec 3.3 Attribution",
+   "quote": "This selective focus on the left tail of the P&L distribution ensures that the evolution prioritizes the mitigation of severe drawdowns over average predictive accuracy",
+   "support_explanation": "Attribution looks only at the K_attr=20 worst training days; error patterns must recur (>=3 days, App A).",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2605.06822",
+   "locator": "Sec 3.3 Validation Gate",
+   "quote": "Rejected candidates are discarded and the previous rubric carries forward.",
+   "support_explanation": "Retention gate with rollback to previous rubric.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2605.06822",
+   "locator": "App A walk-forward details",
+   "quote": "This 0.5 pp tolerance avoids rejecting sideways improvements.",
+   "support_explanation": "Acceptance is vs best-so-far minus 50 bps on a single 1-month validation window; no paired/statistical test.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2605.06822",
+   "locator": "Sec 3.3 Inference",
+   "quote": "No rubric changes occur during test.",
+   "support_explanation": "Evolved rubric is frozen: retention is tested as train/val-to-test transfer, not online accumulation.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.1 Walk-Forward Protocol",
+   "quote": "To test out-of-sample generalization, we employ a rolling walk-forward backtest. Each of the three windows consists of:",
+   "support_explanation": "4-month train (J=5 rounds), 1-month validation, 2-month test; three windows per sector.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.1 Dataset",
+   "quote": "specifically select GPT-4o-mini and GPT-4.1-mini, whose training cutoffs strictly predate our test data.",
+   "support_explanation": "Leakage guard for backbone knowledge; news cutoff 23:59 UTC and open-to-open returns in App A.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.2",
+   "quote": "Because the study contains only three non-overlapping walk-forward windows, we interpret the results as directional out-of-sample evidence rather than a formal significance claim about long-term excess returns.",
+   "support_explanation": "Authors concede no significance claim; single run per cell.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.2",
+   "quote": "is comparatively better matched to the event-driven structure of Biotech.",
+   "support_explanation": "FinCon-4o beats SHARP-4o on Biotech (+18.8 vs +12.7) and is within ~5 pp on the 3-sector average; the SHARP lead over the best LLM baseline is modest.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.4 Ablation A1",
+   "quote": "is the most critical component: without error-day analysis, mutations become untargeted, and performance drops to near-static levels.",
+   "support_explanation": "A1 no attribution: AI Tech 4o +7.1 vs full +33.2; 4.1-mini +8.5 vs +22.9 (Table 2).",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.4 Ablation A2",
+   "quote": "and keeps every other component identical (the same LLM backbone, attribution signals, evolution budget, and validation gate), changing only the",
+   "support_explanation": "A2 is a matched control that swaps only the mutation operator (free-form prompt rewrite vs atomic rule edits).",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2605.06822",
+   "locator": "Table 2 caption",
+   "quote": "Ablation on AI Tech. Each row modifies one component vs. full system.",
+   "support_explanation": "Ablations cover one sector and two backbones, no repeated runs.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.4 A3",
+   "quote": "The Static-to-Evo lift is comparable in magnitude to the proprietary backbones, so the contribution of rubric evolution is attributable to the mechanism itself rather than to any specific LLM family",
+   "support_explanation": "Qwen2.5-72B +9.8 pp, Llama-3.3-70B +12.9 pp 3-sector average; sector-level numbers for open models not given.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2605.06822",
+   "locator": "Sec 5 Gap to production (iv)",
+   "quote": "Our seven-month out-of-sample window spans a rally and a modest correction, but is too short to assess robustness to structural shifts such as prolonged bear markets or abrupt monetary policy changes.",
+   "support_explanation": "Regime coverage limit stated by authors.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2605.06822",
+   "locator": "Sec 5 Gap to production (i)",
+   "quote": "Our backtest assumes rebalancing at official open-to-open prices, which is optimistic relative to a live implementation.",
+   "support_explanation": "Slippage and market impact omitted; only 5 bps cost charged.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2605.06822",
+   "locator": "App A computational resources",
+   "quote": "Proprietary backbones (GPT-4o-mini, GPT-4.1-mini) are accessed via the OpenAI API and require no local GPUs.",
+   "support_explanation": "Cost reported only as wall-clock per sector run (about 3h30 API, 5h40 Qwen-72B, 6h55 Llama-70B); no token/dollar totals; baselines' compute not stated.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.1 Baselines / App A Baselines",
+   "quote": "We compare against four baselines that span three levels of sophistication:",
+   "support_explanation": "App A describes only Random, Momentum, MeanReversion and Static; implementation, adaptation and tuning of Lopez-Lira/FinCon/FinHEAR baselines are not described (main text says only identical portfolio constraints).",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2605.06822",
+   "locator": "App C",
+   "quote": "No rule is tuned on test-period data; all conditions and thresholds are adapted from standard financial commentary available prior to our evaluation window.",
+   "support_explanation": "Initial rubric shared across sectors; sector-specific rules (1-4 per sector) added in released code.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2605.06822",
+   "locator": "App A walk-forward details",
+   "quote": "Within each window, rubric evolution is independent : the same initial rubric",
+   "support_explanation": "Each window re-evolves from R0; no cross-window accumulation or reuse of earlier rubrics.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.3",
+   "quote": "Crucially, every rule change is a human-readable condition/action edit traceable to specific historical error days.",
+   "support_explanation": "Audit trail claim; rubric diffs shown (Fig 4-5, App E).",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.4 A2",
+   "quote": "notably below the Static baseline that performs no adaptation at all.",
+   "support_explanation": "A2 4o AI Tech -12.1 vs Static +7.3; but for 4.1-mini A2 is +6.0 vs Static -6.4, i.e. free reflection helped there.",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2605.06822",
+   "locator": "Sec 4.4 / App F",
+   "quote": "Qualitatively, even when fair-initialized with the same rubric content, the A2 prompt gradually shifts from modular IF/THEN rules into flowing prose",
+   "support_explanation": "Qualitative evidence for the drift mechanism, one example (GPT-4.1-mini, window 0).",
+   "kind": "author_report",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2605.06822",
+   "locator": "Tables 1, 2, 4 reading",
+   "quote": "Static (no evolution) AI Tech return across backbones ranges from -6.4 (GPT-4.1-mini) to +12.1 (Llama-3.3-70B); SHARP-4o AI Tech +33.2 vs Static +7.3; SHARP-4.1 Cons. Disc. -0.5 vs Static -12.9; FinCon-4o 3-sector avg +15.9 vs SHARP-4o +20.9",
+   "support_explanation": "Our reading: backbone-to-backbone spread of the untouched static rubric (18 pp) is the same order as the claimed Static-to-Evo lifts, and cell returns swing widely; with 3 windows and no repeat runs, noise is comparable to several of the margins.",
+   "kind": "our_inference",
+   "material_sha256": "bb1e13d94c164ebbe6bc14e02755f0486905366722b9218b5f34b7c740cbd114"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Analyst rubric: a bounded (<=18) versioned set of IF/THEN rules injected into the LLM analyst prompt; baseline = shared generic initial rubric (6 rules + 1-4 sector rules) and, in A2, a free-form prompt",
+   "information": "Attribution agent sees the 20 worst training-period portfolio days with holdings, predicted returns, self-reported activated rules, realized P&L and news; evolution agent sees current rubric + error patterns; validation uses the next held-out month; test months and the future are hidden",
+   "operation": "Backtest -> attribute worst days to rubric vulnerabilities (patterns recurring >=3 days) -> propose <=3 atomic rule edits (modify/add/remove) -> apply -> backtest on validation month",
+   "output": "Candidate rubric R~; accepted if validation excess return >= best-so-far - 50 bps, best-by-validation rubric kept across J=5 rounds",
+   "conditions": "daily long-short equities, 16 stocks per sector, news window 3 days, 5L/5S portfolio, 5 bps cost, open-to-open returns",
+   "feedback": "realized P&L of backtest on training days (delayed scalar) plus validation excess return",
+   "selection_rule_data": "validation month of each window (single 21-day-ish period) with 0.5 pp tolerance; no paired test; rubric selected by max validation return",
+   "persistence": "rubric versions with rule-level diffs; frozen R* used for the 2-month test; evolution restarts from the same R0 in every window",
+   "later_use": "daily trading signals on test days via LLM analyst conditioned on the frozen rubric",
+   "claimed_effect": "Static -> Evo 3-sector average: GPT-4o-mini +0.6% -> +20.9%, GPT-4.1-mini -4.4% -> +13.4%; Qwen +9.8 pp, Llama +12.9 pp",
+   "failure_boundary": "Attribution is LLM self-reported; tail-only (worst 20 days); 3 windows, 7-month regime; slippage/impact omitted; regime-dependent rules need periodic re-evolution",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E021"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Mutation operator of the improvement loop (atomic rule edits vs free-form prompt rewrite)",
+   "information": "same attribution signals in both arms (A2 keeps backbone, attribution, budget and gate identical)",
+   "operation": "Constrain candidates to rule-level edits with a hard rule cap and <=3 mutations per round",
+   "output": "bounded, diffable candidate set",
+   "conditions": "needs a decomposable policy representation",
+   "feedback": "validation gate",
+   "selection_rule_data": "same gate for both arms",
+   "persistence": "diffs in rubric versions",
+   "later_use": "same",
+   "claimed_effect": "A2 free reflection AI Tech 4o -12.1% vs full +33.2%; 4.1-mini +6.0% vs +22.9%",
+   "failure_boundary": "single sector, two backbones, no repeats",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E023",
+    "E024"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Unbounded free-form prompt mutation under noisy, delayed P&L cannot attribute losses to localized logic, causing untargeted rewrites and policy drift.",
+  "checked_gap": "Real and well scoped for trading: aggregate P&L is a poor localizer. But the claim that structure/attribution rather than other differences fixes it is supported only by in-house ablations A1/A2; the named neighbors (ATLAS, GEPA, MIPRO, OPRO) are not run, and generic rule-list/playbook editing methods (e.g. delta-edit playbooks, ExpeL-style rule stores) are not discussed.",
+  "lineage_closest_adjacent": [
+   {
+    "item": "ATLAS / OPRO-style prompt optimization for trading; FinCon verbal reinforcement; Agrawal et al. 2025; MIPRO",
+    "source": "Sec 1-2 citations; FinCon run as baseline",
+    "solved": "adaptation of a free-form prompt/belief state",
+    "remaining": "claimed: no fault isolation under noisy rewards"
+   },
+   {
+    "item": "Rubric-as-reward mining (Auto-Rubric etc.)",
+    "source": "Sec 2",
+    "solved": "interpretable rubrics from static preference data",
+    "remaining": "not evolved from live feedback"
+   }
+  ],
+  "residue": "Attributing a scalar noisy P&L to a specific rule; keeping accepted edits from overfitting a short validation period.",
+  "stakes": "Policy drift and untraceable edits in a high-stakes, auditable setting.",
+  "method_response": "Rule-ID based diagnosis over recurring worst-day patterns, atomic edits, versioned diffs, walk-forward gate.",
+  "remaining_gap": "Attribution reliability unmeasured (self-reported), gate statistical power small, no cross-window retention, single domain, optimizer baselines not run.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E003",
+   "E019"
+  ],
+  "unresolved": [
+   "Whether GEPA/ATLAS-style optimizers with the same gate and budget would match SHARP"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "structural_prior_encoding",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "structural_prior_encoding",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "weak",
+    "tactic_steps_checked": [
+     "constrain the policy representation to a bounded condition-action rule set with IDs and caps so edits are atomic by construction (cap enforced in code)",
+     "no formal entailment: attribution trace is LLM self-reported and the structure is a design choice, not a known problem invariant"
+    ],
+    "success_checks": "load-bearing structure isolated by A2 (free-form swap) on one sector; no proof of correctness; generality across domains untested (single domain)",
+    "failure_checks": "risk of a bespoke per-domain structure with no uniqueness guarantee; marginal-vs-incumbent contribution not isolated vs optimizer baselines",
+    "evidence_ids": [
+     "E003",
+     "E005",
+     "E013",
+     "E014"
+    ],
+    "reason": "Closest of the 15 definitions is encoding structure into the representation so a property (localizable edits) holds by construction; considered heterogeneous_decomposition (rule-level partition) and reframe_as_solvable_object but those cards presuppose compression sensitivity analysis / provable reduction. Weak fit."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Weak fit to structural_prior_encoding; no sub-card applies (C13/C16/C20 concern graph, symmetry, forward-process structure).",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H10",
+    "version": "patterns-2026-10-21",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S1",
+      "status": "met",
+      "note": "edits localized to rule IDs"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "status": "partial",
+      "note": "candidate set accepted/rejected as a whole (<=3 edits); no individual-edit acceptance or preservation tests"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S4",
+      "status": "met",
+      "note": "patterns recurring on >=3 worst days, joint cross-sample diagnosis"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "met",
+      "note": "proposer sees holdings, predictions, rules, P&L, news"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/F5",
+      "status": "partial",
+      "note": "assumes P&L loss isolates the edited rule; self-reported activation not validated"
+     }
+    ],
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E012"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H31",
+    "version": "patterns-2026-10-21",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:evidence_gated_retention/H31",
+      "status": "partial",
+      "note": "disjoint held-out validation gate with rollback and 50 bps tolerance, but no paired/statistical test and one short window"
+     }
+    ],
+    "evidence_ids": [
+     "E005",
+     "E006"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "structural_prior_encoding",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "attribute_and_patch_incumbent",
+   "domain_sub": "H10",
+   "operation_correspondence": "RS: bake structure into the representation so a property holds by construction. Domain H10: localize edit to atomic units (rules) so diagnosed errors map to edits.",
+   "conditions_differences": "RS expects a proof/entailment and generality; SHARP gives an empirical ablation in one sector. H10 expects selection disjoint from critique data (met) and cost reporting (partial).",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E013"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S1",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute S1"
+   ],
+   "applies_when": "patched artifact is decomposable",
+   "applicable": true,
+   "status": "met",
+   "reason": "Rule-level edits keyed to rule IDs.",
+   "evidence_ids": [
+    "E004",
+    "E022"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute S3"
+   ],
+   "applies_when": "retention rule should protect earlier wins",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Whole-candidate gate vs best-so-far-minus-tolerance; individual-edit gating and preservation checks absent.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S5",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute S5"
+   ],
+   "applies_when": "proposer is an LLM diagnosing from traces",
+   "applicable": true,
+   "status": "met",
+   "reason": "Full per-day state supplied to attribution agent (App G).",
+   "evidence_ids": [
+    "E004"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F5",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute F5"
+   ],
+   "applies_when": "feedback is aggregate and may not isolate the edited artifact",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Authors admit activation trace is self-reported; no planted-fault or attribution-accuracy check.",
+   "evidence_ids": [
+    "E003"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/F1",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute F1"
+   ],
+   "applies_when": "loop is the vehicle for a domain result",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Method is argued generically but validated only on equity long-short trading; results are domain-specific.",
+   "evidence_ids": [
+    "E016"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/H31",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "H31 sub-pattern"
+   ],
+   "applies_when": "claims a validated commit rule",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Disjoint validation window and rollback present; no paired test, e-process, or multiple-comparison handling over 5 rounds; tolerance chosen by hand.",
+   "evidence_ids": [
+    "E005",
+    "E006"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "rs:structural_prior_encoding/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "structural_prior_encoding reviewer expectations 3"
+   ],
+   "applies_when": "structure is claimed to cause the gain",
+   "applicable": true,
+   "status": "partial",
+   "reason": "A2 swaps only the mutation operator with matched budget, but one sector/two backbones/single run.",
+   "evidence_ids": [
+    "E013",
+    "E014",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:structural_prior_encoding/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "structural_prior_encoding reviewer expectations 4"
+   ],
+   "applies_when": "comparison to state-of-the-art incumbent",
+   "applicable": true,
+   "status": "partial",
+   "reason": "FinCon/FinHEAR/Lopez-Lira run but their tuning is undescribed; ATLAS/GEPA/MIPRO not run.",
+   "evidence_ids": [
+    "E002",
+    "E019"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.06822-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "backtest practice; paper Sec 5"
+   ],
+   "applies_when": "trading P&L is the headline measure",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Null baseline (1000 random L/S with costs) and O2O execution good; slippage/impact omitted; only 122 test days.",
+   "evidence_ids": [
+    "E017",
+    "E016"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "local:2605.06822-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "stochastic LLM pipelines"
+   ],
+   "applies_when": "stochastic LLM generation drives both evolution and inference",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No repeated runs, seeds, or intervals for evolution or inference; authors state directional evidence only.",
+   "evidence_ids": [
+    "E010"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Rubric evolution lifts compact LLMs 10-20 pp on average over their own static initial rubric",
+   "setting": "3 sectors x 3 walk-forward windows, 4 backbones, 5L/5S, 5 bps",
+   "baseline_control": "Static rule (same LLM, same inputs, R0 only)",
+   "selection_vs_test": "evolve on 4 months, gate on 1 month, test on following 2 months frozen",
+   "result_denominator": "3-sector avg: 4o +0.6 -> +20.9, 4.1-mini -4.4 -> +13.4, Qwen -0.6 -> +9.2, Llama -5.3 -> +7.6; positive vs Static in all six 4o/4.1 cells",
+   "evidence_ids": [
+    "E008",
+    "E010",
+    "E015",
+    "E025"
+   ],
+   "counterevidence": "Static itself swings 18 pp across backbones; Evo gets extra LLM-guided search + selection by validation while Static gets none; 3 windows, no repeats.",
+   "allowed_conclusion": "Evolved frozen rubrics outperformed the initial rubric in these windows (author-reported); size of effect uncertain."
+  },
+  {
+   "claim_id": "C2",
+   "text": "SHARP beats LLM trading baselines (FinCon, FinHEAR, Lopez-Lira)",
+   "setting": "same portfolio constraints",
+   "baseline_control": "three LLM agents",
+   "selection_vs_test": "same test windows",
+   "result_denominator": "SHARP-4o leads FinCon-4o by about 5 pp on 3-sector avg but loses on Biotech; SHARP-4.1 wins AI Tech/Biotech, loses/ties Cons. Disc.",
+   "evidence_ids": [
+    "E011",
+    "E019",
+    "E025"
+   ],
+   "counterevidence": "Baseline setup undescribed; one cell per method.",
+   "allowed_conclusion": "Competitive with the best baseline; superiority not established."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Attribution and rule-structured edits (not free-form reflection) are what make evolution work",
+   "setting": "AI Tech, 4o and 4.1-mini",
+   "baseline_control": "A1 no attribution; A2 free reflection with matched gate/budget",
+   "selection_vs_test": "test windows",
+   "result_denominator": "4o: 33.2 / 7.1 / -12.1; 4.1: 22.9 / 8.5 / +6.0",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014",
+    "E023",
+    "E024"
+   ],
+   "counterevidence": "Single sector and run; A2 beats Static for 4.1-mini; A2 is a self-built baseline.",
+   "allowed_conclusion": "Directional support for attribution + atomic edits over a free-form rewrite baseline in one sector."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Human-auditable, versioned policy trace",
+   "setting": "rubric diffs",
+   "baseline_control": "A2 prose drift",
+   "selection_vs_test": "not applicable",
+   "result_denominator": "qualitative",
+   "evidence_ids": [
+    "E022",
+    "E024"
+   ],
+   "counterevidence": "No reader study; auditability of self-reported activations unverified.",
+   "allowed_conclusion": "Edits are readable diffs; value to practitioners not measured."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "In three short walk-forward windows per sector, a frozen rubric evolved by LLM attribution and gated on a held-out month produced higher out-of-sample long-short returns than the same LLM with the initial rubric (author-reported, single run).",
+  "not_supported": "Statistical reliability; superiority over ATLAS/GEPA-style optimizers or over the best LLM baseline; reliability of the self-reported rule attribution; live trading viability; cross-window or cross-regime retention.",
+  "unresolved": [
+   "baseline tuning details",
+   "seed variance",
+   "attribution accuracy"
+  ],
+  "note": "Author-reported numbers only; not reproduced. Improver level not claimed (the improver is not itself edited)."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Concrete, domain-grounded bottleneck (credit assignment under noisy P&L for free-form optimizers) with named neighbors and an in-paper reproduction of the failure; neighbors beyond FinCon are not run and generic rule-store editing literature is not covered.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Rule-ID attribution over recurring worst-day patterns, bounded atomic edits and validation gate form a coherent, distinguishable alternative to free-form rewrite; weakened by self-reported attribution and tail-only (20 worst days) diagnosis.",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Algorithm, caps, tolerances, rollback, versioned diffs and frozen deployment are reconstructable; gate is whole-candidate with hand-set tolerance, no cross-window retention or staleness handling, regime limits only acknowledged.",
+   "evidence_ids": [
+    "E005",
+    "E006",
+    "E007",
+    "E021"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Deterministic P&L metrics with open-to-open execution, news cutoff, 5 bps cost and a 1000-trial random null; slippage/impact omitted and only 122 test days; attribution quality itself not measured.",
+   "evidence_ids": [
+    "E009",
+    "E017"
+   ],
+   "counterevidence_ids": [
+    "E016"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Matched A1/A2 ablations and Static control support attribution and rule structure, but on one sector, two backbones, single runs; no optimizer-neighbor baselines; regime-fit alternative (momentum flip in a 2025 rally) not separated.",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E025"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Strict walk-forward with separate validation and test months, look-ahead guards, backbone cutoffs before test; only 7 months in one market regime, news-window choice made on validation, evolution restarts per window.",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E016"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "Sample sizes and negative cells are reported but no repeated runs, intervals or tests; authors disclaim significance; backbone-level noise of Static is as large as several margins.",
+   "evidence_ids": [
+    "E010",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Wall-clock per sector run reported and ablations share budget, but no token/dollar totals and baselines' compute is not stated.",
+   "evidence_ids": [
+    "E018",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 67.5,
+  "display": 67.5,
+  "lower": 67.5,
+  "upper": 67.5,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "status": {
+  "status": "reviewed",
+  "reason": "Complete HTML full text including appendices read; plots not available as text."
+ },
+ "rationale": "规则化rubric+归因+验证门控，walk-forward冻结测试且有A1/A2匹配对照；但仅3窗口、单次运行、无统计、邻近优化器未跑、归因为自报，评为scoped retained。"
+}

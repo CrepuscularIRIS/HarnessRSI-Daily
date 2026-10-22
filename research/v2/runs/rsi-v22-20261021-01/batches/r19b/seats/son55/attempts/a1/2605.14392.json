@@ -1,0 +1,740 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "全文含附录完整；非权重留存对象=模型自写、经准入门控与轮换的可验证环境池(domain 边界卡 self_generate_the_curriculum)，增益载体为权重，故证据只到 task。",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "把自我改进从问题生成改为环境构建：模型写可复用可验证环境，经验证/自审/难度校准/新颖度准入后训练自身，EvoEnv 使强模型 Qwen3-4B-Thinking 平均 72.4→74.8 而固定数据/固定手工环境 RLVR 反而下降。",
+  "paper_key": "2605.14392",
+  "paper_id": "2605.14392",
+  "title": "Learning to Build the Environment: Self-Evolving Reasoning RL via Verifiable Environment Synthesis",
+  "version": "2605.14392v1"
+ },
+ "materials": [
+  {
+   "material_id": "M-2605.14392",
+   "url": "https://arxiv.org/html/2605.14392v1",
+   "sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-5",
+    "Appendix A-I (seed list, validator, audit, limitations, hyperparameters)"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "训练用环境池 P_t(可执行 Python 环境类：生成器-oracle/渲染/打分)与新颖度缓存 C_t；基线为人工环境集(RLVE)或固定数据",
+   "information": "生成器看到 seed/退役环境构成的 few-shot；求解器只看渲染后的提示；参考答案由冻结代码计算，策略无法改动",
+   "operation": "同一策略以生成器角色写环境代码→L1-L5 机械验证→3 次语义自审(any-reject)→8 实例通过率校准(0<â<1)→嵌入新颖度闸(sim<0.8)→入池",
+   "output": "入池环境用于求解器 GRPO；退役环境转为生成器 few-shot 种子",
+   "conditions": "Python 标准库子集、沙箱子进程、30s 超时；确定性任务",
+   "feedback": "执行结果、通过率、嵌入相似度；非外部真值",
+   "selection_rule_data": "四条合约联合准入；池按使用轮数轮换，原始种子保底 20%",
+   "persistence": "池/缓存/种子池跨训练步保存",
+   "later_use": "求解器按环境采样训练；生成器 prompt 引用池内示例",
+   "claimed_effect": "8 基准均值 +2.4(Thinking)~+3.9(Instruct)",
+   "failure_boundary": "审核同源；仅确定性可紧凑编码的推理任务；无池危害驱动的退役",
+   "evidence_ids": [
+    "E001",
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E019"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "共享策略权重(生成器/求解器两角色)",
+   "information": "生成器奖励=验证层级+通过率目标a*=0.3+新颖度；求解器奖励=冻结打分器",
+   "operation": "角色条件 GRPO(w_gen=0.3)同时更新权重",
+   "output": "更新后的策略",
+   "conditions": "权重更新属边界，不属非权重组件",
+   "feedback": "环境准入结果与求解器通过率",
+   "selection_rule_data": "n/a(权重)",
+   "persistence": "权重",
+   "later_use": "下一步生成与求解",
+   "claimed_effect": "见 C1",
+   "failure_boundary": "改进由权重承载，池本身的留存收益未被单独证明",
+   "evidence_ids": [
+    "E010"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "固定验证分布在策略变强后饱和；每实例自博弈的标签与策略耦合；每实例可执行验证器用完即弃，缺少可复用、可校准、可退役的环境对象。",
+  "checked_gap": "真实局限：RLVE(手写环境，基线)与 AZR(单实例可执行)各解决一半；EvoEnv 的 delta 是模型自写+准入门控+溶解度校准。固定基线停滞(图3)是唯一量化支持。",
+  "lineage": [
+   "STaR/ReST-EM→R-Zero(自提问，标签策略耦合，基线)→AZR/Self-Challenging(单实例可执行)→RLVE(固定手工环境，基线)→EvoEnv"
+  ],
+  "closest_adjacent": "RLVE(环境级，人写)；AZR/SCA(模型写，实例级)；EnvScaler 等离线管线(工具/网页环境)；均在论文表3列出，来源版本为论文引用年。",
+  "residue": "环境级、模型自写、冻结打分且按求解器校准的对象；强模型上增益幅度小(+2.4)，未证明差异来自环境级留存而非环境多样性或额外 RL。",
+  "stakes": "若成立可去除外部题库依赖；若不成立仅是合成数据变体。",
+  "method_response": "准入四合约+池轮换直接对应“验证-校准-退役-复用”四点缺失。",
+  "remaining_gap": "无环境池留存/轮换/自审门的单独消融；无随机或冻结生成器的同规模合成环境对照；任务域窄。",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E010",
+   "E013",
+   "E019"
+  ],
+  "unresolved": [
+   "池轮换与自审门各自的作用",
+   "增益是否来自环境多样性本身"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "high",
+    "tactic_steps_checked": "1 语料瓶颈(饱和)已陈述但“更便宜的非生成补救”只靠 DAPO/RLVE 间接比较；2 生成器+few-shot+难度奖励触达欠覆盖区(45 原型)；3 单一过滤并非一个而是五层门，难度门最关键；4 生成器奖励含求解器通过率=把学习器信号回流生成器(最强形式)；5 迁移到 GPQA/LCB 有，但无同规模非生成对照",
+    "success_failure_checks": "成功：筛选环节被消融(去质量奖励+2.4→+0.5)；失败：仅显示中间性质(多样性)——已连接下游指标，但门级消融缺",
+    "evidence_ids": [
+     "E003",
+     "E005",
+     "E014",
+     "E016",
+     "E023"
+    ],
+    "reason": "生成可执行环境并经质量门再训练、学习器通过率回流生成器，与 C08 数据工厂+隐式过滤一致；区别于同父 C07(稳定性)与 C26(偏好目标)。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "",
+  "executes_pattern": true,
+  "resolves_problem": "unresolved：图3显示固定基线停滞而演化池上升，但单次运行、无池级消融。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "self_generate_the_curriculum",
+    "sub": "H22",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "high",
+    "condition_checks": "S1 验证锚(冻结执行)部分满足；S2 难度信号取自生成器自己的环境实例而非固定留出环境→不满足；S5 成本未报；S6 留出基准/静态基线对照部分满足；F1 难度无有效性：有 L1-L5+自审，基本避免；F4 学习器作为自身改进来源：同源自审未被排除",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E005",
+     "E013"
+    ]
+   },
+   {
+    "main": "evidence_gated_retention",
+    "sub": "H30",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "partial",
+    "condition_checks": "准入多门有；退役按轮数而非危害证据；无边际收益/反事实测试；池无硬规模上限(840 持续增长)",
+    "evidence_ids": [
+     "E003",
+     "E006",
+     "E014"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": "C08",
+   "domain_namespace": "rsi",
+   "domain_main": "self_generate_the_curriculum",
+   "domain_sub": "H22",
+   "operation_correspondence": "C08 的“生成实例→质量门→回流学习器不确定性”对应 H22 的“提议者按难度带生成任务→可验证锚→求解器训练”；两者共有生成器接收学习器通过率。",
+   "conditions_differences": "H22 要求前沿信号定义在固定留出环境上，EvoEnv 在生成器自有环境上取；C08 要求证明合成数据迁移到真实目标——本文部分满足。",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E013"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:self_generate_the_curriculum/S1",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:self_generate_the_curriculum.S1"
+   ],
+   "applies_when": "生成任务/环境的有效性需独立于生成器",
+   "applicable": true,
+   "status": "partial",
+   "reason": "参考答案由冻结代码给出，但“代码是否实现了所述任务”依赖同源 K_rev=3 any-reject 审核；外部审计 n=79、F1 87%，约 12% 缺陷召回外流。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E017",
+    "E018"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:self_generate_the_curriculum.S2"
+   ],
+   "applies_when": "使用难度/前沿信号",
+   "applicable": true,
+   "status": "partial",
+   "reason": "通过率由冻结打分器计算，但在候选环境自身实例上每实例 1 次采样、m=8，而非固定留出环境。",
+   "evidence_ids": [
+    "E005"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:self_generate_the_curriculum.S5"
+   ],
+   "applies_when": "难度估计需嵌套求解器 rollout",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未报告生成/审核/校准的 rollout 数或 GPU 小时；仅称基线步数/算力匹配。",
+   "evidence_ids": [
+    "E008",
+    "E009",
+    "E021"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "rsi:self_generate_the_curriculum/S6",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:self_generate_the_curriculum.S6"
+   ],
+   "applies_when": "主张超出生成分布的泛化",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有未参与训练的外部基准与固定环境基线对照；缺随机/冻结生成器同规模合成环境对照。",
+   "evidence_ids": [
+    "E007",
+    "E013",
+    "E022"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:evidence_gated_retention.S2"
+   ],
+   "applies_when": "库/池随时间累积",
+   "applicable": true,
+   "status": "partial",
+   "reason": "有准入与轮换退役，但池无硬上限，退役不依据危害证据。",
+   "evidence_ids": [
+    "E006",
+    "E014"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-2",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #2 (source: both)"
+   ],
+   "applies_when": "自制信号替代真值",
+   "applicable": true,
+   "status": "partial",
+   "reason": "与 DAPO/RLVE/R-Zero 对比，并消融奖励成分；缺“相同数量的静态合成环境/额外微调”基线。",
+   "evidence_ids": [
+    "E008",
+    "E016",
+    "E023"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-6",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering.md Reviewer expectations #6 (source: reject_reviews)"
+   ],
+   "applies_when": "主张部署现实性",
+   "applicable": true,
+   "status": "partial",
+   "reason": "限定于确定性 Python 紧凑任务，作者在 App H 如实声明。",
+   "evidence_ids": [
+    "E019"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2605.14392-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文 Sec 4.2 单格结果与小增益"
+   ],
+   "applies_when": "增益幅度与单次评测噪声同量级",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "训练种子重复、置信区间均未报告；AMC/GPQA/LCB 为单次，差值多在 1-5 点。",
+   "evidence_ids": [
+    "E020",
+    "E021",
+    "E022"
+   ],
+   "score_item": "E.statistics"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "EvoEnv 在三个模型族上提高八项基准平均 pass@1，强模型上固定 RLVR 基线反而下降",
+   "setting": "零外部数据，十种子环境，GRPO 100 步(lr 5e-7)，Qwen3-4B-Instruct/Thinking、Nemotron-Cascade-8B",
+   "baseline_control": "Untrained、R-Zero、DAPO(声称算力匹配)、RLVE(声称步数匹配)",
+   "selection_vs_test": "训练中仅用生成环境的通过率做选择，评测基准未参与选择；基座预训练污染未检",
+   "result_denominator": "8 基准均值；Thinking 72.4→74.8 (+3.3% 相对)；每格单次(AIME 等 16 次采样平均)",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E020",
+    "E022"
+   ],
+   "counterevidence": [
+    "E021"
+   ],
+   "allowed_conclusion": "在该单次 100 步设置下，平均分高于未训练基座与所比基线；增益幅度小且未给训练种子方差。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "演化环境池保持前沿信号：训练分数 0.88→0.61 而留出环境准确率 72.4→80.4，固定环境停滞",
+   "setting": "Qwen3-4B-Instruct，100 步，对 50 个未见 RLVE 环境",
+   "baseline_control": "固定环境 RLVR",
+   "selection_vs_test": "未见 RLVE 环境为留出",
+   "result_denominator": "图3曲线，单次",
+   "evidence_ids": [
+    "E013"
+   ],
+   "counterevidence": [
+    "E021"
+   ],
+   "allowed_conclusion": "图中显示演化池训练的策略在留出环境上更好；因果归于池演化(而非环境多样性/额外 RL)未隔离。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "生成器越写越好，池扩到 840 个环境、45 个结构原型，未坍缩",
+   "setting": "同上",
+   "baseline_control": "无(自身前后十步对比)",
+   "selection_vs_test": "n/a",
+   "result_denominator": "L2/L3 通过率 53.4→73.6%、L4 42.4→63.0%",
+   "evidence_ids": [
+    "E014",
+    "E015"
+   ],
+   "counterevidence": [
+    "E015"
+   ],
+   "allowed_conclusion": "生成通过率上升且结构标签增多；内容集中于数论/模/序列类，对下游增益的贡献未单独检验。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "质量奖励与多样性奖励均为必要",
+   "setting": "Thinking 单模型",
+   "baseline_control": "去掉各一部分",
+   "selection_vs_test": "n/a",
+   "result_denominator": "+2.4 vs +0.5/+0.6，单次",
+   "evidence_ids": [
+    "E016",
+    "E023"
+   ],
+   "counterevidence": [
+    "E021"
+   ],
+   "allowed_conclusion": "生成器奖励两部分对该次运行的平均增益有贡献；差值量级与单格噪声同阶，未检验显著性。"
+  },
+  {
+   "claim_id": "C5",
+   "text": "同源语义自审在 any-reject 下与 GPT-5.4 高度一致",
+   "setting": "79 个通过 L5 的环境，参照 GPT-5.4 单次审核",
+   "baseline_control": "总判 correct / 总判 has_bugs",
+   "selection_vs_test": "n/a",
+   "result_denominator": "F1=87.0%(P 85.7, R 88.2)，n=79",
+   "evidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "counterevidence": [
+    "E004"
+   ],
+   "allowed_conclusion": "审核门对一个小样本的参照标签有较好一致性；参照非真值，仍有漏检(召回 88%)进入下一道通过率门。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "task",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "单次 100 步 GRPO 设置下，EvoEnv 的自建环境课程使三种 4–8B 模型的 8 基准平均 pass@1 高于未训练基座和所比 R-Zero/DAPO/RLVE；环境池的留存/轮换/自审门各自贡献未隔离，不能写成 retained 或 improver。",
+  "author_claim_preserved": "作者主张“稳定自我改进取决于构建结构上超出自身能力的世界”，该机理表述未被消融证明。",
+  "unresolved": [
+   "池级(store-off/固定池)对照缺失",
+   "训练方差",
+   "算力计入"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "对象明确(环境池)，邻居比较表完整且基线含两类最近邻；饱和残差有图3支持，但“同类 memory/optimizer 别名”之外的邻居(如离线环境管线)只作定位。",
+   "evidence_ids": [
+    "E002",
+    "E010",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "从执行反馈(通过率)→候选编辑(生成器奖励)→准入→回写→下一步读取链条清楚，solve-verify 不对称论证有可检验预测(训练分数下降而留出上升)；通过率估计噪声与 a*=0.3 选择理由偏薄。",
+   "evidence_ids": [
+    "E003",
+    "E005",
+    "E013"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "五层验证、自审、新颖度闸、轮换、保底比例和超参(附录I)均可重建；缺少危害驱动退役/回退，池无上限，同源审核漏检后果仅靠通过率门兜底。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E006",
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "八个标准基准+符号等价判分可信；环境打分器正确性仅用 79 例、以非完美的 GPT-5.4 为参照；无对平凡/随机环境的校验。",
+   "evidence_ids": [
+    "E017",
+    "E020"
+   ],
+   "counterevidence_ids": [
+    "E018"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有三类基线与生成器奖励消融；缺池级留存/轮换/自审/新颖度门消融，缺同规模静态合成环境对照，增益可能来自环境多样性或额外 RL。",
+   "evidence_ids": [
+    "E016",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "评测基准与训练完全不重叠且无外部题库；留出 RLVE 环境同属对照；但无基座污染检验，种子部分取自公开竞赛档案。",
+   "evidence_ids": [
+    "E007",
+    "E013",
+    "E020"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "有样本量并报告基线下降的负结果，但主结果无任何不确定性；小题量基准 16 次评测平均不等于训练种子方差。",
+   "evidence_ids": [
+    "E020",
+    "E022"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "称基线步数/算力匹配，但生成、3 次自审、8×校准 rollout 的额外成本未计入也未报告。",
+   "evidence_ids": [
+    "E008",
+    "E009"
+   ],
+   "counterevidence_ids": [
+    "E021"
+   ],
+   "search_scope": []
+  }
+ },
+ "rationale": "环境构建闭环定位清楚、门控可重建；增益由权重承载，池级因果未隔离，单次运行且无方差与算力核算，证据仅到 task。",
+ "score": {
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "coverage": 1.0,
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75
+ },
+ "provenance": {
+  "input_hash": "84c6caf1b1a5bf8044143d994efafef3a2a03fec844b67ce505b8e4b82ac44a7",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this run; model_type taken from controller dispatch (claude-kimi type config). Blind boundary kept: no read/list of seats/ outside seats/son55/attempts/a1.",
+  "timestamp": "2026-10-22T01:46:35Z"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 1 Intro; txt line 82",
+   "quote": "A reasoning environment is a reusable executable artifact with four routines: a sampler that generates latent task instances, an oracle that computes reference answers, a renderer that turns instances into natural-language prompts, and a scorer that evaluates solver responses.",
+   "support_explanation": "定义被改进对象：可复用可执行环境(sampler/oracle/renderer/scorer)，非权重产物。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 1 Intro; txt line 110",
+   "quote": "The resulting system still lacks a durable object that can be validated once, sampled repeatedly, calibrated against the current solver, retired when it saturates, and later reused as seed material.",
+   "support_explanation": "作者的 gap：缺少可留存、可校准、可退役、可复用的环境级对象。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 1 Intro; txt line 132",
+   "quote": "Candidate environments enter the pool only when they satisfy four contracts: they execute under a strict interface; their oracle and scorer match the advertised task under conservative semantic self-review; sampled instances are hard-but-solvable for the current policy; and the pool remains broad enough to avoid template collapse.",
+   "support_explanation": "准入规则：四条合约(执行/语义自审/难度/新颖)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 3.2; txt line 689",
+   "quote": "The reviewer is the same policy used elsewhere in training, but its verdict is not used as generator reward.",
+   "support_explanation": "语义审核者与被训练策略同源，仅作为池准入门，不进入生成器奖励。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 3.3; txt line 787",
+   "quote": "We use one response per instance to estimate the pass rate without inflating compute.",
+   "support_explanation": "难度校准每个实例仅 1 次采样、m=8 实例，通过率估计噪声大。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 3.4; txt line 1326",
+   "quote": "Pool rotation controls the long-horizon curriculum.",
+   "support_explanation": "池轮换：使用固定轮数后退役，退役环境转为生成器 few-shot 种子；退役依据为轮数而非危害证据。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.1; txt line 1741",
+   "quote": "No external problem-answer data is used.",
+   "support_explanation": "零外部题库，十个种子环境；种子来自 competitive-programming 档案(附录F)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.1 Baselines; txt line 1805",
+   "quote": "GRPO trained on DAPO-Math-17k at matched compute",
+   "support_explanation": "DAPO 基线声称算力匹配；EvoEnv 自身生成/审核/校准算力是否计入未说明。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.1 Baselines; txt line 1811",
+   "quote": "fixed-environment RLVR with hand-curated environments and matched training steps",
+   "support_explanation": "RLVE 基线仅声称训练步数匹配。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Abstract; txt line 54",
+   "quote": "The strongest evidence comes from the already-strong regime: on Qwen3-4B-Thinking, fixed public-data RLVR and fixed hand-crafted environment RLVR reduce the average, while",
+   "support_explanation": "主结果：强模型上固定数据/固定手工环境 RLVR 使平均下降，EvoEnv 上升(72.4→74.8)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.2; txt line 2191",
+   "quote": "Second, the strong-model regime highlights the weakness of fixed curricula. On Qwen3-4B-Thinking, DAPO and RLVE reduce the average to",
+   "support_explanation": "同上，来自正文解释。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.2; txt line 2199",
+   "quote": "This suggests that, once a static verified distribution becomes saturated or misaligned, stable reward alone is not enough; the training environment must also evolve with the solver.",
+   "support_explanation": "作者对基线下降的解释(饱和/错配)，属推断，未单独检验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.3 Fig 3; txt line 2232",
+   "quote": "while held-out accuracy on 50 unseen RLVE environments rises from",
+   "support_explanation": "图3：训练分数下降而对 50 个未见 RLVE 环境的留出准确率上升，固定基线停滞(图表，单次运行)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.4 Fig 4; txt line 2265",
+   "quote": "The accepted pool keeps growing, reaching 840 generated environments and 45 tag prototypes by step 100.",
+   "support_explanation": "池增长与结构多样性审计(标签原型)，仅 Qwen3-4B-Instruct 100 步一次运行。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.4; txt line 2306",
+   "quote": "The dominant mass is in countable, automatically checkable tasks",
+   "support_explanation": "生成环境主要集中在可计数的数论/模/序列类(正文数论占 68.2%)，覆盖面窄。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.5; txt line 2321",
+   "quote": "Each ablation removes one component while keeping training steps, seeds, and evaluation protocol identical to the full",
+   "support_explanation": "消融仅涉及生成器奖励的两部分(质量/多样性)，仅在 Qwen3-4B-Thinking 上。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "App E; txt line 2874",
+   "quote": "GPT-5.4 is not a perfect oracle but is a substantially more capable reasoner than our",
+   "support_explanation": "同源审核器的外部审计用 GPT-5.4 作参照，79 个环境，参照本身非完美。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "App E; txt line 3111",
+   "quote": "The reviewer reliably catches greedy-for-optimal substitutions, hardcoded or trivially-derivable reference answers",
+   "support_explanation": "审核器能抓的缺陷类型；跨方法数据流等仍会漏检(同节后文)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "App H; txt line 3537",
+   "quote": "This paper studies a controlled setting: zero-data RLVR for reasoning with deterministic Python environments.",
+   "support_explanation": "作者限定范围：确定性 Python 环境、紧凑可验证任务，不覆盖开放判断/工具使用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.1 Evaluation; txt line 1759",
+   "quote": "For the small-problem-set competition math benchmarks, AIME 2024, AIME 2025, HMMT Feb 2025,",
+   "support_explanation": "小题量基准评测 16 次平均；AMC/GPQA/LCB 为单次 pass@1。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Sec 4.1/4.2 + App I (full text search)",
+   "quote": null,
+   "support_explanation": "全文及附录I查找：未发现训练种子数/多次训练重复、置信区间、GPU 小时、token 或总 rollout 数的报告；表1/表2均为单格点值。",
+   "kind": "our_inference"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Table 1 (HTML cells split per line)",
+   "quote": null,
+   "support_explanation": "表1：Qwen3-4B-Instruct 49.2→53.1；Thinking 72.4→74.8；Nemotron-Cascade-8B 71.0→73.2；Thinking 上 DAPO 64.8、RLVE 69.2、R-Zero 71.8；EvoEnv 逐项有升有降(如 AIME24 86.7→86.2、HMMT 56.9→60.0)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M-2605.14392",
+   "material_sha256": "180099a51cde6fe5d9abcb4c8ff2454d472ba51b144fbf3a80576959e990996d",
+   "locator": "Table 2 (cells split)",
+   "quote": null,
+   "support_explanation": "表2：Thinking 上完整 EvoEnv 平均 +2.4；去质量奖励 +0.5；去多样性奖励 +0.6；均为单次运行。",
+   "kind": "author_report"
+  }
+ ]
+}

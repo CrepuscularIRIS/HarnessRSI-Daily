@@ -1,0 +1,852 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "2605.08083",
+  "paper_id": "arXiv:2605.08083",
+  "title": "LLMs Improving LLMs: Agentic Discovery for Test-Time Scaling",
+  "version": "2605.08083v2",
+  "claim_type": "system_method",
+  "central_claim": "Building an offline replay environment lets an explorer LLM (Claude Code) iteratively synthesize width-depth test-time-scaling controllers as code using scaling-curve and execution-trace feedback and a single beta knob; the discovered controller improves the accuracy-cost tradeoff over handcrafted TTS baselines, generalizes to held-out benchmarks/model scales, and costs only $39.9 and 160 minutes to find."
+ },
+ "provenance": {
+  "input_hash": "b41dd3e78ba1bcdc3f3f83f36ee863d972fbd513a90f1f786404f8493fb03799",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref null: worker has no runtime receipt; model_type is the configured slot (haiku slot lock -> claude-sonnet-5-5[1m] per dispatcher instruction).",
+  "timestamp": "2026-10-22T01:49:07Z"
+ },
+ "materials": [
+  {
+   "material_id": "2605.08083",
+   "url": "https://arxiv.org/html/2605.08083v2",
+   "sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb",
+   "sections_read": [
+    "abstract",
+    "1 Intro",
+    "2 TTS as algorithmic search (formulation)",
+    "3 AutoTTS (replay env, discovery loop, beta parameterization)",
+    "4 Experimental setup",
+    "5 Results (Tables 1-3, efficiency, evolution trajectory)",
+    "6 Related work",
+    "7 Conclusion",
+    "App A limitation",
+    "App C discovery prompt",
+    "App D discovered controller code"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure image contents (Figs 1-4 curves) not in text; per-round candidate controllers IBC/SCR/DGCC referenced in code docstring are not shown"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2605.08083",
+   "locator": "Abstract",
+   "quote": "However, existing TTS strategies are largely hand-crafted: researchers manually design reasoning patterns and tune heuristics by intuition, leaving much of the computation-allocation space unexplored.",
+   "support_explanation": "Author gap: TTS controllers are hand-designed; the claim that the allocation space is unexplored is asserted, not measured.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2605.08083",
+   "locator": "Sec 6 Related Work",
+   "quote": "no prior work has formulated it as an algorithmic search problem.",
+   "support_explanation": "Novelty claim over TTS design; nearest discovery neighbors (FunSearch, EoH, AlphaEvolve, ADAS, Meta-Harness, TTT-Discover) are cited but not run.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2605.08083",
+   "locator": "Sec 6 Related Work",
+   "quote": "further advances this paradigm by exposing full execution histories to the proposer, enabling targeted diagnosis of failure modes rather than relying on scalar feedback alone.",
+   "support_explanation": "Trace-feedback design follows Meta-Harness; the new parts are the TTS replay environment and beta parameterization.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2605.08083",
+   "locator": "Sec 3.1",
+   "quote": "To address this, we construct an offline replay environment that moves all LLM calls prior to the discovery process, making controller evaluation deterministic and cheap.",
+   "support_explanation": "Evaluation substrate: pre-collected trajectories and probe signals; no live-LLM validation of replay is reported.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2605.08083",
+   "locator": "Sec 3.2",
+   "quote": "each round, an explorer LLM (Claude Code) reads the accumulated history",
+   "support_explanation": "History H holds all proposed controller implementations, accuracy-cost outcomes and execution traces; explorer model version is not given.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2605.08083",
+   "locator": "Sec 3.2 History Design",
+   "quote": "For each round, we sweep across multiple betas and record the resulting scaling curve as the scalar component; the trajectory component then supplies fine-grained behavioral evidence, enabling the agent to diagnose failure modes and propose a more targeted controller in the next round.",
+   "support_explanation": "Feedback signal = beta-sweep scaling curve + decision traces.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2605.08083",
+   "locator": "Sec 4 Experimental Protocol",
+   "quote": "The discovery loop runs for five rounds with Claude Code as the agent, and the final controller is selected as the one achieving the highest accuracy on",
+   "support_explanation": "Selection rule: highest accuracy on the AIME24 search environments (accuracy only); single discovery run of five rounds.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2605.08083",
+   "locator": "Sec 4 Experimental Protocol",
+   "quote": "is fixed and evaluated on held-out environments from AIME25 and HMMT25, which are never used during discovery or selection.",
+   "support_explanation": "Held-out benchmark separation claim (30 problems each).",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2605.08083",
+   "locator": "Sec 4 Experimental Protocol",
+   "quote": "we pre-sample 128 reasoning trajectories per (model, problem) pair at temperature 0.7 with a probing interval of 500 tokens to construct the replay matrix.",
+   "support_explanation": "Replay matrix size and probe granularity.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2605.08083",
+   "locator": "Sec 4 Experimental Protocol",
+   "quote": "each controller is evaluated 64 times independently by randomly sampling a subset of trajectories from the pre-sampled pool of 128, and the results are averaged.",
+   "support_explanation": "Variance reduction over trajectory resampling; no spread across draws or across discovery runs is reported.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2605.08083",
+   "locator": "Sec 4 Baselines",
+   "quote": "We follow the original setting with threshold 0.95",
+   "support_explanation": "Handcrafted baselines (SC@64, ASC, ESC, Parallel-Probe) run with original settings; no baseline tuning on the AIME24 search set at matched effort.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.1",
+   "quote": "outperforming all handcrafted baselines in three out of four models on average, and remaining competitive on Qwen3-8B (62.7 vs. 62.8 for SC@64).",
+   "support_explanation": "Headline held-out claim at beta=1.0; accuracy margins are small except Qwen3-1.7B.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.1",
+   "quote": "it reduces token consumption by approximately 69.5% compared to SC@64 while maintaining on-par accuracy on average across all four models (45.3 vs. 45.2)",
+   "support_explanation": "Token saving is quoted against SC@64, the most expensive baseline, not against ASC.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.4",
+   "quote": "resulting in a drastic token reduction (575.5K to 93.3K) accompanied by an accuracy drop from 53.1 to 49.0 on held-out benchmarks.",
+   "support_explanation": "w/o beta ablation moves the controller to a very different operating point (6x fewer tokens), so it is not an iso-cost comparison; single discovery run.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.4",
+   "quote": "Without this, the discovered controller achieves worse performance while allocating much more tokens.",
+   "support_explanation": "w/o execution traces: avg acc 51.6 vs 53.1 and tokens 824.3K vs 575.5K; single run each.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.5",
+   "quote": "Overall, the five-round discovery process costs only $39.9 and takes 160 minutes, suggesting that our replay-based discovery framework is practical to run.",
+   "support_explanation": "Discovery cost; the cost of pre-sampling 128 trajectories per (model, problem) is not included in the figure.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2605.08083",
+   "locator": "Sec 2 Cost definition",
+   "quote": "In settings where probing is treated as free relative to generation, we set",
+   "support_explanation": "Probe cost kappa_probe can be zero; probe answers are precomputed. Probe-based methods (AutoTTS, Parallel-Probe) benefit relative to full-read ASC/ESC if real probing costs tokens.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2605.08083",
+   "locator": "Sec 4 Metrics",
+   "quote": "We report both task accuracy and tokens that measure the total number of tokens consumed across all used branches.",
+   "support_explanation": "Cost metric = total generation tokens over used branches.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.3",
+   "quote": "These results suggest that the discovered strategies are not tightly overfitted to the main Qwen-based math setting, and can transfer to both a different model family and a non-math reasoning benchmark.",
+   "support_explanation": "Table 2: one extra model/benchmark pair (R1-Distill-Llama-8B on HMMT25) and one extra benchmark (Qwen3-1.7B on GPQA-Diamond), one run each.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2605.08083",
+   "locator": "App A Limitation",
+   "quote": "Additionally, the discovery process currently relies on a frontier coding agent; exploring whether open-source coding agents can achieve comparable discovery performance is an interesting direction for future work.",
+   "support_explanation": "Discovery depends on a single frontier explorer; no explorer or seed variation.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2605.08083",
+   "locator": "Sec 3.3",
+   "quote": "With only five discovery rounds, navigating this high-dimensional space causes the agent to collapse onto extreme solutions",
+   "support_explanation": "Motivation for beta: agents proposed up to 10 hyperparameters; supported anecdotally by preliminary experiments and the w/o beta row.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2605.08083",
+   "locator": "App D",
+   "quote": "that would be difficult to arrive at through manual intuition alone.",
+   "support_explanation": "Claim about the discovered Confidence Momentum Controller; no human-expert or tuned-handcrafted comparison supports it, and the code derives 12 internal hyperparameters from beta.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2605.08083",
+   "locator": "App C discovery prompt",
+   "quote": "at the start of every round, so your patch must be self-contained within",
+   "support_explanation": "Each round restarts from the template and reads prior rounds from history; the history is a raw archive of code, CSV results and traces rather than a distilled memory.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2605.08083",
+   "locator": "Table 1 reading (held-out average)",
+   "quote": "Held-out avg (Acc, tokens): Qwen3-4B ASC 60.2 @333.1k vs AutoTTS beta0.5 59.8 @348.7k vs beta1.0 60.5 @648.6k; Qwen3-8B ASC 62.8 @485.7k vs 61.1 @379.0k vs 62.7 @710.8k; Qwen3-1.7B ASC 34.3 @593.6k vs 38.6 @343.5k vs 40.6 @646.1k; Qwen3-0.6B ASC 23.2 @617.3k vs 21.8 @254.0k vs 24.6 @480.9k",
+   "support_explanation": "Our reading of Table 1: against ASC, the discovered controller is dominated on Qwen3-4B, trades accuracy for tokens on 8B, and clearly wins only on 0.6B/1.7B; the strongest gain is +6.3 points on Qwen3-1.7B vs SC@64.",
+   "kind": "our_inference",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2605.08083",
+   "locator": "Table 3 reading",
+   "quote": "Search cost ($): Ours 39.9; w/o Beta Parameterization 46.4; w/o Execution Traces 30.9; accuracy avg 53.1 / 49.0 / 51.6",
+   "support_explanation": "Our reading of Table 3: ablations are single discovery runs; the 1.5-point gap for traces is within what stochastic discovery could produce, and w/o beta differs mostly in operating point.",
+   "kind": "our_inference",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "2605.08083",
+   "locator": "Sec 5.6",
+   "quote": "while the right panel reports the corresponding performance on the held-out AIME25 and HMMT25 benchmarks.",
+   "support_explanation": "Authors tracked held-out performance per round for analysis, although held-out sets are stated not to drive selection.",
+   "kind": "author_report",
+   "material_sha256": "5b02d3604d74f43f72c9d45d940c601cc6e5c60d77e81b1255d06cd20ef1c3fb"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "Code-defined width-depth TTS controller (OptimalController class with beta schedule and trace hooks) for a frozen base LLM; baseline = handcrafted ASC/ESC/Parallel-Probe/SC@64",
+   "information": "Explorer sees the environment API, seed baselines, full history of prior controllers, their beta-sweep scaling curves and per-question decision traces; replay environment hides gold answers from the controller; controllers see probe answers only when probing",
+   "operation": "Explorer LLM (Claude Code) rewrites the controller from a template each round after reading history; controller evaluated on offline replay of AIME24 for four Qwen3 models",
+   "output": "Executable controller class + beta-to-hyperparameter map; final = highest AIME24 accuracy over rounds and beta",
+   "conditions": "pre-sampled 128 trajectories per (model, problem), 500-token probe interval, 64 resampled evaluations per controller, 5 rounds",
+   "feedback": "accuracy-token scaling curve across beta sweep; execution traces of branch/probe/prune/stop decisions",
+   "selection_rule_data": "highest accuracy on search environments (AIME24); held-out AIME25/HMMT25 not used (author claim); no population, no parent sampling",
+   "persistence": "history archive of rounds (code, CSV results, JSONL traces); final controller released as code",
+   "later_use": "fixed controller run on held-out benchmarks and other models via replay",
+   "claimed_effect": "average held-out token saving about 69.5% vs SC@64 at on-par accuracy (beta=0.5); peak accuracy beyond handcrafted in 5 of 8 cases (beta=1.0)",
+   "failure_boundary": "single discovery run, one frontier explorer, replay fidelity unvalidated, probing treated as cheap, only width-depth action set",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E008",
+    "E023"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Search space parameterization: each controller exposes one monotone scalar beta mapped to all internal hyperparameters",
+   "information": "same as S1",
+   "operation": "Discovery prompt requires single-knob schedule; map produced by the coding agent",
+   "output": "1-D sweep that traces an accuracy-cost frontier",
+   "conditions": "controller must be expressible with a monotone beta schedule",
+   "feedback": "scaling curve",
+   "selection_rule_data": "same as S1",
+   "persistence": "inside controller code",
+   "later_use": "beta chosen at deployment (0.5, 1.0 reported)",
+   "claimed_effect": "w/o beta: 6x fewer tokens, held-out acc 49.0 vs 53.1",
+   "failure_boundary": "discovered CMC still has 12 internal hyperparameters via hand-chosen linear schedules; no iso-cost comparison",
+   "evidence_ids": [
+    "E014",
+    "E021",
+    "E022"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "TTS strategies are hand-designed heuristics tuned by intuition; evaluating candidate strategies online is too expensive for automated search, and scalar feedback does not tell the explorer why a controller fails.",
+  "checked_gap": "Real but partly generic: hand-designed controllers exist, and expensive evaluation is a concrete bottleneck that replay addresses. Not established: that LLM-agent code search finds better controllers than a cheap automated tuning of the existing controllers on the same replay data; that baseline hyperparameters were optimal; that the space is meaningfully unexplored.",
+  "lineage_closest_adjacent": [
+   {
+    "item": "Meta-Harness (full execution histories to proposer)",
+    "source": "Sec 3.2, Sec 6 [20]",
+    "solved": "trace-augmented agentic harness discovery",
+    "remaining": "TTS controllers over replay; evaluation cost"
+   },
+   {
+    "item": "FunSearch / EoH / AlphaEvolve / ADAS",
+    "source": "Sec 6",
+    "solved": "LLM program search in code",
+    "remaining": "not applied to TTS control; not run as baselines"
+   },
+   {
+    "item": "ASC, ESC, Parallel-Probe, ST-BoN, DeepPrune etc.",
+    "source": "Sec 1, 6",
+    "solved": "handcrafted adaptive stopping/pruning",
+    "remaining": "claimed fixed heuristics; ASC is already competitive on cost for 4B/8B"
+   }
+  ],
+  "residue": "Cheap, deterministic evaluation of adaptive allocation policies and a diagnosable feedback channel.",
+  "stakes": "Hand tuning of branching/pruning/stopping per model and benchmark.",
+  "method_response": "Offline replay MDP, trace history, single-knob schedule.",
+  "remaining_gap": "No matched-effort automated-tuning baseline, no replay-to-live validation, richer action spaces, open-source explorers.",
+  "evidence_ids": [
+   "E001",
+   "E002",
+   "E003",
+   "E011",
+   "E020",
+   "E024"
+  ],
+  "unresolved": [
+   "Whether tuned versions of ASC/Parallel-Probe on AIME24 replay reach the same frontier",
+   "Replay vs live-LLM fidelity"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "reframe_as_solvable_object",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "reframe_as_solvable_object",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "recast TTS design as controller synthesis over a replay MDP with explicit state/actions/objective, evaluable deterministically",
+     "solver is LLM code search, not a mature solver with correspondence guarantees; no proof that replay objective equals live objective"
+    ],
+    "success_checks": "formal definition of the central object (state, action set, objective) is given in Sec 2; faithfulness to live inference not validated by intervention or oracle",
+    "failure_checks": "risk of re-applying existing LLM program-search machinery to a new input (limited novelty); faithfulness gap between replay and live inference",
+    "evidence_ids": [
+     "E002",
+     "E004",
+     "E009",
+     "E003"
+    ],
+    "reason": "The paper itself states the contribution as a reframing of TTS strategy design as algorithmic search over a replayable environment; the reframing is formalized, but guarantees and faithfulness checks are absent. No C-sub (C00 interpretability measurement, C21 RL as sequence modelling, C27 game) applies."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Partial fit to reframe_as_solvable_object with sub null.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H14",
+    "version": "patterns-2026-10-21",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:population_search_executable_fitness/S2",
+      "status": "met",
+      "note": "replay evaluator is built before the loop and deterministic; gameability limited by held-out sets but selection is on one benchmark"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S3",
+      "status": "met",
+      "note": "evolved unit is a controller class inside a scaffold with shared helpers"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S4",
+      "status": "met",
+      "note": "decision traces ground proposals"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/S5",
+      "status": "partial",
+      "note": "history archive ablated only through traces; no population/archive selection"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/F1",
+      "status": "partial",
+      "note": "generic LLM program search applied to a new domain; novelty sits in environment and beta"
+     },
+     {
+      "id": "rsi:population_search_executable_fitness/F4",
+      "status": "partial",
+      "note": "replay proxy for live inference with free probing is not validated"
+     }
+    ],
+    "evidence_ids": [
+     "E004",
+     "E006",
+     "E007",
+     "E017",
+     "E023"
+    ]
+   },
+   {
+    "main": "attribute_and_patch_incumbent",
+    "sub": "H12",
+    "version": "patterns-2026-10-21",
+    "fit": "low",
+    "condition_checks": [
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S5",
+      "status": "met",
+      "note": "proposer sees raw traces and source"
+     },
+     {
+      "id": "rsi:attribute_and_patch_incumbent/S3",
+      "status": "unmet",
+      "note": "template reset each round; no regression/preservation gate across edits"
+     }
+    ],
+    "evidence_ids": [
+     "E006",
+     "E023"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   "Consider a domain-card note for inference-time algorithm discovery (offline replay environments) under H14/H15."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "reframe_as_solvable_object",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "population_search_executable_fitness",
+   "domain_sub": "H14",
+   "operation_correspondence": "RS: recast the problem as a formal object with a cheap solver. Domain H14: LLM proposes code edits evaluated by an automated executable evaluator; here the evaluator is the replay MDP.",
+   "conditions_differences": "H14 expects population/archive and parent sampling; AutoTTS uses a short serial proposal loop with history reading. RS expects correspondence proof; AutoTTS provides none.",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E023"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population S2"
+   ],
+   "applies_when": "executable fitness drives selection",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Deterministic replay score, but the proxy (free probing, finite 128-trajectory pool) is unvalidated against live runs and selection is by search-set accuracy only.",
+   "evidence_ids": [
+    "E004",
+    "E007",
+    "E017"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S5",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population S5"
+   ],
+   "applies_when": "history/memory is claimed to guide search",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Execution traces are ablated; the history itself (vs a no-history restart) is not.",
+   "evidence_ids": [
+    "E015",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F1",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population F1"
+   ],
+   "applies_when": "generic LLM evolution applied to new target",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Search-level contributions exist (replay env, beta, trace feedback), but trace feedback follows Meta-Harness and no search-algorithm comparison is run.",
+   "evidence_ids": [
+    "E003",
+    "E002"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/F4",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json population F4"
+   ],
+   "applies_when": "selection on a proxy fitness",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Replay-based tokens exclude probing cost; the proxy tie to live inference is argued, not tested.",
+   "evidence_ids": [
+    "E017",
+    "E004"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:attribute_and_patch_incumbent/S3",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json attribute S3"
+   ],
+   "applies_when": "edits patch an incumbent",
+   "applicable": false,
+   "status": "not_applicable",
+   "reason": "Each round restarts from the template, so no incumbent is patched; cumulative learning happens only through reading history.",
+   "evidence_ids": [
+    "E023"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-4",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object reviewer expectations 4"
+   ],
+   "applies_when": "reframed object stands in for the real problem",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "No replay-to-live equivalence check; no ground-truth oracle of the original live TTS objective.",
+   "evidence_ids": [
+    "E004",
+    "E017"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rs:reframe_as_solvable_object/RE-3",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "reframe_as_solvable_object reviewer expectations 3"
+   ],
+   "applies_when": "reframe claimed as contribution",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Replay environment and beta schedule are new identifying structure; the search machinery itself is re-applied.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E021"
+   ],
+   "score_item": "G"
+  },
+  {
+   "id": "local:2605.08083-1",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "automated-ML baselines practice"
+   ],
+   "applies_when": "claims automatic discovery beats handcrafted methods",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Handcrafted baselines run at original settings with no matched-effort tuning on the same replay search set, and no non-LLM search (random/grid/Bayesian) control.",
+   "evidence_ids": [
+    "E011",
+    "E024"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.08083-2",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "stochastic search practice"
+   ],
+   "applies_when": "single stochastic discovery run supports claims",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "One five-round discovery per configuration; ablations and main controller not repeated; no variance across explorer runs.",
+   "evidence_ids": [
+    "E007",
+    "E025"
+   ],
+   "score_item": "E.statistics"
+  },
+  {
+   "id": "local:2605.08083-3",
+   "version": "v1",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "cost reporting practice"
+   ],
+   "applies_when": "headline cost excludes data collection",
+   "applicable": true,
+   "status": "partial",
+   "reason": "$39.9 and 160 minutes reported with ablation search costs; offline trajectory pre-sampling cost not reported.",
+   "evidence_ids": [
+    "E016",
+    "E009"
+   ],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Discovered controller improves the accuracy-cost tradeoff over handcrafted TTS baselines on held-out benchmarks",
+   "setting": "Qwen3 0.6B/1.7B/4B/8B, replay of AIME25 and HMMT25 (30 problems each)",
+   "baseline_control": "SC@64, ASC, ESC, Parallel-Probe at original settings",
+   "selection_vs_test": "search AIME24; held-out AIME25/HMMT25",
+   "result_denominator": "avg held-out: beta=1.0 acc 24.6/40.6/60.5/62.7 vs best baseline 24.1/34.3/60.4/62.8; beta=0.5 tokens ~254k-379k vs SC@64 ~0.9-1.2M",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E024"
+   ],
+   "counterevidence": "ASC dominates on Qwen3-4B and is close on 8B in token cost; margins of 0.1-0.5 acc points are inside noise on 30 problems; baselines untuned.",
+   "allowed_conclusion": "Discovered controller is competitive with strong baselines and clearly better than SC@64 on tokens; superiority over best handcrafted is shown only for small models."
+  },
+  {
+   "claim_id": "C2",
+   "text": "Discovered strategies generalize to held-out benchmarks and other model families",
+   "setting": "R1-Distill-Llama-8B on HMMT25; Qwen3-1.7B on GPQA-Diamond",
+   "baseline_control": "SC@64, ASC, ESC",
+   "selection_vs_test": "unseen model/benchmark",
+   "result_denominator": "27.2 vs 26.7 acc at 533.9K vs 985.7K tokens; GPQA 41.6 vs 41.3 at 151K vs 510K",
+   "evidence_ids": [
+    "E019"
+   ],
+   "counterevidence": "One model-benchmark pair each, tiny accuracy deltas, no repeats.",
+   "allowed_conclusion": "No evidence of failure out of distribution; weak evidence of transfer."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Beta parameterization and execution traces are needed for effective discovery",
+   "setting": "ablation on AIME24/AIME25/HMMT25 averages",
+   "baseline_control": "w/o beta, w/o traces",
+   "selection_vs_test": "same as C1",
+   "result_denominator": "53.1 acc/575.5K vs 49.0/93.3K vs 51.6/824.3K",
+   "evidence_ids": [
+    "E014",
+    "E015",
+    "E025"
+   ],
+   "counterevidence": "Different operating points, single run, no search-cost-matched comparison.",
+   "allowed_conclusion": "Suggestive only."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Entire discovery costs $39.9 and 160 minutes",
+   "setting": "five-round discovery",
+   "baseline_control": "n/a",
+   "selection_vs_test": "n/a",
+   "result_denominator": "single run",
+   "evidence_ids": [
+    "E016"
+   ],
+   "counterevidence": "Excludes offline replay data collection.",
+   "allowed_conclusion": "Agent-API cost of the loop is small; total pipeline cost not shown."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A Claude Code-written controller selected on AIME24 replay achieves, on replayed AIME25/HMMT25, roughly 40-70% fewer tokens than SC@64 with on-par accuracy (author-reported), and beats the handcrafted baselines on accuracy for the 0.6B and 1.7B models.",
+  "not_supported": "Superiority over tuned or ASC-style cost-efficient baselines on 4B/8B; benefit of agentic search over simpler automated tuning; fidelity of replay to live generation including probe cost; reproducibility across discovery runs; total pipeline cost.",
+  "unresolved": [
+   "replay fidelity",
+   "baseline tuning",
+   "variance across discovery runs"
+  ],
+  "note": "Author-reported results only. Improver level not claimed: the explorer is not improved."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Real bottleneck in expensive evaluation of adaptive allocation policies and a clear lineage to Meta-Harness/ADAS/AlphaEvolve, but the hand-crafted-heuristics gap is generic, the 'unexplored space' is not characterized, and the most relevant alternative (automated tuning of existing controllers) is not considered.",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003"
+   ],
+   "counterevidence_ids": [
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Replay MDP, trace-augmented history and single-knob schedule form a coherent, reconstructable answer to cost and overfitting; beta's anti-overfit mechanism is asserted from preliminary observation and the schedule itself fans out to 12 hand-set hyperparameters.",
+   "evidence_ids": [
+    "E004",
+    "E006",
+    "E021",
+    "E022"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Prompt, environment API, replay setup, selection rule, final controller code and schedule are disclosed; no admission gate beyond search accuracy, explorer version/seed and beta grid unspecified, per-round template reset, and no versioning/rollback beyond a history archive.",
+   "evidence_ids": [
+    "E005",
+    "E007",
+    "E023"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Accuracy vs ground truth is sound but on 30-problem sets; cost counts generation tokens only with probing treated as free; replay fidelity to live generation and probe-answer extraction cost are unvalidated; token headline is against the most expensive baseline.",
+   "evidence_ids": [
+    "E004",
+    "E017",
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Component ablations (beta, traces) exist but are single-run and not iso-cost; baselines untuned; no non-LLM search or history-off control; ASC dominance on 4B/8B undermines the tradeoff claim.",
+   "evidence_ids": [
+    "E011",
+    "E014",
+    "E015",
+    "E024"
+   ],
+   "counterevidence_ids": [
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Search on AIME24, evaluation on AIME25/HMMT25 stated as never used for selection, plus another model family and GPQA; held-out benchmarks are near-distribution to AIME24 and authors tracked held-out curves per round.",
+   "evidence_ids": [
+    "E008",
+    "E019",
+    "E026"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 1,
+   "reason": "64 resampled evaluations are averaged but no spread, CI or significance is reported; one discovery run per variant; margins of a few tenths of a point on 30 problems.",
+   "evidence_ids": [
+    "E010",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Discovery API cost and wall-clock reported, ablation search costs given and inference tokens central, but offline pre-sampling cost and live probing cost are omitted and baseline effort is not matched.",
+   "evidence_ids": [
+    "E016",
+    "E025",
+    "E009"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 61.25,
+  "display": 61.3,
+  "lower": 61.25,
+  "upper": 61.25,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "status": {
+  "status": "reviewed",
+  "reason": "Complete HTML full text including discovery prompt and discovered code read; figures not available as text."
+ },
+ "rationale": "回放环境+轨迹反馈+β单旋钮使TTS控制器发现便宜，AIME25/HMMT25留出较干净；但基线未调参(ASC在4B/8B占优)、单次发现、无方差、探针成本按免费，评scoped retained。"
+}

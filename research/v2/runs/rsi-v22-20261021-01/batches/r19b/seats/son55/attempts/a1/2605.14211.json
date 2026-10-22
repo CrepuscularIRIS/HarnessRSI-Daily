@@ -1,0 +1,418 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "out_of_scope",
+ "reason": "改进对象与被评价产物均为权重(π、IDM)，辅以聚类 K 与游玩内记忆库；记忆库内容来自外部视频训练出的分类器而非自身执行反馈改写，且无跨任务留存的非权重组件被评价。按冻结 A3：improver 更新与产物皆为权重→范围外。边界提示：长记忆消融(+2.5)是非权重组件，建议聚合时核对。",
+ "paper": {
+  "claim_type": "component_training",
+  "central_claim": "从含噪无标注互联网视频自举的“自磨砺”回路(卡住→检索→更新 IDM/关键时刻→训练策略)可在 8 小时、多小时规划的 Pokémon Emerald 与 Zelda 上持续推进，优于 BC、检索增强和零样本基础模型基线。",
+  "paper_key": "2605.14211",
+  "paper_id": "2605.14211",
+  "title": "ASH: Agents that Self-Hone in Long-Horizon Worlds",
+  "version": "2605.14211v5"
+ },
+ "materials": [
+  {
+   "material_id": "M-2605.14211",
+   "url": "https://arxiv.org/html/2605.14211v5",
+   "sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-5",
+    "Appendix A-I"
+   ],
+   "complete": true,
+   "missing_sections": []
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "策略 π(1.2B 因果 Transformer)、逆动力学模型 IDM、关键时刻分类器 K(DINOv2+HDBSCAN)及每智能体关键时刻记忆库",
+   "information": "智能体自身轨迹(观察+动作)；22k/17k 条未标注 YouTube 通关视频；无奖励；里程碑仅用于评测",
+   "operation": "卡住(Δ=4800 步无新关键时刻)→DINOv2 相似度检索 top-k 视频窗口→用检索数据更新 K→用自己轨迹+随机策略数据更新 IDM→IDM 给视频打伪动作→训练 π(含由 K 构造的长期记忆前缀)",
+   "output": "更新后的 π/IDM/K 与继续游玩",
+   "conditions": "2D 离散动作游戏；需要可检索的相关互联网视频",
+   "feedback": "无环境奖励；信号=轨迹与视频的相似度+K 的新颖性",
+   "selection_rule_data": "检索窗口贪心一对一匹配得分；K 聚类需≥30 条不同轨迹；10% 样本留出防过拟合",
+   "persistence": "权重 π/IDM、聚类 K、各智能体记忆库(仅本次游玩内)",
+   "later_use": "下一段游玩直接使用更新后的权重与记忆",
+   "claimed_effect": "8 小时内 Pokémon 11.2/12、Zelda 9.9/12 里程碑，高于 BC/RAEA/Voyager+Opus",
+   "failure_boundary": "IDM 难标 A/B 键；视频脏数据 52.5%；仅 2D；基线含手工策展 400 小时数据",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E003",
+    "E004",
+    "E005",
+    "E009",
+    "E010",
+    "E011"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "长程视觉运动任务依赖人工奖励或带动作标注示范，难规模化；BC 与固定短记忆难处理远期依赖。",
+  "checked_gap": "问题真实，但范围外：目标是权重学习，非 harness 组件。",
+  "lineage": [
+   "VPT(IDM 伪标签BC)→RAEA(检索增强BC)→Voyager 类 LLM 技能库→ASH(检索+IDM 自举+关键时刻记忆)"
+  ],
+  "closest_adjacent": "VPT(静态语料+固定 IDM)、RAEA、Voyager+Opus 5，均为基线。",
+  "residue": "动态更新 IDM 与按需检索训练集。",
+  "stakes": "游戏式长程学习；对 harness RSI 价值有限。",
+  "method_response": "卡住触发的检索自举回应“静态语料不覆盖当前路障”。",
+  "remaining_gap": "3D/连续动作、IDM 对不可见动作的标注、数据稀缺环境。",
+  "evidence_ids": [
+   "E001",
+   "E009",
+   "E017"
+  ],
+  "unresolved": [
+   "未做 RSI 范围外的分量评分"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": "C08",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "1 语料瓶颈：静态语料不覆盖当前路障(陈述)；2 可控生成器：非生成而是检索+逆映射标注；3 质量闸：检索相关性+聚类过滤；4 迭代：每次卡住重做；5 对真实目标迁移：直接在真实游戏评测",
+    "success_failure_checks": "成功：过滤环节被消融(随机帧长记忆 vs 关键时刻)；失败：中间性质(检索相关率 94%)与下游里程碑已连接",
+    "evidence_ids": [
+     "E002",
+     "E003",
+     "E007",
+     "E012"
+    ],
+    "reason": "“逆映射(视频→动作)产生训练实例+质量闸+迭代”与 C08 的数据工厂描述部分对应；ASH 无生成器而是检索，故仅 partial。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "",
+  "executes_pattern": true,
+  "resolves_problem": "unresolved：里程碑进展提高，但 RSI 意义上的留存组件未被单独证明。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [],
+  "unassigned": [
+   "权重自举回路；最近边界卡 couple_context_and_weight_updates/H28 仅 fit=low(记忆库不是被训练读取的可编辑上下文工件)"
+  ],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [],
+ "expectations": [
+  {
+   "id": "rsi:couple_context_and_weight_updates/F5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:couple_context_and_weight_updates.F5"
+   ],
+   "applies_when": "测试时在输入流上累积经验",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "范围外，未逐条评分；评测在同一游玩轨迹上累积，评测流与适应流重合——聚合时可核。",
+   "evidence_ids": [
+    "E002",
+    "E008"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "local:2605.14211-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "引言(6.5/6.0)与摘要/表6(9.3/7.8)矛盾"
+   ],
+   "applies_when": "主张最强基线数字",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "同一文内最强基线里程碑数不一致。",
+   "evidence_ids": [
+    "E013",
+    "E014"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "ASH 在两个游戏的 8 小时评测中持续推进并超过基线",
+   "setting": "Pokémon Emerald/Zelda Minish Cap，12 里程碑，8 小时",
+   "baseline_control": "Voyager+Opus 5、VPT、Offline BC、RAEA(上限 288 GPU 小时)",
+   "selection_vs_test": "里程碑取自网络攻略；评测与自举同一游玩流",
+   "result_denominator": "12 条轨迹/方法，均值±标准差(表6)",
+   "evidence_ids": [
+    "E008",
+    "E011",
+    "E014"
+   ],
+   "counterevidence": [
+    "E013"
+   ],
+   "allowed_conclusion": "范围外；仅记录事实：作者报告的里程碑均值高于其基线，基线含人工策展数据且引言数字自相矛盾。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": null,
+  "claim_support": "unresolved",
+  "strongest_supported_claim": "范围外不评分；作者报告的结果为 task 级(权重更新后的游玩进度)。",
+  "unresolved": [
+   "是否按边界卡纳入(长记忆消融 +2.5 为非权重组件)"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "unknown",
+   "rating": null,
+   "reason": "范围外(A3)：不评分。",
+   "evidence_ids": [],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "rationale": "改进载体为权重(π/IDM)，按冻结 A3 判范围外；长记忆消融为边界项，供聚合复核。",
+ "score": {
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "raw": null,
+  "display": null,
+  "lower": null,
+  "upper": null,
+  "coverage": 0.0
+ },
+ "provenance": {
+  "input_hash": "84c6caf1b1a5bf8044143d994efafef3a2a03fec844b67ce505b8e4b82ac44a7",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this run; model_type taken from controller dispatch (claude-kimi type config). Blind boundary kept: no read/list of seats/ outside seats/son55/attempts/a1.",
+  "timestamp": "2026-10-22T01:47:27Z"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 2 Related Work; txt line 269",
+   "quote": "it retrieves a task-relevant training set from a much larger internet-scale corpus, then updates its weights using that data.",
+   "support_explanation": "作者自述：改进以检索数据后更新权重完成。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 1 Intro; txt line 161",
+   "quote": "ASH uses its current trajectories to retrieve relevant examples from online video and to update its Inverse Dynamics Model (IDM).",
+   "support_explanation": "自改进回路：轨迹→检索互联网视频→更新 IDM。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 3 Bootstrapping; txt line 2067",
+   "quote": "Therefore, we use the IDM to create pseudo-actions for each sample from",
+   "support_explanation": "IDM 给检索视频打伪动作标签，策略在其上训练(权重更新)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 3 Key moments; txt line 1790",
+   "quote": "These new key moments serve a dual purpose:",
+   "support_explanation": "关键时刻同时用作长期记忆与触发自举的卡住信号。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 3 Key moments; txt line 1800",
+   "quote": "Secondly, they are used for our dynamic bootstrapping algorithm, where a bootstrap is triggered when an agent does not encounter a new key moment for",
+   "support_explanation": "触发规则：Δ 步无新关键时刻。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.2; txt line 2515",
+   "quote": "Finally, dynamic bootstrapping allows ASH to deploy compute more efficiently by only training when it gets stuck, contributing an additional 1.5 milestones.",
+   "support_explanation": "组件消融：动态自举增益 1.5 个里程碑(长记忆 2.5 在同句前文)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.5; txt line 2705",
+   "quote": "We find that replacing key moments with random frames reduces average achieved milestones by",
+   "support_explanation": "长记忆内容消融：关键时刻 7.75 vs 随机帧 6.00(表2，4 次 4 小时)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.1; txt line 2433",
+   "quote": "For our baselines, we train one policy for each environment and perform 12 runs each.",
+   "support_explanation": "ASH 3 次训练×4 智能体=12 条轨迹；基线 12 次运行。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 5 Limitations; txt line 2741",
+   "quote": "It also relies on pseudo-actions from an Inverse Dynamics Model, which will struggle to label actions that are difficult to infer from pixels.",
+   "support_explanation": "作者局限：IDM 伪标签。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "App E.2; txt line 4088",
+   "quote": "We see that more than half (52.5%) of the corpus is dirty.",
+   "support_explanation": "互联网视频语料脏数据占 52.5%(抽样200)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4 Baselines; txt line 2386",
+   "quote": "so we manually curate 400 hours of high-quality training data.",
+   "support_explanation": "VPT/BC 基线需人工策展 400 小时数据才能起步。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.4; txt line 2620",
+   "quote": "As Pokémon is a long-horizon game, we find a randomly retrieved video has only an 8% chance of being relevant training data, highlighting the challenges of naively training a policy over",
+   "support_explanation": "检索质量评估基线：随机检索相关率 8%。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 1 Intro; txt line 198",
+   "quote": "The strongest baseline gets stuck in both environments, achieving an average of",
+   "support_explanation": "引言数字(6.5/6.0)与摘要及表6(Voyager 9.25/7.83)不一致，文内自相矛盾。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "App E.1 Table 6 caption; txt line 4005",
+   "quote": "Average milestones reached (out of 12) at the end of the 8-hour evaluation, reported as mean",
+   "support_explanation": "终点里程碑均值±标准差：ASH 11.17±0.83/9.92±1.51。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.6; txt line 2731",
+   "quote": "We find that ASH does not exhibit catastrophic forgetting.",
+   "support_explanation": "离线重放最终检查点，无遗忘(仅 Pokémon 4 条轨迹)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 4.1; txt line 2484",
+   "quote": "Methods without an update mechanism plateau at that horizon.",
+   "support_explanation": "作者的归因：无更新机制的方法停滞。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M-2605.14211",
+   "material_sha256": "506c1991afcfc23058edb956350503bc481dea03c79616318641221523f957a4",
+   "locator": "Sec 5 Limitations; txt line 2741",
+   "quote": "Furthermore, as ASH was evaluated in 2D environments with discrete action spaces, it remains unclear how well ASH generalizes to 3D environments, or to those with continuous action spaces.",
+   "support_explanation": "作者局限：2D 离散动作。",
+   "kind": "author_report"
+  }
+ ]
+}

@@ -1,0 +1,843 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19a",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "paper": {
+  "paper_key": "2605.06614",
+  "paper_id": "arXiv:2605.06614",
+  "title": "SkillOS: Learning Skill Curation for Self-Evolving Agents",
+  "version": "2605.06614v1",
+  "claim_type": "component_training",
+  "central_claim": "An RL recipe (grouped task streams + composite reward) trains a skill curator that edits an external Markdown SkillRepo for a frozen executor; the learned curator outperforms memory-free and memory-based baselines (and a Gemini-2.5-Pro prompted curator) in effectiveness and efficiency, and generalizes across executors and task domains."
+ },
+ "provenance": {
+  "input_hash": "b41dd3e78ba1bcdc3f3f83f36ee863d972fbd513a90f1f786404f8493fb03799",
+  "rubric_version": "frozen-v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref null: worker has no access to a runtime receipt; model_type is the configured claude-kimi slot (haiku slot lock -> claude-sonnet-5-5[1m] per dispatcher instruction).",
+  "timestamp": "2026-10-22T01:42:19Z"
+ },
+ "materials": [
+  {
+   "material_id": "2605.06614",
+   "url": "https://arxiv.org/html/2605.06614v1",
+   "sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d",
+   "sections_read": [
+    "abstract",
+    "1 Intro",
+    "2 Related Work",
+    "3 Methodology",
+    "4 Experiments (Tables 1-2)",
+    "5 Analysis (Table 3)",
+    "6 Conclusion",
+    "Appendix A prompts (captions only)",
+    "B hyperparameters/grouping/datasets/baselines/metrics",
+    "C.1 Gemini-3.1-Flash-Lite (Table 6)",
+    "C.2 case studies",
+    "D limitations",
+    "E future work"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Figure image contents (Figs 3-6 numbers, Fig 7-19 prompt/skill text) are not present in the extracted text; judged from captions and surrounding prose only"
+   ]
+  }
+ ],
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "2605.06614",
+   "locator": "Sec 1 Introduction, contribution paragraph",
+   "quote": "By mimicking test-time streaming settings, it grounds skill curation in long-term utility: skills induced from earlier experiences are evaluated by their ability to improve later related tasks.",
+   "support_explanation": "States the credit path: earlier-task curation is scored by later related tasks.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "2605.06614",
+   "locator": "Sec 1 Introduction, gap paragraph",
+   "quote": "This limits the density of learning signals available for curating highly reusable skills and mastering complex management operations such as skill update and deletion, which are essential for robust and scalable long-term self-evolution.",
+   "support_explanation": "Author gap: prior RL work gives too sparse signal for complex curation ops.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "2605.06614",
+   "locator": "Sec 2 Related Work, RL for skill curation",
+   "quote": "but their supervision is mostly restricted to local adaptation within short task streams. This favors immediately useful operations such as skill insertion, while offering limited signal for complex management operations, such as revising outdated skills and deleting harmful ones.",
+   "support_explanation": "Names nearest RL-curation neighbors (Wang 2025a; Ye 2026) and the claimed residual (short horizon). Neighbors are not run as baselines.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "2605.06614",
+   "locator": "Sec 3.1 end",
+   "quote": "The updated repository is then used by the executor on subsequent tasks, forming a closed loop between task execution and experience-driven skill evolution.",
+   "support_explanation": "Persistence + later reading of the SkillRepo (BM25 top-k by executor).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "2605.06614",
+   "locator": "Sec 3.1 Skill Curator",
+   "quote": "the self-judged correctness of the answers/interactions",
+   "support_explanation": "Curator input includes self-judged correctness (no oracle label at curation time).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "2605.06614",
+   "locator": "Sec 3.2.1",
+   "quote": "To provide downstream learning signals for skill curation, we construct each training instance as a group of related tasks that are solved sequentially.",
+   "support_explanation": "Grouped-stream training instance construction.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "2605.06614",
+   "locator": "Sec 3.2.2 reward, Eq 1 text",
+   "quote": "The content quality reward evaluates whether the curated skills are semantically meaningful and likely to be useful for future tasks.",
+   "support_explanation": "Composite reward includes an LLM-judge (Qwen3-32B) content term alongside task outcome, function-call validity and compression: proxy terms added to downstream outcome.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "2605.06614",
+   "locator": "App B.2 grouping",
+   "quote": "For multi-turn agentic tasks, we leverage the default task type annotation for each benchmark (e.g., 6 task types in ALFWorld) as they naturally expose a discrete partition of tasks into families that share the same underlying skills, and we can use this partition directly in place of the annotated attribute set",
+   "support_explanation": "Agentic grouping uses the benchmark's task-type labels (privileged family label) during training; whether test-time uses grouping is not stated.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "2605.06614",
+   "locator": "Sec 4.2 Main Results",
+   "quote": "improves the average success rate from 55.7 to 61.2 over the strongest baseline ReasoningBank with Qwen3-8B as the executor",
+   "support_explanation": "Headline ALFWorld gain over the best memory baseline (Qwen3-8B executor).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "2605.06614",
+   "locator": "Sec 4.3",
+   "quote": "On ALFWorld, it lifts the average success rate of Qwen3-8B from 47.9 to 61.2 and Gemini-2.5-Pro from 66.4 to 80.2, demonstrating compatibility with executors of varying capacity.",
+   "support_explanation": "Executor transfer (curator trained with Qwen3-8B executor only).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "2605.06614",
+   "locator": "Sec 4.3",
+   "quote": "This highlights a curator-executor mismatch: stronger reasoning ability alone does not guarantee effective skill curation",
+   "support_explanation": "Trained 8B curator vs prompted Gemini-2.5-Pro curator (SkillOS-gemini): the key trained-vs-prompted control.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "2605.06614",
+   "locator": "Sec 5 Ablation",
+   "quote": "Experiments are conducted on ALFWorld, with Qwen3-8B used as both the curator and executor.",
+   "support_explanation": "Ablation scope is a single benchmark/executor (Table 3 has no std).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "2605.06614",
+   "locator": "Sec 5 Ablation",
+   "quote": "The most significant degradation comes from using random task sequences (w/o grouping), which lowers the success rate to 57.3.",
+   "support_explanation": "Grouped-stream credit path ablation: 61.2 -> 57.3 (Table 3).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "2605.06614",
+   "locator": "Sec 5 Ablation",
+   "quote": "Without the content-quality reward, the success rate drops from 61.2 to 58.6",
+   "support_explanation": "Proxy-judge reward term contributes 2.6 points; compression term 1.2 (Table 3).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "2605.06614",
+   "locator": "Sec 5 Attribution of Skill Usage",
+   "quote": "invokes skills on all evaluation examples and achieves a higher success rate, indicating that the evolved skills contribute directly to task solving.",
+   "support_explanation": "Correlational usage evidence; no skill-removal or shuffled-skill intervention.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "2605.06614",
+   "locator": "Sec 4.1 Implementation",
+   "quote": "We report averaged performance and standard deviation over 3 runs.",
+   "support_explanation": "Three runs with std subscripts; no significance tests or CIs.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "2605.06614",
+   "locator": "Sec 4.1 Implementation",
+   "quote": "The full training process takes approximately 3 days for ALFWorld, 2.5 days for reasoning tasks, and 5 days for WebShop.",
+   "support_explanation": "Training cost on 16 H100 reported; no matched-budget prompted-curator baseline; inference-time curation cost not reported.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "2605.06614",
+   "locator": "Sec 4.1 Evaluation Configurations",
+   "quote": "For efficiency, we compute the number of execution steps per agentic task and the number of tokens per reasoning problem, respectively.",
+   "support_explanation": "Tokens-per-problem is promised but no token numbers appear in Table 2 text.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "2605.06614",
+   "locator": "Sec 3.1",
+   "quote": "This setting naturally captures the challenge of self-evolving agents, where the system must distill useful experience from the trajectories of past interactions to improve performance on future tasks, and become more capable over time.",
+   "support_explanation": "Evaluation is a test-time stream; test-time order, repo initialisation and per-seed reset are not specified in the extracted text.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "2605.06614",
+   "locator": "App D Limitations",
+   "quote": "Our current implementation relies on a relatively simple keyword-based retrieval mechanism, such as BM25, to retrieve relevant skills from the skill repository.",
+   "support_explanation": "Retrieval is a fixed BM25 reader; curator-reader co-training is not done (executor frozen).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "2605.06614",
+   "locator": "App C.1",
+   "quote": "achieves the highest average success rate (73.1%), outperforming the strongest external baseline ReasoningBank (66.0%) by +7.1 points",
+   "support_explanation": "Fourth executor (Gemini-3.1-Flash-Lite) on ALFWorld only.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "2605.06614",
+   "locator": "App B.3.1 WebShop",
+   "quote": "partitioned into 10,587 training, 1,000 dev, and 500 test instructions.",
+   "support_explanation": "Official splits; evaluation uses the 500 test instructions. ALFWorld test is valid_seen (140).",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "2605.06614",
+   "locator": "App B.3.1 DeepMath",
+   "quote": "is a large-scale, decontaminated mathematical reasoning dataset containing approximately 103K problems",
+   "support_explanation": "Reasoning curator trained on DeepMath subset, tested on AIME24/25/GPQA-Diamond.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "2605.06614",
+   "locator": "Table 2 / Table 1 reading",
+   "quote": "AIME24 SkillOS 80.0 (std 3.3) vs No Memory 76.0 (std 6.9) vs SkillOS-base 75.6 (std 5.1); Qwen3-8B executor ALFWorld Avg SR SkillOS 61.2 (std 4.6) vs ReasoningBank 55.7 (std 3.1)",
+   "support_explanation": "Our reading of table rows: reasoning gains of a few points sit inside run-to-run std on 30-problem AIME sets; ALFWorld margin vs best baseline is ~1.2x the std of SkillOS. Gemini-executor margin SkillOS 80.2 vs SkillOS-gemini 79.3.",
+   "kind": "our_inference",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "2605.06614",
+   "locator": "Sec 5 Behaviors of Skill Curator",
+   "quote": "Meanwhile, delete remains a relatively small fraction throughout training with a slightly growing trend, showing the effectiveness of rewarding conciseness of",
+   "support_explanation": "Delete usage is reported as a proportion only; no evidence that deletions remove harmful skills or are rolled back.",
+   "kind": "author_report",
+   "material_sha256": "a9d7a6493d64b35d6ae0c3b89d424a900b88d4ae385a5a3d149827e1d6da7e5d"
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "External SkillRepo of Markdown SKILL.md files (insert/update/delete) written by a trainable Qwen3-8B curator; baseline = prompted/heuristic curators (ReasoningBank, MemP, untrained Qwen3-8B, Gemini-2.5-Pro)",
+   "information": "Curator sees trajectory, self-judged correctness, and BM25-retrieved related skills; executor frozen, retrieves top-5 skills by BM25; no gold label at curation time; training reward uses downstream task outcomes over a grouped stream",
+   "operation": "After each task the curator emits a sequence of insert_skill/update_skill/delete_skill function calls that ApplyOps to the repo",
+   "output": "S_{t+1}=ApplyOps(S_t, c_t); repo read by executor on subsequent tasks",
+   "conditions": "streaming task sequence; tool-call schema (Fig 8); skill = YAML frontmatter + Markdown body",
+   "feedback": "downstream executor success on later tasks in the same group (r_task averaged over tasks 2..|G|), function-call validity, Qwen3-32B content judge, compression ratio",
+   "selection_rule_data": "No per-edit acceptance gate: all curator ops are applied; selection happens only through GRPO updating the curator (8 rollouts of the whole curation sequence per group, advantage = reward minus group mean) on the training split",
+   "persistence": "SkillRepo persists within the stream; curator weights persist after RL; repo reset to empty at start of each training group",
+   "later_use": "BM25 top-5 retrieval into executor prompt on later tasks",
+   "claimed_effect": "ALFWorld avg SR 55.7 -> 61.2 vs ReasoningBank (Qwen3-8B exec), fewer steps; WebShop SR 16.5 vs 11.4; reasoning avg 73.8 vs 69.6",
+   "failure_boundary": "Flat single-file skills; BM25 retrieval; frozen executor; no rollback/version/staleness mechanism; agentic gains larger than reasoning gains",
+   "evidence_ids": [
+    "E004",
+    "E005",
+    "E006",
+    "E007",
+    "E009",
+    "E020"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "Training-instance construction: grouped task streams from the training split",
+   "information": "Gemini-2.5-Pro annotated attributes (reasoning) or benchmark task-type labels (ALFWorld/WebShop) define dependency groups; test tasks not used",
+   "operation": "Retrieve successor tasks by soft-Jaccard phrase similarity with progression/difficulty gates; train on groups of size 10 (or random 5-12)",
+   "output": "Group G whose later tasks provide delayed reward to earlier curation actions",
+   "conditions": "task families exist and are labelable",
+   "feedback": "none by itself (instance construction)",
+   "selection_rule_data": "Training split only; weights tuned by manual inspection on 200 held-out source tasks",
+   "persistence": "not applicable (data construction)",
+   "later_use": "RL training of curator",
+   "claimed_effect": "Removing grouping lowers ALFWorld avg SR 61.2 -> 57.3",
+   "failure_boundary": "Relies on task-family labels or LLM annotation; no short-horizon-RL baseline comparison",
+   "evidence_ids": [
+    "E006",
+    "E008",
+    "E013"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "Skill curation is the bottleneck; manual, heuristic-prescribed and short-horizon RL curation cannot learn complex long-term curation (update/delete) from indirect, delayed feedback.",
+  "checked_gap": "Real and specific: prior fixed curators (ReasoningBank, MemP) use hand rules; RL-trained curators exist (Mem-alpha, Ye et al. 2026, ARISE) but the paper only asserts, not tests, that their short horizon is the limiting factor. The SkillOS-base vs SkillOS vs SkillOS-gemini rows do show curation quality matters in this setting.",
+  "lineage_closest_adjacent": [
+   {
+    "item": "ReasoningBank / MemP (prompted or rule-managed memory)",
+    "source": "baselines in Tables 1-2, run by authors",
+    "solved": "write/maintain memory from experience",
+    "remaining": "no learned downstream-credit curation"
+   },
+   {
+    "item": "Mem-alpha (Wang 2025a), Ye et al. 2026, ARISE (Li 2026b), SkillRL, D2Skill",
+    "source": "cited in Sec 1-2 only; no baselines",
+    "solved": "RL for memory/skill ops in short streams or for skill use",
+    "remaining": "claimed: limited long-horizon signal for update/delete"
+   }
+  ],
+  "residue": "Long-horizon credit for update/delete curation ops; joint curator-retriever optimisation left to future work (App D).",
+  "stakes": "Curated stores written by frontier prompted curators can mismatch executor capability (SkillOS-gemini below SkillOS with Qwen executors).",
+  "method_response": "Grouped related-task streams make later tasks score earlier curation; composite reward adds validity/quality/compression shaping.",
+  "remaining_gap": "No test that short-horizon vs grouped RL (neighbors) explains the gain beyond the w/o-grouping ablation; retrieval, flat skills, executor co-training, and entry-level retention gating remain open.",
+  "evidence_ids": [
+   "E002",
+   "E003",
+   "E011",
+   "E020"
+  ],
+  "unresolved": [
+   "Whether Mem-alpha/Ye-style RL curators would match SkillOS at equal budget (neighbors not run)"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "self_supervised_signal_engineering",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "self_supervised_signal_engineering",
+    "sub_id": null,
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": [
+     "manufacture a usable proxy signal when direct per-edit supervision is absent: grouped later-task success + self-judged correctness + LLM-judge content + compression",
+     "closest sub C26 (typed dense rewards) differs: advantage is rollout-level scalar GRPO uniform over tokens, no pairwise/step-level preference construction"
+    ],
+    "success_checks": "intervention on the manufactured signal is partly present (w/o r_cnt, w/o r_comp, w/o grouping, Table 3); filter/stabiliser ablations beyond rewards absent",
+    "failure_checks": "thin wrapper on existing GRPO/curator recipe risk; proxy judge terms not shown to be validated against ground truth",
+    "evidence_ids": [
+     "E005",
+     "E006",
+     "E007",
+     "E013",
+     "E014"
+    ],
+    "reason": "Reward for curation is manufactured from delayed executor outcomes judged by the model itself plus auxiliary judges, which is the closest of the 15 definitions; fit is only partial because ground-truth environment outcomes/oracle metrics may also be involved and the update is plain GRPO."
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "Closest original card is self_supervised_signal_engineering with sub null; no C-sub reproduces the grouped-stream delayed-credit move.",
+  "executes_pattern": "partial",
+  "resolves_problem": "partial"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "amortize_improver_into_trained_policy",
+    "sub": "H26",
+    "version": "patterns-2026-10-21",
+    "fit": "high",
+    "condition_checks": [
+     {
+      "id": "rsi:amortize_improver_into_trained_policy/H26-step2",
+      "status": "met",
+      "note": "credit path via grouped streams: later-task success rewards earlier curation"
+     },
+     {
+      "id": "rsi:amortize_improver_into_trained_policy/H26-step3",
+      "status": "partial",
+      "note": "reward depends on what frozen executor does with the repo (reader-aware) but reader is not co-trained and reward has composite proxy terms"
+     },
+     {
+      "id": "rsi:amortize_improver_into_trained_policy/H26-step4",
+      "status": "partial",
+      "note": "trained on train splits, tested on official splits, but streaming test protocol and task-family label use at test unreported"
+     },
+     {
+      "id": "rsi:amortize_improver_into_trained_policy/H26-step5",
+      "status": "partial",
+      "note": "trained vs prompted curator at same executor present; store-removed/frozen variants and matched-budget prompted baseline absent"
+     }
+    ],
+    "evidence_ids": [
+     "E001",
+     "E006",
+     "E011",
+     "E013",
+     "E017"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H01",
+    "version": "patterns-2026-10-21",
+    "fit": "medium",
+    "condition_checks": [
+     {
+      "id": "rsi:abstract_experience_into_guidance/S4",
+      "status": "partial",
+      "note": "insert/update/delete edit ops with a compression reward; no consolidation/conflict policy beyond what the curator learns"
+     }
+    ],
+    "evidence_ids": [
+     "E004",
+     "E025"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": [
+   "H26 step 3: note that reader-awareness can be achieved by reward-through-frozen-reader without co-training (SkillOS)."
+  ]
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "self_supervised_signal_engineering",
+   "rs_sub": null,
+   "domain_namespace": "rsi",
+   "domain_main": "amortize_improver_into_trained_policy",
+   "domain_sub": "H26",
+   "operation_correspondence": "RS: derive a training signal where per-decision supervision is missing. Domain: curator actions credited by later tasks that read the store. Both map to the grouped-stream reward.",
+   "conditions_differences": "RS card expects a diagnosis plus ablated filter; H26 expects reader coupling and artifact ablation. SkillOS has reward ablations but no store-frozen or filter ablation.",
+   "evidence_ids": [
+    "E006",
+    "E007",
+    "E013"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S2",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json amortize S2"
+   ],
+   "applies_when": "improver is trained and credited via a consumer of its artifact",
+   "applicable": true,
+   "status": "met",
+   "reason": "Curation reward comes from later-task executor success inside the group.",
+   "evidence_ids": [
+    "E001",
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S1",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json amortize S1"
+   ],
+   "applies_when": "reward is raw score instead of improvement vs pre-edit state",
+   "applicable": true,
+   "status": "partial",
+   "reason": "r_task is mean success of tasks 2..|G| with GRPO group-mean baseline across rollouts; no no-memory reference per group, so task difficulty is only handled by group-relative advantage.",
+   "evidence_ids": [
+    "E006"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/S3",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json amortize S3"
+   ],
+   "applies_when": "writer and reader are separate models",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Executor is frozen and BM25 retrieval is fixed; authors list joint optimisation as future work.",
+   "evidence_ids": [
+    "E020"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/F4",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json amortize F4"
+   ],
+   "applies_when": "composite proxy reward is used",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Task outcome dominates but validity, Qwen3-32B judge and compression terms are added; ablation (no std) shows 2.6 and 1.2 point drops, i.e. proxy terms matter and are not validated against ground truth.",
+   "evidence_ids": [
+    "E007",
+    "E014"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/H26-step4",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "H26 step 4"
+   ],
+   "applies_when": "store built on streams and scored on a stream",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Train/test splits official; test-time stream order, reset and use of task-type labels at test not reported.",
+   "evidence_ids": [
+    "E008",
+    "E019",
+    "E022"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:amortize_improver_into_trained_policy/H26-step5",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "H26 step 5; main card pending expectations"
+   ],
+   "applies_when": "claims a trained curator beats prompted curation",
+   "applicable": true,
+   "status": "partial",
+   "reason": "SkillOS-base and SkillOS-gemini are matched on prompt/interface, but no store-frozen or shuffled-skill control and training bill is not matched by a prompt-optimisation baseline.",
+   "evidence_ids": [
+    "E011",
+    "E017"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:evidence_gated_retention/S2",
+   "version": "conditions-2026-10-21",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json evidence_gated_retention S2"
+   ],
+   "applies_when": "paper claims update/delete curation keeps the store healthy",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "Delete share is reported, but no admission test, rollback, or evidence that deleted skills were harmful.",
+   "evidence_ids": [
+    "E002",
+    "E025"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-1",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering reviewer expectations 1"
+   ],
+   "applies_when": "signal tuned on one family",
+   "applicable": true,
+   "status": "met",
+   "reason": "Cross-executor (3 + Gemini-3.1-Flash-Lite) and cross-task (Fig 3) transfer reported.",
+   "evidence_ids": [
+    "E010",
+    "E021"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:self_supervised_signal_engineering/RE-5",
+   "version": "rs-15-31",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "self_supervised_signal_engineering reviewer expectations 5"
+   ],
+   "applies_when": "generation/filtering loop adds compute",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Training days reported; inference-time curation calls/tokens and per-query cost not reported.",
+   "evidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2605.06614-1",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "paper Sec 5, App D"
+   ],
+   "applies_when": "claims gains come from the evolved skills",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Usage correlation only; no ablation with skills removed or shuffled at test.",
+   "evidence_ids": [
+    "E015"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.06614-2",
+   "version": "v1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "Sec 4.1, Table 2"
+   ],
+   "applies_when": "claims efficiency in tokens for reasoning",
+   "applicable": true,
+   "status": "unknown",
+   "reason": "Token counts promised but not found in the extracted text.",
+   "evidence_ids": [
+    "E018"
+   ],
+   "score_item": "E.cost"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "Trained SkillOS curator outperforms memory-free and memory-based baselines on ALFWorld, WebShop, reasoning",
+   "setting": "Qwen3-8B/32B and Gemini-2.5-Pro executors; curator Qwen3-8B; BM25 top-5",
+   "baseline_control": "No Memory, ReasoningBank, MemP, SkillOS-base, SkillOS-gemini",
+   "selection_vs_test": "trained on train splits; evaluated on ALFWorld valid_seen 140, WebShop 500 test, AIME24/25, GPQA-D",
+   "result_denominator": "ALFWorld avg SR 61.2 vs 55.7 (RB); WebShop SR 16.5 vs 11.4; reasoning avg 73.8 vs 69.6 (No Memory) - 3 runs, std subscripts",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E024"
+   ],
+   "counterevidence": "AIME margins within std; Gemini-executor margin vs SkillOS-gemini ~0.9; ALFWorld margin vs best baseline close to 1-1.5 std; no RL-curator neighbor baselines.",
+   "allowed_conclusion": "On ALFWorld a trained 8B curator reliably beats the tested prompted/heuristic curators with Qwen executors; WebShop and reasoning gains are smaller and statistically unsupported."
+  },
+  {
+   "claim_id": "C2",
+   "text": "RL training, not curator model scale, drives the gain (8B trained > Gemini-2.5-Pro prompted curator)",
+   "setting": "same prompt/interface",
+   "baseline_control": "SkillOS-base, SkillOS-gemini",
+   "selection_vs_test": "test splits",
+   "result_denominator": "ALFWorld Qwen3-8B exec 61.2 vs gemini curator 50.7 base 53.1; Gemini exec 80.2 vs 79.3",
+   "evidence_ids": [
+    "E011",
+    "E021",
+    "E024"
+   ],
+   "counterevidence": "Trained curator may encode benchmark priors in weights and emit them regardless of experience; no shuffled-trajectory control; no matched-budget prompt optimisation.",
+   "allowed_conclusion": "Training on in-domain streams yields a better curator than zero-shot prompting at no extra inference-time model size."
+  },
+  {
+   "claim_id": "C3",
+   "text": "Grouped task streams and composite reward are needed",
+   "setting": "ALFWorld, Qwen3-8B executor and curator",
+   "baseline_control": "w/o r_cnt, w/o r_comp, w/o grouping",
+   "selection_vs_test": "test split",
+   "result_denominator": "61.2 / 58.6 / 60.0 / 57.3 single value each",
+   "evidence_ids": [
+    "E012",
+    "E013",
+    "E014"
+   ],
+   "counterevidence": "No std for ablation; one benchmark; w/o grouping uses random sequences, not a short-horizon (neighbor) objective.",
+   "allowed_conclusion": "Directionally supports grouping and judge reward on ALFWorld; magnitude uncertain."
+  },
+  {
+   "claim_id": "C4",
+   "text": "Learned curator yields richer repo structure and meta-skills; skills drive success",
+   "setting": "ALFWorld analyses",
+   "baseline_control": "baseline repos",
+   "selection_vs_test": "test",
+   "result_denominator": "Figures 5-6 (not in text)",
+   "evidence_ids": [
+    "E015"
+   ],
+   "counterevidence": "Correlational; qualitative case studies.",
+   "allowed_conclusion": "Suggestive only."
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "A Qwen3-8B skill curator RL-trained on grouped ALFWorld streams produces a SkillRepo that raises held-out ALFWorld success (author-reported, 3 runs) over untrained, Gemini-prompted, and two heuristic memory baselines across four frozen executors.",
+  "not_supported": "Consistent gains on reasoning/WebShop beyond noise; attribution of gains to skill content vs curator-weight priors; superiority over other RL-trained curators; efficiency in tokens; safety of update/delete ops.",
+  "unresolved": [
+   "test-time stream protocol",
+   "judge reliability",
+   "token cost"
+  ],
+  "note": "Author-reported results only; no reproduction by us. Improver level not claimed: training budget not matched against a prompt-optimised curator."
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Specific bottleneck (curation of a persistent skill store from delayed feedback) with named neighbors and a stated residual (short-horizon supervision); untested vs the RL-curator neighbors, and 'curation is the bottleneck' only indirectly shown by SkillOS-base vs trained rows.",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E011"
+   ],
+   "counterevidence_ids": [
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Credit path (later related tasks score earlier edits), rollout-level GRPO and composite reward are reconstructable and match the stated problem; judge/compression proxy terms and uniform token advantage are weakly justified.",
+   "evidence_ids": [
+    "E001",
+    "E006",
+    "E007"
+   ],
+   "counterevidence_ids": [
+    "E014"
+   ],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Operation chain (ops, BM25 top-5, repo update, reuse) clear, but no retention gate, version/rollback, staleness/conflict handling; delete effect unevidenced; test-time stream/reset protocol and grouping at test missing.",
+   "evidence_ids": [
+    "E004",
+    "E019",
+    "E025"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Programmatic environment SR/steps and math_verify accuracy are credible, steps counted over failures; self-judge signal for curation not validated, WebShop absolute SR low (16.5), AIME 30-problem sets noisy.",
+   "evidence_ids": [
+    "E009",
+    "E022",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Good trained-vs-base-vs-Gemini curator controls and reward/grouping ablations, but no store-frozen/shuffled-skill or no-experience control (curator weight priors alternative), no RL-curator baselines, ablations single-run, usage evidence correlational.",
+   "evidence_ids": [
+    "E011",
+    "E013",
+    "E014",
+    "E015"
+   ],
+   "counterevidence_ids": [
+    "E012"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "Official held-out splits, cross-executor and cross-task transfer, DeepMath decontaminated; but ALFWorld valid_seen only, test stream is also the adaptation stream with unspecified order/reset, checkpoint selection protocol not stated.",
+   "evidence_ids": [
+    "E010",
+    "E021",
+    "E022",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E019"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Three runs with std for main tables (unclear which source of randomness), no CIs/significance tests; ablation table without std; several margins within std.",
+   "evidence_ids": [
+    "E016"
+   ],
+   "counterevidence_ids": [
+    "E024"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "Training time and hardware reported plus step counts; inference curation cost, tokens (promised, not seen), and matched-budget baseline for the 3-5 day training are missing.",
+   "evidence_ids": [
+    "E017",
+    "E018"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  }
+ },
+ "score": {
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75,
+  "coverage": 1.0,
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c"
+ },
+ "status": {
+  "status": "reviewed",
+  "reason": "Complete HTML full text incl. appendices read; figures' image content not available in text."
+ },
+ "rationale": "已训练curator经分组任务流获延迟信用，ALFWorld对启发式/未训练/Gemini curator有可信提升；但无RL邻居基线、无store冻结对照、推理收益在噪声内，评为scoped retained。"
+}

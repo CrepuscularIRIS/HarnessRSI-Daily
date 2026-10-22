@@ -1,0 +1,916 @@
+{
+ "schema_version": "radar-review-v2.2",
+ "run_id": "rsi-v22-20261021-01",
+ "batch_id": "r19b",
+ "attempt_id": "a1",
+ "seat": "son55",
+ "status": "reviewed",
+ "reason": "材料完整(正文+附录A-J)；系统方法，留存对象为跨任务记忆与可执行技能库，留出任务检验了转移。",
+ "paper": {
+  "claim_type": "system_method",
+  "central_claim": "跨任务积累并复用经验(可验证技能库+解决方案/细化/执行三类记忆)，使药物性质预测 agent 在单任务排名第一，并在 16 个小任务建立记忆后于 17 个留出任务上零测试时搜索即比 20 次搜索的基线高 10–30%。",
+  "paper_key": "2605.15461",
+  "paper_id": "2605.15461",
+  "title": "DrugSAGE:Self-evolving Agent Experience for Efficient State-of-the-Art Drug Discovery",
+  "version": "2605.15461v1"
+ },
+ "materials": [
+  {
+   "material_id": "M-2605.15461",
+   "url": "https://arxiv.org/html/2605.15461v1",
+   "sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "sections_read": [
+    "Abstract",
+    "Sec 1-6",
+    "Appendix A-J (datasets, baseline protocols/prompts, per-task tables, routing tables, Explore Agent, transfer score, theorem)"
+   ],
+   "complete": true,
+   "missing_sections": [
+    "Appendix C 基线提示词/Appendix D-E 逐任务数值表以抽取方式部分略读(不影响判断)"
+   ]
+  }
+ ],
+ "signatures": [
+  {
+   "sig_id": "S1",
+   "object": "跨任务经验记忆 Z=(R解决方案, H细化, Q执行)，驱动 MCTS 的家族选择、父节点采样、子方案提议和沙箱修复；基线=无跨任务记忆的 agent 搜索",
+   "information": "目标任务验证指标、历史任务节点的标准化得分(transfer)、LLM 提议的类型化编辑+理由+父子验证差、沙箱日志与资源画像；测试标签不可见",
+   "operation": "记忆增强 UCB 选家族→权重含 transfer 的父节点采样→H 检索 grounding 的 LLM 提议→Q 的已验证修复/资源画像→执行→全部结果写回 R/H/Q",
+   "output": "最佳验证集方案",
+   "conditions": "任务共享输入输出结构，指标/类型/规模可比",
+   "feedback": "执行得分与失败日志",
+   "selection_rule_data": "目标任务验证集得分；历史任务得分仅作先验",
+   "persistence": "追加式记忆(无准入、遗忘、版本、回退)",
+   "later_use": "后续任务的家族/父节点/提议/修复",
+   "claimed_effect": "更少搜索更高分；B=0 时零搜索转移",
+   "failure_boundary": "无记忆污染/过期/冲突处理的描述；未报告记忆有害的案例",
+   "evidence_ids": [
+    "E002",
+    "E003",
+    "E004",
+    "E005",
+    "E006",
+    "E007"
+   ]
+  },
+  {
+   "sig_id": "S2",
+   "object": "共享可执行技能库 K(SKILL.md+AST API 快照+仓库元数据)",
+   "information": "文献/GitHub 检索结果、仓库 AST 快照；任务描述",
+   "operation": "LiteratureScout 多视角检索→SkillBuilder 基于 AST 写 SKILL.md→Tier0-2 分层验证+自动修复→通过者入库",
+   "output": "搜索空间根节点",
+   "conditions": "需有可用实现的论文/仓库",
+   "feedback": "语法/导入/沙箱端到端执行结果",
+   "selection_rule_data": "执行验证；排序用引用/星标/活跃度等先验",
+   "persistence": "skills/{name}/ 目录，跨任务共享",
+   "later_use": "所有任务的搜索根",
+   "claimed_effect": "0.929 vs 0.875(去掉 Explore Agent)",
+   "failure_boundary": "静态先验排序；对留出任务的泄漏未说明",
+   "evidence_ids": [
+    "E008",
+    "E013",
+    "E024"
+   ]
+  },
+  {
+   "sig_id": "S3",
+   "object": "DrugSAGE-Zero 路由器",
+   "information": "任务签名(类型、指标、log|D|、描述嵌入)",
+   "operation": "最近类比任务→取其记忆中最佳方案→原样部署，不搜索",
+   "output": "一个已验证方案",
+   "conditions": "池中存在指标/类型相近任务",
+   "feedback": "无(仅检索)",
+   "selection_rule_data": "指标/类型/规模/嵌入相似度",
+   "persistence": "n/a",
+   "later_use": "直接作为目标任务答案",
+   "claimed_effect": "17 个留出任务上 B=0 即近排行榜",
+   "failure_boundary": "LD50 差 0.502→0.547；对生物学语境不对齐也路由",
+   "evidence_ids": [
+    "E009",
+    "E022",
+    "E027"
+   ]
+  }
+ ],
+ "gap": {
+  "author_gap": "现有 agent 每个新任务都从头付出完整搜索成本，不保留过往经验；药物性质任务共享输入输出结构。",
+  "checked_gap": "真实局限，且被基线表证实：基线虽有任务内记忆但无跨任务记忆。",
+  "lineage": [
+   "RAG 式 ML agent→搜索式 agent(AIDE/MLEvolve/AIRA-dojo)→AutoResearch/ShinkaEvolve(以排行榜模型为锚)→Agentomics(生物医学端到端)→DrugSAGE(跨任务记忆+文献技能库)"
+  ],
+  "closest_adjacent": "Agentomics(最近邻)；追加式技能库[22]、工作流归纳[23]、记忆生命周期[24]等 agent-memory 文献仅作定位，无跨任务记忆的 ML-agent 同类基线被比较。",
+  "residue": "跨任务转移的方案与统计证据；零测试时搜索。",
+  "stakes": "大数据集下单次训练数小时，搜索成本直接转为实验成本。",
+  "method_response": "三类记忆各接一处搜索接口，并用路由实现零搜索转移。",
+  "remaining_gap": "无“带技能库、无记忆”的基线在 B=0 下对照；记忆构建成本与泄漏边界；任务域限于性质预测。",
+  "evidence_ids": [
+   "E001",
+   "E011",
+   "E012",
+   "E029"
+  ],
+  "unresolved": [
+   "技能库与记忆的分离贡献(跨基线)"
+  ]
+ },
+ "rs_pattern": {
+  "primary": "adapt_via_conditioning",
+  "supporting": [],
+  "matches": [
+   {
+    "main_id": "adapt_via_conditioning",
+    "sub_id": "C03",
+    "role": "primary",
+    "fit": "partial",
+    "tactic_steps_checked": "1 规范条件化模式：任务签名+记忆检索(非统一格式训练)；2 参考底座：16 个任务的方案库；3 无上游训练：直接对齐/检索(互补子动作)；4 留出整类别：Polaris 11 任务为新类别，TDC 6 任务有同类类比，做了去同类消融；5 对手基线：最近邻/排行榜模型基线缺位",
+    "success_failure_checks": "失败模式“声称 zero-shot 而基线未获同样信息”：基线既无记忆也无文献技能库，且 TDC 部分用于建记忆——命中；成功条件“结构化留出+条件化信号开关消融”：Polaris 留出+图4b 部分满足",
+    "evidence_ids": [
+     "E009",
+     "E010",
+     "E011",
+     "E012",
+     "E016",
+     "E017"
+    ],
+    "reason": "LLM agent 以检索到的历史任务方案为条件、无参数更新地解新任务，对应 C03 的“把参考底座转入查询”分支；无训练、非神经条件化，故仅 partial。"
+   }
+  ],
+  "outside_taxonomy": false,
+  "reason": "",
+  "executes_pattern": true,
+  "resolves_problem": "unresolved：留出任务上方案接近排行榜，但对手基线缺信息对等，成本摊销未计。"
+ },
+ "domain_pattern": {
+  "namespace": "rsi",
+  "matches": [
+   {
+    "main": "population_search_executable_fitness",
+    "sub": "H15",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "high",
+    "condition_checks": "S2 评估器先于循环、难作弊(官方验证/测试划分)满足；S4 变异基于评估器观察(H 检索失败/理由)满足；S5 记忆以测得效应为凭——H 存父子差，partial；H15 步骤4 声明共享范围并测转移——Polaris 留出满足；步骤5 同预算消融+留出——仅图示",
+    "evidence_ids": [
+     "E003",
+     "E004",
+     "E016",
+     "E010"
+    ]
+   },
+   {
+    "main": "index_experience_for_reuse",
+    "sub": "H03",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "partial",
+    "condition_checks": "Zero 模式=检索先例并原样部署；写门：K 有执行验证而 R/H/Q 无准入门；案例单元为整方案，未去实例化；F3 记忆建自测试流——TDC 部分重叠；留存件消融仅图示",
+    "evidence_ids": [
+     "E005",
+     "E006",
+     "E009",
+     "E012"
+    ]
+   },
+   {
+    "main": "abstract_experience_into_guidance",
+    "sub": "H02",
+    "version": "taxonomy+cards@52ff9657",
+    "fit": "partial",
+    "condition_checks": "技能库来源=外部文献而非自身交互流；保留门=分层执行验证满足；版本/合并/退役无；下游增益 0.929 vs 0.875 但库的构建与评测任务是否分离未交代",
+    "evidence_ids": [
+     "E008",
+     "E013",
+     "E024"
+    ]
+   }
+  ],
+  "unassigned": [],
+  "revision_proposals": []
+ },
+ "pattern_mapping": [
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain_namespace": "rsi",
+   "domain_main": "index_experience_for_reuse",
+   "domain_sub": "H03",
+   "operation_correspondence": "C03“检索最近参考实例作为一等输入并直接转为查询预测”对应 H03“检索并复用先例案例”，Zero 模式即不经适配的先例复用。",
+   "conditions_differences": "C03 要求按整类别留出并审计污染；H03 要求去实例化案例与写门，本文案例为整方案、R/H/Q 无写门。",
+   "evidence_ids": [
+    "E009",
+    "E010",
+    "E012"
+   ]
+  },
+  {
+   "rs_main": "adapt_via_conditioning",
+   "rs_sub": "C03",
+   "domain_namespace": "rsi",
+   "domain_main": "population_search_executable_fitness",
+   "domain_sub": "H15",
+   "operation_correspondence": "细化记忆条件化 LLM 变异提议，对应 H15“蒸馏搜索记忆指导进化”。",
+   "conditions_differences": "H15 要求以子-父适应度差为记忆准入凭据；本文记录差值但无重复观察门。",
+   "evidence_ids": [
+    "E004",
+    "E006"
+   ]
+  }
+ ],
+ "expectations": [
+  {
+   "id": "rsi:population_search_executable_fitness/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:population_search_executable_fitness.S5"
+   ],
+   "applies_when": "搜索带有记忆/档案",
+   "applicable": true,
+   "status": "partial",
+   "reason": "父子验证差与失败日志入记忆，记忆有无消融仅图示(单调)，无重复观察/负证据门。",
+   "evidence_ids": [
+    "E004",
+    "E006",
+    "E016"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:population_search_executable_fitness/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:population_search_executable_fitness.S2"
+   ],
+   "applies_when": "以执行得分选择",
+   "applicable": true,
+   "status": "met",
+   "reason": "官方五种子划分、验证集选方案、测试集报告、与排行榜同度量。",
+   "evidence_ids": [
+    "E020",
+    "E023"
+   ],
+   "score_item": "E.measurement"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.S2"
+   ],
+   "applies_when": "存储随使用增长",
+   "applicable": true,
+   "status": "partial",
+   "reason": "技能库有执行验证门；R/H/Q 记录所有已执行候选，无准入、去重或遗忘。",
+   "evidence_ids": [
+    "E006",
+    "E008"
+   ],
+   "score_item": "X"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/S5",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.S5"
+   ],
+   "applies_when": "主张留存存储带来增益",
+   "applicable": true,
+   "status": "partial",
+   "reason": "图4b 提供无Z/仅Q/全记忆三档，但数值与方差不在正文；基线 B=0 对照缺“带 K 无 Z”。",
+   "evidence_ids": [
+    "E016",
+    "E011"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F3",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.F3"
+   ],
+   "applies_when": "存储由评测数据流构建(F 型：met=避免)",
+   "applicable": true,
+   "status": "partial",
+   "reason": "Polaris 从未进入记忆；6 个 TDC 留出任务属同一基准，作者承认其被部分用于建记忆；Explore Agent 是否针对留出任务检索文献未说明。",
+   "evidence_ids": [
+    "E010",
+    "E012",
+    "E029"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rsi:index_experience_for_reuse/F2",
+   "version": "conditions@8704c7da",
+   "source_strength": "common_practice",
+   "source_refs": [
+    "conditions.json:index_experience_for_reuse.F2"
+   ],
+   "applies_when": "以相似度而非适用性检索(F 型：met=避免)",
+   "applicable": true,
+   "status": "partial",
+   "reason": "路由按指标/类型/规模/嵌入，Ames→BBB、CYP 抑制→CYP 底物；去同类消融只覆盖 3 个目标。",
+   "evidence_ids": [
+    "E022",
+    "E017"
+   ],
+   "score_item": "M"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-2",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #2 (source: both)"
+   ],
+   "applies_when": "主张零样本/留出泛化",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "无污染/数据重叠分析：TDC 排行榜与 minimol/chemprop/maplight 类模型公开，K 来自文献检索，路由到的方案本身即排行榜模型组合。",
+   "evidence_ids": [
+    "E012",
+    "E025",
+    "E027"
+   ],
+   "score_item": "E.holdout"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-3",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #3 (source: reject_reviews)"
+   ],
+   "applies_when": "主张条件化/检索的独特价值",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "未与“直接取排行榜前三方案”“有技能库无记忆的 B=0”这类更便宜替代对照。",
+   "evidence_ids": [
+    "E011",
+    "E025"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "rs:adapt_via_conditioning/RE-1",
+   "version": "rs-cards@063f1008",
+   "source_strength": "observed_in_reviews",
+   "source_refs": [
+    "adapt_via_conditioning.md Reviewer expectations #1 (source: both)"
+   ],
+   "applies_when": "主张增益来自条件化信号",
+   "applicable": true,
+   "status": "partial",
+   "reason": "图4b 切换记忆；对手基线不对等。",
+   "evidence_ids": [
+    "E016"
+   ],
+   "score_item": "E.causality"
+  },
+  {
+   "id": "local:2605.15461-1",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "本文强调“高效”与成本"
+   ],
+   "applies_when": "主张摊销后的效率",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "测试时成本给出，记忆与技能库的构建成本(16×24h、LLM 费用)及失败搜索成本未摊入。",
+   "evidence_ids": [
+    "E018",
+    "E023",
+    "E029"
+   ],
+   "score_item": "E.cost"
+  },
+  {
+   "id": "local:2605.15461-2",
+   "version": "1",
+   "source_strength": "single_source",
+   "source_refs": [
+    "摘要 vs Sec 1/4.1"
+   ],
+   "applies_when": "摘要数字需与正文一致",
+   "applicable": true,
+   "status": "unmet",
+   "reason": "摘要“33 任务/九个 agent”与正文单任务 22 任务/八基线不一致。",
+   "evidence_ids": [
+    "E019",
+    "E020"
+   ],
+   "score_item": "E.measurement"
+  }
+ ],
+ "claims": [
+  {
+   "claim_id": "C1",
+   "text": "单任务设定下 DrugSAGE 在 22 个 TDC 任务上平均排名第一，高于八个 agent",
+   "setting": "五种子官方划分，Claude Sonnet 4.6 为主干，24h/任务，从零搜索",
+   "baseline_control": "Autoresearch、ShinkaEvolve(排行榜 top-3 起点)；MLEvolve、AIRA-dojo、Claude Code、Biomni、STELLA、Agentomics；DrugSAGE-anchor 控制搜索空间",
+   "selection_vs_test": "验证集选方案，测试集报告",
+   "result_denominator": "22 任务、平均排名 1.95、归一化 0.929、10/22 胜",
+   "evidence_ids": [
+    "E020",
+    "E021",
+    "E023",
+    "E028",
+    "E013"
+   ],
+   "counterevidence": [
+    "E019",
+    "E021"
+   ],
+   "allowed_conclusion": "作者实现的 agent 比较中平均排名第一；Biomni 未复现；与摘要“33 任务/九 agent”不一致。该主张不依赖跨任务记忆(task 级)。"
+  },
+  {
+   "claim_id": "C2",
+   "text": "建于 16 个小任务的跨任务记忆使 DrugSAGE-Zero 在 17 个留出任务上零测试时搜索即超过所有 20 次搜索的基线",
+   "setting": "6 个最大 TDC 任务+11 个 Polaris 任务留出；基线报告 B=1..20 最佳",
+   "baseline_control": "无跨任务记忆的各基线",
+   "selection_vs_test": "记忆来自 16 个小任务；Polaris 从未进入；TDC 留出任务“部分用于建记忆”",
+   "result_denominator": "平均归一化 0.90(TDC 6)/0.97(Polaris 11)，增益 10–30%(归一化口径)",
+   "evidence_ids": [
+    "E010",
+    "E011",
+    "E012",
+    "E014",
+    "E015",
+    "E027"
+   ],
+   "counterevidence": [
+    "E026",
+    "E029"
+   ],
+   "allowed_conclusion": "该记忆+技能库组合在 17 个留出任务上以近零测试时成本得到接近排行榜水平的方案；比较的基线既无记忆也无文献技能库，故不能把 10–30% 归于跨任务记忆本身。"
+  },
+  {
+   "claim_id": "C3",
+   "text": "跨任务记忆本身带来增益并降低成本",
+   "setting": "六个留出 TDC 任务，B=20",
+   "baseline_control": "无Z、仅Q、完整记忆三档(同一 DrugSAGE)",
+   "selection_vs_test": "同 C2",
+   "result_denominator": "图4(a,b)曲线，正文无数值，单次运行",
+   "evidence_ids": [
+    "E016"
+   ],
+   "counterevidence": [
+    "E029"
+   ],
+   "allowed_conclusion": "作者图示单调递增；数值与方差在文本中不可核。"
+  },
+  {
+   "claim_id": "C4",
+   "text": "Zero 路由并非简单复制同类任务",
+   "setting": "3 个 CYP 抑制目标，去掉同类池任务",
+   "baseline_control": "无",
+   "selection_vs_test": "同 C2",
+   "result_denominator": "0.822/0.892/0.733 近排行榜；下降 0.03–0.05",
+   "evidence_ids": [
+    "E017",
+    "E022"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "三个目标上去掉同类任务后性能小幅下降；说明对指标/类型对齐的路由较稳健，但仍只有三个目标。"
+  },
+  {
+   "claim_id": "C5",
+   "text": "自动构建的文献技能库扩大了搜索空间并带来提升",
+   "setting": "22 个 TDC 任务单任务",
+   "baseline_control": "DrugSAGE-anchor(同起点)",
+   "selection_vs_test": "同 C1",
+   "result_denominator": "0.929 vs 0.875，平均排名 1.95 vs 2.59",
+   "evidence_ids": [
+    "E013",
+    "E028"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "该控制隔离出 Explore Agent 的作用；但 K 的构建成本与对留出任务的泄漏边界未交代。"
+  },
+  {
+   "claim_id": "C6",
+   "text": "带有历史偏置项的 UCB 选择保持标准遗憾阶",
+   "setting": "理论，假设 transfer 有界且 exploit 渐近收敛",
+   "baseline_control": "n/a",
+   "selection_vs_test": "n/a",
+   "result_denominator": "定理3.1/附录J",
+   "evidence_ids": [
+    "E007"
+   ],
+   "counterevidence": [],
+   "allowed_conclusion": "形式上成立的弱保证(常数中含 C0)；不证明记忆有益。"
+  }
+ ],
+ "assessment": {
+  "evidence_level": "retained",
+  "claim_support": "scoped",
+  "strongest_supported_claim": "在 17 个留出任务上，建于 16 个小任务的记忆+文献技能库使 DrugSAGE-Zero 以近零测试时成本得到与 TDC 排行榜最佳相当的方案，并在归一化口径上高于无记忆无技能库的 20 次搜索基线；记忆自身的边际贡献仅有图示的单调消融，不能写成对基线的 10–30% 归因。",
+  "author_claim_preserved": "作者原主张“跨任务记忆使 B=0 即优于带 20 步搜索的所有基线 10–30%”不被改窄后计分。",
+  "unresolved": [
+   "技能库与记忆的分离",
+   "记忆/技能库构建成本",
+   "对留出任务的泄漏边界"
+  ]
+ },
+ "ratings": {
+  "G": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "对象(跨任务经验记忆+文献技能库)明确，基线表覆盖搜索/ML 自动化/科学发现 agent 的不同别名；但无“带跨任务记忆”的同类 ML-agent 被比较。",
+   "evidence_ids": [
+    "E001",
+    "E002",
+    "E011"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "M": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "三类记忆各接一处搜索接口并给出公式、路由与修复规则，M 链可重建；转移依赖指标/类型对齐的假设有消融支持；定理仅为弱保证。",
+   "evidence_ids": [
+    "E003",
+    "E004",
+    "E005",
+    "E007",
+    "E022"
+   ],
+   "counterevidence_ids": [],
+   "search_scope": []
+  },
+  "X": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "技能库有分层执行验证门；跨任务记忆仅追加，缺准入、去重、过期、冲突与回退；后续任务实际读取清楚。",
+   "evidence_ids": [
+    "E006",
+    "E008"
+   ],
+   "counterevidence_ids": [
+    "E029"
+   ],
+   "search_scope": []
+  },
+  "E.measurement": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "官方 TDC 五种子划分与度量、与排行榜同口径；但头条用 min-max 归一化放大差距（绝对值上 Zero 与排行榜持平），Biomni 未复现，摘要与正文数字不一致。",
+   "evidence_ids": [
+    "E015",
+    "E020",
+    "E026",
+    "E027"
+   ],
+   "counterevidence_ids": [
+    "E019",
+    "E021"
+   ],
+   "search_scope": []
+  },
+  "E.causality": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "有 DrugSAGE-anchor 控制搜索空间、图4b 记忆档位、类比任务消融；但对手基线既无记忆又无技能库，无 B=0 技能库对照与更便宜替代(排行榜模型)，记忆消融无数值。",
+   "evidence_ids": [
+    "E013",
+    "E016",
+    "E017"
+   ],
+   "counterevidence_ids": [
+    "E011",
+    "E025"
+   ],
+   "search_scope": []
+  },
+  "E.holdout": {
+   "status": "resolved",
+   "rating": 3,
+   "reason": "17 个留出任务中 11 个 Polaris 完全未入记忆，选择在验证集；但 6 个 TDC 留出任务与记忆池同基准且部分被用于建记忆，无污染分析。",
+   "evidence_ids": [
+    "E010",
+    "E012"
+   ],
+   "counterevidence_ids": [
+    "E029"
+   ],
+   "search_scope": []
+  },
+  "E.statistics": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "每任务五种子划分的均值±标准差；agent 搜索重复、记忆构建重复、置信区间均无，17 任务的平均不带不确定性。",
+   "evidence_ids": [
+    "E027",
+    "E028"
+   ],
+   "counterevidence_ids": [
+    "E029"
+   ],
+   "search_scope": []
+  },
+  "E.cost": {
+   "status": "resolved",
+   "rating": 2,
+   "reason": "给出测试时 LLM 费用对比与预算映射，但记忆/技能库构建成本和失败候选成本未计入摊销。",
+   "evidence_ids": [
+    "E018",
+    "E023"
+   ],
+   "counterevidence_ids": [
+    "E029"
+   ],
+   "search_scope": []
+  }
+ },
+ "rationale": "跨任务记忆+技能库在留出任务上近排行榜且成本低，证据至 retained；基线信息不对等、归一化口径、记忆无写门、构建成本未摊销。",
+ "score": {
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "coverage": 1.0,
+  "raw": 63.75,
+  "display": 63.8,
+  "lower": 63.75,
+  "upper": 63.75
+ },
+ "provenance": {
+  "input_hash": "84c6caf1b1a5bf8044143d994efafef3a2a03fec844b67ce505b8e4b82ac44a7",
+  "rubric_version": "rubric_frozen v1.0",
+  "rubric_hash": "b44708afa1f27e52c91cb344e5f1f6a85c7b64f1396e7cced6f0a68e614d909c",
+  "rs_manifest_hash": "3fc06b621b26f2ea87aa273ee34e2a80308fd09102f1530056428662b0971e32",
+  "domain_cards_hash": "52ff96577c9ce316bf740104cebc5fd548f2a1459770b5638617cb3f34179cb9",
+  "expectations_hash": "8704c7da7ef42067ffd6373eb8479a4f0405193f5d942af0ea4749c035da0429",
+  "model_type": "son55(claude-sonnet-5-5[1m])",
+  "actual_model": null,
+  "session_id": null,
+  "receipt_ref": null,
+  "notes": "actual_model/session_id/receipt_ref not exposed to the worker in this run; model_type taken from controller dispatch (claude-kimi type config). Blind boundary kept: no read/list of seats/ outside seats/son55/attempts/a1.",
+  "timestamp": "2026-10-22T01:49:49Z"
+ },
+ "evidence": [
+  {
+   "evidence_id": "E001",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Abstract; txt line 83",
+   "quote": "Current LLM-based agents can find SOTA solutions through extensive trial and error, but they do not retain the experience accumulated along the way and therefore pay the full search cost on every new task.",
+   "support_explanation": "作者 gap：现有 agent 不留存跨任务经验。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E002",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 1; txt line 134",
+   "quote": "It maintains a cross-task memory that accumulates verified skills, statistical evidence about which strategies generally work better, and a record of recurring failure modes and their fixes.",
+   "support_explanation": "被改进对象：跨任务经验记忆(技能/统计证据/失败修复)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E003",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.2; txt line 520",
+   "quote": "Each record in this memory describes a node in the search tree, including its model family, model architecture, hyperparameters, training procedure, data processing, training objectives, task description, and its performance on the validation set.",
+   "support_explanation": "解决方案记忆 R 的记录内容。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E004",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.2; txt line 530",
+   "quote": "Each record contains the description of the parent and child nodes, task description, LLM-proposed edits (e.g., changes of model architecture, training objective, data processing); rationale (LLM-generated reasons why proposed edits are beneficial); and the validation performance difference between the parent and child.",
+   "support_explanation": "细化记忆 H：编辑、理由、父子验证差。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E005",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.2; txt line 543",
+   "quote": "When the execution of a candidate solution fails, the sandbox matches the error against known failure signatures and applies a verified fix immediately if one exists.",
+   "support_explanation": "执行记忆 Q：失败签名→已验证修复，直接复用。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E006",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.3 Step 5; txt line 1056",
+   "quote": "In this way, the same execution advances the current task and also becomes reusable evidence for later tasks.",
+   "support_explanation": "写回规则：每次执行结果均写回，没有准入/遗忘规则。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E007",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.3; txt line 753",
+   "quote": "Moreover, we formally show that introducing this bias term does not change the regret bound of standard UCB:",
+   "support_explanation": "定理3.1：有界历史偏置不改 UCB 遗憾阶。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E008",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.1; txt line 489",
+   "quote": "The validation stage runs tiered checks, from syntax and import resolution to end-to-end execution in a per-skill sandbox, with automatic repair on failure.",
+   "support_explanation": "技能库 K 的准入门：分层执行验证。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E009",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 3.4; txt line 1160",
+   "quote": "Lastly, the agent retrieves all the solutions developed for the closest analog task and rank them based on their performance.",
+   "support_explanation": "DrugSAGE-Zero 路由：最近类比任务的最佳方案原样转移。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E010",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Setup; txt line 1706",
+   "quote": "These 11 Polaris tasks form a separate held-out benchmark set used only at evaluation time and never entering",
+   "support_explanation": "11 个 Polaris 任务从未进入记忆。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E011",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Setup; txt line 1723",
+   "quote": "Baseline agents also have their own memory mechanisms, but they do not maintain the cross-task memory studied here.",
+   "support_explanation": "基线无跨任务记忆亦无 DrugSAGE 的文献技能库。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E012",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Results; txt line 1799",
+   "quote": "The Polaris results test whether zero-test-time routing works beyond the TDC benchmark, which is partly used to build memory.",
+   "support_explanation": "承认 TDC 部分用于建记忆(6 个 TDC 留出任务也出现在单任务实验中)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E013",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.3; txt line 2010",
+   "quote": "-anchor (normalized score 0.929 vs 0.875), proving the benefit of skill library automatically constructed by the explore agent.",
+   "support_explanation": "技能库消融：Explore Agent 的增益 0.929 vs 0.875(单任务)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E014",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Results; txt line 1797",
+   "quote": "outperforms the baselines with more than 10-30% gain.",
+   "support_explanation": "头条主张，口径是 min-max 归一化分数。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E015",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Fig 3 caption; txt line 1748",
+   "quote": "Scores are min-max normalized per task before averaging; higher is better.",
+   "support_explanation": "归一化口径。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E016",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.3; txt line 2049",
+   "quote": "full memory, the normalized score increases monotonically, while the cost decreases monotonically, showing that the gain is not only from the base search procedure but also from reusing experience across tasks.",
+   "support_explanation": "记忆消融：仅图4(a,b)呈现，正文无数值。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E017",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.3; txt line 2097",
+   "quote": "is not merely copying exact same-category analogs on these CYP targets.",
+   "support_explanation": "类比任务消融：去掉同类任务后仍近排行榜(仅 3 个 CYP 目标)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E018",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.3; txt line 2029",
+   "quote": "performs no LLM generation at test time and only calls the lightweight",
+   "support_explanation": "Zero 模式测试时成本≈0(仅嵌入路由)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E019",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Abstract; txt line 91",
+   "quote": "ranks first among nine SOTA agents in a single-task setting.",
+   "support_explanation": "摘要写 33 任务/九个 agent。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E020",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.1 Protocol; txt line 1261",
+   "quote": "on all 22 TDC datasets independently, so every task searches for the SOTA solution from scratch.",
+   "support_explanation": "单任务实验实为 22 个 TDC 数据集；与摘要“33 任务”不一致。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E021",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.1 Baselines; txt line 1237",
+   "quote": "Biomni results are provided by the Biomni team from their beta platform and are not independently reproduced by us.",
+   "support_explanation": "Biomni 结果未复现。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E022",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "App G.1; txt line 7153",
+   "quote": "may be sufficient for effective zero-shot transfer even when the biological context does not fully overlap.",
+   "support_explanation": "路由以指标/任务类型对齐为主，生物学语境不要求一致。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E023",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "App C; txt line 2749",
+   "quote": "Each experiment is run on a single NVIDIA L40S GPU, wall-clock budget per agent per task is capped at 24 hours.",
+   "support_explanation": "单 GPU、单任务 24 小时墙钟上限；预算映射到 B。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E024",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 5; txt line 2136",
+   "quote": "prioritizes skill sets based on prior knowledge such as citation number, GitHub number, etc.",
+   "support_explanation": "技能优先级依赖引用/星标等先验，不用实验反馈。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E025",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "App C.1; txt line 2780",
+   "quote": "For each TDC dataset it starts from the top-3 open-sourced leaderboard models",
+   "support_explanation": "Autoresearch 基线以排行榜前三模型为起点。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E026",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Table 2 prose; txt line 1805",
+   "quote": "achieves competitive performance than top TDC leaderboard models and",
+   "support_explanation": "Zero 模式与排行榜持平而非显著超越(表2)。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E027",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Table 2 (cells split)",
+   "quote": null,
+   "support_explanation": "表2：DrugSAGE-zero vs DrugSAGE(B=20) vs TDC 最佳：Ames 0.871/0.878/0.871；LD50 MAE 0.547/0.502/0.552；Solubility MAE 0.686/0.722/0.741；CYP2C9 0.852/0.861/0.859；CYP3A4 0.914/0.914/0.916；CYP2D6 0.779/0.724/0.790。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E028",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.1 + Table 1 (cells split)",
+   "quote": null,
+   "support_explanation": "表1：22 个 TDC 任务，DrugSAGE 平均排名 1.95、归一化 0.929、10/22 胜；DrugSAGE-anchor 2.59/0.875/7/22 胜；Autoresearch 4.82/0.741；ShinkaEvolve 4.95/0.731；其余 agent 排名 6.6–10.3。",
+   "kind": "author_report"
+  },
+  {
+   "evidence_id": "E029",
+   "material_id": "M-2605.15461",
+   "material_sha256": "99ffb363213e0fbab203b7f44c8217b649f3ed283c791ae00dd32132977cfeaf",
+   "locator": "Sec 4.2 Setup + App B (full text search)",
+   "quote": null,
+   "support_explanation": "全文查找：留出任务是否影响 Explore Agent 技能库 K(针对目标任务的文献检索)及记忆/技能库构建成本(16 个任务各 24 小时、LLM 费用)未见报告；agent 搜索运行次数/种子方差未见；5 种子仅为数据划分。",
+   "kind": "our_inference"
+  }
+ ]
+}
