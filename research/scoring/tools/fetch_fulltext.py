@@ -102,13 +102,14 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", default="")
     ap.add_argument("--ids-file", default="")
+    ap.add_argument("--run", default="rsi-l1-20261022-03")
     args = ap.parse_args()
     corpus = {json.loads(l)["arxiv"]: json.loads(l) for l in open(REPO / "research/corpus.jsonl")}
     ids = [i for i in args.ids.split(",") if i]
     if args.ids_file:
         ids += [l.strip() for l in open(args.ids_file) if l.strip()]
-    priv = REPO / "research/fulltext/review-runs/rsi-l1-20261022-03/materials"
-    pub = REPO / "research/scoring/runs/rsi-l1-20261022-03/materials"
+    priv = REPO / "research/fulltext/review-runs" / args.run / "materials"
+    pub = REPO / "research/scoring/runs" / args.run / "materials"
     ok = skipped = miss = 0
     try:
         for aid in ids:

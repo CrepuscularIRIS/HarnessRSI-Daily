@@ -32,8 +32,7 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     corpus = {json.loads(l)["arxiv"]: json.loads(l) for l in open(REPO / "research/corpus.jsonl")}
-    ft_dirs = [REPO / "research/fulltext/review-runs/rsi-v22-20261021-01/materials",
-               REPO / "research/fulltext/review-runs/rsi-v3-20261022-01/materials"]
+    ft_dirs = sorted((REPO / "research/fulltext/review-runs").glob("*/materials"))
 
     ids = [i for i in args.ids.split(",") if i]
     if args.ids_file:

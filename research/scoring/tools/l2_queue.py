@@ -27,17 +27,17 @@ def main() -> int:
     run_dir = REPO / "research/scoring/runs" / args.run
 
     ft = {}
-    for d in ("rsi-v22-20261021-01", "rsi-v3-20261022-01"):
-        for p in (REPO / "research/fulltext/review-runs" / d / "materials").glob("*.txt"):
-            ft[p.stem] = str(p.relative_to(REPO))
+    for p in (REPO / "research/fulltext/review-runs").glob("*/materials/*.txt"):
+        ft[p.stem] = str(p.relative_to(REPO))
 
     recs = {}
-    for f in sorted((run_dir / "batches").glob("b*.jsonl")):
+    for f in sorted((run_dir / "batches").glob("*.jsonl")):
         for line in open(f):
             line = line.strip()
             if line:
                 d = json.loads(line)
-                recs[d["paper_id"]] = d
+                if d.get("stage") == "L1":
+                    recs[d["paper_id"]] = d
     l1_total = len(recs)
     budget = args.budget or l1_total // 5
     audit_n = budget // 10
@@ -64,7 +64,7 @@ def main() -> int:
     rows = ["paper_id\tpriority\ttier\tfamilies\tcards\tmaterial\tfulltext_path\taudit_sample\tl1_batch"]
     by_batch = {}
     for d in sorted(queued, key=lambda d: d["paper_id"]):
-        bid = next(f.stem for f in (run_dir / "batches").glob("b*.jsonl")
+        bid = next(f.stem for f in (run_dir / "batches").glob("*.jsonl")
                    if d["paper_id"] in {json.loads(l)["paper_id"] for l in open(f) if l.strip()})
         rows.append("\t".join([d["paper_id"], d["priority"], d["problem_tier"] or "null",
                                ",".join(d["families"]), ",".join(d["cards"]), d["material"],
