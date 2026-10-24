@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARC-AGI-3 谱系图</title>
+<style>
+  :root {
+    --bg: #f6f4ee; --grid: #e7e3d8; --ink: #1d1d1f; --muted: #5d5d63;
+    --blue: #1e93c9; --red: #d6453d; --yellow: #f2b33d; --green: #2e9d5b;
+    --grey: #9a9a9a; --magenta: #c2378f; --orange: #e9772c; --azure: #7fc6e8; --maroon: #8c2b2b;
+    --card: #ffffff; --line: #2b2b2b;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--ink);
+    font-size: 20px; line-height: 1.5;
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    padding: 0 56px 26px;
+  }
+  .pix { display: grid; grid-template-columns: repeat(50, 32px); height: 32px; margin: 0 -56px; }
+  .pix i { display: block; height: 32px; }
+  .mono { font-family: "DejaVu Sans Mono", "Noto Mono", monospace; }
+  header { padding-top: 18px; }
+  .kicker { display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); letter-spacing: .04em; }
+  .kicker b { color: var(--ink); }
+  h1 { font-size: 64px; line-height: 1.1; margin: 8px 0 6px; font-weight: 900; letter-spacing: .01em; }
+  h1 .u { background: linear-gradient(transparent 62%, rgba(242,179,61,.75) 62%); }
+  .sub { font-size: 23px; color: #33333a; max-width: 1420px; }
+  .chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 16px; border: 3px solid var(--line); background: var(--card); }
+  .chip { padding: 8px 18px 8px; border-right: 3px solid var(--line); position: relative; }
+  .chip:last-child { border-right: 0; }
+  .chip .k { font-size: 16px; color: var(--muted); }
+  .chip .v { font-size: 46px; font-weight: 900; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .chip .s { font-size: 15.5px; color: var(--muted); }
+  .chip::before { content: ""; position: absolute; left: 0; top: 0; width: 18px; height: 18px; }
+  .c1::before { background: var(--blue); } .c2::before { background: var(--green); } .c3::before { background: var(--red); } .c4::before { background: var(--yellow); }
+  .row { display: grid; gap: 22px; margin-top: 18px; }
+  .card { background: var(--card); border: 3px solid var(--line); padding: 12px 22px 12px; position: relative; box-shadow: 8px 8px 0 rgba(29,29,31,.12); }
+  .tag { display: inline-block; font-size: 15px; font-weight: 700; color: #fff; background: var(--ink); padding: 1px 10px; letter-spacing: .12em; margin-bottom: 6px; }
+  .card h2 { font-size: 27px; margin: 2px 0 8px; line-height: 1.3; }
+  .card p { margin: 0 0 6px; }
+  .note { font-size: 15px; color: var(--muted); line-height: 1.45; }
+  .r-a { grid-template-columns: 560px 1fr; }
+  /* protocol */
+  .proto { display: grid; grid-template-columns: 1fr 26px 1fr 26px 1fr; align-items: stretch; margin-top: 6px; }
+  .st { border: 3px solid var(--line); padding: 8px 10px; background: #fbfbf8; font-size: 17px; line-height: 1.4; }
+  .st .h { font-weight: 900; font-size: 20px; }
+  .st .h .mono { font-size: 19px; }
+  .arrow { display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 900; }
+  .devstrip { display: flex; gap: 4px; margin: 6px 0 2px; }
+  .devstrip i { width: 22px; height: 22px; display: block; }
+  .fence { margin-top: 12px; border: 3px dashed var(--red); padding: 8px 12px; display: grid; grid-template-columns: 300px 1fr; gap: 14px; align-items: center; background: #fff7f6; }
+  .held { display: grid; grid-template-columns: repeat(10, 24px); gap: 4px; }
+  .held i { width: 24px; height: 24px; display: block; background: var(--grey); }
+  .fence .t { font-size: 17.5px; line-height: 1.45; }
+  .fence .t b { color: var(--red); }
+  .fixed { margin-top: 10px; font-size: 16.5px; color: #333; }
+  /* main */
+  .r-b { grid-template-columns: 812px 1fr; }
+  .legend { display: flex; gap: 18px; font-size: 15.5px; margin: 0 0 4px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 26px; height: 6px; display: inline-block; }
+  .gapbars { margin-top: 6px; }
+  .gb { display: grid; grid-template-columns: 120px 1fr; align-items: center; margin: 12px 0; }
+  .gb .l { font-size: 18px; font-weight: 700; }
+  .track { position: relative; height: 62px; border-left: 3px solid var(--line); }
+  .bar { position: absolute; top: 4px; height: 32px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-weight: 900; color: #fff; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .ci { position: absolute; top: 50px; height: 3px; background: var(--ink); }
+  .ci::before, .ci::after { content: ""; position: absolute; top: -9px; width: 3px; height: 21px; background: var(--ink); }
+  .ci::before { left: 0; } .ci::after { right: 0; }
+  .cilab { position: absolute; top: 40px; font-size: 14px; color: #333; white-space: nowrap; }
+  .zero { position: absolute; top: -4px; bottom: -4px; width: 2px; background: #888; }
+  .axisl { display: grid; grid-template-columns: 120px 1fr; font-size: 13.5px; color: var(--muted); }
+  .axisl .ticks { position: relative; height: 18px; }
+  .axisl .ticks span { position: absolute; transform: translateX(-50%); }
+  .sel { margin-top: 14px; border-top: 3px solid var(--line); padding-top: 10px; }
+  .sel table { width: 100%; border-collapse: collapse; font-size: 17px; font-variant-numeric: tabular-nums; }
+  .sel th { text-align: left; font-size: 14.5px; color: var(--muted); font-weight: 700; border-bottom: 2px solid var(--line); padding: 3px 4px; }
+  .sel td { padding: 5px 4px; border-bottom: 1px solid #ddd; }
+  .sel td.n { text-align: right; }
+  .sel tr.hl td { background: #fff4d8; font-weight: 700; }
+  .r-c { grid-template-columns: 520px 1fr; }
+  .quad { display: grid; grid-template-columns: 70px 1fr 1fr; grid-template-rows: 30px 1fr 1fr; gap: 6px; height: 205px; font-size: 16px; }
+  .quad .ax { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; text-align: center; line-height: 1.25; }
+  .quad .cell { border: 3px solid var(--line); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; line-height: 1.3; }
+  .quad .cell b { font-size: 38px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cell.good { background: #dff1e6; } .cell.bad { background: #fbe1df; } .cell.mix { background: #f4f1e6; }
+  .beh { font-size: 18px; }
+  .beh .it { display: grid; grid-template-columns: 26px 1fr; gap: 8px; margin: 7px 0; align-items: start; }
+  .beh .it i { width: 20px; height: 20px; display: block; margin-top: 5px; }
+  .lim { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 34px; font-size: 18px; }
+  .lim div { padding-left: 26px; position: relative; }
+  .lim div::before { content: ""; position: absolute; left: 0; top: 8px; width: 14px; height: 14px; background: var(--red); }
+  footer { position: absolute; left: 56px; right: 56px; bottom: 22px; font-size: 14px; color: var(--muted); display: flex; justify-content: space-between; gap: 30px; border-top: 2px solid var(--line); padding-top: 8px; background: var(--bg); }
+</style>
+</head>
+<body>
+<div class="pix">
+  <i style="background:#1e93c9"></i><i style="background:#d6453d"></i><i style="background:#2e9d5b"></i><i style="background:#f2b33d"></i><i style="background:#9a9a9a"></i><i style="background:#c2378f"></i><i style="background:#e9772c"></i><i style="background:#7fc6e8"></i><i style="background:#8c2b2b"></i><i style="background:#1d1d1f"></i>
+  <i style="background:#9a9a9a"></i><i style="background:#1e93c9"></i><i style="background:#f2b33d"></i><i style="background:#2e9d5b"></i><i style="background:#d6453d"></i><i style="background:#7fc6e8"></i><i style="background:#1d1d1f"></i><i style="background:#e9772c"></i><i style="background:#c2378f"></i><i style="background:#8c2b2b"></i>
+  <i style="background:#f2b33d"></i><i style="background:#1d1d1f"></i><i style="background:#1e93c9"></i><i style="background:#d6453d"></i><i style="background:#9a9a9a"></i><i style="background:#2e9d5b"></i><i style="background:#8c2b2b"></i><i style="background:#7fc6e8"></i><i style="background:#e9772c"></i><i style="background:#c2378f"></i>
+  <i style="background:#2e9d5b"></i><i style="background:#c2378f"></i><i style="background:#9a9a9a"></i><i style="background:#1e93c9"></i><i style="background:#f2b33d"></i><i style="background:#d6453d"></i><i style="background:#e9772c"></i><i style="background:#1d1d1f"></i><i style="background:#7fc6e8"></i><i style="background:#8c2b2b"></i>
+  <i style="background:#d6453d"></i><i style="background:#7fc6e8"></i><i style="background:#2e9d5b"></i><i style="background:#1d1d1f"></i><i style="background:#1e93c9"></i><i style="background:#9a9a9a"></i><i style="background:#f2b33d"></i><i style="background:#c2378f"></i><i style="background:#8c2b2b"></i><i style="background:#e9772c"></i>
+</div>
+<header>
+  <div class="kicker"><span><b>HarnessRSI Reel</b> · arXiv:2610.30499v1 · Lehmann &amp; Vahdati</span><span>ARC-AGI-3 · 9 个模型–推理强度条件 × 3 次独立构建 = 27 条谱系</span></div>
+  <h1>能自己搭出 harness，<span class="u">不等于能把它改好</span></h1>
+  <div class="sub">同一个模型经固定编码引导（OpenCode）从最小仓库自建 ARC-AGI-3 游戏 harness，凭 5 个开发游戏的反馈改写两次；三个冻结版本全部在 20 个从不提供反馈的游戏上评测。</div>
+  <div class="chips">
+    <div class="chip c1"><div class="k">开发游戏（5 个）均值变化 H0→H2</div><div class="v">+8.42</div><div class="s">RHAE 分；这些游戏的反馈直接驱动了修订</div></div>
+    <div class="chip c2"><div class="k">留出游戏（20 个）均值变化 H0→H2</div><div class="v">+2.80</div><div class="s">95% 区间 [−1.44, 7.35]，含 0</div></div>
+    <div class="chip c3"><div class="k">适应差距 G₂ = 开发增益 − 留出增益</div><div class="v">5.62</div><div class="s">95% 区间 [1.78, 9.77]</div></div>
+    <div class="chip c4"><div class="k">27 条谱系里 H2 对 H0（留出）</div><div class="v">15 升 · 12 降</div><div class="s">无平局；符号检验 p = .70</div></div>
+  </div>
+</header>
+
+<div class="row r-a">
+  <div class="card">
+    <span class="tag">问题</span>
+    <h2>开发集涨分，能当作“自我改进”吗？</h2>
+    <p>自改 harness 的研究常用演化曲线或开发集分数说明进步。作者把四种能力拆开：①搭出能运行的 harness；②修复接口与生命周期错误；③把执行证据变成具体修改；④<b>选出能在未见任务上变好的修改</b>。前三项不蕴含第四项。</p>
+    <p>若把“初始能力强”或“开发集涨分”当成更新能力，就会部署不迁移、甚至丢掉已有本事的修订。</p>
+  </div>
+  <div class="card">
+    <span class="tag">研究动作</span>
+    <h2>固定谱系协议：每一版都冻结，每一版都在留出游戏上评</h2>
+    <div class="proto">
+      <div class="st"><div class="h"><span class="mono">H0</span> 初始构建</div>最小仓库 → 候选 → 控制器在 2 个开发游戏上做冒烟检查（只查能否运行，不看分），失败可修 ≤10 次 → 冻结
+        <div class="devstrip"><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i></div><span class="note">在 5 个开发游戏上运行</span></div>
+      <div class="arrow">→</div>
+      <div class="st"><div class="h"><span class="mono">H1</span> 修订 1</div>输入：自身源码、轨迹、得分、动作、推理费用（固定反馈包）。可改任意文件，也可保留父版本 → 冒烟检查 → 冻结
+        <div class="devstrip"><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i></div><span class="note">再跑 5 个开发游戏</span></div>
+      <div class="arrow">→</div>
+      <div class="st"><div class="h"><span class="mono">H2</span> 修订 2</div>同一流程；主终点就是 H2，不按留出成绩挑版本。两版之间没有任何人工编辑或自然语言指导
+        <div class="devstrip"><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i><i style="background:var(--blue)"></i></div><span class="note">只评测，不再修订</span></div>
+    </div>
+    <div class="fence">
+      <div class="held"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="t"><b>20 个留出游戏</b>：H0、H1、H2 各评一次；不参与提案、接受、停止或选择。开发游戏在战役前随机选定（tr87 · vc33 · r11l · bp35 · ft09）。动作在本地与官方服务重放核分。</div>
+    </div>
+    <div class="fixed">固定不变：模型与推理强度（构建与游戏同一 profile）、OpenCode 引导、无联网、无跨游戏状态；24 小时 / 1 GiB 上限。<b>没有统一的推理美元或调用上限</b>，费用只记录。</div>
+  </div>
+</div>
+
+<div class="row r-b">
+  <div class="card">
+    <span class="tag">谱系图</span>
+    <h2>27 条谱系在留出游戏上的走向</h2>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--blue)"></i>H2 高于 H0（15）</span>
+      <span><i class="sw" style="background:var(--red)"></i>H2 低于 H0（12）</span>
+      <span><i class="sw" style="background:#111"></i>27 条均值</span>
+      <span><i class="sw" style="background:var(--yellow);height:14px;width:14px"></i>单个 harness 重跑区间</span>
+    </div>
+    <svg viewBox="0 0 760 500" width="760" height="500" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans CJK SC, sans-serif">
+<line x1="98" x2="595" y1="462.0" y2="462.0" stroke="#d9d4c7" stroke-width="1"/>
+<text x="88" y="467.0" font-size="15" text-anchor="end" fill="#6b6b6b">0</text>
+<line x1="98" x2="595" y1="374.4" y2="374.4" stroke="#d9d4c7" stroke-width="1"/>
+<text x="88" y="379.4" font-size="15" text-anchor="end" fill="#6b6b6b">20</text>
+<line x1="98" x2="595" y1="286.8" y2="286.8" stroke="#d9d4c7" stroke-width="1"/>
+<text x="88" y="291.8" font-size="15" text-anchor="end" fill="#6b6b6b">40</text>
+<line x1="98" x2="595" y1="199.2" y2="199.2" stroke="#d9d4c7" stroke-width="1"/>
+<text x="88" y="204.2" font-size="15" text-anchor="end" fill="#6b6b6b">60</text>
+<line x1="98" x2="595" y1="111.6" y2="111.6" stroke="#d9d4c7" stroke-width="1"/>
+<text x="88" y="116.6" font-size="15" text-anchor="end" fill="#6b6b6b">80</text>
+<line x1="98" x2="595" y1="24.0" y2="24.0" stroke="#d9d4c7" stroke-width="1"/>
+<text x="88" y="29.0" font-size="15" text-anchor="end" fill="#6b6b6b">100</text>
+<line x1="128" x2="128" y1="18" y2="462" stroke="#2b2b2b" stroke-width="2"/>
+<text x="128" y="492" font-size="18" font-weight="700" text-anchor="middle" fill="#222">初始 H0</text>
+<line x1="350" x2="350" y1="18" y2="462" stroke="#2b2b2b" stroke-width="2"/>
+<text x="350" y="492" font-size="18" font-weight="700" text-anchor="middle" fill="#222">修订 1 · H1</text>
+<line x1="565" x2="565" y1="18" y2="462" stroke="#2b2b2b" stroke-width="2"/>
+<text x="565" y="492" font-size="18" font-weight="700" text-anchor="middle" fill="#222">修订 2 · H2</text>
+<polyline points="128,36.5 350,51.3 565,34.7" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,207.8 350,108.3 565,56.3" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,52.1 350,53.7 565,54.9" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,297.1 350,215.1 565,243.6" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,267.7 350,276.2 565,225.7" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,339.7 350,432.1 565,406.2" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,329.9 350,347.4 565,376.8" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,441.1 350,457.9 565,459.9" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,442.8 350,454.5 565,457.4" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,447.4 350,459.4 565,459.6" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,455.3 350,454.5 565,453.7" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,454.3 350,453.8 565,458.7" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,457.2 350,460.6 565,460.9" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,340.0 350,335.9 565,302.6" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,270.8 350,260.5 565,256.9" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,364.4 350,300.6 565,301.6" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,433.2 350,445.4 565,451.0" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,389.9 350,368.0 565,346.0" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,409.0 350,373.2 565,386.3" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,391.7 350,381.5 565,401.7" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,337.8 350,280.6 565,323.8" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,379.1 350,347.0 565,347.9" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,462.0 350,462.0 565,461.5" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,461.5 350,461.1 565,458.5" fill="none" stroke="#1e93c9" stroke-width="2.2" stroke-opacity=".55"/>
+<polyline points="128,461.4 350,459.7 565,461.4" fill="none" stroke="#d6453d" stroke-width="2.2" stroke-opacity=".55"/>
+<rect x="579" y="219.5" width="14" height="52.5" fill="#f2b33d" stroke="#8a5b00" stroke-width="1.5"/>
+<polyline points="128,269.5 350,381.0 565,365.7" fill="none" stroke="#d6453d" stroke-width="5"/>
+<rect x="122" y="263.5" width="12" height="12" fill="#d6453d"/>
+<rect x="344" y="375.0" width="12" height="12" fill="#d6453d"/>
+<rect x="559" y="359.7" width="12" height="12" fill="#d6453d"/>
+<polyline points="128,372.7 350,333.9 565,227.4" fill="none" stroke="#1e93c9" stroke-width="5"/>
+<rect x="122" y="366.7" width="12" height="12" fill="#1e93c9"/>
+<rect x="344" y="327.9" width="12" height="12" fill="#1e93c9"/>
+<rect x="559" y="221.4" width="12" height="12" fill="#1e93c9"/>
+<polyline points="128,354.5 350,348.7 565,342.2" fill="none" stroke="#111" stroke-width="5" stroke-dasharray="12 6"/>
+<rect x="120" y="346.5" width="16" height="16" fill="#111"/>
+<rect x="342" y="340.7" width="16" height="16" fill="#111"/>
+<rect x="557" y="334.2" width="16" height="16" fill="#111"/>
+<text x="114" y="342.5" font-size="17" font-weight="700" text-anchor="end" fill="#111">均值 24.54</text>
+<text x="605" y="348.2" font-size="17" font-weight="700" fill="#111">27.34</text>
+<text x="601" y="225.4" font-size="15.5" fill="#0f5f86" font-weight="700">Sol-high #1</text>
+<text x="601" y="244.4" font-size="14" fill="#0f5f86">20.38→53.56</text>
+<text x="601" y="367.7" font-size="15.5" fill="#a52a22" font-weight="700">Sol-xhigh #1</text>
+<text x="601" y="385.7" font-size="14" fill="#a52a22">43.95→21.99</text>
+<text x="601" y="302.0" font-size="13.5" fill="#8a5b00">▮ 同一 H2 重跑 10 次</text>
+<text x="601" y="319.0" font-size="13.5" fill="#8a5b00">43.38–55.37 · SD 3.99</text>
+</svg>
+    <div class="note">按原文附录 D Table 3 逐行重绘（纵轴为 20 个留出游戏的平均 RHAE，0–100）。Claude Sonnet 5 #3 在表中两位小数同为 0.14，作者按未取整值计为下降。黄色区间是作者事后选定的一个 harness（Sol-high #1 的 H2）在同样 20 个游戏上重跑 10 次的结果，其余快照都只评测了一次。底部 9 条近零的线是 Terra、Luna、Sonnet 各 3 条谱系（始终在 0–5 分）。</div>
+  </div>
+  <div class="card">
+    <span class="tag">关键结果</span>
+    <h2>开发增益高估了迁移</h2>
+    <div class="gapbars">
+      <div class="gb"><div class="l">开发 5 个</div><div class="track"><div class="zero" style="left:20%"></div><div class="bar" style="left:20%;width:42.1%;background:var(--blue)">+8.42</div></div></div>
+      <div class="gb"><div class="l">留出 20 个</div><div class="track"><div class="zero" style="left:20%"></div><div class="bar" style="left:20%;width:14%;background:var(--green)">+2.80</div><div class="ci" style="left:12.8%;width:44%"></div><div class="cilab" style="left:58.5%">[−1.44, 7.35]</div></div></div>
+      <div class="gb" style="margin-top:26px"><div class="l">差距 G₂</div><div class="track"><div class="zero" style="left:20%"></div><div class="bar" style="left:20%;width:28.1%;background:var(--red)">5.62</div><div class="ci" style="left:28.9%;width:40%"></div><div class="cilab" style="left:70.5%">[1.78, 9.77]</div></div></div>
+      <div class="axisl" style="margin-top:20px"><span></span><div class="ticks"><span style="left:0%">−4</span><span style="left:20%">0</span><span style="left:40%">4</span><span style="left:60%">8</span><span style="left:80%">12</span></div></div>
+    </div>
+    <p class="note" style="margin-top:8px">区间为对整条谱系做 100,000 次自助重抽的 95% 百分位区间，只描述这 27 条谱系与这一游戏划分。单独去掉开发游戏 r11l，差距从 5.62 降到 3.02（作者的描述性影响检查）。</p>
+    <div class="sel">
+      <div style="font-weight:900;font-size:20px;margin-bottom:4px">事后诊断：用开发分挑版本会怎样</div>
+      <table>
+        <tr><th>部署策略</th><th style="text-align:right">留出 RHAE</th><th style="text-align:right">较 H0</th><th style="text-align:right">$/游戏</th></tr>
+        <tr><td>保留 H0</td><td class="n">24.54</td><td class="n">0.00</td><td class="n">10.30</td></tr>
+        <tr><td>总是部署 H2</td><td class="n">27.34</td><td class="n">+2.80</td><td class="n">7.57</td></tr>
+        <tr class="hl"><td>按开发 RHAE 选 H0/H1/H2</td><td class="n">29.06</td><td class="n">+4.53</td><td class="n">9.15</td></tr>
+        <tr><td style="color:#777">留出 oracle（仅作参照）</td><td class="n" style="color:#777">30.66</td><td class="n" style="color:#777">+6.13</td><td class="n" style="color:#777">9.80</td></tr>
+      </table>
+      <div class="note" style="margin-top:6px">按开发分选择在 9/6/12 条谱系里分别选中 H0/H1/H2；+4.53 的 95% 区间 [0.81, 8.68]。这是事后计算，没有作为预先设定的策略检验过。所有修订版都改了实现，没有一次选择“保留父版本”。</div>
+    </div>
+  </div>
+</div>
+
+<div class="row r-c">
+  <div class="card">
+    <span class="tag">分数 × 成本</span>
+    <h2>H0→H2：变便宜的一半在丢分</h2>
+    <div class="quad">
+      <div></div><div class="ax">留出 RHAE 上升</div><div class="ax">留出 RHAE 下降</div>
+      <div class="ax">每游戏<br>更便宜</div><div class="cell good"><b>9</b>两项都变好</div><div class="cell bad"><b>9</b>省钱但丢分</div>
+      <div class="ax">每游戏<br>更贵</div><div class="cell mix"><b>6</b>花更多换分</div><div class="cell bad"><b>3</b>两项都变差</div>
+    </div>
+    <div class="note" style="margin-top:6px">原文附录 D Table 7（H0→H2，27 条）。均值每游戏省 $2.72，中位只省 $0.54。全部实验按冻结价目表至少 $18,129.27。</div>
+  </div>
+  <div class="card">
+    <span class="tag">修订行为（探索性）</span>
+    <h2>“看了证据、改了对的地方、通过检查”仍不保证变好</h2>
+    <div class="beh">
+      <div class="it"><i style="background:var(--blue)"></i><div>54 次修订全部检查了逐游戏开发证据，最终 diff 都至少针对一个有证据的问题，并都通过了运行检查——但留出结果有升有降。</div></div>
+      <div class="it"><i style="background:var(--orange)"></i><div>第一次修订 27 次中 22 次“改变策略方向”（控制优先级、上下文、重放、动作 / 推理调度）；没有一次更换整个 harness 族。</div></div>
+      <div class="it"><i style="background:var(--magenta)"></i><div>大范围重写平均 +3.75，局部改动 −0.20；改完即交付的 36 次平均 +2.48，看到结果再改的 18 次 −0.76。两项对比的区间都含 0。</div></div>
+      <div class="it"><i style="background:var(--grey)"></i><div>标注由 GPT-5.6 Sol 对屏蔽结果的记录做两次独立编码；未与人工标注比对。诊断（κ=0.35）、保护现有能力（0.47）、资源元推理（0.29）低于预设 0.67 可靠性阈值，不用于解释。</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <span class="tag">限制与边界</span>
+    <div class="lim">
+      <div>一个基准、一组 5 个开发游戏、只改两次；更长的改进序列和其他任务仍未知。</div>
+      <div>每个快照只评测一次；一个 harness 重跑 10 次 SD 3.99，单条谱系几分的变化难以解读。</div>
+      <div>没有统一推理预算，也没有“更新者 × 使用者”交叉，模型之间的排名只是描述，不能分离模型、harness 设计与花费的作用。</div>
+      <div>公共游戏可能出现在预训练中。人类引导系统（Tycho 等）在同一批游戏上报告 100 RHAE，但其开发与选择流程不同，不能据此量化“人类引导”的贡献。</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>来源：Lehmann &amp; Vahdati, “Can LLMs Improve Their Own Harness? A Controlled Study on ARC-AGI-3”, arXiv:2610.30499v1（§2, §4–§8, 附录 A, D, E）。逐数出处见 SOURCE.md。</span>
+  <span>谱系图、四象限与条形为本项目按原文表格重绘；顶部像素条为装饰。本项目未运行实验，未复现。</span>
+</footer>
+</body>
+</html>

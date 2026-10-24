@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 3 → 18 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,10 +20,30 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Fifteen papers, fifteen distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [Reel index](reel/README.md).
-（15 篇、15 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Eighteen papers, eighteen distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [Reel index](reel/README.md).
+（18 篇、18 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
 
 <table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.30499/poster.png"><img src="reel/2610.30499/poster.png" width="260" alt="2610.30499 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.30499">2610.30499</a> · Build ≠ improve</b><br>
+27 self-built ARC-AGI-3 harness lineages: two self-revisions gain +8.42 on the 5 feedback games but only +2.80 on 20 held-out games (CI spans 0).<br>
+27 条自建谱系：开发 +8.42，留出只 +2.80（区间含 0）——会搭不等于会改好。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.29005/poster.png"><img src="reel/2610.29005/poster.png" width="260" alt="2610.29005 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.29005">2610.29005</a> · Evaluator first</b><br>
+A synthesized state evaluator agrees 141/141 on its own challenge suite but 113/122 on states search actually reaches; gaps are repairable under external calibration.<br>
+合成评估器自出考卷 141/141，搜索状态上 113/122；外部校准下可修补。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.28798/poster.png"><img src="reel/2610.28798/poster.png" width="260" alt="2610.28798 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.28798">2610.28798</a> · Feedback contract</b><br>
+With exact validation scores every round, an agent "gains" 0.0157 on a no-signal task and uses all 30 submissions; release scores only past a paired-SE threshold.<br>
+每轮精确验证分让无信号任务也报出增益；只在超过配对标准误时发放新分。
+</td>
+</tr>
 <tr>
 <td width="33%" align="center" valign="top">
 <a href="reel/2610.07792/poster.png"><img src="reel/2610.07792/poster.png" width="260" alt="2610.07792 poster"></a><br>

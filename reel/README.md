@@ -1,9 +1,12 @@
 # 精选 Reel
 
-2026-10-22，run [rsi-l1-20261022-03](../research/scoring/runs/rsi-l1-20261022-03/progress.md)：1597 篇 L1 → 978 篇 L2 全文核对 → confirmed P3 池 562 篇 → 终选 **15 篇**（宁缺毋滥）。每张画报经 Opus 5.5 原文核对（含附录补读）、逐数溯源（SOURCE.md）与实际视觉 QA（QA.md）；15 种版式互不重复。选题全程：[selection 1](../research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](../research/scoring/runs/rsi-l1-20261022-03/selection-002.md)。按新到旧排列：
+2026-10-22，run [rsi-l1-20261022-03](../research/scoring/runs/rsi-l1-20261022-03/progress.md)：1597 篇 L1 → 978 篇 L2 全文核对 → confirmed P3 池 562 篇 → 终选 **15 篇**（宁缺毋滥）。2026-10-24，rolling run [rsi-rolling-20261023-01](../research/scoring/runs/rsi-rolling-20261023-01/progress.md) 增量 5 篇 confirmed P3 → 第三期终选 **3 篇**（1 篇退回修订）。共 **18 篇**。每张画报经 Opus 5.5 原文核对（含附录补读）、逐数溯源（SOURCE.md）与实际视觉 QA（QA.md）；18 种版式互不重复。选题全程：[selection 1](../research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](../research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](../research/scoring/runs/rsi-rolling-20261023-01/selection-003.md)。按新到旧排列：
 
 | 论文 | 问题族 | 一句话 |
 |---|---|---|
+| [2610.30499](2610.30499/) ARC-AGI-3 自改 harness | F1/F3 | 27 条谱系：开发 +8.42，留出只 +2.80（区间含 0）——会搭不等于会改好 |
+| [2610.29005](2610.29005/) VeriEvolve | F2/F4 | 合成评估器在自出考卷上 141/141，到搜索状态上 113/122；外部校准下可修补 |
+| [2610.28798](2610.28798/) Feedback Contract | F2/F4 | 每轮给精确验证分，无信号任务也报出增益；按配对标准误发放分数 |
 | [2610.07792](2610.07792/) ServeLearnBench | F4 | 隐藏且变化的策略下，从结果反馈推断知识的缺口与副作用 |
 | [2610.05437](2610.05437/) TeleTune | F4 | 不可重放的离线遥测里，用动作预测准确率门控技能编辑 |
 | [2610.02920](2610.02920/) HASTE | F4 | 演化安全 harness 本身（Zombie 的防御侧） |

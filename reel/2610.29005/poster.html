@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VeriEvolve 检验报告</title>
+<style>
+  :root {
+    --bg: #eef2f1; --paper: #ffffff; --ink: #18232a; --muted: #5a6870;
+    --teal: #0f6e74; --teal-d: #0a4d52; --teal-l: #dcefee; --amber: #c98a12; --amber-l: #fbefd2;
+    --red: #c23b31; --red-l: #f8dcd8; --grid: #c9d5d4; --violet: #5a4a9e;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--ink);
+    font-size: 19.5px; line-height: 1.5; background: var(--bg); padding: 22px 48px 0;
+  }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  .sheet { background: var(--paper); border: 1px solid var(--grid); box-shadow: 0 2px 0 var(--grid); height: 2220px; position: relative; padding: 0 40px 0; }
+  .band { margin: 0 -40px; background: var(--teal); color: #fff; padding: 12px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 17px; letter-spacing: .06em; }
+  .band b { font-size: 26px; letter-spacing: .5em; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 2px solid var(--ink); font-size: 16px; }
+  .meta div { padding: 8px 10px 8px 0; border-right: 1px solid var(--grid); }
+  .meta div:last-child { border-right: 0; }
+  .meta span { display: block; font-size: 13.5px; color: var(--muted); letter-spacing: .1em; }
+  h1 { font-size: 58px; line-height: 1.15; margin: 16px 0 8px; font-weight: 900; }
+  h1 .flag { color: var(--red); }
+  .sub { font-size: 22px; color: #2c3a42; }
+  .sec { margin-top: 24px; }
+  .sh { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--teal); padding-bottom: 4px; margin-bottom: 10px; }
+  .sh .no { font-family: "DejaVu Sans Mono", monospace; font-weight: 700; color: #fff; background: var(--teal); padding: 0 8px; font-size: 16px; }
+  .sh h2 { margin: 0; font-size: 27px; }
+  .sh .r { margin-left: auto; font-size: 15px; color: var(--muted); }
+  .note { font-size: 14.5px; color: var(--muted); line-height: 1.45; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+  p { margin: 0 0 7px; }
+  /* pipeline */
+  .pipe { display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr; align-items: stretch; }
+  .stg { border: 2px solid var(--teal); border-radius: 4px; padding: 8px 12px; font-size: 16.5px; line-height: 1.42; background: #f7fbfb; }
+  .stg .h { font-weight: 900; color: var(--teal-d); font-size: 19px; }
+  .stg .h .mono { font-size: 15px; background: var(--teal); color: #fff; padding: 0 5px; margin-right: 6px; }
+  .stg .fz { display: inline-block; margin-top: 4px; font-size: 13.5px; font-weight: 700; border: 1.5px solid var(--ink); padding: 0 6px; letter-spacing: .1em; }
+  .pa { display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--teal); font-weight: 900; }
+  .loop { margin-top: 6px; font-size: 15px; color: var(--teal-d); text-align: right; }
+  .ext { margin-top: 10px; border: 2px dashed var(--amber); background: var(--amber-l); padding: 8px 14px; font-size: 16.5px; line-height: 1.45; display: grid; grid-template-columns: 210px 1fr; gap: 12px; align-items: center; }
+  .ext b.t { color: #7a5205; font-size: 18px; }
+  /* reports */
+  .rep { display: grid; grid-template-columns: 330px 1fr; gap: 30px; }
+  .card { border: 1.5px solid var(--grid); padding: 10px 14px; }
+  .card .ttl { font-size: 15px; color: var(--muted); letter-spacing: .08em; }
+  .bignum { font-size: 54px; font-weight: 900; line-height: 1.05; color: var(--teal-d); font-variant-numeric: tabular-nums; }
+  .bignum.r { color: var(--red); }
+  .cm { display: grid; grid-template-columns: 140px 1fr 1fr; grid-template-rows: 36px 92px 92px; gap: 4px; }
+  .cm .hd { display: flex; align-items: center; justify-content: center; font-size: 15.5px; font-weight: 700; color: var(--muted); text-align: center; line-height: 1.2; }
+  .cm .c { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--ink); line-height: 1.15; }
+  .cm .c b { font-size: 46px; font-variant-numeric: tabular-nums; }
+  .cm .c span { font-size: 15px; }
+  .c.ok { background: var(--teal-l); } .c.fp { background: var(--red-l); border-color: var(--red); color: var(--red); } .c.fn { background: var(--amber-l); border-color: var(--amber); color: #7a5205; }
+  .cmside { font-size: 16px; }
+  .cmside table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 16px; }
+  .cmside th { font-size: 13.5px; color: var(--muted); text-align: right; border-bottom: 1.5px solid var(--ink); padding: 3px 5px; }
+  .cmside td { text-align: right; padding: 4px 5px; border-bottom: 1px solid var(--grid); }
+  .cmside th:first-child, .cmside td:first-child { text-align: left; }
+  .cmside td.f { color: var(--red); font-weight: 700; }
+  /* cells */
+  table.res { width: 100%; border-collapse: collapse; }
+  table.res td { padding: 5px 6px; vertical-align: middle; }
+  table.res tr.top td { border-top: 1.5px solid var(--ink); }
+  td.ex { font-weight: 900; font-size: 18.5px; width: 140px; }
+  td.kd { font-size: 15.5px; color: var(--muted); width: 96px; }
+  td.ar { font-size: 22px; color: var(--teal); font-weight: 900; text-align: center; width: 30px; }
+  td.gl { font-weight: 900; font-size: 18px; text-align: right; width: 170px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.gl span { font-weight: 400; font-size: 14.5px; color: var(--muted); }
+  .cells { display: grid; grid-template-columns: repeat(30, 1fr); gap: 2px; }
+  .cells i { display: block; height: 22px; background: #e7ecec; border: 1px solid #cdd8d8; }
+  .cells i.x { background: var(--teal); border-color: var(--teal-d); }
+  .cells i.n { background: #7fb3b6; border-color: #5d9ca0; }
+  .cellwrap { display: grid; grid-template-columns: 1fr 170px; align-items: center; gap: 8px; }
+  .cv { font-size: 15.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .cv span { font-weight: 400; color: var(--muted); font-size: 13.5px; }
+  /* stage 3 */
+  .s3 { display: grid; grid-template-columns: 1fr 470px; gap: 30px; }
+  table.fx { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+  table.fx th { font-size: 13.5px; color: var(--muted); text-align: left; border-bottom: 1.5px solid var(--ink); padding: 3px 6px; }
+  table.fx td { padding: 6px 6px; border-bottom: 1px solid var(--grid); vertical-align: top; line-height: 1.38; }
+  table.fx td.task { font-family: "DejaVu Sans Mono", monospace; font-size: 15.5px; font-weight: 700; white-space: nowrap; }
+  .ok-tag { color: var(--teal-d); font-weight: 700; } .no-tag { color: var(--red); font-weight: 700; }
+  .tree { border: 1.5px solid var(--grid); padding: 8px 12px; font-size: 15.5px; }
+  .tree .row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin: 6px 0; }
+  .leaf { border: 2px solid var(--ink); height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 13px; line-height: 1.15; text-align: center; }
+  .leaf.chk { background: var(--teal-l); border-color: var(--teal); }
+  .leaf.miss { background: var(--red-l); border-color: var(--red); border-style: dashed; color: var(--red); }
+  .leaf b { font-size: 18px; }
+  .stem { height: 18px; border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-top: 2px solid var(--ink); margin: 0 5% 0; }
+  /* bottom */
+  .bot { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+  .kv { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; font-size: 16.5px; }
+  .kv div:nth-child(even) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .kv div { border-bottom: 1px dotted var(--grid); padding: 2px 0; }
+  .lim > div:not(.sh) { position: relative; padding-left: 30px; margin: 6px 0; font-size: 16.5px; line-height: 1.42; }
+  .lim > div:not(.sh)::before { content: "!"; position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: var(--red); color: #fff; font-weight: 900; font-size: 14px; line-height: 20px; text-align: center; }
+  footer { position: absolute; left: 40px; right: 40px; bottom: 14px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 30px; border-top: 1.5px solid var(--ink); padding-top: 6px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="band"><b>检验报告</b><span>HarnessRSI Reel · arXiv:2610.29005v1 · Li, Yuksel, Tur, Hakkani-Tür, Maia（UIUC / aiXplain）</span></div>
+  <div class="meta">
+    <div><span>送检对象</span>由代理合成的可执行评估器</div>
+    <div><span>主样本</span>MCPMark Filesystem 全部 30 个任务</div>
+    <div><span>参照标准</span>MCPMark 官方 verifier（不给任何模型看）</div>
+    <div><span>执行器</span>Claude（强） / GLM-5.2（弱）</div>
+  </div>
+  <h1>自己出的考卷全对，<span class="flag">真实搜索状态里才露出缺口</span></h1>
+  <div class="sub">VeriEvolve 先从任务指令合成“挑战状态”和可执行评估器，再用冻结的评估器作 fitness 演化工作流；两个执行器终态的差异再用来修补评估器。</div>
+
+  <div class="sec two">
+    <div>
+      <div class="sh"><span class="no">01</span><h2>问题</h2></div>
+      <p>有状态的工具任务（文件系统、数据库、浏览器、仓库）由最终环境状态判对错：文件在不在、内容、层级、一致性、有没有误伤别的东西。这些约束隐含在指令里，没有现成的可执行 fitness。</p>
+      <p>人写 verifier 可靠但贵（MCPMark 报告每个任务与 verifier 需数小时专家工作）；LLM 评审易扩展，但语义判断不能保证每条状态约束都成立。</p>
+      <p><b>本文问：</b>代理能否自己合成一个足以指导工作流改进的评估器？只在“成功可从状态观测、且有外部 verifier 可校准”的有利设定下作可行性检验。</p>
+      <div class="ext" style="grid-template-columns:1fr;gap:2px"><b class="t">外部 verifier 站在环外</b><div>源码、判定、诊断从不给任何模型角色，也不用于排序工作流或修补评估器；但它决定哪些评估器进入 S2（事后一致率 ≥0.85）、哪些被接受状态算假阳性从而触发 S3，且 F⁺ 本身是它接受的状态。</div></div>
+    </div>
+    <div>
+      <div class="sh"><span class="no">02</span><h2>研究动作：评估器先行</h2></div>
+      <div class="pipe">
+        <div class="stg"><div class="h"><span class="mono">S1</span>造评估器</div>指令 + 初始状态 → 正例 / 干净负例 / 对抗近似错例，由确定性适配器落成真实状态 → 合成评估器，过内部门槛（正例接受 ≥0.90、对抗拒绝 ≥0.80）<br><span class="fz">冻结 E⁽⁰⁾</span></div>
+        <div class="pa">→</div>
+        <div class="stg"><div class="h"><span class="mono">S2</span>演化工作流</div>5 个功能节点（理解、规划、ReAct 执行、产物检查、后处理），每节点保留多个备选；评估器给部分分数与逐项检查证据<br><span class="fz">评估器全程不变</span></div>
+        <div class="pa">→</div>
+        <div class="stg"><div class="h"><span class="mono">S3</span>修评估器</div>强执行器状态 F⁺ 对弱执行器被接受的状态 F⁻ 做差异 → 成对反事实用例（只改一处）→ 局部修订；须接受 F⁺、拒绝旧假阳性、保留所有旧判定才晋级<br><span class="fz">冻结 E⁽ᵏ⁺¹⁾ 后重跑 S2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sh"><span class="no">03</span><h2>两张化验单：同一批冻结评估器，换一批状态</h2><span class="r">Filesystem · 与外部 verifier 对照</span></div>
+    <div class="rep">
+      <div>
+        <div class="card"><div class="ttl">A · 在自己生成的挑战状态上</div><div class="bignum">141/141</div><div style="font-size:16px">30 个评估器全部建成；141 个状态（其中 62 个对抗近似错例）全部与外部 verifier 一致</div></div>
+        <div class="card" style="margin-top:12px"><div class="ttl">B · 在执行器搜索中实际到达的状态上</div><div class="bignum r">113/122</div><div style="font-size:16px">92.6%（95% CI 86.6–96.1）；仅 60 个最终状态时 57/60</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:470px 1fr;gap:26px;align-items:start">
+        <div class="cm">
+          <div></div><div class="hd">外部 verifier<br>判通过</div><div class="hd">外部 verifier<br>判失败</div>
+          <div class="hd">内部评估器<br>判通过</div><div class="c ok"><b>41</b><span>一致</span></div><div class="c fp"><b>3</b><span>假阳性 → 触发 S3</span></div>
+          <div class="hd">内部评估器<br>判失败</div><div class="c fn"><b>6</b><span>假阴性（4 个任务）</span></div><div class="c ok"><b>72</b><span>一致</span></div>
+        </div>
+        <div class="cmside">
+          <table>
+            <tr><th>执行器</th><th>状态</th><th>✓/✓</th><th>✓/×</th><th>×/✓</th><th>×/×</th></tr>
+            <tr><td>GLM-5.2</td><td>85</td><td>18</td><td class="f">3</td><td>1</td><td>63</td></tr>
+            <tr><td>Claude</td><td>44</td><td>30</td><td>0</td><td>5</td><td>9</td></tr>
+            <tr><td><b>合计（去重）</b></td><td>122</td><td>41</td><td class="f">3</td><td>6</td><td>72</td></tr>
+          </table>
+          <p class="note" style="margin-top:6px">内部/外部；7 个状态两执行器都产生过，合计时只算一次（原文 Table 2）。精确率 93.2%，召回 87.2%，特异度 96.0%。</p>
+          <p style="font-size:16.5px;margin-top:8px"><b>读法：</b>在生成套件上的“全对”不保证覆盖完整。搜索会主动走到评估器没想到的状态，错误两个方向都有。</p>
+        <p class="note" style="margin-top:6px">B 的状态在评估器冻结之后由别的模型在真实任务上产生，从未参与构建；但只保留了每轮评估器打分最高的状态（258 个，去重后 122），作者明言不是独立随机样本。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sh"><span class="no">04</span><h2>冻结评估器指导下的工作流演化（30 个任务）</h2><span class="r">种子 = 第 0 轮内部选出的最佳候选；每格一个任务</span></div>
+    <table class="res">
+      <tr><td></td><td></td><td class="note">第 0 轮种子</td><td></td><td class="note">演化后</td><td class="note" style="text-align:right">得 / 失 · McNemar</td></tr>
+      <tr class="top"><td class="ex">GLM-5.2（弱）</td><td class="kd">外部验证</td><td><div class="cellwrap"><div class="cells"><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cv">6/30 <span>[0.10, 0.37]</span></div></div></td><td class="ar">→</td><td><div class="cellwrap"><div class="cells"><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cv">18/30 <span>[0.42, 0.75]</span></div></div></td><td class="gl">+12 / −0 <span>p &lt; 0.001</span></td></tr>
+<tr class=""><td class="ex"></td><td class="kd">内部评估器</td><td><div class="cellwrap"><div class="cells"><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cv">8/30 <span>[0.14, 0.44]</span></div></div></td><td class="ar">→</td><td><div class="cellwrap"><div class="cells"><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cv">21/30 <span>[0.52, 0.83]</span></div></div></td><td class="gl">+13 / −0 <span>p &lt; 0.001</span></td></tr>
+<tr class="top"><td class="ex">Claude（强）</td><td class="kd">外部验证</td><td><div class="cellwrap"><div class="cells"><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cv">27/30 <span>[0.74, 0.97]</span></div></div></td><td class="ar">→</td><td><div class="cellwrap"><div class="cells"><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i><i class="x"></i></div><div class="cv">30/30 <span>[0.89, 1.00]</span></div></div></td><td class="gl">+3 / −0 <span>p = 0.25</span></td></tr>
+<tr class=""><td class="ex"></td><td class="kd">内部评估器</td><td><div class="cellwrap"><div class="cells"><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><div class="cv">24/30 <span>[0.63, 0.90]</span></div></div></td><td class="ar">→</td><td><div class="cellwrap"><div class="cells"><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></div><div class="cv">30/30 <span>[0.89, 1.00]</span></div></div></td><td class="gl">+6 / −0 <span>p = 0.031</span></td></tr>
+    </table>
+    <p class="note" style="margin-top:4px">深色 = 外部 verifier 通过，浅色 = 内部评估器通过；格子按数量填充，顺序不对应具体任务。方括号为 Wilson 95% 区间（原文 Table 14）。GLM 演化后被内部接受的 21 个状态中 18 个外部通过（内部精确率 85.7%），剩下 3 个就是上面的假阳性。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sh"><span class="no">05</span><h2>用强弱执行器的状态差修补评估器：3 个假阳性全部修掉</h2></div>
+    <div class="s3">
+      <div>
+        <table class="fx">
+          <tr><th>任务</th><th>差异暴露的漏检约束</th><th>修订</th><th>弱执行器之后</th></tr>
+          <tr><td class="task">uppercase</td><td>精确文本与结尾换行（原检查用 .strip() 放宽了）</td><td>E⁰→E¹（1 次调用）</td><td><span class="no-tag">仍未做对</span>，内外都判失败</td></tr>
+          <tr><td class="task">debugging</td><td>必须出现所要求的固定代码片段</td><td>E⁰→E¹（3 次调用，2 次被回归检查拒绝）</td><td><span class="no-tag">仍未做对</span>，内外都判失败</td></tr>
+          <tr><td class="task">structure_mirror</td><td>缺失的嵌套目录与叶目录占位文件</td><td>E⁰→E¹（1 次调用）</td><td><span class="ok-tag">第 3 轮收敛，内外都通过</span></td></tr>
+        </table>
+        <p class="note" style="margin-top:6px">三例都由外部 verifier 选出，F⁺ 都是外部 verifier 接受的 Claude 状态；修订本身只接收指令、两个状态、当前评估器与挑战集。修补调用共约 64K token，不到 S3 总 token 的 1%，其余花在修订后重跑弱执行器搜索（49 轮）。structure_mirror 的第二轮由文件同步产生的重复目录触发，已排除。</p>
+      </div>
+      <div class="tree">
+        <div style="font-weight:900;font-size:17px">structure_mirror：E⁽⁰⁾ 只检查了 8 个空叶目录中的 5 个</div>
+        <div class="stem"></div>
+        <div class="row">
+          <div class="leaf chk"><b>✓</b>查</div><div class="leaf chk"><b>✓</b>查</div><div class="leaf chk"><b>✓</b>查</div><div class="leaf chk"><b>✓</b>查</div><div class="leaf chk"><b>✓</b>查</div><div class="leaf miss"><b>?</b>漏</div><div class="leaf miss"><b>?</b>漏</div><div class="leaf miss"><b>?</b>漏</div>
+        </div>
+        <div style="font-size:15px;line-height:1.4">GLM-5.2 的状态少了另外 3 个 → E⁽⁰⁾ 照样通过，外部 verifier 拒绝。差异聚成三簇（缺目录、缺占位文件、目录留空），6 个成对用例 → 补齐路径的 3 行修订 → E⁽¹⁾ 通过累计回归。</div>
+        <div class="note" style="margin-top:4px">示意：按原文 Figure 2 文字重画，目录名与位置为示意。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec bot">
+    <div>
+      <div class="sh"><span class="no">06</span><h2>代价与其他环境</h2></div>
+      <div class="kv">
+        <div>Filesystem S2 · GLM-5.2：执行器 token / 演化器费用 / 墙钟</div><div>33.18M · $31.24 · 43.5 h</div>
+        <div>Filesystem S2 · Claude（不含 prompt cache 读取）</div><div>0.58M · $1.74 · 5.3 h</div>
+        <div>Filesystem S3（三例合计）</div><div>8.10M · $3.49 · 4.6 h</div>
+        <div>PostgreSQL：建成评估器 / 生成状态一致</div><div>18/21 · 115/120</div>
+        <div>PostgreSQL：进入 S2 / 任一执行器解出</div><div>15 · 3（另 12 个都未收敛）</div>
+      </div>
+      <p class="note" style="margin-top:6px">S1 成本未记录。PostgreSQL 从未产生触发 S3 的假阳性；Playwright、Notion、GitHub 只是较小或不完整的压力测试。作者：评估器可用后，瓶颈转向搜索与执行。</p>
+    </div>
+    <div class="lim">
+      <div class="sh"><span class="no">07</span><h2>限制（作者已写明的为主）</h2></div>
+      <div><b>不是无 verifier 闭环：</b>准入、假阳性的发现、参照状态 F⁺ 都依赖外部 verifier。回溯测试的替代触发“强弱状态有任何差异”能抓到 3/3 假阳性，但同时误报 18 个正确状态中的 10 个。</div>
+      <div><b>无等预算基线：</b>每个 Filesystem 条件只跑一次，演化结果只与自己的第 0 轮比较，作者承认部分增益可能来自反复采样而非评估器指导。</div>
+      <div><b>同源：</b>挑战集生成与评估器构建都用 Claude；S1 的 verifier 信息隔离是流程约定，S3 才有数据包级技术隔离。</div>
+      <div><b>3/3 不是可靠率：</b>修订后的评估器没有在未参与修订的新状态上再检验；F⁺ 出错时修订会怎样未测。</div>
+    </div>
+  </div>
+
+  <footer>
+    <span>来源：Li et al., “VeriEvolve: Evaluator-First Evolution for Tool-Using Agents”, arXiv:2610.29005v1（§1, §3–§8, Tables 1–4, 附录 D.2–D.4, E.6）。逐数出处见 SOURCE.md。</span>
+    <span>流程、格子与目录树为本项目示意或按原文数字重绘。本项目未运行实验，未复现。</span>
+  </footer>
+</div>
+</body>
+</html>

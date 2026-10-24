@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>反馈契约密封柜台</title>
+<style>
+  :root {
+    --navy: #14233b; --navy2: #22375a; --brass: #b8892f; --brass-l: #e9d6a6;
+    --ivory: #f8f3e6; --paper: #fffdf7; --ink: #1b2230; --muted: #5f6672;
+    --red: #b8372e; --red-l: #f6dcd8; --teal: #23756c; --teal-l: #d7ece8; --line: #cdbf9c;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ivory); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--ink);
+    font-size: 20px; line-height: 1.5; background: var(--ivory);
+  }
+  .serif { font-family: "Noto Serif CJK SC", serif; }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  header { background: var(--navy); color: var(--ivory); padding: 30px 64px 30px; position: relative; border-bottom: 10px solid var(--brass); }
+  header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -20px; height: 4px; background: var(--brass); }
+  .hd { display: flex; justify-content: space-between; font-size: 17px; color: var(--brass-l); letter-spacing: .08em; }
+  h1 { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 58px; line-height: 1.16; margin: 12px 0 8px; letter-spacing: .01em; }
+  h1 em { font-style: normal; color: #f2c75c; }
+  .sub { font-size: 23px; color: #dfe4ec; max-width: 1400px; }
+  main { padding: 36px 64px 0; }
+  .row { display: grid; gap: 28px; margin-bottom: 18px; }
+  .box { background: var(--paper); border: 2px solid var(--line); padding: 16px 24px; position: relative; }
+  .lbl { font-family: "Noto Serif CJK SC", serif; font-weight: 900; color: var(--brass); font-size: 17px; letter-spacing: .3em; border-bottom: 2px solid var(--brass); display: inline-block; padding-bottom: 2px; margin-bottom: 8px; }
+  h2 { font-family: "Noto Serif CJK SC", serif; font-size: 30px; margin: 4px 0 8px; line-height: 1.3; }
+  p { margin: 0 0 8px; }
+  .note { font-size: 15px; color: var(--muted); line-height: 1.45; }
+  .r1 { grid-template-columns: 500px 1fr; }
+  /* sealed counter */
+  .counter { display: grid; grid-template-columns: 170px 1fr; gap: 0; align-items: center; margin-top: 4px; }
+  .agent { border: 3px solid var(--ink); background: #fff; padding: 12px 10px; text-align: center; font-weight: 700; font-size: 19px; line-height: 1.35; }
+  .agent small { display: block; font-weight: 400; font-size: 14.5px; color: var(--muted); margin-top: 4px; }
+  .safe { background: var(--navy); color: #eef1f6; border: 6px solid var(--brass); border-radius: 6px; padding: 14px 18px 14px 18px; position: relative; margin-left: 48px; }
+  .safe .t { color: #f2c75c; font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 21px; letter-spacing: .06em; }
+  .in-arrow { position: absolute; left: -50px; top: 38px; width: 50px; text-align: center; font-size: 15px; color: var(--ink); font-weight: 700; line-height: 1.1; }
+  .in-arrow b { display: block; font-size: 30px; }
+  .out-arrow { position: absolute; left: -50px; bottom: 26px; width: 50px; text-align: center; font-size: 15px; color: var(--teal); font-weight: 700; line-height: 1.1; }
+  .out-arrow b { display: block; font-size: 30px; }
+  .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-top: 8px; }
+  .st { background: var(--navy2); padding: 8px 12px; font-size: 16.5px; line-height: 1.4; border-left: 4px solid var(--brass); }
+  .st b { color: #f2c75c; }
+  .losses { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; margin-top: 6px; }
+  .losses i { height: 10px; display: block; background: #4f6a93; }
+  .rule { margin-top: 10px; background: #0d1829; border: 2px dashed var(--brass); padding: 10px 14px; text-align: center; font-size: 25px; color: #fff; }
+  .rule .mono { font-size: 25px; }
+  .rule small { display: block; font-size: 15.5px; color: #c8cfdb; margin-top: 2px; }
+  .slot { margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .slot div { background: #e9f3f1; color: var(--ink); padding: 8px 12px; font-size: 16px; border-left: 5px solid var(--teal); }
+  .slot div.no { background: #f6e3e0; border-left-color: var(--red); }
+  /* results */
+  .r2 { grid-template-columns: 1fr 1fr; }
+  .bars { margin-top: 8px; }
+  .bl { display: grid; grid-template-columns: 150px 1fr; align-items: center; margin: 8px 0; }
+  .bl .k { font-size: 17px; font-weight: 700; line-height: 1.25; }
+  .bl .k small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
+  .tr { position: relative; height: 40px; }
+  .tr .z { position: absolute; left: 14.29%; top: -6px; bottom: -6px; width: 2px; background: var(--ink); }
+  .tr .b { position: absolute; top: 6px; height: 28px; }
+  .tr .wk { position: absolute; top: 19px; height: 2px; background: var(--ink); }
+  .tr .wk::before, .tr .wk::after { content: ""; position: absolute; top: -7px; width: 2px; height: 16px; background: var(--ink); }
+  .tr .wk::before { left: 0; } .tr .wk::after { right: 0; }
+  .tr .v { position: absolute; top: 7px; font-weight: 900; font-size: 19px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ticks { position: relative; height: 20px; margin-left: 150px; font-size: 13.5px; color: var(--muted); }
+  .ticks span { position: absolute; transform: translateX(-50%); }
+  .grp { border-top: 2px solid var(--line); padding-top: 6px; margin-top: 6px; }
+  .grp .gh { font-weight: 900; font-size: 19px; }
+  .big { display: flex; gap: 18px; margin-top: 10px; }
+  .big > div { flex: 1; border: 2px solid var(--line); padding: 8px 12px; background: #fff; }
+  .big .n { font-size: 34px; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.1; font-family: "Noto Serif CJK SC", serif; }
+  .big .n.r { color: var(--red); } .big .n.g { color: var(--teal); }
+  /* strips */
+  .srow { display: grid; grid-template-columns: 112px 80px 1fr 96px; align-items: center; gap: 8px; margin: 3px 0; }
+  .srow.c { margin-bottom: 12px; }
+  .sn { font-weight: 900; font-size: 17px; }
+  .sl { font-size: 15px; color: var(--muted); text-align: right; }
+  .slots { display: grid; grid-template-columns: repeat(30, 1fr); gap: 3px; }
+  .slots i { display: block; height: 24px; border: 1.5px solid #b9ad8c; background: linear-gradient(90deg, var(--c) var(--f), #fff var(--f)); }
+  .slots i.e { --c: var(--red); }
+  .slots i.k { --c: var(--teal); }
+  .sv { font-weight: 900; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .sv span { font-size: 13.5px; font-weight: 400; color: var(--muted); margin-left: 2px; }
+  .scale { display: grid; grid-template-columns: 112px 80px 1fr 96px; gap: 8px; font-size: 13.5px; color: var(--muted); }
+  .scale .s { position: relative; height: 18px; }
+  .scale .s span { position: absolute; transform: translateX(-50%); }
+  /* tables */
+  .r3 { grid-template-columns: 1fr 1fr; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 17.5px; }
+  th { font-size: 14.5px; color: var(--muted); text-align: right; border-bottom: 2px solid var(--ink); padding: 4px 6px; font-weight: 700; }
+  th:first-child, td:first-child { text-align: left; }
+  td { text-align: right; padding: 3px 6px; border-bottom: 1px solid #e3dac4; }
+  tr.k td { background: var(--teal-l); font-weight: 700; }
+  td.task { font-weight: 900; }
+  /* clauses */
+  .lim .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; }
+  .cl { display: grid; grid-template-columns: 54px 1fr; gap: 10px; margin: 7px 0; font-size: 17.5px; line-height: 1.42; }
+  .cl .no { font-family: "Noto Serif CJK SC", serif; font-weight: 900; color: #fff; background: var(--brass); text-align: center; height: 34px; line-height: 34px; font-size: 18px; }
+  .lim .cols > div { position: relative; padding-left: 28px; margin: 5px 0; font-size: 16.5px; line-height: 1.42; }
+  .lim .cols > div::before { content: "※"; position: absolute; left: 0; top: 0; color: var(--red); font-weight: 900; }
+  .clauses { margin-top: 10px; font-size: 15.5px; line-height: 1.5; color: #333; border-top: 2px solid var(--brass); padding-top: 6px; }
+  .clauses b { color: var(--brass); font-family: "Noto Serif CJK SC", serif; }
+  .gapline { margin-top: 10px; border: 2px solid var(--line); background: #fff; padding: 8px 14px; font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .gapline b { font-family: "Noto Serif CJK SC", serif; font-size: 24px; }
+  footer { position: absolute; left: 64px; right: 64px; bottom: 22px; font-size: 14px; color: var(--muted); display: flex; justify-content: space-between; gap: 30px; border-top: 3px double var(--brass); padding-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="hd"><span>HARNESSRSI REEL · arXiv:2610.28798v1 · Yao et al.（Walmart Global Tech 等）</span><span>迭代式 ML 代理 · 验证反馈的发放规则</span></div>
+  <h1>每次都给精确验证分，<em>噪声也会被当成进步</em>收下</h1>
+  <div class="sub">代理反复改代码、跑实验、读验证分；“反馈契约”规定它能看到什么、何时停、何时碰测试集。</div>
+</header>
+<main>
+  <div class="row r1">
+    <div class="box">
+      <div class="lbl">问 题</div>
+      <h2>同样大小的真实改进和随机波动，从循环里看不出区别</h2>
+      <p>验证分是有限样本上的估计。代理保留“看起来变好”的修改，真实改进与等量波动都会被留下。轮数一多，最后报告的分数描述的是<b>这一份验证划分</b>，而不是总体。</p>
+      <p>比赛有截止日、提交限额和人看着；代理一个下午就能对同一份验证集提交成百上千次，没有速率限制，也没有人判断收益何时不再真实。</p>
+      <p class="note">经典工具（自适应数据分析、Blum &amp; Hardt 2015 的 Ladder 阈值发布）假设提交者摸不到原始数据；代理在仓库里工作，能读文件、重训、看中间产物，还没有截止日。作者说这三点把单一机制问题变成了协议设计问题。</p>
+    </div>
+    <div class="box">
+      <div class="lbl">研究动作</div>
+      <h2>把验证集锁进柜台：只从窗口递出一对 (u<sub>t</sub>, R<sub>t</sub>)</h2>
+      <div class="counter">
+        <div class="agent">ML 代理<small>读训练集、改仓库、<br>写下一个候选 f<sub>t</sub></small><small style="margin-top:10px">看不到：验证标签、<br>逐样本损失、预测文件</small></div>
+        <div class="safe">
+          <div class="in-arrow">提交<b>→</b>f<sub>t</sub></div>
+          <div class="out-arrow"><b>←</b>(u,R)</div>
+          <div class="t">柜台内部（对代理隐藏）</div>
+          <div class="steps">
+            <div class="st"><b>①</b> 在 n 个验证样本上算逐样本损失 L<sub>t</sub>
+              <div class="losses"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="st"><b>②</b> 与当前冠军逐行配对，取差值的标准差 s<sub>t</sub>，标准误 = s<sub>t</sub>/√n</div>
+          </div>
+          <div class="rule"><span class="mono">r<sub>t</sub> &lt; R<sub>t−1</sub> − s<sub>t</sub>/√n</span><small>新平均损失必须比当前公布分好出至少一个配对标准误，才换冠军并公布新分（取整到 1/n）；否则重复旧分</small></div>
+          <div class="steps" style="margin-top:10px">
+            <div class="st"><b>③</b> 冠军、其逐样本损失、全部记录 H<sub>t</sub> 留在柜内以便复核</div>
+            <div class="st"><b>④</b> 连续 p 次 no_update 即停；冠军在测试集只评一次</div>
+          </div>
+        </div>
+      </div>
+      <div class="slot">
+        <div><b>递出：</b>是否更新 u<sub>t</sub> ∈ {update, no_update}，以及当前公布分 R<sub>t</sub></div>
+        <div class="no"><b>不递出：</b>被拒提交差了多少；任何测试反馈；验证标签与预测</div>
+      </div>
+      <div class="clauses"><b>契约五条</b>　C1 划分：验证集只经提交触达，测试集迭代中不可达　·　C2 发放：每轮只回 (u,R)　·　C3 停止：预设预算 T<sub>max</sub> 与耐心 p，按更新事件计数　·　C4 测试隔离：先指定最终模型，测试只评一次　·　C5 留档：隐藏损失、记录、seed 足以不重跑代理即复核</div>
+    </div>
+  </div>
+
+  <div class="row r2">
+    <div class="box">
+      <div class="lbl">关键对照</div>
+      <h2>无信号任务：真实增益按构造为 0</h2>
+      <p style="font-size:17.5px">切分前置乱标签（维度与 Criteo 相同），基础比例预测器已是总体最优，任何“增益”都只能来自选择噪声。五个 seed，均值 ± 标准误。</p>
+      <div class="bars">
+        <div class="grp"><div class="gh" style="color:var(--red)">精确分数（现行做法）</div>
+          <div class="bl"><div class="k">最终报告增益<small>验证集上</small></div><div class="tr"><div class="z"></div><div class="b" style="left:14.29%;width:74.76%;background:var(--red)"></div><div class="v" style="left:90%">0.0157</div></div></div>
+          <div class="bl"><div class="k">一次性测试增益<small>停止后才评</small></div><div class="tr"><div class="z"></div><div class="b" style="left:11.43%;width:2.86%;background:#e48b83"></div><div class="wk" style="left:2.86%;width:17.14%"></div><div class="v" style="left:22%">−0.0006 ± 0.0018</div></div></div>
+        </div>
+        <div class="grp"><div class="gh" style="color:var(--teal)">反馈契约</div>
+          <div class="bl"><div class="k">最终报告增益</div><div class="tr"><div class="z"></div><div class="b" style="left:14.29%;width:15.71%;background:var(--teal)"></div><div class="v" style="left:31%">0.0033</div></div></div>
+          <div class="bl"><div class="k">一次性测试增益</div><div class="tr"><div class="z"></div><div class="b" style="left:14.29%;width:15.71%;background:#7fbab2"></div><div class="wk" style="left:20.48%;width:19.05%"></div><div class="v" style="left:42%">0.0033 ± 0.0020</div></div></div>
+        </div>
+        <div class="ticks"><span style="left:4.76%">−0.002</span><span style="left:14.29%">0</span><span style="left:38.1%">0.005</span><span style="left:61.9%">0.010</span><span style="left:85.71%">0.015</span></div>
+      </div>
+      <div class="gapline">验证−测试差：精确分数 <b style="color:var(--red)">0.0163</b> ± 0.0026　｜　契约 <b style="color:var(--teal)">0.0000</b> ± 0.0025</div>
+    </div>
+    <div class="box">
+      <div class="lbl">停止行为</div>
+      <h2>精确分数被预算叫停，契约被机制叫停</h2>
+      <p style="font-size:16.5px">每格一次提交（上限 30）；数字为平均停止轮次 ± 标准误。契约按“被接受的更新”计耐心，精确分数只能按“观察到的改进”计。</p>
+      <div style="margin-top:10px"><div class="srow"><div class="sn">Criteo CTR</div><div class="sl">精确分数</div><div class="slots"><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i></div><div class="sv">30.0<span>±0.0</span></div></div>
+<div class="srow c"><div class="sn"></div><div class="sl">契约</div><div class="slots"><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:30%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i></div><div class="sv">12.3<span>±4.4</span></div></div>
+<div class="srow"><div class="sn">MSLR 排序</div><div class="sl">精确分数</div><div class="slots"><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:0%"></i><i class="e" style="--f:0%"></i><i class="e" style="--f:0%"></i></div><div class="sv">27.0<span>±0.0</span></div></div>
+<div class="srow c"><div class="sn"></div><div class="sl">契约</div><div class="slots"><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:30%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i></div><div class="sv">4.3<span>±0.7</span></div></div>
+<div class="srow"><div class="sn">无信号对照</div><div class="sl">精确分数</div><div class="slots"><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i><i class="e" style="--f:100%"></i></div><div class="sv">30.0<span>±0.0</span></div></div>
+<div class="srow c"><div class="sn"></div><div class="sl">契约</div><div class="slots"><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:100%"></i><i class="k" style="--f:40%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i><i class="k" style="--f:0%"></i></div><div class="sv">10.4<span>±4.4</span></div></div></div>
+      <div class="scale"><span></span><span></span><div class="s"><span style="left:1.67%">1</span><span style="left:31.67%">10</span><span style="left:65.00%">20</span><span style="left:98.33%">30</span></div><span></span></div>
+      <p style="margin-top:14px">精确分数在 Criteo 和无信号对照上都用满 30 次（MSLR 到第 27 次）。作者的读法：<b>预算被耗尽通常被当成勤奋，更应读作症状</b>——反馈通道不设限时，噪声总能提供新的“改进”可追。</p>
+      <p class="note">停止轮次在 Criteo 和无信号对照上随 seed 相差好几次提交；契约组的增益收窄是“发放规则 + 停止规则”一起作用的结果，论文没有做同轮数的对照。</p>
+    </div>
+  </div>
+
+  <div class="row r3">
+    <div class="box">
+      <div class="lbl">真实任务</div>
+      <h2>差距收窄约一成，测试分不降反略升</h2>
+      <table>
+        <tr><th>任务（指标）</th><th>接口</th><th>停止轮</th><th>测试 ↑</th><th>验证−测试差 ↓</th></tr>
+        <tr><td class="task" rowspan="2">Criteo（AUC）</td><td>精确</td><td>30.0</td><td>0.7820</td><td>0.0060</td></tr>
+        <tr class="k"><td>契约</td><td>12.3</td><td>0.7823</td><td>0.0055</td></tr>
+        <tr><td class="task" rowspan="2">MSLR（NDCG@10）</td><td>精确</td><td>27.0</td><td>0.4446</td><td>0.0134</td></tr>
+        <tr class="k"><td>契约</td><td>4.3</td><td>0.4451</td><td>0.0123</td></tr>
+      </table>
+      <p class="note" style="margin-top:8px">原文 Table 2，各三个 seed。作者自述：绝对差异很小，三个 seed 分不出小效应与零；两个数据集都是表格数据。MSLR 的有效样本数是约 2,000 个查询而非行数。</p>
+    </div>
+    <div class="box">
+      <div class="lbl">阈值怎么定</div>
+      <h2>不用调的配对标准误 vs 固定阈值（Criteo）</h2>
+      <table>
+        <tr><th>更新阈值</th><th>停止轮</th><th>测试 AUC ↑</th><th>差 ↓</th></tr>
+        <tr><td>固定 η = 0.001</td><td>14.6</td><td>0.7831</td><td>0.0060</td></tr>
+        <tr><td>固定 η = 0.005</td><td>9.8</td><td>0.7684</td><td>0.0066</td></tr>
+        <tr><td>固定 η = 0.010</td><td>7.8</td><td>0.7727</td><td>0.0054</td></tr>
+        <tr class="k"><td>配对标准误（契约）</td><td>14.2</td><td>0.7840</td><td>0.0053</td></tr>
+      </table>
+      <p class="note" style="margin-top:8px">原文 Table 4：同一 harness、提示、划分、预算与耐心，只换阈值。阈值太高丢掉真实改进，太低几乎每轮都放分；配对规则在这组网格上测试最高、差最小，且停得并不更早。</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="box lim">
+      <div class="lbl">限制与边界</div><div class="cols">
+      <div>保证只针对公布的记录（公布分接近“迄今最佳候选”的风险），不是最终测试分；作者说契约让报告的数字可信，而不是让模型更好。</div>
+      <div>命题 1、2 针对固定阈值；实际部署的配对标准误规则是启发式。正文称加下限 η<sub>min</sub> 后定理适用，但 Algorithm 1 未写下限、常数 c 未给出。</div>
+      <div>C1/C4 的文件隔离是协议规定，正文没有给出文件权限、沙箱或越界访问测试。</div>
+      <div>第二骨干 Claude Sonnet 4.6 上两种接口停止轮次相近（23.4 对 22.6），且未按当前协议重跑，需分开读。</div>
+      <div>阈值化接口只返回选择信号，误差分析要在训练集或另行标注的样本上做。</div>
+    <div>§5.3 验证集大小实验用 Signed Boosting 提交（Table 3 注），与主实验的 Codex 代理不同，需分开读。</div></div>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>来源：Yao et al., “An Explicit Feedback Contract for Iterative ML-Agent Harnesses”, arXiv:2610.28798v1（§1, §3–§6, Algorithm 1, Tables 2–5）。逐数出处见 SOURCE.md。</span>
+  <span>柜台图为本项目示意；条形与提交格按原文 Table 2 数值重绘。本项目未运行实验，未复现。</span>
+</footer>
+</body>
+</html>
