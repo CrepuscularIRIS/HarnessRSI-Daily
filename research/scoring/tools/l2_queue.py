@@ -31,6 +31,7 @@ def main() -> int:
         ft[p.stem] = str(p.relative_to(REPO))
 
     recs = {}
+    l2_done = set()
     for f in sorted((run_dir / "batches").glob("*.jsonl")):
         for line in open(f):
             line = line.strip()
@@ -38,6 +39,8 @@ def main() -> int:
                 d = json.loads(line)
                 if d.get("stage") == "L1":
                     recs[d["paper_id"]] = d
+                elif d.get("stage") == "L2":
+                    l2_done.add(d["paper_id"])
     l1_total = len(recs)
     budget = args.budget or l1_total // 5
     audit_n = budget // 10
@@ -45,12 +48,14 @@ def main() -> int:
     def l2_ok(d):
         return d["next_action"] == "to_l2" and d["status"] != "out_of_scope"
 
-    main_pool = sorted((d for d in recs.values() if l2_ok(d) and d["paper_id"] in ft),
+    main_pool = sorted((d for d in recs.values() if l2_ok(d) and d["paper_id"] in ft
+                        and d["paper_id"] not in l2_done),
                        key=lambda d: (ORDER.get(d["priority"], 9), d["paper_id"]))
     main_pick = [d for d in main_pool if d["priority"] in ("high", "medium")][:budget]
 
     audit_pool = [d for d in recs.values()
-                  if d["paper_id"] in ft and d["paper_id"] not in {x["paper_id"] for x in main_pick}
+                  if d["paper_id"] in ft and d["paper_id"] not in l2_done
+                  and d["paper_id"] not in {x["paper_id"] for x in main_pick}
                   and (d["problem_tier"] in ("P0", "P1") or "F0" in (d.get("families") or [])
                        or d["status"] == "needs_material" or d["next_action"] == "park")]
     rng = random.Random(args.seed)
