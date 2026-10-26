@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日间学夜间存</title>
+<style>
+  :root {
+    --night: #1d2150; --night2: #2c3270; --night3: #3d4590; --star: #e9ecff;
+    --day: #fff4dd; --sun: #f2a93b; --sun-d: #b86e0e; --ink: #1c1f2e; --muted: #626679;
+    --herd: #0f9488; --herd-l: #d4f0ec; --param: #b04a5a; --param-l: #f3dfe3; --ctx: #8a7d55; --line: #d9d3c2; --bg: #f5f2ea;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body { width: 1600px; height: 2263px; overflow: hidden; position: relative; font-family: "Noto Sans CJK SC", sans-serif; color: var(--ink); font-size: 18.5px; line-height: 1.5; background: var(--bg); }
+  .serif { font-family: "Noto Serif CJK SC", serif; }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  header { height: 290px; position: relative; background: linear-gradient(90deg, #fbe2a8 0%, #f7c46e 34%, #c97c62 50%, #4a3f7a 66%, var(--night) 100%); color: var(--ink); padding: 30px 60px; overflow: hidden; }
+  header .sunc { position: absolute; left: -110px; top: 196px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, #fff3c4 0%, #f6b545 60%, rgba(246,181,69,0) 72%); }
+  header .moon { position: absolute; right: 90px; top: 34px; width: 90px; height: 90px; border-radius: 50%; box-shadow: -22px 10px 0 0 #f4f1de; }
+  header .stars i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--star); }
+  .tagl { font-size: 16px; letter-spacing: .1em; color: #6a4a12; }
+  .tagr { position: absolute; right: 220px; top: 32px; font-size: 16px; letter-spacing: .08em; color: #dfe2ff; }
+  h1 { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 52px; line-height: 1.2; margin: 26px 0 16px; white-space: nowrap; color: #1a1430; }
+  h1 .n { color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+  .sub { font-size: 21.5px; max-width: 1220px; color: #2a2238; background: rgba(255,248,232,.78); padding: 6px 14px; border-radius: 4px; }
+  main { padding: 22px 50px 0; }
+  .grid { display: grid; gap: 20px; margin-bottom: 16px; }
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 22px; }
+  .panel.n { background: var(--night); color: #eef0ff; border-color: var(--night); }
+  .k { font-size: 15px; letter-spacing: .12em; color: var(--sun-d); font-weight: 700; }
+  .panel.n .k { color: #f5c46e; }
+  h2 { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 28px; margin: 2px 0 8px; line-height: 1.28; }
+  p { margin: 0 0 7px; }
+  .note { font-size: 14px; color: var(--muted); line-height: 1.42; }
+  .panel.n .note { color: #b9bde0; }
+  .r1 { grid-template-columns: 1fr 1fr; }
+  .sym { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  .sym > div { border-radius: 8px; padding: 10px 14px; font-size: 16.5px; line-height: 1.42; }
+  .sym .c { background: #f3efe2; border-left: 6px solid var(--ctx); }
+  .sym .w { background: var(--param-l); border-left: 6px solid var(--param); }
+  .sym b.t { display: block; font-size: 19px; margin-bottom: 2px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15.5px; font-variant-numeric: tabular-nums; }
+  th, td { padding: 3px 7px; text-align: right; border-bottom: 1px solid #ece7da; white-space: nowrap; }
+  th { color: var(--muted); font-size: 14px; border-bottom: 2px solid #b9b2a0; font-weight: 700; }
+  th:first-child, td:first-child { text-align: left; }
+  tr.h td { background: var(--herd-l); font-weight: 900; }
+  tr.dim td { color: #8d90a0; }
+  .bar { display: inline-block; height: 13px; vertical-align: -1px; border-radius: 2px; }
+  td.b { text-align: left; width: 210px; }
+  .lims { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 24px; font-size: 15.3px; line-height: 1.42; }
+  .lims div { padding-left: 22px; position: relative; }
+  .lims div::before { content: ""; position: absolute; left: 2px; top: 7px; width: 11px; height: 11px; background: var(--sun); transform: rotate(45deg); }
+  .panel.n .lims div::before { background: #f5c46e; }
+  footer { position: absolute; left: 50px; right: 50px; bottom: 12px; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  svg text { font-family: "Noto Sans CJK SC", sans-serif; }
+  svg .mono { font-family: "DejaVu Sans Mono", monospace; }
+</style>
+</head>
+<body>
+<header>
+  <div class="sunc"></div><div class="moon"></div>
+  <div class="stars"><i style="right:330px;top:70px"></i><i style="right:420px;top:150px"></i><i style="right:260px;top:200px"></i><i style="right:180px;top:150px;width:3px;height:3px"></i><i style="right:520px;top:60px;width:3px;height:3px"></i><i style="right:60px;top:240px"></i><i style="right:300px;top:262px;width:3px;height:3px"></i></div>
+  <div class="tagl">HARNESSRSI DAILY · REEL · 2610.31401v1 · couple_context_and_weight_updates</div>
+  <div class="tagr">日间 harness · 夜间权重</div>
+  <h1>白天在 harness 里挑出要学的，<span class="n">夜里把它蒸进权重</span></h1>
+  <div class="sub">HERD 每个阶段先演化技能与高残差记忆，再在两个漂移锚之下把 harness 自蒸馏进权重，部署时只用权重。25 阶段任务流上：习得与最强参数基线持平，遗忘和通用能力损失最小。</div>
+</header>
+
+<main>
+  <div class="grid r1">
+    <div class="panel">
+      <div class="k">01 · 问题</div>
+      <h2>只用 harness 装不下，只改权重会忘</h2>
+      <p style="font-size:17px">持续学习要不断吸收新任务，又不能丢掉已有能力。本文在同一条 25 阶段任务流、同一模型与预算下测了两条单边路线：</p>
+      <div class="sym">
+        <div class="c"><b class="t">只改 harness</b>ACE 的经验手册到第 2 个任务就到 15,410 tokens，之后几乎每次训练调用超过 16,384 的输入上限被回滚；HCL 25 个阶段几乎没提交任何修改。两者最终 AA 0.427 / 0.433，与原模型 0.419 只差约 1 点。</div>
+        <div class="w"><b class="t">只改权重</b>Seq-LoRA 在 4 个阶段内把 GSM8K 从 0.89 降到 0.18、IFEval 从 0.82 降到 0.33，之后没有恢复；参数基线的通用能力宏平均损失 20.0–25.5 点，最差一类掉 62–68 点。</div>
+      </div>
+      <p class="note" style="margin-top:6px">左栏只说明这两个实现在此设定（Qwen3.5-4B、16,384 输入上限）下几乎没有学到东西，不能当作“harness 方法必然装不下”的一般证明。</p>
+    </div>
+    <div class="panel">
+      <div class="k">设定</div>
+      <h2>TRACE+17：25 个任务依次到来</h2>
+      <p style="font-size:17px">8 个 TRACE 任务后接 17 个 Super-NaturalInstructions 任务；每个任务 500 训练 / 100 验证 / 100 测试，提示词不跨任务或划分重复。另设 5 类各 200 题的通用能力测试（MMLU、GSM8K、HellaSwag、IFEval、XCOPA），与任务流不相交。</p>
+      <p style="font-size:17px">所有方法都从 <b>Qwen3.5-4B</b> 出发；凡更新权重的方法每阶段都是 <b>32 次更新 × 32 条记录</b>。主结果为 3 个种子均值，配对比较用题目级自助法（4,000 次）。</p>
+      <p style="font-size:17px">指标：习得 Acq（刚学完时的分）、AA（第 25 阶段后所有已学任务的平均）、遗忘 F、通用能力变化 ΔC 及最差一类 ΔC<sub>min</sub>。</p>
+    </div>
+  </div>
+
+  <div class="panel n" style="margin-bottom:16px">
+    <div class="k">02 · 关键动作 · 一个阶段（示意，本项目重绘）</div>
+    <svg style="width:100%;height:auto;display:block" viewBox="0 0 1480 420">
+      <defs>
+        <marker id="aw" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f5c46e"/></marker>
+        <marker id="at" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fd6c8"/></marker>
+        <g id="anchor"><circle cx="0" cy="-22" r="7" fill="none" stroke="#f5c46e" stroke-width="3"/><line x1="0" y1="-15" x2="0" y2="18" stroke="#f5c46e" stroke-width="4"/><line x1="-12" y1="-6" x2="12" y2="-6" stroke="#f5c46e" stroke-width="4"/><path d="M-20,6 Q-18,22 0,22 Q18,22 20,6" fill="none" stroke="#f5c46e" stroke-width="4"/></g>
+      </defs>
+      <!-- day band -->
+      <rect x="0" y="0" width="560" height="420" rx="10" fill="#3b3a6a"/>
+      <rect x="0" y="0" width="560" height="40" rx="10" fill="#f6b545"/>
+      <text x="20" y="27" font-size="18" font-weight="900" fill="#2a1d05">白天 · harness 演化（快、可选择）</text>
+      <rect x="22" y="58" width="236" height="76" rx="8" fill="#fff4dd"/>
+      <text x="36" y="84" font-size="16" font-weight="700" fill="#1c1f2e">任务窗口 A<tspan baseline-shift="sub" font-size="11">t</tspan></text>
+      <text x="36" y="106" font-size="13.5" fill="#4a4d5e">8,192 tokens 的完整训练记录</text>
+      <text x="36" y="125" font-size="13.5" fill="#4a4d5e">上一检查点先作答，挑出答错的</text>
+      <rect x="300" y="58" width="236" height="76" rx="8" fill="#fff4dd"/>
+      <text x="314" y="84" font-size="16" font-weight="700" fill="#1c1f2e">基座 θ₀ 写技能</text>
+      <text x="314" y="106" font-size="13.5" fill="#4a4d5e">看窗口和至多 4 个错例，一次写成</text>
+      <text x="314" y="125" font-size="13.5" fill="#4a4d5e">≤ 768 tokens，按提示前缀路由</text>
+      <line x1="258" y1="96" x2="296" y2="96" stroke="#f5c46e" stroke-width="3" marker-end="url(#aw)"/>
+      <rect x="22" y="160" width="514" height="74" rx="8" fill="#4b4a82" stroke="#f5c46e" stroke-width="2"/>
+      <text x="36" y="186" font-size="16" font-weight="700" fill="#ffe2a6">守门：只有让窗口更好预测才提交</text>
+      <text x="36" y="210" font-size="13.5" fill="#e3e5ff">技能在上下文时，已验证答案的平均负对数似然（残差）更低才采用；</text>
+      <text x="36" y="228" font-size="13.5" fill="#e3e5ff">实际上 3 个种子 × 25 阶段的 75 次提交全部通过</text>
+      <line x1="280" y1="134" x2="280" y2="156" stroke="#f5c46e" stroke-width="3" marker-end="url(#aw)"/>
+      <rect x="22" y="260" width="514" height="140" rx="8" fill="#2c3270" stroke="#5fd6c8" stroke-width="2"/>
+      <text x="36" y="288" font-size="16" font-weight="700" fill="#9ff0e5">高残差记忆 R（24,576 tokens）</text>
+      <text x="36" y="312" font-size="13.5" fill="#e3e5ff">合并后用新权重重算每条记录的残差，按残差从高到低</text>
+      <text x="36" y="331" font-size="13.5" fill="#e3e5ff">保留完整记录；刚被权重学会的记录立即让位。</text>
+      <text x="36" y="356" font-size="13.5" fill="#e3e5ff">R 从不重放、不当训练目标，只给下一阶段的</text>
+      <text x="36" y="375" font-size="13.5" fill="#e3e5ff">检查点漂移约束提供探针。</text>
+      <!-- night band -->
+      <rect x="590" y="0" width="890" height="420" rx="10" fill="#141739"/>
+      <text x="610" y="27" font-size="18" font-weight="900" fill="#dfe2ff">夜间 · 约束下的自蒸馏（慢、持久）</text>
+      <circle cx="1450" cy="20" r="10" fill="#f4f1de"/><circle cx="1445" cy="17" r="9" fill="#141739"/>
+      <rect x="612" y="58" width="300" height="118" rx="8" fill="#2c3270" stroke="#f5c46e" stroke-width="2"/>
+      <text x="626" y="84" font-size="16" font-weight="700" fill="#ffe2a6">教师 = 冻结的 θ̄<tspan baseline-shift="sub" font-size="11">t−1</tspan></text>
+      <text x="626" y="108" font-size="13.5" fill="#e3e5ff">系统消息：路由到的技能</text>
+      <text x="626" y="128" font-size="13.5" fill="#e3e5ff">上一轮：已验证答案 y* 被“回放”</text>
+      <text x="626" y="148" font-size="13.5" fill="#e3e5ff">为模型自己的回答</text>
+      <text x="626" y="168" font-size="13.5" fill="#b9bde0">（教师看得到答案）</text>
+      <rect x="1000" y="58" width="300" height="118" rx="8" fill="#2c3270" stroke="#5fd6c8" stroke-width="2"/>
+      <text x="1014" y="84" font-size="16" font-weight="700" fill="#9ff0e5">学生 = 同一权重 + 新 LoRA</text>
+      <text x="1014" y="108" font-size="13.5" fill="#e3e5ff">只看裸提示，不看技能</text>
+      <text x="1014" y="128" font-size="13.5" fill="#e3e5ff">在 y* 的每个前缀位置上</text>
+      <text x="1014" y="148" font-size="13.5" fill="#e3e5ff">最小化全词表前向 KL</text>
+      <line x1="912" y1="117" x2="996" y2="117" stroke="#5fd6c8" stroke-width="3" marker-end="url(#at)"/>
+      <text x="954" y="108" text-anchor="middle" font-size="13" fill="#9ff0e5">KL</text>
+      <!-- anchors -->
+      <use href="#anchor" x="700" y="268"/>
+      <text x="730" y="248" font-size="16" font-weight="700" fill="#ffe2a6">检查点锚 D<tspan baseline-shift="sub" font-size="11">C</tspan> ≤ 0.05</text>
+      <text x="730" y="270" font-size="13.5" fill="#e3e5ff">对 θ̄<tspan baseline-shift="sub" font-size="10">t−1</tspan>，探针来自高残差记忆，按任务分组</text>
+      <text x="730" y="290" font-size="13.5" fill="#e3e5ff">管住每阶段的漂移和最近学的任务</text>
+      <use href="#anchor" x="700" y="356"/>
+      <text x="730" y="336" font-size="16" font-weight="700" fill="#ffe2a6">基座锚 D<tspan baseline-shift="sub" font-size="11">0</tspan> ≤ 0.05</text>
+      <text x="730" y="358" font-size="13.5" fill="#e3e5ff">对 θ₀，用流开始前留好的通用探针，按来源分组</text>
+      <text x="730" y="378" font-size="13.5" fill="#e3e5ff">管住累积漂移和通用能力</text>
+      <path d="M1150,176 C1150,230 1150,240 1105,262" stroke="#f5c46e" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+      <text x="1130" y="214" font-size="13" fill="#f5c46e">两种漂移都只比前 32 个 token、取最差一组</text>
+      <rect x="1120" y="250" width="330" height="140" rx="8" fill="#0f9488"/>
+      <text x="1136" y="278" font-size="16" font-weight="700" fill="#fff">对偶上升调乘子 → 合并</text>
+      <text x="1136" y="302" font-size="13.5" fill="#e9fffb">超预算时乘子增大、把学生拉回；</text>
+      <text x="1136" y="322" font-size="13.5" fill="#e9fffb">预算内乘子衰减到 0，不干扰学习。</text>
+      <text x="1136" y="346" font-size="13.5" fill="#e9fffb">LoRA 合并成 θ̄<tspan baseline-shift="sub" font-size="10">t</tspan>，下一阶段从零开新适配器；</text>
+      <text x="1136" y="368" font-size="13.5" fill="#e9fffb">harness 留到下一阶段，<tspan font-weight="700">部署只用 θ̄<tspan baseline-shift="sub" font-size="10">t</tspan></tspan></text>
+      <line x1="560" y1="330" x2="606" y2="330" stroke="#5fd6c8" stroke-width="3" stroke-dasharray="5 4"/>
+    </svg>
+  </div>
+
+  <div class="grid" style="grid-template-columns: 900px 1fr">
+    <div class="panel">
+      <div class="k">03 · 结果 · 第 25 阶段后（3 个种子均值）</div>
+      <table>
+        <tr><th>方法</th><th>AA</th><th>Acq</th><th>遗忘 F</th><th style="text-align:left">F（越短越好）</th><th>通用测试</th><th>ΔC<sub>min</sub></th><th style="text-align:left">最差一类损失</th></tr>
+        <tr class="h"><td>HERD</td><td>0.706</td><td>0.713</td><td>0.010</td><td class="b"><span class="bar" style="width:46px;background:#0f9488"></span></td><td>0.774</td><td>−0.130</td><td class="b"><span class="bar" style="width:33px;background:#0f9488"></span></td></tr>
+        <tr><td>Uniform replay</td><td>0.699</td><td>0.711</td><td>0.020</td><td class="b"><span class="bar" style="width:91px;background:#b04a5a"></span></td><td>0.599</td><td>−0.675</td><td class="b"><span class="bar" style="width:169px;background:#b04a5a"></span></td></tr>
+        <tr><td>Seq-LoRA</td><td>0.694</td><td>0.715</td><td>0.025</td><td class="b"><span class="bar" style="width:114px;background:#b04a5a"></span></td><td>0.597</td><td>−0.665</td><td class="b"><span class="bar" style="width:166px;background:#b04a5a"></span></td></tr>
+        <tr><td>MoRAM</td><td>0.693</td><td>0.701</td><td>0.019</td><td class="b"><span class="bar" style="width:87px;background:#b04a5a"></span></td><td>0.637</td><td>−0.650</td><td class="b"><span class="bar" style="width:163px;background:#b04a5a"></span></td></tr>
+        <tr><td>OPR</td><td>0.690</td><td>0.705</td><td>0.024</td><td class="b"><span class="bar" style="width:110px;background:#b04a5a"></span></td><td>0.614</td><td>−0.625</td><td class="b"><span class="bar" style="width:156px;background:#b04a5a"></span></td></tr>
+        <tr><td>TreeLoRA</td><td>0.686</td><td>0.711</td><td>0.032</td><td class="b"><span class="bar" style="width:146px;background:#b04a5a"></span></td><td>0.605</td><td>−0.635</td><td class="b"><span class="bar" style="width:159px;background:#b04a5a"></span></td></tr>
+        <tr><td>OPHSD（混合，固定 harness）</td><td>0.620</td><td>0.639</td><td>0.021</td><td class="b"><span class="bar" style="width:96px;background:#8a6a9a"></span></td><td>0.582</td><td>−0.645</td><td class="b"><span class="bar" style="width:161px;background:#8a6a9a"></span></td></tr>
+        <tr class="dim"><td>HCL-Stable（上下文）</td><td>0.433</td><td>0.435</td><td>0.003</td><td class="b"><span class="bar" style="width:14px;background:#b8ad8a"></span></td><td>0.823</td><td>−0.085</td><td class="b"><span class="bar" style="width:21px;background:#b8ad8a"></span></td></tr>
+        <tr class="dim"><td>ACE（上下文）</td><td>0.427</td><td>0.428</td><td>0.001</td><td class="b"><span class="bar" style="width:5px;background:#b8ad8a"></span></td><td>0.748</td><td>−0.320</td><td class="b"><span class="bar" style="width:80px;background:#b8ad8a"></span></td></tr>
+        <tr class="dim"><td>原模型（对照）</td><td>0.419</td><td>0.419</td><td>0.000</td><td class="b"></td><td>0.837</td><td>0.000</td><td class="b"></td></tr>
+      </table>
+      <p class="note" style="margin-top:6px">SDFT 生成越来越长后崩溃（AA 0.021），未列。上下文方法遗忘低是因为几乎没学到东西。条形长度按数值等比，本项目绘制。</p>
+      <p style="font-size:16.5px;margin-top:6px"><b>配对比较（95% 区间）</b>：习得对 Seq-LoRA −0.002 [−0.010, 0.007]，<b>持平</b>；AA 对 uniform replay +0.007 [−0.001, 0.016]，<b>持平</b>；遗忘对 uniform replay −0.010 [−0.020, −0.004]，通用测试 +0.175 [0.150, 0.201]。与“固定系统提示的原模型”相比，通用测试差 −1.7 点，区间含 0。</p>
+    </div>
+    <div class="panel">
+      <div class="k">04 · 拆掉一件看看（单种子）</div>
+      <table>
+        <tr><th>变体</th><th>AA</th><th>F</th><th>ΔC<sub>min</sub></th></tr>
+        <tr class="h"><td>完整 HERD</td><td>0.706</td><td>0.010</td><td>−0.130</td></tr>
+        <tr><td>去掉技能</td><td><b style="color:#b04a5a">0.656</b></td><td>0.013</td><td>−0.135</td></tr>
+        <tr><td>记忆改均匀抽样</td><td>0.690</td><td><b style="color:#b04a5a">0.020</b></td><td>−0.125</td></tr>
+        <tr><td>去掉检查点锚</td><td>0.688</td><td><b style="color:#b04a5a">0.030</b></td><td>−0.140</td></tr>
+        <tr><td>去掉基座锚</td><td>0.704</td><td>0.016</td><td><b style="color:#b04a5a">−0.490</b></td></tr>
+        <tr><td>两个锚都去掉</td><td>0.680</td><td><b style="color:#b04a5a">0.044</b></td><td><b style="color:#b04a5a">−0.560</b></td></tr>
+        <tr><td>改用交叉熵 SFT</td><td>0.706</td><td>0.018</td><td><b style="color:#b04a5a">−0.320</b></td></tr>
+        <tr><td>部署时再挂上 harness</td><td>0.708</td><td>0.007</td><td>−0.128</td></tr>
+      </table>
+      <p style="font-size:15.5px;margin-top:6px">去掉技能（记忆、探针、锚不变）习得降 4.5 点、AA 降 5.0 点，是 harness 在这里承重的主要证据；作者给的三倍种子标准差参考尺度为 AA 0.024、F 0.009、ΔC<sub>min</sub> 0.036。去掉基座锚时数学从 0.885 掉到 0.395。</p>
+      <p style="font-size:15.5px"><b>成本</b>：HERD 总训练 10,723 秒，Seq-LoRA 10,463 秒；ACE 888,082 秒且每条提示多带 15,410 tokens；OPHSD 659,000 秒。</p>
+    </div>
+  </div>
+
+  <div class="panel n">
+    <div class="k">05 · 限制与证据边界</div>
+    <div class="lims">
+      <div><b>一个模型、一条流。</b>Qwen3.5-4B 担任全部角色；需要每条训练记录都有已验证答案 y*，且任务边界已知、一阶段一任务、不回访。</div>
+      <div><b>机制证据是单种子。</b>所有消融与 ε<sub>C</sub> 扫描只跑一次；主表三种子，题目级自助区间不等于多条独立机制运行。</div>
+      <div><b>部署后 harness 不再起作用。</b>第 25 阶段把 harness 挂回每条提示，各项变化 ≤ 0.4 点。保留下来的技能与记忆在这里是训练时的挑选器和教师上下文，不是推理时组件。</div>
+      <div><b>守门没有挡住坏技能。</b>75 次提交全部通过；superni:074 有两个种子的技能自相矛盾（输出是问题的比例只有 21 / 64%）。守门看残差下降，不保证自由生成遵守技能格式。</div>
+      <div><b>保护跟着记忆走。</b>任务被学会后会退出记忆、失去探针：第 25 阶段 24 个旧任务中有 9–10 个没有探针；superni:192 在种子 42 上从 0.83 掉到 0.52。</div>
+      <div><b>只比前 32 个 token。</b>IFEval 中有最少字数要求的 17 题通过率从第 4 阶段的 0.71–0.76 降到 0.18–0.24（原模型 0.94）；通用测试总体仍掉 6.3 点，遗忘不为零。</div>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns: 1fr 1fr; margin-top:16px">
+    <div class="panel">
+      <div class="k">06 · 长程稳定性与漂移审计</div>
+      <p style="font-size:16.5px">前 8 个任务的平均分：HERD 从第 8 阶段 0.664 到第 25 阶段 0.665，始终在半点以内；Seq-LoRA 第 12 阶段掉到 0.372 再回到 0.637。每 200 题的通用探针上，Seq-LoRA 第 11–13 阶段跌到 0.28 / 0.16 / 0.37，第 14 阶段回到 0.59（落在主表锚点阶段之间）；HERD 从未低于 0.75。另一种自蒸馏基线 OPHSD 的通用测试在第 4 / 8 / 16 / 25 阶段持续下滑：0.741 → 0.661 → 0.613 → 0.582。</p>
+      <p style="font-size:16.5px">三种子平均的阶段末漂移从未超预算（D<sub>C</sub> ≤ 0.045，D<sub>0</sub> ≤ 0.044）；阶段内峰值分别在 9 / 11 个阶段超过 0.05，第 6 阶段最高到 0.168 / 0.324，阶段结束前被拉回。</p>
+    </div>
+    <div class="panel" style="background:var(--herd-l);border-color:#a9dcd5">
+      <div class="k" style="color:#0b6e65">本项目读法</div>
+      <p style="font-size:16.5px">这张卡问的是上下文与权重成对更新时，谁携带收益。HERD 的答案在本设定里清楚：harness 负责“挑什么学、教师看什么”，权重负责“存下来”；去掉技能损失约 5 点 AA，去掉两个锚则遗忘与通用能力回到参数基线水平。</p>
+      <p style="font-size:16.5px">它不是“只改 harness”的自我改进：留下的 harness 在部署时不再贡献分数。本期确认的是 q3 = capability 的条件性结论——在已验证答案、已知任务边界、固定记忆与更新预算下能持续习得并少遗忘；不认证零遗忘，也不认证 harness 单独可行。</p>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>Xun Sun, Thanh Thi Nguyen, Thuy-Trang Vu · HERD: Harness-Evolving Recursive Distillation for Continual Learning · arXiv:2610.31401v1</span>
+  <span>流程图为本项目示意 · 数字见 SOURCE.md · 未复现</span>
+</footer>
+</body>
+</html>

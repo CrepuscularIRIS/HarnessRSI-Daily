@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 3 → 18 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 6 → 21 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,10 +20,30 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Eighteen papers, eighteen distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [Reel index](reel/README.md).
-（18 篇、18 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Twenty-one papers, twenty-one distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [Reel index](reel/README.md).
+（21 篇、21 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
 
 <table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.32322/poster.png"><img src="reel/2610.32322/poster.png" width="260" alt="2610.32322 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.32322">2610.32322</a> · Retire on level, not gain</b><br>
+A zero with-vs-without gain fits both "already internalized" and "neither model nor skill can do it"; gain-only rules retire 57.5% of the uncovered skills.<br>
+零增益既可能是已会、也可能是都不会；只看增益的规则删掉 57.5% 的未覆盖技能。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.31401/poster.png"><img src="reel/2610.31401/poster.png" width="260" alt="2610.31401 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.31401">2610.31401</a> · Harness selects, weights store</b><br>
+Evolve skills and high-residual memory, then self-distill under two drift anchors: acquisition on par with the best parametric baseline, least forgetting; deployed weights only.<br>
+harness 挑出要学的、双锚约束下蒸进权重：习得持平、遗忘最少；部署只用权重。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.31326/poster.png"><img src="reel/2610.31326/poster.png" width="260" alt="2610.31326 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.31326">2610.31326</a> · Experiment before commit</b><br>
+Removing only the agent's own between-evaluation experiments: better programs on hidden and unseen instances across 3 models × 2 tasks, at 2.6–13× the LLM cost.<br>
+只删“提交前自己做实验”的工具作对照：三模型两任务上程序更好，费用高 2.6–13 倍。
+</td>
+</tr>
 <tr>
 <td width="33%" align="center" valign="top">
 <a href="reel/2610.30499/poster.png"><img src="reel/2610.30499/poster.png" width="260" alt="2610.30499 poster"></a><br>
