@@ -44,3 +44,11 @@
 - 漏检抽查：首次执行（seed=44，1 名额），改判 0/1；欠账余 ~1.5（累计未取整部分），继续攒。
 - to_l3 池：28815（备选）+ 本班 5 = 6 篇 ≥3 → 明早每日 Opus 班选题。
 - 待办：pending_experiment 8 篇待实验对照材料；needs_material 0。
+
+## 2026-10-27 12:17 巡检班
+
+- 新增：12 篇（inbox/2026-10-27-0036，corpus 1632→1644，全文 12/12，材料 12/12 abstract_intro）。入库两遇 arXiv API 429/超时，15 分钟退避后成功；教训：inbox mv 只挂入库成功后。
+- L1：inc-l1-04 12/12 完成（assessed 11 / oos 1；P3×10 / P2×1 / null×1）。
+- L2：按增量轮声明执行（本班 to_l2 全部 11 篇；high 遗留 0；工具默认多排的 8 篇遗留 medium 已裁出，留待将来声明扩充）。inc-l2-05（6）+ inc-l2-06（5）= 11/11 完成。**5 篇 P3/confirmed/to_l3**（34027/34238/34938/35316/35579）；35193 P2/pending_material（被引源文件未核，封顶 P2）；35434 P3/pending_experiment；33024/33046/33845/33956 P3/pending_experiment/park。子卡合计 110 项（33 holds / 58 partial / 15 fails / 6 unknown / 1 challenged / 1 NA——fails 为论文被诊断系统违反条件，非诊断失败）。
+- 漏检抽查：0.1×11=1.1→1 名额，本班未用（队列构建时无待抽查池），欠账累计 ~1.7。
+- to_l3 池：5 篇 ≥3 → 明早 Opus 班选题（第五期）。
