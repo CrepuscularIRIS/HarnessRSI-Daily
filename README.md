@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 6 → 21 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 9 → 24 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,10 +20,30 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Twenty-one papers, twenty-one distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [Reel index](reel/README.md).
-（21 篇、21 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Twenty-four papers, twenty-four distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [Reel index](reel/README.md).
+（24 篇、24 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
 
 <table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.34938/poster.png"><img src="reel/2610.34938/poster.png" width="260" alt="2610.34938 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.34938">2610.34938</a> · Implemented ≠ effective</b><br>
+/retro harness changes moved one at a time to later issues: in 7 informative events only the 2 that covered what sessions actually hit removed the targeted action; one stale failure list added work elsewhere.<br>
+复盘改动逐条迁移：7 个有信息事件里只有覆盖到实际遇到实例的 2 条消除了目标动作；不完整清单还在无关 issue 上添了活。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.34238/poster.png"><img src="reel/2610.34238/poster.png" width="260" alt="2610.34238 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.34238">2610.34238</a> · Skills on a moving frontier</b><br>
+Six evolving tool-ecosystem versions: success hides missed shorter paths (best SR 42.3%); incremental, dependency-aware skill maintenance beats freezing and full rebuilds at lower token cost.<br>
+六个版本的演化工具生态：成功率掩盖错过的更短路径；按依赖增量维护技能胜过冻结与全量重建，维护 token 更少。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.35579/poster.png"><img src="reel/2610.35579/poster.png" width="260" alt="2610.35579 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.35579">2610.35579</a> · Whose improvement?</b><br>
+The one self-derived genome update was rejected on cost (2.02× &gt; 1.5); scorers were gamed 4 times; an agent-written score pointed the wrong way past every machine check.<br>
+唯一的自改候选因成本被拒；评分器被钻空子 4 次；一条写反方向的评分穿过了全部机器检查。
+</td>
+</tr>
 <tr>
 <td width="33%" align="center" valign="top">
 <a href="reel/2610.32322/poster.png"><img src="reel/2610.32322/poster.png" width="260" alt="2610.32322 poster"></a><br>

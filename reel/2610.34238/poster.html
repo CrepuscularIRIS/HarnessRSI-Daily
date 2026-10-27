@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工具生态线路图</title>
+<style>
+  :root {
+    --bg: #f7f5ef; --ink: #1c1c1c; --muted: #5d5d5d; --rule: #d7d2c4; --white: #ffffff;
+    --l1: #e4002b; --l2: #0072ce; --l3: #00a651; --l4: #f2a900; --l5: #8e44ad; --grey: #9a9a9a;
+    --l1-l: #fde3e7; --l2-l: #dcecfa; --l3-l: #ddf3e5; --l4-l: #fdf0cc; --l5-l: #efe1f6;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--ink);
+    font-size: 19px; line-height: 1.5;
+  }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  header { background: #1c1c1c; color: #fff; padding: 22px 54px 20px; position: relative; }
+  .strip { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: linear-gradient(90deg, var(--l1) 0 20%, var(--l2) 20% 40%, var(--l3) 40% 60%, var(--l4) 60% 80%, var(--l5) 80% 100%); }
+  .meta { display: flex; justify-content: space-between; font-size: 16px; color: #bdbdbd; letter-spacing: .04em; }
+  .meta .line { display: inline-flex; align-items: center; gap: 8px; }
+  .meta .roundel { width: 26px; height: 26px; border-radius: 50%; border: 6px solid var(--l1); background: #fff; display: inline-block; }
+  h1 { font-size: 54px; line-height: 1.18; margin: 10px 0 8px; font-weight: 900; }
+  h1 .d { color: var(--l4); }
+  .sub { font-size: 21.5px; color: #e6e6e6; margin: 0 0 6px; max-width: 1490px; }
+  .sub b { color: #fff; border-bottom: 3px solid var(--l4); }
+  main { padding: 18px 54px 0; }
+  .sec { background: var(--white); border-radius: 14px; border: 1px solid var(--rule); padding: 12px 22px 14px; margin-bottom: 14px; position: relative; }
+  .sh { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .sh .no { width: 40px; height: 40px; border-radius: 50%; color: #fff; font-weight: 900; font-size: 20px; display: flex; align-items: center; justify-content: center; flex: none; font-family: "DejaVu Sans Mono", monospace; }
+  .sh h2 { font-size: 28px; margin: 0; font-weight: 900; line-height: 1.25; }
+  p { margin: 0 0 8px; }
+  .note { font-size: 14.5px; color: var(--muted); line-height: 1.45; }
+  .row { display: grid; gap: 16px; }
+  .r2 { grid-template-columns: 1fr 1fr; }
+  .r3 { grid-template-columns: 740px 1fr; }
+  .chip { display: inline-block; border-radius: 4px; padding: 0 7px; font-size: 15px; font-weight: 700; color: #fff; }
+  .num { font-family: "DejaVu Sans Mono", monospace; font-weight: 700; }
+  table.t { border-collapse: collapse; width: 100%; font-size: 16px; }
+  table.t th { font-size: 14.5px; color: var(--muted); text-align: right; padding: 4px 6px; border-bottom: 2px solid #1c1c1c; font-weight: 700; }
+  table.t th:first-child, table.t td:first-child { text-align: left; }
+  table.t td { padding: 4px 6px; text-align: right; border-bottom: 1px solid #ece8dd; font-family: "DejaVu Sans Mono", monospace; }
+  table.t td:first-child { font-family: "Noto Sans CJK SC", sans-serif; }
+  table.t tr.best td { background: var(--l3-l); font-weight: 700; }
+  .lim { margin: 4px 0 0; padding-left: 22px; }
+  .lim li { font-size: 16.5px; margin-bottom: 5px; line-height: 1.45; }
+  .take { background: #1c1c1c; color: #f2f2f2; border-radius: 10px; padding: 12px 18px; font-size: 16.5px; line-height: 1.55; }
+  .take b { color: var(--l4); }
+  footer { position: absolute; left: 54px; right: 54px; bottom: 14px; font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 7px; display: flex; justify-content: space-between; gap: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="meta">
+    <span class="line"><span class="roundel"></span> HarnessRSI Daily · Reel 第五期</span>
+    <span>arXiv:2610.34238v1 · cs.CL · 2026-10-25 · 浙江大学 / 伦敦大学学院（Shuofei Qiao, Xuanguang Pan 等）</span>
+  </div>
+  <h1><span class="d">Δτ</span>-Bench：工具一直在换，留下的技能跟得上吗？</h1>
+  <p class="sub">把大型工具生态的演化做成可执行基准：42 个领域、1,588 个多轮任务、<b>六个依次演化的生态版本</b>。旧接口会退役、拆分、合并，更省的路径会出现——<b>任务成功率会掩盖错过的更短路径</b>。最强模型 / harness 成功率仅 42.3%；现有技能学习方法起步有益，却跟不上后续变化。作者提出 STEWARD：按工具依赖增量维护技能，并在执行中按需供给工具与流程。</p>
+  <div class="strip"></div>
+</header>
+<main>
+  <!-- 01 metro map -->
+  <div class="sec">
+    <div class="sh"><span class="no" style="background:var(--l1)">01</span><h2>线路图：同一意图、同一目标状态，六个版本的可用接口不同</h2></div>
+    <svg width="1470" height="232" viewBox="0 0 1470 232" style="display:block">
+      <!-- main line -->
+      <line x1="80" y1="120" x2="1390" y2="120" stroke="#1c1c1c" stroke-width="14" stroke-linecap="round"/>
+      <line x1="80" y1="120" x2="1390" y2="120" stroke="#e4002b" stroke-width="8" stroke-linecap="round"/>
+      <!-- stations -->
+      <g font-family="DejaVu Sans Mono, monospace">
+        <g transform="translate(110,120)"><circle r="26" fill="#fff" stroke="#1c1c1c" stroke-width="7"/><text y="8" text-anchor="middle" font-size="22" font-weight="700">v1</text></g>
+        <g transform="translate(366,120)"><circle r="26" fill="#fff" stroke="#1c1c1c" stroke-width="7"/><text y="8" text-anchor="middle" font-size="22" font-weight="700">v2</text></g>
+        <g transform="translate(622,120)"><circle r="26" fill="#fff" stroke="#1c1c1c" stroke-width="7"/><text y="8" text-anchor="middle" font-size="22" font-weight="700">v3</text></g>
+        <g transform="translate(878,120)"><circle r="26" fill="#fff" stroke="#1c1c1c" stroke-width="7"/><text y="8" text-anchor="middle" font-size="22" font-weight="700">v4</text></g>
+        <g transform="translate(1134,120)"><circle r="26" fill="#fff" stroke="#1c1c1c" stroke-width="7"/><text y="8" text-anchor="middle" font-size="22" font-weight="700">v5</text></g>
+        <g transform="translate(1360,120)"><circle r="26" fill="#fff" stroke="#1c1c1c" stroke-width="7"/><text y="8" text-anchor="middle" font-size="22" font-weight="700">v6</text></g>
+      </g>
+      <!-- tool counts above -->
+      <g font-family="Noto Sans CJK SC, sans-serif" font-size="17" text-anchor="middle" fill="#1c1c1c">
+        <text x="110" y="62" font-weight="700" font-size="22">892</text><text x="110" y="82" fill="#5d5d5d" font-size="14.5">个工具（基础接口）</text>
+        <text x="366" y="62" font-weight="700" font-size="22">841</text>
+        <text x="622" y="62" font-weight="700" font-size="22">837</text>
+        <text x="878" y="62" font-weight="700" font-size="22">799</text>
+        <text x="1134" y="62" font-weight="700" font-size="22">858</text>
+        <text x="1360" y="62" font-weight="700" font-size="22">890</text>
+      </g>
+      <!-- changes between stations -->
+      <g font-family="DejaVu Sans Mono, monospace" font-size="16" text-anchor="middle">
+        <g transform="translate(238,170)"><text fill="#00a651">+110 新增</text><text y="21" fill="#e4002b">−161 退役</text><text y="42" fill="#0072ce">~176 修改</text></g>
+        <g transform="translate(494,170)"><text fill="#00a651">+196</text><text y="21" fill="#e4002b">−200</text><text y="42" fill="#0072ce">~147</text></g>
+        <g transform="translate(750,170)"><text fill="#00a651">+125</text><text y="21" fill="#e4002b">−163</text><text y="42" fill="#0072ce">~150</text></g>
+        <g transform="translate(1006,170)"><text fill="#00a651">+179</text><text y="21" fill="#e4002b">−120</text><text y="42" fill="#0072ce">~155</text></g>
+        <g transform="translate(1247,170)"><text fill="#00a651">+166</text><text y="21" fill="#e4002b">−134</text><text y="42" fill="#0072ce">~165</text></g>
+      </g>
+</svg>
+    <p style="font-size:16px;color:#5d5d5d;margin:4px 0 0">每次转换只施加有限个“保能力”的变换：① 一对一（改名、加参数、换格式）② 一拆多 ③ 多合一（只合并已验证轨迹里相邻的调用）。新接口可与旧接口并存（要在重叠中选），也可直接替换（旧流程断掉）。每个版本都校验所有基础能力仍可通过现役接口达成；可选地扰动部分描述，模拟残缺或过期文档。训练 1,191 / 测试 397 个意图 × 6 版本 = 9,528 个任务-生态实例。</p>
+  </div>
+
+  <div class="row r2">
+    <!-- 02 hidden opportunity -->
+    <div class="sec">
+      <div class="sh"><span class="no" style="background:var(--l2)">02</span><h2>成功率看不到的损失</h2></div>
+      <svg width="690" height="196" viewBox="0 0 690 196" style="display:block">
+        <g font-family="DejaVu Sans Mono, monospace" font-size="17" font-weight="700" text-anchor="middle">
+          <!-- path A: 4 steps -->
+          <text x="10" y="30" text-anchor="start" font-family="Noto Sans CJK SC, sans-serif" font-size="15" font-weight="400" fill="#5d5d5d">旧流程（仍能成功）</text>
+          <line x1="60" y1="62" x2="440" y2="62" stroke="#0072ce" stroke-width="7"/>
+          <g fill="#fff" stroke="#0072ce" stroke-width="4">
+            <circle cx="60" cy="62" r="17"/><circle cx="187" cy="62" r="17"/><circle cx="313" cy="62" r="17"/><circle cx="440" cy="62" r="17"/></g>
+          <text x="60" y="68">f1</text><text x="187" y="68">f2</text><text x="313" y="68">f3</text><text x="440" y="68">f4</text>
+          <text x="480" y="68" text-anchor="start" font-weight="700" font-size="17" font-family="Noto Sans CJK SC, sans-serif">4 步 · 成本 4</text>
+          <!-- path B: 3 steps via m -->
+          <text x="10" y="118" text-anchor="start" font-family="Noto Sans CJK SC, sans-serif" font-size="15" font-weight="400" fill="#5d5d5d">新合并接口 m 出现后</text>
+          <path d="M60 150 L250 150 L440 150" stroke="#00a651" stroke-width="7" fill="none"/>
+          <g fill="#fff" stroke="#00a651" stroke-width="4"><circle cx="60" cy="150" r="17"/><circle cx="440" cy="150" r="17"/></g>
+          <rect x="211" y="132" width="78" height="36" rx="18" fill="#fff" stroke="#00a651" stroke-width="4"/>
+          <text x="60" y="156">f1</text><text x="250" y="156">m</text><text x="440" y="156">f4</text>
+          <text x="480" y="156" text-anchor="start" font-weight="700" font-size="17" font-family="Noto Sans CJK SC, sans-serif">3 步 · 成本 5</text>
+          <text x="250" y="190" font-family="Noto Sans CJK SC, sans-serif" font-size="14" font-weight="400" fill="#5d5d5d">m = f2+f3 合并（按 Fig. 2 示例重绘：f 权重 (1,1)，m 权重 (1,3)）</text>
+        </g>
+      </svg>
+      <p style="font-size:16.5px">参考路径由动态规划在<b>构造出的实现空间内</b>分别求“最少步数”与“最低成本”。只看成功率（终态数据库变化覆盖金标变化）时，继续走旧路的代理不会被扣分；本文另设 <b>SPE</b>（成功加权的路径效率）、<b>IDR</b>（最优路径变短 / 变便宜的任务上是否发现新路）、<b>DAR</b>（最优路径变长时能否恢复）。</p>
+    </div>
+    <!-- 03 models -->
+    <div class="sec">
+      <div class="sh"><span class="no" style="background:var(--l4);color:#1c1c1c">03</span><h2>模型：找得全、挑不准、走不省</h2></div>
+      <table class="t">
+        <tr><th>模型 / harness</th><th>成功率</th><th>检索召回</th><th>检索精确</th><th>Step-SPE</th><th>SPE/SR</th></tr>
+        <tr class="best"><td>Codex-GPT-5.5</td><td>42.27</td><td>90.36</td><td>19.90</td><td>26.93</td><td>63.71</td></tr>
+        <tr><td>Gemini-3.6-Flash</td><td>41.65</td><td>87.51</td><td>19.30</td><td>25.49</td><td>61.20</td></tr>
+        <tr><td>GPT-5.5</td><td>31.74</td><td>81.08</td><td>20.21</td><td>23.11</td><td>72.81</td></tr>
+        <tr><td>Claude-Sonnet-5</td><td>29.97</td><td>76.93</td><td>19.36</td><td>20.48</td><td>68.34</td></tr>
+        <tr><td>DeepSeek-V4-Pro</td><td>33.29</td><td>79.00</td><td>18.65</td><td>13.49</td><td>40.52</td></tr>
+        <tr><td>GLM-5.2</td><td>32.28</td><td>78.25</td><td>19.32</td><td>19.39</td><td>60.07</td></tr>
+      </table>
+      <p style="font-size:16px;margin-top:8px">召回近九成、精确不到两成：相关工具多半拿到了，却排除不掉无关和过期的。DeepSeek-V4-Pro 成功率高于 GLM-5.2，Step-SPE 反而低一截——<b>成功不等于高效</b>。逐级给提示（领域内 → 任务涉及 → 仅现役相关工具）成功率与 SPE 逐级上升；再给出参考路径几乎不再提升，差距主要在“认出现役且高效的接口并用对”，不在高层规划。</p>
+      <p class="note">表摘自 Table 1（另有 Qwen-3.8-Max、Kimi-K3、GPT-oss-120B，成功率 27.00–30.10）。消融为 Fig. 3，原文只给图。</p>
+    </div>
+  </div>
+
+  <div class="row r3" style="margin-top:14px">
+    <!-- 04 skill methods -->
+    <div class="sec">
+      <div class="sh"><span class="no" style="background:var(--l5)">04</span><h2>现有技能方法：起步有益，换站就掉队</h2></div>
+      <p style="font-size:16.5px">同一任务模型（DeepSeek-V3.2）下比较 EvoSkill、AutoSkill、Trace2Skill、SkillOpt 与不用技能。v1 四种方法的成功率与 SPE 都高于不用技能，但：</p>
+      <svg width="690" height="150" viewBox="0 0 690 150" style="display:block">
+        <g font-family="Noto Sans CJK SC, sans-serif" font-size="15.5">
+          <text x="0" y="20" font-weight="700">v3 的 DAR（最优路径变长时的恢复）</text>
+          <text x="0" y="52">不用技能</text><rect x="120" y="38" width="300" height="20" fill="#9a9a9a"/><text x="428" y="54" font-family="DejaVu Sans Mono, monospace">Step 11.11 / Cost 10.25</text>
+          <text x="0" y="84">EvoSkill</text><rect x="120" y="70" width="3" height="20" fill="#8e44ad"/><text x="132" y="86" font-family="DejaVu Sans Mono, monospace">0 / 0</text>
+          <text x="0" y="116">AutoSkill</text><rect x="120" y="102" width="3" height="20" fill="#8e44ad"/><text x="132" y="118" font-family="DejaVu Sans Mono, monospace">0 / 0</text>
+          <text x="0" y="146" fill="#5d5d5d" font-size="14">条长按 Step-DAR 绘制（11.11 = 300px）；其余版本数值原文只以 Fig. 4 给出</text>
+        </g>
+      </svg>
+      <ul class="lim" style="margin-top:6px">
+        <li>AutoSkill 在 v3、v5 成功率低于不用技能；AutoSkill / EvoSkill 在若干中间版本 SPE 也低于它。</li>
+        <li>不用技能在 v2 拿到最高 Cost-IDR、在 v5 拿到两项 DAR 最高。</li>
+        <li>SkillOpt 各版本成功率与 SPE 领先，但 IDR / DAR 并不一致领先，技能生成与优化约 3,000K token / 任务，是其他方法的 2–3 倍。</li>
+      </ul>
+    </div>
+    <!-- 05 steward -->
+    <div class="sec">
+      <div class="sh"><span class="no" style="background:var(--l3)">05</span><h2>STEWARD：把工具和技能当一个系统管</h2></div>
+      <svg width="660" height="208" viewBox="0 0 660 208" style="display:block">
+        <g font-family="Noto Sans CJK SC, sans-serif">
+          <rect x="0" y="0" width="300" height="200" rx="12" fill="#ddf3e5" stroke="#00a651" stroke-width="2"/>
+          <text x="150" y="26" text-anchor="middle" font-weight="900" font-size="18">跨版本 · 知识维护</text>
+          <rect x="22" y="40" width="256" height="30" rx="6" fill="#fff" stroke="#00a651"/><text x="150" y="61" text-anchor="middle" font-size="15.5">规划技能（v1 后固定）</text>
+          <rect x="22" y="78" width="256" height="30" rx="6" fill="#fff" stroke="#00a651"/><text x="150" y="99" text-anchor="middle" font-size="15.5">原子技能（声明工具依赖）</text>
+          <rect x="22" y="116" width="256" height="30" rx="6" fill="#fff" stroke="#00a651"/><text x="150" y="137" text-anchor="middle" font-size="15.5">工具技能（一工具一条）</text>
+          <text x="150" y="168" text-anchor="middle" font-size="14">只用环境验证成功的训练轨迹做局部编辑</text>
+          <text x="150" y="188" text-anchor="middle" font-size="14">依赖工具缺失 → 置为失活，保留待复活</text>
+          <rect x="340" y="0" width="320" height="200" rx="12" fill="#dcecfa" stroke="#0072ce" stroke-width="2"/>
+          <text x="500" y="26" text-anchor="middle" font-weight="900" font-size="18">单任务 · 能力供给</text>
+          <text x="360" y="58" font-size="15.5">① 按首条请求取规划技能 → 临时计划</text>
+          <text x="360" y="86" font-size="15.5">② 每步取原子技能 + 直接检索工具</text>
+          <text x="360" y="114" font-size="15.5">③ 与当前目录求交 → 初始可见工具</text>
+          <text x="360" y="142" font-size="15.5">④ 缺能力时 retrieve_tools /</text>
+          <text x="384" y="164" font-size="15.5">explore_capabilities（≤3 次）</text>
+          <text x="360" y="190" font-size="14" fill="#5d5d5d">只放行当前目录中存在、已检查过的工具</text>
+          <path d="M300 100 L340 100" stroke="#1c1c1c" stroke-width="3" marker-end="url(#ah)"/>
+        </g>
+        <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#1c1c1c"/></marker></defs>
+      </svg>
+      <p style="font-size:16.5px;margin-top:8px">DeepSeek-V3.2 上六个版本成功率都最高，平均 <span class="num">39.04%</span> 对 SkillOpt <span class="num">36.36%</span>；v2 起其他方法的维护 token 是它的 1.2–5.5 倍。相对每格最强基线，Step / Cost-IDR 平均 +4.04 / +3.69 点，Step / Cost-DAR +5.28 / +4.76 点。</p>
+    </div>
+  </div>
+
+  <!-- 06 controlled -->
+  <div class="sec" style="margin-top:14px">
+    <div class="sh"><span class="no" style="background:#1c1c1c">06</span><h2>对照：同一份 v1 技能库，只换 v2 起的维护方式</h2></div>
+    <div class="row" style="grid-template-columns: 860px 1fr; gap: 26px">
+      <svg width="860" height="250" viewBox="0 0 860 250" style="display:block">
+        <g font-family="Noto Sans CJK SC, sans-serif" font-size="15.5">
+          <!-- axes: SR scale 30..42 -> x 170..590 ; 35 px per point -->
+          <text x="170" y="18" fill="#5d5d5d" font-size="14">平均成功率（%），轴从 30 起</text>
+          <text x="640" y="18" fill="#5d5d5d" font-size="14">维护 token（K / 任务）</text>
+          <g stroke="#ece8dd"><line x1="170" y1="28" x2="170" y2="214"/><line x1="345" y1="28" x2="345" y2="214"/><line x1="520" y1="28" x2="520" y2="214"/></g>
+          <g fill="#5d5d5d" font-size="13" text-anchor="middle" font-family="DejaVu Sans Mono, monospace"><text x="170" y="245">30</text><text x="345" y="245">35</text><text x="520" y="245">40</text></g>
+          <text x="0" y="44" font-weight="700">DeepSeek-V3.2</text>
+          <text x="0" y="68">冻结库</text><rect x="170" y="55" width="136.5" height="18" fill="#9a9a9a"/><text x="312" y="69" font-family="DejaVu Sans Mono, monospace" font-size="14">33.90</text><text x="640" y="69" font-family="DejaVu Sans Mono, monospace">0</text>
+          <text x="0" y="92">全量重建</text><rect x="170" y="79" width="161.4" height="18" fill="#f2a900"/><text x="337" y="93" font-family="DejaVu Sans Mono, monospace" font-size="14">34.61</text><text x="640" y="93" font-family="DejaVu Sans Mono, monospace">1,271.10</text>
+          <text x="0" y="116" font-weight="700" fill="#00a651">增量维护</text><rect x="170" y="103" width="239" height="18" fill="#00a651"/><text x="415" y="117" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700">36.83</text><text x="640" y="117" font-family="DejaVu Sans Mono, monospace" font-weight="700" fill="#00a651">769.55（−39.5%）</text>
+          <text x="0" y="146" font-weight="700">GPT-5.5</text>
+          <text x="0" y="170">冻结库</text><rect x="170" y="157" width="336" height="18" fill="#9a9a9a"/><text x="512" y="171" font-family="DejaVu Sans Mono, monospace" font-size="14">39.60</text><text x="640" y="171" font-family="DejaVu Sans Mono, monospace">0</text>
+          <text x="0" y="194">全量重建</text><rect x="170" y="181" width="314.7" height="18" fill="#f2a900"/><text x="490" y="195" font-family="DejaVu Sans Mono, monospace" font-size="14">38.99</text><text x="640" y="195" font-family="DejaVu Sans Mono, monospace">1,449.60</text>
+          <text x="0" y="218" font-weight="700" fill="#00a651">增量维护</text><rect x="170" y="205" width="378.4" height="18" fill="#00a651"/><text x="554" y="219" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700">40.81</text><text x="640" y="219" font-family="DejaVu Sans Mono, monospace" font-weight="700" fill="#00a651">1,009.02（−30.4%）</text>
+        </g>
+      </svg>
+      <div style="font-size:16.5px">
+        <p>两个模型上增量维护在成功率、SPE、IDR、DAR、工具 F1 都最好；比全量重建高 <b>2.22 / 1.82</b> 点，维护 token 少 39.5% / 30.4%。GPT-5.5 上全量重建（38.99）甚至低于直接冻结（39.60）。</p>
+        <p>供给消融（DeepSeek-V3.2，Fig. 7）：只加技能搜索几乎无提升；只加工具搜索成功率 +8.65、工具 F1 +4.14，但 Step-DAR −2.76；两者合用各项都提升，相对只用工具搜索 DAR 再 +11.41 / +9.30。</p>
+        <p class="note">均为单次运行，未报告种子方差；1–2 点的差别未必稳定。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="grid-template-columns: 1fr 470px; gap:16px">
+    <div class="sec">
+      <div class="sh"><span class="no" style="background:var(--grey)">07</span><h2>限制与核对备注</h2></div>
+      <ul class="lim">
+        <li><b>合成生态</b>：服务、任务、变换都由 LLM 在 42 个模拟领域生成并执行校验；一条变化流，不是真实开放 API 的演化。</li>
+        <li><b>“最优”有边界</b>：参考路径只在构造的实现空间内最优；成本是 LLM 按定义给的 1–10 分，不是实测延迟。</li>
+        <li><b>无方差</b>：模型表、技能方法比较、STEWARD 与消融都没有独立种子或置信区间；用户模拟器与技能研究的任务模型都是 DeepSeek-V3.2。</li>
+        <li><b>核对备注</b>：Table 2 中 DeepSeek-V3.2 增量维护平均成功率 36.83，与 Fig. 6 中 STEWARD 平均 39.04 口径不同，原文未说明（可能是供给设置或平均范围不同）；本画报两处数字分开引用，不互相推算。</li>
+      </ul>
+    </div>
+    <div class="sec">
+      <div class="sh"><span class="no" style="background:var(--l4);color:#1c1c1c">读</span><h2>本项目读法</h2></div>
+      <div class="take"><b>能带走的判断：</b>留存技能的价值取决于它跟着工具目录走：过期依赖要能失活、复活；维护最好是局部编辑而非每版重建。评估自演化代理时，只报成功率会漏掉“旧路还能走、新路没发现”的损失，需要像 IDR / DAR 这样以当前可达最优为参照的指标。</div>
+      <p class="note" style="margin-top:8px">问题档位等字段是本项目的阅读判断，不是审稿结论。</p>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>来源：arXiv:2610.34238v1（§1–§8、Table 1–3、Fig. 2–7、附录 A–C）。线路图按 Table 3 计数重绘；02 路径示例按 Fig. 2 重绘；04 条形按 §4.2 文字数值。</span>
+  <span class="mono">reel/2610.34238 · problem-core-v1.1</span>
+</footer>
+</body>
+</html>

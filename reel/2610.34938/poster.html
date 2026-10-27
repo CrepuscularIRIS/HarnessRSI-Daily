@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>复盘改动迁移评审</title>
+<style>
+  :root {
+    --bg: #eef1f4; --panel: #ffffff; --line: #d0d7de; --ink: #1f2328; --muted: #59636e;
+    --add: #1a7f37; --add-l: #dafbe1; --del: #cf222e; --del-l: #ffebe9;
+    --blue: #0969da; --blue-l: #ddf4ff; --amber: #9a6700; --amber-l: #fff8c5; --violet: #8250df; --violet-l: #fbefff;
+    --gray-l: #f6f8fa;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--ink);
+    font-size: 19px; line-height: 1.5;
+  }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  /* top bar */
+  .bar { height: 54px; background: #24292f; color: #e6edf3; display: flex; align-items: center; padding: 0 48px; gap: 18px; font-size: 17px; }
+  .bar .repo { font-family: "DejaVu Sans Mono", monospace; }
+  .bar .repo b { color: #fff; }
+  .bar .sp { flex: 1; }
+  .bar .pill { border: 1px solid #57606a; border-radius: 6px; padding: 2px 10px; font-size: 15px; color: #c9d1d9; }
+  header { background: var(--panel); border-bottom: 1px solid var(--line); padding: 22px 48px 0; }
+  h1 { font-size: 48px; line-height: 1.2; margin: 0 0 8px; font-weight: 900; letter-spacing: .01em; }
+  h1 .num { color: var(--muted); font-weight: 400; }
+  .status { display: flex; align-items: center; gap: 14px; font-size: 18px; color: var(--muted); margin-bottom: 10px; }
+  .badge { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; color: #fff; font-weight: 700; font-size: 17px; }
+  .badge.purple { background: var(--violet); }
+  .sub { font-size: 22px; line-height: 1.5; margin: 4px 0 14px; max-width: 1480px; }
+  .sub b { color: var(--del); }
+  .tabs { display: flex; gap: 6px; font-size: 17px; }
+  .tabs span { padding: 8px 16px; border: 1px solid transparent; border-bottom: none; color: var(--muted); border-radius: 6px 6px 0 0; }
+  .tabs span.on { border-color: var(--line); background: var(--bg); color: var(--ink); font-weight: 700; margin-bottom: -1px; }
+  .tabs .n { background: #e7ecf0; border-radius: 10px; padding: 0 8px; font-size: 14px; margin-left: 6px; }
+  main { padding: 18px 48px 0; }
+  .row { display: grid; gap: 20px; margin-bottom: 14px; }
+  .r1 { grid-template-columns: 690px 1fr; }
+  .r3 { grid-template-columns: 1fr 1fr; }
+  .r4 { grid-template-columns: 1fr 520px; }
+  .box { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .box .hd { background: var(--gray-l); border-bottom: 1px solid var(--line); padding: 9px 18px; display: flex; align-items: baseline; gap: 12px; }
+  .box .hd .tag { font-family: "DejaVu Sans Mono", monospace; font-size: 15px; color: var(--muted); }
+  .box .hd h2 { font-size: 26px; margin: 0; line-height: 1.3; font-weight: 900; }
+  .box .bd { padding: 12px 18px 14px; }
+  p { margin: 0 0 8px; }
+  .note { font-size: 14.5px; color: var(--muted); line-height: 1.45; }
+  /* chain */
+  .chain { display: flex; align-items: stretch; gap: 0; margin: 6px 0 10px; }
+  .lk { flex: 1; border: 2px solid var(--line); border-radius: 8px; padding: 8px 4px; text-align: center; font-size: 14.5px; line-height: 1.35; background: #fff; }
+  .lk b { display: block; font-size: 19px; }
+  .lk.ok { border-color: var(--add); background: var(--add-l); }
+  .lk.q { border-color: var(--amber); background: var(--amber-l); }
+  .lk.out { border-style: dashed; }
+  .arr { width: 22px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 20px; }
+  /* funnel */
+  .fun { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 4px 0 10px; }
+  .fl { display: flex; align-items: center; gap: 10px; font-size: 16.5px; }
+  .fl .b { height: 27px; background: var(--blue-l); border: 1px solid #a5d6ff; border-radius: 4px; display: flex; align-items: center; padding: 0 10px; font-weight: 700; font-family: "DejaVu Sans Mono", monospace; font-size: 17px; color: #0550ae; white-space: nowrap; }
+  .fl .t { color: var(--ink); }
+  /* diff */
+  .diff { border: 1px solid var(--line); border-radius: 6px; font-family: "DejaVu Sans Mono", "Noto Sans CJK SC", monospace; font-size: 15.5px; line-height: 1.55; overflow: hidden; }
+  .diff .fh { background: var(--gray-l); border-bottom: 1px solid var(--line); padding: 4px 10px; color: var(--muted); }
+  .diff .ln { padding: 1px 10px; white-space: nowrap; }
+  .diff .ln.a { background: var(--add-l); }
+  .diff .ln.a::before { content: "+ "; color: var(--add); }
+  /* checks table (main) */
+  .checks { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+  .checks th { text-align: left; font-size: 15px; color: var(--muted); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .checks td { padding: 5px 8px; border-bottom: 1px solid #eaeef2; vertical-align: middle; }
+  .checks tr.grp td { background: var(--gray-l); font-weight: 700; font-size: 16px; padding: 6px 10px; }
+  .checks tr.grp.g td { color: var(--add); }
+  .checks tr.grp.r td { color: var(--del); }
+  .checks tr.ctl td { background: #fbfcfd; }
+  .checks tr.ctl td:first-child { padding-left: 34px; color: var(--muted); }
+  .repo { font-family: "DejaVu Sans Mono", monospace; font-weight: 700; font-size: 15.5px; }
+  .dots { display: inline-flex; gap: 5px; vertical-align: middle; }
+  .d { width: 19px; height: 19px; border-radius: 50%; border: 2px solid var(--del); display: inline-block; }
+  .d.f { background: var(--del); }
+  .d.x { border: 2px dashed #8c959f; position: relative; }
+  .d.x::after { content: "×"; position: absolute; left: 3px; top: -5px; font-size: 15px; color: #8c959f; }
+  .frac { font-family: "DejaVu Sans Mono", monospace; font-size: 16px; margin-left: 8px; color: var(--ink); }
+  .vd { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 15px; font-weight: 700; white-space: nowrap; }
+  .vd.ok { background: var(--add-l); color: var(--add); border: 1px solid #4ac26b; }
+  .vd.part { background: var(--amber-l); color: var(--amber); border: 1px solid #d4a72c; }
+  .vd.no { background: var(--del-l); color: var(--del); border: 1px solid #ff8182; }
+  .vd.neu { background: var(--gray-l); color: var(--muted); border: 1px solid var(--line); }
+  .legend { display: flex; gap: 22px; font-size: 15px; color: var(--muted); align-items: center; margin: 2px 0 8px; flex-wrap: wrap; }
+  .legend .d { width: 15px; height: 15px; }
+  /* bars */
+  .bars { display: grid; grid-template-columns: 150px 1fr 70px; gap: 4px 10px; align-items: center; font-size: 16px; margin: 6px 0 8px; }
+  .bars .lab { text-align: right; }
+  .bars .trk { height: 20px; background: var(--gray-l); border-radius: 3px; position: relative; }
+  .bars .fill { height: 20px; background: #54aeff; border-radius: 3px; }
+  .bars .fill.hl { background: var(--violet); }
+  .bars .v { font-family: "DejaVu Sans Mono", monospace; font-size: 15px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 16.5px; align-items: baseline; }
+  .kv .k { font-family: "DejaVu Sans Mono", monospace; font-weight: 700; font-size: 22px; color: var(--del); text-align: right; white-space: nowrap; }
+  .kv .k.g { color: var(--ink); }
+  .lim li { margin-bottom: 5px; font-size: 16.5px; line-height: 1.45; }
+  .lim { margin: 4px 0 0; padding-left: 22px; }
+  .review { border-left: 4px solid var(--violet); background: var(--violet-l); padding: 10px 14px; font-size: 16.5px; line-height: 1.5; border-radius: 0 6px 6px 0; }
+  .review b { color: var(--violet); }
+  footer { position: absolute; left: 48px; right: 48px; bottom: 16px; font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; display: flex; justify-content: space-between; gap: 20px; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <span class="repo">harness-self-evolution / <b>retro-transfer-study</b></span>
+  <span class="sp"></span>
+  <span class="pill">arXiv:2610.34938v1 · cs.SE · 2026-10-26</span>
+  <span class="pill">HarnessRSI Daily · Reel 第五期</span>
+</div>
+<header>
+  <h1>复盘改动写进 harness，下一个任务就会照做吗？ <span class="num">#34938</span></h1>
+  <div class="status">
+    <span class="badge purple">● 逐条迁移评审</span>
+    <span>Christoph Treude（新加坡管理大学）· Sebastian Baltes（海德堡大学）</span>
+    <span class="note" style="font-size:16px">How Do Coding-Agent Harnesses Self-Evolve?</span>
+  </div>
+  <p class="sub">让 Claude Code 用 <span class="mono">/retro</span> 复盘自己的会话、提出 harness 改动；作者把 12 条改动<b>一次一条</b>迁移到同仓库的后续 issue，新容器里各跑 5 次 原版 / 改后。在 7 个有信息的迁移事件中，只有改动<b>覆盖到会话实际遇到的实例</b>的 2 条消除了目标动作；1 条减轻，4 条没有减少，还有改动在无关 issue 上增加了工作。</p>
+  <div class="tabs"><span class="on">对话</span><span>改动<span class="n">24</span></span><span>迁移检查<span class="n">13</span></span><span>标注<span class="n">120 条轨迹</span></span></div>
+</header>
+<main>
+  <div class="row r1">
+    <div class="box">
+      <div class="hd"><span class="tag">01</span><h2>问题：写进文件不等于改变行为</h2></div>
+      <div class="bd">
+        <p>编码代理的 harness（CLAUDE.md 等上下文文件、hook、lint/CI 配置）可以在会话后自我修改，留给同仓库的下一次会话用。“改动有没有帮助”要拆成一条链，任一环断开，改动就是摆设：</p>
+        <div class="chain">
+          <div class="lk ok"><b>已实施</b>改动写入允许的文件</div><div class="arr">→</div>
+          <div class="lk ok"><b>已加载</b>进入会话上下文</div><div class="arr">→</div>
+          <div class="lk ok"><b>已查阅</b>读了文件 / 跑了命令</div><div class="arr">→</div>
+          <div class="lk q"><b>动作改变</b>不再做目标动作</div><div class="arr">→</div>
+          <div class="lk out"><b>任务结果</b>另行记录</div>
+        </div>
+        <p style="font-size:17px">本文把“重复工作”操作化为<b>复现（recurrence）</b>：后续会话是否又做了该改动想防止的那个具体动作，例如在没装 pytest 的仓库先跑 pytest、或对未修改的代码重跑测试来确认某个失败是否原本就有（基线比对）。这是行为度量，不判断该动作是否多余，也不等于任务做得更好。</p>
+        <p class="note">迁移检查里转移过去的上下文文件在每个改后会话都被加载，通常也被查阅（表 II 查阅列）；断点集中在“动作改变”这一环。</p>
+      </div>
+    </div>
+    <div class="box">
+      <div class="hd"><span class="tag">02</span><h2>研究动作：一次只迁一条改动</h2></div>
+      <div class="bd">
+        <div class="fun">
+          <div class="fl"><span class="b" style="width:330px">30 个会话</span><span class="t">SWE-bench Verified；Claude Code 2.1.295 + Opus 5.5</span></div>
+          <div class="fl"><span class="b" style="width:300px">125 条提议</span><span class="t">每次复盘 2–6 条，双 LLM 编码 + 一作裁决</span></div>
+          <div class="fl"><span class="b" style="width:200px">24 条实施</span><span class="t">回到原会话、原容器实施</span></div>
+          <div class="fl"><span class="b" style="width:160px">12 条改动</span><span class="t">11 条可在别的 issue 上评估 + 1 条作者写的对照</span></div>
+          <div class="fl"><span class="b" style="width:150px">13 个迁移事件</span><span class="t">同仓库另选 issue，确认环境能复现目标问题</span></div>
+          <div class="fl"><span class="b" style="width:110px">7 个有信息</span><span class="t">原版 5 次中 ≥3 次遇到目标问题（预设）</span></div>
+        </div>
+        <p style="font-size:16.5px">每个事件：<b>原版 harness × 5</b> 与 <b>只多这一条改动 × 5</b>，各在新 Docker 容器、同一任务提示下运行；3 条改动另加无关 issue 作对照，看是否凭空增加验证工作。</p>
+        <div class="diff">
+          <div class="fh">CLAUDE.md（SymPy 例；按 §III 文字复述，非原文件）</div>
+          <div class="ln a">测试用 bin/test 运行；容器里没装 pytest</div>
+          <div class="ln a">结束前跑 CI 的 lint 检查（bin/test quality 等）</div>
+        </div>
+        <p class="note" style="margin-top:6px">其余 6 个事件：5 个原版会话几乎没遇到问题；作者写的 pre-commit 对照从未被读或运行。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" style="margin-bottom:14px">
+    <div class="hd"><span class="tag">03 · 表 II 重绘</span><h2>主结果：7 个有信息的迁移事件，原版 vs 改后各 5 个会话</h2></div>
+    <div class="bd">
+      <div class="legend">
+        <span><span class="d f"></span> 该会话做了目标动作（复现；对照行 = 做了基线比对）</span>
+        <span><span class="d"></span> 没做</span>
+        <span><span class="d x"></span> 剔除（认证错误结束，原文已披露）</span>
+        <span>分组为作者在标注后按“改动是否覆盖会话实际遇到的实例”所分（事后分组）</span>
+      </div>
+      <table class="checks">
+        <colgroup><col style="width:100px"><col style="width:330px"><col style="width:215px"><col style="width:215px"><col style="width:66px"><col></colgroup>
+        <tr><th>仓库</th><th>改动</th><th>原版 harness</th><th>改后 harness</th><th>查阅</th><th>结论</th></tr>
+        <tr class="grp g"><td colspan="6">✓ 改动覆盖了会话实际遇到的实例</td></tr>
+        <tr><td class="repo">SymPy</td><td>CLAUDE.md 一行指明 bin/test</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td><span class="dots"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">0/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd ok">消除</span> 首次 pytest 尝试全部消失</td></tr>
+        <tr><td class="repo">Astropy</td><td>known-failures 文件：3 个测试</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d"></i><i class="d"></i></span><span class="frac">3/5</span></td>
+          <td><span class="dots"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">0/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd ok">消除</span> 改后读清单，不再比对</td></tr>
+        <tr class="ctl"><td>对照</td><td>同一文件，无关 issue</td>
+          <td><span class="dots"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">0/5</span></td>
+          <td><span class="dots"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">0/5</span></td>
+          <td class="mono">0/5</td><td><span class="vd neu">无新增</span></td></tr>
+        <tr class="grp r"><td colspan="6">✗ 改动没有覆盖会话实际遇到的实例</td></tr>
+        <tr><td class="repo">Sphinx</td><td>known-failures 文件 + AGENTS.md</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd no">未减少</span> 清单只列 2 个失败，遇到的是别的测试</td></tr>
+        <tr class="ctl"><td>对照</td><td>同一文件，无关 issue</td>
+          <td><span class="dots"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">0/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">1/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd part">+1 次比对</span></td></tr>
+        <tr><td class="repo">Sphinx</td><td>known-failures 文件 + CLAUDE.md</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd no">未减少</span></td></tr>
+        <tr class="ctl"><td>对照</td><td>同一文件，无关 issue</td>
+          <td><span class="dots"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">0/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d"></i></span><span class="frac">4/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd no">增加工作</span> 清单称“未列出的失败都是你改出来的”</td></tr>
+        <tr><td class="repo">SymPy</td><td>两个包的 known-failures + 比对脚本</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d"></i></span><span class="frac">4/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d x"></i></span><span class="frac">4/4</span></td>
+          <td class="mono">4/4</td><td><span class="vd no">未减少</span> 会话测的是别的包</td></tr>
+        <tr><td class="repo">pytest</td><td>known-failures：同一文件 3 个失败</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd no">未减少</span> 失败出现在别的文件</td></tr>
+        <tr><td class="repo">Astropy</td><td>闰秒缓存修复插件 + 比对脚本</td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i><i class="d f"></i></span><span class="frac">5/5</span></td>
+          <td><span class="dots"><i class="d f"></i><i class="d f"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="frac">2/5</span></td>
+          <td class="mono">5/5</td><td><span class="vd part">减轻</span> 无会话遇到闰秒失败；列表外的 NumPy 失败被报成新失败</td></tr>
+      </table>
+      <p class="note" style="margin-top:8px">点的排列只表示计数，不对应具体会话编号。复现标签由一作在不显示 harness 标识的情况下标注，与两名 LLM 标注者在 120 条轨迹中 119 条一致（κ = 0.98）；但轨迹里能看到读取迁移文件，标注并非完全盲。</p>
+    </div>
+  </div>
+
+  <div class="row r3">
+    <div class="box">
+      <div class="hd"><span class="tag">04 · RQ1</span><h2>/retro 提了什么：多数有据，lint 常是“惯例”</h2></div>
+      <div class="bd">
+        <div class="bars">
+          <span class="lab">可执行检查</span><span class="trk"><span class="fill hl" style="width:100%;display:block"></span></span><span class="v">38</span>
+          <span class="lab">导航指针</span><span class="trk"><span class="fill" style="width:63.2%;display:block"></span></span><span class="v">24</span>
+          <span class="lab">指令</span><span class="trk"><span class="fill" style="width:55.3%;display:block"></span></span><span class="v">21</span>
+          <span class="lab">信息访问</span><span class="trk"><span class="fill" style="width:52.6%;display:block"></span></span><span class="v">20</span>
+          <span class="lab">工具或配置</span><span class="trk"><span class="fill" style="width:31.6%;display:block"></span></span><span class="v">12</span>
+          <span class="lab">不改 harness</span><span class="trk"><span class="fill" style="width:26.3%;display:block"></span></span><span class="v">10</span>
+        </div>
+        <p style="font-size:16.5px">125 条中 101 条基于会话事件，19 条“先验”，5 条关联弱。<b>19 条先验提议里 18 条是 lint</b>（技能说明把“没有 pre-commit / CI 检查”本身算作问题）。38 条可执行检查中，按写好的样子只有 <b>9 条</b>能在任务环境里报出失败，其余缺工具或是从不触发的 commit hook。</p>
+        <p class="note">两个 LLM 编码者按同一码本独立编码（触发码 κ 0.67、机制码 κ 0.84），一作裁决分歧；这不是人类评分者信度。</p>
+      </div>
+    </div>
+    <div class="box">
+      <div class="hd"><span class="tag">05</span><h2>代价：动作少了，任务没变好，时间可能更长</h2></div>
+      <div class="bd">
+        <div class="kv">
+          <span class="k g">≤ 1</span><span>每个事件中两种 harness 的任务成功次数最多差 1 个会话——没有一致的任务成功率收益（作者也不把动作减少等同任务改善）</span>
+          <span class="k">88 → 156 s</span><span>SymPy 那条 CLAUDE.md 消除了失败的 pytest 调用，但捆绑的第二行让每个改后会话都跑 CI lint，中位时长上升</span>
+          <span class="k">82 → 245 s</span><span>Sphinx 对照任务：不完整的失败清单诱发了它本想防止的基线比对（0/5 → 4/5）</span>
+          <span class="k g">−5 至 −28 s</span><span>另外 4 个有信息的事件中位时长下降；SymPy、pytest 两个未覆盖事件时长上升</span>
+        </div>
+        <p class="note" style="margin-top:10px">一条改动可同时含命令指针和 lint 要求，时长变化不能归给单一成分；作者建议后续逐个成分评估。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row r4">
+    <div class="box">
+      <div class="hd"><span class="tag">06</span><h2>限制（原文 §V 与本项目核对）</h2></div>
+      <div class="bd">
+        <ul class="lim">
+          <li><b>选题偏向会复现的问题</b>：后续 issue 是挑来复现目标问题的，第二批 20 个会话也非随机（专挑环境出过问题的仓库）；结果不代表任意后续任务上的帮助频率。</li>
+          <li><b>样本小、分组在后</b>：每种 harness 5 个会话、7 个有信息事件；“是否覆盖”是标注后分的组，改动之间同时差好几个属性，不能据此确立覆盖就是原因。</li>
+          <li><b>不是自主回路</b>：提议由代理生成，但挑选实施哪条、选后续 issue、标注结果都由作者完成；在原容器里实施，改后文件可能带有提议文本以外的信息。</li>
+          <li><b>范围窄</b>：一个代理、一个版本的 /retro、只涉及环境类问题。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box">
+      <div class="hd"><span class="tag">评审意见</span><h2>本项目读法</h2></div>
+      <div class="bd">
+        <div class="review"><b>能带走的判断：</b>harness 自演化的瓶颈不在“生成并实施改动”，而在之后：要逐条确认目标问题有没有出现、代理有没有查阅、动作有没有变，并能修订或撤回没用的改动。仓库级的测试命令可以跨 issue 复用；“某个环境里失败过的具体测试清单”容易覆盖不到下一次遇到的失败，还可能误导验证。</div>
+        <p class="note" style="margin-top:8px">问题档位等字段是本项目的阅读判断，不是审稿结论。</p>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>来源：arXiv:2610.34938v1（§I–§VI、表 I–II）；数据与轨迹见作者 Zenodo 制品 10.5281/zenodo.23653700。点阵为按表 II 计数重绘；diff 为按 §III 文字复述。</span>
+  <span class="mono">reel/2610.34938 · problem-core-v1.1</span>
+</footer>
+</body>
+</html>

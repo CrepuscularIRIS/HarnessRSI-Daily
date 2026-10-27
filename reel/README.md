@@ -1,9 +1,12 @@
 # 精选 Reel
 
-2026-10-22，run [rsi-l1-20261022-03](../research/scoring/runs/rsi-l1-20261022-03/progress.md)：1597 篇 L1 → 978 篇 L2 全文核对 → confirmed P3 池 562 篇 → 终选 **15 篇**（宁缺毋滥）。2026-10-24，rolling run [rsi-rolling-20261023-01](../research/scoring/runs/rsi-rolling-20261023-01/progress.md) 增量 5 篇 confirmed P3 → 第三期终选 **3 篇**（1 篇退回修订）；随后同一 rolling run 补跑班后候选池 6 篇 confirmed P3 → 第四期终选 **3 篇**（无退回）。共 **21 篇**。每张画报经 Opus 5.5 原文核对（含附录补读）、逐数溯源（SOURCE.md）与实际视觉 QA（QA.md）；21 种版式互不重复。选题全程：[selection 1](../research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](../research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](../research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](../research/scoring/runs/rsi-rolling-20261023-01/selection-004.md)。按新到旧排列：
+2026-10-22，run [rsi-l1-20261022-03](../research/scoring/runs/rsi-l1-20261022-03/progress.md)：1597 篇 L1 → 978 篇 L2 全文核对 → confirmed P3 池 562 篇 → 终选 **15 篇**（宁缺毋滥）。2026-10-24，rolling run [rsi-rolling-20261023-01](../research/scoring/runs/rsi-rolling-20261023-01/progress.md) 增量 5 篇 confirmed P3 → 第三期终选 **3 篇**（1 篇退回修订）；随后同一 rolling run 补跑班后候选池 6 篇 confirmed P3 → 第四期终选 **3 篇**（无退回）；第五期候选池 5 篇 confirmed P3 → 终选 **3 篇**（1 篇退回修订）。共 **24 篇**。每张画报经 Opus 5.5 原文核对（含附录补读）、逐数溯源（SOURCE.md）与实际视觉 QA（QA.md）；24 种版式互不重复。选题全程：[selection 1](../research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](../research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](../research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](../research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](../research/scoring/runs/rsi-rolling-20261023-01/selection-005.md)。按新到旧排列：
 
 | 论文 | 问题族 | 一句话 |
 |---|---|---|
+| [2610.35579](2610.35579/) Infinity Machine | F1/F2 | 唯一自改候选因成本被拒、发现全出自初始 genome；评分器被钻 4 次；写反方向的评分穿过全部机器检查 |
+| [2610.34938](2610.34938/) /retro 复盘迁移 | F1/F3 | 复盘改动逐条迁移：只有覆盖到实际遇到实例的 2 条消除目标动作，4 条未减少，不完整清单还添活 |
+| [2610.34238](2610.34238/) Δτ-Bench | F3/F5 | 六版本演化工具生态：成功率掩盖错过的更短路径；按依赖增量维护技能胜过冻结与全量重建 |
 | [2610.32322](2610.32322/) Beyond Gain 技能退休 | F2/F1 | 零增益既可能是已会也可能是都不会；增益规则删掉 57.5% 的未覆盖技能，按不带技能的水平读 |
 | [2610.31401](2610.31401/) HERD | F3/F5 | harness 挑出要学的、双锚约束下蒸进权重：习得持平，遗忘与通用能力损失最小（部署只用权重） |
 | [2610.31326](2610.31326/) AgenticEvolve | F1/F4 | 只删“提交前自己做实验”的工具作对照：三模型两任务上程序更好，费用高 2.6–13 倍 |
