@@ -52,3 +52,9 @@
 - L2：按增量轮声明执行（本班 to_l2 全部 11 篇；high 遗留 0；工具默认多排的 8 篇遗留 medium 已裁出，留待将来声明扩充）。inc-l2-05（6）+ inc-l2-06（5）= 11/11 完成。**5 篇 P3/confirmed/to_l3**（34027/34238/34938/35316/35579）；35193 P2/pending_material（被引源文件未核，封顶 P2）；35434 P3/pending_experiment；33024/33046/33845/33956 P3/pending_experiment/park。子卡合计 110 项（33 holds / 58 partial / 15 fails / 6 unknown / 1 challenged / 1 NA——fails 为论文被诊断系统违反条件，非诊断失败）。
 - 漏检抽查：0.1×11=1.1→1 名额，本班未用（队列构建时无待抽查池），欠账累计 ~1.7。
 - to_l3 池：5 篇 ≥3 → 明早 Opus 班选题（第五期）。
+
+## 2026-10-28 08:43 每日 Opus 判断（第五期选题 + C-005-1 落档）
+
+- 新增 confirmed P3：5 篇 ≥3 → 第五期选题。终选 3 篇（34938 自演化实证 / 34238 Δτ-Bench+STEWARD / 35579 Infinity Machine 限 L2 确认范围），3 张全过 QA；34027 列下期备选（双主卡与 34938 重叠 + 单 seed 优选）。见 selection-005.md。累计 24 张。
+- Correction C-005-1（35316：Q2 vertical_port + 最小种子基线增益 + Table 3/4 冲突）已退回 Sol 修订：inc-l2-06-rev1-35316.jsonl → **P1/confirmed/park**（q2=vertical_port、q3=incremental、q4=partial；三点全接受，64.98/+28.02 标 Table 3 basis）。原记录保留。
+- to_l3 池：34027（备选）。
