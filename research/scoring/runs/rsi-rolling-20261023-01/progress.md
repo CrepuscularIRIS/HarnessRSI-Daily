@@ -58,3 +58,11 @@
 - 新增 confirmed P3：5 篇 ≥3 → 第五期选题。终选 3 篇（34938 自演化实证 / 34238 Δτ-Bench+STEWARD / 35579 Infinity Machine 限 L2 确认范围），3 张全过 QA；34027 列下期备选（双主卡与 34938 重叠 + 单 seed 优选）。见 selection-005.md。累计 24 张。
 - Correction C-005-1（35316：Q2 vertical_port + 最小种子基线增益 + Table 3/4 冲突）已退回 Sol 修订：inc-l2-06-rev1-35316.jsonl → **P1/confirmed/park**（q2=vertical_port、q3=incremental、q4=partial；三点全接受，64.98/+28.02 标 Table 3 basis）。原记录保留。
 - to_l3 池：34027（备选）。
+
+## 2026-10-28 06:17 巡检班
+
+- 新增：7 篇（inbox/2026-10-28-0642，corpus 1644→1651，全文 7/7，材料 7/7 abstract_intro；收集 +8 中 1 个为 GitHub-only（langchain design-agent），arXiv 检索无命中留 inbox 待关联）。入库脚本一次因无 arxiv 字段项崩溃并连带误挪 inbox——已恢复，mv 改挂在校验断言之后。
+- L1：inc-l1-05 7/7 完成（全 assessed；P3×3 / P2×4）。
+- L2：inc-l2-07 7/7 完成（本班 to_l2 全部）。**4 篇 P3/confirmed/to_l3**（37651/36826/37255/34073）；36077 P3/pending_experiment；36774/37046 P2/park。
+- 漏检抽查：0.7→0 名额，欠账累计 ~2.4。
+- to_l3 池：34027（备选）+ 本班 4 = 5 篇 ≥3 → 今晨 Opus 班第六期选题。
