@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>记忆净值申报</title>
+<style>
+  :root {
+    --paper: #fbfaf4; --ink: #15171c; --muted: #5c606a; --rule: #1c2b4a; --hair: #c9ccd3; --box: #f1f2f5;
+    --navy: #1c2b4a; --red: #a8261d; --red-l: #f7e0dc; --green: #2e6b3a; --green-l: #dcecdf;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--ink);
+    font-size: 19.5px; line-height: 1.5; background: var(--paper);
+  }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  .sheet { position: absolute; inset: 34px 44px 70px; border: 2.5px solid var(--ink); background: #fff; }
+  .top { display: grid; grid-template-columns: 250px 1fr 300px; border-bottom: 2.5px solid var(--ink); }
+  .top > div { padding: 14px 18px; }
+  .formno { border-right: 1.5px solid var(--ink); }
+  .formno .f { font-size: 14px; color: var(--muted); letter-spacing: .08em; }
+  .formno .big { font-family: "DejaVu Sans Mono", monospace; font-size: 40px; font-weight: 700; line-height: 1.1; margin: 4px 0; }
+  .formno .yr { font-size: 15px; }
+  .ttl h1 { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 46px; line-height: 1.2; margin: 2px 0 6px; }
+  .ttl h1 em { font-style: normal; color: var(--red); }
+  .ttl .s { font-size: 17px; color: #34373f; margin: 0; }
+  .side { border-left: 1.5px solid var(--ink); font-size: 14.5px; color: #34373f; }
+  .side .row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--hair); padding: 4px 0; }
+  .side .row:last-child { border-bottom: 0; }
+  .eqbar { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 0; border-bottom: 2.5px solid var(--ink); }
+  .eqbar > div { padding: 14px 18px; font-size: 17px; }
+  .eqbar .op { font-family: "DejaVu Sans Mono", monospace; font-size: 34px; padding: 0 6px; }
+  .eqbar .lab { font-size: 14px; color: var(--muted); }
+  .eqbar .v { font-size: 22px; font-weight: 700; }
+  .part { display: flex; align-items: center; gap: 14px; background: var(--navy); color: #fff; padding: 9px 18px; font-size: 19px; }
+  .part b { background: #fff; color: var(--navy); padding: 0 8px; font-family: "DejaVu Sans Mono", monospace; font-size: 15px; }
+  .part span.r { margin-left: auto; font-size: 14px; color: #c9d1e4; }
+  .body { padding: 16px 20px 18px; }
+  .line { display: grid; grid-template-columns: 46px 1fr; gap: 10px; border-bottom: 1px solid var(--hair); padding: 8px 0; font-size: 18px; align-items: baseline; }
+  .line:last-child { border-bottom: 0; }
+  .line .no { font-family: "DejaVu Sans Mono", monospace; font-weight: 700; color: var(--navy); }
+  .note { font-size: 14px; color: var(--muted); line-height: 1.45; }
+  .r { color: var(--red); } .g { color: var(--green); } .n { color: var(--navy); }
+  table.heat { border-collapse: collapse; width: 100%; font-size: 15.5px; }
+  table.heat th { font-size: 14.5px; font-weight: 400; color: var(--muted); padding: 3px 4px; border: 1px solid var(--hair); background: var(--box); text-align: center; }
+  table.heat td { border: 1px solid #ffffff; text-align: center; padding: 4px 2px; font-family: "DejaVu Sans Mono", monospace; font-size: 16.5px; height: 40px; }
+  table.heat td.k { background: var(--box); color: var(--muted); font-family: "Noto Sans CJK SC", sans-serif; font-size: 13.5px; width: 52px; border-color: var(--hair); }
+  table.heat td.nm { text-align: left; padding-left: 10px; font-family: "Noto Sans CJK SC", sans-serif; font-size: 15.5px; width: 150px; background: #fff; border-color: var(--hair); }
+  table.heat tr.base td { background: #fff; color: var(--navy); font-weight: 700; border-color: var(--hair); }
+  .stack { display: grid; grid-template-columns: 120px 1fr 60px; gap: 8px; align-items: center; margin: 9px 0; font-size: 16px; }
+  .stack .bar { display: flex; height: 28px; border: 1px solid var(--ink); }
+  .stack .bar span { height: 100%; }
+  .s-nl { background: #c9ccd3; } .s-pl { background: #e6a39b; } .s-ml { background: #c0453a; } .s-nu { background: #6b1610; }
+  .key { font-size: 13.5px; color: var(--muted); display: flex; gap: 14px; margin-top: 4px; }
+  .key i { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; margin-right: 4px; border: 1px solid var(--ink); }
+  table.ex { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+  table.ex th { font-size: 13px; font-weight: 400; color: var(--muted); border-bottom: 1.5px solid var(--ink); padding: 3px 5px; text-align: right; }
+  table.ex th:first-child { text-align: left; }
+  table.ex td { border-bottom: 1px solid var(--hair); padding: 7px 6px; text-align: right; font-family: "DejaVu Sans Mono", monospace; }
+  table.ex td:first-child { text-align: left; font-family: "Noto Sans CJK SC", sans-serif; }
+  table.ex tr.rag td { background: var(--box); font-weight: 700; }
+  td.up { color: var(--green); font-weight: 700; } td.dn { color: var(--red); }
+  .cb { display: inline-block; width: 15px; height: 15px; border: 1.5px solid var(--ink); vertical-align: -2px; margin-right: 6px; text-align: center; line-height: 12px; font-size: 13px; }
+  .take { border: 2px solid var(--navy); padding: 12px 16px; font-size: 18px; line-height: 1.55; margin-top: 8px; background: #f6f7fa; }
+  footer { position: absolute; left: 44px; right: 44px; bottom: 26px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 18px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="top">
+    <div class="formno"><div class="f">表号</div><div class="big">MT-1</div><div class="yr">记忆净值申报表</div><div class="note" style="margin-top:6px">申报对象：持久代理记忆<br>参照：直接检索原始历史</div></div>
+    <div class="ttl">
+      <div class="note" style="letter-spacing:.06em">arXiv:2610.34073v1 · cs.CL · 2026-10-25 · UIUC / 清华 / 人大 / Verdent.ai / Waterloo</div>
+      <h1>费力建一套记忆，<br>比<em>直接检索原始历史</em>赚还是亏？</h1>
+      <p class="s">Memory Tax: Dissecting the Net Value of Agent Memory —— 多数被测记忆系统交的“税”超过了它带来的“收益”。</p>
+    </div>
+    <div class="side">
+      <div class="row"><span>项目</span><span>HarnessRSI Daily</span></div>
+      <div class="row"><span>期别</span><span>Reel 第六期</span></div>
+      <div class="row"><span>问题族</span><span>F1 归因 · F5 单调</span></div>
+      <div class="row"><span>卡片</span><span>index_experience_for_reuse</span></div>
+      <div class="row"><span>核对</span><span>Opus 5.5 · 全文</span></div>
+    </div>
+  </div>
+  <div class="eqbar">
+    <div><div class="lab">第 A 栏 · 记忆收益</div><div class="v g">RAG 答错、记忆答对</div></div>
+    <div class="op">−</div>
+    <div><div class="lab">第 B 栏 · 记忆税</div><div class="v r">RAG 答对、记忆答错</div></div>
+    <div class="op">=</div>
+    <div><div class="lab">第 C 栏 · 净值（相对参照，逐题计）</div><div class="v n">税 &gt; 收益 → 总分低于 RAG</div></div>
+  </div>
+
+  <div class="part"><b>第一部分</b>申报口径：怎么比才公平<span class="r">§3.1；附录 A、B</span></div>
+  <div class="body" style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
+    <div>
+      <div class="line"><span class="no">1</span><span><b>参照</b>：原始历史分块，BM25 + 稠密检索，重排取 top-k（1 轮 / 2 轮）。分块、检索、嵌入、重排逐项消融，多数变体相差几分以内。</span></div>
+      <div class="line"><span class="no">2</span><span><b>申报方</b>：11 个开源记忆系统，平铺 3、分层 / 生命周期 3、图 3、RL 训练策略 2。</span></div>
+    </div>
+    <div>
+      <div class="line"><span class="no">3</span><span><b>共用</b>：同一嵌入与重排模型、同一 QA 提示、同一 judge（Qwen3.6-27B，与人工一致 95.1% / 100% / 97.3%）。</span></div>
+      <div class="line"><span class="no">4</span><span><b>检索量对齐</b>：按“检索范围”（看到的记忆 token / 自身库总 token）把各系统 top-k 调到不低于 RAG（1 轮），多数是<b>调大</b>；作者逐项核验改动不压低对方。</span></div>
+    </div>
+  </div>
+
+  <div class="part"><b>第二部分</b>总账：相对 RAG（2 轮）的判分差（百分点）<span class="r">Table 1（据表重绘）</span></div>
+  <div class="body" style="padding-top:8px">
+    <table class="heat">
+      <tr><th colspan="2" rowspan="2" style="text-align:left">系统</th><th colspan="3">LongMemEval-s（全 500 题）</th><th colspan="3">PersonaMem-v2（20% 分层子集）</th><th colspan="3">MINT-Eval（10% 分层子集）</th></tr>
+      <tr><th>Qwen3.5-4B</th><th>Qwen3.6-27B</th><th>5.6-luna</th><th>Qwen3.5-4B</th><th>Qwen3.6-27B</th><th>5.6-luna</th><th>Qwen3.5-4B</th><th>Qwen3.6-27B</th><th>5.6-luna</th></tr>
+      <tr class="base"><td class="k">参照</td><td class="nm">RAG（2 轮）绝对分</td><td>72.2</td><td>81.4</td><td>90.0</td><td>36.2</td><td>48.7</td><td>48.4</td><td>26.1</td><td>33.1</td><td>34.5</td></tr>
+      <tr><td class="k">平铺</td><td class="nm">A-Mem</td><td style="background:rgba(168,38,29,0.15);color:#3b0f0b">−1.8</td><td style="background:rgba(168,38,29,0.16);color:#3b0f0b">−2.0</td><td style="background:rgba(168,38,29,0.33);color:#3b0f0b">−6.0</td><td style="background:rgba(168,38,29,0.18);color:#3b0f0b">−2.5</td><td style="background:rgba(168,38,29,0.09);color:#3b0f0b">−0.3</td><td style="background:rgba(168,38,29,0.35);color:#3b0f0b">−6.6</td><td style="background:rgba(168,38,29,0.15);color:#3b0f0b">−1.7</td><td style="background:rgba(168,38,29,0.44);color:#3b0f0b">−8.7</td><td style="background:rgba(168,38,29,0.38);color:#3b0f0b">−7.4</td></tr>
+<tr><td class="k">平铺</td><td class="nm">MemOS</td><td style="background:rgba(168,38,29,0.50);color:#fff">−10.2</td><td style="background:rgba(168,38,29,0.28);color:#3b0f0b">−4.8</td><td style="background:rgba(168,38,29,0.57);color:#fff">−12.0</td><td style="background:rgba(46,107,58,0.39);color:#123a1c">+1.0</td><td style="background:rgba(46,107,58,0.46);color:#123a1c">+1.5</td><td style="background:rgba(168,38,29,0.35);color:#3b0f0b">−6.7</td><td style="background:rgba(168,38,29,0.41);color:#3b0f0b">−8.1</td><td style="background:rgba(168,38,29,0.63);color:#fff">−13.4</td><td style="background:rgba(168,38,29,0.25);color:#3b0f0b">−4.2</td></tr>
+<tr><td class="k">平铺</td><td class="nm">SimpleMem</td><td style="background:rgba(168,38,29,0.57);color:#fff">−12.0</td><td style="background:rgba(168,38,29,0.40);color:#3b0f0b">−7.8</td><td style="background:rgba(168,38,29,0.33);color:#3b0f0b">−6.0</td><td style="background:rgba(168,38,29,0.14);color:#3b0f0b">−1.5</td><td style="background:rgba(168,38,29,0.16);color:#3b0f0b">−2.0</td><td style="background:rgba(168,38,29,0.22);color:#3b0f0b">−3.3</td><td style="background:rgba(168,38,29,0.39);color:#3b0f0b">−7.5</td><td style="background:rgba(168,38,29,0.63);color:#fff">−13.3</td><td style="background:rgba(168,38,29,0.56);color:#fff">−11.6</td></tr>
+<tr><td class="k">分层</td><td class="nm">MemoryOS</td><td style="background:rgba(168,38,29,0.39);color:#3b0f0b">−7.6</td><td style="background:rgba(168,38,29,0.41);color:#3b0f0b">−8.0</td><td style="background:rgba(168,38,29,0.49);color:#fff">−10.0</td><td style="background:rgba(46,107,58,0.37);color:#123a1c">+0.9</td><td style="background:rgba(168,38,29,0.10);color:#3b0f0b">−0.5</td><td style="background:rgba(168,38,29,0.30);color:#3b0f0b">−5.4</td><td style="background:rgba(168,38,29,0.38);color:#3b0f0b">−7.2</td><td style="background:rgba(168,38,29,0.36);color:#3b0f0b">−6.9</td><td style="background:rgba(168,38,29,0.13);color:#3b0f0b">−1.3</td></tr>
+<tr><td class="k">分层</td><td class="nm">LightMem</td><td style="background:rgba(168,38,29,0.68);color:#fff">−14.6</td><td style="background:rgba(168,38,29,0.19);color:#3b0f0b">−2.6</td><td style="background:rgba(168,38,29,0.61);color:#fff">−13.0</td><td style="background:rgba(46,107,58,0.28);color:#123a1c">+0.2</td><td style="background:rgba(168,38,29,0.15);color:#3b0f0b">−1.7</td><td style="background:rgba(168,38,29,0.18);color:#3b0f0b">−2.5</td><td style="background:rgba(168,38,29,0.30);color:#3b0f0b">−5.4</td><td style="background:rgba(168,38,29,0.50);color:#fff">−10.2</td><td style="background:rgba(168,38,29,0.46);color:#fff">−9.3</td></tr>
+<tr><td class="k">分层</td><td class="nm">OpenViking</td><td style="background:rgba(168,38,29,0.90);color:#fff">−40.4</td><td style="background:rgba(168,38,29,0.90);color:#fff">−22.6</td><td style="background:rgba(168,38,29,0.90);color:#fff">−27.0</td><td style="background:rgba(168,38,29,0.28);color:#3b0f0b">−4.9</td><td style="background:rgba(168,38,29,0.49);color:#fff">−10.1</td><td style="background:rgba(168,38,29,0.50);color:#fff">−10.2</td><td style="background:rgba(168,38,29,0.73);color:#fff">−15.9</td><td style="background:rgba(168,38,29,0.68);color:#fff">−14.6</td><td style="background:rgba(168,38,29,0.50);color:#fff">−10.3</td></tr>
+<tr><td class="k">图</td><td class="nm">HippoRAG2</td><td style="background:rgba(168,38,29,0.22);color:#3b0f0b">−3.4</td><td style="background:rgba(168,38,29,0.21);color:#3b0f0b">−3.2</td><td style="background:rgba(168,38,29,0.45);color:#3b0f0b">−9.0</td><td style="background:rgba(168,38,29,0.17);color:#3b0f0b">−2.3</td><td style="background:rgba(168,38,29,0.17);color:#3b0f0b">−2.3</td><td style="background:rgba(168,38,29,0.21);color:#3b0f0b">−3.1</td><td style="background:rgba(168,38,29,0.14);color:#3b0f0b">−1.5</td><td style="background:rgba(168,38,29,0.47);color:#fff">−9.6</td><td style="background:rgba(168,38,29,0.35);color:#3b0f0b">−6.7</td></tr>
+<tr><td class="k">图</td><td class="nm">MAGMA</td><td style="background:rgba(168,38,29,0.55);color:#fff">−11.4</td><td style="background:rgba(168,38,29,0.62);color:#fff">−13.2</td><td style="background:rgba(168,38,29,0.65);color:#fff">−14.0</td><td style="background:rgba(168,38,29,0.21);color:#3b0f0b">−3.1</td><td style="background:rgba(168,38,29,0.42);color:#3b0f0b">−8.3</td><td style="background:rgba(168,38,29,0.40);color:#3b0f0b">−7.8</td><td style="background:rgba(168,38,29,0.18);color:#3b0f0b">−2.4</td><td style="background:rgba(168,38,29,0.33);color:#3b0f0b">−6.2</td><td style="background:rgba(168,38,29,0.28);color:#3b0f0b">−5.0</td></tr>
+<tr><td class="k">图</td><td class="nm">PlugMem</td><td style="background:rgba(168,38,29,0.25);color:#3b0f0b">−4.2</td><td style="background:rgba(168,38,29,0.31);color:#3b0f0b">−5.6</td><td style="background:rgba(168,38,29,0.90);color:#fff">−20.0</td><td style="background:rgba(168,38,29,0.13);color:#3b0f0b">−1.2</td><td style="background:rgba(168,38,29,0.22);color:#3b0f0b">−3.5</td><td style="background:rgba(168,38,29,0.43);color:#3b0f0b">−8.6</td><td style="background:rgba(168,38,29,0.27);color:#3b0f0b">−4.7</td><td style="background:rgba(46,107,58,0.26);color:#123a1c">+0.1</td><td style="background:rgba(46,107,58,0.70);color:#fff">+3.3</td></tr>
+<tr><td class="k">训练</td><td class="nm">Mem-T</td><td style="background:rgba(168,38,29,0.13);color:#3b0f0b">−1.2</td><td style="background:rgba(168,38,29,0.34);color:#3b0f0b">−6.4</td><td style="background:rgba(168,38,29,0.57);color:#fff">−12.0</td><td style="background:rgba(168,38,29,0.25);color:#3b0f0b">−4.1</td><td style="background:rgba(168,38,29,0.35);color:#3b0f0b">−6.6</td><td style="background:rgba(168,38,29,0.38);color:#3b0f0b">−7.4</td><td style="background:rgba(46,107,58,0.37);color:#123a1c">+0.9</td><td style="background:rgba(168,38,29,0.19);color:#3b0f0b">−2.7</td><td style="background:rgba(46,107,58,0.79);color:#fff">+3.9</td></tr>
+<tr><td class="k">训练</td><td class="nm">Memory-R2</td><td style="background:rgba(168,38,29,0.34);color:#3b0f0b">−6.4</td><td style="background:rgba(168,38,29,0.42);color:#3b0f0b">−8.4</td><td style="background:rgba(168,38,29,0.53);color:#fff">−11.0</td><td style="background:rgba(46,107,58,0.53);color:#123a1c">+2.0</td><td style="background:rgba(168,38,29,0.09);color:#3b0f0b">−0.3</td><td style="background:rgba(168,38,29,0.25);color:#3b0f0b">−4.2</td><td style="background:rgba(168,38,29,0.28);color:#3b0f0b">−4.8</td><td style="background:rgba(168,38,29,0.56);color:#fff">−11.6</td><td style="background:rgba(168,38,29,0.56);color:#fff">−11.6</td></tr>
+    </table>
+    <p style="font-size:17.5px;margin:10px 0 0">11 × 9 = 99 格里只有 <b class="g">9 格</b>高于 RAG（2 轮）；LongMemEval-s 上 33 格<b class="r">全部</b>低于它，最大差 −40.4（OpenViking）。按题拆开，记忆<b>确实</b>答对了一些 RAG 答错的题（收益），但同时丢掉更多 RAG 本来答对的题（税）。</p>
+    <p class="note" style="margin:2px 0 0">逐题收益 / 税的维恩图见原文 Fig. 2、附录 C.1（对 RAG 1 轮），原文文本未给计数，本画报不转述具体数。5.6-luna 在 LongMemEval-s 上为 100 题分层子集。</p>
+  </div>
+
+  <div class="part"><b>第三部分</b>税从哪来：存丢了，还是存了找不到<span class="r">§4.2–4.5；附录 C.2–C.5</span></div>
+  <div class="body" style="display:grid;grid-template-columns:640px 1fr;gap:28px">
+    <div>
+      <div style="font-size:16.5px;margin-bottom:2px"><span class="mono n" style="font-weight:700">5</span>　<b>保真</b>：抽 500 条原始对话轮，人工追到对应记忆单元</div>
+      <div class="stack"><span>MemoryOS</span><div class="bar"><span class="s-nl" style="width:98.4%"></span><span class="s-nu" style="width:1.6%"></span></div><span class="mono">98.4</span></div>
+<div class="stack"><span>MAGMA</span><div class="bar"><span class="s-nl" style="width:93.6%"></span><span class="s-pl" style="width:6.2%"></span><span class="s-ml" style="width:0.2%"></span></div><span class="mono">93.6</span></div>
+<div class="stack"><span>MemOS</span><div class="bar"><span class="s-nl" style="width:85.8%"></span><span class="s-pl" style="width:9.0%"></span><span class="s-ml" style="width:2.4%"></span><span class="s-nu" style="width:2.8%"></span></div><span class="mono">85.8</span></div>
+<div class="stack"><span>PlugMem</span><div class="bar"><span class="s-nl" style="width:79.6%"></span><span class="s-pl" style="width:10.8%"></span><span class="s-ml" style="width:5.2%"></span><span class="s-nu" style="width:4.4%"></span></div><span class="mono">79.6</span></div>
+<div class="stack"><span>LightMem</span><div class="bar"><span class="s-nl" style="width:76.2%"></span><span class="s-pl" style="width:13.6%"></span><span class="s-ml" style="width:0.6%"></span><span class="s-nu" style="width:9.6%"></span></div><span class="mono">76.2</span></div>
+<div class="stack"><span>Memory-R2</span><div class="bar"><span class="s-nl" style="width:72.6%"></span><span class="s-pl" style="width:14.8%"></span><span class="s-ml" style="width:6.0%"></span><span class="s-nu" style="width:6.6%"></span></div><span class="mono">72.6</span></div>
+<div class="stack"><span>SimpleMem</span><div class="bar"><span class="s-nl" style="width:65.6%"></span><span class="s-pl" style="width:27.6%"></span><span class="s-ml" style="width:2.2%"></span><span class="s-nu" style="width:4.6%"></span></div><span class="mono">65.6</span></div>
+<div class="stack"><span>OpenViking</span><div class="bar"><span class="s-nl" style="width:39.4%"></span><span class="s-pl" style="width:9.6%"></span><span class="s-ml" style="width:13.0%"></span><span class="s-nu" style="width:38.0%"></span></div><span class="mono">39.4</span></div>
+      <div class="key"><span><i class="s-nl"></i>无损</span><span><i class="s-pl"></i>部分丢失</span><span><i class="s-ml"></i>大部丢失</span><span><i class="s-nu"></i>没有对应单元</span></div>
+      <p class="note" style="margin-top:4px">Table 2；附录 C.2。不限于金标证据，一对多映射时给标注员全部候选单元。</p>
+    </div>
+    <div>
+      <div class="line"><span class="no">6</span><span><b>可达</b>：MemoryOS 的样本 <b>98.4%</b> 无损，在 LongMemEval-s 上仍低 RAG 7.6–10.0 点。MAGMA、LightMem 直接给金标记忆单元时接近金标原文，却远高于它们自己检索时的成绩：<b class="r">存住了，但难检出</b>。逐轮重放检索，记忆系统第一轮召回的金标单元少于 RAG；证据被拆碎、稀释或改写。</span></div>
+      <div class="line"><span class="no">7</span><span><b>稳健</b>：同一份记忆换 QA 模型，许多系统掉分比 RAG 多（Fig. 6，未给统一数值）。</span></div>
+      <div class="line"><span class="no">8</span><span><b>评测余量</b>：只取两个最稀有词的关键词检索在 EverMemBench-MCQ 得 68.2、LoCoMo 58.8；混合 RAG 在 15 个基准中 7 个达 69–83。题目偏“直接找原文”，记忆能多赚的空间小，税就更显眼（Table 15）。</span></div>
+    </div>
+  </div>
+
+  <div class="part"><b>第四部分</b>附表：经验记忆（离自我改进最近的一栏）<span class="r">§5.1；附录 C.6.1 Table 16 · Qwen3.5-4B</span></div>
+  <div class="body" style="display:grid;grid-template-columns:900px 1fr;gap:28px">
+    <div>
+      <table class="ex">
+        <tr><th>训练集积累经验 → 测试时冻结</th><th>ALFWorld</th><th>WebShop</th><th>Mind2Web</th><th>BigCode</th><th>AppWorld</th><th>τ²-Bench</th></tr>
+        <tr><td>无记忆（ReAct）</td><td>52.2</td><td>45.9</td><td>48.5</td><td>16.9</td><td>12.5</td><td>61.0</td></tr>
+        <tr class="rag"><td>RAG：取最相似的 2 条原始轨迹</td><td>73.1</td><td>38.4</td><td>45.3</td><td>21.6</td><td>22.6</td><td>69.0</td></tr>
+        <tr><td>Memp（步骤工作流）</td><td class="up">76.1</td><td class="up">44.5</td><td class="up">47.9</td><td class="dn">20.3</td><td class="dn">14.3</td><td class="dn">62.0</td></tr>
+        <tr><td>ReasoningBank（推理策略）</td><td class="dn">62.7</td><td class="dn">34.3</td><td class="up">49.9</td><td class="dn">14.9</td><td class="dn">14.3</td><td class="dn">51.0</td></tr>
+        <tr><td>G-Memory（三层图）</td><td class="up">73.9</td><td class="up">39.5</td><td class="up">47.0</td><td class="dn">20.3</td><td>22.6</td><td class="up">78.0</td></tr>
+        <tr><td>SkillPro（演化技能池）</td><td class="dn">47.0</td><td class="up">42.5</td><td class="dn">43.6</td><td class="dn">11.5</td><td class="dn">10.7</td><td class="dn">55.0</td></tr>
+      </table>
+      <p class="note" style="margin-top:4px">绿 = 高于 RAG 行，红 = 低于。WebShop 上 RAG 本身低于无记忆。SkillPro 在 ALFWorld 每题约 1,226K token，RAG 为 235K。单骨干、单次运行。</p>
+    </div>
+    <div>
+      <div style="font-size:16.5px;font-weight:700;margin-bottom:4px">申报说明（限制）</div>
+      <div style="font-size:16.5px;line-height:1.6">
+        <div><span class="cb"></span>检索范围是<b>相对</b>比例，不等于等 token / 等算力；单元很少的系统（OpenViking）固定 top-k。</div>
+        <div><span class="cb"></span>后两套基准为子集；无重复构建的方差；金标单元映射有 LLM 辅助。</div>
+        <div><span class="cb"></span>“税”相对所选参照定义；不说明记忆普遍有害，web 类经验任务中抽象可以更好。</div>
+        <div><span class="cb"></span>§6 的两条改进（保留回原文的路径、把检索经历写回记忆）在全文文本中缺结果表，本画报不展示。</div>
+      </div>
+      <div class="take" style="font-size:15.5px;padding:8px 12px;margin-top:10px"><b class="n">本项目读法</b>：一次持久记忆升级要晋级，先和“直接检索同一份原始历史”比，并按题分开记账收益与税；只比哪套记忆分更高，会把“存丢”和“找不到”的损失藏进总分里。这是可放进自我改进闭环的 B 类审计口径。</div>
+    </div>
+  </div>
+</div>
+<footer><span>来源：arXiv 2610.34073v1 正文 §1–§8、附录 A–C；表格与条形为本项目据原文表重绘，非原图。未复现实验。</span><span>selection-006 · Opus 5.5 原文核对 · 档位为阅读判断，非审稿结论</span></footer>
+</body>
+</html>

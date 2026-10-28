@@ -1,9 +1,12 @@
 # 精选 Reel
 
-2026-10-22，run [rsi-l1-20261022-03](../research/scoring/runs/rsi-l1-20261022-03/progress.md)：1597 篇 L1 → 978 篇 L2 全文核对 → confirmed P3 池 562 篇 → 终选 **15 篇**（宁缺毋滥）。2026-10-24，rolling run [rsi-rolling-20261023-01](../research/scoring/runs/rsi-rolling-20261023-01/progress.md) 增量 5 篇 confirmed P3 → 第三期终选 **3 篇**（1 篇退回修订）；随后同一 rolling run 补跑班后候选池 6 篇 confirmed P3 → 第四期终选 **3 篇**（无退回）；第五期候选池 5 篇 confirmed P3 → 终选 **3 篇**（1 篇退回修订）。共 **24 篇**。每张画报经 Opus 5.5 原文核对（含附录补读）、逐数溯源（SOURCE.md）与实际视觉 QA（QA.md）；24 种版式互不重复。选题全程：[selection 1](../research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](../research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](../research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](../research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](../research/scoring/runs/rsi-rolling-20261023-01/selection-005.md)。按新到旧排列：
+2026-10-22，run [rsi-l1-20261022-03](../research/scoring/runs/rsi-l1-20261022-03/progress.md)：1597 篇 L1 → 978 篇 L2 全文核对 → confirmed P3 池 562 篇 → 终选 **15 篇**（宁缺毋滥）。2026-10-24，rolling run [rsi-rolling-20261023-01](../research/scoring/runs/rsi-rolling-20261023-01/progress.md) 增量 5 篇 confirmed P3 → 第三期终选 **3 篇**（1 篇退回修订）；随后同一 rolling run 补跑班后候选池 6 篇 confirmed P3 → 第四期终选 **3 篇**（无退回）；第五期候选池 5 篇 confirmed P3 → 终选 **3 篇**（1 篇退回修订）；第六期候选池 5 篇 confirmed P3 → 终选 **3 篇**（无退回）。共 **27 篇**。每张画报经 Opus 5.5 原文核对（含附录补读）、逐数溯源（SOURCE.md）与实际视觉 QA（QA.md）；27 种版式互不重复。选题全程：[selection 1](../research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](../research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](../research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](../research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](../research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](../research/scoring/runs/rsi-rolling-20261023-01/selection-006.md)。按新到旧排列：
 
 | 论文 | 问题族 | 一句话 |
 |---|---|---|
+| [2610.37255](2610.37255/) Your Policy Is Secretly a Harness | F1/F3 | 冻结比较混了“上限”与“失配”：被拒的批量点击适配后反超；只倒序观测字段成功率 85%→19% |
+| [2610.37651](2610.37651/) GEPA-Curator | F1/F2 | 失败不一定是 prompt 的错：先筛可学任务、配可信成功对照，WebArena 比 GEPA 高 3.4 / 5.0 点 |
+| [2610.34073](2610.34073/) Memory Tax | F1/F5 | 对齐检索量后与原始历史 RAG 比，99 格只有 9 格占优；税来自存丢和找不到 |
 | [2610.35579](2610.35579/) Infinity Machine | F1/F2 | 唯一自改候选因成本被拒、发现全出自初始 genome；评分器被钻 4 次；写反方向的评分穿过全部机器检查 |
 | [2610.34938](2610.34938/) /retro 复盘迁移 | F1/F3 | 复盘改动逐条迁移：只有覆盖到实际遇到实例的 2 条消除目标动作，4 条未减少，不完整清单还添活 |
 | [2610.34238](2610.34238/) Δτ-Bench | F3/F5 | 六版本演化工具生态：成功率掩盖错过的更短路径；按依赖增量维护技能胜过冻结与全量重建 |

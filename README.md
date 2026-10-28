@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 9 → 24 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 12 → 27 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,10 +20,30 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Twenty-four papers, twenty-four distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [Reel index](reel/README.md).
-（24 篇、24 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Twenty-seven papers, twenty-seven distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [Reel index](reel/README.md).
+（27 篇、27 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
 
 <table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.37255/poster.png"><img src="reel/2610.37255/poster.png" width="260" alt="2610.37255 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.37255">2610.37255</a> · Ceiling minus mismatch</b><br>
+A frozen model mixes what a harness offers with how well that checkpoint uses it: batched clicks drop 85.1% → 72.9% frozen, then beat continued training after equal adaptation (88.2% vs 83.4%); reversing observation fields alone drops 85.0% → 19.2%.<br>
+冻结比较混了上限与失配：批量点击冻结时变差、等预算适配后反超；只倒序观测字段，成功率 85.0% → 19.2%。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.37651/poster.png"><img src="reel/2610.37651/poster.png" width="260" alt="2610.37651 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.37651">2610.37651</a> · Curate the failures</b><br>
+One accepted mutation turned a 5-step success into a 30-step failure while the minibatch score rose 8 → 9; curating learnable tasks plus trusted success anchors beats GEPA by 3.4 / 5.0 points on held-out WebArena.<br>
+一次被接受的变异让可解任务 5 步成功变 30 步失败；先筛可学任务、配可信成功对照，held-out 上比 GEPA 高 3.4 / 5.0 点。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.34073/poster.png"><img src="reel/2610.34073/poster.png" width="260" alt="2610.34073 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.34073">2610.34073</a> · Memory tax</b><br>
+Against retrieval over the same raw history, only 9 of 99 system × benchmark × backbone cells come out ahead; the tax comes from evidence lost in construction and evidence stored but hard to retrieve.<br>
+与直接检索同一原始历史相比，99 格只有 9 格占优；税来自构建时丢失和存了却难检出。
+</td>
+</tr>
 <tr>
 <td width="33%" align="center" valign="top">
 <a href="reel/2610.34938/poster.png"><img src="reel/2610.34938/poster.png" width="260" alt="2610.34938 poster"></a><br>

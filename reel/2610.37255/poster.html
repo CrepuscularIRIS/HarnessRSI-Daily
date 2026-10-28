@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>冻结比较的盲区</title>
+<style>
+  :root {
+    --board: #28433a; --board2: #2f4c42; --frame: #6e4a2c; --frame2: #4f331d;
+    --chalk: #f2f0e6; --muted: #c3cfc6; --dim: #93a69a;
+    --yellow: #f3d677; --pink: #f3a79f; --blue: #a7d3ee; --mint: #b6e2a6; --line: rgba(242,240,230,.35);
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1600px; height: 2263px; overflow: hidden; position: relative;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; color: var(--chalk);
+    font-size: 19px; line-height: 1.5;
+    background: var(--frame);
+  }
+  .board {
+    position: absolute; inset: 22px; border: 6px solid var(--frame2); border-radius: 4px;
+    background:
+      radial-gradient(ellipse 700px 380px at 20% 12%, rgba(255,255,255,.05), transparent 70%),
+      radial-gradient(ellipse 600px 500px at 82% 55%, rgba(255,255,255,.04), transparent 70%),
+      radial-gradient(ellipse 900px 400px at 40% 92%, rgba(255,255,255,.035), transparent 70%),
+      var(--board);
+    box-shadow: inset 0 0 60px rgba(0,0,0,.45);
+    padding: 26px 46px 0 46px;
+  }
+  .kai { font-family: "AR PL KaitiM GB", "Noto Serif CJK SC", serif; }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  .math { font-family: "Latin Modern Math", "DejaVu Serif", serif; }
+  .meta { display: flex; justify-content: space-between; font-size: 15.5px; color: var(--dim); letter-spacing: .04em; }
+  h1 { font-family: "AR PL KaitiM GB", "Noto Serif CJK SC", serif; font-weight: 400; font-size: 58px; line-height: 1.18; margin: 6px 0 6px; color: #fffdf3; letter-spacing: .02em; }
+  h1 em { font-style: normal; color: var(--yellow); }
+  .sub { font-size: 20px; color: var(--muted); margin: 0 0 4px; }
+  .sub b { color: var(--chalk); }
+  .rule { border: 0; border-top: 2px dashed var(--line); margin: 18px 0 20px; }
+  .grid { display: grid; gap: 22px; }
+  .sec { padding: 0; }
+  .sh { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .sh .no { font-family: "DejaVu Sans Mono", monospace; font-size: 16px; color: var(--board); background: var(--yellow); padding: 0 7px; border-radius: 2px; }
+  .sh h2 { font-family: "AR PL KaitiM GB", "Noto Serif CJK SC", serif; font-weight: 400; font-size: 32px; margin: 0; line-height: 1.2; color: #fffdf3; }
+  p { margin: 0 0 8px; }
+  .note { font-size: 14.5px; color: var(--dim); line-height: 1.45; }
+  .y { color: var(--yellow); } .p { color: var(--pink); } .b { color: var(--blue); } .g { color: var(--mint); }
+  .eq { border: 2px solid var(--chalk); border-radius: 10px; padding: 10px 16px; margin: 6px 0 10px; font-size: 22px; text-align: center; background: rgba(0,0,0,.12); }
+  .eq .big { font-size: 34px; font-family: "Latin Modern Math", "DejaVu Serif", serif; }
+  table.t { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+  table.t th { font-size: 14.5px; color: var(--muted); text-align: left; border-bottom: 2px solid var(--line); padding: 4px 8px; font-weight: 400; }
+  table.t td { border-bottom: 1px dashed rgba(242,240,230,.22); padding: 4px 8px; vertical-align: top; }
+  table.t td.n { font-family: "DejaVu Sans Mono", monospace; text-align: right; white-space: nowrap; }
+  table.t tr.hl td { color: var(--yellow); }
+  ul.lim { margin: 4px 0 0; padding-left: 22px; }
+  ul.lim li { font-size: 16.5px; margin-bottom: 6px; line-height: 1.45; }
+  .take { border: 2px dashed var(--yellow); border-radius: 8px; padding: 10px 16px; font-size: 17px; line-height: 1.55; margin-top: 10px; }
+  .bars .r { display: grid; grid-template-columns: 150px 1fr 92px; align-items: center; gap: 10px; margin: 5px 0; font-size: 16.5px; }
+  .bars .track { height: 22px; border: 1px solid var(--line); border-radius: 3px; position: relative; }
+  .bars .fill { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(110deg, rgba(242,240,230,.75) 0 6px, rgba(242,240,230,.55) 6px 9px); border-radius: 2px; }
+  .bars .fill.bad { background: repeating-linear-gradient(110deg, rgba(243,167,159,.85) 0 6px, rgba(243,167,159,.6) 6px 9px); }
+  .bars .cc { position: absolute; right: 6px; top: -1px; font-size: 13.5px; color: var(--board); font-family: "DejaVu Sans Mono", monospace; }
+  .bars .v { font-family: "DejaVu Sans Mono", monospace; text-align: right; }
+  footer { position: absolute; left: 74px; right: 74px; bottom: 36px; font-size: 13.5px; color: var(--dim); border-top: 1px dashed var(--line); padding-top: 7px; display: flex; justify-content: space-between; gap: 18px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="meta"><span>arXiv:2610.37255v1 · cs.LG · 2026-10-27 · Mu, Shen, Shu（HKUST-GZ / HKUST）</span><span>HarnessRSI Daily · Reel 第六期 · F1 归因 / F3 迁移</span></div>
+  <h1>用冻结模型挑 harness，<br>为什么会把<em>更好的那个</em>拒掉？</h1>
+  <p class="sub">Your Policy Is Secretly a Harness: The Decision Geometry of Agent Interfaces —— <b>部署回报 = harness 的上限 − 这份权重的失配</b>。冻结比较把两项混在一起。</p>
+  <hr class="rule">
+
+  <div class="grid" style="grid-template-columns: 700px 1fr;">
+    <section class="sec">
+      <div class="sh"><span class="no">01</span><h2>一个恒等式，两类改动</h2></div>
+      <div class="eq"><span class="big">J = C − M</span><br>
+        <span style="font-size:17px"><span class="y">C 上限</span>：该 harness 下任何策略能拿到的最优（KL 正则）回报，与权重无关<br>
+        <span class="p">M 失配</span>：这份 checkpoint 沿自己轨迹偏离最优策略所丢的回报（KL 累积）</span></div>
+      <p>训练只改 <span class="p">M</span>；换 harness 会同时动 <span class="y">C</span> 和 <span class="p">M</span>。所以“同一权重在新旧 harness 下比分数”，测的是“新 harness 给得多 + 这份权重用得好”的混合。</p>
+      <p class="note">§2、§5.2 Eq.(8)–(9)；正则化 performance-gap 恒等式（Geist 2019；O’Donoghue 2022）。作者另证：最优策略的 log odds 恰好复原该 harness 诱导的相对动作分数（Prop. 3.1）。</p>
+    </section>
+    <section class="sec">
+      <div class="sh"><span class="no">02</span><h2>能精确算账的受控场</h2></div>
+      <p>MiniWoB++ 三类任务 × <b>六个 harness</b>，各自编译成有限状态图，软 Bellman 求出精确最优；每个动作对应菜单里一个 token，模型下一 token 分布就是它的策略。</p>
+      <table class="t">
+        <tr><th>ID</th><th>相对 H0 的改动</th></tr>
+        <tr><td class="mono">H0</td><td>每次决策一个原生点击 / 提交</td></tr>
+        <tr><td class="mono">H1</td><td>加“批量点击”：一次决策执行两次点击</td></tr>
+        <tr><td class="mono">H2–H4</td><td>自动闸门 / 程序校验工具 / 冻结 LM 审核工具</td></tr>
+        <tr><td class="mono">H5</td><td>动作不变，只加系统指令</td></tr>
+      </table>
+      <p class="note" style="margin-top:6px">Qwen3.5-2B + LoRA，精确策略梯度 1,024 步；冻结基座作参考策略；测试 576 个未参与更新的任务。§2、附录 F.1 Table 4–6。</p>
+    </section>
+  </div>
+  <hr class="rule">
+
+  <section class="sec">
+    <div class="sh"><span class="no">03</span><h2>批量点击：冻结时变差，适配后最好</h2><span class="note">纵轴：KL 正则回报 J（附录 F.3 Table 8 重绘）。山顶 = 上限 C，粉笔点 = 实际回报 J，粉线 = 失配 M。</span></div>
+    <svg width="1496" height="430" viewBox="0 0 1496 430" font-family="Noto Sans CJK SC, sans-serif">
+      <!-- axis: y(v)=380-(v-0.28)*1888.9 -->
+      <g stroke="rgba(242,240,230,.35)" stroke-width="1" fill="none">
+        <line x1="70" y1="20" x2="70" y2="384"/>
+        <line x1="70" y1="380" x2="1180" y2="380" stroke-dasharray="4 5"/>
+      </g>
+      <g fill="#93a69a" font-size="14" font-family="DejaVu Sans Mono, monospace" text-anchor="end">
+        <text x="62" y="384">0.28</text><text x="62" y="290">0.33</text><text x="62" y="195">0.38</text><text x="62" y="101">0.43</text><text x="62" y="44">0.46</text>
+      </g>
+      <g stroke="rgba(242,240,230,.15)"><line x1="66" y1="285.6" x2="1180" y2="285.6"/><line x1="66" y1="191.1" x2="1180" y2="191.1"/><line x1="66" y1="96.7" x2="1180" y2="96.7"/></g>
+      <!-- source pair J line -->
+      <line x1="70" y1="110.1" x2="1180" y2="110.1" stroke="#f3d677" stroke-width="1.5" stroke-dasharray="7 6"/>
+      <text x="850" y="134" fill="#f3d677" font-size="14">源对回报 0.423</text><text x="850" y="153" fill="#f3d677" font-size="13">（H0 训练 · H0 部署）</text>
+
+      <!-- column helper: mountain base y=400 -->
+      <!-- col1 x=200: C1=0.43774 y=82.0 ; J=0.42289 y=110.1 -->
+      <polygon points="120,400 200,82 280,400" fill="rgba(242,240,230,.06)" stroke="#f2f0e6" stroke-width="2"/>
+      <line x1="200" y1="82" x2="200" y2="110.1" stroke="#f3a79f" stroke-width="5"/>
+      <circle cx="200" cy="110.1" r="8" fill="#f2f0e6"/>
+      <!-- col2 x=480: C2=0.45022 y=58.5 ; J=0.31285 y=317.9 -->
+      <polygon points="400,400 480,58.5 560,400" fill="rgba(167,211,238,.08)" stroke="#a7d3ee" stroke-width="2"/>
+      <line x1="480" y1="58.5" x2="480" y2="317.9" stroke="#f3a79f" stroke-width="5"/>
+      <circle cx="480" cy="317.9" r="8" fill="#f2f0e6"/>
+      <!-- col3 x=760: H0 continuation C1 y=82 J=0.42294 y=110.0 -->
+      <polygon points="680,400 760,82 840,400" fill="rgba(242,240,230,.06)" stroke="#f2f0e6" stroke-width="2"/>
+      <line x1="760" y1="82" x2="760" y2="110" stroke="#f3a79f" stroke-width="5"/>
+      <circle cx="760" cy="110" r="8" fill="#f2f0e6"/>
+      <!-- col4 x=1040: H1 adapted C2 y=58.5 J=0.43133 y=94.2 -->
+      <polygon points="960,400 1040,58.5 1120,400" fill="rgba(167,211,238,.08)" stroke="#a7d3ee" stroke-width="2"/>
+      <line x1="1040" y1="58.5" x2="1040" y2="94.2" stroke="#f3a79f" stroke-width="5"/>
+      <circle cx="1040" cy="94.2" r="9" fill="#f3d677"/>
+
+      <!-- labels -->
+      <g font-size="15" fill="#f2f0e6">
+        <text x="214" y="140">J 0.423</text><text x="214" y="160" fill="#f3a79f">M 0.015</text>
+        <text x="494" y="54" fill="#a7d3ee">C +0.012</text>
+        <text x="494" y="200" fill="#f3a79f">M 0.137</text><text x="494" y="220" fill="#f3a79f">（+0.123）</text>
+        <text x="494" y="322">J 0.313</text>
+        <text x="774" y="140">J 0.423</text><text x="774" y="160" fill="#f3a79f">M 0.015</text>
+        <text x="1056" y="132" fill="#f3d677">J 0.431</text><text x="1056" y="152" fill="#f3a79f">M 0.019 &lt; T 0.027</text>
+      </g>
+      <g font-size="16" fill="#f2f0e6" text-anchor="middle">
+        <text x="200" y="420">① 源 checkpoint · H0</text>
+        <text x="480" y="420">② 同权重搬到 H1（冻结比较）</text>
+        <text x="760" y="420">③ H0 下续训 1,024 步</text>
+        <text x="1040" y="420">④ H1 下适配 1,024 步</text>
+      </g>
+      <g font-size="15" fill="#b6e2a6" text-anchor="middle" font-family="DejaVu Sans Mono, monospace">
+        <text x="200" y="372">成功 85.05%</text><text x="480" y="372">72.90%</text><text x="760" y="372">83.37%</text><text x="1040" y="372">88.17%</text>
+      </g>
+      <!-- arrows -->
+      <g stroke="#f2f0e6" stroke-width="1.6" fill="none" stroke-dasharray="5 5">
+        <path d="M 290 250 C 340 240, 360 260, 395 262"/>
+      </g>
+      <text x="300" y="236" fill="#c3cfc6" font-size="14">换 harness，不动权重</text>
+
+      <!-- right panel: paired CIs -->
+      <g transform="translate(1200,24)">
+        <rect x="0" y="0" width="290" height="372" rx="8" fill="rgba(0,0,0,.18)" stroke="rgba(242,240,230,.35)"/>
+        <text x="16" y="30" fill="#f3d677" font-size="17">配对差（95% 区间）</text>
+        <g font-size="14.5" fill="#f2f0e6">
+          <text x="16" y="62">冻结回报变化</text><text x="274" y="62" text-anchor="end" font-family="DejaVu Sans Mono, monospace" fill="#f3a79f">−0.110</text>
+          <text x="16" y="84" fill="#93a69a" font-family="DejaVu Sans Mono, monospace" font-size="13">[−0.116, −0.104]</text>
+          <text x="16" y="118">④ 对 ① 恢复</text><text x="274" y="118" text-anchor="end" font-family="DejaVu Sans Mono, monospace" fill="#b6e2a6">+0.0084</text>
+          <text x="16" y="140" fill="#93a69a" font-family="DejaVu Sans Mono, monospace" font-size="13">[0.0014, 0.0145]</text>
+          <text x="16" y="174">④ 对 ③ 同预算</text><text x="274" y="174" text-anchor="end" font-family="DejaVu Sans Mono, monospace" fill="#b6e2a6">+0.0084</text>
+          <text x="16" y="196" fill="#93a69a" font-family="DejaVu Sans Mono, monospace" font-size="13">[0.0025, 0.0141]</text>
+          <text x="16" y="230">门槛 T = ΔC + M(①)</text><text x="274" y="230" text-anchor="end" font-family="DejaVu Sans Mono, monospace">0.027</text>
+        </g>
+        <text x="16" y="266" fill="#c3cfc6" font-size="13.5">区间来自任务 bootstrap，</text>
+        <text x="16" y="286" fill="#c3cfc6" font-size="13.5">不是独立训练种子重复。</text>
+        <text x="16" y="318" fill="#c3cfc6" font-size="13.5">适配后：H0 下 0.386，</text>
+        <text x="16" y="338" fill="#c3cfc6" font-size="13.5">同一权重已改为偏好 H1。</text>
+      </g>
+    </svg>
+    <p style="margin-top:2px">新 harness 只把上限抬高 <span class="y">0.012</span>，却让冻结权重的失配多出 <span class="p">0.123</span>：冻结比较会拒掉它。两支从同一权重、同预算、同任务抽样出发；在 H1 下适配到失配低于门槛后，既超过源对，也超过 H0 续训。</p>
+  </section>
+  <hr class="rule">
+
+  <div class="grid" style="grid-template-columns: 640px 1fr;">
+    <section class="sec">
+      <div class="sh"><span class="no">04</span><h2>最优决策不变，只换呈现</h2></div>
+      <p style="font-size:17px">H0 训练后的权重冻结；转移、奖励、参考策略都固定，<b>最优策略与上限数值上完全相同</b>（差 ≤ 2.2×10⁻¹⁶）。只改观测或菜单的写法：</p>
+      <div class="bars">
+        <div class="r"><span>原样</span><div class="track"><div class="fill" style="width:85.0%"></div><span class="cc">0%</span></div><span class="v">85.0%</span></div>
+        <div class="r"><span>菜单改成列表</span><div class="track"><div class="fill" style="width:86.0%"></div><span class="cc">9.2%</span></div><span class="v">86.0%</span></div>
+        <div class="r"><span>动作码置换</span><div class="track"><div class="fill" style="width:67.6%"></div><span class="cc" style="right:auto;left:calc(67.6% + 6px);color:#c3cfc6">25.3%</span></div><span class="v">67.6%</span></div>
+        <div class="r"><span>动作码倒序</span><div class="track"><div class="fill" style="width:68.2%"></div><span class="cc" style="right:auto;left:calc(68.2% + 6px);color:#c3cfc6">30.0%</span></div><span class="v">68.2%</span></div>
+        <div class="r"><span>动作码平移一位</span><div class="track"><div class="fill" style="width:57.1%"></div><span class="cc" style="right:auto;left:calc(57.1% + 6px);color:#c3cfc6">27.7%</span></div><span class="v">57.1%</span></div>
+        <div class="r"><span class="p">观测字段倒序</span><div class="track"><div class="fill bad" style="width:19.2%"></div><span class="cc" style="right:auto;left:calc(19.2% + 6px);color:#f3a79f">52.0%</span></div><span class="v p">19.2%</span></div>
+      </div>
+      <p class="note">条长 = 任务成功率；条内 / 旁数字 = 最可能动作被改变的状态占比。§4.2 Table 1；附录 F.2 Table 7（区间 [17.0, 21.4]）。</p>
+    </section>
+    <section class="sec">
+      <div class="sh"><span class="no">05</span><h2>九次被冻结比较拒掉的换装</h2></div>
+      <svg width="760" height="372" viewBox="0 0 760 372" font-family="Noto Sans CJK SC, sans-serif">
+        <rect x="60" y="20" width="600" height="300" fill="rgba(0,0,0,.12)" stroke="rgba(242,240,230,.3)"/>
+        <line x1="160" y1="20" x2="160" y2="320" stroke="rgba(242,240,230,.3)" stroke-dasharray="3 4"/>
+        <line x1="60" y1="270" x2="660" y2="270" stroke="rgba(242,240,230,.3)" stroke-dasharray="3 4"/>
+        <line x1="60" y1="320" x2="660" y2="20" stroke="#f3d677" stroke-width="1.2" stroke-dasharray="6 5"/>
+        <text x="650" y="308" fill="#f3d677" font-size="13" text-anchor="end">黄虚线：预测 = 实测</text>
+        <g fill="#93a69a" font-size="13" font-family="DejaVu Sans Mono, monospace">
+          <text x="160" y="338" text-anchor="middle">0</text><text x="410" y="338" text-anchor="middle">0.05</text><text x="660" y="338" text-anchor="middle">0.10</text>
+          <text x="56" y="274" text-anchor="end" font-size="12">0</text><text x="56" y="149" text-anchor="end" font-size="12">0.05</text><text x="56" y="28" text-anchor="end" font-size="12">0.10</text>
+        </g>
+        <text x="360" y="366" fill="#c3cfc6" font-size="13.5" text-anchor="middle">适配前的预测增益 T − r₂</text>
+        <text x="20" y="170" fill="#c3cfc6" font-size="13" transform="rotate(-90 20 170)" text-anchor="middle">适配后实测增益</text>
+        <!-- raise ceiling: filled -->
+        <g fill="#f2f0e6">
+          <circle cx="565" cy="57.5" r="7"/><circle cx="585" cy="57.5" r="7"/><circle cx="535" cy="62.5" r="7"/>
+          <circle cx="490" cy="92.5" r="7"/><circle cx="370" cy="157.5" r="7"/><circle cx="355" cy="165" r="7"/>
+        </g>
+        <circle cx="175" cy="250" r="7" fill="none" stroke="#f2f0e6" stroke-width="2.5"/>
+        <!-- lower ceiling -->
+        <g fill="#f3a79f"><circle cx="115" cy="272.5" r="7"/><circle cx="145" cy="275" r="7"/></g>
+        <g font-size="13.5" fill="#f2f0e6">
+          <text x="470" y="40">H1→H5 · H0→H5 · H3→H1</text>
+          <text x="504" y="104">H4→H1</text>
+          <text x="384" y="150">H2→H5</text>
+          <text x="282" y="186">H1→H2</text>
+          <text x="190" y="242">H0→H1（事后预测）</text>
+          <text x="76" y="300" fill="#f3a79f">H4→H3 · H1→H0（降上限）</text>
+        </g>
+      </svg>
+      <p style="font-size:17px;margin-top:-4px">30 个有序换装里冻结比较拒掉 22 个，其中 9 个门槛 T &gt; 0。<b>抬高上限的 7 个适配后全部超过源对；降低上限的 2 个没有收益。</b>8 个事前登记的预测与实测排序 Spearman <span class="y">ρ = 0.95</span>；冻结时的回报变化只有 <span class="p">ρ = 0.17</span>（只看上限差 ρ = 0.86）。</p>
+      <p class="note">§5.3 Fig. 4；附录 F.4 Table 10（据表重绘）。r₂ = 直接在目标 harness 训练的 checkpoint 的失配。</p>
+    </section>
+  </div>
+  <hr class="rule">
+
+  <div class="grid" style="grid-template-columns: 700px 1fr;">
+    <section class="sec">
+      <div class="sh"><span class="no">06</span><h2>搬到编码代理：只看一项会排错</h2></div>
+      <table class="t">
+        <tr><th>harness（冻结 Qwen3.5-9B）</th><th style="text-align:right">C̃</th><th style="text-align:right">M̃</th><th style="text-align:right">C̃ − M̃</th><th style="text-align:right">准确率 %</th></tr>
+        <tr><td>Terminus-2</td><td class="n">0.431</td><td class="n">0.134</td><td class="n">0.297</td><td class="n">64.1 ± 5.1</td></tr>
+        <tr><td>mini-SWE-agent</td><td class="n">0.631</td><td class="n">0.335</td><td class="n">0.296</td><td class="n">59.8 ± 7.8</td></tr>
+        <tr><td>DeepSeek Harness</td><td class="n">0.590</td><td class="n">0.382</td><td class="n">0.208</td><td class="n">54.7 ± 3.9</td></tr>
+        <tr><td>Pi coding-agent</td><td class="n">0.383</td><td class="n">0.206</td><td class="n">0.177</td><td class="n">51.3 ± 2.6</td></tr>
+        <tr><td>DeepAgents</td><td class="n">0.261</td><td class="n">0.429</td><td class="n">−0.168</td><td class="n">47.9 ± 3.9</td></tr>
+        <tr class="hl"><td>与准确率的 Spearman ρ</td><td class="n">0.7</td><td class="n">−0.7</td><td class="n">1.0</td><td class="n"></td></tr>
+      </table>
+      <p class="note" style="margin-top:6px">没有可解的最优，作者用更强的 GPT-5.6-luna 作替身估 C̃、M̃；只在 3 个 Terminal-Bench Lite 探针任务上采样，动作归到 13 个粗类；准确率为 39 题 × 3 次运行。前两名 C̃ − M̃ 几乎相等、准确率区间重叠。§6.3 Table 2；附录 F.7 Table 13。</p>
+    </section>
+    <section class="sec">
+      <div class="sh"><span class="no">07</span><h2>边界</h2></div>
+      <ul class="lim">
+        <li>精确结论来自有限 MiniWoB++ 图、单 token 动作菜单、2B 模型；每支训练只跑一次，区间是任务 bootstrap，不是种子方差。</li>
+        <li>回报差很小（恢复 +0.0084）；成功率与正则回报可以不同向，例如 H2→H5 回报 +0.045 但成功率 −0.5 点。</li>
+        <li>“适配后反超”需要更新权重。对只改 harness、权重永远冻结的闭环，冻结回报就是它实际拿到的；本文改变的是“怎么解读一次冻结比较”。</li>
+        <li>编码代理部分只验证排序，教师不是最优，C̃ 是上限的下界估计。</li>
+      </ul>
+      <div class="take"><span class="y">本项目读法</span>：harness 改动的评测应把上限与冻结分数并列报告，并在多个 checkpoint 上测；只改呈现方式就可能让后训练模型大幅掉分，先排查读出漂移再下结论。</div>
+    </section>
+  </div>
+</div>
+<footer><span>来源：arXiv 2610.37255v1 正文 §1–§7、附录 F.1–F.8；图均为据原文表格重绘，非原图。未复现实验。</span><span>选题 selection-006 · 原文核对 Opus 5.5 · 档位为阅读判断，非审稿结论</span></footer>
+</body>
+</html>
