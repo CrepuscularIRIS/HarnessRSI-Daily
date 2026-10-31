@@ -92,3 +92,11 @@
 - selection-006 后新增 confirmed P3：9 篇 ≥3 → 第七期选题。终选 3 篇（39122 赞美训练劫持 / 38392 冗余护栏掩蔽侵蚀 / 37201 BiPA 轮次成本归因），均过视觉 QA（各 2–3 轮修复）；36826 上期理由仍成立继续落选。见 selection-007.md。累计 30 张。
 - Correction C-007-1（40023 HEMO 记忆预载非同条件）已退回 Sol 修订：inc-l2-09-rev1-40023.jsonl → q4_fit=partial / pending_experiment / park（保留 P3/high）。原记录保留。
 - 隔夜收集 +5 未评（06:17 巡检班丢失），12:17 班补。
+
+## 2026-10-31 12:17 巡检班
+
+- 新增：4 篇（inbox/2026-10-31-0840，corpus 1665→1669，全文 4/4，材料 4/4 abstract_intro）。
+- L1：inc-l1-08 4/4（assessed 3，out_of_scope 1：38266；to_l2 3 全 medium）。
+- L2：inc-l2-11 5/5（本班 to_l2 3 + 欠账补抽 2；遗留 high 0）。改判 2 篇 P2→P3（08671、39276）。**1 篇 P3/confirmed/to_l3**（39276 MemSteer）；08671 P3/pending_experiment/park（缺隔离机制新实验，另有首版与 v4 贡献边界待核）；39446 P2/park。补抽 32412、30017 均维持 P2，漏检改判 0。
+- 漏检抽查：seed=20261043，本班名额 0（预算 3×10%），欠账 2.6→补抽 2（池 2 全抽），余 ~0.9 滚存。
+- to_l3 池：selection-007 用 9 篇后剩 0 + 本班 1 = 1 篇 <3 → 明晨 Opus 班预计跳过。
