@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>技能优化的账单</title>
+<style>
+  :root { --counter: #2c3a47; --counter2: #36485a; --paper: #fffdf7; --ink: #23211d; --muted: #6d675c; --navy: #1f3b63; --org: #d0661e; --red: #b23a2e; --green: #2f7a4f; }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { width: 1600px; height: 2263px; overflow: hidden; color: var(--ink); font-size: 18.5px; line-height: 1.52;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif;
+    background: var(--counter); }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  .top { padding: 28px 54px 14px; color: #eef2f6; }
+  .top .meta { display: flex; justify-content: space-between; font-size: 14.5px; color: #a9b8c7; font-family: "DejaVu Sans Mono", monospace; }
+  .top h1 { font-size: 50px; line-height: 1.2; margin: 10px 0 8px; font-weight: 900; }
+  .top h1 em { font-style: normal; color: #ffc46b; }
+  .top .sub { font-size: 19px; color: #d6dee7; margin: 0; max-width: 1480px; }
+  .grid { display: grid; gap: 22px; padding: 0 54px; }
+  .rc { background: var(--paper); position: relative; padding: 16px 22px 24px; outline: 1px solid #1d2731; }
+  .rc::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; border-top: 8px dotted var(--paper); }
+  .rc .hd { font-family: "DejaVu Sans Mono", monospace; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; border-bottom: 2px dashed #bdb6a8; padding-bottom: 4px; margin-bottom: 8px; }
+  h2 { font-size: 26px; margin: 0 0 6px; line-height: 1.25; font-weight: 900; }
+  p { margin: 0 0 6px; }
+  .note { font-size: 14px; color: var(--muted); line-height: 1.45; }
+  .dash { border-top: 2px dashed #bdb6a8; margin: 8px 0; }
+  .line { display: flex; justify-content: space-between; gap: 12px; font-size: 16.5px; padding: 2px 0; }
+  .line .v { font-family: "DejaVu Sans Mono", monospace; white-space: nowrap; }
+  .tot { display: flex; justify-content: space-between; font-family: "DejaVu Sans Mono", monospace; font-weight: 700; font-size: 22px; border-top: 3px double var(--ink); padding-top: 4px; margin-top: 6px; }
+  .r { color: var(--red); } .g { color: var(--green); } .n { color: var(--navy); } .o { color: var(--org); }
+  .tagill { font-size: 12.5px; background: #fff0c4; color: #7a5600; border-radius: 3px; padding: 0 6px; font-weight: 600; font-family: "Noto Sans CJK SC", sans-serif; }
+  ul, ol { margin: 2px 0; padding-left: 22px; } li { font-size: 16.5px; margin: 2px 0; }
+  .ticket { background: #fff3d6; border: 2px solid #c98a1a; border-radius: 8px; padding: 10px 24px; position: relative; }
+  .ticket::before, .ticket::after { content: ""; position: absolute; top: 50%; width: 22px; height: 22px; background: var(--paper); border: 2px solid #c98a1a; border-radius: 50%; transform: translateY(-50%); }
+  .ticket::before { left: -13px; clip-path: inset(0 0 0 50%); } .ticket::after { right: -13px; clip-path: inset(0 50% 0 0); }
+  .bar { height: 20px; display: inline-block; vertical-align: -4px; }
+  .foot { position: absolute; left: 54px; right: 54px; bottom: 16px; color: #a9b8c7; font-size: 13.5px; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="meta"><span>HarnessRSI Daily · 第七期 · 收银台</span><span>arXiv:2610.37201v1 · cs.AI · 2026-10-27 · Zhou, Peng, Huang, Zhang, Sun, Wang, Lu（上海 AI Lab 等）</span></div>
+  <h1>技能优化器报出的增益是<em>选出来的</em>还是学出来的？多出来的费用又记在哪一行？</h1>
+  <p class="sub">GEPA、SkillOpt、SkillAdam 改写放进上下文的“技能”文本，在 ≤ 30 个开发任务（TB2 只有 9 个）上分数更高就保留。长时程任务成功率噪声大、上下文每回合重发——BiPA 不改优化器，只用日志回答两件事：<b>开发增益里有多少是挑选本身造成的</b>；<b>多读的 token 来自哪种行为</b>。</p>
+</div>
+
+<div class="grid" style="grid-template-columns: 1.12fr 1fr;">
+  <div class="rc">
+    <div class="hd"><span>小票 01 · 测试结果（avg@3）</span><span>Table 1 · 附录 C.1–C.2</span></div>
+    <h2>16 个学到的技能：成功率不动，读的更多</h2>
+    <svg width="760" height="518" viewBox="0 0 640 436" font-family="Noto Sans CJK SC, sans-serif">
+<line x1="109.1" y1="40" x2="109.1" y2="390" stroke="#e5e1d8"/><text x="109.1" y="408" text-anchor="middle" font-size="12.5" fill="#666">1.0×</text>
+<line x1="207.3" y1="40" x2="207.3" y2="390" stroke="#e5e1d8"/><text x="207.3" y="408" text-anchor="middle" font-size="12.5" fill="#666">1.1×</text>
+<line x1="305.5" y1="40" x2="305.5" y2="390" stroke="#e5e1d8"/><text x="305.5" y="408" text-anchor="middle" font-size="12.5" fill="#666">1.2×</text>
+<line x1="403.6" y1="40" x2="403.6" y2="390" stroke="#e5e1d8"/><text x="403.6" y="408" text-anchor="middle" font-size="12.5" fill="#666">1.3×</text>
+<line x1="501.8" y1="40" x2="501.8" y2="390" stroke="#e5e1d8"/><text x="501.8" y="408" text-anchor="middle" font-size="12.5" fill="#666">1.4×</text>
+<line x1="600.0" y1="40" x2="600.0" y2="390" stroke="#e5e1d8"/><text x="600.0" y="408" text-anchor="middle" font-size="12.5" fill="#666">1.5×</text>
+<line x1="60" y1="390.0" x2="600" y2="390.0" stroke="#e5e1d8"/><text x="54" y="394.0" text-anchor="end" font-size="12.5" fill="#666">-12</text>
+<line x1="60" y1="320.0" x2="600" y2="320.0" stroke="#e5e1d8"/><text x="54" y="324.0" text-anchor="end" font-size="12.5" fill="#666">-8</text>
+<line x1="60" y1="250.0" x2="600" y2="250.0" stroke="#e5e1d8"/><text x="54" y="254.0" text-anchor="end" font-size="12.5" fill="#666">-4</text>
+<line x1="60" y1="180.0" x2="600" y2="180.0" stroke="#999"/><text x="54" y="184.0" text-anchor="end" font-size="12.5" fill="#666">+0</text>
+<line x1="60" y1="110.0" x2="600" y2="110.0" stroke="#e5e1d8"/><text x="54" y="114.0" text-anchor="end" font-size="12.5" fill="#666">+4</text>
+<line x1="60" y1="40.0" x2="600" y2="40.0" stroke="#e5e1d8"/><text x="54" y="44.0" text-anchor="end" font-size="12.5" fill="#666">+8</text>
+<line x1="109.1" y1="40" x2="109.1" y2="390" stroke="#999"/>
+<circle cx="442.9" cy="213.2" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="453.9" y="217.2" text-anchor="start" font-size="12.5" fill="#1f3b63">TB2·G</text>
+<circle cx="531.3" cy="374.2" r="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="542.3" y="378.2" text-anchor="start" font-size="12.5" fill="#1f3b63">TB2·O</text>
+<circle cx="472.4" cy="309.5" r="8" fill="#1f3b63" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="483.4" y="313.5" text-anchor="start" font-size="12.5" fill="#1f3b63">TB2·A</text>
+<circle cx="256.4" cy="195.8" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="267.4" y="199.8" text-anchor="start" font-size="12.5" fill="#1f3b63">τ3·G</text>
+<circle cx="325.1" cy="132.8" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="336.1" y="136.8" text-anchor="start" font-size="12.5" fill="#1f3b63">τ3·O</text>
+<circle cx="197.5" cy="202.8" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="186.5" y="214.8" text-anchor="end" font-size="12.5" fill="#1f3b63">τ3·A</text>
+<circle cx="315.3" cy="194.0" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="326.3" y="198.0" text-anchor="start" font-size="12.5" fill="#1f3b63">Auto·G</text>
+<circle cx="354.5" cy="237.8" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="365.5" y="241.8" text-anchor="start" font-size="12.5" fill="#1f3b63">Auto·O</text>
+<circle cx="187.6" cy="185.2" r="8" fill="#fffdf7" stroke="#1f3b63" stroke-width="2.4"/>
+<text x="176.6" y="181.2" text-anchor="end" font-size="12.5" fill="#1f3b63">Auto·A</text>
+<circle cx="305.5" cy="76.8" r="8" fill="#fffdf7" stroke="#d0661e" stroke-width="2.4"/>
+<text x="294.5" y="80.8" text-anchor="end" font-size="12.5" fill="#d0661e">TB2·A</text>
+<circle cx="148.4" cy="250.0" r="8" fill="#fffdf7" stroke="#d0661e" stroke-width="2.4"/>
+<text x="137.4" y="244.0" text-anchor="end" font-size="12.5" fill="#d0661e">τ3·G</text>
+<circle cx="118.9" cy="288.5" r="8" fill="#fffdf7" stroke="#d0661e" stroke-width="2.4"/>
+<text x="129.9" y="292.5" text-anchor="start" font-size="12.5" fill="#d0661e">τ3·O</text>
+<circle cx="158.2" cy="257.0" r="8" fill="#fffdf7" stroke="#d0661e" stroke-width="2.4"/>
+<text x="168.2" y="271.0" text-anchor="start" font-size="12.5" fill="#d0661e">τ3·A</text>
+<circle cx="177.8" cy="106.5" r="8" fill="#fffdf7" stroke="#d0661e" stroke-width="2.4"/>
+<text x="188.8" y="110.5" text-anchor="start" font-size="12.5" fill="#d0661e">Auto·G</text>
+<circle cx="354.5" cy="82.0" r="8" fill="#fffdf7" stroke="#d0661e" stroke-width="2.4"/>
+<text x="365.5" y="86.0" text-anchor="start" font-size="12.5" fill="#d0661e">Auto·O</text>
+<circle cx="423.3" cy="68.0" r="8" fill="#d0661e" stroke="#d0661e" stroke-width="2.4"/>
+<text x="434.3" y="72.0" text-anchor="start" font-size="12.5" fill="#d0661e">Auto·A</text>
+
+      <text x="330" y="431" text-anchor="middle" font-size="13" fill="#555">每任务输入 token 相对种子技能 ρ（几何均值）</text>
+      <text x="64" y="22" font-size="13" fill="#555">↑ 测试成功率 − 种子（百分点）</text>
+    </svg>
+    <p style="font-size:14.5px;margin:0"><b class="n">●</b> DeepSeek-V4.1-Flash　<b class="o">●</b> GPT-6-Luna　· 标签：基准·优化器（G = GEPA，O = SkillOpt，A = SkillAdam）<br>实心：与种子的差距超过种子自身三次测试运行的极差（附录 C.2）</p>
+    <div class="dash"></div>
+    <div class="line"><span>16 个技能合计 vs 种子（单侧 95% 上界）</span><span class="v">+0.1 点（+1.6）</span></div>
+    <div class="line"><span>DeepSeek 9 个合计</span><span class="v">−1.4 点（+0.6）</span></div>
+    <div class="line"><span>输入 token 比 ρ（16 个合计）</span><span class="v r">1.16×</span></div>
+    <p class="note" style="margin-top:4px">Luna 在 TB2 上 GEPA、SkillOpt 都返回了种子，故 18 个运行只有 16 个技能。唯一<b>真涨</b>的是 Luna 的 AutoBench（+4.2 至 +6.4；只有 SkillAdam 的 +6.4 超过种子极差 5.8）。DeepSeek 9 个技能里 8 个的<b>每次</b>测试运行都比种子任何一次读得多。</p>
+  </div>
+
+  <div style="display:grid; gap:22px; align-content:start;">
+    <div class="rc">
+      <div class="hd"><span>小票 02 · 选择回放</span><span>§4.1 · Fig. 3 · 附录 C.3–C.4</span></div>
+      <h2>把“候选”换成没改过的种子，照样中奖</h2>
+      <p style="font-size:16.5px">按每次运行实际的候选数与接受规则，把每个候选都当作<b>原封不动的种子</b>重新打分 10 万次，看仅靠挑选能报出多大的开发增益 G₀。</p>
+      <div class="ticket">
+        <div class="line"><span>DeepSeek · SkillOpt / GEPA 报告增益被回放达到的概率</span><span class="v">0.56–0.94</span></div>
+        <div class="line"><span>DeepSeek · SkillAdam（TB2 / τ³ / AutoBench）</span><span class="v">0.25 / 0.87 / 0.88</span></div>
+        <div class="line"><span>Luna（多种任务模型）</span><span class="v">0.21–0.99</span></div>
+      </div>
+      <p class="note" style="margin-top:8px">回放依赖两条假设（给定难度后各回合独立；任务难度服从同一 Beta），且 DeepSeek 的 SkillOpt/GEPA 都从种子<b>最低的那次</b>开发得分起算；若起点随机抽取，τ³ 上的报告增益就变得少见（P = 0.02–0.17）。</p>
+      <div class="dash"></div>
+      <div class="line"><span>单次赢就收：误收未改动候选</span><span class="v r">24–41%</span></div>
+      <div class="line"><span>要求赢两次：误收 / 真 +2 任务保留</span><span class="v g">6–17% / 55–94%</span></div>
+      <p class="note">模拟结果，不是在新优化循环里实测。</p>
+    </div>
+    <div class="rc">
+      <div class="hd"><span>小票 03 · 覆盖面</span><span>§5.2 Finding 3 · 附录 F.2</span></div>
+      <h2>技能让会做的更稳，不让新的变会</h2>
+      <div class="line"><span>种子 vs 无技能：新覆盖 / 丢失任务</span><span class="v">36 / 13（p = .001）</span></div>
+      <div class="line"><span>学到的技能 vs 种子：新覆盖 / 丢失</span><span class="v">57 / 62</span></div>
+      <p class="note">“覆盖”= 三次测试至少成功一次。成功率上升的任务里，三次回合的工具序列更一致（Mantel–Haenszel OR 1.61，p = .03）。</p>
+    </div>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns: 1fr 1fr; margin-top: 30px;">
+  <div class="rc">
+    <div class="hd"><span>小票 04 · 计费方式</span><span>§4.2–4.4 · Prop. 1 · Finding 8</span></div>
+    <h2>多一回合，多付的不止一回合 <span class="tagill">示意</span></h2>
+    <svg width="680" height="210" viewBox="0 0 680 210" font-family="Noto Sans CJK SC, sans-serif" font-size="13">
+      <!-- staircase: 8 turns, prefix F=30px, h=14px per turn -->
+      <g>
+        <rect x="20"  y="160" width="52" height="30" fill="#9db4cf"/>
+        <rect x="80"  y="146" width="52" height="30" fill="#9db4cf"/><rect x="80" y="176" width="52" height="14" fill="#e9b98d"/>
+        <rect x="140" y="132" width="52" height="30" fill="#9db4cf"/><rect x="140" y="162" width="52" height="28" fill="#e9b98d"/>
+        <rect x="200" y="118" width="52" height="30" fill="#9db4cf"/><rect x="200" y="148" width="52" height="42" fill="#e9b98d"/>
+        <rect x="260" y="104" width="52" height="30" fill="#9db4cf"/><rect x="260" y="134" width="52" height="56" fill="#e9b98d"/>
+        <rect x="320" y="90"  width="52" height="30" fill="#9db4cf"/><rect x="320" y="120" width="52" height="70" fill="#e9b98d"/>
+        <rect x="380" y="76"  width="52" height="30" fill="#9db4cf"/><rect x="380" y="106" width="52" height="84" fill="#e9b98d"/>
+        <rect x="440" y="62"  width="52" height="30" fill="none" stroke="#b23a2e" stroke-width="2.5" stroke-dasharray="5 3"/><rect x="440" y="92" width="52" height="98" fill="none" stroke="#b23a2e" stroke-width="2.5" stroke-dasharray="5 3"/>
+      </g>
+      <line x1="14" y1="190" x2="500" y2="190" stroke="#555"/>
+      <g fill="#555" text-anchor="middle"><text x="46" y="205">回合 1</text><text x="226" y="205">4</text><text x="406" y="205">7</text><text x="466" y="205" fill="#b23a2e">+1 回合</text></g>
+      <g font-size="13.5"><rect x="520" y="70" width="14" height="12" fill="#9db4cf"/><text x="540" y="81">前缀 F（技能+提示）</text><rect x="520" y="94" width="14" height="12" fill="#e9b98d"/><text x="540" y="105">历史（每回合 +h）</text>
+      <text x="520" y="136" font-family="DejaVu Sans Mono, monospace" font-size="14">X = R·F + R(R−1)h/2</text><text x="520" y="160" font-family="DejaVu Sans Mono, monospace" font-size="14">1 &lt; e_R &lt; 2</text><text x="520" y="180" fill="#555">回合弹性（不压缩历史）</text></g>
+    </svg>
+    <p style="font-size:16.5px">每回合都把前缀和全部历史重发一遍：回合多 1%，输入 token 至少多 1%，长回合接近 2%。实测同一任务内回合每多 10%，输入 token 多约 14–16%（斜率 1.35–1.58），而输出 token 与工具调用斜率 ≤ 1.03。</p>
+    <div class="dash"></div>
+    <div class="line"><span>DeepSeek 9 个技能多出的 log 输入 token：来自多出的回合</span><span class="v r">73%</span></div>
+    <div class="line"><span>来自更长的技能文本</span><span class="v">21%</span></div>
+    <div class="line"><span>59 次编辑：回合变化 / 工具调用变化 / 文本长度变化解释的方差</span><span class="v">93% / 79% / 10%</span></div>
+    <p class="note">示意图为本项目按原文 Eq.(3) 绘制的阶梯，不是实验数据。四项拆分只在双方 6 个回合都可用的任务上算；按字符比例把 token 分摊到上下文组件。</p>
+  </div>
+
+  <div class="rc">
+    <div class="hd"><span>小票 05 · 编辑器写了什么</span><span>§5.3 Findings 6–7 · 附录 E.1–E.3</span></div>
+    <h2>只加规则，没有一条叫它少读</h2>
+    <div class="line"><span>59 次可追溯父代的编辑中，让技能变长的</span><span class="v">58</span></div>
+    <div class="line"><span>DeepSeek 9 个技能新增规则（每个平均 37 条，最多 105）</span><span class="v">337</span></div>
+    <div class="line"><span>　其中“再核对一遍”（verify）</span><span class="v"><span class="bar" style="width:156px;background:#1f3b63"></span> 52%</span></div>
+    <div class="line"><span>　“一次只做一个调用”（serialize）</span><span class="v"><span class="bar" style="width:16px;background:#d0661e"></span> 18 条</span></div>
+    <div class="line"><span>　“少读 / 只读需要的部分”</span><span class="v r">0 条</span></div>
+    <div class="dash"></div>
+    <div class="line"><span>被保留 vs 被拒的编辑，输入 token 平均涨幅</span><span class="v">~10% vs ~14%（p = .46）</span></div>
+    <div class="line"><span>不降开发成功率又不增 token 的编辑</span><span class="v">5 / 59</span></div>
+    <div class="line"><span>AutoBench：写操作与别的写操作同回合（种子 → 学到的技能）</span><span class="v">56% → ≤ 0.3%</span></div>
+    <p class="note">串行写有其道理：AutoBench 每次写都整体读改存模拟世界，并发写会互相覆盖——把所有调用按种子的密度打包，AutoBench 的 log ρ 从 0.17 减半到 0.08，大头正是这些写。也就是说，并非每个多出的回合都是浪费。</p>
+    <div class="dash"></div>
+    <h2 style="font-size:21px">换模型、换基准：增益不跟走，费用跟走</h2>
+    <p style="font-size:16px">迁移的 9 个技能只有 1 个高于种子（+1.9）；DeepSeek 学的 τ³ 技能在 Luna 上仍读 1.08–1.38×，TB2 技能在 AutoBench 上读 1.24–1.49×。</p>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns: 1fr 1fr 1fr; margin-top: 40px;">
+  <div class="rc">
+    <div class="hd"><span>作者建议 · 四条设计原则</span><span>§6</span></div>
+    <ol>
+      <li>增益超过“仅靠挑选会报出的增益”才收；分不出成功率时，按超出运行间差异的 token 差来定。</li>
+      <li>按编辑<b>新增的回合</b>计费，而不是按文本长度。</li>
+      <li>允许编辑器<b>删除与合并</b>规则（DeepSeek 59 次编辑只缩短过 1 次）。</li>
+      <li>让编辑器看到之前规则<b>花了多少回合与 token</b>。</li>
+    </ol>
+    <p class="note">账单换算也不翻转结论：按缓存价计费仍为种子的 1.05–1.27×；按“只付本回合新增历史”重算（压缩历史的近似），回合斜率降到约 1.04，但每个技能仍是 1.05–1.36×。</p>
+  </div>
+  <div class="rc">
+    <div class="hd"><span>附加实验 · 三词种子</span><span>附录 C.5（Luna，各一次）</span></div>
+    <h2 style="font-size:22px">从“Solve the task.”出发会怎样</h2>
+    <div class="line"><span>AutoBench：三词 → O / G</span><span class="v">25.0 → 43.3 / 44.4</span></div>
+    <div class="line"><span>　对照：从手写种子出发</span><span class="v">42.8 / 41.4</span></div>
+    <div class="line"><span>τ³：返回技能</span><span class="v">60.0 / 68.0</span></div><div class="line"><span>　对照：三词种子两次测试</span><span class="v">65.3 / 68.0</span></div>
+    <p class="note" style="margin-top:4px">一次改写就追平从手写种子出发的结果，再改写也不再提高；AutoBench 上 18.3 / 19.4 点增益中各有 16.7 点来自无技能或手写种子至少做对过一次的 63 个任务。τ³ 上的开发增益（+10.0 / +6.7）回放达到概率 0.27 / 0.74。</p>
+  </div>
+  <div class="rc">
+    <div class="hd"><span>边界 · 本项目阅读</span><span>Limitations · 附录 A、C</span></div>
+    <ul>
+      <li>每个“优化器×模型×基准”只跑了<b>一次</b>优化；三次测试只反映执行噪声，不反映优化随机性。</li>
+      <li>一个 harness（OpenCode，不压缩历史）、两个模型、同一个种子技能；规则 → 行为是对应关系，没有做单条规则的受控改写。</li>
+      <li>Luna 的 AutoBench 增益是真的；作者的“分不出成功率就看成本”规则在那里会退回种子，也会错过它。</li>
+    </ul>
+    <p class="note">本项目读法：“开发增益落在挑选噪声里”与第三期的 2610.28798、2610.30499 是同一判断，本篇的独立价值在后半——成本藏在<b>回合</b>里而不是技能长度里，且成功率指标看不见它。读法来自卡片 diagnose_self_improvement / evidence_gated_retention，非作者原话。</p>
+  </div>
+</div>
+<div class="foot"><span>Zhou et al. · “Does Your Generalist Skill Optimizer Really Incentivize Agentic Tasks? Rethinking Skill Optimization via Bipartite Attribution” · arXiv:2610.37201v1</span><span>散点按 Table 1 重绘 · 逐数出处见 SOURCE.md</span></div>
+</body>
+</html>

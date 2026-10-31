@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 12 → 27 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 15 → 30 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Twenty-seven papers, twenty-seven distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [Reel index](reel/README.md).
-（27 篇、27 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Thirty papers, thirty distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [Reel index](reel/README.md).
+（30 篇、30 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.39122/poster.png"><img src="reel/2610.39122/poster.png" width="260" alt="2610.39122 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.39122">2610.39122</a> · Praise teaches overreach</b><br>
+Learning from ordinary positive feedback, with no attacker in the loop, raises indirect-injection success by 14.0–48.8 points under skill evolution (first adaptation order; direction holds in 21/21 across orders, size varies); rewarding "don't execute what the user didn't ask" cuts 35.8% to 5.8%.<br>
+正常好评下自我演化，攻击者不参与学习，技能演化后注入成功率升 14.0–48.8 点；只有奖励“没被要求就不做”才降到 5.8%。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.38392/poster.png"><img src="reel/2610.38392/poster.png" width="260" alt="2610.38392 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.38392">2610.38392</a> · Masked erosion</b><br>
+With overlapping safeguards, deleting one adds child-only harm of 0.016, so gates decide on success alone; a fully audited lineage ends at 0.025 harm under its own model and 0.575 under a weaker one.<br>
+安全规则互为备份时，删一条几乎看不出新危害，验收门只按成功率放行；全审计谱系终态换弱模型后滥用率 0.575。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.37201/poster.png"><img src="reel/2610.37201/poster.png" width="260" alt="2610.37201 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.37201">2610.37201</a> · The bill is in the turns</b><br>
+Sixteen learned skills: +0.1 points of test success, 1.16× input tokens; replaying unchanged candidates reproduces the dev gains, and extra turns, not longer text, carry 73% of the added cost.<br>
+16 个学到的技能成功率 +0.1 点、输入 token 1.16×；未改动候选也能“报出”开发增益；增量的 73% 来自多出的回合而非文本长度。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

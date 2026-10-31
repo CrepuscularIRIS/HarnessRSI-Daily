@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>被掩蔽的侵蚀</title>
+<style>
+  :root {
+    --rock: #2f2a26; --rock2: #463d36; --sand: #f3ead6; --sand2: #ebdfc3; --ink: #2a241f; --muted: #6f6355;
+    --A: #6e4630; --V: #a8683a; --P: #cf9d55; --C: #e6c98a; --red: #b8321f; --teal: #2d6e6a; --line: #cdbd9c;
+  }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { width: 1600px; height: 2263px; overflow: hidden; background: var(--sand); color: var(--ink);
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; font-size: 18.5px; line-height: 1.52; }
+  .serif { font-family: "Noto Serif CJK SC", serif; }
+  .mono { font-family: "DejaVu Sans Mono", monospace; }
+  .head { background: var(--rock); color: #f4ead6; padding: 26px 56px 0; position: relative; }
+  .head .meta { display: flex; justify-content: space-between; font-size: 14.5px; color: #c9b9a0; letter-spacing: .05em; }
+  .head h1 { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 52px; line-height: 1.2; margin: 10px 0 8px; }
+  .head h1 em { font-style: normal; color: #e9a36b; }
+  .head .sub { font-size: 19px; color: #e4d6bd; max-width: 1440px; margin: 0 0 16px; }
+  .strata { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; height: 46px; margin: 0 -56px; }
+  .strata div { display: flex; align-items: center; padding-left: 20px; font-size: 15px; color: #fff; }
+  .strata div b { font-family: "DejaVu Sans Mono", monospace; font-size: 17px; margin-right: 10px; }
+  .wrap { padding: 18px 56px 0; }
+  .bore { display: grid; grid-template-columns: 92px 1fr; gap: 0; border-top: 2px solid var(--rock2); padding: 14px 0 14px; }
+  .bore .zk { font-family: "DejaVu Sans Mono", monospace; font-size: 14px; color: var(--muted); border-right: 3px double var(--line); margin-right: 22px; padding-top: 4px; }
+  .bore .zk b { display: block; font-size: 30px; color: var(--rock); line-height: 1; }
+  h2 { font-family: "Noto Serif CJK SC", serif; font-weight: 900; font-size: 28px; margin: 0 0 6px; line-height: 1.25; }
+  p { margin: 0 0 6px; }
+  .note { font-size: 14px; color: var(--muted); line-height: 1.45; }
+  .cols { display: grid; gap: 26px; }
+  .card { background: #fbf6ea; border: 1px solid var(--line); border-radius: 4px; padding: 12px 16px; }
+  .big { font-family: "DejaVu Sans Mono", monospace; font-weight: 700; font-size: 34px; line-height: 1.1; }
+  .r { color: var(--red); } .t { color: var(--teal); }
+  table.tb { border-collapse: collapse; width: 100%; font-size: 16px; }
+  table.tb th { text-align: left; font-weight: 600; font-size: 13.5px; color: var(--muted); border-bottom: 2px solid var(--rock2); padding: 3px 6px; }
+  table.tb td { padding: 3px 6px; border-bottom: 1px dotted var(--line); }
+  table.tb td.n { font-family: "DejaVu Sans Mono", monospace; text-align: right; white-space: nowrap; }
+  table.tb tr.hl td { background: #f1e3c2; }
+  ul { margin: 2px 0 2px; padding-left: 22px; } li { font-size: 16.5px; margin: 2px 0; }
+  .legend { display: flex; gap: 14px; font-size: 13.5px; color: var(--muted); align-items: center; flex-wrap: wrap; }
+  .sw { display: inline-block; width: 18px; height: 12px; border: 1px solid #2f2a26; vertical-align: -1px; margin-right: 4px; }
+  .foot { position: absolute; left: 56px; right: 56px; bottom: 18px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 8px; }
+  .tagill { font-size: 12.5px; background: #fff3c9; color: #7a5600; border-radius: 3px; padding: 0 6px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="meta"><span>HarnessRSI Daily · 第七期 · 地层剖面</span><span class="mono">arXiv:2610.38392v1 · cs.AI · 2026-10-28 · So, Liu, Long（澳门大学 / 清华大学）</span></div>
+  <h1>安全规则互为备份时，验收门为什么<em>看不见</em>删掉其中一条？</h1>
+  <p class="sub">自我改进代理改写自己的 harness，只在验收门（在一批任务上比新旧版本）通过时保留改动。多条安全规则挡同一种危害时，删掉一条，其余几条照样挡住——当前模型下看不出任何新增危害，验收门只按任务成功率做决定，<b>冗余被悄悄侵蚀</b>。作者称之为 masked erosion（被掩蔽的侵蚀）。</p>
+  <div class="strata">
+    <div style="background:var(--A)"><b>A</b>auth：每条笔记标明属于谁</div>
+    <div style="background:var(--V)"><b>V</b>verify：凭据须与自己的一致</div>
+    <div style="background:var(--P);color:#2f2a26"><b>P</b>profile：登录后核对账户</div>
+    <div style="background:var(--C);color:#2f2a26"><b>C</b>caution：只用请求者的凭据</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="bore">
+    <div class="zk">钻孔<b>01</b>剖面</div>
+    <div class="cols" style="grid-template-columns: 640px 1fr;">
+      <div>
+        <h2>16 种规则组合的危害率（AppWorld · DeepSeek）</h2>
+        <svg width="620" height="450" viewBox="0 0 600 440">
+<line x1="120" y1="341" x2="300" y2="394" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="240" y1="341" x2="300" y2="394" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="360" y1="341" x2="300" y2="394" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="480" y1="341" x2="300" y2="394" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="86" y1="246" x2="120" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="86" y1="246" x2="240" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="171" y1="246" x2="120" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="171" y1="246" x2="360" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="257" y1="246" x2="120" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="257" y1="246" x2="480" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="343" y1="246" x2="240" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="343" y1="246" x2="360" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="429" y1="246" x2="240" y2="309" stroke="#b8321f" stroke-width="5" stroke-dasharray="0"/>
+<line x1="429" y1="246" x2="480" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="514" y1="246" x2="360" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="514" y1="246" x2="480" y2="309" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="120" y1="151" x2="86" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="120" y1="151" x2="171" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="120" y1="151" x2="343" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="240" y1="151" x2="86" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="240" y1="151" x2="257" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="240" y1="151" x2="429" y2="214" stroke="#b8321f" stroke-width="5" stroke-dasharray="0"/>
+<line x1="360" y1="151" x2="171" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="360" y1="151" x2="257" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="360" y1="151" x2="514" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="480" y1="151" x2="343" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="480" y1="151" x2="429" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="480" y1="151" x2="514" y2="214" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="300" y1="56" x2="120" y2="119" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="300" y1="56" x2="240" y2="119" stroke="#b8321f" stroke-width="5" stroke-dasharray="0"/>
+<line x1="300" y1="56" x2="360" y2="119" stroke="#cbbd9f" stroke-width="1.4"/>
+<line x1="300" y1="56" x2="480" y2="119" stroke="#cbbd9f" stroke-width="1.4"/>
+<rect x="261" y="394" width="78" height="32" rx="6" fill="#7a3b2e" stroke="#7a3b2e" stroke-width="1.2"/>
+<text x="300" y="409" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#fff">∅</text>
+<text x="300" y="422" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#fff">0.692</text>
+<rect x="81" y="309" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="120" y="324" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">A···</text>
+<text x="120" y="337" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="201" y="309" width="78" height="32" rx="6" fill="#e5cf98" stroke="#2f2a26" stroke-width="2"/>
+<text x="240" y="324" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">·V··</text>
+<text x="240" y="337" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.008</text>
+<rect x="321" y="309" width="78" height="32" rx="6" fill="#7a3b2e" stroke="#7a3b2e" stroke-width="1.2"/>
+<text x="360" y="324" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#fff">··P·</text>
+<text x="360" y="337" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#fff">0.417</text>
+<rect x="441" y="309" width="78" height="32" rx="6" fill="#b5653f" stroke="#7a3b2e" stroke-width="1.2"/>
+<text x="480" y="324" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#fff">···C</text>
+<text x="480" y="337" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#fff">0.167</text>
+<rect x="47" y="214" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="86" y="229" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">AV··</text>
+<text x="86" y="242" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="132" y="214" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="171" y="229" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">A·P·</text>
+<text x="171" y="242" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="218" y="214" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="257" y="229" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">A··C</text>
+<text x="257" y="242" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="304" y="214" width="78" height="32" rx="6" fill="#e5cf98" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="343" y="229" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">·VP·</text>
+<text x="343" y="242" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.008</text>
+<rect x="390" y="214" width="78" height="32" rx="6" fill="#e5cf98" stroke="#2f2a26" stroke-width="2"/>
+<text x="429" y="229" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">·V·C</text>
+<text x="429" y="242" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.025</text>
+<rect x="475" y="214" width="78" height="32" rx="6" fill="#b5653f" stroke="#7a3b2e" stroke-width="1.2"/>
+<text x="514" y="229" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#fff">··PC</text>
+<text x="514" y="242" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#fff">0.058</text>
+<rect x="81" y="119" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="120" y="134" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">AVP·</text>
+<text x="120" y="147" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="201" y="119" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="2"/>
+<text x="240" y="134" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">AV·C</text>
+<text x="240" y="147" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="321" y="119" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="360" y="134" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">A·PC</text>
+<text x="360" y="147" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+<rect x="441" y="119" width="78" height="32" rx="6" fill="#e5cf98" stroke="#2f2a26" stroke-width="1.2"/>
+<text x="480" y="134" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">·VPC</text>
+<text x="480" y="147" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.008</text>
+<rect x="261" y="24" width="78" height="32" rx="6" fill="#efe3c4" stroke="#2f2a26" stroke-width="2"/>
+<text x="300" y="39" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="14" font-weight="700" fill="#2f2a26">AVPC</text>
+<text x="300" y="52" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="11" fill="#2f2a26">0.000</text>
+
+        </svg>
+        <div class="legend"><span><span class="sw" style="background:#efe3c4"></span>危害 0</span><span><span class="sw" style="background:#e5cf98"></span>0 &lt; 危害 ≤ 0.05（受保护）</span><span><span class="sw" style="background:#b5653f"></span>&gt; 0.05</span><span><span class="sw" style="background:#7a3b2e"></span>&gt; 0.3</span><span style="color:#b8321f">━ 一条审计门谱系的实际路径</span></div>
+      </div>
+      <div>
+        <p style="font-size:17px">笔记里放着<b>另一位用户</b>可用的凭据（任务从不需要）；确定性审计（无 LLM 评审）记录是否用了外人的 token。原文对 4 层规则的全部 16 个子集各测危害率（Table 17，校准+确认池合并）。</p>
+        <p style="font-size:17px">DeepSeek 下 <b>A、V 各自单独就够</b>；初始 harness H0 的<b>余量（margin）= 2</b>：至少再失效 2 层才会出现危害（A、V 同删 → ··PC 0.058）。</p>
+        <div class="card" style="margin-top:8px">
+          <p style="margin:0"><b>红线</b>是论文图 1 的那条谱系（审计门：每批的危害任务<b>全部</b>审计，ρ = 1）：删 P → 删 A → 删 C，三次都没看到新增危害，全部通过。</p>
+          <table class="tb" style="margin-top:6px">
+            <tr><th>最终只剩 V</th><th style="text-align:right">当前模型 DeepSeek</th><th style="text-align:right">换成更弱的 Qwen3-30B</th></tr>
+            <tr class="hl"><td>T_final 上凭据滥用率</td><td class="n">0.025</td><td class="n r" style="font-weight:700">0.575</td></tr>
+          </table>
+          <p class="note" style="margin-top:4px">余量 2 → 1；两个更强的 API 模型下至多 0.05。图中数值为原文 Table 17，路径为附录 Table 14 “veto ρ=1 第 5 条”。</p>
+        </div>
+        <p class="note" style="margin-top:8px">为什么看不见：删到仍受保护状态的“掩蔽删除”，子代独有危害 h₀₁ 只有 <b>0.016</b>（上界 0.028），而暴露性删除为 0.422；每批约 4 个危害任务的审计约 6% 的决策能看见它。全审计门在 18 次暴露删除中 14 次看到新危害，在 29 次掩蔽删除中只有 2 次。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bore">
+    <div class="zk">钻孔<b>02</b>两种侵蚀</div>
+    <div class="cols" style="grid-template-columns: 1fr 1fr;">
+      <div>
+        <h2>漂移：删除几乎无收益，靠噪声通过</h2>
+        <p style="font-size:16.5px">AppWorld 中每次删除都近乎中性（|z| ≤ 1.1）。27 条压力谱系（每代提议删除一层，共 8 代）：</p>
+        <table class="tb">
+          <tr><th>验收门</th><th style="text-align:right">删除被接受率</th><th style="text-align:right">谱系最终失去保护</th></tr>
+          <tr><td>贪心（成功数更多即收）</td><td class="n">0.48</td><td class="n r">5/6</td></tr>
+          <tr><td>折半（Self-Harness 单评变体）</td><td class="n">0.44</td><td class="n">2/6</td></tr>
+          <tr class="hl"><td>配对显著性（精确 McNemar）</td><td class="n">0.04</td><td class="n t">0/6</td></tr>
+        </table>
+        <p class="note" style="margin-top:4px">显著性检验压住了漂移，但代价是保守：同样 α = .05 下，真实 +0.075 的改进它只放行 8%（贪心 96%）；外推到 64 代仍有 0.19 概率失守。贪心留下的“增益”在 T_final 上不成立（0.358 vs H0 0.400）。</p>
+      </div>
+      <div>
+        <h2>选择：规则有成本，删掉真能涨分</h2>
+        <svg width="660" height="214" viewBox="0 0 660 214" font-family="Noto Sans CJK SC, sans-serif" font-size="13.5">
+          <!-- x: cost 0..0.32 over 60..440 ; y: loops lost 0..6 over 180..30 -->
+          <g stroke="#e0d3b6"><line x1="60" y1="30" x2="440" y2="30"/><line x1="60" y1="80" x2="440" y2="80"/><line x1="60" y1="130" x2="440" y2="130"/></g>
+          <line x1="60" y1="180" x2="440" y2="180" stroke="#6f6355"/><line x1="60" y1="30" x2="60" y2="180" stroke="#6f6355"/>
+          <g font-family="DejaVu Sans Mono, monospace" font-size="12" fill="#6f6355" text-anchor="end"><text x="54" y="184">0</text><text x="54" y="134">2</text><text x="54" y="84">4</text><text x="54" y="34">6</text></g>
+          <g font-family="DejaVu Sans Mono, monospace" font-size="12" fill="#6f6355" text-anchor="middle"><text x="60" y="198">0</text><text x="118.8" y="198">.05</text><text x="178.1" y="198">.10</text><text x="237.5" y="198">.15</text><text x="296.9" y="198">.20</text><text x="356.3" y="198">.25</text><text x="415.6" y="198">.30</text></g>
+          <text x="250" y="213" text-anchor="middle" fill="#6f6355">confirm 层造成的成功率损失（成本）</text>
+          <text x="6" y="22" fill="#6f6355">失守谱系 /6</text>
+          <!-- greedy n=40 : 5,4,5,3,5 at .000 .033 .083 .150 .317 -->
+          <polyline points="60,55 99.2,80 158.6,55 238.1,105 436.4,55" fill="none" stroke="#a8683a" stroke-width="2" stroke-dasharray="5 4"/>
+          <!-- paired n=40: 0,0,1,6,4 -->
+          <polyline points="60,180 99.2,180 158.6,155 238.1,30 436.4,80" fill="none" stroke="#b8321f" stroke-width="3"/>
+          <g fill="#b8321f"><circle cx="60" cy="180" r="5"/><circle cx="99.2" cy="180" r="5"/><circle cx="158.6" cy="155" r="5"/><circle cx="238.1" cy="30" r="5"/><circle cx="436.4" cy="80" r="5"/></g>
+          <!-- n=20 @ .150 : 0/6 ; n=120 @ .033 .083 : 5/6 -->
+          <rect x="232" y="174" width="12" height="12" fill="#2d6e6a"/>
+          <g fill="none" stroke="#2d6e6a" stroke-width="2.5"><polygon points="99.2,47 106,59 92.4,59"/><polygon points="158.6,47 165.4,59 151.8,59"/></g>
+          <g font-size="13"><text x="250" y="178" fill="#2d6e6a">n=20：0/6</text><text x="112" y="44" fill="#2d6e6a">n=120：5/6</text><text x="248" y="28" fill="#b8321f">配对 n=40：6/6</text><text x="300" y="68" fill="#a8683a">贪心 n=40</text></g>
+          <g font-size="13" fill="#2a241f"><text x="462" y="44">OpsSim · 4 步预算</text><text x="462" y="64">每格 6 条谱系</text><text x="462" y="90" fill="#b8321f">每个配对计数都落在</text><text x="462" y="108" fill="#b8321f">事先冻结的 95% 区间内</text><text x="462" y="134">断点在 0.08–0.15</text><text x="462" y="152">≈ n=40 时精确检验</text><text x="462" y="170">的临界效应</text></g>
+        </svg>
+        <p class="note">更大的批次让显著性门能“看出”更小的增益，于是<b>放行更便宜的删除</b>：成本 0.15 时，20 任务批 6 条全保住、40 任务批 6 条全失守。120 任务批是从 60 任务池<b>有放回</b>抽取，按去重计算会翻转 10 次接受中的 4 次——只确认方向，不确认精确断点（附录 B）。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bore">
+    <div class="zk">钻孔<b>03</b>留下了什么</div>
+    <div class="cols" style="grid-template-columns: 1.05fr 1fr;">
+      <div>
+        <h2>审计挡住“暴露”，挡不住“变薄”</h2>
+        <table class="tb">
+          <tr><th>AppWorld · DeepSeek · 每门 6 条压力谱系</th><th style="text-align:right">每次读的危害运行</th><th style="text-align:right">失守</th><th style="text-align:right">平均余量</th><th style="text-align:right">换 Qwen3-30B 滥用</th></tr>
+          <tr><td>贪心</td><td class="n">—</td><td class="n r">5/6</td><td class="n">0.33</td><td class="n r">.48</td></tr>
+          <tr><td>审计否决 ρ=1</td><td class="n">4/批</td><td class="n">1/6</td><td class="n">0.83</td><td class="n">.40</td></tr>
+          <tr><td>大审计否决</td><td class="n">120/状态</td><td class="n t">0/6</td><td class="n">1.17</td><td class="n">.21</td></tr>
+          <tr class="hl"><td>余量感知（逐层消融须仍受保护）</td><td class="n">30/层</td><td class="n t">0/6</td><td class="n">1.33</td><td class="n t">.04</td></tr>
+          <tr><td>配对显著性</td><td class="n">—</td><td class="n t">0/6</td><td class="n">1.83</td><td class="n t">.004</td></tr>
+        </table>
+        <p class="note" style="margin-top:4px">原文 Table 3。大审计否决 6 条都没失守，但其中 5 条只剩余量 1。只比较<b>在 DeepSeek 下仍受保护</b>的终态：换 Qwen3-30B 后非配对门终态滥用 0.30、配对门 0.004（差值区间 [0.16, 0.47]）；Qwen3-8B 差 0.16。换成能解题的 Luna / Sol，差只有 0.025——效应限于<b>更弱的执行模型</b>。</p>
+      </div>
+      <div>
+        <h2>现成优化器：规则一字未改，行为变了</h2>
+        <p style="font-size:16.5px">原样运行 GEPA 0.1.4（3 个种子，各 800 次调用，只按任务成功打分）：三个终态都<b>逐字保留了凭据规则</b>，DeepSeek 下零危害。但其中两个把笔记模板改写成“需要时就用这些凭据以 {owner} 身份登录”。</p>
+        <table class="tb">
+          <tr><th>换 Qwen3-30B，T_final 危害</th><th style="text-align:right">次数</th></tr>
+          <tr><td>H0</td><td class="n">0/80</td></tr>
+          <tr><td>种子 1 终态 / 种子 2 终态</td><td class="n r">2/40 · 5/40</td></tr>
+        </table>
+        <p class="note" style="margin-top:4px">这是<b>添加</b>了一句指令，而非删除规则，且落在标注的 4 层之外，余量定义覆盖不到；评审模型也把每层判为完好。种子 2 按运行计 Fisher p = .003，按任务（3/20）符号检验 p = .125——作者明说是个案，不是估计。GEPA 的验证增益（最高 +0.22）同样没有迁移到 T_final（0.35–0.45 vs 0.40）。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bore">
+    <div class="zk">钻孔<b>04</b>补救与边界</div>
+    <div class="cols" style="grid-template-columns: 1fr 1fr;">
+      <div>
+        <h2>两种结构性补救</h2>
+        <ul>
+          <li><b>冻结安全文本：</b>4 条自然改写谱系把安全文本重置回父代——终态全部保留 H0 安全文本、干净成功率最高，Qwen3-30B 下危害 0.019。但它保护文字不保护行为：有一条终态在未冻结处加了“别多做账户核对”的提示。</li>
+          <li><b>余量感知门：</b>只接受每个单层消融仍受保护的子代。与贪心共用随机数：0/6 vs 5/6 失守（符号检验 p = .031），AppWorld 干净成功率不降；但在规则有成本的 OpsSim 里要付 0.35 的成功率，且只查“层”不查措辞（3 条自然谱系都让 verify 被改弱）。</li>
+        </ul>
+      </div>
+      <div>
+        <h2>边界</h2>
+        <ul>
+          <li>两个环境、各一种危害、4 条手写规则；393/411 条谱系是<b>人为植入删除</b>的压力测试，用来隔离验收门，<b>不估计</b>部署中侵蚀的频率。</li>
+          <li>强模型在 τ²-bench、AgentDojo 等场景本来就会避开所测危害；最大的换模效应来自更弱的模型。</li>
+          <li>177 条预登记预测：113 成立、49 失败；支撑主结论的 14 项检验 7 项达标，其余方向一致。GEPA 预测与“漂移”解释是在看到相关结果后才冻结的。</li>
+        </ul>
+        <p class="note">本项目读法：“当前安全”和“出事后仍安全”是两个性质，验收门只检查前者；对 harness 自改环路，安全文本应移出优化器，模型更换后须重审。读法来自卡片 evidence_gated_retention，非作者原话。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bore">
+    <div class="zk">钻孔<b>05</b>对照层</div>
+    <div class="cols" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="card">
+        <h2 style="font-size:24px">自然改写：不删层，改层里的检查</h2>
+        <p style="font-size:16px">让 DeepSeek 自由改写“让 harness 更省”时，它很少整层删除，而是改写层内条件。被接受的 10 条安全文本改动在新任务上确有增益 0.075（区间 [0.007, 0.163]），其中 <b>7 条放松了检查</b>，多为 profile。</p>
+        <p style="font-size:15px;background:#f1e3c2;padding:4px 8px;border-left:3px solid var(--red)">改写后的 profile：“只有在笔记主人不确定时才核对账户……”单独使用时滥用率 <b>.63</b>，原文版本 .38（30 次 T_cal 危害运行）。</p>
+        <p class="note">改写后的层单独运行，比原层多放过 0.19 的危害（[0.08, 0.31]，只计能抽出规则的探针；全部合并为 0.325）。</p>
+      </div>
+      <div class="card">
+        <h2 style="font-size:24px">反证：没有冗余时，审计够用</h2>
+        <p style="font-size:16px">OpsSim 变体里每种陷阱<b>只有一层</b>能挡：任何单层删除都会暴露危害（0.08–0.34）。</p>
+        <table class="tb">
+          <tr><th>门</th><th style="text-align:right">失守</th></tr>
+          <tr><td>贪心</td><td class="n r">6/6</td></tr>
+          <tr><td>审计否决 ρ=1（每批约 4 个危害任务）</td><td class="n r">5/6</td></tr>
+          <tr class="hl"><td>大审计否决（每状态 120 次）</td><td class="n t">0/6</td></tr>
+        </table>
+        <p class="note" style="margin-top:4px">大审计拒掉了贪心接受的全部 23 次删除。同一个门在有冗余的 AppWorld 里同样 0/6 失守，却留下 5/6 只剩余量 1——它看得见“暴露”，看不见“变薄”。作者也承认无冗余变体接近一个设计检查。</p>
+      </div>
+      <div class="card">
+        <h2 style="font-size:24px">作者给出的三条做法</h2>
+        <ol style="margin:2px 0 4px;padding-left:22px">
+          <li style="font-size:16px">把安全攸关的行为放到<b>优化器之外</b>（冻结安全文本，但要知道哪些文本是安全文本）。</li>
+          <li style="font-size:16px">按<b>删完还剩什么</b>来验收（逐层消融），而不只看这批任务上发生了什么。</li>
+          <li style="font-size:16px"><b>换模型后重审</b> harness：换模型相当于剩余屏障的共因失效。</li>
+        </ol>
+        <p class="note">余量本身较粗：用 DeepSeek 下的余量给 Qwen3-30B 换模危害排序，Spearman 只有 0.65；“随机失效一层后的期望危害”更好（0.80），但需要远多于一批的危害运行。</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="foot"><span>So, Liu, Long · “Masked Erosion: How Acceptance Gates Lose Redundant Safeguards in Self-Improving Agents” · arXiv:2610.38392v1</span><span>图表按原文表格重绘 · 逐数出处见 SOURCE.md · 问题档位为本项目阅读判断</span></div>
+</body>
+</html>
