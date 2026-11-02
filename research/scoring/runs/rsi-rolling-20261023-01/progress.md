@@ -108,3 +108,11 @@
 ## 2026-11-02 08:43 每日 Opus 判断
 
 - selection-007 后新增 confirmed P3：仍 1 篇（39276）<3 → 跳过。隔夜收集 +7 待 12:17 巡检班入库评分。
+
+## 2026-11-02 12:17 巡检班
+
+- 新增：7 篇（inbox/2026-11-02-0835，corpus 1669→1676，全文 7/7，材料 7/7 abstract_intro）。
+- L1：inc-l1-09 7/7（assessed 6，out_of_scope 1：40917；to_l2 6 = high 2 / medium 4）。
+- L2：inc-l2-12 6/6（本班 to_l2 全部；遗留 high 0）。改判 2 篇 P2→P3。**2 篇 P3/confirmed/to_l3**（40758 自演化规则膨胀基准、41216 TinyAstral 迁移）；4 篇 pending_experiment/park（42141/40901/41245/40721）。
+- 漏检抽查：名额 1（预算 6×10%）但池 0（pending 篇均已 L2）→ 欠账 ~0.9+1→~1.9 滚存。seed=20261102。
+- to_l3 池：1（39276）+ 本班 2 = 3 篇 ≥3 → 明晨 Opus 班可做 selection。
