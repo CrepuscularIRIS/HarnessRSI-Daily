@@ -116,3 +116,7 @@
 - L2：inc-l2-12 6/6（本班 to_l2 全部；遗留 high 0）。改判 2 篇 P2→P3。**2 篇 P3/confirmed/to_l3**（40758 自演化规则膨胀基准、41216 TinyAstral 迁移）；4 篇 pending_experiment/park（42141/40901/41245/40721）。
 - 漏检抽查：名额 1（预算 6×10%）但池 0（pending 篇均已 L2）→ 欠账 ~0.9+1→~1.9 滚存。seed=20261102。
 - to_l3 池：1（39276）+ 本班 2 = 3 篇 ≥3 → 明晨 Opus 班可做 selection。
+
+## 2026-11-03 08:43 每日 Opus 判断（第八期选题，补跑）
+
+- selection-007 后新增 confirmed P3：3 篇 ≥3 → 第八期选题。终选 3/3（39276 MemSteer / 40758 CLR-Bench / 41216 TinyAstral），各 2–3 轮修复后过视觉 QA；无 correction（TinyAstral 吸收主张、MemSteer 数字出入、CLR-Bench 类别构造偏置均按原文收窄展示口径）。见 selection-008.md。累计 33 张。
