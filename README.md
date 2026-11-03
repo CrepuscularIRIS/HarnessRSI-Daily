@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 15 → 30 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 18 → 33 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Thirty papers, thirty distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [Reel index](reel/README.md).
-（30 篇、30 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Thirty-three papers, thirty-three distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [Reel index](reel/README.md).
+（33 篇、33 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.41216/poster.png"><img src="reel/2610.41216/poster.png" width="260" alt="2610.41216 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.41216">2610.41216</a> · Swap the planner, keep the harness</b><br>
+A robot harness evolved around a frozen teacher also lifts frozen planners it never saw (+30.2 / +30.6 / +26.6 points on the same 500 RoboTwin episodes); a 4B student reaches 62.8 vs the teacher's 63.6, though the distillation gain is roughly constant across snapshots and evolution gains were measured on RoboTwin only.<br>
+冻结教师下演化的机器人 harness 换规划器仍有效；4B 学生 62.8 贴近教师 63.6，但蒸馏增量各版近似恒定，演化收益只在 RoboTwin 上测过。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.40758/poster.png"><img src="reel/2610.40758/poster.png" width="260" alt="2610.40758 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.40758">2610.40758</a> · Exceptions, not rules</b><br>
+After sparse corrections, self-evolving agents store the corrected values: ACE excludes the revealed member 92.5% of the time but unseen members 12.2%, and passes 95% of practice levels while solving 8% of single-rule cells; with a stronger base model ACE and DC learn from feedback alone.<br>
+纠错后记下的是例外清单：见过的成员排除 92.5%、没见过的 12.2%；练习通过 95% 只解 8%。换更强底座，ACE / DC 只靠反馈就学会。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2610.39276/poster.png"><img src="reel/2610.39276/poster.png" width="260" alt="2610.39276 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2610.39276">2610.39276</a> · Let the history set the exam</b><br>
+Unlabeled personal histories can supply supervision for memory-design search: naive generated QA leaves the optimizer below its start (54.2 vs 54.9), source checks make it work, and the full pipeline matches official-QA guidance (68.3 vs 67.3, with official items still in the test set).<br>
+从未标注历史自动出题选记忆设计：随便出的题优化后不如起点，加来源检查才走得动；与官方题对照相当（对照题仍留在评测中）。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

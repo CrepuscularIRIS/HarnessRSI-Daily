@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>从历史里出题</title>
+<style>
+  :root { --kraft: #e7d8bd; --paper: #fffdf6; --ink: #241f1a; --muted: #6a6055; --red: #c0392b; --navy: #1f4e79; --green: #3d7a4a; }
+  @page { size: 1600px 2263px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { width: 1600px; height: 2263px; overflow: hidden; position: relative; color: var(--ink); font-size: 17.5px; line-height: 1.5;
+    font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif; background: var(--kraft);
+    background-image: radial-gradient(#d6c4a2 1.2px, transparent 1.3px); background-size: 26px 26px; }
+  .serif { font-family: "Noto Serif CJK SC", serif; }
+  .wrap { padding: 28px 54px 0; }
+  .meta { font-size: 14px; color: #6b5a42; display: flex; justify-content: space-between; font-family: "DejaVu Sans Mono", monospace; }
+  h1 { font-family: "Noto Serif CJK SC", serif; font-size: 48px; line-height: 1.22; margin: 10px 0 10px; font-weight: 900; }
+  h1 u { text-decoration: none; background: linear-gradient(transparent 62%, #f3b9a8 62%); }
+  .lead { background: var(--paper); padding: 12px 20px; font-size: 18.5px; position: relative; transform: rotate(-.35deg); box-shadow: 0 1px 0 #c9b48f; }
+  .card { background: var(--paper); padding: 16px 20px 16px; position: relative; box-shadow: 0 1px 0 #c3ad86, 2px 3px 0 #d8c6a4; }
+  .tape { position: absolute; width: 120px; height: 28px; top: -13px; opacity: .78; }
+  .t1 { background: #f2c14e; left: 24px; transform: rotate(-4deg); } .t2 { background: #9cc5b5; right: 30px; transform: rotate(3deg); }
+  .t3 { background: #e8a2a2; left: 46%; transform: rotate(-2deg); } .t4 { background: #b9b0dd; left: 30px; transform: rotate(2.5deg); }
+  .lab { font-family: "DejaVu Sans Mono", monospace; font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 4px; }
+  h2 { font-family: "Noto Serif CJK SC", serif; font-size: 25px; line-height: 1.25; margin: 0 0 8px; font-weight: 900; }
+  p { margin: 0 0 6px; }
+  .note { font-size: 14px; color: var(--muted); line-height: 1.45; }
+  .tagill { font-size: 12.5px; background: #fff0c4; color: #7a5600; border-radius: 3px; padding: 0 6px; font-weight: 600; }
+  .row { display: grid; gap: 26px; margin-top: 38px; }
+  .pipe { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: 4px; }
+  .pipe .s { background: #fff; border: 1.5px solid #8c7b62; border-radius: 6px; padding: 8px 10px; margin-right: 22px; position: relative; font-size: 15.5px; line-height: 1.4; }
+  .pipe .s:last-child { margin-right: 0; }
+  .pipe .s::after { content: "→"; position: absolute; right: -20px; top: 40%; font-size: 20px; color: #8c7b62; }
+  .pipe .s:last-child::after { content: ""; }
+  .pipe .s b { display: block; font-size: 15.5px; margin-bottom: 2px; }
+  .pipe .s.gate { border: 2px solid var(--red); background: #fff6f3; }
+  .opt { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .opt div { font-size: 16px; line-height: 1.45; border-top: 2px dashed #b9a585; padding-top: 6px; }
+  .polaroid { background: #fff; padding: 14px 14px 10px; box-shadow: 0 2px 0 #c3ad86, 3px 4px 0 #d3bf99; transform: rotate(.5deg); }
+  .key { font-size: 14px; display: flex; gap: 18px; flex-wrap: wrap; margin: 2px 0 4px; }
+  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
+  table.t { border-collapse: collapse; width: 100%; font-size: 16px; margin-top: 4px; }
+  table.t td, table.t th { border-bottom: 1px solid #e3d6bf; padding: 3px 6px; text-align: right; }
+  table.t th { font-size: 13px; color: var(--muted); font-weight: 400; }
+  table.t td:first-child, table.t th:first-child { text-align: left; }
+  .neg { color: var(--red); font-weight: 700; } .pos { color: var(--green); font-weight: 700; }
+  .diag { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 6px; }
+  .diag div { font-size: 15px; padding: 6px 10px; border-left: 5px solid; background: #fff; }
+  ul { margin: 2px 0; padding-left: 22px; } li { font-size: 16px; margin: 3px 0; }
+  .traj { display: grid; grid-template-columns: repeat(9, 1fr); gap: 0; margin: 10px 0 6px; position: relative; }
+  .traj::before { content: ""; position: absolute; left: 2%; right: 2%; top: 21px; border-top: 3px solid #8c7b62; }
+  .traj div { position: relative; text-align: center; font-size: 16px; line-height: 1.35; padding: 0 6px; }
+  .traj div i { display: block; margin: 6px auto 8px; width: 32px; height: 32px; border-radius: 50%; background: var(--red); color: #fff; font-style: normal; font-weight: 700; line-height: 32px; font-size: 16px; position: relative; }
+  .traj div:first-child i { background: #fff; color: #222; border: 2.5px solid #555; line-height: 27px; }
+  .foot { position: absolute; left: 54px; right: 54px; bottom: 16px; font-size: 13px; color: #6b5a42; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="meta"><span>HarnessRSI Daily · 第八期 · 手账 No. 08-1</span><span>arXiv:2610.39276v1 · cs.AI · 2026-10-29 · Huang, Lan, Yu, Peng, Lu（北京大学 · 微软亚洲研究院）</span></div>
+  <h1>个人历史没有标注，也没有成败信号——<u>能不能让它自己出题</u>，来挑选和修改代理的记忆设计？</h1>
+  <div class="lead">记忆系统怎么存、怎么检索、怎么拼上下文，应该随用户历史调整；MemEvolve、ALMA、M★ 这类优化器靠下游任务反馈来改设计，但聊天、邮件、照片本身给不出“对 / 错”。人工为每份新历史写题目、参考答案和证据又太贵。<b>MemSteer</b> 从未标注的历史里自动出题（带参考答案与来源证据），用来评估候选设计、定位失败、驱动修改；全程不更新模型权重。</div>
+
+  <div class="card" style="margin-top:26px">
+    <span class="tape t1"></span><span class="tape t2"></span>
+    <div class="lab"><span>出题车间 · 题怎么来</span><span>§3.2 · 附录 A.4 · 示意（据原文流程自绘）</span></div>
+    <div class="pipe">
+      <div class="s"><b>① 记录图</b>同一对话、相邻章节、互相引用或词汇重叠的记录连边；从种子沿路径扩展，取一个预算内的材料包</div>
+      <div class="s"><b>② 答案计划</b>先定参考答案、支撑事实（引到原文片段）、每条证据的作用和组合方式</div>
+      <div class="s gate"><b>③ 程序检查</b>结构不一致或来源覆盖不全的计划，在出题前丢掉</div>
+      <div class="s"><b>④ 单独出题</b>另起一次调用，按计划写一个可独立成立的问题</div>
+      <div class="s gate"><b>⑤ 语义审计</b>LLM 审稿逐条判：答案有支撑、题与计划一致、每个事实与证据角色成立</div>
+      <div class="s gate"><b>⑥ 盲答复原</b>只给题目、答案类型和原始记录：须判可答、规范化后与参考答案完全一致、引用覆盖每条证据记录</div>
+    </div>
+    <div class="opt">
+      <div><b>拿题去改设计（MemSteer-Opt）</b>：设计 = 存储 × 检索 × 上下文拼装；固定回答模型、提示与上下文预算。每个候选重建记忆、在生成的验证集上严格更高才替换；共 20 轮。</div>
+      <div><b>证据用于诊断</b>：所需证据都在上下文里却答错 → <b style="color:var(--navy)">回答失败</b>；缺证据且记忆里找不回 → <b style="color:var(--red)">存储失败</b>；缺但找得回 → <b style="color:var(--green)">检索失败</b>。每类最多抽 10 例给提议者。</div>
+      <div><b>规模</b>：ATM-Bench 约四年 11,034 条邮件 / 图片 / 视频记录，测 1,013 题 ＋ 31 题难集；RHELM 10 个人设 21,142 条交互，测 1,305 题。生成题 ATM 上 400 训练 ＋ 200 验证。</div>
+    </div>
+  </div>
+
+  <div class="row" style="grid-template-columns: 1fr 1.02fr;">
+    <div class="polaroid">
+      <div class="lab"><span>贴图 01 · 题出得好不好，决定优化走不走得动</span><span>Table 4 · 据原文数值重绘</span></div>
+      <div class="key"><span><span class="dot" style="border:2.5px solid #555;width:10px;height:10px"></span>无检查</span><span><span class="dot" style="background:#555"></span>加 ⑤⑥ 检查</span><span>箭头 = 同一出题法加检查</span></div>
+      <svg width="690" height="590" viewBox="0 0 690 590" font-family="Noto Sans CJK SC, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<line x1="62.0" y1="18" x2="62.0" y2="534" stroke="#e6dccb"/><text x="62.0" y="552" text-anchor="middle" font-size="13" fill="#555">60</text>
+<line x1="149.1" y1="18" x2="149.1" y2="534" stroke="#e6dccb"/><text x="149.1" y="552" text-anchor="middle" font-size="13" fill="#555">65</text>
+<line x1="236.3" y1="18" x2="236.3" y2="534" stroke="#e6dccb"/><text x="236.3" y="552" text-anchor="middle" font-size="13" fill="#555">70</text>
+<line x1="323.4" y1="18" x2="323.4" y2="534" stroke="#e6dccb"/><text x="323.4" y="552" text-anchor="middle" font-size="13" fill="#555">75</text>
+<line x1="410.6" y1="18" x2="410.6" y2="534" stroke="#e6dccb"/><text x="410.6" y="552" text-anchor="middle" font-size="13" fill="#555">80</text>
+<line x1="497.7" y1="18" x2="497.7" y2="534" stroke="#e6dccb"/><text x="497.7" y="552" text-anchor="middle" font-size="13" fill="#555">85</text>
+<line x1="584.9" y1="18" x2="584.9" y2="534" stroke="#e6dccb"/><text x="584.9" y="552" text-anchor="middle" font-size="13" fill="#555">90</text>
+<line x1="672.0" y1="18" x2="672.0" y2="534" stroke="#e6dccb"/><text x="672.0" y="552" text-anchor="middle" font-size="13" fill="#555">95</text>
+<line x1="62" y1="534.0" x2="672" y2="534.0" stroke="#e6dccb"/><text x="54" y="538.0" text-anchor="end" font-size="13" fill="#555">52</text>
+<line x1="62" y1="419.3" x2="672" y2="419.3" stroke="#e6dccb"/><text x="54" y="423.3" text-anchor="end" font-size="13" fill="#555">56</text>
+<line x1="62" y1="304.7" x2="672" y2="304.7" stroke="#e6dccb"/><text x="54" y="308.7" text-anchor="end" font-size="13" fill="#555">60</text>
+<line x1="62" y1="190.0" x2="672" y2="190.0" stroke="#e6dccb"/><text x="54" y="194.0" text-anchor="end" font-size="13" fill="#555">64</text>
+<line x1="62" y1="75.3" x2="672" y2="75.3" stroke="#e6dccb"/><text x="54" y="79.3" text-anchor="end" font-size="13" fill="#555">68</text>
+<rect x="62" y="18" width="610" height="516" fill="none" stroke="#555"/>
+<line x1="62" y1="450.9" x2="672" y2="450.9" stroke="#333" stroke-dasharray="6 4" stroke-width="1.5"/>
+<text x="666" y="444.9" text-anchor="end" font-size="13.5" fill="#333">Base-BM25 起点 54.9</text>
+<line x1="62" y1="95.4" x2="672" y2="95.4" stroke="#333" stroke-dasharray="2 3" stroke-width="1.5"/>
+<text x="70" y="89.4" text-anchor="start" font-size="13.5" fill="#333">官方 QA 指导 67.3†</text>
+<line x1="123.0" y1="470.9" x2="356.3" y2="170.1" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+<circle cx="123.0" cy="470.9" r="7" fill="#fff" stroke="#8d6e63" stroke-width="3"/>
+<circle cx="365.3" cy="167.1" r="8" fill="#8d6e63"/>
+<line x1="260.7" y1="218.7" x2="445.1" y2="161.5" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+<circle cx="260.7" cy="218.7" r="7" fill="#fff" stroke="#3f7f9a" stroke-width="3"/>
+<circle cx="454.1" cy="158.5" r="8" fill="#3f7f9a"/>
+<line x1="330.4" y1="155.6" x2="591.5" y2="69.7" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+<circle cx="330.4" cy="155.6" r="7" fill="#fff" stroke="#c0392b" stroke-width="3"/>
+<circle cx="600.5" cy="66.7" r="8" fill="#c0392b"/>
+<text x="133.0" y="490.9" text-anchor="start" font-size="14" font-weight="700" fill="#222">Naive 无检查 54.2</text>
+<text x="369.3" y="213.1" text-anchor="start" font-size="14" font-weight="700" fill="#222">Naive ＋检查 64.8</text>
+<text x="250.7" y="222.7" text-anchor="end" font-size="14" font-weight="700" fill="#222">Ragas 63.0</text>
+<text x="466.1" y="176.5" text-anchor="start" font-size="14" font-weight="700" fill="#222">Ragas ＋检查 65.1</text>
+<text x="318.4" y="145.6" text-anchor="end" font-size="14" font-weight="700" fill="#222">MemSteer 无检查 65.2</text>
+<text x="588.5" y="56.7" text-anchor="end" font-size="14" font-weight="700" fill="#222">MemSteer 完整 68.3</text>
+<text x="367.0" y="580" text-anchor="middle" font-size="14.5" fill="#222">出题质量 %（两个 LLM 评委均值，四项全过才算 1）</text>
+<text transform="translate(16,276.0) rotate(-90)" text-anchor="middle" font-size="14.5" fill="#222">优化后 ATM 全集 QS</text>
+</svg>
+      <p class="serif" style="font-size:16.5px;margin-top:4px">随机拼记录出的题（Naive）拿去优化，QS 54.2，<b>还不如不优化的起点 54.9</b>；同样的题只要过一遍检查就到 64.8（保留 21.2%）。换成记录图取材 ＋ 答案计划，再加 3.5 点，到 68.3（保留 47.9%）。</p>
+      <p class="note">质量分由 GPT-5-mini 与 DeepSeek-V4-Flash 两个 LLM 评，不是人工；两者对“MemSteer 无检查”分歧最大（83.5 vs 67.3）。DeepSeek-V4-Flash 在 ATM 上同时是回答器、开放题判分和设计提议者。</p>
+    </div>
+    <div class="card">
+      <span class="tape t3"></span>
+      <div class="lab"><span>贴图 02 · 和“用官方标注题来优化”比</span><span>Table 1–2 · 附录 A.3 · 据原文数值重绘</span></div>
+      <h2>平手，而且对照偏向官方那边</h2>
+      <div class="key"><span><span class="dot" style="background:#fff;border:2.5px solid #555;width:10px;height:10px"></span>起点</span><span><span class="dot" style="background:var(--red)"></span>用生成题优化</span><span><span style="display:inline-block;width:4px;height:14px;background:var(--navy);vertical-align:-2px;margin-right:4px"></span>用官方题优化†</span></div>
+      <svg width="700" height="526" viewBox="0 0 700 526" font-family="Noto Sans CJK SC, sans-serif">
+<line x1="262.0" y1="22" x2="262.0" y2="496" stroke="#e6dccb"/><text x="262.0" y="514" text-anchor="middle" font-size="13" fill="#555">0</text>
+<line x1="326.0" y1="22" x2="326.0" y2="496" stroke="#e6dccb"/><text x="326.0" y="514" text-anchor="middle" font-size="13" fill="#555">15</text>
+<line x1="390.0" y1="22" x2="390.0" y2="496" stroke="#e6dccb"/><text x="390.0" y="514" text-anchor="middle" font-size="13" fill="#555">30</text>
+<line x1="454.0" y1="22" x2="454.0" y2="496" stroke="#e6dccb"/><text x="454.0" y="514" text-anchor="middle" font-size="13" fill="#555">45</text>
+<line x1="518.0" y1="22" x2="518.0" y2="496" stroke="#e6dccb"/><text x="518.0" y="514" text-anchor="middle" font-size="13" fill="#555">60</text>
+<line x1="582.0" y1="22" x2="582.0" y2="496" stroke="#e6dccb"/><text x="582.0" y="514" text-anchor="middle" font-size="13" fill="#555">75</text>
+<text x="250" y="49" text-anchor="end" font-size="14.5" fill="#222">MemSteer-Opt · ATM 全集 QS</text>
+<line x1="496.2" y1="44" x2="553.4" y2="44" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="496.2" cy="44" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="549.1" y1="31" x2="549.1" y2="57" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="553.4" cy="44" r="7.5" fill="#c0392b"/>
+<text x="565.4" y="49" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">68.3</tspan> / <tspan fill="#1f4e79" font-weight="700">67.3†</tspan></text>
+<text x="486.2" y="49" text-anchor="end" font-size="13" fill="#555">54.9</text>
+<text x="250" y="115" text-anchor="end" font-size="14.5" fill="#222">MemSteer-Opt · ATM Hard（31 题）</text>
+<line x1="297.0" y1="110" x2="386.2" y2="110" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="297.0" cy="110" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="381.0" y1="97" x2="381.0" y2="123" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="386.2" cy="110" r="7.5" fill="#c0392b"/>
+<text x="398.2" y="115" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">29.1</tspan> / <tspan fill="#1f4e79" font-weight="700">27.9†</tspan></text>
+<text x="297.0" y="99" text-anchor="middle" font-size="12.5" fill="#555">8.2</text>
+<text x="250" y="181" text-anchor="end" font-size="14.5" fill="#222">MemSteer-Opt · RHELM 仅对话</text>
+<line x1="357.1" y1="176" x2="374.6" y2="176" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="357.1" cy="176" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="375.1" y1="163" x2="375.1" y2="189" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="374.6" cy="176" r="7.5" fill="#c0392b"/>
+<text x="387.1" y="181" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">26.4</tspan> / <tspan fill="#1f4e79" font-weight="700">26.5†</tspan></text>
+<text x="347.1" y="181" text-anchor="end" font-size="13" fill="#555">22.3</text>
+<text x="250" y="247" text-anchor="end" font-size="14.5" fill="#222">MemSteer-Opt · RHELM ＋邮件文档</text>
+<line x1="404.1" y1="242" x2="432.2" y2="242" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="404.1" cy="242" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="435.7" y1="229" x2="435.7" y2="255" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="432.2" cy="242" r="7.5" fill="#c0392b"/>
+<text x="447.7" y="247" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">39.9</tspan> / <tspan fill="#1f4e79" font-weight="700">40.7†</tspan></text>
+<text x="394.1" y="247" text-anchor="end" font-size="13" fill="#555">33.3</text>
+<text x="250" y="313" text-anchor="end" font-size="14.5" fill="#222">M★ · ATM 全集 QS</text>
+<line x1="464.2" y1="308" x2="489.8" y2="308" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="464.2" cy="308" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="483.0" y1="295" x2="483.0" y2="321" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="489.8" cy="308" r="7.5" fill="#c0392b"/>
+<text x="501.8" y="313" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">53.4</tspan> / <tspan fill="#1f4e79" font-weight="700">51.8†</tspan></text>
+<text x="454.2" y="313" text-anchor="end" font-size="13" fill="#555">47.4</text>
+<text x="250" y="379" text-anchor="end" font-size="14.5" fill="#222">MemEvolve · ATM 全集 QS</text>
+<line x1="411.8" y1="374" x2="491.1" y2="374" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="411.8" cy="374" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="491.1" y1="361" x2="491.1" y2="387" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="491.1" cy="374" r="7.5" fill="#c0392b"/>
+<text x="503.1" y="379" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">53.7</tspan> / <tspan fill="#1f4e79" font-weight="700">53.7†</tspan></text>
+<text x="401.8" y="379" text-anchor="end" font-size="13" fill="#555">35.1</text>
+<text x="250" y="445" text-anchor="end" font-size="14.5" fill="#222">MemEvolve · ATM Hard</text>
+<line x1="292.3" y1="440" x2="302.5" y2="440" stroke="#c0392b" stroke-width="5" opacity=".35"/>
+<circle cx="292.3" cy="440" r="6.5" fill="#fff" stroke="#555" stroke-width="2.5"/>
+<line x1="310.6" y1="427" x2="310.6" y2="453" stroke="#1f4e79" stroke-width="3.5"/>
+<circle cx="302.5" cy="440" r="7.5" fill="#c0392b"/>
+<text x="322.6" y="445" font-size="13.5" fill="#222"><tspan fill="#c0392b" font-weight="700">9.5</tspan> / <tspan fill="#1f4e79" font-weight="700">11.4†</tspan></text>
+<text x="292.3" y="429" text-anchor="middle" font-size="12.5" fill="#555">7.1</text>
+</svg>
+      <p style="font-size:15.5px"><b>†</b> 官方对照拿 ATM 的 600 / 1,013 题、RHELM 的 788 / 1,305 题来训练与选设计，<b>这些题仍留在评测分母里</b>；生成题一题评测题都没用。七行里两者差 0–1.9 点，方向两边都有（正文写 ATM 领先 1.1 / 1.3，按表计算为 1.0 / 1.2）。</p>
+      <p class="note">换官方 GPT-5-mini 判分（Table 7）：全集官方 69.6、生成 69.2；难集 24.3 vs 27.5。难集只有 31 题，一题约 3.2 点，约 1.2 点的差不到一题。MemEvolve 在难集上不如官方对照，R@10 还降 0.1。</p>
+    </div>
+  </div>
+
+  <div class="row" style="grid-template-columns: 1fr 1fr 1.08fr;">
+    <div class="card">
+      <span class="tape t4"></span>
+      <div class="lab"><span>便签 · 好题要花 token</span><span>Table 5</span></div>
+      <p style="font-size:15.5px">同 600 个任务、同源记录与生成器，三种出题法过同一个 GPT-4.1-mini 过滤器，再由盲评的 GPT-4.1 打质量分：</p>
+      <table class="t">
+        <tr><th>出题法</th><th>质量</th><th>token / 题</th></tr>
+        <tr><td>直接一次出题 ＋ 答案 ＋ 证据</td><td>67.8%</td><td>64.0k</td></tr>
+        <tr><td>同一回复里先计划后出题</td><td>73.1%</td><td>68.2k</td></tr>
+        <tr><td>两阶段：计划 → 程序检查 → 另起出题</td><td><b>85.9%</b></td><td><b>105.1k</b></td></tr>
+      </table>
+      <p class="note" style="margin-top:6px">训练题预算从 100 加到 200 时增益最大，之后检索召回基本持平（附录 B.2）。</p>
+    </div>
+    <div class="card">
+      <span class="tape t2" style="right:40px"></span>
+      <div class="lab"><span>便签 · 换个用户还行吗</span><span>Table 3 · Table 9a · §4.3</span></div>
+      <table class="t">
+        <tr><th>RHELM，含外部数据</th><th>起点</th><th>共享设计</th><th>继续优化</th></tr>
+        <tr><td>6 个源用户（合并）</td><td>31.5</td><td class="pos">34.3</td><td>–</td></tr>
+        <tr><td>4 个留出用户（合并）</td><td>35.3</td><td class="neg">35.1</td><td>–</td></tr>
+        <tr><td>Martin Keller（228 题）</td><td>41.2</td><td class="neg">37.7</td><td class="pos">44.3</td></tr>
+        <tr><td>David R. Ellis（158 题）</td><td>37.3</td><td>38.6</td><td class="pos">39.2</td></tr>
+      </table>
+      <p style="font-size:15px;margin-top:6px">在 6 个用户上优化的共享设计，搬到另外 4 人身上合并后不涨反跌 0.2；用<b>目标用户自己历史</b>生成的 421 / 337 道题继续优化，两人都回升。ATM 上优化的设计冻结后直接搬到 RHELM，比起点高 4.1 / 5.3 点。</p>
+    </div>
+    <div class="card">
+      <span class="tape t1" style="left:auto;right:28px"></span>
+      <div class="lab"><span>便签 · 边界</span><span>附录 C · §4 · 本项目阅读</span></div>
+      <ul>
+        <li>出题、审计、盲答都由 LLM 完成，<b>没有人工认证</b>；几道检查共享的错误或偏差可以一起漏过。盲答只证明答案能从这些记录推出，不证明每条记录都必要。</li>
+        <li>题目跟着历史的分布走，不是用户真正会问的问题；设计空间以检索为主。</li>
+        <li>两个基准，其中 RHELM 是合成人设；每个设置只跑一次，无多种子方差。</li>
+      </ul>
+      <p style="font-size:15px;margin-top:6px"><b>读法</b>（本项目判断）：最有说服力的不是“比官方高”，而是 Naive 题让优化原地踏步、检查把它拉回来——监督质量本身是瓶颈，且可以在不碰评测题的条件下补上。它证明的是“有限条件下可用的监督”，不是人工标注已被无误替代。</p>
+    </div>
+  </div>
+  <div class="row" style="grid-template-columns: 1fr;">
+    <div class="card">
+      <span class="tape t3" style="left:20%"></span><span class="tape t4" style="left:auto;right:14%"></span>
+      <div class="lab"><span>剪报 · ATM 上一条被接受的设计轨迹（9 次修改，从 Base-BM25 出发）</span><span>附录 B.5 · 图 5 · Table 9b</span></div>
+      <h2>生成题选出来的改动，大多落在检索与上下文拼装上</h2>
+      <div class="traj">
+        <div><i>0</i>Base-BM25：原问题直接 BM25，按排名拼上下文</div>
+        <div><i>1</i>加 BGE-M3 稠密检索</div>
+        <div><i>2</i>混合检索 ＋ BGE 重排</div>
+        <div><i>3</i>问题分解</div>
+        <div><i>4</i>HyDE ＋ 第二级检索</div>
+        <div><i>5</i>HyDE 查询</div>
+        <div><i>6</i>180 个候选池、重排 90 个</div>
+        <div><i>7</i>答案校验</div>
+        <div><i>★</i>终版：4 条 HyDE 查询、重排 120、读 25 条记录、输出上限 4,000 token</div>
+      </div>
+      <p style="font-size:16px;margin-top:8px">顺序从“检索表示与排序”走到“多查询拼上下文”再到“答案校验”（原图编号 9 次修改，文字列出的步骤如上）。RHELM 十人设置里，生成题让 10 个人设<b>全部</b>高于起点，合并 33.3 → 39.9；官方题对照 40.7†（Table 9b）。论文自己也写明：这个设计空间以检索为主。</p>
+    </div>
+  </div>
+</div>
+<div class="foot"><span>数字均出自原文（v1）；出题车间为据 §3.2–3.3 自绘的示意，两张图据 Table 1、2、4 重绘。档位是阅读优先级判断，不是审稿结论。</span><span>reel/2610.39276</span></div>
+</body>
+</html>
