@@ -120,3 +120,7 @@
 ## 2026-11-03 08:43 每日 Opus 判断（第八期选题，补跑）
 
 - selection-007 后新增 confirmed P3：3 篇 ≥3 → 第八期选题。终选 3/3（39276 MemSteer / 40758 CLR-Bench / 41216 TinyAstral），各 2–3 轮修复后过视觉 QA；无 correction（TinyAstral 吸收主张、MemSteer 数字出入、CLR-Bench 类别构造偏置均按原文收窄展示口径）。见 selection-008.md。累计 33 张。
+
+## 2026-11-04 08:43 每日 Opus 判断
+
+- selection-008 后新增 confirmed P3：0 篇 <3 → 跳过。收集端自 11-02 晨无新产出（Grok 端静默，非本管线丢失）；巡检班待收集恢复后自动续评。
