@@ -133,3 +133,9 @@
 - L2：inc-l2-13 4/4（to_l2 全部；遗留 high 0）。改判 1 篇 P2→P3（2608.11250）。**2 篇 P3/confirmed/to_l3**（2609.33378 递归 harness 蒸馏、2610.21082 SciΠvot）；2608.11250 P3/pending_experiment/park；2608.16876 P2/park。
 - 漏检抽查：名额 0（预算 4×10%），欠账 ~1.9+0.4→~2.3 滚存（池 0）。seed=20261104。
 - to_l3 池：0 + 2 = 2 篇 <3 → 明晨 Opus 班暂不达标（除非夜间再增）。
+
+## 2026-11-04 00:17 巡检班（GitHub 查新）
+
+- 查新来源：selfimproving-agent list 再更新 → 2 篇新候选（corpus 1683→1685，全文/材料 2/2）。
+- L1：inc-l1-11 2/2，**均 out_of_scope/exclude**（2611.00053 SIMIT 视觉自想象权重自改进；2609.36808 Spotter 冻结策略+VLM 反思不属 harness-RSI 收录口径）。无 to_l2，无 L2。
+- to_l3 池：维持 2 篇 <3。
