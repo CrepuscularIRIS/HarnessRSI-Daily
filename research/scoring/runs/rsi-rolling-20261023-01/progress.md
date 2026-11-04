@@ -124,3 +124,12 @@
 ## 2026-11-04 08:43 每日 Opus 判断
 
 - selection-008 后新增 confirmed P3：0 篇 <3 → 跳过。收集端自 11-02 晨无新产出（Grok 端静默，非本管线丢失）；巡检班待收集恢复后自动续评。
+
+## 2026-11-04 18:17 巡检班（GitHub 查新首班）
+
+- 查新来源：refs/lists 上游拉齐（selfimproving-agent→11-02、XMUDeepLIT→10-25、EvoMap→11-02；CUA 侧 Awesome-CUA 等 3 仓亦更新）。Grok 收件箱仍静默。事故与修复：build_corpus.py 全量重写曾丢 ~471 条 inbox 记录，已 checkout 恢复并改为临时文件差分 append；此后为常设流程。
+- 新增：7 篇（GitHub 查新，corpus 1676→1683，全文 7/7，材料 7/7 abstract_intro）。
+- L1：inc-l1-10 7/7（assessed 4，out_of_scope 3：12762/16429/21427；to_l2 4）。
+- L2：inc-l2-13 4/4（to_l2 全部；遗留 high 0）。改判 1 篇 P2→P3（2608.11250）。**2 篇 P3/confirmed/to_l3**（2609.33378 递归 harness 蒸馏、2610.21082 SciΠvot）；2608.11250 P3/pending_experiment/park；2608.16876 P2/park。
+- 漏检抽查：名额 0（预算 4×10%），欠账 ~1.9+0.4→~2.3 滚存（池 0）。seed=20261104。
+- to_l3 池：0 + 2 = 2 篇 <3 → 明晨 Opus 班暂不达标（除非夜间再增）。
