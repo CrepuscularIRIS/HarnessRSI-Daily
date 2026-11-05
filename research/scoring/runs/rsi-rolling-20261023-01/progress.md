@@ -169,3 +169,7 @@
 - L1：inc-l1-13 9/9（assessed 7，out_of_scope 2；to_l2 7）。
 - L2：inc-l2-15 7/7（to_l2 全部；遗留 high 0）。改判 1 篇 P2→P3（06321）。**4 篇 P3/confirmed/to_l3**（05445/05450/06444/06768）；06254 P2/park；06321、06049 pending_experiment/park。
 - 漏检抽查：名额 1（预算 7×10%）但池 0 → 欠账 ~3.3+1→~4.3 滚存。seed=20261108。
+
+## 2026-11-07 每日 Opus 判断（第十期选题）
+
+- selection-009 后新增 confirmed P3：4 篇 ≥3 → 第十期选题。终选 3 篇（05450 ReScopeBench 陈旧内容修订 / 06444 EvoGuard 在线双技能选择器 / 05445 LIBRA 执行过滤工具图），各修复后过视觉 QA；无 correction。06768 落选（真机数为开发尝试汇总、冻结证据仅仿真单次、含人工介入、与 41216 同题；RoboDojo 数字存在正文/附录矛盾——备注退 Sol，84.4% 不再用于展示）。见 selection-010.md。累计 39 张。
