@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 18 → 33 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 21 → 36 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Thirty-three papers, thirty-three distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [Reel index](reel/README.md).
-（33 篇、33 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Thirty-six papers, thirty-six distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [Reel index](reel/README.md).
+（36 篇、36 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.05139/poster.png"><img src="reel/2611.05139/poster.png" width="260" alt="2611.05139 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.05139">2611.05139</a> · When to touch the harness mid-run</b><br>
+Meta² learns offline, from privileged A/B/C contrasts, when to act, avoid or hold, then edits only the live run without a verifier: 81.00 on Terminal-Bench 2.1 and 44.44 on DeepSWE; carrying edits across tasks drops it to 78.33 / 39.11. One Meta-Skill per setting.<br>
+离线用特权对照学“何时出手 / 按兵不动”，局中无判分器只做本局改动；改动跨题保留反而变差。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.04952/poster.png"><img src="reel/2611.04952/poster.png" width="260" alt="2611.04952 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.04952">2611.04952</a> · Signals are not capability</b><br>
+In controlled Gomoku, Reflexion, Voyager and DGM all show accumulating artifacts, changed behavior and rising metrics, yet one only plays fewer illegal moves, one blocks its own 20 winning moves through component order, and one only loses states after forming a capability.<br>
+三信号俱全却没形成能力：合法化增益、组合覆盖、只丢不增，三个反例断在三个不同环节。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.01834/poster.png"><img src="reel/2611.01834/poster.png" width="260" alt="2611.01834 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.01834">2611.01834</a> · Hard task or broken environment?</b><br>
+Of 1,324 generated environments no teacher solved, 52% had a faulty verifier and 23% a broken world; 997 repairs trace to 33 shared root causes and yield rises from 71.6% to 88.3% after repair and resampling.<br>
+没人解得出的生成环境，四分之三其实是环境坏了；修一次传给共享同一原子的环境。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

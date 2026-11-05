@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>环境分诊台</title><style>
+:root{--teal:#0f6e68;--red:#d23b2e;--amb:#e8a317;--grn:#2e9a57;--wall:#e9f0ee;--ink:#1d2326}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{width:1600px;height:2263px;overflow:hidden;position:relative;background:var(--wall);color:var(--ink);font-family:"Noto Sans CJK SC",sans-serif;font-size:17.5px;line-height:1.5}
+.sign{background:var(--teal);color:#fff;padding:18px 55px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:8px solid #0a4f4b}
+.sign .cross{display:inline-flex;align-items:center;gap:14px;font-size:26px;font-weight:900;letter-spacing:6px}
+.sign .cross i{display:inline-block;width:38px;height:38px;background:
+ linear-gradient(#fff,#fff) center/12px 38px no-repeat, linear-gradient(#fff,#fff) center/38px 12px no-repeat}
+.sign .meta{font-family:"Noto Sans Mono CJK SC",monospace;font-size:14.5px;text-align:right;line-height:1.5}
+.head{padding:20px 55px 4px}
+h1{font-size:50px;line-height:1.2;margin:0 0 10px;font-weight:900}
+h1 .r{color:var(--red)}
+.sub{font-size:19.5px;margin:0;color:#2b3337}
+.row{display:grid;gap:24px;margin:30px 55px 0}
+.card{background:#fff;border-radius:10px;border:2px solid #b9c8c5;padding:14px 22px 14px;position:relative;box-shadow:0 2px 0 #0001}
+.card .no{position:absolute;top:-14px;left:18px;background:var(--teal);color:#fff;font-size:14px;font-weight:700;padding:1px 12px;border-radius:12px;letter-spacing:2px}
+h2{font-size:25px;margin:8px 0 6px;line-height:1.3}
+h2 small{font-size:14px;color:#6a7376;font-weight:400;margin-left:8px}
+p{margin:0 0 7px}
+.k{font-weight:900;color:var(--red)}
+.note{font-size:15.5px;color:#5c6467;line-height:1.45}
+.atoms{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 8px}
+.atom{border:2px solid var(--teal);border-radius:8px;padding:6px 10px;font-size:15px;line-height:1.4;background:#f3faf9}
+.atom b{display:block;font-size:17px;color:var(--teal)}
+ol.adm{margin:4px 0 6px;padding-left:24px}ol.adm li{font-size:15.5px;margin-bottom:3px}
+.slip{background:#fff7e0;border:2px dashed #b88a12;border-radius:8px;padding:10px 14px;font-size:16px}
+svg text{font-family:"Noto Sans CJK SC",sans-serif}
+.lb{font-size:19px;font-weight:900;fill:#1d2326}.lb2{font-size:18px;font-weight:700;fill:#0a4f4b}.lb3{font-size:15.5px;fill:#333}
+.tg1{font-size:19px;font-weight:900}.tg2{font-size:15.5px;fill:#333}
+.bn{font-size:17px;font-weight:900;fill:#0a4f4b;font-family:"URW Gothic","Noto Sans CJK SC"}.sm{font-size:13.5px;fill:#666}
+.fn{font-size:18px;font-weight:900;fill:#fff;font-family:"URW Gothic","Noto Sans CJK SC"}
+.yield{display:grid;grid-template-columns:150px 1fr 90px;align-items:center;gap:10px;margin:4px 0;font-size:16px}
+.yield .bar{height:26px;background:#dfe7e5;border-radius:4px;overflow:hidden}
+.yield .bar span{display:block;height:100%;background:var(--teal)}
+.yield .v{font-family:"URW Gothic",sans-serif;font-weight:700;font-size:22px}
+table.t{border-collapse:collapse;width:100%;font-size:15.5px;margin:4px 0 6px}
+table.t td,table.t th{border-bottom:1px solid #cfd8d6;padding:3px 6px;text-align:left}
+table.t th{font-size:13.5px;color:#666;font-weight:400}
+table.t td.n{text-align:right;font-family:"URW Gothic","DejaVu Sans",sans-serif;font-weight:700}
+.order{background:#fff;border:3px solid var(--red);border-radius:10px;padding:12px 20px;position:relative}
+.order h3{margin:0 0 6px;font-size:21px;color:var(--red)}
+.order ul{margin:0;padding-left:20px}.order li{font-size:16.5px;margin-bottom:7px;line-height:1.45}
+.foot{position:absolute;bottom:20px;left:55px;right:55px;font-size:13.5px;color:#4a5356}
+</style></head><body>
+<div class="sign"><span class="cross"><i></i>环境急诊 · 分诊台</span>
+ <span class="meta">LegoEnv · arXiv 2611.01834v1 · 2026-11-01<br>Jiang, Wu, Liu 等（上海交大 / 腾讯 / NUS 等）</span></div>
+<div class="head">
+ <h1>没人解得出的环境：<span class="r">是题太难，还是环境坏了？</span></h1>
+ <p class="sub">自动造训练环境时，坏掉的验证器和缺工具的世界会伪装成“难题”，既浪费采样又产出错误监督。LegoEnv 把环境拆成可复用原子，先验验证器、再给失败分诊，把一次修复传给所有共享同一部件的环境。</p>
+</div>
+
+<div class="row" style="grid-template-columns:1.05fr 1fr">
+ <div class="card"><span class="no">挂号</span>
+  <h2>环境由四类原子拼成<small>§3.1–3.4</small></h2>
+  <div class="atoms">
+   <div class="atom"><b>服务</b>从 467 个开源仓编译出 384 个可用应用，本文用 223 个</div>
+   <div class="atom"><b>数据</b>336 个公开数据集中 281 个有可用表；世界只从真实数据播种</div>
+   <div class="atom"><b>意图</b>一次必须 / 不得发生的写入；110 种操作、45 种校验类型</div>
+   <div class="atom"><b>规则</b>代理要自己找到并遵守的业务规则，写在表格、邮件等载体里</div>
+  </div>
+  <p class="note">骨架（≤6 个服务 + 意图 + 规则 + 数据集）须过四条结构约束：1,394 个从真实流程挖出，3,400 个由替换重组得到。构建代理（DeepSeek-V4-Flash）为每个骨架写出世界、请求、正 / 负断言和一份参考解。</p>
+ </div>
+ <div class="card"><span class="no">准入</span>
+  <h2>验证器先要过自检<small>§3.4</small></h2>
+  <ol class="adm">
+   <li>初始世界里：应写入的断言都不成立，不得改动的断言都成立；</li>
+   <li>执行参考解后全部断言成立；</li>
+   <li>参考解每条正断言都依赖某一步（去掉就失败），不许空测；</li>
+   <li>每条负断言都有可能被违反；重置后回到同一初始世界。</li></ol>
+  <div class="slip">挡不住的一类：<b>验证器要求一个请求里根本没说的值</b>——参考解正好带着这个值，自检照样通过，只有真的去跑才暴露。</div>
+ </div>
+</div>
+
+<div class="row"><div class="card"><span class="no">分诊</span>
+ <h2>1,324 个“难题”里，四分之三其实是环境的错<small>§5.2、附录 K</small></h2>
+ <svg viewBox="0 0 1490 560" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect x="30" y="46" width="64" height="315.040755040755" fill="#7fb6b1"/><rect x="30" y="361.040755040755" width="64" height="124.95924495924498" fill="#6b6f73"/><text x="30" y="30" class="lb">4,662 个通过准入的环境（第 2 轮）</text><text x="106" y="76" class="lb2">3,338† 至少一次被接受</text><text x="106" y="100" class="lb3">产出率 71.6%（教师 8 次尝试）</text><text x="30" y="514" class="lb2" fill="#333">1,324 个 8 次全失败（灰）</text><text x="30" y="536" class="lb3">读起来和其余环境没有两样</text><path d="M94,361.040755040755 C262.0,361.040755040755 262.0,96 430,96 L430,253.4773413897281 C262.0,253.4773413897281 262.0,426.6349206349206 94,426.6349206349206 Z" fill="#d23b2e" fill-opacity="0.35"/><path d="M94,426.6349206349206 C262.0,426.6349206349206 262.0,279.4773413897281 430,279.4773413897281 L430,347.90634441087616 C262.0,347.90634441087616 262.0,455.1377091377091 94,455.1377091377091 Z" fill="#e8a317" fill-opacity="0.35"/><path d="M94,455.1377091377091 C262.0,455.1377091377091 262.0,373.90634441087616 430,373.90634441087616 L430,448.0 C262.0,448.0 262.0,486 94,486 Z" fill="#2e9a57" fill-opacity="0.35"/><path d="M760,96 C820.0,96 820.0,96 880,96 L880,253.4773413897281 C820.0,253.4773413897281 820.0,253.4773413897281 760,253.4773413897281 Z" fill="#d23b2e" fill-opacity="0.35"/><path d="M760,279.4773413897281 C820.0,279.4773413897281 820.0,253.4773413897281 880,253.4773413897281 L880,321.90634441087616 C820.0,321.90634441087616 820.0,347.90634441087616 760,347.90634441087616 Z" fill="#e8a317" fill-opacity="0.35"/><rect x="880" y="96" width="54" height="225.90634441087613" fill="#0f6e68"/><text x="850" y="62" class="lb">997 次修复 → 33 个根因</text><text x="850" y="84" class="lb3">修一次，传给共享该部件的环境</text><path d="M934,96 C1042.0,96 1042.0,86 1150,86 L1150,262.0574018126888 C1042.0,262.0574018126888 1042.0,272.0574018126888 934,272.0574018126888 Z" fill="#0f6e68" fill-opacity="0.3"/><path d="M934,272.0574018126888 C1042.0,272.0574018126888 1042.0,302.0574018126888 1150,302.0574018126888 L1150,351.9063444108761 C1042.0,351.9063444108761 1042.0,321.90634441087616 934,321.90634441087616 Z" fill="#6b6f73" fill-opacity="0.35"/><rect x="1150" y="86" width="40" height="176.05740181268882" fill="#0f6e68"/><rect x="1150" y="302.0574018126888" width="40" height="49.848942598187314" fill="#6b6f73"/><text x="1202" y="146" class="lb">777†</text><text x="1202" y="170" class="lb3">重新采样后</text><text x="1202" y="192" class="lb3">至少一次被接受</text><text x="1202" y="322.0574018126888" class="lb">220</text><text x="1202" y="346.0574018126888" class="lb3">仍无产出 →</text><text x="1202" y="368.0574018126888" class="lb3">RL 探索集</text><path d="M760,373.90634441087616 C955.0,373.90634441087616 955.0,373.90634441087616 1150,373.90634441087616 L1150,448.0 C955.0,448.0 955.0,448.0 760,448.0 Z" fill="#2e9a57" fill-opacity="0.3"/><rect x="1150" y="373.90634441087616" width="40" height="74.09365558912387" fill="#2e9a57"/><text x="1202" y="403.90634441087616" class="lb">327†</text><text x="1202" y="427.90634441087616" class="lb3">原样保留为难题</text><rect x="430" y="96" width="330" height="157.4773413897281" rx="6" fill="#fff" stroke="#333" stroke-width="1.5"/><rect x="430" y="96" width="16" height="157.4773413897281" rx="3" fill="#d23b2e"/><circle cx="744" cy="110" r="6" fill="#e9f0ee" stroke="#333"/><text x="458" y="126" class="tg1" fill="#d23b2e">验证器错 · 695（52%）</text><text x="458" y="152" class="tg2">要求了请求和规则都</text><text x="458" y="173" class="tg2">没说的东西</text><rect x="430" y="279.4773413897281" width="330" height="68.42900302114803" rx="6" fill="#fff" stroke="#333" stroke-width="1.5"/><rect x="430" y="279.4773413897281" width="16" height="68.42900302114803" rx="3" fill="#e8a317"/><circle cx="744" cy="293.4773413897281" r="6" fill="#e9f0ee" stroke="#333"/><text x="458" y="309.4773413897281" class="tg1" fill="#e8a317">世界错 · 302（23%）</text><text x="458" y="335.4773413897281" class="tg2">缺记录、列或工具，或彼此不一致</text><text x="770" y="319.6918429003021" class="lb3" text-anchor="start"> </text><rect x="430" y="373.90634441087616" width="330" height="74.09365558912387" rx="6" fill="#fff" stroke="#333" stroke-width="1.5"/><rect x="430" y="373.90634441087616" width="16" height="74.09365558912387" rx="3" fill="#2e9a57"/><circle cx="744" cy="387.90634441087616" r="6" fill="#e9f0ee" stroke="#333"/><text x="458" y="403.90634441087616" class="tg1" fill="#2e9a57">健全但难 · 327（25%）</text><text x="458" y="429.90634441087616" class="tg2">教师确实解不出，保留不改</text><text x="430" y="36" class="lb">分诊</text><text x="430" y="60" class="lb3">诊断代理读请求、规则、参考解与失败轨迹</text></svg>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:4px">
+  <div>
+   <div class="yield"><span>修复前产出率</span><div class="bar"><span style="width:71.6%"></span></div><span class="v">71.6%</span></div>
+   <div class="yield"><span>修复并重采样后</span><div class="bar"><span style="width:88.3%"></span></div><span class="v">88.3%</span></div>
+  </div>
+  <p class="note">† 本项目按原文数字推算：3,338 = 4,662 − 1,324；327 = 1,324 − 997；777 = 997 − 220；(3,338 + 777) / 4,662 = 88.3%，与作者一致。首轮“验证器 / 世界”标签与根因分层是两种划分（695 个验证器标签里 173 个后来判为构建者纪律）。</p>
+ </div>
+</div></div>
+
+<div class="row" style="grid-template-columns:1.15fr 1fr">
+ <div class="card"><span class="no">病因</span>
+  <h2>997 次修复只有 33 个根因<small>附录 K 表 10</small></h2>
+  <svg viewBox="0 0 690 290" width="690" height="290" xmlns="http://www.w3.org/2000/svg"><text x="118" y="35" class="lb3" text-anchor="end">校验类型语义</text><rect x="128" y="16" width="430.0" height="28" fill="#0f6e68"/><text x="566.0" y="37" class="bn">582</text><text x="136" y="60" class="sm">同一种 verifier kind 被读成两种意思</text><text x="118" y="89" class="lb3" text-anchor="end">构建者纪律</text><rect x="128" y="70" width="297.0103092783505" height="28" fill="#0f6e68"/><text x="433.0103092783505" y="91" class="bn">402</text><text x="136" y="114" class="sm">缺来源事实 / 收件人 / 政策条款、坏种子、错参考动作</text><text x="118" y="143" class="lb3" text-anchor="end">服务规格</text><rect x="128" y="124" width="5.9106529209622" height="28" fill="#0f6e68"/><text x="141.9106529209622" y="145" class="bn">8</text><text x="118" y="197" class="lb3" text-anchor="end">数据卡</text><rect x="128" y="178" width="3" height="28" fill="#0f6e68"/><text x="139" y="199" class="bn">4</text><text x="118" y="251" class="lb3" text-anchor="end">单个实例</text><rect x="128" y="232" width="3" height="28" fill="#0f6e68"/><text x="139" y="253" class="bn">1</text></svg>
+  <p class="note">另有 89 次修复带次要原因，未计入。几乎全是“校验类型读法”与“构建者指令”，所以改一处说明或一条校验类型的定义，后续用到它的环境一起受益。</p>
+ </div>
+ <div class="card"><span class="no">复诊</span>
+  <h2>换代理从头跑一遍诊断与修复<small>附录 H（约 100 例 / 阶段）</small></h2>
+  <svg viewBox="0 0 560 280" width="560" height="280" xmlns="http://www.w3.org/2000/svg"><rect x="20.0" y="12" width="330.0" height="36" rx="4" fill="#0f6e68" fill-opacity="1.0"/><text x="185" y="37" class="fn" text-anchor="middle">100</text><text x="368" y="36" class="lb3">无人解出的环境</text><rect x="29.900000000000006" y="64" width="310.2" height="36" rx="4" fill="#0f6e68" fill-opacity="0.85"/><text x="185" y="89" class="fn" text-anchor="middle">94</text><text x="368" y="88" class="lb3">诊断有效</text><rect x="72.8" y="116" width="224.4" height="36" rx="4" fill="#0f6e68" fill-opacity="0.7"/><text x="185" y="141" class="fn" text-anchor="middle">68</text><text x="368" y="140" class="lb3">修复</text><rect x="100.85" y="168" width="168.3" height="36" rx="4" fill="#0f6e68" fill-opacity="0.55"/><text x="185" y="193" class="fn" text-anchor="middle">51</text><text x="368" y="192" class="lb3">通过复核</text><rect x="112.4" y="220" width="145.2" height="36" rx="4" fill="#0f6e68" fill-opacity="0.4"/><text x="185" y="245" class="fn" text-anchor="middle">44</text><text x="368" y="244" class="lb3">教师随后解出</text></svg>
+  <p class="note">在 DeepSeek-V4-Flash 上让代理在不看已有修复的情况下重做；另：只给失败证据与 15 个服务的原始规格，修复代理救回 203 个建不出的环境中的 188 个，同时没有弄坏 90 个本来能建的。</p>
+ </div>
+</div>
+
+<div class="row" style="grid-template-columns:1fr 1fr">
+ <div class="card"><span class="no">出院后</span>
+  <h2>拿这些环境训模型（权重层面，非本卡重点）<small>表 1–2、§4.2–4.3、§5.4</small></h2>
+  <table class="t"><tr><th>AutomationBench（600 题，与训练环境无共用应用）</th><th>前 / 对照</th><th>后 / 本文</th></tr>
+   <tr><td>SFT · Qwen3.5-27B（教师轨迹蒸馏）</td><td class="n">3.2</td><td class="n">23.2</td></tr>
+   <tr><td>SFT · Qwen3.6-27B</td><td class="n">16.0</td><td class="n">32.0</td></tr>
+   <tr><td>同 2,229 条轨迹：本文 vs 最好的公开管线 AWM</td><td class="n">21.5</td><td class="n">29.5</td></tr>
+   <tr><td>GRPO · Qwen3.8-27B（教师本身，验证器作奖励）</td><td class="n">37.6</td><td class="n">38.3–41.3</td></tr></table>
+  <p class="note">所有 SFT 轨迹都采自 37.6% 的 Qwen3.8-27B，是蒸馏而非来自更强外部模型。RL 区间内每个检查点都高于基座，但 18 组配对里只有 1 组在 5% 水平显著。含修复环境的第 3 轮语料在 AutomationBench 更高（34.8），在 MCP-Mark / BFCL 反而更低（59.1 / 67.9 vs 68.5 / 72.4，单次评测）——<b>修复对下游训练的价值尚未确立</b>。</p>
+ </div>
+ <div class="order"><h3>医嘱：别把这些数读过头</h3><ul>
+  <li>88.3% 是“修复 + 再采 8 次”之后的产出率，修复组多拿了一轮采样，不是同采样预算、难度不变的因果增益。</li>
+  <li>“健全但难”的 25% 由诊断代理判定；请求、验证器、参考解都由构建模型写，没有全量独立盲审，修后任务的语义不保证正确。</li>
+  <li>只跑了一轮演化、一个 27B 模型家族、英文业务场景；训练都只跑一次，循环是否收敛未知。</li>
+  <li>BFCL 的“拒绝不该做的调用”项在 SFT 后下降 5–8 点：每个请求都至少要求一次写入，没有奖励拒绝。</li>
+  <li>本项目读法：本文与自生成课程的关键区别是把“生成器说是对的”换成“执行过的自检 + 失败分诊”，但锚点（请求与规则）仍由同一模型写出。</li></ul></div>
+</div>
+
+<div class="foot">数字出处见 SOURCE.md（§1、§3、§4、§5.2、Limitations，附录 K 表 10 等）。标 † 者为本项目按原文数字推算；流向图为按比例重绘的示意，不是原文插图。问题档位为本项目阅读判断，非审稿结论；未运行论文代码。</div>
+</body></html>
