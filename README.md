@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 21 → 36 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 24 → 39 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Thirty-six papers, thirty-six distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [Reel index](reel/README.md).
-（36 篇、36 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Thirty-nine papers, thirty-nine distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [Reel index](reel/README.md).
+（39 篇、39 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.05450/poster.png"><img src="reel/2611.05450/poster.png" width="260" alt="2611.05450 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.05450">2611.05450</a> · Revised, retained, used?</b><br>
+ReScopeBench scores saved experience against the current environment after silent changes: replacement content climbs only from 21.47% to 64.63% over four tasks while still-valid content stays at 89–91%; no model exceeds 37.63 in immediate updating, and complete saved experience is neither necessary nor sufficient for delivery. One stream per condition.<br>
+环境静默变化后把修订、保留、使用分开计分：改得慢、留得住，记对了也不一定交得出。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.06444/poster.png"><img src="reel/2611.06444/poster.png" width="260" alt="2611.06444 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.06444">2611.06444</a> · Should the rewrite replace the skill?</b><br>
+42.2% of single-trajectory skill rewrites score below their parent. EvoGuard trains a pairwise selector offline on utility-labelled skills and decides each online update in one forward pass: 56.5% vs 45.5% for accept-all on ALFWorld; 86.3% accuracy on parent–child pairs, and a few families still regress.<br>
+单轨迹改写四成多变差；离线学成的选择器在线一次前向判去留，不额外跑环境。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.05445/poster.png"><img src="reel/2611.05445/poster.png" width="260" alt="2611.05445 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.05445">2611.05445</a> · Who remembers to log in first?</b><br>
+LIBRA keeps a tool relation only if the consumer succeeds with the provider's value and fails with a substitute in the same sandbox state. With the same encoder, a schema-compatible graph barely helps (AppWorld Recall 29.2 vs 28.7) while the execution-filtered graph reaches 40.7. Retrieval metrics only.<br>
+冷启动工具目录里先跑反事实组合测试再建依赖，检索时补回请求没提的前置工具。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

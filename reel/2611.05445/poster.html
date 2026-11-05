@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>可执行工具库蓝图</title><style>
+:root{--bp:#17497f;--ink:#ffffff;--cy:#9fe0ff;--am:#ffcf5c;--or:#ff8a65}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;color:var(--ink);font-family:"Noto Sans CJK SC",sans-serif;font-size:17.5px;line-height:1.5;position:relative;
+background-color:var(--bp);background-image:linear-gradient(rgba(159,224,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(159,224,255,.13) 1px,transparent 1px),linear-gradient(rgba(159,224,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(159,224,255,.06) 1px,transparent 1px);
+background-size:100px 100px,100px 100px,20px 20px,20px 20px}
+.frame{position:absolute;left:30px;top:30px;right:30px;bottom:30px;border:3px solid var(--ink);padding:24px 32px}
+.frame::before{content:"";position:absolute;inset:6px;border:1px solid var(--cy);pointer-events:none}
+.hd{display:grid;grid-template-columns:1fr 330px;gap:28px}
+.dwg{font-family:"Noto Sans Mono CJK SC",monospace;font-size:14.5px;color:var(--cy);letter-spacing:2px}
+h1{font-size:46px;line-height:1.22;margin:8px 0 10px;font-weight:900}
+h1 em{font-style:normal;color:var(--am)}
+.sub{font-size:19px;margin:0 0 6px}
+.meta{font-size:14.5px;color:var(--cy)}
+.spec{border:2px solid var(--ink);font-family:"Noto Sans Mono CJK SC",monospace;font-size:14px;line-height:1.55}
+.spec div{padding:5px 10px;border-bottom:1px solid var(--cy)}.spec div:last-child{border-bottom:none}
+.spec b{color:var(--am);font-weight:400}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:30px}
+.box{border:2px solid var(--ink);padding:12px 18px;background:rgba(13,47,85,.55);min-width:0;position:relative}
+.box .lbl{position:absolute;top:-13px;left:14px;background:var(--bp);padding:0 8px;font-family:"Noto Sans Mono CJK SC",monospace;font-size:13.5px;color:var(--cy);letter-spacing:2px}
+.box h2{margin:4px 0 6px;font-size:24px;line-height:1.3}
+p{margin:0 0 6px}
+.am{color:var(--am);font-weight:900}.or{color:var(--or);font-weight:900}
+.note{font-size:14.5px;color:var(--cy);line-height:1.45}
+.formula{font-family:"Noto Sans Mono CJK SC",monospace;font-size:16px;border:1px dashed var(--cy);padding:6px 10px;margin:6px 0;text-align:center;color:var(--am)}
+table{border-collapse:collapse;width:100%;font-size:15px;font-family:"Noto Sans Mono CJK SC",monospace}
+td,th{border:1px solid var(--cy);padding:4px 7px;text-align:right}th{color:var(--am);font-weight:400}
+td:first-child,th:first-child{text-align:left}
+ul{margin:0;padding-left:22px;font-size:15.5px;line-height:1.5}li{margin-bottom:3px}
+.tb{position:absolute;left:32px;right:32px;bottom:22px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border:2px solid var(--ink);font-size:13.5px;font-family:"Noto Sans Mono CJK SC",monospace}
+.tb div{padding:6px 10px;border-right:1px solid var(--cy)}.tb div:last-child{border-right:none}
+.tb b{display:block;color:var(--cy);font-weight:400;font-size:12px;letter-spacing:2px}
+</style></head><body>
+<div class="frame">
+<div class="hd"><div>
+<div class="dwg">DWG 2611.05445 · 可执行工具库 · 总装图</div>
+<h1>用户只说“找到 Alice，我来转账”，<br><em>谁来想起要先登录？</em></h1>
+<p class="sub">检索器按与请求的相似度给每个工具单独排名，常常找到“目标工具”却漏掉它的前置工具。LIBRA 在任何请求到来之前，<b>在沙箱里真跑一遍组合</b>，只把“有它能成、换掉就败”的关系存进工具库，检索时沿边补回前置工具。</p>
+<div class="meta">LIBRA: Programmatic Induction of Executable Tool Libraries · arXiv 2611.05445v1 · 布朗大学、南加州大学 · AppWorld / BFCL / SciToolEval</div>
+</div>
+<div class="spec">
+<div><b>输入</b> 工具目录 + 可执行运行时（公开元数据）</div>
+<div><b>不需要</b> 依赖标注 · 使用轨迹 · 任务训练</div>
+<div><b>LLM</b> 每个工具 1 次写契约 + 至多 2 次按反馈修订（DeepSeek-V4-Flash）</div>
+<div><b>检索</b> Qwen3-Embedding-0.6B，只嵌入原始元数据；无重排</div>
+<div><b>评价</b> Recall / NDCG（候选集质量，不是任务完成）</div>
+</div></div>
+
+<div class="row">
+<div class="box"><span class="lbl">A · 问题</span><h2>目标排第 1，前置排到第 169</h2>
+<svg viewBox="0 0 700 280" width="100%" role="img" aria-label="稠密检索排名"><rect x="20" y="6" width="54.7" height="240" fill="#9fe0ff" opacity="0.10"/><text x="80.7" y="22" font-size="13.5" fill="#9fe0ff">← 前 15 名（检索截断）</text><line x1="20" y1="66" x2="680" y2="66" stroke="#9fe0ff" stroke-width="1.5"/><line x1="20.0" y1="62" x2="20.0" y2="70" stroke="#9fe0ff"/><line x1="113.7" y1="62" x2="113.7" y2="70" stroke="#9fe0ff"/><line x1="211.4" y1="62" x2="211.4" y2="70" stroke="#9fe0ff"/><line x1="309.0" y1="62" x2="309.0" y2="70" stroke="#9fe0ff"/><line x1="406.6" y1="62" x2="406.6" y2="70" stroke="#9fe0ff"/><line x1="504.3" y1="62" x2="504.3" y2="70" stroke="#9fe0ff"/><line x1="601.9" y1="62" x2="601.9" y2="70" stroke="#9fe0ff"/><line x1="676.1" y1="62" x2="676.1" y2="70" stroke="#9fe0ff"/><circle cx="20.0" cy="66" r="7" fill="#ffffff"/><text x="32.0" y="56" font-size="14" fill="#ffffff">phone.update_alarm #1（目标工具）</text><rect x="118.4" y="59" width="14" height="14" fill="#ff8a65"/><text x="137.4" y="90" font-size="14" fill="#ff8a65" text-anchor="start">phone.login #28（前置·认证）</text><text x="680" y="56" font-size="13" fill="#9fe0ff" text-anchor="end">AppWorld</text><line x1="20" y1="136" x2="680" y2="136" stroke="#9fe0ff" stroke-width="1.5"/><line x1="20.0" y1="132" x2="20.0" y2="140" stroke="#9fe0ff"/><line x1="113.7" y1="132" x2="113.7" y2="140" stroke="#9fe0ff"/><line x1="211.4" y1="132" x2="211.4" y2="140" stroke="#9fe0ff"/><line x1="309.0" y1="132" x2="309.0" y2="140" stroke="#9fe0ff"/><line x1="406.6" y1="132" x2="406.6" y2="140" stroke="#9fe0ff"/><line x1="504.3" y1="132" x2="504.3" y2="140" stroke="#9fe0ff"/><line x1="601.9" y1="132" x2="601.9" y2="140" stroke="#9fe0ff"/><line x1="676.1" y1="132" x2="676.1" y2="140" stroke="#9fe0ff"/><circle cx="27.8" cy="136" r="7" fill="#ffffff"/><text x="39.8" y="126" font-size="14" fill="#ffffff">GorillaFileSystem.tail #3（目标工具）</text><rect x="71.6" y="129" width="14" height="14" fill="#ff8a65"/><text x="90.6" y="160" font-size="14" fill="#ff8a65" text-anchor="start">GorillaFileSystem.touch #16（前置·环境状态）</text><text x="680" y="126" font-size="13" fill="#9fe0ff" text-anchor="end">BFCL</text><line x1="20" y1="206" x2="680" y2="206" stroke="#9fe0ff" stroke-width="1.5"/><line x1="20.0" y1="202" x2="20.0" y2="210" stroke="#9fe0ff"/><line x1="113.7" y1="202" x2="113.7" y2="210" stroke="#9fe0ff"/><line x1="211.4" y1="202" x2="211.4" y2="210" stroke="#9fe0ff"/><line x1="309.0" y1="202" x2="309.0" y2="210" stroke="#9fe0ff"/><line x1="406.6" y1="202" x2="406.6" y2="210" stroke="#9fe0ff"/><line x1="504.3" y1="202" x2="504.3" y2="210" stroke="#9fe0ff"/><line x1="601.9" y1="202" x2="601.9" y2="210" stroke="#9fe0ff"/><line x1="676.1" y1="202" x2="676.1" y2="210" stroke="#9fe0ff"/><circle cx="20.0" cy="206" r="7" fill="#ffffff"/><text x="32.0" y="196" font-size="14" fill="#ffffff">GetNPR2 #1（目标工具）</text><rect x="669.1" y="199" width="14" height="14" fill="#ff8a65"/><text x="680.0" y="230" font-size="14" fill="#ff8a65" text-anchor="end">SELFIEStoSMILES #169（前置·格式转换）</text><text x="680" y="196" font-size="13" fill="#9fe0ff" text-anchor="end">SciToolEval</text><text x="20" y="274" font-size="13.5" fill="#9fe0ff">稠密检索名次（图 3）；LIBRA 沿保留的边把三个前置工具都提进了前 K</text></svg>
+<p>请求通常只说想要的结果，认证、查 ID、初始化状态、格式转换这些步骤不写。前置工具与请求、与目标工具在嵌入空间里都不必相似——稠密检索按设计找到了目标，<span class="or">缺的是“谁必须先执行”的信号</span>。</p>
+<div style="border:1px dashed var(--cy);padding:8px 12px;margin-top:8px;font-size:15.5px"><span class="am">图 1 的例子</span>：请求“Find Alice in my contact and I will make the transfer”，稠密检索给出 <b>Venmo.Search_users</b>；LIBRA 在库里查到它的输入来源边，沿一跳补回 <b>Venmo.Login</b>。LIBRA 不生成、不执行任务计划，只改变候选集。</div>
+</div>
+<div class="box"><span class="lbl">B · 构库</span><h2>反事实沙箱测试：有它能成，换掉就败</h2>
+<p>LLM 只看单个工具的公开描述、签名和输入输出模式，写出<b>契约</b>：候选调用、可复用的输出与状态变化、可观测的成功 / 失败条件。然后在隔离沙箱里组合执行：</p>
+<svg viewBox="0 0 700 300" width="100%" role="img" aria-label="反事实沙箱测试示意">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffffff"/></marker></defs>
+<g font-size="15" fill="#ffffff">
+<rect x="10" y="20" width="150" height="58" fill="none" stroke="#ffffff" stroke-width="2"/><text x="85" y="45" text-anchor="middle">提供者 t_p</text><text x="85" y="66" text-anchor="middle" font-size="13" fill="#9fe0ff">如 Venmo.Login</text>
+<line x1="160" y1="49" x2="250" y2="49" stroke="#ffffff" stroke-width="2" marker-end="url(#ar)"/><text x="205" y="40" text-anchor="middle" font-size="13" fill="#9fe0ff">产出值 v</text>
+<rect x="250" y="20" width="160" height="58" fill="none" stroke="#ffffff" stroke-width="2"/><text x="330" y="45" text-anchor="middle">消费者 t_c(v)</text><text x="330" y="66" text-anchor="middle" font-size="13" fill="#9fe0ff">从保存的沙箱状态 σ</text>
+<text x="430" y="56" font-size="26" fill="#ffcf5c" font-weight="900">✓ 成功</text>
+<rect x="250" y="104" width="160" height="58" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6 4"/><text x="330" y="129" text-anchor="middle">消费者 t_c(ṽ)</text><text x="330" y="150" text-anchor="middle" font-size="13" fill="#9fe0ff">同一 σ，换独立值或省略</text>
+<text x="430" y="140" font-size="26" fill="#ff8a65" font-weight="900">✗ 失败</text>
+<line x1="330" y1="78" x2="330" y2="104" stroke="#9fe0ff" stroke-dasharray="3 3"/>
+<path d="M540 40 L560 40 L560 150 L540 150" fill="none" stroke="#ffcf5c" stroke-width="2"/>
+<text x="572" y="88" font-size="16" fill="#ffcf5c" font-weight="700">两者同时</text><text x="572" y="110" font-size="16" fill="#ffcf5c" font-weight="700">成立才收</text><text x="572" y="132" font-size="14" fill="#ffcf5c">输入来源边</text>
+<line x1="10" y1="190" x2="690" y2="190" stroke="#9fe0ff" stroke-opacity="0.4"/>
+<text x="10" y="216" font-size="15">状态依赖：t_p 执行<tspan font-weight="900" fill="#ffcf5c">前</tspan>调 t_c 失败、执行<tspan font-weight="900" fill="#ffcf5c">后</tspan>同参数调 t_c 成功 → 收 t_p → t_c</text>
+<text x="10" y="242" font-size="15">两次都成功：仅当输出 / 输入字段名语义对齐，才收作“兼容边”（不等于必要依赖）</text>
+<text x="10" y="270" font-size="14" fill="#9fe0ff">反例（图 1）：card 与 trans_id 都是整数，但支付卡号不能当交易号用 —— 类型兼容 ≠ 能组合</text>
+<text x="690" y="292" font-size="12.5" fill="#9fe0ff" text-anchor="end">示意 · 依 §3.1 与算法 1 重绘</text>
+</g></svg>
+</div>
+</div>
+
+<div class="row">
+<div class="box"><span class="lbl">C · 检索</span><h2>只走一跳，每个输入至多补两个提供者</h2>
+<p>稠密检索取前 15 个工具作“消费者种子”，沿入边找提供者；每个输入只留<b>字段名最匹配</b>和<b>与请求最相关</b>的两个，再把种子分数传过去：</p>
+<div class="formula">s′(u) = max( s(u), [ s(u) + Σ<sub>t∈C(u)</sub> s(t) ] / (1 + |C(u)|) )</div>
+<p class="note">取平均而非求和，邻居多的工具不会因此占便宜。剪枝很要紧：把所有保留边的提供者都加进来，SciToolEval Recall 从 91.1 掉到 76.4；走两跳也略降（附录 E）。</p>
+<h2 style="margin-top:12px">关键对照：同一编码器，只换图</h2>
+<svg viewBox="0 0 700 330" width="100%" role="img" aria-label="执行过滤消融"><line x1="56" y1="260.0" x2="690" y2="260.0" stroke="#9fe0ff" stroke-opacity="0.25"/><text x="48" y="265.0" font-size="14" fill="#9fe0ff" text-anchor="end">0</text><line x1="56" y1="199.5" x2="690" y2="199.5" stroke="#9fe0ff" stroke-opacity="0.25"/><text x="48" y="204.5" font-size="14" fill="#9fe0ff" text-anchor="end">25</text><line x1="56" y1="139.0" x2="690" y2="139.0" stroke="#9fe0ff" stroke-opacity="0.25"/><text x="48" y="144.0" font-size="14" fill="#9fe0ff" text-anchor="end">50</text><line x1="56" y1="78.5" x2="690" y2="78.5" stroke="#9fe0ff" stroke-opacity="0.25"/><text x="48" y="83.5" font-size="14" fill="#9fe0ff" text-anchor="end">75</text><line x1="56" y1="18.0" x2="690" y2="18.0" stroke="#9fe0ff" stroke-opacity="0.25"/><text x="48" y="23.0" font-size="14" fill="#9fe0ff" text-anchor="end">100</text><rect x="81.4" y="190.5" width="48.0" height="69.5" fill="#8aa9c9" stroke="#0d2f55"/><text x="105.4" y="185.5" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="400">28.7</text><rect x="133.2" y="189.3" width="48.0" height="70.7" fill="#c3d4e6" stroke="#0d2f55"/><text x="157.2" y="184.3" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="400">29.2</text><rect x="185.1" y="161.5" width="48.0" height="98.5" fill="#ffcf5c" stroke="#0d2f55"/><text x="209.1" y="156.5" font-size="15" fill="#ffcf5c" text-anchor="middle" font-weight="900">40.7</text><text x="158.2" y="280" font-size="15" fill="#ffffff" text-anchor="middle">AppWorld@15</text><rect x="292.7" y="56.5" width="48.0" height="203.5" fill="#8aa9c9" stroke="#0d2f55"/><text x="316.7" y="51.5" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="400">84.1</text><rect x="344.6" y="56.5" width="48.0" height="203.5" fill="#c3d4e6" stroke="#0d2f55"/><text x="368.6" y="51.5" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="400">84.1</text><rect x="396.4" y="39.5" width="48.0" height="220.5" fill="#ffcf5c" stroke="#0d2f55"/><text x="420.5" y="34.5" font-size="15" fill="#ffcf5c" text-anchor="middle" font-weight="900">91.1</text><text x="369.5" y="280" font-size="15" fill="#ffffff" text-anchor="middle">SciToolEval@10</text><rect x="504.0" y="62.0" width="48.0" height="198.0" fill="#8aa9c9" stroke="#0d2f55"/><text x="528.0" y="57.0" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="400">81.8</text><rect x="555.9" y="63.0" width="48.0" height="197.0" fill="#c3d4e6" stroke="#0d2f55"/><text x="579.9" y="58.0" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="400">81.4</text><rect x="607.8" y="50.9" width="48.0" height="209.1" fill="#ffcf5c" stroke="#0d2f55"/><text x="631.8" y="45.9" font-size="15" fill="#ffcf5c" text-anchor="middle" font-weight="900">86.4</text><text x="580.9" y="280" font-size="15" fill="#ffffff" text-anchor="middle">BFCL@15</text><rect x="56" y="306" width="14" height="14" fill="#8aa9c9"/><text x="76" y="318" font-size="13.5" fill="#ffffff">只用稠密检索 QTS</text><rect x="225.0" y="306" width="14" height="14" fill="#c3d4e6"/><text x="245.0" y="318" font-size="13.5" fill="#ffffff">模式兼容图（未执行过滤）</text><rect x="421.0" y="306" width="14" height="14" fill="#ffcf5c"/><text x="441.0" y="318" font-size="13.5" fill="#ffffff">LIBRA 执行过滤图</text></svg>
+<p class="note">附录 B 表 4。未经执行过滤的“模式兼容图”与不用图几乎一样（AppWorld 29.2 vs 28.7）；换成执行过滤图才 +12.0 / +7.0 / +4.6 Recall。NDCG：39.1 / 86.6 / 78.4（QTS 32.8 / 83.9 / 76.2）。</p>
+</div>
+<div class="box"><span class="lbl">D · 结果</span><h2>与基线比</h2>
+<table><tr><th>一次性检索 R / NDCG</th><th>AppWorld@15</th><th>SciToolEval@10</th><th>BFCL@15</th></tr>
+<tr><td>BM25</td><td>20.0 / 18.8</td><td>86.4 / 54.1</td><td>75.5 / 69.5</td></tr>
+<tr><td>QTS（同编码器）</td><td>28.7 / 32.8</td><td>84.1 / 83.9</td><td>81.8 / 76.2</td></tr>
+<tr><td>TGR-Adapt</td><td>36.3 / <span class="am">39.9</span></td><td>76.2 / 75.1</td><td>81.4 / 73.6</td></tr>
+<tr><td>Ego-Trip</td><td>29.2 / 33.2</td><td>84.1 / 83.9</td><td>85.7 / 78.4</td></tr>
+<tr><td>SciToolKG</td><td>–</td><td>89.7 / 82.5</td><td>–</td></tr>
+<tr><td class="am">LIBRA</td><td class="am">40.7 / 39.1</td><td class="am">91.1 / 86.6</td><td class="am">86.4 / 78.4</td></tr></table>
+<p style="margin-top:8px">相对 QTS 平均 <span class="am">+7.9 Recall / +3.7 NDCG</span>（表 2）。AppWorld 的 NDCG 仍低于 TGR-Adapt（39.1 vs 39.9），但召回更多。</p>
+<p>放进多轮代理检索 ToolReAGt（10 轮，3 个代理 LLM × 3 个种子）：相对 QTS 平均 <span class="am">+4.5 Recall / +2.9 NDCG</span>，9 个设置中 8 个 Recall 最高（图 2）；不改 ReAct 策略、不训练代理。</p>
+<h2 style="margin-top:10px">还漏在哪</h2>
+<svg viewBox="0 0 700 214" width="100%" role="img" aria-label="漏检原因分解"><text x="140" y="32" font-size="15" fill="#ffffff" text-anchor="end">AppWorld（860）</text><rect x="150.0" y="8" width="351.5" height="34" fill="#5b7fa8" stroke="#0d2f55"/><text x="325.8" y="31" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">65.1%</text><rect x="501.5" y="8" width="70.2" height="34" fill="#8aa9c9" stroke="#0d2f55"/><text x="536.6" y="31" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">13.0%</text><rect x="571.7" y="8" width="18.4" height="34" fill="#c3d4e6" stroke="#0d2f55"/><rect x="590.1" y="8" width="1.1" height="34" fill="#e8eef5" stroke="#0d2f55"/><rect x="591.2" y="8" width="98.8" height="34" fill="#ffcf5c" stroke="#0d2f55"/><text x="640.6" y="31" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">18.3%</text><text x="140" y="82" font-size="15" fill="#ffffff" text-anchor="end">BFCL（224）</text><rect x="150.0" y="58" width="14.6" height="34" fill="#5b7fa8" stroke="#0d2f55"/><rect x="164.6" y="58" width="164.2" height="34" fill="#8aa9c9" stroke="#0d2f55"/><text x="246.7" y="81" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">30.4%</text><rect x="328.7" y="58" width="65.3" height="34" fill="#c3d4e6" stroke="#0d2f55"/><text x="361.4" y="81" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">12.1%</text><rect x="394.1" y="58" width="115.6" height="34" fill="#e8eef5" stroke="#0d2f55"/><text x="451.9" y="81" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">21.4%</text><rect x="509.6" y="58" width="180.9" height="34" fill="#ffcf5c" stroke="#0d2f55"/><text x="600.1" y="81" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">33.5%</text><text x="140" y="132" font-size="15" fill="#ffffff" text-anchor="end">SciToolEval（85）</text><rect x="150.0" y="108" width="209.5" height="34" fill="#5b7fa8" stroke="#0d2f55"/><text x="254.8" y="131" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">38.8%</text><rect x="359.5" y="108" width="13.0" height="34" fill="#c3d4e6" stroke="#0d2f55"/><rect x="372.5" y="108" width="317.5" height="34" fill="#ffcf5c" stroke="#0d2f55"/><text x="531.2" y="131" font-size="14.5" fill="#0d2f55" text-anchor="middle" font-weight="700">58.8%</text><rect x="10" y="158" width="14" height="14" fill="#5b7fa8"/><text x="30" y="170" font-size="14" fill="#ffffff">图里没有这条边</text><rect x="152" y="158" width="14" height="14" fill="#8aa9c9"/><text x="172" y="170" font-size="14" fill="#ffffff">消费者没进种子</text><rect x="294" y="158" width="14" height="14" fill="#c3d4e6"/><text x="314" y="170" font-size="14" fill="#ffffff">提供者没被选中</text><rect x="10" y="184" width="14" height="14" fill="#e8eef5"/><text x="30" y="196" font-size="14" fill="#ffffff">提升后仍在截断线下</text><rect x="180" y="184" width="14" height="14" fill="#ffcf5c"/><text x="200" y="196" font-size="14" fill="#ffffff">补回</text></svg>
+<p class="note">表 3：稠密检索漏掉的金标准工具。AppWorld 65.1% 是“图里根本没有这条边”——如查联系人要用任务里才有的数据，建库时跑不出 phone_number；BFCL 主要卡在种子和截断线。</p>
+</div>
+</div>
+
+<div class="row">
+<div class="box"><span class="lbl">E · 成本</span><h2>一次构库，跨请求复用</h2>
+<table><tr><th></th><th>AppWorld</th><th>SciToolEval</th><th>BFCL</th></tr>
+<tr><td>目录工具数</td><td>473</td><td>477</td><td>128</td></tr>
+<tr><td>候选组合</td><td>581,690</td><td>163,608</td><td>12,762</td></tr>
+<tr><td>保留关系（值 / 状态）</td><td>1,946 / 0</td><td>732 / 0</td><td>595 / 77</td></tr>
+<tr><td>墙钟时间</td><td>260:40</td><td>20:45</td><td>4:28</td></tr></table>
+<p class="note" style="margin-top:6px">每个构库作业 96 个 CPU worker、一张 L40S（字段嵌入），AppWorld 申请 384 GB 内存（附录 C）。LLM 调用随工具数线性增长，但候选组合最坏是工具数的平方级；工具数相近的 AppWorld 与 SciToolEval 耗时差 12.6 倍。</p>
+</div>
+<div class="box" style="border-color:var(--am)"><span class="lbl" style="color:var(--am)">F · 读之前先知道</span>
+<ul>
+<li><b>只测了检索</b>：Recall / NDCG 衡量候选集，不是工作流完成率；没有端到端任务成功。</li>
+<li>没有边级金标准：“运行时验证”只表示在测试的契约与沙箱状态下通过，作者不声称依赖精度；兼容边也算进图里。</li>
+<li>需要可执行、可重置的运行时；SciToolEval 只评了 530 题中可执行的 270 题，AppWorld 用公开注释的 90 训练 + 57 开发题。</li>
+<li>TGR 原实现不公开，表中是作者的改编版；Ego-Trip 也按各基准改编。</li>
+<li>契约由 LLM 依公开元数据提出、最多按反馈修订两次（AppWorld 218、SciToolEval 48、BFCL 37 份契约至少修订一次）；契约没想到的组合，测试也测不到——反事实检验管精度，不管覆盖。</li>
+<li>依赖任务专属数据的前置（建库时没有那条联系人）结构上无法提前发现，这正是 AppWorld 漏检的大头。</li>
+</ul>
+<p style="margin-top:8px"><span class="am">改变的判断</span>：从元数据推断“谁依赖谁”不够——模式兼容的边不加执行过滤，对检索几乎没有帮助；让组合关系先过“有它成、换掉败”的执行检验，才是这类冷启动工具库能复用的部分。</p>
+</div>
+</div>
+
+<div class="tb">
+<div><b>SOURCE</b>arXiv 2611.05445v1 · HTML 全文 sha256 4deab8f2…</div>
+<div><b>MAPPING</b>数字对应见 SOURCE.md；图 B 与排名尺为示意重绘</div>
+<div><b>ISSUE</b>HarnessRSI Daily · 第十期</div>
+<div><b>NOTE</b>问题档位为本项目阅读判断，不是审稿结论</div>
+</div>
+</div>
+</body></html>
