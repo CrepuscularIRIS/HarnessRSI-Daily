@@ -177,3 +177,11 @@
 ## 2026-11-08 08:43 每日 Opus 判断
 
 - selection-010 后新增 confirmed P3：0 篇 <3 → 跳过（06768 已落选，无其他候选）。隔夜收集 +12 待 12:17 巡检班入库评分。
+
+## 2026-11-08 12:17 巡检班
+
+- 新增：12 篇（inbox/2026-11-06-0937，corpus 1706→1718，全文 12/12，材料 12/12 abstract_intro）。
+- L1：inc-l1-14 12/12（assessed 11，out_of_scope 1：08483? 不——06946 类边界研究入 to_l2；to_l2 11 = 本批 11 篇 assessed 全部 + needs_material 若干）。
+- L2：inc-l2-16 11/11。改判 3 篇 P2→P3；**2611.03743 判定 P3/confirmed 但 next_action=exclude**（反馈学习进入 RL 权重，属范围外口径，理由见批次）；**5 篇 P3/confirmed/to_l3**（07048/07123/07372/07624/08318）；07051、06972 P3/pending_experiment/park（缺独立锚点/归因）；07469、07595 P2/pending_experiment/park；08483 P2/confirmed/park。子卡 63 项。
+- 漏检抽查：名额 1（预算 11×10%）但池 0 → 欠账 ~4.3+1→~5.3 滚存。seed=20261109。
+- to_l3 池：0 + 5 = 5 篇 ≥3 → 明晨 Opus 班达标。
