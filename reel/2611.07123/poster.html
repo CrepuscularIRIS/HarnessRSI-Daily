@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>判卷模型示波器</title><style>
+:root{--case:#d9d5c7;--case2:#c7c2b2;--ink:#1e2420;--scr:#07160c;--ph:#7dff9a;--amb:#ffc857;--mut:#8fb79a;--red:#ff6b6b}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;background:#3a3f3b;color:var(--ink);font-family:"Noto Sans CJK SC",sans-serif;font-size:17.5px;line-height:1.5;position:relative}
+.case{position:absolute;left:24px;top:24px;right:24px;bottom:24px;background:linear-gradient(180deg,var(--case),var(--case2));border-radius:18px;box-shadow:inset 0 2px 0 #f2efe6,inset 0 -3px 0 #a9a392,0 6px 18px rgba(0,0,0,.45);padding:24px 40px}
+.brand{display:flex;justify-content:space-between;align-items:center;font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px;letter-spacing:3px;color:#4a4f49}
+.brand .led{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--ph);box-shadow:0 0 8px var(--ph);margin-right:8px;vertical-align:-1px}
+h1{margin:8px 0 4px;font-size:50px;line-height:1.2;font-weight:900;color:#151a16}
+h1 em{font-style:normal;color:#2e7d43}
+.sub{font-size:19px;color:#2f352f;margin:0;max-width:1480px}
+.spec{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;margin-top:12px;border:1.5px solid #6b6f66;border-radius:6px;background:#e7e3d7;font-size:15px}
+.spec div{padding:6px 12px;border-right:1px solid #9c9a8e}.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:"Noto Sans Mono CJK SC",monospace;font-size:12.5px;letter-spacing:2px;color:#62675f;font-weight:400}
+.screen{background:var(--scr);border-radius:10px;border:10px solid #2b2f2b;box-shadow:inset 0 0 40px rgba(125,255,154,.10),0 0 0 2px #8c8878;padding:14px 18px;color:#d8f5df;margin-top:20px}
+.screen h2{margin:0 0 4px;font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px;letter-spacing:3px;color:var(--amb);font-weight:700;display:flex;justify-content:space-between}
+.screen h2 span:last-child{color:var(--mut);letter-spacing:0;font-weight:400;font-size:13.5px}
+.screen h3{margin:0 0 6px;font-size:22px;color:#eafff0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.panel{background:#efece2;border:1.5px solid #7e7c70;border-radius:8px;padding:14px 20px;margin-top:22px;min-width:0}
+.panel h2{margin:0 0 6px;font-size:22px;display:flex;align-items:center;gap:10px}
+.knob{display:inline-block;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8a8f88,#2d312d);box-shadow:0 1px 2px rgba(0,0,0,.5);position:relative;flex:none}
+.knob::after{content:"";position:absolute;left:12px;top:3px;width:2px;height:9px;background:#e8e4d8}
+.panel h2 small{margin-left:auto;font-size:13.5px;color:#6b6f66;font-weight:400}
+p{margin:0 0 6px}
+.note{font-size:14.5px;color:#5c615a;line-height:1.45}
+.screen .note{color:var(--mut)}
+.g{color:var(--ph);font-weight:700}.a{color:var(--amb);font-weight:700}.r{color:var(--red);font-weight:700}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{border:1px solid #9c9a8e;padding:5px 8px;text-align:center}th{background:#ddd8ca}
+td.l{text-align:left} td.best{background:#cfeed6;font-weight:700} td.worse{background:#f6d4cf}
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 4px}
+.loop div{border:1.5px solid var(--ph);border-radius:6px;padding:6px 8px;text-align:center;font-size:15px;color:#d8f5df}
+.loop b{display:block;color:var(--ph);font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px}
+ul{margin:4px 0 0;padding-left:22px}li{margin:0 0 6px;font-size:16.5px}
+.verdict{margin-top:22px;background:#1d2a20;color:#e7f7ea;border-radius:8px;padding:12px 20px;border-left:8px solid var(--ph)}
+.verdict h2{margin:0 0 4px;color:var(--ph);font-size:23px}
+.verdict .note{color:#a9c8b0}
+.foot{position:absolute;left:40px;right:40px;bottom:12px;display:flex;justify-content:space-between;font-size:13.5px;color:#55594f;border-top:1px solid #9c9a8e;padding-top:5px}
+</style></head><body>
+<div class="case">
+<div class="brand"><span><span class="led"></span>JUDGE-DRIFT SCOPE · LLM-as-a-Judge 运维</span><span>arXiv 2611.07123v1 · PromptOps</span></div>
+<h1>判卷模型上线后会“漂”：<em>何时、怎样</em>重调它的提示词？</h1>
+<p class="sub">500 条对话流中，人工参考分数的构成在第 214 条后突变，固定提示词的 judge 误差上升。用陆续到达的参考分数反复重调提示词能把优势找回来，但通常回不到突变前；哪种优化器、什么时候触发，都没有通用答案。</p>
+<div class="spec">
+<div><b>BENCH</b>FairBotBench：600 段德英电商对话（偏见 / 毒性 / 个性化），三人参考分均值 1–5</div>
+<div><b>JUDGE</b>GPT-5.4-nano（low）· Gemma 4 26B-A4B 量化版</div>
+<div><b>OPTIMIZER</b>GEPA · SIMBA · Rubric Synthesis · 示例选择（SA / TPE）；专家模型 GPT-5.4</div>
+<div><b>AUTHORS</b>Kleinkop 等 · 德累斯顿应用技术大学（HTW Dresden）</div>
+</div>
+
+<div class="screen"><h2><span>SCREEN 1 · 机制</span><span>§3、§4.1、式 (1)、附录 0.B.3 · 示意</span></h2>
+<div class="loop">
+<div><b>Controller</b>何时优化：定期 / 滑窗误差超阈</div>
+<div><b>Dispatcher</b>用哪个（组合）优化器</div>
+<div><b>Sample Selector</b>用哪些反馈记录</div>
+<div><b>Optimizer</b>改出新提示词 p<sub>t+1</sub></div>
+</div>
+<svg viewBox="0 0 1440 230" width="100%" height="230" font-family="Noto Sans Mono CJK SC"><line x1="60.0" x2="60.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="194.0" x2="194.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="328.0" x2="328.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="462.0" x2="462.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="596.0" x2="596.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="730.0" x2="730.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="864.0" x2="864.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="998.0" x2="998.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="1132.0" x2="1132.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="1266.0" x2="1266.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="1400.0" x2="1400.0" y1="20" y2="170" stroke="#1f4a2c"/><line x1="60" x2="1400" y1="20" y2="20" stroke="#1f4a2c"/><line x1="60" x2="1400" y1="57.5" y2="57.5" stroke="#1f4a2c"/><line x1="60" x2="1400" y1="95" y2="95" stroke="#1f4a2c"/><line x1="60" x2="1400" y1="132.5" y2="132.5" stroke="#1f4a2c"/><line x1="60" x2="1400" y1="170" y2="170" stroke="#1f4a2c"/><rect x="499.5" y="176" width="134.0" height="16" fill="#7dff9a" opacity=".18"/><text x="566.5" y="210" font-size="14" fill="#8fb79a" text-anchor="middle">[164,214] 改变前</text><rect x="636.2" y="176" width="134.0" height="16" fill="#7dff9a" opacity=".18"/><text x="703.2" y="210" font-size="14" fill="#8fb79a" text-anchor="middle">[215,265] 刚改变</text><rect x="772.9" y="176" width="404.7" height="16" fill="#7dff9a" opacity=".18"/><text x="975.2" y="210" font-size="14" fill="#8fb79a" text-anchor="middle">[266,417] 第一次改变后更新</text><rect x="1180.2" y="176" width="219.8" height="16" fill="#7dff9a" opacity=".18"/><text x="1290.1" y="210" font-size="14" fill="#8fb79a" text-anchor="middle">[418,500] 最后</text><rect x="633.5" y="20" width="766.5" height="150" fill="#ffc857" opacity=".07"/><line x1="633.5" x2="633.5" y1="14" y2="172" stroke="#ffc857" stroke-width="2.5" stroke-dasharray="7 5"/><text x="641.5" y="40" font-size="15" fill="#ffc857">第 214 条后：参考分数构成突变（同一数据集重排）</text><line x1="113.6" x2="113.6" y1="60" y2="108" stroke="#7dff9a" stroke-width="3"/><circle cx="113.6" cy="60" r="6" fill="#7dff9a"/><text x="122.6" y="84" font-size="15.5" font-weight="700" fill="#7dff9a">20</text><line x1="194.0" x2="194.0" y1="60" y2="108" stroke="#7dff9a" stroke-width="3"/><circle cx="194.0" cy="60" r="6" fill="#7dff9a"/><text x="203.0" y="84" font-size="15.5" font-weight="700" fill="#7dff9a">50</text><line x1="314.6" x2="314.6" y1="60" y2="108" stroke="#7dff9a" stroke-width="3"/><circle cx="314.6" cy="60" r="6" fill="#7dff9a"/><text x="323.6" y="84" font-size="15.5" font-weight="700" fill="#7dff9a">95</text><line x1="496.8" x2="496.8" y1="60" y2="108" stroke="#7dff9a" stroke-width="3"/><circle cx="496.8" cy="60" r="6" fill="#7dff9a"/><text x="505.8" y="84" font-size="15.5" font-weight="700" fill="#7dff9a">163</text><line x1="770.2" x2="770.2" y1="60" y2="108" stroke="#7dff9a" stroke-width="3"/><circle cx="770.2" cy="60" r="6" fill="#7dff9a"/><text x="779.2" y="84" font-size="15.5" font-weight="700" fill="#7dff9a">265</text><line x1="1177.6" x2="1177.6" y1="60" y2="108" stroke="#7dff9a" stroke-width="3"/><circle cx="1177.6" cy="60" r="6" fill="#7dff9a"/><text x="1186.6" y="84" font-size="15.5" font-weight="700" fill="#7dff9a">417</text><path d="M317.3,140 L496.8,140" stroke="#ff6b6b" stroke-width="5"/><path d="M499.5,152 L770.2,152" stroke="#7dff9a" stroke-width="5" opacity=".7"/><text x="317.3" y="128" font-size="13.5" fill="#ff6b6b">265 次更新的开发集 96–163（全在改变前）</text><text x="783.6" y="157" font-size="13.5" fill="#8fb79a">训练记录 164–265（半前半后）· 本项目按 NewElements 定义推算</text><text x="60" y="14" font-size="13.5" fill="#8fb79a">CH1 · 500 条对话流 · 竖线 = 定期更新位置（周期 20，间隔 ×1.5）</text></svg>
+<p class="note">评测协议：每条对话先由当前提示词打分再拿到参考分（“理想、即时、无噪声”的反馈），优化只能用已到达的记录。默认样本选择 NewElements：训练 = 上次更新以来的新记录，开发集 = 上次更新的训练记录。比较对象：同一条流上一直用初始 G-Eval 提示词的静态 judge。</p>
+</div>
+
+<div class="screen"><h2><span>SCREEN 2 · Low–First 流：相对静态提示词的改进（%，正 = 误差更小）</span><span>表 1 · 三条采样流的中位数</span></h2>
+<div class="row">
+<div><svg viewBox="0 0 700 420" width="100%" height="420" font-family="Noto Sans Mono CJK SC"><text x="70" y="22" font-size="15" fill="#ffc857">CH1 · GPT-5.4-nano 判卷</text><line x1="70" x2="520" y1="360.0" y2="360.0" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="365.0" font-size="13.5" fill="#8fb79a" text-anchor="end">-20</text><line x1="70" x2="520" y1="324.4" y2="324.4" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="329.4" font-size="13.5" fill="#8fb79a" text-anchor="end">-10</text><line x1="70" x2="520" y1="288.9" y2="288.9" stroke="#8fb79a" stroke-width="1.6"/><text x="62" y="293.9" font-size="13.5" fill="#8fb79a" text-anchor="end">0</text><line x1="70" x2="520" y1="253.3" y2="253.3" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="258.3" font-size="13.5" fill="#8fb79a" text-anchor="end">10</text><line x1="70" x2="520" y1="217.8" y2="217.8" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="222.8" font-size="13.5" fill="#8fb79a" text-anchor="end">20</text><line x1="70" x2="520" y1="182.2" y2="182.2" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="187.2" font-size="13.5" fill="#8fb79a" text-anchor="end">30</text><line x1="70" x2="520" y1="146.7" y2="146.7" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="151.7" font-size="13.5" fill="#8fb79a" text-anchor="end">40</text><line x1="70" x2="520" y1="111.1" y2="111.1" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="116.1" font-size="13.5" fill="#8fb79a" text-anchor="end">50</text><line x1="70" x2="520" y1="75.6" y2="75.6" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="80.6" font-size="13.5" fill="#8fb79a" text-anchor="end">60</text><line x1="70" x2="520" y1="40.0" y2="40.0" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="45.0" font-size="13.5" fill="#8fb79a" text-anchor="end">70</text><line x1="70.0" x2="70.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="70.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">改变前</text><line x1="220.0" x2="220.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="220.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">刚改变</text><line x1="370.0" x2="370.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="370.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">更新后</text><line x1="520.0" x2="520.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="520.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">最后</text><text x="532" y="331.6" font-size="13.5" fill="#ff6b6b">0 以下 = 比固定</text><text x="532" y="348.6" font-size="13.5" fill="#ff6b6b">提示词还差</text><polyline points="70.0,95.8 220.0,318.8 370.0,302.8 520.0,175.8" fill="none" stroke="#7dff9a" stroke-width="2.6" stroke-dasharray="6 3" style="filter:drop-shadow(0 0 3px #7dff9a)"/><circle cx="70.0" cy="95.8" r="3.5" fill="#7dff9a"/><circle cx="220.0" cy="318.8" r="3.5" fill="#7dff9a"/><circle cx="370.0" cy="302.8" r="3.5" fill="#7dff9a"/><circle cx="520.0" cy="175.8" r="3.5" fill="#7dff9a"/><polyline points="70.0,82.7 220.0,331.9 370.0,250.5 520.0,200.4" fill="none" stroke="#e4ff5c" stroke-width="2.6" stroke-dasharray="2 4" style="filter:drop-shadow(0 0 3px #e4ff5c)"/><circle cx="70.0" cy="82.7" r="3.5" fill="#e4ff5c"/><circle cx="220.0" cy="331.9" r="3.5" fill="#e4ff5c"/><circle cx="370.0" cy="250.5" r="3.5" fill="#e4ff5c"/><circle cx="520.0" cy="200.4" r="3.5" fill="#e4ff5c"/><polyline points="70.0,251.6 220.0,270.8 370.0,255.8 520.0,250.1" fill="none" stroke="#b8f5c6" stroke-width="2.6" stroke-dasharray="10 4 2 4" style="filter:drop-shadow(0 0 3px #b8f5c6)"/><circle cx="70.0" cy="251.6" r="3.5" fill="#b8f5c6"/><circle cx="220.0" cy="270.8" r="3.5" fill="#b8f5c6"/><circle cx="370.0" cy="255.8" r="3.5" fill="#b8f5c6"/><circle cx="520.0" cy="250.1" r="3.5" fill="#b8f5c6"/><polyline points="70.0,101.2 220.0,285.0 370.0,230.2 520.0,230.9" fill="none" stroke="#ffc857" stroke-width="2.6" style="filter:drop-shadow(0 0 3px #ffc857)"/><circle cx="70.0" cy="101.2" r="3.5" fill="#ffc857"/><circle cx="220.0" cy="285.0" r="3.5" fill="#ffc857"/><circle cx="370.0" cy="230.2" r="3.5" fill="#ffc857"/><circle cx="520.0" cy="230.9" r="3.5" fill="#ffc857"/><polyline points="70.0,109.0 220.0,216.0 370.0,196.8 520.0,192.9" fill="none" stroke="#6fd3ff" stroke-width="2.6" style="filter:drop-shadow(0 0 3px #6fd3ff)"/><circle cx="70.0" cy="109.0" r="3.5" fill="#6fd3ff"/><circle cx="220.0" cy="216.0" r="3.5" fill="#6fd3ff"/><circle cx="370.0" cy="196.8" r="3.5" fill="#6fd3ff"/><circle cx="520.0" cy="192.9" r="3.5" fill="#6fd3ff"/><polyline points="70.0,83.0 220.0,264.7 370.0,269.7 520.0,168.0" fill="none" stroke="#ff9ecf" stroke-width="2.6" style="filter:drop-shadow(0 0 3px #ff9ecf)"/><circle cx="70.0" cy="83.0" r="3.5" fill="#ff9ecf"/><circle cx="220.0" cy="264.7" r="3.5" fill="#ff9ecf"/><circle cx="370.0" cy="269.7" r="3.5" fill="#ff9ecf"/><circle cx="520.0" cy="168.0" r="3.5" fill="#ff9ecf"/><text x="532" y="173.0" font-size="14" fill="#ff9ecf">SIMBA→Rubric(M) 34.0</text><text x="532" y="192.0" font-size="14" fill="#7dff9a">Rubric(S) 31.8</text><text x="532" y="211.0" font-size="14" fill="#6fd3ff">GEPA→TPE 27.0</text><text x="532" y="230.0" font-size="14" fill="#e4ff5c">Rubric(M) 24.9</text><text x="532" y="249.0" font-size="14" fill="#ffc857">GEPA(S) 16.3</text><text x="532" y="268.0" font-size="14" fill="#b8f5c6">TPE(S) 10.9</text></svg></div>
+<div><svg viewBox="0 0 700 420" width="100%" height="420" font-family="Noto Sans Mono CJK SC"><text x="70" y="22" font-size="15" fill="#ffc857">CH2 · Gemma 4 判卷</text><line x1="70" x2="520" y1="360.0" y2="360.0" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="365.0" font-size="13.5" fill="#8fb79a" text-anchor="end">-20</text><line x1="70" x2="520" y1="324.4" y2="324.4" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="329.4" font-size="13.5" fill="#8fb79a" text-anchor="end">-10</text><line x1="70" x2="520" y1="288.9" y2="288.9" stroke="#8fb79a" stroke-width="1.6"/><text x="62" y="293.9" font-size="13.5" fill="#8fb79a" text-anchor="end">0</text><line x1="70" x2="520" y1="253.3" y2="253.3" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="258.3" font-size="13.5" fill="#8fb79a" text-anchor="end">10</text><line x1="70" x2="520" y1="217.8" y2="217.8" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="222.8" font-size="13.5" fill="#8fb79a" text-anchor="end">20</text><line x1="70" x2="520" y1="182.2" y2="182.2" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="187.2" font-size="13.5" fill="#8fb79a" text-anchor="end">30</text><line x1="70" x2="520" y1="146.7" y2="146.7" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="151.7" font-size="13.5" fill="#8fb79a" text-anchor="end">40</text><line x1="70" x2="520" y1="111.1" y2="111.1" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="116.1" font-size="13.5" fill="#8fb79a" text-anchor="end">50</text><line x1="70" x2="520" y1="75.6" y2="75.6" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="80.6" font-size="13.5" fill="#8fb79a" text-anchor="end">60</text><line x1="70" x2="520" y1="40.0" y2="40.0" stroke="#1f4a2c" stroke-width="1"/><text x="62" y="45.0" font-size="13.5" fill="#8fb79a" text-anchor="end">70</text><line x1="70.0" x2="70.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="70.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">改变前</text><line x1="220.0" x2="220.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="220.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">刚改变</text><line x1="370.0" x2="370.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="370.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">更新后</text><line x1="520.0" x2="520.0" y1="40" y2="360" stroke="#1f4a2c"/><text x="520.0" y="382" font-size="14" fill="#8fb79a" text-anchor="middle">最后</text><text x="532" y="331.6" font-size="13.5" fill="#ff6b6b">0 以下 = 比固定</text><text x="532" y="348.6" font-size="13.5" fill="#ff6b6b">提示词还差</text><polyline points="70.0,102.6 220.0,286.4 370.0,169.8 520.0,160.5" fill="none" stroke="#7dff9a" stroke-width="2.6" stroke-dasharray="6 3" style="filter:drop-shadow(0 0 3px #7dff9a)"/><circle cx="70.0" cy="102.6" r="3.5" fill="#7dff9a"/><circle cx="220.0" cy="286.4" r="3.5" fill="#7dff9a"/><circle cx="370.0" cy="169.8" r="3.5" fill="#7dff9a"/><circle cx="520.0" cy="160.5" r="3.5" fill="#7dff9a"/><polyline points="70.0,78.4 220.0,328.0 370.0,232.0 520.0,151.6" fill="none" stroke="#e4ff5c" stroke-width="2.6" stroke-dasharray="2 4" style="filter:drop-shadow(0 0 3px #e4ff5c)"/><circle cx="70.0" cy="78.4" r="3.5" fill="#e4ff5c"/><circle cx="220.0" cy="328.0" r="3.5" fill="#e4ff5c"/><circle cx="370.0" cy="232.0" r="3.5" fill="#e4ff5c"/><circle cx="520.0" cy="151.6" r="3.5" fill="#e4ff5c"/><polyline points="70.0,147.7 220.0,148.4 370.0,168.7 520.0,174.8" fill="none" stroke="#b8f5c6" stroke-width="2.6" stroke-dasharray="10 4 2 4" style="filter:drop-shadow(0 0 3px #b8f5c6)"/><circle cx="70.0" cy="147.7" r="3.5" fill="#b8f5c6"/><circle cx="220.0" cy="148.4" r="3.5" fill="#b8f5c6"/><circle cx="370.0" cy="168.7" r="3.5" fill="#b8f5c6"/><circle cx="520.0" cy="174.8" r="3.5" fill="#b8f5c6"/><polyline points="70.0,86.9 220.0,136.0 370.0,158.8 520.0,137.8" fill="none" stroke="#ffc857" stroke-width="2.6" style="filter:drop-shadow(0 0 3px #ffc857)"/><circle cx="70.0" cy="86.9" r="3.5" fill="#ffc857"/><circle cx="220.0" cy="136.0" r="3.5" fill="#ffc857"/><circle cx="370.0" cy="158.8" r="3.5" fill="#ffc857"/><circle cx="520.0" cy="137.8" r="3.5" fill="#ffc857"/><polyline points="70.0,80.2 220.0,177.6 370.0,126.0 520.0,107.6" fill="none" stroke="#6fd3ff" stroke-width="2.6" style="filter:drop-shadow(0 0 3px #6fd3ff)"/><circle cx="70.0" cy="80.2" r="3.5" fill="#6fd3ff"/><circle cx="220.0" cy="177.6" r="3.5" fill="#6fd3ff"/><circle cx="370.0" cy="126.0" r="3.5" fill="#6fd3ff"/><circle cx="520.0" cy="107.6" r="3.5" fill="#6fd3ff"/><polyline points="70.0,106.8 220.0,207.1 370.0,156.6 520.0,148.8" fill="none" stroke="#ff9ecf" stroke-width="2.6" style="filter:drop-shadow(0 0 3px #ff9ecf)"/><circle cx="70.0" cy="106.8" r="3.5" fill="#ff9ecf"/><circle cx="220.0" cy="207.1" r="3.5" fill="#ff9ecf"/><circle cx="370.0" cy="156.6" r="3.5" fill="#ff9ecf"/><circle cx="520.0" cy="148.8" r="3.5" fill="#ff9ecf"/><text x="532" y="112.6" font-size="14" fill="#6fd3ff">SIMBA(M) 51.0</text><text x="532" y="142.8" font-size="14" fill="#ffc857">SIMBA(S) 42.5</text><text x="532" y="161.8" font-size="14" fill="#ff9ecf">SIMBA→Rubric(M) 39.4</text><text x="532" y="180.8" font-size="14" fill="#e4ff5c">Rubric(L) 38.6</text><text x="532" y="199.8" font-size="14" fill="#7dff9a">Rubric(S) 36.1</text><text x="532" y="218.8" font-size="14" fill="#b8f5c6">TPE(L) 32.1</text></svg></div>
+</div>
+<p><b>图 5（三种流合并）</b>：突变后，12 个“后端 × 配置”的改进全部下降，Rubric 类与 SIMBA→Rubric 个别运行跌到静态之下；到最后一段 12 个都重新优于静态，但多数<b>低于突变前</b>（Gemma 上的 Rubric(S)、TPE(L) 例外）。作者称之为“恢复”而非“复原”。</p>
+<p class="note">间隔之间参考分构成不同，绝对误差不能直接比，所以这里画的是同区间相对静态 judge 的改进。更极端的 Split 流：GPT + Rubric(M) 从 <span class="a">+55.2%</span> 跌到 <span class="r">−77.7%</span>，第一次突变后更新后反而到 <span class="r">−106.4%</span>，最后一段才回到 +35.8%（附录表 5）。</p>
+</div>
+
+<div class="row">
+<div class="panel"><h2><span class="knob"></span>触发时机也是优化问题<small>§4.4 · 表 2 · 中位总体 MAE（越低越好）</small></h2>
+<table>
+<tr><th rowspan="2">滑窗控制器</th><th colspan="2">GEPA(S)</th><th colspan="2">Rubric(M)</th></tr>
+<tr><th>高敏 τ=0.4</th><th>低敏 τ=0.6</th><th>高敏</th><th>低敏</th></tr>
+<tr><td class="l">小窗 w=20</td><td class="best">0.49</td><td>0.50</td><td class="best">0.47</td><td>0.53</td></tr>
+<tr><td class="l">大窗 w=50</td><td>0.54</td><td>0.54</td><td>0.52</td><td class="worse">0.56</td></tr>
+<tr><td class="l">定期（基线）</td><td colspan="2">0.59</td><td colspan="2">0.53</td></tr>
+</table>
+<p style="margin-top:6px">8 个自适应设置中 7 个持平或优于定期；最灵敏的“高敏 + 小窗”最好，但触发最频繁、更贵；Rubric 的“低敏 + 大窗”反而差 0.03。</p>
+<p class="note">只在 GPT 后端、Low–First 流、两种配置上做（预算所限，作者称探索性）。注意：表 2 定期 GEPA(S) 记 0.59，表 1 同流同配置总体为 0.55；按 0.55 算“GEPA 四个自适应设置全部更好”仍成立。</p>
+</div>
+<div class="panel"><h2><span class="knob"></span>没有通用最优优化器<small>§4.2 · 图 2 · 23 个参数化配置 × 2 后端 × 3 次</small></h2>
+<ul>
+<li>两个后端的误差–token 帕累托前沿形状差别很大，两边都在前沿上的只有 Rubric(S) 与 Rubric(M)。</li>
+<li>GPT：最低平均 MAE 约 0.48 来自 SIMBA(S)→Rubric(M)，不少配置多花 token 却不降误差。</li>
+<li>Gemma：前沿从三种 Rubric 一直延伸到 SIMBA(M)（约 1870 万 token、MAE 0.5）；SIMBA(L) 用约 2630 万 token 也没更好。</li>
+<li>Rubric Synthesis 便宜、常上前沿，却在突变后掉得最狠——作者认为像是对突变前反馈“专化”，但明说没有证明因果。</li>
+</ul>
+<p class="note">token 只在同一后端内比较；三次重复只够做筛选，不足以给出确定排名。</p>
+</div>
+</div>
+
+<div class="panel"><h2><span class="knob"></span>量程之外：结论不覆盖什么<small>§3、§5、§6</small></h2>
+<ul style="columns:2;column-gap:36px">
+<li>反馈是理想化的：每条对话都立即拿到三人参考分均值；真实部署的稀疏、延迟、噪声、分歧与采集成本都没有模拟。</li>
+<li>“漂移”是把同一数据集按参考分构成重排造成的，人类评价政策和 judge 模型本身都没变；也没有按构成分层报告误差。</li>
+<li>一个基准、500 条流、每种流 3 条采样流、两个 judge 后端；控制器实验更窄。</li>
+<li>改进以同一条流上的参考分衡量，没有独立的长期回归标准集，也没有显式回滚 / 作废旧评分的机制。</li>
+</ul></div>
+
+<div class="verdict"><h2>改变的判断</h2>
+<p>LLM judge 不是“调好一次就能一直当真值”的组件：被评对象的构成一变，固定提示词的一致性就会下降；用到达的反馈持续重调能找回相对优势，但要同时决定何时触发、用哪些记录、花多少钱，而这些选择因 judge 后端而异。</p>
+<p class="note">本项目读法：对把 LLM judge 用作留存 / 晋级信号的自改进系统，这意味着评价器本身也需要随流复核；本文在理想反馈下证明了“可以维护”，没有证明“可以部署”。</p>
+</div>
+
+<div class="foot"><span>来源：arXiv 2611.07123v1（HTML 全文，sha256 bdfa672a…）· 数字对应见 SOURCE.md · 示波器版式与时间轴为示意，曲线点为表 1 原值</span><span>HarnessRSI Daily · 第十一期 · 问题档位为本项目阅读判断，不是审稿结论</span></div>
+</div>
+</body></html>

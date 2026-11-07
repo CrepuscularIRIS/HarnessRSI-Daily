@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 24 → 39 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 27 → 42 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Thirty-nine papers, thirty-nine distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [Reel index](reel/README.md).
-（39 篇、39 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Forty-two papers, forty-two distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [Reel index](reel/README.md).
+（42 篇、42 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.08318/poster.png"><img src="reel/2611.08318/poster.png" width="260" alt="2611.08318 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.08318">2611.08318</a> · Learning the task or the verifier?</b><br>
+One embodied self-improvement loop, one switch: whether the learner reads the benchmark's success criteria. Under the original criteria the exposed library leads 51.6% vs 27.8%; the same 320 episodes re-judged by instruction-faithful criteria give 45.0% vs 47.2%. A library that read the rewritten criteria drops from 65.0% to 13.5% under the originals. Simulation, author-written criteria.<br>
+学习器读了判据，学到的常是判卷器：同一批轨迹换一份忠于指令的判据重判，领先消失。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.07624/poster.png"><img src="reel/2611.07624/poster.png" width="260" alt="2611.07624 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.07624">2611.07624</a> · Beneath the surface</b><br>
+Four harness-evolution methods, two harnesses, two benchmarks, eight passes each: all 16 champions gain some tasks and lose others (2–10 lost). In all four parent pools the top-scoring parent is not the most productive one, and a stricter gate keeps the best candidate in 6 of 16 pools instead of 15. One lineage per condition.<br>
+均分之下的换手：新增与丢失要分开报，选父代、组合、准入各需各的证据。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.07123/poster.png"><img src="reel/2611.07123/poster.png" width="260" alt="2611.07123 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.07123">2611.07123</a> · When to re-tune the judge</b><br>
+After the reference-score mix of a 500-turn stream shifts, a fixed LLM-judge prompt loses agreement. Re-optimizing from arriving feedback beats the static prompt again in all 12 settings but mostly stays below pre-shift levels; 7 of 8 error-triggered controllers match or beat periodic updates. Oracle-like feedback, one benchmark.<br>
+judge 提示词不是调好就固定的真值源：何时触发、用哪些反馈、花多少钱都要选。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

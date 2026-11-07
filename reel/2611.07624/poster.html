@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>演化收益冰山图</title><style>
+:root{--deep:#061a2c;--mid:#0c3350;--panel:rgba(10,40,64,.82);--txt:#e8f1f6;--mut:#9fb6c6;--ice:#dff3fb;--loss:#ff8a5b;--gold:#ffd166}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;color:var(--txt);font-family:"Noto Sans CJK SC",sans-serif;font-size:17.5px;line-height:1.5;position:relative;
+background:radial-gradient(circle at 85% 6%,rgba(120,200,240,.18) 0 120px,transparent 121px),
+radial-gradient(circle at 85% 6%,transparent 0 180px,rgba(120,200,240,.10) 181px 183px,transparent 184px 260px,rgba(120,200,240,.08) 261px 263px,transparent 264px),
+linear-gradient(180deg,#bfe3f2 0,#bfe3f2 330px,#0f4a70 331px,#082a45 900px,#041626 2263px)}
+.hd{height:330px;padding:28px 60px 0;color:#0b2a40;position:relative}
+.kick{font-family:"Noto Sans Mono CJK SC",monospace;font-size:16px;letter-spacing:4px;color:#2c5d7a}
+h1{margin:6px 0 6px;font-size:54px;line-height:1.18;font-weight:900;color:#06233a;max-width:1180px}
+h1 em{font-style:normal;color:#d0532a}
+.sub{font-size:19px;color:#173f58;max-width:1180px;margin:0}
+.meta{position:absolute;left:60px;right:60px;bottom:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid #0b2a40;font-size:14.5px;color:#0b2a40}
+.meta div{padding:6px 10px 0 0}.meta b{display:block;font-size:13.5px;color:#3b6e8c;font-weight:400}
+.sonar{position:absolute;right:62px;top:38px;width:170px;text-align:center;font-family:"Noto Sans Mono CJK SC",monospace;font-size:13.5px;color:#0b2a40}
+.sonar .n{font-size:44px;font-weight:900;color:#d0532a;line-height:1.05;font-family:"Noto Sans CJK SC"}
+.wrap{padding:0 50px}
+.sec{margin-top:20px;background:var(--panel);border:1px solid #2c5f80;border-radius:4px;padding:14px 22px}
+.sec h2{margin:0 0 6px;font-size:24px;line-height:1.3;display:flex;gap:12px;align-items:baseline}
+.sec h2 .d{font-family:"Noto Sans Mono CJK SC",monospace;font-size:14px;color:var(--gold);border:1px solid var(--gold);padding:1px 8px;border-radius:2px}
+.sec h2 small{margin-left:auto;font-size:14px;color:var(--mut);font-weight:400}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:20px}
+.grid2 .sec{margin-top:0}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.op{border-left:3px solid var(--gold);padding:2px 0 2px 12px}
+.op h3{margin:0 0 3px;font-size:18px;color:var(--gold);font-family:"Noto Sans Mono CJK SC",monospace}
+.op p{font-size:16.5px;line-height:1.45}
+.big{font-size:30px;font-weight:900;color:var(--ice);line-height:1.1}
+.big.l{color:var(--loss)}
+p{margin:0 0 6px}
+.note{font-size:14.5px;color:var(--mut);line-height:1.45}
+.k{color:var(--loss);font-weight:700}.g{color:var(--gold);font-weight:700}
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{border-bottom:1px solid #2f6080;padding:4px 6px;text-align:center}th{color:var(--gold);font-weight:700}
+td.l,th.l{text-align:left}
+ul{margin:4px 0 0;padding-left:22px}li{margin:0 0 6px;font-size:16.5px}
+.verdict{margin-top:20px;border:2px solid var(--gold);background:rgba(4,22,38,.9);padding:12px 20px}
+.verdict h2{margin:0 0 4px;color:var(--gold);font-size:24px}
+.foot{position:absolute;left:50px;right:50px;bottom:14px;display:flex;justify-content:space-between;font-size:13.5px;color:var(--mut);border-top:1px solid #2c5f80;padding-top:6px}
+</style></head><body>
+<div class="hd">
+<div class="kick">SOUNDING REPORT · 非权重 harness 演化审计 · arXiv 2611.07624v1</div>
+<h1>均分浮出水面，<em>丢掉的任务</em>沉在下面</h1>
+<p class="sub">冻结 GPT-5.4，把四种 harness 演化方法各跑一条谱系，冠军与种子各在全部题上重复 8 遍：16 个冠军全都“既新解出一些题、又丢掉一些原来会的题”。再用三组受控实验追问——选谁当父代、补丁怎么组合、门该多严——每一步都需要它自己的证据。</p>
+<div class="sonar"><div>测深读数</div><div class="n">16 / 16</div><div>冠军既有新增<br>也有丢失覆盖</div></div>
+<div class="meta">
+<div><b>方法</b>AHE · HyperAgents · A-Evolve · GEPA</div>
+<div><b>harness</b>MiniSWE（可改源码）· Codex（只改外层）</div>
+<div><b>基准</b>τ³-Banking 97 题 · Terminal-Bench 2 89 题</div>
+<div><b>作者</b>Wang 等 · 中国科大 / UC Berkeley / BIGAI / 上海交大</div>
+</div>
+</div>
+
+<div class="wrap">
+<div class="sec"><h2><span class="d">01</span>水线上下：每个冠军相对种子<span style="color:var(--ice)">新增</span> / <span style="color:var(--loss)">丢失</span>的“8 遍内至少成功一次”的题<small>表 10 · 附录 B.2 · 金色为 ΔPass@8（百分点）</small></h2>
+<svg viewBox="0 0 1500 465" width="100%" height="465" font-family="Noto Sans CJK SC"><defs><linearGradient id="sea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#14537a"/><stop offset="1" stop-color="#06213a"/></linearGradient></defs><rect x="0" y="232" width="1500" height="233" fill="url(#sea)" opacity=".85"/><line x1="40" x2="1490" y1="173.0" y2="173.0" stroke="#2f5f7d" stroke-dasharray="3 5"/><text x="34" y="178.0" font-size="13.5" fill="#9fb6c6" text-anchor="end">5</text><line x1="40" x2="1490" y1="114.0" y2="114.0" stroke="#2f5f7d" stroke-dasharray="3 5"/><text x="34" y="119.0" font-size="13.5" fill="#9fb6c6" text-anchor="end">10</text><line x1="40" x2="1490" y1="55.0" y2="55.0" stroke="#2f5f7d" stroke-dasharray="3 5"/><text x="34" y="60.0" font-size="13.5" fill="#9fb6c6" text-anchor="end">15</text><line x1="40" x2="1490" y1="291.0" y2="291.0" stroke="#2b6b93" stroke-dasharray="3 5"/><text x="34" y="296.0" font-size="13.5" fill="#9fb6c6" text-anchor="end">5</text><line x1="40" x2="1490" y1="350.0" y2="350.0" stroke="#2b6b93" stroke-dasharray="3 5"/><text x="34" y="355.0" font-size="13.5" fill="#9fb6c6" text-anchor="end">10</text><line x1="40" x2="1490" y1="232" y2="232" stroke="#e8f1f6" stroke-width="2"/><text x="227.0" y="22" font-size="15.5" font-weight="700" fill="#ffd166" text-anchor="middle">τ³-Banking · MiniSWE</text><path d="M69.0,232 L75.0,55.0 L109.0,55.0 L115.0,232 Z" fill="#dff3fb"/><text x="92.0" y="49.0" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+15</text><path d="M69.0,232 L115.0,232 L107.0,279.2 L77.0,279.2 Z" fill="#ff8a5b"/><text x="92.0" y="297.2" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−4</text><text x="92.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">AHE</text><text x="92.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+11.3</text><path d="M148.0,232 L154.0,78.6 L188.0,78.6 L194.0,232 Z" fill="#dff3fb"/><text x="171.0" y="72.6" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+13</text><path d="M148.0,232 L194.0,232 L186.0,350.0 L156.0,350.0 Z" fill="#ff8a5b"/><text x="171.0" y="368.0" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−10</text><text x="171.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">HyperAgents</text><text x="171.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+3.1</text><path d="M227.0,232 L233.0,149.39999999999998 L267.0,149.39999999999998 L273.0,232 Z" fill="#dff3fb"/><text x="250.0" y="143.39999999999998" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+7</text><path d="M227.0,232 L273.0,232 L265.0,302.8 L235.0,302.8 Z" fill="#ff8a5b"/><text x="250.0" y="320.8" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−6</text><text x="250.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">A-Evolve</text><text x="250.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+1.0</text><path d="M306.0,232 L312.0,114.0 L346.0,114.0 L352.0,232 Z" fill="#dff3fb"/><text x="329.0" y="108.0" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+10</text><path d="M306.0,232 L352.0,232 L344.0,302.8 L314.0,302.8 Z" fill="#ff8a5b"/><text x="329.0" y="320.8" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−6</text><text x="329.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">GEPA</text><text x="329.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+4.1</text><line x1="407.0" x2="407.0" y1="20" y2="445" stroke="#36607a"/><text x="587.0" y="22" font-size="15.5" font-weight="700" fill="#ffd166" text-anchor="middle">τ³-Banking · Codex</text><path d="M429.0,232 L435.0,90.39999999999998 L469.0,90.39999999999998 L475.0,232 Z" fill="#dff3fb"/><text x="452.0" y="84.39999999999998" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+12</text><path d="M429.0,232 L475.0,232 L467.0,302.8 L437.0,302.8 Z" fill="#ff8a5b"/><text x="452.0" y="320.8" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−6</text><text x="452.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">AHE</text><text x="452.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+6.2</text><path d="M508.0,232 L514.0,102.19999999999999 L548.0,102.19999999999999 L554.0,232 Z" fill="#dff3fb"/><text x="531.0" y="96.19999999999999" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+11</text><path d="M508.0,232 L554.0,232 L546.0,255.6 L516.0,255.6 Z" fill="#ff8a5b"/><text x="531.0" y="273.6" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−2</text><text x="531.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">HyperAgents</text><text x="531.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+9.3</text><path d="M587.0,232 L593.0,125.8 L627.0,125.8 L633.0,232 Z" fill="#dff3fb"/><text x="610.0" y="119.8" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+9</text><path d="M587.0,232 L633.0,232 L625.0,326.4 L595.0,326.4 Z" fill="#ff8a5b"/><text x="610.0" y="344.4" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−8</text><text x="610.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">A-Evolve</text><text x="610.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+1.0</text><path d="M666.0,232 L672.0,161.2 L706.0,161.2 L712.0,232 Z" fill="#dff3fb"/><text x="689.0" y="155.2" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+6</text><path d="M666.0,232 L712.0,232 L704.0,338.2 L674.0,338.2 Z" fill="#ff8a5b"/><text x="689.0" y="356.2" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−9</text><text x="689.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">GEPA</text><text x="689.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">−3.1</text><line x1="767.0" x2="767.0" y1="20" y2="445" stroke="#36607a"/><text x="947.0" y="22" font-size="15.5" font-weight="700" fill="#ffd166" text-anchor="middle">Terminal-Bench 2 · MiniSWE</text><path d="M789.0,232 L795.0,184.8 L829.0,184.8 L835.0,232 Z" fill="#dff3fb"/><text x="812.0" y="178.8" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+4</text><path d="M789.0,232 L835.0,232 L827.0,267.4 L797.0,267.4 Z" fill="#ff8a5b"/><text x="812.0" y="285.4" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−3</text><text x="812.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">AHE</text><text x="812.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+1.1</text><path d="M868.0,232 L874.0,196.6 L908.0,196.6 L914.0,232 Z" fill="#dff3fb"/><text x="891.0" y="190.6" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+3</text><path d="M868.0,232 L914.0,232 L906.0,279.2 L876.0,279.2 Z" fill="#ff8a5b"/><text x="891.0" y="297.2" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−4</text><text x="891.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">HyperAgents</text><text x="891.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">−1.1</text><path d="M947.0,232 L953.0,208.4 L987.0,208.4 L993.0,232 Z" fill="#dff3fb"/><text x="970.0" y="202.4" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+2</text><path d="M947.0,232 L993.0,232 L985.0,255.6 L955.0,255.6 Z" fill="#ff8a5b"/><text x="970.0" y="273.6" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−2</text><text x="970.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">A-Evolve</text><text x="970.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">0.0</text><path d="M1026.0,232 L1032.0,184.8 L1066.0,184.8 L1072.0,232 Z" fill="#dff3fb"/><text x="1049.0" y="178.8" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+4</text><path d="M1026.0,232 L1072.0,232 L1064.0,255.6 L1034.0,255.6 Z" fill="#ff8a5b"/><text x="1049.0" y="273.6" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−2</text><text x="1049.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">GEPA</text><text x="1049.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+2.2</text><line x1="1127.0" x2="1127.0" y1="20" y2="445" stroke="#36607a"/><text x="1307.0" y="22" font-size="15.5" font-weight="700" fill="#ffd166" text-anchor="middle">Terminal-Bench 2 · Codex</text><path d="M1149.0,232 L1155.0,173.0 L1189.0,173.0 L1195.0,232 Z" fill="#dff3fb"/><text x="1172.0" y="167.0" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+5</text><path d="M1149.0,232 L1195.0,232 L1187.0,279.2 L1157.0,279.2 Z" fill="#ff8a5b"/><text x="1172.0" y="297.2" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−4</text><text x="1172.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">AHE</text><text x="1172.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">+1.1</text><path d="M1228.0,232 L1234.0,208.4 L1268.0,208.4 L1274.0,232 Z" fill="#dff3fb"/><text x="1251.0" y="202.4" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+2</text><path d="M1228.0,232 L1274.0,232 L1266.0,291.0 L1236.0,291.0 Z" fill="#ff8a5b"/><text x="1251.0" y="309.0" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−5</text><text x="1251.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">HyperAgents</text><text x="1251.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">−3.4</text><path d="M1307.0,232 L1313.0,220.2 L1347.0,220.2 L1353.0,232 Z" fill="#dff3fb"/><text x="1330.0" y="214.2" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+1</text><path d="M1307.0,232 L1353.0,232 L1345.0,267.4 L1315.0,267.4 Z" fill="#ff8a5b"/><text x="1330.0" y="285.4" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−3</text><text x="1330.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">A-Evolve</text><text x="1330.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">−2.2</text><path d="M1386.0,232 L1392.0,208.4 L1426.0,208.4 L1432.0,232 Z" fill="#dff3fb"/><text x="1409.0" y="202.4" font-size="15" font-weight="700" fill="#e8f1f6" text-anchor="middle">+2</text><path d="M1386.0,232 L1432.0,232 L1424.0,291.0 L1394.0,291.0 Z" fill="#ff8a5b"/><text x="1409.0" y="309.0" font-size="15" font-weight="700" fill="#ff8a5b" text-anchor="middle">−5</text><text x="1409.0" y="432" font-size="13.5" fill="#e8f1f6" text-anchor="middle">GEPA</text><text x="1409.0" y="455" font-size="14.5" fill="#ffd166" text-anchor="middle">−3.4</text></svg>
+<p class="note">覆盖（Pass@8）与可靠度（Avg@8）是两件事：16 条谱系里可靠度升 11 条、覆盖升 10 条，4 条两者方向相反。例：MiniSWE + HyperAgents 在 τ³-Banking 上可靠度 <span class="g">+5.2</span>，却丢了 <span class="k">10</span> 道原本会的题（新增 13）。</p>
+</div>
+
+<div class="grid2">
+<div class="sec"><h2><span class="d">02</span>水下还有什么：成本与迁移<small>§4.3、§5、表 3</small></h2>
+<p><b>部署成本</b>：11 个可靠度上升的冠军里 8 个单次运行更贵（3 个更便宜的都是 MiniSWE 编码任务）。但更贵不一定更不划算：MiniSWE + AHE 在 τ³-Banking 跑 4 遍覆盖 56.7%，已超过种子跑 8 遍的 54.6%，部署成本更低。</p>
+<p><b>增益落在哪</b>：表 1 冠军 vs 种子是在全部题上比较，表 3 把变化拆成训练 / 验证 / 测试题的贡献（百分点，三者相加≈总变化）：</p>
+<table><tr><th class="l">τ³-Banking ΔPass@8</th><th>训练</th><th>验证</th><th>测试</th></tr>
+<tr><td class="l">Codex + AHE（+6.2）</td><td>+6.2</td><td>0.0</td><td>0.0</td></tr>
+<tr><td class="l">Codex + HyperAgents（+9.3）</td><td>+8.2</td><td>+1.0</td><td>0.0</td></tr>
+<tr><td class="l">MiniSWE + AHE（+11.3）</td><td>+3.1</td><td>+4.1</td><td>+4.1</td></tr></table>
+<p style="margin-top:6px">测试题可靠度 16 条中 10 条为正；跨基准时覆盖在 τ³→τ²-bench 上 8 个冠军降 7 个，在 Terminal-Bench 2→DeepSWE 上升 7 个。</p>
+</div>
+<div class="sec"><h2><span class="d">03</span>声呐原理：同一个均分被拿来做四种决定<small>§3.2 · 图 1 · 示意</small></h2>
+<svg viewBox="0 0 640 300" width="100%" height="300" font-family="Noto Sans CJK SC">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffd166"/></marker></defs>
+<g font-size="16" font-weight="700" text-anchor="middle">
+<rect x="10" y="20" width="130" height="54" rx="27" fill="none" stroke="#ffd166" stroke-width="2"/><text x="75" y="53" fill="#ffd166">select 选父代</text>
+<rect x="170" y="20" width="130" height="54" rx="27" fill="none" stroke="#e8f1f6" stroke-width="1.5"/><text x="235" y="53" fill="#e8f1f6">rollout 采轨迹</text>
+<rect x="330" y="20" width="130" height="54" rx="27" fill="none" stroke="#ffd166" stroke-width="2"/><text x="395" y="53" fill="#ffd166">analyze 诊断</text>
+<rect x="490" y="20" width="140" height="54" rx="27" fill="none" stroke="#ffd166" stroke-width="2"/><text x="560" y="53" fill="#ffd166">mutate 改动</text>
+<rect x="330" y="120" width="130" height="54" rx="27" fill="none" stroke="#e8f1f6" stroke-width="1.5"/><text x="395" y="153" fill="#e8f1f6">validate 可选</text>
+<rect x="170" y="120" width="130" height="54" rx="27" fill="none" stroke="#ffd166" stroke-width="2"/><text x="235" y="153" fill="#ffd166">gate 准入</text>
+<rect x="10" y="120" width="130" height="54" rx="27" fill="none" stroke="#e8f1f6" stroke-width="1.5"/><text x="75" y="153" fill="#e8f1f6">record 存档</text>
+</g>
+<g stroke="#ffd166" stroke-width="1.6" fill="none">
+<line x1="140" y1="47" x2="166" y2="47" marker-end="url(#a)"/><line x1="300" y1="47" x2="326" y2="47" marker-end="url(#a)"/><line x1="460" y1="47" x2="486" y2="47" marker-end="url(#a)"/>
+<path d="M560,74 L560,147 L464,147" marker-end="url(#a)"/><line x1="330" y1="147" x2="304" y2="147" marker-end="url(#a)"/><line x1="170" y1="147" x2="144" y2="147" marker-end="url(#a)"/>
+<path d="M75,120 L75,78" marker-end="url(#a)"/></g>
+<text x="320" y="210" font-size="15" fill="#e8f1f6" text-anchor="middle">作者把四种方法拆成同一套 7 个算子，只审金色四个：</text>
+<text x="320" y="234" font-size="15" fill="#e8f1f6" text-anchor="middle">谁当父代、证据支持改什么、改动如何组合、哪个候选留下。</text>
+<text x="320" y="262" font-size="14" fill="#9fb6c6" text-anchor="middle">演化只用训练 / 验证题；测试题只给冻结的种子与冠军报告分数。</text>
+<text x="320" y="284" font-size="14" fill="#9fb6c6" text-anchor="middle">每个方法 × harness × 基准只有一条演化谱系。</text>
+</svg>
+</div>
+</div>
+
+<div class="sec"><h2><span class="d">04</span>三次受控测深：每个决定要测它自己的后果<small>§6 · 附录 D.1–D.4 · 表 4–7</small></h2>
+<div class="grid4">
+<div class="op"><h3>select</h3><div class="big">0 / 4</div><p>四个父代池里，测试分最高的父代都<b>不是</b>后代平均提升最大的那个。每池 4 个冻结冠军 × 各 3 个分支，统一用 A-Evolve 的诊断与变异。</p>
+<p class="note">原选择规则命中“最佳父代”的概率：通用任务 17.5% / 8.8%，低于随机的 25%；编码任务 59.5% / 55.7%。</p></div>
+<div class="op"><h3>analyze</h3><div class="big">15 / 16</div><p>从冠军里拆出的具体改动（组件），可靠度高于对应的泛泛提醒（“检查工具、核对结果”）。</p>
+<p class="note">但提醒本身在只改外层的 Codex 上会拉低可靠度；16 个组件里有 4 个单独加到种子上反而低于种子（本项目按表 5 计数）。</p></div>
+<div class="op"><h3>mutate</h3><div class="big">6 / 8</div><p>冠军整体优于其任一单独组件。HyperAgents 的两个通用任务冠军交互为负：−6.3（95% 区间 −11.7 至 −1.2）、−6.6（−12.6 至 −0.6）。</p>
+<p class="note">反例：Codex 编码任务上两个组件各自低于种子（69.1、68.0 vs 69.9），合起来 72.6。</p></div>
+<div class="op"><h3>gate</h3><div class="big l">15 → 6</div><p>把门改严（均值严格提升且相对现任的平均回退 ≤ 0.05），能留住报告面板最佳候选的池从 15 个降到 6 个（共 16）。</p>
+<p class="note">按留下集合大小归一后，MiniSWE 下降、Codex 上升——后者多是“只留下种子且种子恰最佳”。重放顺序为诊断安排，非历史顺序。</p></div>
+</div></div>
+
+<div class="grid2">
+<div class="sec"><h2><span class="d">05</span>读数的误差棒<small>附录 B、D · §7 · 本项目读法</small></h2>
+<ul>
+<li>每个方法 × harness × 基准只有<b>一条</b>演化谱系；父代实验每父代只有 3 个分支；“丢失覆盖”是 8 次执行中的经验事件，不等于永久遗忘。τ³-Banking 上前 4 遍与后 4 遍的部分总体方向不一致。</li>
+<li>父代 / 门实验的报告面板只有 27 题（τ³）与 20 题（TB2）；门实验 2 遍决策数据。只用 GPT-5.4 一个模型。</li>
+<li>作者据这些诊断改出 AGE（四处算子修订装进 A-Evolve），在四个设置上可靠度与覆盖都高于 A-Evolve；但 AGE 只跑种子 0 一次，修订又是从同一批基准的诊断里来的——<b>本项目只把它当作“诊断可转成改动”的示例，不当作干净的方法对比</b>。</li>
+</ul></div>
+<div class="sec"><h2><span class="d">06</span>例子：一次翻转背后是什么<small>表 2、表 12 · 22 个任务–谱系对比</small></h2>
+<table><tr><th class="l">行为类别（主类）</th><th>升</th><th>降</th></tr>
+<tr><td class="l">状态与依赖管理</td><td>7</td><td>1</td></tr>
+<tr><td class="l">精确对齐（日期、字符、条件）</td><td>1</td><td>4</td></tr>
+<tr><td class="l">完成与交付</td><td>2</td><td>3</td></tr>
+<tr><td class="l">工具发现与恢复</td><td>2</td><td>1</td></tr>
+<tr><td class="l">实现调试</td><td>1</td><td>0</td></tr></table>
+<p class="note" style="margin-top:6px">如 τ³ 任务 037：种子 8 遍成功 7 次，A-Evolve / GEPA 冠军只剩 3 / 1 次——争议都提交了，但填错了发现问题的日期。</p>
+</div>
+</div>
+
+<div class="verdict"><h2>改变的判断</h2>
+<p>“演化曲线上升”不足以说明 harness 变好：新增与丢失要分开报，部署成本要和覆盖一起看，留出与迁移要逐个目标看。选父代、诊断、组合、准入是四个不同的决定，各自要用它想要的后果（后代提升、组件效应、交互、留住的候选）来检验，不能一路复用同一个均分。</p>
+<p class="note">本项目读法：这是在固定模型、两个基准、每条件一条谱系下的条件性诊断，不是对四种方法的排名。</p>
+</div>
+</div>
+
+<div class="foot"><span>来源：arXiv 2611.07624v1（HTML 全文，sha256 f46aa8d0…）· 数字对应见 SOURCE.md · 冰山与算子环为示意画法，柱高为表 10 原值</span><span>HarnessRSI Daily · 第十一期 · 问题档位为本项目阅读判断，不是审稿结论</span></div>
+</body></html>
