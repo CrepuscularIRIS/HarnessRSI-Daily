@@ -191,3 +191,7 @@
 - selection-010 后新增 confirmed P3：5 篇 ≥3 → 第十一期选题。终选 3 篇（08318 任务 vs 验证器学习 / 07624 聚合分数盲区 / 07123 PromptOps 判官再调优），各 2–4 轮修复后过视觉 QA。07048 与 07123 同主卡、理论构造无 harness 数据落选。见 selection-011.md。累计 42 张。
 - Correction C-011-1（07372 EnvOpt 归因未隔离、消融无数值/PDF 缺表）退回 Sol：需复读 PDF 表后复核 q4（疑 partial）、evidence_status、next_action 与 q3。
 - 备注未退回：07123 两表 0.59/0.55 不一致（结论不受影响）；07624 AGE 修订用测试集标签单 seed。
+
+## 2026-11-09 C-011-1 落档
+
+- 07372 EnvOpt 修订：q4→partial、pending_experiment/park（P3/high 保留）；两项 holds 改 partial，"第三轴正交"确认撤回。PDF 表核对：11.17pp + 成本 -83.45% 成立，引言 16% 不支持；Table 2 显示 full 非全面优于 tools-only。原记录保留。
