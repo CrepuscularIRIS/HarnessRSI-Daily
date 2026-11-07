@@ -185,3 +185,9 @@
 - L2：inc-l2-16 11/11。改判 3 篇 P2→P3；**2611.03743 判定 P3/confirmed 但 next_action=exclude**（反馈学习进入 RL 权重，属范围外口径，理由见批次）；**5 篇 P3/confirmed/to_l3**（07048/07123/07372/07624/08318）；07051、06972 P3/pending_experiment/park（缺独立锚点/归因）；07469、07595 P2/pending_experiment/park；08483 P2/confirmed/park。子卡 63 项。
 - 漏检抽查：名额 1（预算 11×10%）但池 0 → 欠账 ~4.3+1→~5.3 滚存。seed=20261109。
 - to_l3 池：0 + 5 = 5 篇 ≥3 → 明晨 Opus 班达标。
+
+## 2026-11-09 每日 Opus 判断（第十一期选题）
+
+- selection-010 后新增 confirmed P3：5 篇 ≥3 → 第十一期选题。终选 3 篇（08318 任务 vs 验证器学习 / 07624 聚合分数盲区 / 07123 PromptOps 判官再调优），各 2–4 轮修复后过视觉 QA。07048 与 07123 同主卡、理论构造无 harness 数据落选。见 selection-011.md。累计 42 张。
+- Correction C-011-1（07372 EnvOpt 归因未隔离、消融无数值/PDF 缺表）退回 Sol：需复读 PDF 表后复核 q4（疑 partial）、evidence_status、next_action 与 q3。
+- 备注未退回：07123 两表 0.59/0.55 不一致（结论不受影响）；07624 AGE 修订用测试集标签单 seed。
