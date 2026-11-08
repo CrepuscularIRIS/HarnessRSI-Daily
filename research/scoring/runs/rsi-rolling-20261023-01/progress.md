@@ -195,3 +195,7 @@
 ## 2026-11-09 C-011-1 落档
 
 - 07372 EnvOpt 修订：q4→partial、pending_experiment/park（P3/high 保留）；两项 holds 改 partial，"第三轴正交"确认撤回。PDF 表核对：11.17pp + 成本 -83.45% 成立，引言 16% 不支持；Table 2 显示 full 非全面优于 tools-only。原记录保留。
+
+## 2026-11-10 08:43 每日 Opus 判断
+
+- selection-011 后新增 confirmed P3：0 篇 <3 → 跳过（池内 07048 同卡落选、07372 已 correction 降为 park）。
