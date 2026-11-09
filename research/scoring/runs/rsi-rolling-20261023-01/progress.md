@@ -199,3 +199,7 @@
 ## 2026-11-10 08:43 每日 Opus 判断
 
 - selection-011 后新增 confirmed P3：0 篇 <3 → 跳过（池内 07048 同卡落选、07372 已 correction 降为 park）。
+
+## 2026-11-11 08:43 每日 Opus 判断
+
+- selection-011 后新增 confirmed P3：0 篇 <3 → 跳过。
