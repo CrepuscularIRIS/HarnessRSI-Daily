@@ -223,3 +223,7 @@
 - selection-011 后新增 confirmed P3：5 篇 ≥3 → 第十二期选题。终选 3 篇（09348 反馈后门植入 / 09030 状态编码受控研究 / 09218 BoxBox 任务内 harness 改写），各修复后过视觉 QA；09291 与上期 07123 同卡去重。见 selection-012.md。累计 45 张。
 - Correction C-012-1（08644 Decision Context dev=test 同集 71 场景、归因未分离、表间矛盾）退回 Sol：复核 q4（疑 partial/pending_experiment）与 q3（疑 incremental）。
 - 备注未退回：09030 的 Opus 5 xhigh 行含两次早期无验证运行；附录 E.5 与表 2 数字对调。
+
+## 2026-11-12 C-012-1 落档
+
+- 08644 Decision Context 修订：P3→P2、q3→incremental、q4→partial、pending_experiment/park；H00 构建评估分离 holds→partial（dev/test 未划分、通道匹配未确认、表 2/5 控制列矛盾——加权 16.0% vs 总分 10%）。原记录保留。
