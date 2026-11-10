@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 27 → 42 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 30 → 45 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Forty-two papers, forty-two distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [Reel index](reel/README.md).
-（42 篇、42 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Forty-five papers, forty-five distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [Reel index](reel/README.md).
+（45 篇、45 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.09348/poster.png"><img src="reel/2611.09348/poster.png" width="260" alt="2611.09348 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.09348">2611.09348</a> · When feedback becomes a backdoor</b><br>
+An attacker who controls only some tasks and their reference answers traces a trigger→payload rule through SkillOpt's promotion stages. SearchQA: all 3 seeds retain it, 200/200 triggered vs 0/200 clean, 0/200 after deleting the rule. SpreadsheetBench: natural attacks stop at recognition. A neutralized backdoor edit rides through the atomic validation gate with a clean edit (0.3775 vs 0.1700). One optimizer, one model.<br>
+参考答案也是攻击面：整候选验证分更高，担保不了其中每条编辑。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.09030/poster.png"><img src="reel/2611.09030/poster.png" width="260" alt="2611.09030 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.09030">2611.09030</a> · Enough information, poor interpretation</b><br>
+A fixed robot self-learning harness, one factor varied at a time (9 tasks, 631 configurations). World-frame and object-frame reports of the same state, both 16.9k characters, reach 30% vs 40% held-out success; per-skill feedback beats per-episode 52% vs 25%, and a state-only report scores below outcome-only (11% vs 19%). Simulation only.<br>
+信息够了，翻不成改动：报告按什么单位、几何有没有写明，比报告多长更重要。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.09218/poster.png"><img src="reel/2611.09218/poster.png" width="260" alt="2611.09218 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.09218">2611.09218</a> · Box, box: revise the harness mid-race</b><br>
+On 50 open-ended performance-optimization tasks (3 × 4 h runs each), letting the agent call its own harness review and hot-reload it with context preserved reaches 1.702× vs 1.539× (external Harness Scaling), 1.442× (frozen) and 1.281× (offline evolution). Budgets matched in wall-clock, not dollars; in-task gains only.<br>
+harness 优化可以是任务中途的代理能力；离线演化在开放长任务上可能比不改还差。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

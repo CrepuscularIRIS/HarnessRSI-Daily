@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>进站换胎计时屏</title><style>
+:root{--bg:#0b0d10;--pn:#14171c;--ln:#262b33;--tx:#e6e8ec;--mut:#8a93a6;--red:#e10600;--pur:#a64dff;--grn:#00d26a;--yel:#ffd400}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;background:var(--bg);color:var(--tx);font-family:"Noto Sans CJK SC",sans-serif;font-size:18px;line-height:1.55;position:relative;
+background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 6px,transparent 6px 12px)}
+.chk{height:16px;background:repeating-conic-gradient(#fff 0 25%,#111 0 50%) 0 0/16px 16px}
+.bar0{display:flex;justify-content:space-between;align-items:center;padding:10px 56px;background:#000;border-bottom:4px solid var(--red);font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px;letter-spacing:2px}
+.bar0 b{color:var(--red);font-size:18px}
+.wrap{padding:18px 56px 0}
+h1{font-size:46px;line-height:1.2;margin:0 0 8px;font-weight:900;font-style:italic}
+h1 em{font-style:italic;color:var(--red)}
+.sub{margin:0;font-size:18.5px;color:#cfd3da;max-width:1490px}
+.info{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;margin-top:12px;border:1px solid var(--ln);background:var(--pn)}
+.info div{padding:8px 14px;border-right:1px solid var(--ln);font-size:14.5px;line-height:1.45}.info div:last-child{border-right:0}
+.info b{display:block;font-family:"Noto Sans Mono CJK SC",monospace;font-size:12px;letter-spacing:2px;color:var(--red);font-weight:400}
+.pn{background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:14px 22px;margin-top:18px;min-width:0}
+.pn h2{margin:0 0 6px;font-size:22px;display:flex;align-items:baseline;gap:12px;font-style:italic}
+.pn h2 .k{font-family:"Noto Sans Mono CJK SC",monospace;font-style:normal;font-size:13px;background:var(--red);color:#fff;padding:1px 8px}
+.pn h2 small{margin-left:auto;font-size:13.5px;color:var(--mut);font-weight:400;font-style:normal}
+.hdr,.trow{display:grid;grid-template-columns:44px 8px 1fr 300px 120px 120px;align-items:center;gap:0 12px}
+.hdr{font-family:"Noto Sans Mono CJK SC",monospace;font-size:12.5px;color:var(--mut);letter-spacing:1px;padding:0 0 4px}
+.hdr span:nth-child(n+4){text-align:right}
+.trow{background:#1b1f26;margin-bottom:8px;padding:11px 10px 11px 0}
+.pos{font-family:"Noto Sans Mono CJK SC",monospace;font-size:26px;font-weight:700;text-align:center}
+.bar{align-self:stretch;background:var(--c)}
+.nm b{font-family:"Noto Sans Mono CJK SC",monospace;font-size:22px;letter-spacing:2px;margin-right:12px}.nm span{color:#cfd3da;font-size:16px}
+.xtra{font-size:13.5px;color:#ff8a80}
+.v{font-family:"Noto Sans Mono CJK SC",monospace;font-size:20px;text-align:right}
+.sp{position:relative;padding-bottom:8px}.sp i{position:absolute;right:0;bottom:0;height:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+p{margin:0 0 6px}.note{font-size:15px;color:var(--mut);line-height:1.45}
+.num{font-family:"Noto Sans Mono CJK SC",monospace;font-weight:700;color:#fff}
+table{border-collapse:collapse;width:100%;font-size:16px}td,th{padding:8px 8px;border-bottom:1px solid var(--ln)}th{font-size:12.5px;color:var(--mut);font-weight:400;text-align:left}
+td.n{font-family:"Noto Sans Mono CJK SC",monospace;text-align:right}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+.stat{background:#1b1f26;border-left:4px solid var(--pur);padding:10px 14px}
+.stat b{display:block;font-family:"Noto Sans Mono CJK SC",monospace;font-size:26px;color:#fff}.stat span{font-size:13.5px;color:#b9bfca}
+.inc{border:1px solid #5a1a17;background:#1d0f0f;border-radius:4px;padding:10px 18px}
+.inc h3{margin:0 0 4px;font-size:18px;color:#ff8a80;font-family:"Noto Sans Mono CJK SC",monospace;letter-spacing:1px}
+.inc p{font-size:16px}
+.flag{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-top:18px}
+.yel{border:2px solid var(--yel);border-radius:4px;padding:10px 20px;background:#17150a}
+.yel h2{margin:0 0 4px;font-size:20px;color:var(--yel)}
+.yel ul{margin:0;padding-left:20px;font-size:15.5px;line-height:1.5}.yel li{margin-bottom:2px}
+.jd{background:#fff;color:#111;border-radius:4px;padding:12px 20px}
+.jd h2{margin:0 0 6px;font-size:22px;color:var(--red)}.jd p{font-size:17px}.jd .note{color:#555}
+.src{position:absolute;left:56px;right:56px;bottom:12px;font-size:13px;color:var(--mut);display:flex;justify-content:space-between}
+</style></head><body>
+<div class="chk"></div>
+<div class="bar0"><span><b>BOX, BOX</b>　PERFRACE · 4 小时 · 50 个测试任务 × 3 次运行</span><span>REEL 第十二期 · HARNESSRSI DAILY</span><span>arXiv 2611.09218v1 · cs.SE</span></div>
+<div class="wrap">
+<h1>不熄火进站：让代理在长任务<em>中途</em>自己决定改 harness</h1>
+<p class="sub">真实软件性能优化没有参考答案，跑得越久越会碰到离线学来的 harness 没准备过的困难。BoxBox 给任务代理一个 <span class="num">boxbox()</span> 工具：代理自己决定何时暂停、审查轨迹、改整个可执行 harness；内核验证后热加载，执行上下文原样保留，改过的 harness 继续执行任务，也负责后面的审查。</p>
+<div class="info">
+<div><b>赛道 · PERFRACE</b>100 个任务，取自 GitHub 上编码代理活跃的真实项目，7 个领域；端到端工作负载，没有已知目标补丁；人机配对验证 + 红队防作弊</div>
+<div><b>计分</b>提交给外部 Judge（独立工作负载副本 + 留出正确性用例，影子容器）；取正确提交的历次最佳加速比，跨任务取调和平均</div>
+<div><b>车手 / 底盘</b>GPT-5.6 Luna（high）；所有方法都从同一个终端 harness Terminus-KIRA 出发</div>
+<div><b>车队</b>Tan, Jiang, Yang 等 · 南京大学 / 浙江大学 / 伦敦大学伯贝克学院 / Microsoft</div>
+</div>
+
+<div class="pn"><h2>计时塔：4 小时后的名次<span class="k">表 1</span><small>同样 4 小时壁钟预算；费用为每次运行平均模型费用（含 harness 优化）</small></h2>
+<div class="hdr"><span>POS</span><span></span><span>方法</span><span>SPEEDUP@4h</span><span>平均费用</span><span>加速比 / $</span></div>
+<div class="trow"><div class="pos">1</div><div class="bar" style="--c:#a64dff"></div>
+<div class="nm"><b>BOXBOX</b><span>BoxBox · 代理自己叫进站</span></div>
+<div class="v sp">1.702×<i style="width:94%;background:#a64dff"></i></div><div class="v">$16.43</div><div class="v">0.4886</div></div><div class="trow"><div class="pos">2</div><div class="bar" style="--c:#00d26a"></div>
+<div class="nm"><b>HS</b><span>Harness Scaling · 外部控制器逐次改</span></div>
+<div class="v sp">1.539×<i style="width:72%;background:#00d26a"></i></div><div class="v">$12.98</div><div class="v">0.2872</div></div><div class="trow"><div class="pos">3</div><div class="bar" style="--c:#ffd400"></div>
+<div class="nm"><b>FRZ</b><span>Frozen · 全程不改 harness</span></div>
+<div class="v sp">1.442×<i style="width:59%;background:#ffd400"></i></div><div class="v">$23.22</div><div class="v">0.2142</div></div><div class="trow"><div class="pos">4</div><div class="bar" style="--c:#e10600"></div>
+<div class="nm"><b>HE</b><span>Harness Evolution · 离线演化后冻结</span><div class="xtra">另摊离线训练 + 验证：每次测试运行 ≥ $33.73</div></div>
+<div class="v sp">1.281×<i style="width:37%;background:#e10600"></i></div><div class="v">$24.56</div><div class="v">0.1243</div></div>
+<p class="note">HE 先在 40 个训练、10 个验证任务上离线演化（训练集加速比 1.086 → 1.062 → 1.069，没有持续上升），挑验证最好的 h24 冻结后测试，结果低于完全不改的 Frozen。相对 Frozen，BoxBox 平均费用低 29.3%。HS 总费用最低，但每次换会话都会重置执行上下文。</p></div>
+
+<div class="two">
+<div class="pn"><h2>后半程：谁还在加速<span class="k">§5.2</span></h2>
+<svg viewBox="0 0 680 250" width="680" height="250" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans CJK SC"><line x1="214.00000000000003" y1="10" x2="214.00000000000003" y2="210" stroke="#2a2f38"/><text x="214.00000000000003" y="228" font-size="13" fill="#8a93a6" text-anchor="middle" font-family="Noto Sans Mono CJK SC">1.4×</text><line x1="334.0000000000001" y1="10" x2="334.0000000000001" y2="210" stroke="#2a2f38"/><text x="334.0000000000001" y="228" font-size="13" fill="#8a93a6" text-anchor="middle" font-family="Noto Sans Mono CJK SC">1.5×</text><line x1="454.0000000000002" y1="10" x2="454.0000000000002" y2="210" stroke="#2a2f38"/><text x="454.0000000000002" y="228" font-size="13" fill="#8a93a6" text-anchor="middle" font-family="Noto Sans Mono CJK SC">1.6×</text><line x1="574.0" y1="10" x2="574.0" y2="210" stroke="#2a2f38"/><text x="574.0" y="228" font-size="13" fill="#8a93a6" text-anchor="middle" font-family="Noto Sans Mono CJK SC">1.7×</text><text x="176" y="49" font-size="15" fill="#e6e8ec" text-anchor="end">Frozen</text><line x1="226.00000000000003" y1="44" x2="264.4000000000001" y2="44" stroke="#ffd400" stroke-width="4"/><circle cx="226.00000000000003" cy="44" r="6" fill="#0b0d10" stroke="#ffd400" stroke-width="2.5"/><circle cx="264.4000000000001" cy="44" r="7" fill="#ffd400"/><text x="216.00000000000003" y="33" font-size="13" fill="#b9bfca" text-anchor="end" font-family="Noto Sans Mono CJK SC">1.410</text><text x="276.4000000000001" y="49" font-size="14" fill="#ffd400" font-family="Noto Sans Mono CJK SC" font-weight="700">1.442  +0.032</text><text x="176" y="113" font-size="15" fill="#e6e8ec" text-anchor="end">Harness Scaling</text><line x1="251.2000000000002" y1="108" x2="380.80000000000007" y2="108" stroke="#00d26a" stroke-width="4"/><circle cx="251.2000000000002" cy="108" r="6" fill="#0b0d10" stroke="#00d26a" stroke-width="2.5"/><circle cx="380.80000000000007" cy="108" r="7" fill="#00d26a"/><text x="241.2000000000002" y="97" font-size="13" fill="#b9bfca" text-anchor="end" font-family="Noto Sans Mono CJK SC">1.431</text><text x="392.80000000000007" y="113" font-size="14" fill="#00d26a" font-family="Noto Sans Mono CJK SC" font-weight="700">1.539  +0.108</text><text x="176" y="177" font-size="15" fill="#e6e8ec" text-anchor="end">BoxBox</text><line x1="370.00000000000017" y1="172" x2="576.4000000000001" y2="172" stroke="#a64dff" stroke-width="4"/><circle cx="370.00000000000017" cy="172" r="6" fill="#0b0d10" stroke="#a64dff" stroke-width="2.5"/><circle cx="576.4000000000001" cy="172" r="7" fill="#a64dff"/><text x="360.00000000000017" y="161" font-size="13" fill="#b9bfca" text-anchor="end" font-family="Noto Sans Mono CJK SC">1.530</text><text x="588.4000000000001" y="177" font-size="14" fill="#a64dff" font-family="Noto Sans Mono CJK SC" font-weight="700">1.702  +0.172</text><text x="190" y="248" font-size="13" fill="#8a93a6">空心 = 2 小时 · 实心 = 4 小时（后半程的最佳正确加速比）</text></svg>
+<p class="note">Frozen 后两小时只多出 0.032，曲线基本走平；能在任务中途改 harness 的两种方法后半程还在涨。</p></div>
+<div class="pn"><h2>消融：触发和编辑范围各拿掉一项<span class="k">表 2</span><small>随机 14 个测试任务</small></h2>
+<table><tr><th>变体</th><th style="text-align:right">Speedup@4h</th><th style="text-align:right">费用</th><th style="text-align:right">加速比 / $</th></tr><tr><td><span style="color:#a64dff">■</span> 完整 BoxBox</td><td class="n">1.584×</td><td class="n">$15.07</td><td class="n">0.3452</td></tr><tr><td><span style="color:#8a93a6">■</span> 去掉代理触发（每 30 分钟定时审查）</td><td class="n">1.508×</td><td class="n">$21.58</td><td class="n">0.1338</td></tr><tr><td><span style="color:#8a93a6">■</span> 去掉整体编辑（只许改预定范围）</td><td class="n">1.349×</td><td class="n">$16.07</td><td class="n">0.1132</td></tr></table>
+<p class="note" style="margin-top:6px">定时审查会打断“提出—实现—测量”的过程，即使结论是不用改也要花模型调用；限定编辑范围挡住了跨组件改动。14 个任务，表中无区间。</p></div>
+</div>
+
+<div class="pn"><h2>进站流程<span class="k">§4 · 图 4</span><small>紫框 = 关键差异：由代理触发、热加载时保留上下文</small></h2>
+<svg viewBox="0 0 1440 176" width="1440" height="176" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans CJK SC"><rect x="4" y="20" width="218" height="100" rx="8" fill="#161a21" stroke="#3a404c" stroke-width="2"/><text x="18" y="50" font-size="19" font-weight="700" fill="#fff">任务执行</text><text x="18" y="78" font-size="15" fill="#b9bfca">改项目代码</text><text x="18" y="99" font-size="15" fill="#b9bfca">提交给 Judge 拿反馈</text><text x="210" y="40" font-size="12" fill="#5d6574" text-anchor="end" font-family="Noto Sans Mono CJK SC">01</text><path d="M226 66 l16 0" stroke="#e10600" stroke-width="3"/><path d="M242 66 l-8 -6 v12 z" fill="#e10600"/><rect x="248" y="20" width="218" height="100" rx="8" fill="#2a1240" stroke="#a64dff" stroke-width="2"/><text x="262" y="50" font-size="19" font-weight="700" fill="#fff">boxbox()</text><text x="262" y="78" font-size="15" fill="#b9bfca">代理自己决定</text><text x="262" y="99" font-size="15" fill="#b9bfca">何时进站</text><text x="454" y="40" font-size="12" fill="#5d6574" text-anchor="end" font-family="Noto Sans Mono CJK SC">02</text><path d="M470 66 l16 0" stroke="#e10600" stroke-width="3"/><path d="M486 66 l-8 -6 v12 z" fill="#e10600"/><rect x="492" y="20" width="218" height="100" rx="8" fill="#161a21" stroke="#3a404c" stroke-width="2"/><text x="506" y="50" font-size="19" font-weight="700" fill="#fff">内核接管</text><text x="506" y="78" font-size="15" fill="#b9bfca">暂停任务，保存轨迹、</text><text x="506" y="99" font-size="15" fill="#b9bfca">终端和工作区</text><text x="698" y="40" font-size="12" fill="#5d6574" text-anchor="end" font-family="Noto Sans Mono CJK SC">03</text><path d="M714 66 l16 0" stroke="#e10600" stroke-width="3"/><path d="M730 66 l-8 -6 v12 z" fill="#e10600"/><rect x="736" y="20" width="218" height="100" rx="8" fill="#161a21" stroke="#3a404c" stroke-width="2"/><text x="750" y="50" font-size="19" font-weight="700" fill="#fff">审查会话</text><text x="750" y="78" font-size="15" fill="#b9bfca">读轨迹，改整个</text><text x="750" y="99" font-size="15" fill="#b9bfca">harness，git 提交</text><text x="942" y="40" font-size="12" fill="#5d6574" text-anchor="end" font-family="Noto Sans Mono CJK SC">04</text><path d="M958 66 l16 0" stroke="#e10600" stroke-width="3"/><path d="M974 66 l-8 -6 v12 z" fill="#e10600"/><rect x="980" y="20" width="218" height="100" rx="8" fill="#2a1240" stroke="#a64dff" stroke-width="2"/><text x="994" y="50" font-size="19" font-weight="700" fill="#fff">验证 + 热加载</text><text x="994" y="78" font-size="15" fill="#b9bfca">验证新提交；失败则</text><text x="994" y="99" font-size="15" fill="#b9bfca">保留当前运行时</text><text x="1186" y="40" font-size="12" fill="#5d6574" text-anchor="end" font-family="Noto Sans Mono CJK SC">05</text><path d="M1202 66 l16 0" stroke="#e10600" stroke-width="3"/><path d="M1218 66 l-8 -6 v12 z" fill="#e10600"/><rect x="1224" y="20" width="218" height="100" rx="8" fill="#161a21" stroke="#3a404c" stroke-width="2"/><text x="1238" y="50" font-size="19" font-weight="700" fill="#fff">继续同一任务</text><text x="1238" y="78" font-size="15" fill="#b9bfca">上下文不丢；新 harness</text><text x="1238" y="99" font-size="15" fill="#b9bfca">也负责下次审查</text><text x="1430" y="40" font-size="12" fill="#5d6574" text-anchor="end" font-family="Noto Sans Mono CJK SC">06</text><path d="M1333.0 122 v16 H113.0 v-16" fill="none" stroke="#5d6574" stroke-dasharray="5 5" stroke-width="2"/><text x="720.0" y="166" font-size="13.5" fill="#8a93a6" text-anchor="middle">循环直到 4 小时用完；运行时故障也会触发内核恢复与审查（据 §4 与图 4 重绘的示意）</text></svg>
+<div class="stats">
+<div class="stat"><b>5</b><span>每次运行审查次数中位数；92% 的运行有 3–6 次</span></div>
+<div class="stat"><b>2.1%</b><span>审查占用的时间预算（中位数）</span></div>
+<div class="stat"><b>13.8%</b><span>审查占用的模型费用（中位数）</span></div>
+<div class="stat"><b>620</b><span>次实际生效的非空修改：提示规则、技能、工具、执行逻辑、故障处理</span></div>
+</div></div>
+
+<div class="two" style="margin-top:0">
+<div class="pn"><h2>赛事干预记录<span class="k">附录 A.2–A.3</span></h2>
+<div class="inc"><h3>HE · mirage--kubernetes-triage</h3><p>离线训练时加的“提交前检查”假设仓库在父工作区；测试任务里仓库路径不同，检查解析不到提交，<span class="num">473</span> 次提交被拦，持续约 <span class="num">3 小时 46 分</span>。为训练集失败写的规则，换个任务就挡路。</p></div>
+<div class="inc" style="margin-top:8px"><h3>HS · kitops--minilm-pack</h3><p>外部控制器加了“连续三次相同命令就警告”，代理换个写法照样重复：<span class="num">113</span> 条连续命令没改代码也没产出新测量；最佳 1.649× 停在第 5 个检查点。改动只能等下一次会话。</p></div></div>
+<div class="pn"><h2>车载录像：一次进站做了什么<span class="k">附录 A.4.1</span></h2>
+<p><b>CCC 编译 SQLite</b>：第一次审查加了重复计时、记录、比较的辅助工具；第二次加各阶段计时汇总。之后一处改动在分批测量里显得快了 <span class="num">9.4%</span>，交替跑新旧版本后中位数几乎相同，原来是批次间的测量波动。第三次审查把交替比较写进工具，用它否掉了几个无效改动；之后的改动把官方运行时间 <span class="num">6.321 → 6.095 → 5.792 s</span>。</p>
+<p class="note">个案展示机制，不是统计证据。审查本身不直接改项目代码，改的是代理做实验、测量、等待和管理上下文的方式。</p></div>
+</div>
+
+<div class="flag">
+<div class="yel"><h2>黄旗：成绩怎么读</h2><ul>
+<li>预算按壁钟对齐，不是按美元：HS 总费用更低；HE 的离线成本另计。</li>
+<li>Judge 的正式评分在运行中对代理可见，报告的是历次正确提交的最佳值；四种方法规则相同。</li>
+<li>收益只在同一任务内测；没有冻结后跨任务复用。标题里的“递归”指改过的 harness 也负责后续审查，没有单独测审查能力本身是否变强。</li>
+<li>没有“只审查反思、不改 harness”的对照，上下文保留、额外反思与 harness 修改的贡献没有完全拆开；消融只有 14 个任务。</li>
+<li>作者明说：内核验证与影子验证不构成完整安全边界，是研究原型。</li></ul></div>
+<div class="jd"><h2>改变的判断（本项目读法）</h2>
+<p>在开放式长任务里，harness 优化不一定是任务开始前的离线步骤，可以由代理在任务中途按需去做；离线演化出的 harness 在这类任务上可能比不改还差。</p>
+<p class="note">主卡 make_the_improver_editable / attribute_and_patch_incumbent（族 F3 / F0）。问题档位是本项目的阅读判断，不是审稿结论。</p></div>
+</div>
+</div>
+<div class="src"><span>来源：arXiv:2611.09218v1 全文（钉定 HTML，sha256 4c792323…）；数字逐项见 SOURCE.md</span><span>计时塔、哑铃图按原文表值重绘；进站流程为示意</span></div>
+</body></html>
