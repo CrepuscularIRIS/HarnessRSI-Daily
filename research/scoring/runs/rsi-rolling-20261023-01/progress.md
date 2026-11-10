@@ -227,3 +227,11 @@
 ## 2026-11-12 C-012-1 落档
 
 - 08644 Decision Context 修订：P3→P2、q3→incremental、q4→partial、pending_experiment/park；H00 构建评估分离 holds→partial（dev/test 未划分、通道匹配未确认、表 2/5 控制列矛盾——加权 16.0% vs 总分 10%）。原记录保留。
+
+## 2026-11-12 18:17 巡检班
+
+- 新增：12 篇（inbox/2026-11-10-0935，corpus 1727→1739，全文 12/12，材料 12/12 abstract_intro）。
+- L1：inc-l1-17 12/12（assessed 11，out_of_scope 1；to_l2 11）。
+- L2：inc-l2-19 11/11。Q1 改判 1 篇（12552 asserted→measured_own）。**6 篇 P3/confirmed/to_l3**（逐篇见批次）；5 篇 park（含 11994 报告集开发接触、10787 beta 假设未验、10748 异步调度未闭环验证）。
+- 漏检抽查：名额 1（预算 11×10%）但池 0 → 欠账 ~6.3+1→~7.3 滚存。seed=20261115。
+- to_l3 池：+6。
