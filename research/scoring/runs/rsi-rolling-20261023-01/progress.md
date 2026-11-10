@@ -217,3 +217,9 @@
 - 过程异常：arXiv API 429 限流，RSI 单篇元数据重试一次成功；限流期间连带误写 l1_inputs.jsonl 重复行与错误 TSV，已当场清理（237→219 行，未提交）。
 - L1（单篇快通道）：inc-l1-16 1/1 → **out_of_scope/exclude**（NeuroMAS 训练节点 adapters，冻结骨干≠不更新权重，非 harness 级自修改）；L2 按条件未执行。
 - to_l3 池：维持 5。
+
+## 2026-11-12 每日 Opus 判断（第十二期选题）
+
+- selection-011 后新增 confirmed P3：5 篇 ≥3 → 第十二期选题。终选 3 篇（09348 反馈后门植入 / 09030 状态编码受控研究 / 09218 BoxBox 任务内 harness 改写），各修复后过视觉 QA；09291 与上期 07123 同卡去重。见 selection-012.md。累计 45 张。
+- Correction C-012-1（08644 Decision Context dev=test 同集 71 场景、归因未分离、表间矛盾）退回 Sol：复核 q4（疑 partial/pending_experiment）与 q3（疑 incremental）。
+- 备注未退回：09030 的 Opus 5 xhigh 行含两次早期无验证运行；附录 E.5 与表 2 数字对调。
