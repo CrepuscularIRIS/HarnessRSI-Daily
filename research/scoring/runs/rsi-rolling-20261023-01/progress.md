@@ -210,3 +210,10 @@
 - L1：inc-l1-15 9/9（全 assessed，to_l2 9）。L2：inc-l2-17 9/9（遗留 high 0）。改判 2 篇。**5 篇 P3/confirmed/to_l3**（08644/09218/09030/09348/09291）；09318 降 P1/park（Q2 已解决类）；08723/08643 P2/park；08946 P3/pending_experiment。
 - 漏检抽查：名额 1（预算 9×10%）但池 0 → 欠账 ~5.3+1→~6.3 滚存。seed=20261112。
 - to_l3 池：0 + 5 = 5 篇 ≥3 → 今晨 Opus 班达标。
+
+## 2026-11-10 14:17 巡检班（GitHub 查新 + arXiv 限流处置）
+
+- 查新来源：selfimproving-agent list → 1 篇 2605.16757（材料 1/1 abstract_intro）；inbox 空。
+- 过程异常：arXiv API 429 限流，RSI 单篇元数据重试一次成功；限流期间连带误写 l1_inputs.jsonl 重复行与错误 TSV，已当场清理（237→219 行，未提交）。
+- L1（单篇快通道）：inc-l1-16 1/1 → **out_of_scope/exclude**（NeuroMAS 训练节点 adapters，冻结骨干≠不更新权重，非 harness 级自修改）；L2 按条件未执行。
+- to_l3 池：维持 5。
