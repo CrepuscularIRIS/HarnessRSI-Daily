@@ -244,3 +244,10 @@
 ## 2026-11-13 C-013-1 落档
 
 - 12109 SkillDuet 修订：q4→partial、pending_experiment/park（P3/high 保留为待验问题价值）；H28 §§1–2 holds→partial（增益下降与天花板混淆、ALFWorld 138/140 vs 134/140、WebShop 单次且检查点沾报告集）。原记录保留。
+
+## 2026-11-13 12:17 巡检班
+
+- 新增：10 篇（inbox/2026-11-11-0936，corpus 1739→1749，全文 10/10，材料 10/10 abstract_intro）。首跑 L1 派发遇流断开无输出，重试一次成功。
+- L1：inc-l1-18 10/10（全 assessed，to_l2 10）。L2：inc-l2-20 10/10。**5 篇 P3/confirmed/to_l3**（逐篇见批次）；4 篇 pending_experiment/park；1 篇 P2/park。子卡 70 项。
+- 漏检抽查：名额 1（预算 10×10%）但池 0 → 欠账 ~7.3+1→~8.3 滚存。seed=20261116。
+- to_l3 池：+5。
