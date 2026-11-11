@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>直控航海日志</title><style>
+:root{--paper:#f3e9d2;--navy:#1d3a5f;--rust:#a4462b;--sea:#2f7d7a;--ink:#2a2620;--mut:#5d564b;--rule:#c9b78f}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;background:var(--navy);color:var(--ink);font-family:"Noto Sans CJK SC",sans-serif;font-size:18px;line-height:1.58;position:relative}
+.book{position:absolute;inset:22px;background:var(--paper);border-radius:4px;border:2px solid #0f2238;outline:6px double #c9a35a;outline-offset:-14px;
+background-image:repeating-linear-gradient(0deg,transparent 0 31px,rgba(29,58,95,.10) 31px 32px)}
+.in{padding:34px 48px 0}
+.hd{display:grid;grid-template-columns:1fr 300px;gap:24px;border-bottom:3px solid var(--navy);padding-bottom:14px}
+.k{font-family:"Noto Sans Mono CJK SC",monospace;font-size:14px;letter-spacing:3px;color:var(--rust)}
+h1{font-family:"Noto Serif CJK SC",serif;font-size:44px;line-height:1.24;margin:6px 0 8px;color:var(--navy);font-weight:900}
+h1 em{font-style:normal;color:var(--rust)}
+.sub{margin:0;font-size:18.5px}
+.cmp{border:2px solid var(--navy);background:#fffaf0;padding:10px 14px;font-size:14.5px;line-height:1.55;align-self:start;margin-top:8px}
+.cmp b{display:block;font-family:"Noto Serif CJK SC",serif;color:var(--navy);font-size:19px;margin-bottom:2px}
+.sec{margin-top:26px}
+h2{font-family:"Noto Serif CJK SC",serif;font-size:23px;color:var(--navy);margin:0 0 8px;display:flex;align-items:baseline;gap:12px}
+h2 .d{font-family:"Noto Sans Mono CJK SC",monospace;font-size:13.5px;color:#fff;background:var(--navy);padding:1px 10px;letter-spacing:1px}
+h2 small{margin-left:auto;font-family:"Noto Sans CJK SC";font-weight:400;font-size:13.5px;color:var(--mut)}
+.card{background:rgba(255,250,240,.92);border:1px solid var(--rule);padding:12px 20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+p{margin:0 0 8px}ul{margin:2px 0 0;padding-left:22px}li{margin-bottom:5px}
+.small{font-size:15px;color:var(--mut)}
+.log{width:100%;border-collapse:collapse;font-size:15.5px}
+.log th{font-family:"Noto Serif CJK SC",serif;text-align:left;color:var(--navy);border-bottom:2px solid var(--navy);padding:4px 8px;font-size:15px}
+.log td{border-bottom:1px dashed var(--rule);padding:5px 8px;vertical-align:top}
+.log td.n{font-family:"Noto Sans Mono CJK SC",monospace;white-space:nowrap;text-align:right}
+.storm{border:2px solid var(--rust);background:#fbefe6}
+.storm h2{color:var(--rust)}.storm h2 .d{background:var(--rust)}
+.quote{font-family:"Noto Serif CJK SC",serif;background:#fff;border-left:5px solid var(--sea);padding:8px 14px;font-size:15.5px;line-height:1.55}
+.foot{position:absolute;left:48px;right:48px;bottom:22px;font-size:13.5px;color:var(--mut);display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:7px}
+</style></head><body><div class="book"><div class="in">
+
+<div class="hd"><div>
+<div class="k">航海日志 · LOGBOOK · arXiv:2611.11509v1 · cs.RO · 2026-11-08 · 上海 AI Lab / 上海交大 / 复旦 / 浙大</div>
+<h1>先让模型<em>亲手掌舵</em>，<br>再给它一本自己改写的航海日志</h1>
+<p class="sub">SimplEvo：GPT-6-Astra 直接给机械臂下末端位姿，不经特权感知，也不挂后训练策略。它只在训练场景上把每回合的教训改写进一页文本记忆，测试时记忆冻结。作者要回答的是：给前沿多模态模型外包一圈复杂的 harness，究竟有多少是必要的。</p>
+</div>
+<div class="cmp"><b>本项目阅读</b>阅读判断，非审稿结论，未复现。本文为机器人方向（cs.RO），可能也出现在 Embodied 仓；本仓只按 harness-RSI 口径核对，不混榜。</div>
+</div>
+
+<div class="sec"><h2><span class="d">航线图</span>两条信息路径 + 两本日志<small>§3 · 图 2 · 附录 A · 示意重绘</small></h2>
+<div class="card"><svg viewBox="0 0 1488 300" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans CJK SC"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0L10,5L0,10z" fill="#1d3a5f"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0L10,5L0,10z" fill="#a4462b"/></marker></defs><text x="0" y="30" font-size="20" font-weight="700" fill="#1d3a5f">甲 · 直接控制</text><rect x="0" y="44" width="250" height="66" rx="6" fill="#fffaf0" stroke="#1d3a5f" stroke-width="2"/><text x="125.0" y="72" font-size="19" font-weight="700" text-anchor="middle" fill="#2a2620">GPT-6-Astra</text><text x="125.0" y="96" font-size="15" text-anchor="middle" fill="#5d564b">只看 RGB 与本体感觉</text><line x1="250" y1="66" x2="420" y2="66" stroke="#1d3a5f" stroke-width="2.5" marker-end="url(#a)"/><text x="335" y="58" font-size="14.5" text-anchor="middle" fill="#1d3a5f">1–6 个末端路点</text><rect x="420" y="44" width="230" height="66" rx="6" fill="#fffaf0" stroke="#1d3a5f" stroke-width="2"/><text x="535.0" y="72" font-size="19" font-weight="700" text-anchor="middle" fill="#2a2620">逆运动学 → 机器人</text><text x="535.0" y="96" font-size="15" text-anchor="middle" fill="#5d564b">外部 IK（论文设置）</text><path d="M535,110 C535,150 125,150 125,112" fill="none" stroke="#1d3a5f" stroke-width="2.5" marker-end="url(#a)"/><text x="330" y="160" font-size="15" text-anchor="middle" fill="#1d3a5f">每条命令的结果都回到模型：能对比“下了什么命令 / 画面变成什么”</text><text x="0" y="212" font-size="20" font-weight="700" fill="#a4462b">乙 · 挂后训练策略</text><rect x="0" y="226" width="250" height="66" rx="6" fill="#fffaf0" stroke="#a4462b" stroke-width="2"/><text x="125.0" y="254" font-size="19" font-weight="700" text-anchor="middle" fill="#2a2620">GPT-6-Astra</text><text x="125.0" y="278" font-size="15" text-anchor="middle" fill="#5d564b">规划、调用策略</text><line x1="250" y1="248" x2="420" y2="248" stroke="#a4462b" stroke-width="2.5" marker-end="url(#r)"/><text x="335" y="240" font-size="14.5" text-anchor="middle" fill="#a4462b">语言指令 + 步数</text><rect x="420" y="226" width="230" height="66" rx="6" fill="#fffaf0" stroke="#a4462b" stroke-width="2"/><text x="535.0" y="254" font-size="19" font-weight="700" text-anchor="middle" fill="#2a2620">π0.5 / InternW0-Δ</text><text x="535.0" y="278" font-size="15" text-anchor="middle" fill="#5d564b">执行若干物理步</text><line x1="420" y1="278" x2="252" y2="278" stroke="#a4462b" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#r)"/><text x="335" y="298" font-size="14.5" text-anchor="middle" fill="#a4462b">只回终态观测与状态</text><text x="720" y="30" font-size="20" font-weight="700" fill="#2f7d7a">两本日志（都由同一模型自己写）</text><rect x="720" y="44" width="330" height="80" rx="6" fill="#eef6f4" stroke="#2f7d7a" stroke-width="2"/><text x="885.0" y="72" font-size="19" font-weight="700" text-anchor="middle" fill="#2a2620">任务记忆</text><text x="885.0" y="96" font-size="15" text-anchor="middle" fill="#5d564b">1 条演示写一次 · 阶段与完成态 · 无坐标</text><rect x="720" y="160" width="330" height="96" rx="6" fill="#eef6f4" stroke="#2f7d7a" stroke-width="2"/><text x="885.0" y="188" font-size="19" font-weight="700" text-anchor="middle" fill="#2a2620">工作记忆（≤ 32 KB）</text><text x="885.0" y="212" font-size="15" text-anchor="middle" fill="#5d564b">每个训练回合后一次反思，整篇重写</text><text x="885" y="246" font-size="14" text-anchor="middle" fill="#5d564b">记：程序 · 完成判据 · 出错恢复 + 证据</text><line x1="1050" y1="84" x2="1160" y2="84" stroke="#2f7d7a" stroke-width="2.5" marker-end="url(#a)"/><line x1="1050" y1="208" x2="1160" y2="208" stroke="#2f7d7a" stroke-width="2.5" marker-end="url(#a)"/><rect x="1160" y="44" width="328" height="212" rx="6" fill="#1d3a5f"/><text x="1324" y="90" font-size="21" font-weight="700" text-anchor="middle" fill="#f4e7c8">测试时：两本都冻结</text><text x="1182" y="130" font-size="16" fill="#f4e7c8">· 只在训练场景上写，测试场景不回流</text><text x="1182" y="160" font-size="16" fill="#f4e7c8">· 测试回合不反思、不更新</text><text x="1182" y="190" font-size="16" fill="#f4e7c8">· 最多 15 个训练回合；连成 3 次即停</text><text x="1182" y="220" font-size="16" fill="#f4e7c8">· 无深度、相机参数、物体位姿</text></svg></div></div>
+
+<div class="sec"><h2><span class="d">航次记录</span>同条件对照：加不加工作记忆<small>§5.3 / §5.4 / 附录 E.1、E.5 · 表 7 · 按原文数字重绘</small></h2>
+<div class="card"><svg viewBox="0 0 1488 514" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" font-family="Noto Sans CJK SC"><line x1="640.0" y1="26" x2="640.0" y2="488" stroke="#d7c9a6" stroke-dasharray="3 4"/><text x="640.0" y="508" font-size="14" text-anchor="middle" fill="#5d564b" font-family="Noto Sans Mono CJK SC">0%</text><line x1="797.6" y1="26" x2="797.6" y2="488" stroke="#d7c9a6" stroke-dasharray="3 4"/><text x="797.6" y="508" font-size="14" text-anchor="middle" fill="#5d564b" font-family="Noto Sans Mono CJK SC">20%</text><line x1="955.2" y1="26" x2="955.2" y2="488" stroke="#d7c9a6" stroke-dasharray="3 4"/><text x="955.2" y="508" font-size="14" text-anchor="middle" fill="#5d564b" font-family="Noto Sans Mono CJK SC">40%</text><line x1="1112.8" y1="26" x2="1112.8" y2="488" stroke="#d7c9a6" stroke-dasharray="3 4"/><text x="1112.8" y="508" font-size="14" text-anchor="middle" fill="#5d564b" font-family="Noto Sans Mono CJK SC">60%</text><line x1="1270.4" y1="26" x2="1270.4" y2="488" stroke="#d7c9a6" stroke-dasharray="3 4"/><text x="1270.4" y="508" font-size="14" text-anchor="middle" fill="#5d564b" font-family="Noto Sans Mono CJK SC">80%</text><line x1="1428.0" y1="26" x2="1428.0" y2="488" stroke="#d7c9a6" stroke-dasharray="3 4"/><text x="1428.0" y="508" font-size="14" text-anchor="middle" fill="#5d564b" font-family="Noto Sans Mono CJK SC">100%</text><circle cx="646" cy="12" r="7" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><text x="660" y="17" font-size="14.5" fill="#2a2620">没有工作记忆</text><circle cx="790" cy="12" r="8" fill="#2f7d7a"/><text x="804" y="17" font-size="14.5" fill="#2a2620">有（冻结的）工作记忆</text><text x="0" y="58" font-size="16.5" font-weight="700" fill="#2a2620">EBench · 19 个多布局任务的最后 5 个测试场景</text><text x="0" y="79" font-size="13.5" fill="#5d564b">同场景配对，任务记忆不变</text><line x1="1171.1" y1="62" x2="1312.2" y2="62" stroke="#2f7d7a" stroke-width="5"/><circle cx="1171.1" cy="62" r="8" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><circle cx="1312.2" cy="62" r="9" fill="#2f7d7a"/><text x="1157.1" y="67" font-size="15" text-anchor="end" fill="#2a2620" font-family="Noto Sans Mono CJK SC">67.4</text><text x="1328.2" y="67" font-size="15" fill="#2f7d7a" font-weight="700" font-family="Noto Sans Mono CJK SC">85.3</text><text x="1488" y="86" font-size="13" text-anchor="end" fill="#5d564b">64 → 81 / 95</text><text x="0" y="132" font-size="16.5" font-weight="700" fill="#2a2620">RoboDojo · 42 任务 × 前 3 个测试布局</text><text x="0" y="153" font-size="13.5" fill="#5d564b">同布局配对，任务记忆不变</text><line x1="961.7" y1="136" x2="1160.9" y2="136" stroke="#2f7d7a" stroke-width="5"/><circle cx="961.7" cy="136" r="8" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><circle cx="1160.9" cy="136" r="9" fill="#2f7d7a"/><text x="947.7" y="141" font-size="15" text-anchor="end" fill="#2a2620" font-family="Noto Sans Mono CJK SC">40.83</text><text x="1176.9" y="141" font-size="15" fill="#2f7d7a" font-weight="700" font-family="Noto Sans Mono CJK SC">66.11</text><text x="1488" y="160" font-size="13" text-anchor="end" fill="#5d564b">126 回合</text><text x="0" y="206" font-size="16.5" font-weight="700" fill="#2a2620">同一链：4 个高精度任务 × 10 个验证场景 · 直接控制</text><text x="0" y="227" font-size="13.5" fill="#5d564b">链首回合只有任务记忆，SR 含适应期</text><line x1="758.2" y1="210" x2="1014.3" y2="210" stroke="#2f7d7a" stroke-width="5"/><circle cx="758.2" cy="210" r="8" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><circle cx="1014.3" cy="210" r="9" fill="#2f7d7a"/><text x="744.2" y="215" font-size="15" text-anchor="end" fill="#2a2620" font-family="Noto Sans Mono CJK SC">15.0</text><text x="1030.3" y="215" font-size="15" fill="#2f7d7a" font-weight="700" font-family="Noto Sans Mono CJK SC">47.5</text><text x="1488" y="234" font-size="13" text-anchor="end" fill="#5d564b">视觉回放：40 回合中只调阅 3 次</text><text x="0" y="280" font-size="16.5" font-weight="700" fill="#2a2620">同一链 · 挂 π0.5 的 harness</text><text x="0" y="301" font-size="13.5" fill="#5d564b">加工作记忆；加视觉回放降到 12.5</text><line x1="817.3" y1="284" x2="837.0" y2="284" stroke="#a4462b" stroke-width="5"/><circle cx="817.3" cy="284" r="8" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><circle cx="837.0" cy="284" r="9" fill="#a4462b"/><text x="803.3" y="289" font-size="15" text-anchor="end" fill="#2a2620" font-family="Noto Sans Mono CJK SC">22.5</text><text x="853.0" y="289" font-size="15" fill="#a4462b" font-weight="700" font-family="Noto Sans Mono CJK SC">25.0</text><text x="1488" y="308" font-size="13" text-anchor="end" fill="#5d564b">报告策略轨迹也只到 17.5</text><text x="0" y="354" font-size="16.5" font-weight="700" fill="#2a2620">跨模型 · Gemini 3.8 Flash 读 GPT 写的记忆</text><text x="0" y="375" font-size="13.5" fill="#5d564b">EBench Mixed 130 回合，原样读取</text><line x1="827.5" y1="358" x2="1063.9" y2="358" stroke="#2f7d7a" stroke-width="5"/><circle cx="827.5" cy="358" r="8" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><circle cx="1063.9" cy="358" r="9" fill="#2f7d7a"/><text x="813.5" y="363" font-size="15" text-anchor="end" fill="#2a2620" font-family="Noto Sans Mono CJK SC">23.8</text><text x="1079.9" y="363" font-size="15" fill="#2f7d7a" font-weight="700" font-family="Noto Sans Mono CJK SC">53.8</text><text x="0" y="428" font-size="16.5" font-weight="700" fill="#2a2620">跨模型 · DeepSeek-V4.1-Flash</text><text x="0" y="449" font-size="13.5" fill="#5d564b">同上</text><line x1="646.3" y1="432" x2="743.2" y2="432" stroke="#2f7d7a" stroke-width="5"/><circle cx="646.3" cy="432" r="8" fill="#fff" stroke="#2a2620" stroke-width="2.5"/><circle cx="743.2" cy="432" r="9" fill="#2f7d7a"/><text x="632.3" y="437" font-size="15" text-anchor="end" fill="#2a2620" font-family="Noto Sans Mono CJK SC">0.8</text><text x="759.2" y="437" font-size="15" fill="#2f7d7a" font-weight="700" font-family="Noto Sans Mono CJK SC">13.1</text><text x="1488" y="456" font-size="13" text-anchor="end" fill="#5d564b">夹爪习惯没写进记忆，未迁移</text></svg></div></div>
+
+<div class="two sec">
+<div><h2><span class="d">榜单</span>整体成绩（与外部系统并列）<small>表 1–3 · 榜单快照 10-29 / 11-02</small></h2>
+<div class="card"><table class="log">
+<tr><th>设置</th><th style="text-align:right">SR</th></tr>
+<tr><td>EBench 510 个测试场景 · 直接控制、只有任务记忆</td><td class="n">46.7%</td></tr>
+<tr><td>同上 · SimplEvo（冻结工作记忆）</td><td class="n"><b>81.7%</b></td></tr>
+<tr><td>最强后训练策略（PICA-WAM） / 最强挂策略 harness</td><td class="n">61.4 / 56.0</td></tr>
+<tr><td>高精度任务：直接控制 → SimplEvo</td><td class="n">11.3 → 82.5</td></tr>
+<tr><td>RoboDojo 42 任务 × 50 布局 · SimplEvo（分数 75.32）</td><td class="n">69.63%</td></tr>
+<tr><td>RoboDojo 12 个泛化任务：标准 / 随机化配置</td><td class="n">52.00 / 52.00</td></tr>
+<tr><td>　同一模型官方零样本条目</td><td class="n">32.67 / 28.33</td></tr>
+</table>
+<p class="small" style="margin-top:6px">与榜单条目比的是不同系统、不同接口；能说明“记忆本身贡献多少”的是上面的同条件配对。</p></div></div>
+<div><h2><span class="d">航海士笔记</span>记的是规律，不是坐标<small>§5.3、§5.4 · 附录 E.4</small></h2>
+<div class="card">
+<p>中位回合里只有 <b>11%</b> 的运动路点落在任何已存位置 1 cm 以内 —— 模型在新布局上重新找物体，照着程序、完成判据和恢复经验做。</p>
+<p>反思时<b>不给成败结果</b>：8 个任务的 20 场景链总 SR 73.8% → 65.0%；4 个多布局任务最后 5 回合：只有任务记忆 35.0%，无结果反馈的工作记忆 80.0%，有反馈 95.0%。</p>
+<p>外部批评者驱动的 RSI 循环（5 轮改写 playbook 与挂 π0.5 的 harness）：44.4% → 46.7%；同 90 个配对测试回合上 SimplEvo 76.7%，18 个任务中 17 个持平或更好。</p>
+<p class="small">注意：这组比较两边动作接口不同（挂策略 vs 直接控制），预算也没有对齐，不能读成“同条件下 RSI 循环无效”。</p>
+</div></div>
+</div>
+
+<div class="two sec">
+<div class="storm card"><h2><span class="d">风浪记录</span>不能从这里读出的东西<small>§6 · 附录 B.3 · L2 biggest_gap</small></h2>
+<ul>
+<li><b>每任务只有一条适应链</b>：没有独立的适应重复；EBench 26 条链里 21 条在连成 3 次后提前停，共 192 个训练回合。</li>
+<li><b>测试布局部分见过</b>：EBench 多布局任务的测试布局有的在训练中出现过（作者按见过 / 未见分开报告）。</li>
+<li><b>仿真便利</b>：模型思考时模拟器暂停；评测器一判成功就自动结束回合，所以不能推出实时控制或自主判断“做完了”；IK 也是外部给的。</li>
+<li><b>不是零样本</b>：每任务一条演示提供了任务知识；训练回合平均 4.09M token。</li>
+<li>与复杂 harness 的比较没有做等 token / 等探索预算的对照，不足以认证“所有复杂 harness 都不必要”。</li>
+</ul></div>
+<div class="card"><h2><span class="d">航海长批注</span>本项目阅读<small>不改档位 · 不代表复现</small></h2>
+<p><b>问题</b>：在原生直接控制、没有特权输入的条件下，一页自己写、训练后冻结的文本记忆能把前沿多模态模型带多远？它直接拷问“先把模型包进策略和批评者循环”的常见做法。</p>
+<p><b>关键动作</b>：只开关工作记忆、任务记忆不变的同场景配对，再加同一条链上直接控制与挂策略两种接口的并排比较。</p>
+<div class="quote">挂策略时，策略执行了什么不进模型上下文，反思只能改“何时、调用多久”；直接控制时，反思能改模型自己下的低层命令 —— 这是记忆在甲路上收益大、在乙路上几乎没有的作者解释。</div>
+<p class="small" style="margin-top:8px">可与本仓 2611.09030（机器人自学习的反馈表示受控研究）、2610.41216（TinyAstral）对照阅读：三篇对象不同，不能直接相减。</p>
+</div>
+</div>
+
+</div>
+<div class="foot"><span>来源：arXiv:2611.11509v1（Review the Episodes, Refine the Lessons: Simple Memory Evolution for Embodied Agents）· 数字逐条见 SOURCE.md · 航线图为示意</span><span>HarnessRSI Daily · selection-013</span></div>
+</div></body></html>

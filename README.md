@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 30 → 45 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 33 → 48 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Forty-five papers, forty-five distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [Reel index](reel/README.md).
-（45 篇、45 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Forty-eight papers, forty-eight distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [Reel index](reel/README.md).
+（48 篇、48 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.11342/poster.png"><img src="reel/2611.11342/poster.png" width="260" alt="2611.11342 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.11342">2611.11342</a> · Did the failures do the work?</b><br>
+A frozen Qwen3.5-9B, notes written by a larger teacher, every primary analysis pre-registered. A matched search that never sees the failures lifts decision accuracy 70.3% → 76.8%; trace-written notes reach 80.9%, only +4.0 [2.3, 5.7] more. Full conversations: −1.3 [−5.9, 3.3]. The one BFCL lesson that passed the gate came from the search and did not replicate; 146 of 240 held-out items had scoring defects.<br>
+先配一组不读失败的搜索对照：约 60% 的提升不需要失败内容，剩下的只在合成决策层成立。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.10439/poster.png"><img src="reel/2611.10439/poster.png" width="260" alt="2611.10439 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.10439">2611.10439</a> · Who remembers what?</b><br>
+Five synthetic users and seven LLM-harness agents share one memory. MixUA files each lesson into pair, user, agent or global scope, gating only the step that opens a lesson to other users. +13–16 points with 80–90% preference retention, where single-scope stores get one or the other; +10.1 vs +5.5 on tasks nobody had tried. Leakage measured by planted-fact probes, mostly exact match.<br>
+共享经验要逐条决定谁能读、能披露到哪：四格同时拿到公共库的通过率和私有库的偏好。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.11509/poster.png"><img src="reel/2611.11509/poster.png" width="260" alt="2611.11509 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.11509">2611.11509</a> · Steer it yourself, keep a logbook</b><br>
+GPT-6-Astra under direct end-effector control, no depth or post-trained policy, rewrites one bounded text memory after each training episode and freezes it at test. Same scenes, memory on vs off: 67.4% → 85.3% (EBench), 40.83% → 66.11% (RoboDojo); on the same chains memory lifts direct control 15.0% → 47.5% but a policy harness only 22.5% → 25.0%. Simulation, one adaptation chain per task.<br>
+直接控制时反思能改自己下的命令；挂策略时只能改调用时机，记忆几乎不起作用。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>
