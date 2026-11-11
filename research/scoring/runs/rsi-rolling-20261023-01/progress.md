@@ -240,3 +240,7 @@
 
 - selection-012 后新增 confirmed P3：6 篇 ≥3 → 第十三期选题。终选 3 篇（11342 冻结权重下笔记流程对照 / 10439 四范围共享记忆 / 11509 SimplEvo 文本记忆消融），各 1–2 轮修复后过视觉 QA；10542 与上期 09348 同题去重，11558 列下期备选。见 selection-013.md。累计 48 张。
 - Correction C-013-1（12109 SkillDuet 增益下降与天花板混淆、方法增量单次无区间）退回 Sol：复核 q4（疑 partial）、evidence_status（疑 pending_experiment）、H28。
+
+## 2026-11-13 C-013-1 落档
+
+- 12109 SkillDuet 修订：q4→partial、pending_experiment/park（P3/high 保留为待验问题价值）；H28 §§1–2 holds→partial（增益下降与天花板混淆、ALFWorld 138/140 vs 134/140、WebShop 单次且检查点沾报告集）。原记录保留。
