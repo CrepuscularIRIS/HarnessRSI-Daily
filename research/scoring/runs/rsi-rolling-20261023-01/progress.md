@@ -235,3 +235,8 @@
 - L2：inc-l2-19 11/11。Q1 改判 1 篇（12552 asserted→measured_own）。**6 篇 P3/confirmed/to_l3**（逐篇见批次）；5 篇 park（含 11994 报告集开发接触、10787 beta 假设未验、10748 异步调度未闭环验证）。
 - 漏检抽查：名额 1（预算 11×10%）但池 0 → 欠账 ~6.3+1→~7.3 滚存。seed=20261115。
 - to_l3 池：+6。
+
+## 2026-11-13 每日 Opus 判断（第十三期选题）
+
+- selection-012 后新增 confirmed P3：6 篇 ≥3 → 第十三期选题。终选 3 篇（11342 冻结权重下笔记流程对照 / 10439 四范围共享记忆 / 11509 SimplEvo 文本记忆消融），各 1–2 轮修复后过视觉 QA；10542 与上期 09348 同题去重，11558 列下期备选。见 selection-013.md。累计 48 张。
+- Correction C-013-1（12109 SkillDuet 增益下降与天花板混淆、方法增量单次无区间）退回 Sol：复核 q4（疑 partial）、evidence_status（疑 pending_experiment）、H28。
