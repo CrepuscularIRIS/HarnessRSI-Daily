@@ -251,3 +251,7 @@
 - L1：inc-l1-18 10/10（全 assessed，to_l2 10）。L2：inc-l2-20 10/10。**5 篇 P3/confirmed/to_l3**（逐篇见批次）；4 篇 pending_experiment/park；1 篇 P2/park。子卡 70 项。
 - 漏检抽查：名额 1（预算 10×10%）但池 0 → 欠账 ~7.3+1→~8.3 滚存。seed=20261116。
 - to_l3 池：+5。
+
+## 2026-11-14 每日 Opus 判断（第十四期选题）
+
+- selection-013 后新增 confirmed P3：6 篇（含备选 11558）→ 第十四期选题。终选 3 篇（13524 RSI 税 / 14505 Continual-ARC / 13144 学生感知技能准入），各一轮修复后过视觉 QA；无 correction。13336 单次运行近 VeriEvolve、14320 增量薄、11558 备选理由复核仍成立落选。见 selection-014.md。累计 51 张。
