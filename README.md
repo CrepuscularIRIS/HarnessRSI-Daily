@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 33 → 48 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 36 → 51 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -20,8 +20,31 @@ Core question: *which non-weight component was improved, how was the change acce
 
 ## Featured Reel（精选画报）
 
-Forty-eight papers, forty-eight distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [Reel index](reel/README.md).
-（48 篇、48 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Fifty-one papers, fifty-one distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [Reel index](reel/README.md).
+（51 篇、51 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.13524/poster.png"><img src="reel/2611.13524/poster.png" width="260" alt="2611.13524 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.13524">2611.13524</a> · The bill for self-improvement</b><br>
+Six methods on continual task streams, every update call charged, including rejected candidates. A 2,048-token failure note (SRN) matches or beats Meta-Harness, EvoSkill and RRSI on observed accuracy (within 0–3 tasks) while using 65.6–71.0% fewer total tokens; verification is 74.8–93.6% of their RSI tax. One run per setting, streaming adaptations by the authors.<br>
+把被拒更新和反复验证都记账：复杂自改流程的总 token 是笔记基线的 2.8–4.2 倍，准确率只差几题。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.14505/poster.png"><img src="reel/2611.14505/poster.png" width="260" alt="2611.14505 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.14505">2611.14505</a> · Stored is not learned</b><br>
+ARC tasks return after dormancy with fresh instances; every learner is read against its own wiped twin. Shipped harnesses do not beat a demo cache (0.37); notes and programs save nothing measurable on unseen tasks, while DAgger weights save 0.29 [0.23, 0.35]. GLM wrote a rule for every task, but the digest delivered it on only 40 of 154 returns. Single stream, seed 0.<br>
+持久化开着不等于经验被保留：存的是不是可执行的东西、取回路径会不会在任务公布前截断，决定了记忆有没有用。
+</td>
+<td width="33%" align="center" valign="top">
+<a href="reel/2611.13144/poster.png"><img src="reel/2611.13144/poster.png" width="260" alt="2611.13144 poster"></a><br>
+<b><a href="https://arxiv.org/abs/2611.13144">2611.13144</a> · Measure the student first</b><br>
+A stronger teacher writes skills for a fixed student in a budget-limited harness, after profiling it and probing where it breaks. Ahead of a profile-free teacher in all four primary runs (86.46 vs 81.04 vs 75.00); each student does better with its own library (+10.0 [2.5, 18.3] under category routing); wrong profiles admit 0 of 48 skills. One teacher–student pair, thin admission.<br>
+技能写给谁很重要：先测出学生在哪里断再写流程，换库检验显示库有学生特定成分。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>

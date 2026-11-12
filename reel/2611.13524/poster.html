@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>改进税账单</title><style>
+:root{--bg:#e8ece9;--paper:#ffffff;--ink:#1f2724;--mut:#5b6661;--green:#13704f;--green2:#d9efe4;--task:#2d4a6b;--ver:#e0772b;--oth:#f2c14e;--rule:#c9d3ce;--red:#b8322a}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:"Noto Sans CJK SC",sans-serif;font-size:18px;line-height:1.55}
+.sheet{position:absolute;left:40px;top:34px;width:1520px;height:2195px;background:var(--paper);box-shadow:0 2px 0 #c3ccc7,0 10px 30px rgba(0,0,0,.08);border-top:14px solid var(--green)}
+.mono{font-family:"Noto Sans Mono CJK SC",monospace}
+.top{display:grid;grid-template-columns:1fr 420px;gap:30px;padding:26px 46px 18px;border-bottom:2px dashed var(--rule)}
+.brand{display:flex;align-items:center;gap:14px;color:var(--green);font-weight:700;font-size:17px;letter-spacing:2px}
+.logo{width:46px;height:46px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
+h1{font-family:"Noto Serif CJK SC",serif;font-size:46px;line-height:1.22;margin:14px 0 8px;font-weight:900}
+h1 em{font-style:normal;color:var(--ver)}
+.sub{margin:0;font-size:18.5px;color:var(--ink)}
+.acct{border:2px solid var(--ink);font-size:15px;line-height:1.5}
+.acct div{display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid var(--rule)}
+.acct div:last-child{border-bottom:0}
+.acct span{padding:5px 10px}.acct span:first-child{background:#f1f4f2;color:var(--mut);border-right:1px solid var(--rule)}
+.due{background:var(--green2)!important}
+.due span:last-child{font-weight:700;color:var(--green)}
+.body{padding:18px 46px 0}
+.sec{margin-top:34px}
+.sh{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:4px;margin-bottom:10px}
+.sh b{font-size:23px;font-family:"Noto Serif CJK SC",serif}
+.sh i{font-style:normal;background:var(--ink);color:#fff;font-size:14px;padding:1px 9px;border-radius:2px}
+.sh small{color:var(--mut);font-size:14.5px;margin-left:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.box{border:1px solid var(--rule);background:#fafcfb;padding:10px 14px}
+.box b{color:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{border-bottom:1px solid var(--rule);padding:5px 8px;text-align:right}
+th{background:#f1f4f2;font-weight:700;color:var(--mut);font-size:14.5px}
+th:first-child,td:first-child{text-align:left}
+tr.srn td{background:var(--green2);font-weight:700}
+tr.cx td:first-child{color:var(--ver);font-weight:700}
+.n{color:var(--mut);font-size:13px;font-weight:400}
+.legend{display:flex;gap:22px;font-size:14.5px;color:var(--mut);margin:2px 0 4px}
+.sw{display:inline-block;width:16px;height:12px;margin-right:6px;vertical-align:-1px}
+.slip{border:1px dashed var(--ink);padding:12px 14px;background:#fffdf6;position:relative;font-size:16px}
+.slip .t{font-weight:700;font-size:16px}
+.slip .v{font-family:"Noto Sans Mono CJK SC",monospace;color:var(--red);font-weight:700}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+ul{margin:4px 0 0;padding-left:22px}li{margin:2px 0}
+.note{font-size:14px;color:var(--mut)}
+.stamp{position:absolute;right:70px;top:760px;transform:rotate(-9deg);border:4px double var(--red);color:var(--red);font-weight:900;font-size:22px;padding:4px 14px;letter-spacing:3px;opacity:.85;background:rgba(255,255,255,.7)}
+.foot{position:absolute;left:46px;right:46px;bottom:20px;display:flex;justify-content:space-between;font-size:13.5px;color:var(--mut);border-top:2px dashed var(--rule);padding-top:8px}
+.read{background:#1f2724;color:#f3f6f4;padding:14px 18px;font-size:17px}
+.read b{color:var(--oth)}
+</style></head><body>
+<div class="sheet">
+<div class="top">
+ <div>
+  <div class="brand"><div class="logo">税</div><span>RSI 公用事业 · 本期账单</span><span class="mono" style="color:var(--mut);font-weight:400;letter-spacing:0">arXiv:2611.13524v1 · The RSI Tax</span></div>
+  <h1>改进本身也要记账：<br>计入<em>被拒更新、验证、探索、写入</em>的全部 token 后，复杂的自我改进还划算吗？</h1>
+  <p class="sub">持续任务流上，每个任务先计分、再把它的反馈用于后续更新。作者把“改进过程”的 token 叫 <b>RSI 税</b>，与执行任务的 token 合并计账；对照组是一张最多 2,048 token、只在失败后重写的笔记（SRN）。</p>
+ </div>
+ <div class="acct">
+  <div><span>账户</span><span>固定权重代理（初始 KIRA harness）</span></div>
+  <div><span>计费对象</span><span>Meta-Harness · EvoSkill · RRSI · ReasoningBank · SRN · Static</span></div>
+  <div><span>计量周期</span><span>SWE-Chain-Evo 7 条链 × 15 = 105 位置；Terminal-Bench 2.1 89 题（一种固定顺序）</span></div>
+  <div><span>骨干</span><span>DeepSeek V4.1 Flash · GPT-6 Luna</span></div>
+  <div><span>计量单位</span><span>输入＋输出 token（百万，M），不是美元</span></div>
+  <div class="due"><span>本期要点</span><span>SRN 准确率不低于三种复杂方法，平均总 token 少 65.6–71.0%</span></div>
+ </div>
+</div>
+<div class="stamp">每设置一次运行</div>
+<div class="body">
+
+<div class="sec two">
+ <div>
+  <div class="sh"><i>01</i><b>本期问题</b></div>
+  <div class="box">非权重 RSI（改记忆、技能或 harness 代码）的论文通常只报最终状态的准确率。可在真实部署里，每次更新都先花钱：提议、跑候选、在已完成任务上复验，<b>最后没采用的更新也已经花了</b>。这部分成本能不能被之后的任务摊回来？</div>
+ </div>
+ <div>
+  <div class="sh"><i>02</i><b>计量规则</b><small>§2.2、§3、附录 A–B</small></div>
+  <ul style="font-size:16.5px">
+   <li>任务先计分，反馈之后才用于更新；在已完成任务上重跑只算税，<b>不替换原分</b>。</li>
+   <li>RSI 税＝产生或评价更新的全部调用，含被拒的；读取已学状态算执行。税再分 <b>验证 / 探索 / 写入</b>，并追踪对应状态之后有没有被用上。</li>
+   <li>SRN：每 4 题一次，只看失败轨迹的首 2 万＋末 1 万字符改写笔记；无额外采样、无候选验证、无检索。</li>
+  </ul>
+ </div>
+</div>
+
+<div class="sec">
+ <div class="sh"><i>03</i><b>本期用量明细：DeepSeek V4.1 Flash · Terminal-Bench 2.1（89 题）</b><small>表 4、表 6–7；分段按作者阶段表归类</small></div>
+ <div class="legend"><span><span class="sw" style="background:var(--task)"></span>执行任务</span><span><span class="sw" style="background:var(--ver)"></span>税 · 验证（复验现任 / 候选 / 旧前沿）</span><span><span class="sw" style="background:var(--oth)"></span>税 · 提议、探索、写入</span><span><span class="sw" style="background:#9a8f86"></span>税 · 本设置未分项（RRSI）</span></div>
+ <svg width="1428" height="330" viewBox="0 0 1428 330" font-family="Noto Sans CJK SC" font-size="15">
+  <g fill="#5b6661" font-size="13"><text x="196" y="324">0</text><text x="418" y="324">200M</text><text x="640" y="324">400M</text><text x="862" y="324">600M</text><text x="1084" y="324">800M</text></g>
+  <g stroke="#dfe5e2"><line x1="200" y1="8" x2="200" y2="306"/><line x1="422" y1="8" x2="422" y2="306"/><line x1="644" y1="8" x2="644" y2="306"/><line x1="867" y1="8" x2="867" y2="306"/><line x1="1089" y1="8" x2="1089" y2="306"/></g>
+  <!-- scale 1.111 px per M -->
+  <g font-weight="700"><text x="0" y="34">Static</text><text x="0" y="84">ReasoningBank</text><text x="0" y="134" fill="#13704f">SRN</text><text x="0" y="184">RRSI</text><text x="0" y="234">Meta-Harness</text><text x="0" y="284">EvoSkill</text></g>
+  <g font-size="13" fill="#5b6661"><text x="0" y="52">准确率 69.7%（62/89）</text><text x="0" y="102">69.7%（62/89）</text><text x="0" y="152" fill="#13704f">78.7%（70/89）</text><text x="0" y="202">74.2%（66/89）</text><text x="0" y="252">77.5%（69/89）</text><text x="0" y="302">71.9%（64/89）</text></g>
+  <rect x="200" y="18" width="206" height="30" fill="#2d4a6b"/><text x="414" y="39">185.55</text>
+  <rect x="200" y="68" width="211" height="30" fill="#2d4a6b"/><rect x="411" y="68" width="10" height="30" fill="#f2c14e"/><text x="428" y="89">198.87（税 8.61）</text>
+  <rect x="200" y="118" width="238" height="30" fill="#2d4a6b"/><rect x="438" y="118" width="2" height="30" fill="#f2c14e"/><text x="448" y="139" fill="#13704f" font-weight="700">214.65（税 0.28）</text>
+  <rect x="200" y="168" width="208" height="30" fill="#2d4a6b"/><rect x="408" y="168" width="465" height="30" fill="#9a8f86"/><text x="882" y="189">605.75（税 418.34）</text>
+  <rect x="200" y="218" width="205" height="30" fill="#2d4a6b"/><rect x="405" y="218" width="470" height="30" fill="#e0772b"/><rect x="875" y="218" width="173" height="30" fill="#f2c14e"/><text x="1056" y="239">762.57（税 578.45）</text>
+  <text x="414" y="238" fill="#fff" font-size="13">验证 422.69</text><text x="882" y="238" font-size="13">提议 155.75</text>
+  <rect x="200" y="268" width="203" height="30" fill="#2d4a6b"/><rect x="403" y="268" width="111" height="30" fill="#e0772b"/><rect x="514" y="268" width="553" height="30" fill="#e0772b" stroke="#fff" stroke-dasharray="6 4"/><rect x="1067" y="268" width="132" height="30" fill="#f2c14e"/><text x="1206" y="289">898.72（税 716.46）</text>
+  <text x="522" y="288" fill="#fff" font-size="13">其中“刷新旧前沿”497.45 ＞ 全部 89 题执行 182.26</text>
+  <text x="208" y="38" fill="#fff" font-size="13">执行</text>
+ </svg>
+ <div class="note">执行段：Meta-Harness 184.13 反而少于 SRN 214.37；只看执行成本会把排序倒过来（§5.1）。准确率括号内题数为本项目按 89 题换算。</div>
+</div>
+
+<div class="sec two" style="grid-template-columns:1.25fr 1fr">
+ <div>
+  <div class="sh"><i>04</i><b>四个设置的总账</b><small>表 2：准确率 %（题数） / 总 token M</small></div>
+  <table>
+   <tr><th>方法</th><th>DeepSeek · SWE</th><th>GPT-6 Luna · SWE</th><th>DeepSeek · TB</th><th>GPT-6 Luna · TB</th></tr>
+   <tr><td>Static</td><td>43.8 <span class="n">(46)</span> / 487.92</td><td>38.1 <span class="n">(40)</span> / 179.69</td><td>69.7 <span class="n">(62)</span> / 185.55</td><td>66.3 <span class="n">(59)</span> / 78.86</td></tr>
+   <tr><td>ReasoningBank</td><td>40.0 <span class="n">(42)</span> / 520.64</td><td>37.1 <span class="n">(39)</span> / 191.21</td><td>69.7 <span class="n">(62)</span> / 198.87</td><td>67.4 <span class="n">(60)</span> / 85.46</td></tr>
+   <tr class="cx"><td>Meta-Harness</td><td>45.7 <span class="n">(48)</span> / 976.61</td><td>40.0 <span class="n">(42)</span> / 495.81</td><td>77.5 <span class="n">(69)</span> / 762.57</td><td>65.2 <span class="n">(58)</span> / 317.99</td></tr>
+   <tr class="cx"><td>EvoSkill</td><td>41.0 <span class="n">(43)</span> / 1,166.51</td><td>40.0 <span class="n">(42)</span> / 612.39</td><td>71.9 <span class="n">(64)</span> / 898.72</td><td>68.5 <span class="n">(61)</span> / 358.85</td></tr>
+   <tr class="cx"><td>RRSI</td><td>44.8 <span class="n">(47)</span> / 1,092.94</td><td>39.0 <span class="n">(41)</span> / 574.07</td><td>74.2 <span class="n">(66)</span> / 605.75</td><td>61.8 <span class="n">(55)</span> / 454.30</td></tr>
+   <tr class="srn"><td>SRN（笔记）</td><td>48.6 <span class="n">(51)</span> / 492.56</td><td>41.0 <span class="n">(43)</span> / 157.07</td><td>78.7 <span class="n">(70)</span> / 214.65</td><td>68.5 <span class="n">(61)</span> / 87.08</td></tr>
+  </table>
+  <div class="note" style="margin-top:6px">SRN 比最好的复杂方法多解 3 / 1 / 1 / 0 题；比 Static 平均高 4.7 点、总 token 多 3.6%。复杂方法的税率在四个设置里都超过 100%（109–393%），SRN 低于 0.4%（表 3）。</div>
+ </div>
+ <div>
+  <div class="sh"><i>05</i><b>税从哪来</b><small>四个设置合计，表 5</small></div>
+  <table>
+   <tr><th>方法</th><th>税合计 M</th><th>验证占比</th><th>对应状态之后未被用上</th></tr>
+   <tr><td>Meta-Harness</td><td>1,648.86</td><td>74.8%</td><td>52.78%</td></tr>
+   <tr><td>EvoSkill</td><td>2,103.05</td><td>78.1%</td><td>37.91%</td></tr>
+   <tr><td>RRSI</td><td>1,770.50</td><td>93.6%</td><td>23.70%</td></tr>
+   <tr><td>ReasoningBank</td><td>48.98</td><td>—</td><td>63.57%</td></tr>
+   <tr><td>SRN</td><td>1.21</td><td>—</td><td>0%</td></tr>
+  </table>
+  <div class="box" style="margin-top:10px;font-size:15.5px">验证＝在已完成的支持任务上反复跑现任或候选。复杂方法税里约 98.1% 是输入 token：越来越长的执行上下文被一遍遍重读（附录 C）。“未被用上”是 token 份额，只记录<b>之后有没有被调用</b>，不代表对准确率的影响。</div>
+ </div>
+</div>
+
+<div class="sec">
+ <div class="sh"><i>06</i><b>三张单据（附录 D 个案，不代表发生频率）</b></div>
+ <div class="three">
+  <div class="slip"><div class="t">空转搜索 · EvoSkill · 任务 68 后</div>先在 4 个支持任务上复评 3 个旧程序（44,882,109），再多跑 2 条轨迹（13,282,793）；两条都成功，没有失败可供提议。<br>本轮合计 <span class="v">58,164,902</span> token，零新提议，保留原技能。</div>
+  <div class="slip"><div class="t">结果改变不了决定 · Meta-Harness · 任务 72 后</div>现任在支持集上已得 100%，选择器要求严格更高，任何候选都不可能被接受；新候选仍做了冒烟测试和进一步验证。<br>这段候选评价 <span class="v">603,841</span> token（本轮共 4,002,438）。</div>
+  <div class="slip"><div class="t">没人取用的记忆 · ReasoningBank · 任务 55</div>判定＋抽取花 117,631＋124,108，写成 1 个含 3 条的记忆包；之后 34 个任务一次也没检索到它。<br>构造成本 <span class="v">241,739</span> token。全部记录按此口径占其税 53.1–61.5%。</div>
+ </div>
+</div>
+
+<div class="sec two" style="grid-template-columns:1.15fr 1fr">
+ <div>
+  <div class="sh"><i>07</i><b>账单说明 · 这张账单不能说明什么</b></div>
+  <ul style="font-size:15.8px">
+   <li><b>每个设置只跑一次</b>，终端只有一种题序，没有置信区间；准确率差多为 0–3 题，“SRN 不低于复杂方法”只是观察值，不是统计等效。</li>
+   <li>流式改写是作者做的：EvoSkill 原版用固定验证集，这里随窗口<b>反复刷新旧前沿</b>（上图 497.45M 即来自此）；Meta-Harness 每次只做 1 次原生迭代，并配严格提升才部署的选择器，窄于原版种群搜索。</li>
+   <li>SRN 的设计选择（笔记长度、只看失败、截取窗口）没有逐项消融；没有给所有方法相同总预算的帕累托比较。</li>
+   <li>“之后用上 / 未用上”是描述性关联：用上不等于有用，没用上也不等于删掉这些调用后结果不变。token 不等于价格。</li>
+  </ul>
+ </div>
+ <div>
+  <div class="sh"><i>08</i><b>本项目阅读</b></div>
+  <div class="read">稳的是<b>成本倍数</b>，不是准确率排名：在 DeepSeek 终端流上，三种复杂方法的总 token 是 SRN 的 2.8–4.2 倍，主要花在对已完成任务的反复验证上，而准确率只差几题。<br><br>对 harness-RSI 的含义：报告收益时应同时报告获得这份收益的全部调用，包括被拒的候选和永远没被用上的产物；“只计最终 checkpoint 的执行成本”会系统性地低估复杂流程。</div>
+  <div class="note" style="margin-top:8px">倍数为本项目按表 4 计算：762.57 / 214.65 = 3.55，898.72 / 214.65 = 4.19，605.75 / 214.65 = 2.82。</div>
+ </div>
+</div>
+
+</div>
+<div class="foot"><span>来源：Zhang, Li, Wang · The RSI Tax: When Recursive Self-Improvement Is Not Worth the Cost · arXiv:2611.13524v1（北京大学）</span><span>作者结果 / 本项目阅读已分开标注 · 柱状图按作者阶段表重绘 · HarnessRSI Daily Reel</span></div>
+</div>
+</body></html>
