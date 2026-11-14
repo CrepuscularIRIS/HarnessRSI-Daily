@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>规则与权重杂交记录</title><style>
+:root{--bg:#5a6b4e;--paper:#fbf7ec;--ink:#2b2b2b;--mut:#6f6858;--line:#d9d2bf;--r:#c2573a;--w:#2f6f8f;--b:#4a3b6b;--hl:#f6e7a8}
+@page{size:1600px 2263px;margin:0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{height:2263px;overflow:hidden}
+body{width:1600px;height:2263px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:"Noto Sans CJK SC",sans-serif;font-size:18px;line-height:1.55}
+.nb{position:absolute;left:58px;top:40px;width:1484px;height:2183px;background:var(--paper);border-radius:6px 14px 14px 6px;
+ box-shadow:0 12px 34px rgba(0,0,0,.35);background-image:repeating-linear-gradient(transparent 0 33px,#e7e0cc 33px 34px)}
+.spine{position:absolute;left:0;top:0;bottom:0;width:58px;background:#3d4a35;border-radius:6px 0 0 6px}
+.spine i{position:absolute;left:19px;width:20px;height:20px;border-radius:50%;background:var(--paper);box-shadow:inset 0 2px 3px rgba(0,0,0,.4)}
+.margin{position:absolute;left:142px;top:0;bottom:0;width:2px;background:#d98e7c}
+.in{position:absolute;left:170px;right:56px;top:40px;bottom:30px}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px double var(--ink);padding-bottom:14px}
+.lab{font-family:"Noto Sans Mono CJK SC",monospace;font-size:15px;color:var(--mut);letter-spacing:1px}
+h1{font-family:"Noto Serif CJK SC",serif;font-size:47px;line-height:1.2;margin:8px 0 8px;font-weight:900}
+h1 .r{color:var(--r)} h1 .w{color:var(--w)}
+.sub{font-size:19px;margin:0;max-width:880px}
+.meta{width:330px;border:2px solid var(--ink);background:#fff;padding:10px 14px;font-size:15px;line-height:1.6}
+.meta b{display:inline-block;width:64px;color:var(--mut);font-weight:400}
+.sec{margin-top:18px}
+.st{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.st .no{font-family:"Noto Serif CJK SC",serif;font-size:30px;font-weight:900;color:var(--r)}
+.st h2{font-family:"Noto Serif CJK SC",serif;font-size:27px;margin:0}
+.st small{color:var(--mut);font-size:16px}
+.row{display:grid;gap:26px}
+.card{background:#fff;border:1.5px solid #bdb59f;padding:14px 18px;position:relative}
+.tape{position:absolute;top:-12px;left:40%;width:110px;height:24px;background:rgba(246,231,168,.85);transform:rotate(-3deg)}
+.pq{display:grid;grid-template-columns:170px 1fr 1fr;grid-template-rows:64px 1fr 1fr;gap:6px;height:330px}
+.pq .corner{display:flex;flex-direction:column;justify-content:center;font-size:17px;font-weight:700;color:var(--mut);line-height:1.2}
+.pq .colh,.pq .rowh{display:flex;flex-direction:column;justify-content:center;align-items:center;border:2px solid var(--ink);background:#f1ecdd;text-align:center;line-height:1.25}
+.pq .colh b,.pq .rowh b{font-family:"Noto Sans Mono CJK SC",monospace;font-size:24px}
+.pq small{font-size:14px;color:var(--mut)}
+.pq .cell{border:2px solid var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center}
+.cn{font-size:16px;color:var(--mut);font-weight:700}
+.cv{font-family:"Noto Sans Mono CJK SC",monospace;font-size:42px;font-weight:700}
+.cv i{font-style:normal;color:#aaa;margin:0 6px;font-size:34px}
+.note{font-size:15.5px;color:var(--mut);margin:8px 0 0}
+.legend{display:flex;gap:22px;font-size:16px;margin:2px 0 6px}
+.legend span::before{content:"";display:inline-block;width:16px;height:16px;margin-right:6px;vertical-align:-2px;background:var(--c)}
+ol.loop{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);row-gap:10px}
+ol.loop li{position:relative;border:2px solid var(--ink);background:#fff;margin-right:22px;padding:10px 10px;font-size:15.5px;line-height:1.4;min-height:0}
+ol.loop li:not(:nth-child(3n))::after{content:"→";position:absolute;right:-22px;top:46%;font-size:22px;font-weight:900;width:22px;text-align:center}
+ol.loop li b{display:block;font-size:17px;margin-bottom:4px}
+ol.loop li.gate{background:#f3ddd4} ol.loop li.gate2{background:#dbe8ee}
+.kv{font-family:"Noto Sans Mono CJK SC",monospace;font-weight:700}
+.hl{background:var(--hl);padding:0 4px}
+ul{margin:4px 0 0;padding-left:22px} li{margin:2px 0}
+.warn{border:2.5px solid var(--r);background:#fff7f3;padding:14px 20px}
+.warn h3{margin:0 0 6px;color:var(--r);font-size:21px}
+.read{border-left:6px solid var(--b);background:#f2eff7;padding:12px 18px;font-size:17px}
+.foot{position:absolute;bottom:0;left:0;right:0;font-size:13.5px;color:var(--mut);border-top:1px solid var(--line);padding-top:8px;display:flex;justify-content:space-between}
+.stamp{position:absolute;right:8px;top:-6px;transform:rotate(6deg);border:3px solid var(--r);color:var(--r);font-weight:900;padding:4px 12px;font-size:17px;background:rgba(255,255,255,.6)}
+</style></head><body>
+<div class="nb"><div class="spine"><i style="top:90px"></i><i style="top:260px"></i><i style="top:430px"></i><i style="top:600px"></i><i style="top:770px"></i><i style="top:940px"></i><i style="top:1110px"></i><i style="top:1280px"></i><i style="top:1450px"></i><i style="top:1620px"></i><i style="top:1790px"></i><i style="top:1960px"></i><i style="top:2130px"></i></div><div class="margin"></div>
+<div class="in">
+ <div class="hdr"><div>
+  <div class="lab">实验记录本 · 杂交第 2 代 · arXiv:2611.15268v1</div>
+  <h1>知识留在 <span class="r">规则</span> 里，<br>稳定长进 <span class="w">权重</span> 里</h1>
+  <p class="sub">12B 小模型不靠更强老师，从自己的客服日志里轮流改两层：先写规则（技能文本），再做 GRPO 训练 LoRA。把最终两层<b>交叉组合</b>，看各自遗传了什么。</p>
+ </div><div class="meta">
+  <div><b>亲本</b>Gemma 4 12B（同一模型当代理、编辑器、受训者）</div>
+  <div><b>环境</b>τ²-bench 零售 114 题 / 航空 50 题</div>
+  <div><b>用户模拟</b>DeepSeek-V4.1-Flash，T=0</div>
+  <div><b>代数</b>两轮；每轮约 340 GPU·时</div>
+  <div><b>选择</b>只用生成的 V 集；官方题只报告</div>
+ </div></div>
+
+ <div class="sec row" style="grid-template-columns:690px 1fr">
+  <div><div class="st"><span class="no">①</span><h2>2×2 杂交方格</h2><small>官方题，每题 4 次</small></div>
+   <div class="card"><div class="tape"></div><div class="pq"><div class="corner">pass¹<br><small>零售 / 航空</small></div><div class="colh"><b>M0</b><small>原权重</small></div><div class="colh"><b>M2</b><small>两轮 GRPO 后 LoRA</small></div><div class="rowh"><b>H0</b><small>原技能（政策逐字拆分）</small></div><div class="cell" style="background:#efe8d6"><span class="cn">H0-M0 · 起点</span><span class="cv">72.6<i>/</i>56.0</span></div><div class="cell" style="background:#dbe8ee"><span class="cn">H0-M2 · 只换权重</span><span class="cv">78.3<i>/</i>62.5</span></div><div class="rowh"><b>H2</b><small>两轮演化后规则</small></div><div class="cell" style="background:#f3ddd4"><span class="cn">H2-M0 · 只加规则</span><span class="cv">77.4<i>/</i>68.5</span></div><div class="cell" style="background:#e3dcef"><span class="cn">H2-M2 · 两层都换</span><span class="cv">85.1<i>/</i>75.5</span></div></div>
+    <p class="note">参考代理（同模型、整份政策放系统提示）：73.2 / 67.5；三个前沿模型（同 H0 技能）：零售 84.4–86.8，航空 77.0–80.5。</p></div></div>
+  <div><div class="st"><span class="no">②</span><h2>效应各算各的</h2><small>表 11，95% 配对 bootstrap</small></div>
+   <div class="card" style="font-size:17px">
+    <table style="width:100%;border-collapse:collapse;font-size:16.5px">
+     <tr style="border-bottom:2px solid var(--ink)"><th style="text-align:left">pass¹ 增益</th><th>零售</th><th>航空</th></tr>
+     <tr><td style="color:var(--r);font-weight:700">只加规则</td><td class="kv">+4.8 [−0.7, 10.3]</td><td class="kv">+12.5 [5.5, 20.0]</td></tr>
+     <tr><td style="color:var(--w);font-weight:700">只换权重</td><td class="kv">+5.7 [1.1, 10.1]</td><td class="kv">+6.5 [2.0, 11.0]</td></tr>
+     <tr><td style="color:var(--b);font-weight:700">交互项</td><td class="kv">+2.0 [−4.4, 8.8]</td><td class="kv">+0.5 [−7.5, 9.0]</td></tr>
+    </table>
+    <p class="note" style="margin-top:12px">pass⁴（4 次全对）上零售交互 +12.3 [−0.9, 25.4]：两层单独几乎不提可靠性（0.0、+6.1），合起来 +18.4——区间跨 0，只算方向。</p>
+    <p class="note">相对参考代理，最终系统 pass¹ 零售 +11.8 [6.1, 17.5]、航空 +8.0 [0.5, 16.0]。</p>
+   </div></div>
+ </div>
+
+ <div class="sec"><div class="st"><span class="no">③</span><h2>表型分离：规则救没解出的题，权重稳住本来会的题</h2><small>表 3；按起点 H0-M0 的 4 次结果分组，其余列是独立重跑</small></div>
+  <div class="card"><div class="legend"><span style="--c:var(--r)">只加规则 H2-M0</span><span style="--c:var(--w)">只换权重 H0-M2</span><span style="--c:var(--b)">两层 H2-M2</span><span style="color:var(--mut)">（纵轴：平均成功率 %）</span></div>
+   <div style="display:flex;gap:30px"><svg viewBox="0 0 680 280" width="680" height="280" font-family="Noto Sans CJK SC"><text x="0" y="22" font-size="21" font-weight="700" fill="#2b2b2b">零售</text><line x1="64" y1="216.0" x2="670" y2="216.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="221.0" font-size="14" fill="#7a7364" text-anchor="end">0</text><line x1="64" y1="172.0" x2="670" y2="172.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="177.0" font-size="14" fill="#7a7364" text-anchor="end">25</text><line x1="64" y1="128.0" x2="670" y2="128.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="133.0" font-size="14" fill="#7a7364" text-anchor="end">50</text><line x1="64" y1="84.0" x2="670" y2="84.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="89.0" font-size="14" fill="#7a7364" text-anchor="end">75</text><line x1="64" y1="40.0" x2="670" y2="40.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="45.0" font-size="14" fill="#7a7364" text-anchor="end">100</text><rect x="94" y="138.9" width="30" height="77.1" fill="#c2573a"/><text x="109.0" y="132.9" font-size="14.5" text-anchor="middle" fill="#c2573a" font-weight="700">44</text><rect x="128" y="172.0" width="30" height="44.0" fill="#2f6f8f"/><text x="143.0" y="166.0" font-size="14.5" text-anchor="middle" fill="#2f6f8f" font-weight="700">25</text><rect x="162" y="94.9" width="30" height="121.1" fill="#4a3b6b"/><text x="177.0" y="88.9" font-size="14.5" text-anchor="middle" fill="#4a3b6b" font-weight="700">69</text><text x="143.0" y="242" font-size="17" text-anchor="middle" fill="#2b2b2b" font-weight="700">基线解出 0/4</text><text x="143.0" y="264" font-size="14.5" text-anchor="middle" fill="#7a7364">n = 8 题</text><rect x="266" y="89.1" width="30" height="126.9" fill="#c2573a"/><text x="281.0" y="83.1" font-size="14.5" text-anchor="middle" fill="#c2573a" font-weight="700">72</text><rect x="300" y="95.3" width="30" height="120.7" fill="#2f6f8f"/><text x="315.0" y="89.3" font-size="14.5" text-anchor="middle" fill="#2f6f8f" font-weight="700">69</text><rect x="334" y="79.6" width="30" height="136.4" fill="#4a3b6b"/><text x="349.0" y="73.6" font-size="14.5" text-anchor="middle" fill="#4a3b6b" font-weight="700">78</text><text x="315.0" y="242" font-size="17" text-anchor="middle" fill="#2b2b2b" font-weight="700">基线解出 1–3/4</text><text x="315.0" y="264" font-size="14.5" text-anchor="middle" fill="#7a7364">n = 51 题</text><rect x="438" y="62.4" width="30" height="153.6" fill="#c2573a"/><text x="453.0" y="56.4" font-size="14.5" text-anchor="middle" fill="#c2573a" font-weight="700">87</text><rect x="472" y="48.8" width="30" height="167.2" fill="#2f6f8f"/><text x="487.0" y="42.8" font-size="14.5" text-anchor="middle" fill="#2f6f8f" font-weight="700">95</text><rect x="506" y="49.7" width="30" height="166.3" fill="#4a3b6b"/><text x="521.0" y="43.7" font-size="14.5" text-anchor="middle" fill="#4a3b6b" font-weight="700">94</text><text x="487.0" y="242" font-size="17" text-anchor="middle" fill="#2b2b2b" font-weight="700">基线解出 4/4</text><text x="487.0" y="264" font-size="14.5" text-anchor="middle" fill="#7a7364">n = 55 题</text></svg><svg viewBox="0 0 680 280" width="680" height="280" font-family="Noto Sans CJK SC"><text x="0" y="22" font-size="21" font-weight="700" fill="#2b2b2b">航空</text><line x1="64" y1="216.0" x2="670" y2="216.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="221.0" font-size="14" fill="#7a7364" text-anchor="end">0</text><line x1="64" y1="172.0" x2="670" y2="172.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="177.0" font-size="14" fill="#7a7364" text-anchor="end">25</text><line x1="64" y1="128.0" x2="670" y2="128.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="133.0" font-size="14" fill="#7a7364" text-anchor="end">50</text><line x1="64" y1="84.0" x2="670" y2="84.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="89.0" font-size="14" fill="#7a7364" text-anchor="end">75</text><line x1="64" y1="40.0" x2="670" y2="40.0" stroke="#d9d2bf" stroke-width="1"/><text x="56" y="45.0" font-size="14" fill="#7a7364" text-anchor="end">100</text><rect x="94" y="169.0" width="30" height="47.0" fill="#c2573a"/><text x="109.0" y="163.0" font-size="14.5" text-anchor="middle" fill="#c2573a" font-weight="700">27</text><rect x="128" y="207.2" width="30" height="8.8" fill="#2f6f8f"/><text x="143.0" y="201.2" font-size="14.5" text-anchor="middle" fill="#2f6f8f" font-weight="700">5</text><rect x="162" y="139.8" width="30" height="76.2" fill="#4a3b6b"/><text x="177.0" y="133.8" font-size="14.5" text-anchor="middle" fill="#4a3b6b" font-weight="700">43</text><text x="143.0" y="242" font-size="17" text-anchor="middle" fill="#2b2b2b" font-weight="700">基线解出 0/4</text><text x="143.0" y="264" font-size="14.5" text-anchor="middle" fill="#7a7364">n = 15 题</text><rect x="266" y="78.5" width="30" height="137.5" fill="#c2573a"/><text x="281.0" y="72.5" font-size="14.5" text-anchor="middle" fill="#c2573a" font-weight="700">78</text><rect x="300" y="86.8" width="30" height="129.2" fill="#2f6f8f"/><text x="315.0" y="80.8" font-size="14.5" text-anchor="middle" fill="#2f6f8f" font-weight="700">73</text><rect x="334" y="70.3" width="30" height="145.7" fill="#4a3b6b"/><text x="349.0" y="64.3" font-size="14.5" text-anchor="middle" fill="#4a3b6b" font-weight="700">83</text><text x="315.0" y="242" font-size="17" text-anchor="middle" fill="#2b2b2b" font-weight="700">基线解出 1–3/4</text><text x="315.0" y="264" font-size="14.5" text-anchor="middle" fill="#7a7364">n = 16 题</text><rect x="438" y="51.6" width="30" height="164.4" fill="#c2573a"/><text x="453.0" y="45.6" font-size="14.5" text-anchor="middle" fill="#c2573a" font-weight="700">93</text><rect x="472" y="42.3" width="30" height="173.7" fill="#2f6f8f"/><text x="487.0" y="36.3" font-size="14.5" text-anchor="middle" fill="#2f6f8f" font-weight="700">99</text><rect x="506" y="49.3" width="30" height="166.7" fill="#4a3b6b"/><text x="521.0" y="43.3" font-size="14.5" text-anchor="middle" fill="#4a3b6b" font-weight="700">95</text><text x="487.0" y="242" font-size="17" text-anchor="middle" fill="#2b2b2b" font-weight="700">基线解出 4/4</text><text x="487.0" y="264" font-size="14.5" text-anchor="middle" fill="#7a7364">n = 19 题</text></svg></div>
+   <p class="note" style="margin-top:2px">显著项：权重在“本来全会”组领先 零售 <span class="kv">7.7 [3.6, 12.3]</span>、航空 <span class="kv">5.3 [1.3, 10.5]</span>；规则在航空“从没解出”组领先 <span class="kv">21.7 [8.3, 36.7]</span>，但这 15 题中 14 题受技能拆分影响（见⑥）。零售“从没解出”只有 8 题；附录 E 用两次分组、另两次计分重做，交叉在每种拆法下都成立。</p>
+  </div></div>
+
+ <div class="sec row" style="grid-template-columns:1fr 640px">
+  <div><div class="st"><span class="no">④</span><h2>一轮怎么走</h2><small>§4；每层各有门</small></div>
+   <ol class="loop">
+    <li><b>1 新批次部署</b>300 道生成题，每题跑 4 次</li>
+    <li><b>2 诊断写规则</b>按首个错误写入归技能；约 16 失败＋16 对照/步；只许改规则段</li>
+    <li class="gate"><b>3 三道检查</b>代码校验（只引证据原文、不许写实例值）＋双次反例自审＋重写复审</li>
+    <li class="gate"><b>4 配对重测</b>新旧各 6 次，多对 ≥4 题次才留；单条致退化即撤</li>
+    <li class="gate"><b>5 V 集门</b>200 题×8 次，S 严格更高才采用；否则重来一次</li>
+    <li class="gate2"><b>6 GRPO＋门</b>规则在上下文中训练 LoRA；三个检查点过 V 门</li>
+   </ol>
+   <p class="note">两轮共 220 条合并编辑，180 条过检查；60 步留 27 步；终版 51 条规则。编辑器诊断：缺指导 43.8%、读到却没照做 43.6%。</p>
+  </div>
+  <div><div class="st"><span class="no">⑤</span><h2>性状没有遗传进权重</h2><small>航空，按知识点 pass¹（表 15）</small></div>
+   <div class="card"><svg viewBox="0 0 640 300" width="640" height="300" font-family="Noto Sans CJK SC"><text x="106" y="48" font-size="17" text-anchor="end" fill="#2b2b2b" font-weight="700">免费行李额</text><rect x="118" y="24" width="101.1" height="20" fill="#cfc6ae"/><rect x="118" y="24" width="118.0" height="20" fill="#2f6f8f" opacity="0.9"/><text x="244.0" y="40" font-size="14.5" fill="#2f6f8f" font-weight="700">17.5</text><rect x="118" y="50" width="101.1" height="20" fill="#cfc6ae"/><rect x="118" y="50" width="286.6" height="20" fill="#c2573a" opacity="0.9"/><text x="412.6" y="66" font-size="14.5" fill="#c2573a" font-weight="700">42.5</text><text x="636" y="48" font-size="13.5" text-anchor="end" fill="#7a7364">起点 15.0</text><text x="106" y="114" font-size="17" text-anchor="end" fill="#2b2b2b" font-weight="700">加购行李</text><rect x="118" y="90" width="0.0" height="20" fill="#cfc6ae"/><rect x="118" y="90" width="1.5" height="20" fill="#2f6f8f" opacity="0.9"/><text x="126.0" y="106" font-size="14.5" fill="#2f6f8f" font-weight="700">0.0</text><rect x="118" y="116" width="0.0" height="20" fill="#cfc6ae"/><rect x="118" y="116" width="168.6" height="20" fill="#c2573a" opacity="0.9"/><text x="294.6" y="132" font-size="14.5" fill="#c2573a" font-weight="700">25.0</text><text x="636" y="114" font-size="13.5" text-anchor="end" fill="#7a7364">起点 0.0</text><text x="106" y="180" font-size="17" text-anchor="end" fill="#2b2b2b" font-weight="700">价格计算</text><rect x="118" y="156" width="126.8" height="20" fill="#cfc6ae"/><rect x="118" y="156" width="126.8" height="20" fill="#2f6f8f" opacity="0.9"/><text x="252.8" y="172" font-size="14.5" fill="#2f6f8f" font-weight="700">18.8</text><rect x="118" y="182" width="126.8" height="20" fill="#cfc6ae"/><rect x="118" y="182" width="358.0" height="20" fill="#c2573a" opacity="0.9"/><text x="484.0" y="198" font-size="14.5" fill="#c2573a" font-weight="700">53.1</text><text x="636" y="180" font-size="13.5" text-anchor="end" fill="#7a7364">起点 18.8</text><text x="106" y="246" font-size="17" text-anchor="end" fill="#2b2b2b" font-weight="700">票价差</text><rect x="118" y="222" width="154.4" height="20" fill="#cfc6ae"/><rect x="118" y="222" width="168.6" height="20" fill="#2f6f8f" opacity="0.9"/><text x="294.6" y="238" font-size="14.5" fill="#2f6f8f" font-weight="700">25.0</text><rect x="118" y="248" width="154.4" height="20" fill="#cfc6ae"/><rect x="118" y="248" width="295.3" height="20" fill="#c2573a" opacity="0.9"/><text x="421.3" y="264" font-size="14.5" fill="#c2573a" font-weight="700">43.8</text><text x="636" y="246" font-size="13.5" text-anchor="end" fill="#7a7364">起点 22.9</text></svg>
+    <p class="note">灰底为起点。M2 训练时上下文里就有行李额公式，奖励从不要求它记住；去掉规则后，跳过订票技能的 28 段行李对话 H0-M2 全错，与起点相同。</p></div></div>
+ </div>
+
+ <div class="sec row" style="grid-template-columns:1fr 1fr">
+  <div class="warn"><h3>⑥ 读数前先扣掉的部分</h3><ul>
+   <li><b>拆分自损又自修：</b>政策逐字拆成技能，让航空起点比参考代理低 11.5 点；第一轮规则把它修回（67.0 vs 67.5）。受拆分影响的 31 题，终版只比参考代理高 4.0；不受影响的 19 题高 14.5（94.7 vs 80.3）。</li>
+   <li><b>交叉不是独立进化：</b>2×2 用的是最终规则 × 最终权重；没有从起点单独只演化一层的对照（作者在局限中承认）。</li>
+   <li><b>单底座、两域、两轮</b>；每个系统官方题只跑一次（4 次/题），多数单步更新单独不显著。</li>
+   <li><b>V 集反复用于 8 次准入</b>；生成器按官方公开题的 131 个知识点配比，不是完全陌生的任务分布（客户、场景、参考写入不重叠）。</li>
+  </ul></div>
+  <div><div class="read"><b>噪声校准是这套循环能用的前提。</b>同种子两次对话在题内相关只有 −0.09–0.07（T=0 下首句仍 59% 不同），所以配对只去掉题间方差；被挑出的失败题直接重跑也会多成功 4.4 点（回归均值），若拿采集时结果当对照，60 次去留里 22 次会反向。8 次采用的更新在 V 与官方题上的增益相关 r = 0.98，差 ≤ 2.1 点。</div>
+   <div class="read" style="margin-top:14px;border-color:var(--r);background:#fbf0ec"><b>本项目阅读：</b>可带走的是“规则补知识、RL 补稳定，且 RL 不会把上下文里的知识收进权重”这一<b>分工证据</b>，以及先改规则能给 GRPO 喂出混合结果的任务（航空第一轮从没解出的批次题 71 → 42）。不能读成：非权重自改进单独带来了全部收益，或小模型已追平前沿模型（只是 12 个对比都不再显著）。</div>
+  </div>
+ </div>
+
+ <div class="foot"><span>来源：Zhang, Ren, Zhou, Meng（Brightendata）· arXiv:2611.15268v1 · 表 2、3、11、14、15，§4–§5，附录 E · 数字均为作者结果；“本项目阅读”为我们的判断</span><span>HarnessRSI Daily · selection-015</span></div>
+</div></div>
+</body></html>
