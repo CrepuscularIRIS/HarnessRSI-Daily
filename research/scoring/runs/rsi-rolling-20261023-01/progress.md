@@ -266,3 +266,8 @@
 - L1：inc-l1-19 12/12（assessed 11，out_of_scope 1；to_l2 11）。L2：inc-l2-21 11/11。改判 1 篇 P2→P3（15178，待实验）。**6 篇 P3/confirmed/to_l3**（逐篇见批次）；5 篇 park（实验依据缺口）。
 - 漏检抽查：名额 1（预算 11×10%）但池 0 → 欠账 ~8.3+1→~9.3 滚存。seed=20261118。
 - to_l3 池：+6。
+
+## 2026-11-16 每日 Opus 判断（第十五期选题）
+
+- selection-014 后新增 confirmed P3：6 篇 ≥3 → 第十五期选题。终选 2 篇（15268 知识在 harness/可靠性在权重 2×2 交叉 / 16591 Singularity-Bench——领队模型为 Opus 5.5 已在画报披露），各修复后过视觉 QA；第 3 席因 15276/15700 增量近噪声空缺；15309 与 08318 同题去重。见 selection-015.md。累计 53 张。
+- Correction C-015-1（16378 EGE 的 measured_own 依据为 synthetic-by-construction 蒙特卡洛）退回 Sol：复核 Q1（疑 asserted，封顶 P2）与 q3。
