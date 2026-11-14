@@ -271,3 +271,7 @@
 
 - selection-014 后新增 confirmed P3：6 篇 ≥3 → 第十五期选题。终选 2 篇（15268 知识在 harness/可靠性在权重 2×2 交叉 / 16591 Singularity-Bench——领队模型为 Opus 5.5 已在画报披露），各修复后过视觉 QA；第 3 席因 15276/15700 增量近噪声空缺；15309 与 08318 同题去重。见 selection-015.md。累计 53 张。
 - Correction C-015-1（16378 EGE 的 measured_own 依据为 synthetic-by-construction 蒙特卡洛）退回 Sol：复核 Q1（疑 asserted，封顶 P2）与 q3。
+
+## 2026-11-16 C-015-1 落档
+
+- 16378 EGE 修订：q1→asserted、q3→incremental、P3→P2/park（§8 明示 synthetic by construction；样本量 5,000–80,000 为每候选每指标口径）。原记录保留。
