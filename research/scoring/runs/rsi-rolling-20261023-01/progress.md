@@ -275,3 +275,7 @@
 ## 2026-11-16 C-015-1 落档
 
 - 16378 EGE 修订：q1→asserted、q3→incremental、P3→P2/park（§8 明示 synthetic by construction；样本量 5,000–80,000 为每候选每指标口径）。原记录保留。
+
+## 2026-11-17 08:43 每日 Opus 判断
+
+- selection-015 后新增 confirmed P3：0 篇 <3 → 跳过（池内余量已全部读文处理/降档）。
