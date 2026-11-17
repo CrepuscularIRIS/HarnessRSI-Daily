@@ -294,3 +294,8 @@
 ## 2026-11-19 每日 Opus 判断（第十六期选题）
 
 - selection-015 后新增 confirmed P3：4 篇 ≥3 → 第十六期选题。终选 2 篇（17696 Co-Sight / 18533 ModHarness-RL），各重做一次后过视觉 QA；第 3 席按证据空缺。两条 correction 退回（17539 面板参与早期开发、17939 跨后端阈值）。见 selection-016.md。累计 55 张。执行模型 gpt-6-astra（fable 槽）。
+
+## 2026-11-19 S016-1/2 落档
+
+- 17539 修订：q4→partial、pending_experiment/to_l2 留队（P3/high 保留——附录 A.8.3 证实 15 实测 pattern 参与早期开发，独立迁移需新标本+固定模型+等预算）。
+- 17939 修订：**维持 P3/confirmed/to_l3**（同 SEC 后端波动与冻结测试证据成立），H32 holds→partial（附录 E 证实首基线跨后端，0.83 不作纯漂移解释）；成本比 0.341 [0.216,0.580] 保留。
