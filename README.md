@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 36 → 53 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 55 posters (including 2 from the earlier second issue).** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -15,13 +15,30 @@ Core question: *which non-weight component was improved, how was the change acce
   （13 张主卡＋36 张子卡，从本语料逆向归纳；评分判据全部出自这些卡。）
 - **A problem-first rating of the whole corpus**: every paper is first asked whether its question is real, open and consequential, then whether the mechanism's conditions hold — two layers, never summed.
   （全语料“先问问题、再看执行”的两层评价，不算总分。）
-- **A short reading list and a Reel**: 228 confirmed good-question papers, of which 8 were checked against the full text and turned into source-mapped posters.
-  （228 篇确认的好问题论文，其中 8 篇经原文核对做成逐数溯源的画报。）
+- **A short reading list and a Reel**: 55 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
+  （55 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
 
 ## Featured Reel（精选画报）
 
-Fifty-three papers, fifty-three distinct layouts. Each poster was checked against the paper's full text by Opus 5.5, with every number mapped to its section or table in `reel/<id>/SOURCE.md` and visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [selection 15](research/scoring/runs/rsi-rolling-20261023-01/selection-015.md) · [Reel index](reel/README.md).
-（53 篇、53 种互不重复的版式；每张经 Opus 5.5 原文核对、逐数溯源与视觉验收，按新到旧排列。）
+Fifty-five selected papers, with mechanism-specific layouts. Model provenance for the earlier 53 remains in their selection logs; issue 16 adds two checked and produced by the session-reported gpt-6-astra (backend not independently probed), not Opus 5.5. Numbers map to source sections or tables in `reel/<id>/SOURCE.md`, with actual visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [selection 15](research/scoring/runs/rsi-rolling-20261023-01/selection-015.md) · [selection 16](research/scoring/runs/rsi-rolling-20261023-01/selection-016.md) · [Reel index](reel/README.md).
+（55 篇，按机制设计版式；历史模型见各期记录，本期 2 篇由会话报告的 gpt-6-astra 原文核对、逐数溯源与视觉验收。按新到旧排列。）
+
+<table>
+<tr>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.17696/poster.png"><img src="reel/2611.17696/poster.png" width="300" alt="Co-Sight：控制与知识分流"></a><br>
+<b><a href="https://arxiv.org/abs/2611.17696">2611.17696</a> · Completion is not content quality</b><br>
+Control and knowledge ablations separate workflow completion from content F1: 90% vs 60% completion against the compute-matched baseline. Independent additive/subtractive case sets; automatic audit-driven asset revision remains future work.<br>
+流程跑完与内容做对分两条修复线，不能直接当作自主自改证据。
+</td>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.18533/poster.png"><img src="reel/2611.18533/poster.png" width="300" alt="ModHarness-RL：固定压缩与动态纠偏"></a><br>
+<b><a href="https://arxiv.org/abs/2611.18533">2611.18533</a> · Different modules, different update schedules</b><br>
+Fit compression once, evolve steering during RL: limited-history 8B localization F1 .412 vs .279 when compression is repeatedly refit. A scheme comparison, not a learning curve; full-system evidence is mainly CodeSearch.<br>
+压缩固定、纠偏动态，不是模块越常改越好；小准入集复用不保证全程无回归。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>
