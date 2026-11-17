@@ -290,3 +290,7 @@
 - L1：inc-l1-20 6/6（全 assessed，to_l2 6）。L2：inc-l2-22 6/6。改判 1 篇 P2→P3（18533）。**4 篇 P3/confirmed/to_l3**（逐篇见批次）；2 篇 park。
 - 漏检抽查：名额 1（预算 6×10%）但池 0 → 欠账 ~9.3+1→~10.3 滚存。seed=20261119。
 - to_l3 池：+4。
+
+## 2026-11-19 每日 Opus 判断（第十六期选题）
+
+- selection-015 后新增 confirmed P3：4 篇 ≥3 → 第十六期选题。终选 2 篇（17696 Co-Sight / 18533 ModHarness-RL），各重做一次后过视觉 QA；第 3 席按证据空缺。两条 correction 退回（17539 面板参与早期开发、17939 跨后端阈值）。见 selection-016.md。累计 55 张。执行模型 gpt-6-astra（fable 槽）。
