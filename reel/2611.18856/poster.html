@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>改进记忆比改进本身更耐迁移</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}@page{size:1600px 2380px;margin:0}*{box-sizing:border-box}
+:root{--paper:#faf7f0;--ink:#22282c;--muted:#6d7578;--accent:#0e6b5c;--accent2:#9a4a1f;--line:#d8d2c4;--soft:#efece2;--white:#fffdf7}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1600px;height:2380px;padding:64px 72px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+header{border-bottom:4px solid var(--ink);padding-bottom:30px}
+.kicker{font-size:22px;letter-spacing:4px;color:var(--accent);font-weight:bold}
+h1{font-size:74px;line-height:1.15;margin:18px 0 16px;letter-spacing:-2px}
+.lead{font-size:28px;line-height:1.55;color:var(--muted)}
+.issue{position:absolute;top:64px;right:72px;text-align:right;font-size:19px;line-height:1.75;color:var(--muted)}
+h2{font-size:34px;margin:0 0 22px;border-left:8px solid var(--accent);padding-left:18px}
+h3{font-size:25px;margin:0 0 12px}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+/* ledger card */
+.ledger{background:var(--white);border:2px solid var(--ink);margin-top:44px}
+.ledger .lhead{background:var(--ink);color:var(--paper);padding:14px 24px;font-size:24px;font-weight:bold;display:flex;justify-content:space-between;align-items:baseline}
+.ledger .lhead span{font-size:18px;font-weight:400;color:#c9cfc9}
+.lrow{display:grid;grid-template-columns:300px 1fr 330px;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:none}
+.lrow>div{padding:20px 24px}
+.lrow .f{font-size:24px;font-weight:bold;display:flex;align-items:center;gap:14px}
+.lrow .f i{font-style:normal;font-size:17px;color:var(--paper);background:var(--accent);width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.lrow .d{font-size:21px;line-height:1.6;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.lrow .v{font-size:19px;color:var(--muted);line-height:1.6}
+.lrow.hl{background:#e3efe9}
+.lrow.hl2{background:#f3e6da}
+/* two-col mid */
+.mid{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:44px}
+.panel{background:var(--white);border-top:6px solid var(--accent);padding:26px 30px}
+.panel.rust{border-top-color:var(--accent2)}
+.stat{display:flex;align-items:baseline;gap:16px;margin:6px 0 14px}
+.stat b{font-size:64px;line-height:1;color:var(--accent)}
+.stat span{font-size:21px;line-height:1.5;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:21px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:18px;color:var(--muted);font-weight:500;border-bottom:2px solid var(--ink);padding:9px 6px}
+td{padding:12px 6px;border-bottom:1px solid var(--line)}
+td:not(:first-child),th:not(:first-child){text-align:right}
+tr.win td{background:#e3efe9;font-weight:bold}
+tr.lose td{color:var(--muted)}
+/* generation chain */
+.chain{display:flex;gap:0;margin-top:20px;align-items:stretch}
+.gstep{flex:1;background:var(--soft);border:1px solid var(--line);padding:16px 14px;text-align:center}
+.gstep+.gstep{border-left:none}
+.gstep .gname{font-size:21px;font-weight:bold}
+.gstep .gval{font-size:34px;font-weight:bold;margin-top:8px;color:var(--accent)}
+.gstep .gsub{font-size:17px;color:var(--muted);margin-top:6px}
+.gstep.bad .gval{color:var(--accent2)}
+/* caution + takeaway */
+.caution{margin-top:44px;border:2px dashed var(--accent2);padding:24px 30px;background:#fbf3ea}
+.caution h3{color:var(--accent2);font-size:24px}
+.caution p{font-size:21px;line-height:1.7}
+.caution li{font-size:21px;line-height:1.7;margin-top:8px}
+.takeaway{margin-top:auto;background:var(--ink);color:var(--paper);padding:30px 34px;margin-top:44px}
+.takeaway p{font-size:30px;line-height:1.6;font-weight:bold}
+.takeaway .sub{font-size:20px;font-weight:400;color:#c9cfc9;margin-top:12px;line-height:1.6}
+.footer{position:absolute;bottom:30px;left:72px;right:72px;font-size:16px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between}
+a{color:inherit;text-decoration:none}
+ul{margin:8px 0 0;padding-left:24px}
+</style></head><body><main>
+<header><div class="kicker">HARNESSRSI DAILY · 第 17 期 · 论文阅读图解</div><h1>改进记忆，比改进本身<br>更耐迁移</h1><p class="lead">SIM：自改进不只产出新 harness，还产出一份可携带的改进记录——换数据集、换模型后，带着记录比带着改动清单走得远。</p></header>
+<div class="issue">2611.18856v1<br>arXiv 预印本<br>本项目重绘 · 非作者海报</div>
+
+<h2 style="margin-top:40px">01 / 记录里到底存了什么——不是结果，是决策语境</h2>
+<div class="ledger">
+<div class="lhead">一条 SIM 记录<span>按 harness 问题组织，非按时间</span></div>
+<div class="lrow"><div class="f"><i>问</i>遇到的问题</div><div class="d">哪次评估、哪个环节出了什么错（如：继承门过松导致坏改动累积）</div><div class="v">无记录时：问题被反复重新诊断</div></div>
+<div class="lrow hl"><div class="f"><i>改</i>所选修改</div><div class="d">针对该问题选了哪个 harness 修改，以及<b>为什么选它</b></div><div class="v">决策理由是迁移时最稀缺的资产</div></div>
+<div class="lrow hl"><div class="f"><i>测</i>预测 vs 实测</div><div class="d">改之前预测会怎样，改之后实测怎样——两者并列留存</div><div class="v">预测不准的记录同样保留</div></div>
+<div class="lrow"><div class="f"><i>境</i>评估背景</div><div class="d">当时在什么 benchmark、什么策略下测的</div><div class="v">换环境时用于判断哪些经验适用</div></div>
+</div>
+
+<div class="mid">
+<section class="panel"><h3>02 / 换数据集：完整记录 6 战 6 胜</h3>
+<div class="stat"><b>6/6</b><span>六个目标数据集上 Full SIM 全部最高，含记录的迁移胜过只搬改动</span></div>
+<table><thead><tr><th>迁移方式（TB2.1→新集）</th><th>胜出幅度</th></tr></thead><tbody>
+<tr><td>Full SIM（改动＋完整记录）</td><td>+2.43～4.35 vs 次优</td></tr>
+<tr><td>Harness Transfer（只搬改动）</td><td>全部低于 Full SIM</td></tr>
+<tr><td>Problem-Only（只搬问题描述）</td><td>差距 0.20～6.06</td></tr>
+</tbody></table>
+<p style="font-size:18px;color:var(--muted);margin-top:12px" class="num">配对 10 组 coding 续优化：mean +2.36 [1.05, 3.68]，p=0.003，SIM 9/10 组胜。</p></section>
+<section class="panel rust"><h3>03 / 换模型：记录跟着走，4 组全胜</h3>
+<div class="stat"><b>4/4</b><span>跨模型迁移全胜；最强一组 Opus→Gemini 领先 3.60～11.33 分</span></div>
+<table><thead><tr><th>策略（同任务换模型）</th><th>得分</th></tr></thead><tbody>
+<tr class="win"><td>Full SIM 注入</td><td>84.75（workspace）</td></tr>
+<tr class="lose"><td>原始 harness</td><td>73.42</td></tr>
+<tr class="lose"><td>改进后 harness、无 SIM</td><td>68.41</td></tr>
+</tbody></table>
+<p style="font-size:18px;color:var(--muted);margin-top:12px">"改进后 harness 无记录"反而低于原始 harness：脱离评估语境的改动可能失配。</p></section>
+</div>
+
+<h2 style="margin-top:44px">04 / 但记录不是万能钥匙：源改进 ≠ 目标起点</h2>
+<div class="chain">
+<div class="gstep"><div class="gname">seed</div><div class="gval">75.72</div><div class="gsub">源集起点</div></div>
+<div class="gstep bad"><div class="gname">FewShotAll 直搬</div><div class="gval">72.92</div><div class="gsub">低于 seed</div></div>
+<div class="gstep bad"><div class="gname">Harness-only</div><div class="gval">74.12</div><div class="gsub">低于冷启动 75.92</div></div>
+<div class="gstep"><div class="gname">Full SIM</div><div class="gval">77.92</div><div class="gsub">唯一净胜</div></div>
+<div class="gstep"><div class="gname">统一合成</div><div class="gval">75.24</div><div class="gsub">≈分模型 75.20（held-out）</div></div>
+</div>
+<p style="font-size:20px;color:var(--muted);margin-top:14px">世代的自改进收益会随世代衰减（TB2.1 链 4Argon 95.6 vs 94.8，转负）；在源集上最强的改动，直搬到新集可能拖累起点——只有连同记录一起搬才转为净收益。</p>
+
+<div class="caution"><h3>这张图没有证明什么</h3>
+<ul>
+<li>独立重复只在 coding 域完成；跨域结论是推断不是测量。</li>
+<li>SIM 以"整体"评估，无法拆出四栏中哪一栏贡献了迁移收益。</li>
+<li>设定上要求源/目标 harness 接口兼容——真实工程里接口漂移正是迁移失败的主因，本文未测。</li>
+</ul></div>
+
+<div class="takeaway"><p>要迁移的不是"改成什么样"，而是"为什么这么改、当时测到了什么"。</p><p class="sub">决策语境是比改动清单更耐迁移的载体——但这一条目前只有一个领域的证据。</p></div>
+
+<footer class="footer"><span>来源：arXiv:2611.18856v1 §4–5 配对迁移实验、世代链与消融；机制卡片与排版为本项目制作，全部数值为作者报告，未复现。</span><a href="https://arxiv.org/abs/2611.18856">arxiv.org/abs/2611.18856 · SOURCE.md / QA.md</a></footer>
+</main></body></html>

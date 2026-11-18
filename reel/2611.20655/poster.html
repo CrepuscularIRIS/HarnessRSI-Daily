@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>知道≠做到：把规则编译成闸门</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}@page{size:1800px 1450px;margin:0}*{box-sizing:border-box}
+:root{--paper:#f2f3f5;--ink:#1b2126;--muted:#5b656c;--blue:#1f5fbf;--red:#c23a2b;--green:#1e7d46;--card:#ffffff;--soft:#e7eaee;--line:#d3d8dd}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1800px;height:1450px;padding:52px 60px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:24px}
+.kicker{font-size:19px;letter-spacing:3px;color:var(--blue);font-weight:bold}
+h1{font-size:62px;line-height:1.16;margin:14px 0 12px;letter-spacing:-2px}
+.lead{font-size:25px;color:var(--muted);max-width:1150px;line-height:1.5}
+.issue{text-align:right;font-size:18px;line-height:1.7;color:var(--muted)}
+p{margin:0}h2{font-size:29px;margin:0 0 16px}h3{font-size:23px;margin:0 0 10px}
+/* hero comparison */
+.hero{display:grid;grid-template-columns:1fr 120px 1fr;gap:0;margin-top:34px;align-items:stretch}
+.arm{background:var(--card);border:2px solid var(--ink);padding:26px 30px;position:relative}
+.arm .tag{position:absolute;top:-16px;left:24px;background:var(--ink);color:#fff;font-size:18px;padding:5px 14px;letter-spacing:2px}
+.arm.doing .tag{background:var(--green)}
+.arm .route{font-size:22px;line-height:1.65;color:var(--muted);margin:14px 0 18px}
+.arm .route b{color:var(--ink)}
+.viol{display:flex;align-items:baseline;gap:14px;margin-top:6px}
+.viol b{font-size:88px;line-height:1}
+.arm.knowing .viol b{color:var(--red)}
+.arm.doing .viol b{color:var(--green)}
+.viol span{font-size:21px;line-height:1.5}
+.bridge{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.bridge .ar{font-size:56px;color:var(--blue);font-weight:bold}
+.bridge .lbl{font-size:18px;color:var(--blue);font-weight:bold;text-align:center;line-height:1.5}
+/* pipeline */
+.pipe{display:grid;grid-template-columns:1fr 64px 1fr 64px 1fr 64px 1fr;margin-top:38px;align-items:stretch}
+.pstep{background:var(--card);border-top:6px solid var(--blue);padding:20px 22px}
+.pstep h3{color:var(--blue)}
+.pstep p{font-size:19px;line-height:1.6;color:var(--muted)}
+.pstep p b{color:var(--ink)}
+.parrow{display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--blue);font-weight:bold}
+/* bottom grid */
+.bottom{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:30px;margin-top:36px}
+.bcard{background:var(--card);padding:22px 26px;border:1px solid var(--line)}
+.bcard h3{font-size:22px}
+.bcard p{font-size:19px;line-height:1.65;color:var(--muted)}
+.bcard p b{color:var(--ink)}
+.big{font-size:40px;font-weight:bold;line-height:1.15;margin-bottom:8px}
+.big.g{color:var(--green)}.big.r{color:var(--red)}.big.b{color:var(--blue)}
+table{border-collapse:collapse;width:100%;font-size:19px;font-variant-numeric:tabular-nums;margin-top:8px}
+th{text-align:left;font-size:16px;color:var(--muted);font-weight:500;border-bottom:2px solid var(--ink);padding:7px 4px}
+td{padding:9px 4px;border-bottom:1px solid var(--line)}
+td:not(:first-child),th:not(:first-child){text-align:right}
+tr.best td{background:#e2f0e7;font-weight:bold}
+.warn{margin-top:auto;border-left:8px solid var(--red);background:#fbeae7;padding:20px 26px}
+.warn h3{color:var(--red)}
+.warn p{font-size:19px;line-height:1.65}
+.footer{position:absolute;bottom:26px;left:60px;right:60px;font-size:16px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between}
+a{color:inherit;text-decoration:none}
+</style></head><body><main>
+<header><div><div class="kicker">HARNESSRSI DAILY · 第 17 期 · 论文阅读图解</div><h1>知道 ≠ 做到：规则写进提示词没用，<br>编译成闸门才有用</h1><p class="lead">MetaAct：同一个 agent 从自己的执行失败里学安全规则——但规则只有被编译成确定性 guard，违规才会真正归零。</p></div><div class="issue">2611.20655v1<br>arXiv 预印本<br>本项目重绘 · 非作者海报</div></header>
+
+<div class="hero">
+<div class="arm knowing"><div class="tag">知道 KNOWING</div><div class="route">违规规则 → <b>写进 system prompt</b><br>模型每次决策都"读到"了这条规则</div><div class="viol"><b class="num">0.390</b><span>WebShop 违规率<br>基线 0.400——几乎没变</span></div></div>
+<div class="bridge"><div class="ar">⇒</div><div class="lbl">同批规则<br>换个去处</div></div>
+<div class="arm doing"><div class="tag">做到 DOING</div><div class="route">违规规则 → <b>编译成 typed guard</b><br>在执行层拦截非法动作，不靠模型自觉</div><div class="viol"><b class="num">0.010</b><span>WebShop 违规率<br>ScienceWorld 0.700 → 0</span></div></div>
+</div>
+
+<div class="pipe">
+<div class="pstep"><h3>① 从失败合成</h3><p>跑基线 agent，<b>收集真实执行失败</b>（动作越权、状态损坏），LLM 把每次失败归纳成一条 typed 规则（一次性 487k token / 23 类）。</p></div>
+<div class="parrow">→</div>
+<div class="pstep"><h3>② Replay 验证准入</h3><p>规则必须声称"能阻止哪些历史失败"，在<b>真实回放轨迹上验证</b>：有效阻断率 AUROC 0.966，挡住误伤规则的准入。</p></div>
+<div class="parrow">→</div>
+<div class="pstep"><h3>③ 编译为 guard</h3><p>通过的规则编译成<b>确定性执行约束</b>——guard 本身零 token；匹配的动作类型直接改写或拦截。</p></div>
+<div class="parrow">→</div>
+<div class="pstep"><h3>④ 代价：拦截触发重规划</h3><p>被拦后 agent 重新规划，token 不降反升：<b>SciWorld 84.7k/回合</b>，oracle 版 139.9k vs AutoGen 基线 27.7k。</p></div>
+</div>
+
+<div class="bottom">
+<div class="bcard"><h3>验证门挡住的不只是坏规则</h3><p>接受 vs 拒绝一条约束：<b>harmful blocking 6.5% vs 23.1%</b>；去掉 replay 验证后误拦截翻倍（覆盖 0.211→0.433）且出现有害拦截。灾难性后果 <span class="big g" style="font-size:34px">10.0% → 0.2%</span></p></div>
+<div class="bcard"><h3>主成绩（DeepSeek-V4-flash）</h3><table><thead><tr><th></th><th>违规率</th><th>分数增益</th></tr></thead><tbody><tr><td>ScienceWorld</td><td>0.700→0</td><td>+10.1</td></tr><tr class="best"><td>WebShop</td><td>0.400→0.010</td><td>+8.0</td></tr><tr><td>文本指导（对照）</td><td>SciWorld −0.15</td><td>—</td></tr></tbody></table></div>
+<div class="bcard"><h3>与"合成合法性过滤器"的区别</h3><p>AutoHarness（本库 2603.03329）从<b>规范</b>合成过滤器、新种子上验收；MetaAct 从<b>自己的执行失败</b>自下而上合成，并以 replay 验证控制误伤——两者不构成同一机制的证据重复。</p></div>
+</div>
+
+<div class="warn"><h3>这张图没有证明什么</h3><p>动作菜单是固定的 typed 集合：guard 引发的新状态、死锁、以及开放动作空间下规则的可编译性均未测试；token 成本上升是结构性的（拦截→重规划），不是实现瑕疵。runtime-guard 基线（AgentSpec 等）在部分环境归零是基线适配问题，不能读作方法排序。</p></div>
+
+<footer class="footer"><span>来源：arXiv:2611.20655v1 主表、knowing-doing 消融、replay-gate 与 token 附录；流程图与对照为本项目重绘，全部数值为作者报告，未复现。</span><a href="https://arxiv.org/abs/2611.20655">arxiv.org/abs/2611.20655 · SOURCE.md / QA.md</a></footer>
+</main></body></html>

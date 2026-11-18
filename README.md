@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 55 posters (including 2 from the earlier second issue).** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 58 posters (including 2 from the earlier second issue).** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -15,16 +15,36 @@ Core question: *which non-weight component was improved, how was the change acce
   （13 张主卡＋36 张子卡，从本语料逆向归纳；评分判据全部出自这些卡。）
 - **A problem-first rating of the whole corpus**: every paper is first asked whether its question is real, open and consequential, then whether the mechanism's conditions hold — two layers, never summed.
   （全语料“先问问题、再看执行”的两层评价，不算总分。）
-- **A short reading list and a Reel**: 55 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
-  （55 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
+- **A short reading list and a Reel**: 58 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
+  （58 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
 
 ## Featured Reel（精选画报）
 
-Fifty-five selected papers, with mechanism-specific layouts. Model provenance for the earlier 53 remains in their selection logs; issue 16 adds two checked and produced by the session-reported gpt-6-astra (backend not independently probed), not Opus 5.5. Numbers map to source sections or tables in `reel/<id>/SOURCE.md`, with actual visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [selection 15](research/scoring/runs/rsi-rolling-20261023-01/selection-015.md) · [selection 16](research/scoring/runs/rsi-rolling-20261023-01/selection-016.md) · [Reel index](reel/README.md).
-（55 篇，按机制设计版式；历史模型见各期记录，本期 2 篇由会话报告的 gpt-6-astra 原文核对、逐数溯源与视觉验收。按新到旧排列。）
+Fifty-eight selected papers, with mechanism-specific layouts. Model provenance for the earlier 53 remains in their selection logs; issue 16 adds two checked and produced by the session-reported gpt-6-astra (backend not independently probed), and issue 17 adds three by glm-5.3. Numbers map to source sections or tables in `reel/<id>/SOURCE.md`, with actual visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [selection 15](research/scoring/runs/rsi-rolling-20261023-01/selection-015.md) · [selection 16](research/scoring/runs/rsi-rolling-20261023-01/selection-016.md) · [selection 17](research/scoring/runs/rsi-rolling-20261023-01/selection-017.md) · [Reel index](reel/README.md).
+（58 篇，按机制设计版式；历史模型见各期记录，第十六期 2 篇由会话报告的 gpt-6-astra、第十七期 3 篇由 glm-5.3 原文核对、逐数溯源与视觉验收。按新到旧排列。）
 
 <table>
 <tr>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.18856/poster.png"><img src="reel/2611.18856/poster.png" width="300" alt="SIM：改进记忆比改进本身更耐迁移"></a><br>
+<b><a href="https://arxiv.org/abs/2611.18856">2611.18856</a> · Improvement memory outlives the improvement</b><br>
+Transfer with the full improvement record (problem, rationale, predicted vs measured, eval context) beats moving changes alone: 6/6 datasets, 4/4 models, paired +2.36 [1.05,3.68] p=0.003; harness-only transfer can land below the original. Independent replication is coding-only.<br>
+要迁移的是"为什么这么改"，不是"改成了什么样"。
+</td>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.20655/poster.png"><img src="reel/2611.20655/poster.png" width="300" alt="MetaAct：知道≠做到"></a><br>
+<b><a href="https://arxiv.org/abs/2611.20655">2611.20655</a> · Knowing is not doing</b><br>
+Rules written into the prompt leave violation rates unchanged (0.390 vs 0.400); compiled into typed guards they collapse (0.010 / 0). Replay-verified admission keeps harmful blocking at 6.5% vs 23.1%; token cost rises from intercepted replanning.<br>
+规则只有编译成执行层闸门，违规才会真正归零。
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+<a href="reel/2601.05504/poster.png"><img src="reel/2601.05504/poster.png" width="300" alt="现实设定下的记忆投毒防御"></a><br>
+<b><a href="https://arxiv.org/abs/2601.05504">2601.05504</a> · Trust scores are not security</b><br>
+Under realistic EHR memory the trust-scored defense collapses into a confidence filter: Gemini-2.0-Flash admits 54/82 poisoned entries all at trust 1.0; GPT-4o-mini rejects 0/23 leaving memory empty. Trust and security need decoupling. Single attack family, single domain.<br>
+信任分测"像不像真话"，投毒造的恰是"最像真话的话"。
+</td>
 <td width="50%" align="center" valign="top">
 <a href="reel/2611.17696/poster.png"><img src="reel/2611.17696/poster.png" width="300" alt="Co-Sight：控制与知识分流"></a><br>
 <b><a href="https://arxiv.org/abs/2611.17696">2611.17696</a> · Completion is not content quality</b><br>
