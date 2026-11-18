@@ -306,3 +306,10 @@
 - L1：inc-l1-21 12/12（全 assessed，to_l2 12）。L2：inc-l2-23 12/12。**7 篇 P3/confirmed/to_l3**（逐篇见批次）；5 篇 park（18585/18624 Q2 unknown——原文与摘要日期吻合但与编号月份冲突，待核近邻版本；13034/19823/20605 缺隔离实验）。
 - 漏检抽查：名额 1（预算 12×10%）但池 0 → 欠账 ~10.3+1→~11.3 滚存。seed=20261120。
 - to_l3 池：+7。
+
+## 2026-11-18 06:17 巡检班
+
+- 新增：86 篇（GitHub 查新，queue/2026-11-18-0828，入 corpus 1780→1866）；其中 15 篇 26xx 系列（RSI 范围内）切 L1（材料 abstract 15）。
+- 材料目录事故：l1_material.py 写入误嵌套 research/scoring/runs/research/...（路径拼接 bug 复现），15 个文件已移至 run materials/，遗留 l1_inputs.jsonl 已删。
+- L1：inc-l1-22 15/15（assessed 11，out_of_scope 4——均为 GRPO 权重后训练/蒸馏/环境研究，与 RSI 口径不合）。L2：inc-l2-24 11/11——3 篇 P3 维持 confirmed、**3 篇 P2→P3 升档**（2606.09461 H2HMem、2606.18829 GateMem、2605.13357 Harness Engineering），**6 篇 to_l3**、5 park。
+- to_l3 池：+6（累计 13）。
