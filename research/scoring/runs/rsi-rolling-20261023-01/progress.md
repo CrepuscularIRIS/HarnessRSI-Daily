@@ -313,3 +313,9 @@
 - 材料目录事故：l1_material.py 写入误嵌套 research/scoring/runs/research/...（路径拼接 bug 复现），15 个文件已移至 run materials/，遗留 l1_inputs.jsonl 已删。
 - L1：inc-l1-22 15/15（assessed 11，out_of_scope 4——均为 GRPO 权重后训练/蒸馏/环境研究，与 RSI 口径不合）。L2：inc-l2-24 11/11——3 篇 P3 维持 confirmed、**3 篇 P2→P3 升档**（2606.09461 H2HMem、2606.18829 GateMem、2605.13357 Harness Engineering），**6 篇 to_l3**、5 park。
 - to_l3 池：+6（累计 13）。
+
+## 2026-11-18 12:17 巡检班
+
+- 新增：5 篇（GitHub 查新，queue/2026-11-18-1120，材料 5 abstract）。
+- L1：inc-l1-23 15→本次 5/5（assessed 4，OOS 1——2508.00400 零售具身仿真环境，域属 Embodied 建议转仓重审）。L2：inc-l2-25 4/4——2504.00406 VerifiAgent P3/confirmed/to_l3；2411.00489 记忆综述 **P2→P1 降档**（与首版前 arXiv:2404.13501 同题同条件 vertical_port，封顶 P1）；2505.00675、2506.00886 P2/confirmed/park。
+- to_l3 池：+1（累计 14）。
