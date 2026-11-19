@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>榜单分数是一次抽奖</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}@page{size:1900px 1560px;margin:0}*{box-sizing:border-box}
+:root{--paper:#faf7f0;--ink:#22261f;--muted:#6b7060;--navy:#1e3a5f;--red:#b3382c;--green:#2c6e49;--amber:#b07d2b;--card:#ffffff;--line:#d8d2c4;--soft:#efe9dc}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1900px;height:1560px;padding:48px 58px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px double var(--ink);padding-bottom:20px}
+.kicker{font-size:18px;letter-spacing:3px;color:var(--navy);font-weight:bold}
+h1{font-size:56px;line-height:1.28;padding-bottom:6px;margin:12px 0 10px;letter-spacing:-1px}
+.lead{font-size:22px;color:var(--muted);max-width:1200px;line-height:1.5}
+.issue{text-align:right;font-size:16px;line-height:1.65;color:var(--muted);border-left:2px solid var(--line);padding-left:22px}
+p{margin:0}h2{font-size:26px;margin:0 0 12px}h3{font-size:21px;margin:0 0 8px}
+.stamp{display:inline-block;border:3px solid var(--red);color:var(--red);font-size:19px;font-weight:bold;padding:6px 16px;letter-spacing:4px;transform:rotate(-4deg);margin-top:8px}
+/* drift band */
+.band{margin-top:26px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--navy);padding:20px 26px}
+.band h2 span{font-size:17px;color:var(--muted);font-weight:400;margin-left:14px}
+.runrow{display:flex;align-items:flex-end;gap:18px;height:130px;margin-top:14px;padding:0 6px}
+.runbar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}
+.runbar .col{width:100%;background:var(--soft);border:1px solid var(--line);border-bottom:3px solid var(--navy);position:relative}
+.runbar .col i{position:absolute;left:0;right:0;bottom:0;background:var(--navy);opacity:.85}
+.runbar .num{font-size:22px;font-weight:bold;font-variant-numeric:tabular-nums}
+.runbar .lab{font-size:15px;color:var(--muted)}
+.bandmeta{display:flex;gap:40px;margin-top:14px;font-size:18px;color:var(--muted);align-items:center}
+.bandmeta b{color:var(--ink);font-size:20px}
+/* middle: ownership + verdicts */
+.mid{display:grid;grid-template-columns:1.05fr 1.5fr;gap:26px;margin-top:26px;flex:1;min-height:0}
+.panel{background:var(--card);border:1px solid var(--line);padding:20px 24px}
+.panel.own{border-top:5px solid var(--amber)}
+.panel.verd{border-top:5px solid var(--green)}
+.stack{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.orow{display:grid;grid-template-columns:92px 1fr 54px;gap:12px;align-items:center}
+.orow .who{font-size:19px;font-weight:bold}
+.orow .bar{height:30px;background:var(--soft);position:relative;border:1px solid var(--line)}
+.orow .bar i{position:absolute;left:0;top:0;bottom:0}
+.orow .n{font-size:22px;font-weight:bold;text-align:right;font-variant-numeric:tabular-nums}
+.orow.note{font-size:16px;color:var(--muted);line-height:1.55;grid-column:1/-1;margin-top:2px}
+.verdgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.vcard{border:1px solid var(--line);padding:16px 18px;position:relative;background:var(--paper)}
+.vcard h3{font-size:20px}
+.vcard .tag{position:absolute;top:-13px;left:14px;font-size:15px;font-weight:bold;color:#fff;padding:3px 12px;letter-spacing:2px}
+.vcard.pass .tag{background:var(--green)}.vcard.fail .tag{background:var(--red)}
+.vcard .big{font-size:42px;font-weight:bold;line-height:1.26;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+.vcard.pass .big{color:var(--green)}.vcard.fail .big{color:var(--red)}
+.vcard p{font-size:17px;line-height:1.6;color:var(--muted)}
+.vcard p b{color:var(--ink)}
+.vcard .ci{font-size:15px;font-variant-numeric:tabular-nums}
+.warn{margin-top:22px;margin-bottom:44px;border-left:8px solid var(--red);background:#f8ebe8;padding:16px 24px}
+.pq{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+.pq h3{font-size:18px;color:var(--navy)}
+.pqrow{display:grid;grid-template-columns:150px 1fr 64px 18px 64px;gap:10px;align-items:center;font-size:16px;margin:7px 0}
+.pqrow span{color:var(--muted)}
+.pqbar{height:16px;background:var(--soft);border:1px solid var(--line);position:relative}
+.pqbar i{position:absolute;left:0;top:0;bottom:0;background:var(--navy);opacity:.8}
+.pqrow b{font-variant-numeric:tabular-nums;font-weight:bold}
+.pqrow b.w{color:var(--green)}.pqrow b.w.bad{color:var(--red)}
+.pqrow em{font-style:normal;color:var(--muted);text-align:center}
+.pqn{font-size:15px;color:var(--muted);line-height:1.55;margin-top:8px}
+.warn h3{color:var(--red)}
+.warn p{font-size:18px;line-height:1.6}
+.footer{position:absolute;bottom:24px;left:58px;right:58px;font-size:15px;color:var(--muted);border-top:1px solid var(--line);padding-top:9px;display:flex;justify-content:space-between}
+a{color:inherit;text-decoration:none}
+</style></head><body><main>
+<header><div><div class="kicker">HARNESSRSI DAILY · 第 18 期 · 论文阅读图解</div><h1>榜单分数是一次抽奖：<br>同一个 Agent 跑七次，105→123 分</h1><p class="lead">对一台已上线的金融研究 Agent 做全面体检：分数本身在漂移，故障大多归 harness 层所有，而"改动是否可信"必须对着测得的噪声带来判。</p><div class="stamp">审计报告 AUDIT</div></div><div class="issue">2611.17939v1<br>arXiv 预印本 · Alomana<br>本项目重绘 · 非作者海报</div></header>
+
+<div class="band">
+<h2>① 分数是抽奖 <span>Vals Finance Agent Benchmark v2 参考配置，dev 集 18 题 × 149 项 rubric，同一配置连跑 7 次</span></h2>
+<div class="runrow">
+<div class="runbar"><div class="num">119</div><div class="col" style="height:96px"><i style="height:96px"></i></div><div class="lab">run 1</div></div>
+<div class="runbar"><div class="num">116</div><div class="col" style="height:86px"><i style="height:86px"></i></div><div class="lab">run 2</div></div>
+<div class="runbar"><div class="num">120</div><div class="col" style="height:100px"><i style="height:100px"></i></div><div class="lab">run 3</div></div>
+<div class="runbar"><div class="num">123</div><div class="col" style="height:108px"><i style="height:108px"></i></div><div class="lab">run 4</div></div>
+<div class="runbar"><div class="num">105</div><div class="col" style="height:66px"><i style="height:66px"></i></div><div class="lab">run 5</div></div>
+<div class="runbar"><div class="num">116</div><div class="col" style="height:90px"><i style="height:90px"></i></div><div class="lab">run 6</div></div>
+<div class="runbar"><div class="num">109</div><div class="col" style="height:76px"><i style="height:76px"></i></div><div class="lab">run 7</div></div>
+</div>
+<div class="bandmeta"><span>跨度 <b>18 格</b>＝12 个百分点 pass rate</span><span>相邻两跑间 <b>15–28 格</b>翻转</span><span>账单波动 <b>±17%</b>，单题成本 <b>0.16×–5.43×</b></span><span>默认晋级门槛（成本 −5% / +1 点）<b style="color:var(--red)">落在漂移带内</b></span></div>
+</div>
+
+<div class="mid">
+<div class="panel own">
+<h2>② 失败归谁修：模型是少数</h2>
+<p style="font-size:17px;color:var(--muted);margin-bottom:8px">20 条失败轨迹按"谁拥有修复手段"分类（owner-of-the-remedy，规则先行冻结）</p>
+<div class="stack">
+<div class="orow"><div class="who">policy 指令层</div><div class="bar"><i style="width:100%;background:var(--amber)"></i></div><div class="n">13</div></div>
+<div class="orow"><div class="who">tool 工具层</div><div class="bar"><i style="width:23%;background:var(--navy)"></i></div><div class="n">3</div></div>
+<div class="orow"><div class="who">data 数据层</div><div class="bar"><i style="width:0%;background:var(--muted)"></i></div><div class="n">0</div></div>
+<div class="orow"><div class="who">model 模型层</div><div class="bar"><i style="width:31%;background:var(--red)"></i></div><div class="n">4</div></div>
+<div class="orow note">四盲读者（三个模型家族）对"什么坏了"的判定 75/80 与分析器一致；但让他们归层，66/80 说模型——"谁拥有修复"与"谁出错"是两个不同的问题。</div>
+</div>
+</div>
+<div class="panel verd">
+<h2>③ 改动可信吗：同一套优化环，两份判决</h2>
+<div class="verdgrid">
+<div class="vcard pass"><div class="tag">通过 ✓</div><h3>结构性修复：成本臂</h3><div class="big">0.34×</div><p class="ci">成本比 95% CI [0.216, 0.580]——整条带低于噪声带 [0.83, 1/0.83]＝<b>真省钱</b></p><p>换便宜检索模型 + system prompt 一句工具用法指令；pass rate −3.7 pts CI [−8.9, +1.1]＝噪声内。</p></div>
+<div class="vcard fail"><div class="tag">否决 ✗</div><h3>案例性修复：准确率臂</h3><div class="big">+1.5 pts</div><p class="ci">held-out 增益 95% CI [−5.3, +7.2] 跨零＝<b>无法宣称</b></p><p>dev 上 +14 pts（130/149 超全部基线），五条歧义规则全部落在点上；到新题上不迁移，VSEC 三副本全掉。</p></div>
+</div>
+<p style="font-size:17px;line-height:1.6;color:var(--muted);margin-top:12px"><b style="color:var(--ink)">同一句话的两次命运：</b>"批量检索"写成工具描述 0.996× 被拒，写进 system prompt 0.844× 晋级——拥有修复的是层，不是措辞。</p>
+<div class="pq"><h3>省钱省在哪儿：逐题账单（3 副本合计，美元）</h3>
+<div class="pqrow"><span>PFE 披露题</span><div class="pqbar"><i style="width:100%"></i></div><b>$22.34</b><em>→</em><b class="w">$3.95</b></div>
+<div class="pqrow"><span>CZR（无解）</span><div class="pqbar"><i style="width:58%"></i></div><b>$13.01</b><em>→</em><b class="w">$2.35</b></div>
+<div class="pqrow"><span>ASPI（无解）</span><div class="pqbar"><i style="width:41%"></i></div><b>$9.26</b><em>→</em><b class="w">$5.33</b></div>
+<div class="pqrow"><span>MAR/WH</span><div class="pqbar"><i style="width:30%"></i></div><b>$6.63</b><em>→</em><b class="w">$1.60</b></div>
+<div class="pqrow"><span>CRM（变贵）</span><div class="pqbar"><i style="width:21%"></i></div><b>$4.70</b><em>↑</em><b class="w bad">$5.30</b></div>
+<p class="pqn">嵌套检索占基线账单 $71.17 中的 $62.91——省钱几乎全部来自这一层；CZR/ASPI 任何配置都过不了；CRM 是唯一变贵的题：129 轮、114 次单步计算器调用。</p>
+</div>
+</div>
+</div>
+
+<div class="warn"><h3>这张图没有证明什么</h3><p>单 Judge、单 Agent、9 道测试题 20 条轨迹——这是"解剖"而非总体估计；优化环没有"无诊断"对照臂，收益归属整个环而非诊断本身；accuracy winner 的对照复用了首次开箱基线（跨时间窗）。没有漂移测量和预写规则，作者自述会报告"+14 pts"——真实而无价值。</p></div>
+
+<footer class="footer"><span>来源：arXiv:2611.17939v1 §3 漂移、§4 归因、Table 2/4/6、§6 两臂与 Table 7–10；图为本项目重绘，全部数值为作者报告，未复现。</span><a href="https://arxiv.org/abs/2611.17939">arxiv.org/abs/2611.17939 · SOURCE.md / QA.md</a></footer>
+</main></body></html>

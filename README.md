@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 58 posters (including 2 from the earlier second issue).** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 58 posters (including 2 from the earlier second issue) plus 3 from the eighteenth issue = 61 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -15,13 +15,38 @@ Core question: *which non-weight component was improved, how was the change acce
   （13 张主卡＋36 张子卡，从本语料逆向归纳；评分判据全部出自这些卡。）
 - **A problem-first rating of the whole corpus**: every paper is first asked whether its question is real, open and consequential, then whether the mechanism's conditions hold — two layers, never summed.
   （全语料“先问问题、再看执行”的两层评价，不算总分。）
-- **A short reading list and a Reel**: 58 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
-  （58 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
+- **A short reading list and a Reel**: 61 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
+  （61 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
 
 ## Featured Reel（精选画报）
 
-Fifty-eight selected papers, with mechanism-specific layouts. Model provenance for the earlier 53 remains in their selection logs; issue 16 adds two checked and produced by the session-reported gpt-6-astra (backend not independently probed), and issue 17 adds three by glm-5.3. Numbers map to source sections or tables in `reel/<id>/SOURCE.md`, with actual visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [selection 15](research/scoring/runs/rsi-rolling-20261023-01/selection-015.md) · [selection 16](research/scoring/runs/rsi-rolling-20261023-01/selection-016.md) · [selection 17](research/scoring/runs/rsi-rolling-20261023-01/selection-017.md) · [Reel index](reel/README.md).
-（58 篇，按机制设计版式；历史模型见各期记录，第十六期 2 篇由会话报告的 gpt-6-astra、第十七期 3 篇由 glm-5.3 原文核对、逐数溯源与视觉验收。按新到旧排列。）
+Sixty-one selected papers, with mechanism-specific layouts. Model provenance for the earlier 53 remains in their selection logs; issue 16 adds two checked and produced by the session-reported gpt-6-astra (backend not independently probed), and issues 17–18 add three each by glm-5.3. Numbers map to source sections or tables in `reel/<id>/SOURCE.md`, with actual visual QA in `QA.md`. Selection logs: [selection 1](research/scoring/runs/rsi-l1-20261022-03/selection.md) · [selection 2](research/scoring/runs/rsi-l1-20261022-03/selection-002.md) · [selection 3](research/scoring/runs/rsi-rolling-20261023-01/selection-003.md) · [selection 4](research/scoring/runs/rsi-rolling-20261023-01/selection-004.md) · [selection 5](research/scoring/runs/rsi-rolling-20261023-01/selection-005.md) · [selection 6](research/scoring/runs/rsi-rolling-20261023-01/selection-006.md) · [selection 7](research/scoring/runs/rsi-rolling-20261023-01/selection-007.md) · [selection 8](research/scoring/runs/rsi-rolling-20261023-01/selection-008.md) · [selection 9](research/scoring/runs/rsi-rolling-20261023-01/selection-009.md) · [selection 10](research/scoring/runs/rsi-rolling-20261023-01/selection-010.md) · [selection 11](research/scoring/runs/rsi-rolling-20261023-01/selection-011.md) · [selection 12](research/scoring/runs/rsi-rolling-20261023-01/selection-012.md) · [selection 13](research/scoring/runs/rsi-rolling-20261023-01/selection-013.md) · [selection 14](research/scoring/runs/rsi-rolling-20261023-01/selection-014.md) · [selection 15](research/scoring/runs/rsi-rolling-20261023-01/selection-015.md) · [selection 16](research/scoring/runs/rsi-rolling-20261023-01/selection-016.md) · [selection 17](research/scoring/runs/rsi-rolling-20261023-01/selection-017.md) · [selection 18](research/scoring/runs/rsi-rolling-20261023-01/selection-018.md) · [Reel index](reel/README.md).
+（61 篇，按机制设计版式；历史模型见各期记录，第十六期 2 篇由会话报告的 gpt-6-astra、第十七、十八期各 3 篇由 glm-5.3 原文核对、逐数溯源与视觉验收。按新到旧排列。）
+
+<table>
+<tr>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.17939/poster.png"><img src="reel/2611.17939/poster.png" width="300" alt="金融Agent：榜单分数是一次抽奖"></a><br>
+<b><a href="https://arxiv.org/abs/2611.17939">2611.17939</a> · The leaderboard score is a draw</b><br>
+Seven identical runs of a shipped finance agent span 105–123/149 rubric cells (±17% bill). Judged against that measured drift under a pre-written rule, the structural fix (cheaper nested model) is a real 0.34× saving; the dev-specific +14-pt rules collapse to +1.5 CI [−5.3,+7.2] on held-out. One agent, nine questions — an anatomy, not an estimate.<br>
+同一配置跑七次分数差 18 格；没有漂移测量，"+14 分"真实而无价值。
+</td>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.15309/poster.png"><img src="reel/2611.15309/poster.png" width="300" alt="EvoTrias：自洽权分给谁"></a><br>
+<b><a href="https://arxiv.org/abs/2611.15309">2611.15309</a> · Where autonomy belongs</b><br>
+Splitting govern/propose/judge into three owners cuts 64% tokens vs a 4-agent baseline and scales to a 680K-line repo. The controlled exposure study: seeing the evaluator inflates Original +0.093 but OOD only +0.009 (EvoTrias exposed: OOD −0.020); protecting it keeps OOD above Original.<br>
+能看评估器源码的搜索会拟合固定用例；裁判要锁起来。
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+<a href="reel/2611.21056/poster.png"><img src="reel/2611.21056/poster.png" width="300" alt="Elite：先探索，后整合"></a><br>
+<b><a href="https://arxiv.org/abs/2611.21056">2611.21056</a> · Explore, then integrate</b><br>
+Self-improvement with zero downstream task evaluations in the loop: each generation explores multiple focused descendants from one parent, then re-implements a compatible subset as one coherent child (compile/import/assert gates only). 85.6% on SWE-bench Pro at 8.8× less wall-clock than DGM; transfers to Verified 73.3 / Polyglot 69.3.<br>
+环内不碰任务分也能自改进：整合互补机制比单打独斗强。
+</td>
+</tr>
+</table>
 
 <table>
 <tr>
