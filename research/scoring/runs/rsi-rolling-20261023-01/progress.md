@@ -319,3 +319,9 @@
 - 新增：5 篇（GitHub 查新，queue/2026-11-18-1120，材料 5 abstract）。
 - L1：inc-l1-23 15→本次 5/5（assessed 4，OOS 1——2508.00400 零售具身仿真环境，域属 Embodied 建议转仓重审）。L2：inc-l2-25 4/4——2504.00406 VerifiAgent P3/confirmed/to_l3；2411.00489 记忆综述 **P2→P1 降档**（与首版前 arXiv:2404.13501 同题同条件 vertical_port，封顶 P1）；2505.00675、2506.00886 P2/confirmed/park。
 - to_l3 池：+1（累计 14）。
+
+## 2026-11-20 12:17 patrol (glm-5.3)
+- Digest 74adde8 (+7 candidates): ingest 7 → L1 inc-l1-24 (6 to_l2, 1 park Meta-RTL vertical_port P1)
+- L2 inc-l2-26: 4 P3/confirmed/to_l3 (25380 harness-evolution vs weight-update, 25429 SkillPlumber, 25534 feedback-free skill erosion, 26132 AdaObs); 25214 P3/pending_experiment/park (audit sample, downgraded at L2); 26007 P3/pending_experiment/park
+- 抽查 seed 20261120 → 2611.25214 复核降级 park
+- 池 to_l3 (7d) = 9 + 4 = 13
