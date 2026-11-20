@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>把 harness 当研究对象</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}@page{size:1720px 1620px;margin:0}*{box-sizing:border-box}
+:root{--paper:#101418;--ink:#e8e6de;--muted:#8e949c;--blue:#5b8dbf;--teal:#57a893;--red:#c4574a;--amber:#c9973f;--line:#2c333c;--cell:#161c22;--cell2:#1a2129}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1720px;height:1620px;padding:46px 54px 86px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.kicker{font-size:16px;letter-spacing:3px;color:var(--blue);font-weight:bold}
+h1{font-size:46px;line-height:1.3;margin:12px 0 10px;letter-spacing:-1px;color:#fff}
+h1 em{font-style:normal;color:var(--amber)}
+.lead{font-size:19px;color:#a8aeb6;max-width:1300px;line-height:1.55}
+.lead b{color:#e8e6de}
+p{margin:0}h2{font-size:21px;margin:0 0 10px;color:#fff}h3{font-size:17px;margin:0 0 5px}
+/* main grid: duties matrix left, ladder right */
+.grid{display:grid;grid-template-columns:1.62fr 1fr;gap:26px;margin-top:26px;flex:1;min-height:0}
+/* duties matrix */
+.matrix{background:var(--cell);border:1px solid var(--line);padding:22px 24px;display:flex;flex-direction:column}
+.matrix .sub{font-size:14.5px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.mrow{display:grid;grid-template-columns:190px 1fr 1fr;gap:0;border-top:1px solid var(--line);flex:1;align-items:center}
+.mrow:first-of-type{border-top:none}
+.mrow.hd{font-size:14px;color:var(--muted);letter-spacing:1px;flex:0 0 30px;font-weight:bold}
+.mrow .d{font-size:16.5px;font-weight:bold;padding-right:12px;line-height:1.35}
+.mrow .c{font-size:14px;color:#a8aeb6;padding:7px 12px 7px 0;line-height:1.45;border-left:1px solid var(--line);padding-left:12px}
+.mrow .c.fail{color:#c98d84}
+.mrow .c .tag{display:block;font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:2px}
+/* right column */
+.rcol{display:flex;flex-direction:column;gap:22px;min-height:0}
+/* ladder */
+.ladder{background:var(--cell);border:1px solid var(--line);padding:22px 24px;flex:1;display:flex;flex-direction:column}
+.ladder .sub{font-size:14.5px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.rungs{display:flex;flex-direction:column;gap:10px;flex:1}
+.rung{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:stretch;border:1px solid var(--line);background:var(--cell2);padding:10px 14px}
+.rung .lv{font-size:24px;font-weight:bold;color:var(--muted);align-self:center}
+.rung .tx{font-size:14px;line-height:1.5;color:#a8aeb6}
+.rung .tx b{color:#e8e6de;display:block;font-size:15.5px;margin-bottom:2px}
+.rung.top{border-color:var(--teal);background:#14262a}
+.rung.top .lv{color:var(--teal)}
+.rung.top .tx b{color:var(--teal)}
+/* outcome taxonomy */
+.out5{background:var(--cell);border:1px solid var(--line);padding:20px 24px}
+.out5 .sub{font-size:14.5px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.ocells{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.oc{border:1px solid var(--line);padding:9px 10px;background:var(--cell2)}
+.oc .en{font-size:11.5px;color:var(--muted);letter-spacing:.2px;line-height:1.3}
+.oc .zh{font-size:14px;margin-top:3px;line-height:1.35;color:#e8e6de}
+.oc .zh b{display:block;font-size:13px}
+.oc.av .zh b{color:var(--teal)}.oc.uv .zh b{color:var(--amber)}.oc.fl .zh b{color:var(--red)}.oc.ui .zh b{color:var(--red)}
+/* bottom strip: 5 principles + M-HIR */
+.bottom{display:grid;grid-template-columns:1.55fr 1fr;gap:26px;margin-top:22px}
+.pnp{background:var(--cell);border:1px solid var(--line);padding:18px 24px}
+.pnp .sub{font-size:14.5px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pill{border:1px solid #3a4652;background:var(--cell2);padding:8px 14px;font-size:14.5px;line-height:1.4;color:#c4cad2}
+.pill b{color:var(--blue)}
+.mhir{background:#1c1f16;border:1px solid #3d4230;padding:18px 24px}
+.mhir h3{color:var(--amber);font-size:17px}
+.mhir p{font-size:14px;color:#a8aeb6;line-height:1.6;margin-top:6px}
+.mhir p b{color:#e8e6de}
+/* limits */
+.warn{margin-top:22px;border-left:8px solid var(--red);background:#2a1d1a;padding:14px 22px}
+.warn h3{color:#e08a7d;font-size:17px;margin:0 0 5px}
+.warn p{font-size:15px;line-height:1.6;color:#c4b8b2}
+.warn p b{color:#e08a7d}
+.footer{position:absolute;bottom:22px;left:54px;right:54px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:9px;display:flex;justify-content:space-between}
+</style></head><body><main>
+  <div class="kicker">论文雷达 · 概念框架 · 2605.13357</div>
+  <h1>别问模型行不行，问 <em>harness 给没给到位</em></h1>
+  <p class="lead">这篇是立场+框架文：把「模型–harness–环境」当分析单元，harness 本身当成<b>可枚举、可消融、可评估的研究对象</b>。人还在场，不是模型不行，而是运行时支撑缺位——本文把这件事形式化了。</p>
+
+  <div class="grid">
+    <section class="matrix">
+      <h2>11 项组件职责 × 契约 / 缺位失败模式</h2>
+      <p class="sub">每个组件绑定运行时契约与「缺了会怎么坏」；跑一遍任务，证据工件自动落袋（Table 1，原文枚举）。</p>
+      <div class="mrow hd"><div>职责</div><div>运行时契约（示意概括）</div><div>缺位失败模式</div></div>
+      <div class="mrow"><div class="d">任务规范</div><div class="c"><span class="tag">CONTRACT</span>需求可判定、可映射到检查</div><div class="c fail">完成声明无锚点</div></div>
+      <div class="mrow"><div class="d">上下文选择</div><div class="c"><span class="tag">CONTRACT</span>相关文件显式供给</div><div class="c fail">看错文件、表面补丁</div></div>
+      <div class="mrow"><div class="d">工具访问</div><div class="c"><span class="tag">CONTRACT</span>工具注册表+权限</div><div class="c fail">乱跑命令、误用接口</div></div>
+      <div class="mrow"><div class="d">项目记忆</div><div class="c"><span class="tag">CONTRACT</span>跨会话结构化留存</div><div class="c fail">重复踩坑、忘决策</div></div>
+      <div class="mrow"><div class="d">任务状态</div><div class="c"><span class="tag">CONTRACT</span>进度/分支显式记录</div><div class="c fail">半途漂移、状态丢失</div></div>
+      <div class="mrow"><div class="d">可观测性</div><div class="c"><span class="tag">CONTRACT</span>命令输出可解释</div><div class="c fail">误读测试失败</div></div>
+      <div class="mrow"><div class="d">失败归因</div><div class="c"><span class="tag">CONTRACT</span>失败先分类再改</div><div class="c fail">盲目重试、错层修补</div></div>
+      <div class="mrow"><div class="d">验证</div><div class="c"><span class="tag">CONTRACT</span>完成绑定证据链</div><div class="c fail">自宣完成、无回归检查</div></div>
+      <div class="mrow"><div class="d">权限</div><div class="c"><span class="tag">CONTRACT</span>边界显式声明</div><div class="c fail">越权改动、破坏面外</div></div>
+      <div class="mrow"><div class="d">熵审计</div><div class="c"><span class="tag">CONTRACT</span>维护负担入账（0–3 级）</div><div class="c fail">残留文件、测试弱化</div></div>
+      <div class="mrow"><div class="d">干预记录</div><div class="c"><span class="tag">CONTRACT</span>人工介入留痕归类</div><div class="c fail">人在补 harness 却无人知</div></div>
+    </section>
+    <div class="rcol">
+      <section class="ladder">
+        <h2>H0–H3 受控阶梯</h2>
+        <p class="sub">固定任务/仓库/模型，逐级暴露运行时支撑——把 harness 的贡献从模型贡献里剥离出来。</p>
+        <div class="rungs">
+          <div class="rung"><div class="lv">H0</div><div class="tx"><b>最小基线</b>只有任务描述+仓库文件；无工具注册、无项目记忆、无验证协议。</div></div>
+          <div class="rung"><div class="lv">H1–H2</div><div class="tx"><b>逐级暴露（缓存截断，定义未列）</b>按阶梯逐步给出运行时支撑组件。</div></div>
+          <div class="rung top"><div class="lv">H3</div><div class="tx"><b>全支撑</b>受控验证任务上：低级别只产最终 patch；高级别产出<b>复现日志、失败归因、确定性需求检查、结构化验证报告</b>。</div></div>
+        </div>
+      </section>
+      <section class="out5">
+        <h2>5 类结局：行为与证据分离</h2>
+        <p class="sub">「patch 对但没证据」从此可判——unverified 不再冒充 success。</p>
+        <div class="ocells">
+          <div class="oc av"><div class="en">autonomous_verified_success</div><div class="zh"><b>自主且已验证</b></div></div>
+          <div class="oc av"><div class="en">assisted_verified_success</div><div class="zh"><b>辅助下已验证</b></div></div>
+          <div class="oc uv"><div class="en">unverified_success</div><div class="zh"><b>对但无证据</b></div></div>
+          <div class="oc fl"><div class="en">failed</div><div class="zh"><b>失败</b></div></div>
+          <div class="oc ui"><div class="en">unsafe_invalid</div><div class="zh"><b>不安全/无效</b></div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <section class="pnp">
+      <h2>五条设计原则</h2>
+      <p class="sub">原文 P1–P5（Table 1/正文枚举）。</p>
+      <div class="pills">
+        <div class="pill"><b>P1</b> 运行时资源显式命名</div>
+        <div class="pill"><b>P2</b> 中介过程可追溯</div>
+        <div class="pill"><b>P3</b> 完成绑定需求级验证</div>
+        <div class="pill"><b>P4</b> 先归因再恢复</div>
+        <div class="pill"><b>P5</b> 维护负担与熵入账</div>
+      </div>
+    </section>
+    <section class="mhir">
+      <h3>M-HIR：把人工干预变成信号</h3>
+      <p>人告诉 agent 看哪个文件 = 上下文管理缺位；人解读测试失败 = 可观测性/归因缺位。<b>missing-harness 干预率</b>降下来，才算 harness 补上了人正在补的洞。</p>
+    </section>
+  </div>
+
+  <div class="warn">
+    <h3>这张图没有证明什么</h3>
+    <p><b>立场/框架文，仅一个受控验证任务</b>——「证据结构随级别变化」是单任务定性观察，无跨任务/跨模型数据；H1–H2 具体定义在缓存文本中截断（海报如实标注）；11 职责×失败模式的对应是原文枚举的<b>概念映射</b>，不是实证结论。本图不含任何性能数字，因为原文验证节选未提供可逐数核对的表。</p>
+  </div>
+<footer><span>数据：arXiv 2605.13357v1 · Table 1 组件职责 + H0–H3 阶梯节 + 结局分类节 + P1–P5（缓存为节选本，截断处已标注） · 本项目重绘，非作者海报，未复现实验</span><span>selection-019 · 2026-11-20</span></footer>
+</main></body></html>

@@ -6,7 +6,7 @@
 Core question: *which non-weight component was improved, how was the change accepted and retained, and did later tasks actually improve because of it?* Scope and evidence levels: [EVIDENCE](docs/EVIDENCE.md).
 （核心问题：究竟改进了哪个非权重组件，如何接受并留存，之后的任务是否因此变好？）
 
-> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 58 posters (including 2 from the earlier second issue) plus 3 from the eighteenth issue = 61 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
+> Current run: [`rsi-l1-20261022-03`](research/scoring/runs/rsi-l1-20261022-03/progress.md) · rules `problem-core-v1.1` · **1597 papers screened at L1 → 978 checked at L2 (1003 L2 records incl. audits and revisions) → 562 P3-confirmed candidates → 15 posters in the Reel; rolling run [`rsi-rolling-20261023-01`](research/scoring/runs/rsi-rolling-20261023-01/progress.md) added 38 → 58 posters (including 2 from the earlier second issue) plus 3 from the eighteenth issue plus 3 from the nineteenth issue = 64 posters.** Tiers rank reading priority. They are not peer review and do not endorse any venue.
 > （档位是“值不值得读”的判断，不是审稿结论。）
 
 **What this repo gives you（本项目贡献）**
@@ -15,8 +15,8 @@ Core question: *which non-weight component was improved, how was the change acce
   （13 张主卡＋36 张子卡，从本语料逆向归纳；评分判据全部出自这些卡。）
 - **A problem-first rating of the whole corpus**: every paper is first asked whether its question is real, open and consequential, then whether the mechanism's conditions hold — two layers, never summed.
   （全语料“先问问题、再看执行”的两层评价，不算总分。）
-- **A short reading list and a Reel**: 61 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
-  （61 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
+- **A short reading list and a Reel**: 64 selected papers checked against full texts and turned into source-mapped posters; candidate-pool counts remain in the run logs.
+  （64 篇经原文核对做成逐数溯源的画报；候选池数量以各 run 记录为准。）
 
 ## Featured Reel（精选画报）
 

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>生产日志的归因路由</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}@page{size:1240px 1840px;margin:0}*{box-sizing:border-box}
+:root{--paper:#f6f4ed;--ink:#26241c;--muted:#75725f;--navy:#31557e;--red:#a63a2e;--green:#3a6b4f;--amber:#a8772a;--line:#d5d1bf;--soft:#edeada;--card:#fffdf7}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1240px;height:1840px;padding:44px 52px 84px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.kicker{font-size:16px;letter-spacing:3px;color:var(--navy);font-weight:bold}
+h1{font-size:46px;line-height:1.3;margin:12px 0 10px;letter-spacing:-1px}
+h1 em{font-style:normal;color:var(--red)}
+.lead{font-size:19px;color:var(--muted);max-width:900px;line-height:1.55}
+p{margin:0}h2{font-size:22px;margin:0 0 8px}h3{font-size:18px;margin:0 0 6px}
+/* waterfall before/after */
+.wf{margin-top:26px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--navy);padding:22px 26px}
+.wfgrid{display:grid;grid-template-columns:1fr 96px 1fr;gap:14px;align-items:stretch;margin-top:8px}
+.wfcol h3{font-size:17px;color:var(--muted)}
+.wfcol h3 b{color:var(--ink)}
+.wfcol .pile{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.slab{padding:11px 14px;color:#fff;font-size:15.5px;display:flex;justify-content:space-between;align-items:baseline;border-radius:3px}
+.slab b{font-size:19px;font-variant-numeric:tabular-nums}
+.slab.unk{background:var(--red)}
+.slab.ok{background:var(--navy)}
+.slab.mid{background:var(--amber)}
+.wfmid{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
+.wfmid .ar{font-size:34px;color:var(--red)}
+.wfmid .delta{font-size:16px;color:var(--muted);text-align:center;line-height:1.45}
+.wfmid .delta b{color:var(--red);font-size:20px;display:block}
+.wfnote{margin-top:14px;font-size:15.5px;color:var(--muted);line-height:1.55;border-top:1px dashed var(--line);padding-top:10px}
+.wfnote b{color:var(--ink)}
+/* dest flow */
+.dest{display:flex;gap:10px;margin-top:8px}
+.dcell{flex:1;border:1px solid var(--line);background:var(--soft);padding:9px 6px;text-align:center}
+.dcell .n{font-size:22px;font-weight:bold;font-variant-numeric:tabular-nums;color:var(--navy)}
+.dcell .t{font-size:13px;color:var(--muted);margin-top:2px}
+/* arms funnel */
+.arms{margin-top:24px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--green);padding:22px 26px}
+.armgrid{display:grid;grid-template-columns:150px 1fr;gap:16px;margin-top:10px}
+.armbar{display:flex;height:44px;border-radius:3px;overflow:hidden}
+.armbar div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:14.5px;font-variant-numeric:tabular-nums}
+.armbar .rej{background:#b9b2a0}
+.armbar .acc{background:var(--green)}
+.armbar .ref{background:var(--navy)}
+.armmeta{display:flex;flex-direction:column;gap:8px;font-size:15px;color:var(--muted);line-height:1.5}
+.armmeta b{color:var(--ink)}
+.lad{margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.ladcell{border:1px solid var(--line);padding:12px 14px;background:var(--paper)}
+.ladcell .a{font-size:14px;color:var(--muted)}
+.ladcell .v{font-size:22px;font-weight:bold;font-variant-numeric:tabular-nums;margin-top:2px}
+.ladcell .v b{color:var(--green)}
+/* judge vs tree */
+.jv{margin-top:24px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--amber);padding:22px 26px}
+.jvgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+.flowrow{display:grid;grid-template-columns:1fr 26px 1fr;gap:6px;align-items:center;margin:7px 0;font-size:15px}
+.flowrow .from{background:var(--soft);border:1px solid var(--line);padding:6px 10px;border-radius:3px;display:flex;justify-content:space-between}
+.flowrow .to{background:#e7ede3;border:1px solid var(--line);padding:6px 10px;border-radius:3px;display:flex;justify-content:space-between}
+.flowrow .f{color:var(--muted);text-align:center}
+.flowrow b{font-variant-numeric:tabular-nums}
+.jvnote{margin-top:12px;font-size:15px;color:var(--muted);line-height:1.55;border-top:1px dashed var(--line);padding-top:10px}
+.jvnote b{color:var(--ink)}
+/* null control */
+.null{margin-top:24px;border:1px dashed var(--ink);background:var(--card);padding:18px 24px}
+.null h3{font-size:18px}
+.null p{font-size:15.5px;color:var(--muted);line-height:1.6;margin-top:4px}
+.null p b{color:var(--red)}
+/* limits */
+.warn{margin-top:24px;border-left:8px solid var(--red);background:#f5e8e4;padding:14px 20px}
+.warn h3{color:var(--red);font-size:17px;margin:0 0 5px}
+.warn p{font-size:15px;line-height:1.6;color:#4a4238}
+.warn p b{color:var(--red)}
+.footer{position:absolute;bottom:22px;left:52px;right:52px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:9px;display:flex;justify-content:space-between}
+</style></head><body><main>
+  <div class="kicker">论文雷达 · 部署审计 · 2611.15700</div>
+  <h1>2,174 个生产问题里，<em>四成没法归因</em>——先修归因，再修系统</h1>
+  <p class="lead">AskALCF 是 HPC 用户支持线上跑的日志分析与改进管线：先判断每条失败答案是「文档缺 / 检索失败 / 提示词 / 模型 / 工具」哪一种，再把每类失败路由到对应修复。核心一步：两域充分性测试区分「文档根本没有」与「有但没检索到」。</p>
+
+  <section class="wf">
+    <h2>同 2,174 turns，训练前后对照（受控：输入完全相同）</h2>
+    <div class="wfgrid">
+      <div class="wfcol">
+        <h3>训练前 · <b>900 turns 无法归因</b></h3>
+        <div class="pile">
+          <div class="slab unk"><span>unknown</span><b>41.4%</b></div>
+          <div class="slab ok"><span>已归因 turns</span><b>924</b></div>
+        </div>
+      </div>
+      <div class="wfmid"><div class="ar">⟶</div><div class="delta"><b>900→309</b>unknown 41.4%→14.2%</div></div>
+      <div class="wfcol">
+        <h3>上线路由 · <b>仅 309 无法归因</b></h3>
+        <div class="pile">
+          <div class="slab unk" style="background:#c47a6f"><span>unknown</span><b>14.2%</b></div>
+          <div class="slab ok"><span>已归因 turns</span><b>1,295</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="dest">
+      <div class="dcell"><div class="n">198</div><div class="t">no_failure</div></div>
+      <div class="dcell"><div class="n">150</div><div class="t">knowledge</div></div>
+      <div class="dcell"><div class="n">147</div><div class="t">retrieval</div></div>
+      <div class="dcell"><div class="n">75</div><div class="t">prompt</div></div>
+      <div class="dcell"><div class="n">106</div><div class="t">仍 unknown</div></div>
+    </div>
+    <p class="wfnote">机制：729 turns 原先<b>检索测试根本没给出裁决</b>，684 个因此掉进 unknown；修好检索裁决后它们各归其位——是<b>证据覆盖变好</b>，不是归因口径变松。</p>
+  </section>
+
+  <section class="arms">
+    <h2>改归因器本身：16 个 harness 变体，3 个被接受</h2>
+    <div class="armgrid">
+      <div class="armbar"><div class="rej" style="flex:9">9 拒绝</div><div class="acc" style="flex:3">3 接受</div><div class="ref" style="flex:4">4 参照</div></div>
+      <div class="armmeta">被拒的多数是<b>不换证据、只想改 judge 结论</b>；被接受的三个都改了<b>证据的解释与组合方式</b>。4 个参照臂含基线、null 对照与两次复现。</div>
+    </div>
+    <div class="lad">
+      <div class="ladcell"><div class="a">基线（门关闭）</div><div class="v">108/150</div></div>
+      <div class="ladcell"><div class="a">A2 充分性+澄清</div><div class="v">120/150</div></div>
+      <div class="ladcell"><div class="a">A3 严格澄清规则（采用）</div><div class="v"><b>123/150</b></div></div>
+    </div>
+    <p class="jvnote" style="margin-top:12px">专家一致率 108→123（150 turns 冻结参照）；session-disjoint 评估split 35/52→40/52。<b>评估 turns 不用于提出或挑选任何 arm。</b></p>
+  </section>
+
+  <section class="jv">
+    <h2>规则树 vs Agent Judge：分歧 354/2169 (16.3%)</h2>
+    <div class="jvgrid">
+      <div>
+        <div class="flowrow"><div class="from"><span>model</span><b>59</b></div><div class="f">→</div><div class="to"><span>no_failure</span><b></b></div></div>
+        <div class="flowrow"><div class="from"><span>unknown</span><b>45</b></div><div class="f">→</div><div class="to"><span>knowledge</span><b></b></div></div>
+        <div class="flowrow"><div class="from"><span>prompt</span><b>36</b></div><div class="f">→</div><div class="to"><span>no_failure</span><b></b></div></div>
+        <div class="flowrow"><div class="from"><span>model</span><b>31</b></div><div class="f">→</div><div class="to"><span>prompt</span><b></b></div></div>
+      </div>
+      <div>
+        <p class="jvnote" style="border:none;padding:0;margin-top:0">judge 少归 model（85 vs 159）、少留 unknown（205 vs 306）；分歧集中在支持台最关心的两类：<b>怪模型</b>和<b>说不清</b>。置信度门失败——置信度反映证据多寡而非校准概率；规则条件门 +7–9pp 且九 route 修正<b>零回归</b>。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="null">
+    <h3>Null 对照：小幅提升可能是噪声</h3>
+    <p>语义中性的编辑也改变了 171 条路由里的 9 与 11 条——只因改动 prompt 字节<b>绕过了缓存</b>。两次复现里只有 2 turns 都变：不稳定集不是固定子集，删不掉。所以 null 臂当<b>噪声地板</b>：只有目标案例升且对照稳定才接受一个改动。曾有一次 rubric 修订把一致率从 72% 拉到 66%，被回滚。</p>
+  </section>
+
+  <div class="warn">
+    <h3>这张图没有证明什么</h3>
+    <p>准确率只在 <b>150 条专家标注 turns</b> 上建立，其余 2,024 条无参照；标注分层抽样非均匀，不能外推到全表。修复注入绕过检索环节，属<b>上界口径</b>；单一专家、多标签；部署时 merge/reindex 未完成。这是生产系统的受控改进记录，<b>不是</b>「自改进已在生产可靠」的证据。</p>
+  </div>
+<footer><span>数据：arXiv 2611.15700v1 · §V-B 生产对照 + Table II 受训路径 + §V-D judge 对照 + null 对照节 · 本项目重绘，非作者海报，未复现实验</span><span>selection-019 · 2026-11-20</span></footer>
+</main></body></html>
