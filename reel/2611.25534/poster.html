@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>重写正在磨掉专家知识</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}@page{size:1240px 1840px;margin:0}*{box-sizing:border-box}
+:root{--paper:#ffffff;--ink:#1f2129;--muted:#75798a;--navy:#26355f;--red:#b23a2f;--green:#2c6e49;--amber:#a8731f;--line:#d8dbe5;--soft:#f1f2f8;--dark:#20243a}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1240px;height:1840px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+p{margin:0}
+/* ===== top band ===== */
+.head{background:var(--dark);color:#eef0f6;padding:42px 52px 36px}
+.kicker{font-size:15px;letter-spacing:3px;color:#9db4d8;font-weight:bold}
+h1{font-size:48px;line-height:1.28;margin:12px 0 10px;letter-spacing:-1px;color:#fff}
+h1 em{font-style:normal;color:#e88f6b}
+.lead{font-size:18.5px;color:#b8c0d4;line-height:1.6;max-width:1100px}
+.lead b{color:#fff;font-weight:bold}
+.hmeta{display:flex;gap:14px;margin-top:20px}
+.hm{background:#242b45;border:1px solid #3a4260;border-radius:8px;padding:10px 16px;flex:1}
+.hm .v{font-size:22px;font-weight:bold;color:#e8b04b;font-variant-numeric:tabular-nums}
+.hm .k{font-size:13px;color:#8b93a8;margin-top:2px;line-height:1.4}
+/* ===== body ===== */
+.body{flex:1;padding:32px 52px 86px;display:flex;flex-direction:column;min-height:0}
+.body h2{font-size:23px;margin:0 0 6px;color:var(--navy)}
+.body h2 .sub{font-size:15px;color:var(--muted);font-weight:normal;margin-left:10px}
+.body .intro{font-size:15.5px;color:#4a4e5e;line-height:1.55;margin-bottom:16px}
+.body .intro b{color:var(--ink)}
+/* erosion curve */
+.curvebox{border:1px solid var(--line);background:#fff;padding:18px 22px 14px;margin-bottom:22px}
+.cx{position:relative;height:330px}
+.cx svg{position:absolute;inset:0}
+.cx .lbl{position:absolute;font-size:13.5px;color:var(--muted);line-height:1.35}
+.cx .lbl b{color:var(--ink)}
+.cx .dotr{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 0 0 1px var(--red)}
+.legend{display:flex;gap:26px;font-size:14px;color:#4a4e5e;margin-top:10px;align-items:center}
+.legend .sw{display:inline-block;width:22px;height:4px;border-radius:2px;margin-right:7px;vertical-align:middle}
+.cnote{font-size:14px;color:var(--muted);line-height:1.5;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+.cnote b{color:var(--ink)}
+/* item survival */
+.midgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}
+.panel{border:1px solid var(--line);padding:18px 22px;background:#fff;display:flex;flex-direction:column}
+.panel h3{font-size:19px;margin:0 0 4px}
+.panel .sub{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+/* survival bars */
+.sgroup{display:flex;flex-direction:column;gap:12px;flex:1;justify-content:center}
+.srow{display:flex;align-items:center;gap:10px}
+.srow .sl{flex:0 0 178px;font-size:14px;color:#4a4e5e;line-height:1.35}
+.srow .bar{flex:1;height:24px;background:var(--soft);border:1px solid var(--line);border-radius:5px;position:relative;overflow:hidden}
+.srow .bar i{position:absolute;left:0;top:0;bottom:0;background:#7d8bb5}
+.srow.surv .bar i{background:var(--green)}
+.srow.surv .sl b{color:var(--green)}
+.srow .sv{flex:0 0 52px;font-size:16px;font-weight:bold;text-align:right;font-variant-numeric:tabular-nums}
+.srow.surv .sv{color:var(--green)}
+.srow.die .bar i{background:var(--red)}
+.srow.die .sv{color:var(--red)}
+.snote{font-size:13.5px;color:var(--muted);line-height:1.5;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.snote b{color:var(--ink)}
+/* mechanism: toward prior */
+.prior{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
+.prow{display:flex;align-items:center;gap:12px}
+.prow .pl{flex:0 0 200px;font-size:14.5px;color:#4a4e5e;line-height:1.35}
+.ptrack{flex:1;height:20px;background:var(--soft);border:1px solid var(--line);border-radius:10px;position:relative}
+.pknob{position:absolute;top:-4px;width:6px;height:26px;border-radius:3px}
+.pknob.orig{background:#8b93a8}
+.pknob.r5{background:var(--amber)}
+.pknob.r30{background:var(--red)}
+.pknob.selfw{background:var(--navy)}
+.plegend{display:flex;gap:18px;font-size:13px;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+.plegend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle}
+/* restore + skilldiff */
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}
+.rrow{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
+.rline{display:flex;align-items:center;gap:10px}
+.rline .rl{flex:0 0 210px;font-size:14px;color:#4a4e5e;line-height:1.35}
+.rtrack{flex:1;height:18px;background:var(--soft);border:1px solid var(--line);border-radius:9px;position:relative}
+.rknob{position:absolute;top:-4px;width:6px;height:24px;border-radius:3px}
+.rknob.lost{background:#8b93a8}
+.rknob.rest-out{background:var(--green)}
+.rknob.rest-in{background:var(--amber)}
+/* skilldiff mock */
+.sdbox{border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.sdhead{background:var(--navy);color:#fff;font-size:14px;padding:8px 14px;font-weight:bold;letter-spacing:1px}
+.sdline{font-size:14.5px;line-height:1.65;padding:3px 14px;color:#3a3e4e;border-top:1px solid var(--soft)}
+.sdline.focus{background:#fdf6ec;border-left:3px solid var(--amber);color:var(--ink)}
+.sdline.focus .tag{display:inline-block;background:var(--amber);color:#fff;font-size:11.5px;padding:1px 7px;border-radius:4px;margin-right:7px;font-weight:bold;vertical-align:middle}
+.sdnote{font-size:13.5px;color:var(--muted);padding:8px 14px;background:var(--soft);line-height:1.5}
+/* verdict + footer */
+.verdict{background:#f4f8f2;border-left:4px solid var(--green);padding:14px 18px;font-size:15.5px;line-height:1.6;color:#2e4a3a;margin-bottom:16px}
+.verdict b{color:var(--green)}
+.limit{background:#fbf3ef;border-left:4px solid var(--red);padding:12px 18px;font-size:14.5px;line-height:1.55;color:#5a3a34}
+.limit b{color:var(--red)}
+footer{position:absolute;left:52px;right:52px;bottom:22px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:9px}
+</style></head><body><main>
+<section class="head">
+  <div class="kicker">FEEDBACK-FREE 自演化 · 技能侵蚀 · ARXIV 2611.25534</div>
+  <h1>没有反馈的重写，正在<em>磨掉</em>专家知识</h1>
+  <p class="lead">模型逐轮重写专家技能，不给任何任务、运行或判断。30 轮后每个模型、每个基准都<b>变差</b>——技能被拉向模型自己会写的东西，而<b>模型写不出的知识最先丢失</b>。把它标回去，成绩就回来。</p>
+  <div class="hmeta">
+    <div class="hm"><div class="v">−15.0pp</div><div class="k">SkillsBench 30 轮平均降幅（六模型）</div></div>
+    <div class="hm"><div class="v">−7.1pp</div><div class="k">第一轮重写后的平均损失</div></div>
+    <div class="hm"><div class="v">23.1% vs 84.2%</div><div class="k">先验外 vs 全自写都含条目 30 轮存活率</div></div>
+    <div class="hm"><div class="v">+4.8pp</div><div class="k">SkillDiff 标记（不改一字）六 agent 平均回升</div></div>
+  </div>
+</section>
+<section class="body">
+  <h2>侵蚀曲线：从第一轮就开始掉，30 轮后技能约等于没有</h2>
+  <p class="intro">每轮重写只见技能文本与一句话主题；同模型再用重写后的技能当 agent 跑任务。曲线为六模型（GPT-5.6-Luna / GPT-6.1-Sol / MiMo-V2.5-Pro / Claude Haiku 5.5 / Qwen3.7-Plus / Qwen3.8-Flash）平均示意，重绘自原文 Fig.1。</p>
+  <div class="curvebox">
+    <div class="cx">
+      <svg width="1196" height="330" viewBox="0 0 1196 330">
+        <line x1="60" y1="290" x2="1150" y2="290" stroke="#c9ccd8" stroke-width="1.5"/>
+        <line x1="60" y1="230" x2="1150" y2="230" stroke="#e5e7f0" stroke-width="1"/>
+        <line x1="60" y1="170" x2="1150" y2="170" stroke="#e5e7f0" stroke-width="1"/>
+        <line x1="60" y1="110" x2="1150" y2="110" stroke="#e5e7f0" stroke-width="1"/>
+        <line x1="60" y1="50" x2="1150" y2="50" stroke="#e5e7f0" stroke-width="1"/>
+        <text x="52" y="294" font-size="12" fill="#75798a" text-anchor="end">0</text>
+        <text x="52" y="114" font-size="12" fill="#75798a" text-anchor="end">−7</text>
+        <text x="52" y="54" font-size="12" fill="#75798a" text-anchor="end">−14</text>
+        <!-- no-skill reference band -->
+        <rect x="60" y="103" width="1084" height="18" fill="#b23a2f" opacity="0.10"/>
+        <line x1="60" y1="103" x2="1150" y2="103" stroke="#b23a2f" stroke-width="1.4" stroke-dasharray="7 5"/>
+        <!-- erosion polyline: y = 290 + v*(240/14) v=negative -->
+        <polyline points="60,290 234,168 408,127 582,98 756,88 930,82 1144,76" fill="none" stroke="#b23a2f" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+        <!-- dots -->
+        <circle cx="60" cy="290" r="7" fill="#b23a2f" stroke="#fff" stroke-width="2.5"/>
+        <circle cx="234" cy="168" r="7" fill="#b23a2f" stroke="#fff" stroke-width="2.5"/>
+        <circle cx="408" cy="127" r="7" fill="#b23a2f" stroke="#fff" stroke-width="2.5"/>
+        <circle cx="582" cy="98" r="7" fill="#b23a2f" stroke="#fff" stroke-width="2.5"/>
+        <circle cx="1144" cy="76" r="7" fill="#b23a2f" stroke="#fff" stroke-width="2.5"/>
+        <!-- x labels -->
+        <text x="60" y="312" font-size="13" fill="#75798a" text-anchor="middle">原始</text>
+        <text x="234" y="312" font-size="13" fill="#75798a" text-anchor="middle">第1轮</text>
+        <text x="408" y="312" font-size="13" fill="#75798a" text-anchor="middle">第5轮</text>
+        <text x="582" y="312" font-size="13" fill="#75798a" text-anchor="middle">第10轮</text>
+        <text x="1144" y="312" font-size="13" fill="#75798a" text-anchor="middle">第30轮</text>
+        <!-- value labels -->
+        <text x="76" y="278" font-size="14" fill="#1f2129" font-weight="bold">0</text>
+        <text x="250" y="156" font-size="14" fill="#b23a2f" font-weight="bold">−7.1</text>
+        <text x="424" y="115" font-size="14" fill="#b23a2f" font-weight="bold">−10.9</text>
+        <text x="598" y="86" font-size="14" fill="#b23a2f" font-weight="bold">~−13</text>
+        <text x="1122" y="64" font-size="14" fill="#b23a2f" font-weight="bold">−14.6</text>
+      </svg>
+      <div class="lbl" style="right:170px;top:78px;color:#b23a2f"><b>无技能水平</b>（LogicBench 30 轮后<br>= 无技能；MedCalc 甚至低于）</div>
+    </div>
+    <div class="legend"><span><span class="sw" style="background:#b23a2f"></span>SkillsBench 平均 pass rate 相对原始技能的损失（六模型均值）</span><span><span class="sw" style="background:#b23a2f;opacity:.35"></span>30 轮后约与“没有技能”同值</span></div>
+    <p class="cnote">六个模型 × 三基准（SkillsBench 87 任务多步 / LogicBench 760 题 / MedCalc-Bench 1100 题单次提示）全部下降；30 轮后各 agent 比原始技能低 <b>10.3–23.0pp</b>；LogicBench 86.2%→71.4%（=无技能），MedCalc 89.7%→78.7%（&lt;无技能 81.1%）。</p>
+  </div>
+
+  <div class="midgrid">
+    <div class="panel">
+      <h3>谁先被磨掉：模型写不出的知识</h3>
+      <div class="sub">按“10 份自写技能中有几份含该条目”分组，30 轮重写后的存活率（LLM 判存，跨三基准）</div>
+      <div class="sgroup">
+        <div class="srow die"><div class="sl">0/10 含（先验外）</div><div class="bar"><i style="width:23.1%"></i></div><div class="sv">23.1%</div></div>
+        <div class="srow"><div class="sl">1–5/10 含</div><div class="bar"><i style="width:56%"></i></div><div class="sv">~56%</div></div>
+        <div class="srow"><div class="sl">6–9/10 含</div><div class="bar"><i style="width:74%"></i></div><div class="sv">~74%</div></div>
+        <div class="srow surv"><div class="sl"><b>10/10 全含（模型必写）</b></div><div class="bar"><i style="width:84.2%"></i></div><div class="sv">84.2%</div></div>
+      </div>
+      <p class="snote">存活率随接近先验<b>单调上升</b>，gap <b>61.1pp</b>；第一轮就出现；列表项/段落/代码块/标题各类内容一致；换 judge（GPT-6.1-Sol 复验 20 任务）gap 仍 <b>49.5/52.5pp</b>。中间两档为趋势示意，端点与单调性见原文 Fig.3。</p>
+    </div>
+    <div class="panel">
+      <h3>方向：整篇文本滑向模型先验</h3>
+      <div class="sub">TF-IDF 余弦距离（÷自写技能两两距离），越小越像模型自己写的</div>
+      <div class="prior">
+        <div class="prow"><div class="pl">专家原始技能</div><div class="ptrack"><div class="pknob orig" style="left:2%"></div><div class="pknob selfw" style="left:88%"></div></div></div>
+        <div class="prow"><div class="pl">第 5 轮重写</div><div class="ptrack"><div class="pknob r5" style="left:34%"></div></div></div>
+        <div class="prow"><div class="pl">第 30 轮重写</div><div class="ptrack"><div class="pknob r30" style="left:38%"></div></div></div>
+        <div class="plegend">
+          <span><span class="sw" style="background:#8b93a8"></span>原始 1.37</span>
+          <span><span class="sw" style="background:#a8731f"></span>第 5 轮 1.19</span>
+          <span><span class="sw" style="background:#b23a2f"></span>第 30 轮 1.22</span>
+          <span><span class="sw" style="background:#26355f"></span>自写技能 ≈1.0</span>
+        </div>
+      </div>
+      <p class="snote">距离头几轮骤降后走平，<b>但成绩继续掉</b>——整篇距离看不出后几轮仍在丢的是哪几条。于是下钻到条目级（左图）。</p>
+    </div>
+  </div>
+
+  <div class="twocol">
+    <div class="panel">
+      <h3>把丢失的条目放回去：先验外的更值钱</h3>
+      <div class="sub">从第 30 轮技能出发，只恢复一类丢失条目后跑 SkillsBench（示意，恢复幅度对比见原文 §3.3）</div>
+      <div class="rrow">
+        <div class="rline"><div class="rl">不恢复（30 轮残本）</div><div class="rtrack"><div class="rknob lost" style="left:3%"></div></div></div>
+        <div class="rline"><div class="rl">只恢复<b>先验内</b>丢失条目</div><div class="rtrack"><div class="rknob rest-in" style="left:42%"></div></div></div>
+        <div class="rline"><div class="rl">只恢复<b>先验外</b>丢失条目</div><div class="rtrack"><div class="rknob rest-out" style="left:72%"></div></div></div>
+      </div>
+      <p class="snote">恢复先验外内容<b>多挽回</b>的成绩显著高于恢复先验内内容——选择性丢失是下降的原因，不是伴随现象。</p>
+    </div>
+    <div class="panel">
+      <h3>SkillDiff：不重写，只标记</h3>
+      <div class="sdbox">
+        <div class="sdhead">SKILL.MD（原文一字不改，仅加标记）</div>
+        <div class="sdline">通用操作步骤——模型自己也会写</div>
+        <div class="sdline focus"><span class="tag">FOCUS</span>导出前必须先跑 data-check.sh --strict（专家独有，模型从不自写）</div>
+        <div class="sdline focus"><span class="tag">FOCUS</span>异常码 E-17 走回滚分支而非重试（专家独有）</div>
+        <div class="sdline">常用参数说明——接近模型先验</div>
+        <div class="sdnote">标记条目 = 10 份自写技能都<b>不含</b>的条目；删掉标记与说明行即字节级还原原文。六 agent 全部增益，平均 <b>+4.8pp</b>（同批对照控漂移）。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict"><b>结论：</b>专家技能的价值主要在模型先验之外的知识；无反馈重写保不住它。要么给反馈（但反馈可被利用），要么像 SkillDiff 一样把已有知识<b>标注出来让 agent 用上</b>——“改文字”不是维护技能的唯一路径。</div>
+  <div class="limit"><b>限制：</b>重写轮次为递归链式设计（每轮基于上一轮），未做分支/温度敏感性分析；条目存亡由 LLM judge 判定（已换 judge 复验，仍非人工全量）；SkillDiff 增益仅测于 SkillsBench 多步设定，单提示场景未验证；自写技能仅 10 份采样先验，条目分组边界对采样量敏感。</div>
+  <footer><span>How Feedback-Free Self-Evolution Reshapes Agent Skills: A Systematic Study · arXiv 2611.25534v1 · 2026-11-19</span><span>数值映射见 SOURCE.md · 海报由本仓工具链渲染</span></footer>
+</section>
+</main></body></html>
