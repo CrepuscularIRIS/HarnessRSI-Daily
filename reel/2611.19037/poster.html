@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>批评家不是免费加件：先审计，再信任</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}
+@page{size:1600px 1680px;margin:0}
+*{box-sizing:border-box}
+:root{--paper:#f7f5f1;--ink:#1f232c;--muted:#73787f;--card:#ffffff;--line:#ddd8cd;
+ --red:#b02a2a;--red-bg:#f9e8e6;--red-deep:#7e1a1a;
+ --teal:#0f6b6b;--teal-bg:#e2efec;--teal-deep:#0b4b4b;
+ --slate:#44506b;--slate-bg:#e9ecf3;--gold:#8a6d1f;--gold-bg:#f5eed9}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1600px;height:1680px;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:46px 52px 70px}
+p{margin:0}
+.kicker{font-size:16px;letter-spacing:3px;color:var(--red);font-weight:bold}
+h1{font-size:51px;line-height:1.2;margin:12px 0 10px;letter-spacing:-1px;font-weight:bold}
+h1 em{font-style:normal;color:var(--red)}
+.lead{font-size:18.5px;color:#4b505c;line-height:1.58;max-width:1490px}
+.lead b{color:var(--ink)}
+/* four-arm console */
+.console{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px 20px;margin:22px 0 20px}
+.console .cap{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.console h2{font-size:21px;margin:0}
+.console .cap .r{font-size:13.5px;color:var(--muted)}
+.lanes{display:flex;flex-direction:column;gap:14px}
+.lane{display:grid;grid-template-columns:196px 1fr 122px;align-items:center;gap:14px}
+.lane .nm{font-size:15px;font-weight:bold;line-height:1.3}
+.lane .nm small{display:block;font-weight:normal;color:var(--muted);font-size:12px}
+.lane .rail{height:58px;border-radius:9px;background:#f0ede6;position:relative;overflow:visible}
+.lane .rail .tick{position:absolute;top:-6px;bottom:-6px;width:0;border-left:2px dashed #c9c3b4}
+.lane .dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.lane .val{font-size:17px;font-weight:bold;font-variant-numeric:tabular-nums;text-align:right;line-height:1.3}
+.lane .val small{display:block;font-weight:normal;font-size:11.5px;color:var(--muted)}
+.lane.oracle .dot{background:var(--gold)}
+.lane.floor .dot{background:var(--teal)}
+.lane.rand .dot{background:#9aa1ad}
+.lane.real .dot{background:var(--red)}
+.lane.real .rail{outline:2px solid var(--red-bg);border-radius:9px}
+.callout{margin-top:12px;display:flex;gap:12px}
+.callout .co{flex:1;border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.5}
+.callout .co b{font-size:16px;font-variant-numeric:tabular-nums}
+.co.harm{background:var(--red-bg);color:var(--red-deep)}
+.co.asym{background:var(--slate-bg);color:#2e3650}
+.co.neutral{background:var(--teal-bg);color:var(--teal-deep)}
+/* mid grid */
+.mid{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;margin-bottom:18px;flex:1;min-height:0}
+.sect{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;display:flex;flex-direction:column;justify-content:center}
+.sect h2{font-size:20px;margin:0 0 3px}
+.sect .sub{font-size:13.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.err2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.errbox{border-radius:11px;padding:13px 16px;font-size:14px;line-height:1.55}
+.errbox b{display:block;font-size:15.5px;margin-bottom:3px}
+.errbox.nondir{background:var(--teal-bg);color:var(--teal-deep)}
+.errbox.dir{background:var(--red-bg);color:var(--red-deep)}
+.cond{border-radius:11px;background:var(--slate-bg);padding:12px 16px;font-size:14.5px;line-height:1.6;color:#2e3650}
+.cond .formula{font-size:20px;font-weight:bold;color:var(--ink);letter-spacing:1px;margin-right:10px;font-family:'PosterCN',serif}
+.ladder{display:flex;flex-direction:column;gap:9px}
+.lrow{display:grid;grid-template-columns:250px 1fr 62px;align-items:center;gap:10px;font-size:13.8px}
+.lrow .who{line-height:1.3}
+.lrow .who b{display:block;font-size:14.5px}
+.lrow .bar{height:34px;border-radius:7px;background:#f0ede6;position:relative;overflow:hidden}
+.lrow .bar i{position:absolute;top:0;bottom:0;left:50%;border-radius:0}
+.lrow .bar i.neg{right:50%;left:auto;border-radius:7px 0 0 7px}
+.lrow .bar .zero{position:absolute;top:-4px;bottom:-4px;left:50%;border-left:2px solid #b9b2a2}
+.lrow .val{font-size:15px;font-weight:bold;font-variant-numeric:tabular-nums;text-align:right}
+.lrow .val.neg{color:var(--red-deep)}
+.lrow .val.pos{color:var(--teal-deep)}
+.foot2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:2px}
+.mini{border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:13.5px;line-height:1.55;color:#4b505c;background:#fbfaf7}
+.mini b{color:var(--ink)}
+/* footer */
+.foot{margin-top:16px;display:flex;gap:14px;font-size:13px;color:var(--muted);line-height:1.6}
+.foot .tag{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:3px 12px;color:var(--ink);font-weight:bold}
+.foot b{color:var(--ink)}
+</style></head><body><main>
+<section class="head">
+ <p class="kicker">SELF-IMPROVEMENT · 反馈信号的可信度 · ARXIV 2611.19037 · THE CRITIC CAN HURT</p>
+ <h1>批评家不是免费加件：<em>弱批评能把搜索拖到“无批评底线”之下</em></h1>
+ <p class="lead">LLM 引导的迭代搜索里，提议会被打分、被择优，<b>批评却通常既不打分也不过滤</b>，却条件化着之后的每一次提议。四臂预算对齐审计（无批评底线 / 独立随机二抽 / 真批评 / 神谕上界）显示：一个 2024 代 8B 批评家让 8 个表格数据集中的 <b>7 个落到无批评底线以下</b>，最坏 adult 上测试 AUC <b>0.68 vs 底线 0.93（−0.245）</b>。</p>
+</section>
+
+<section class="console">
+ <div class="cap"><h2>四臂审计 · adult 最坏案例（同一缓存前沿，96 配置 × 8 轮，8 种子）</h2><p class="r">终点为最终测试 AUC（数值见右侧）· 轨迹与虚线刻度为示意</p></div>
+ <div class="lanes">
+  <div class="lane oracle"><p class="nm">④ 神谕<small>绕过语言信道，直选验证效用最高的未试配置</small></p><div class="rail"><span class="tick" style="left:18%"></span><span class="tick" style="left:48.6%"></span><span class="tick" style="left:86%"></span><span class="dot" style="left:82.5%"></span></div><p class="val">0.938<small>上界（余量≤0.0077）</small></p></div>
+  <div class="lane floor"><p class="nm">① 无批评（底线）<small>无反馈 ⇒ 均匀抽样</small></p><div class="rail"><span class="tick" style="left:18%"></span><span class="tick" style="left:48.6%"></span><span class="tick" style="left:86%"></span><span class="dot" style="left:80.4%"></span></div><p class="val">0.93<small>无反馈基线</small></p></div>
+  <div class="lane rand"><p class="nm">② 随机反馈<small>独立种子的第二次均匀搜索</small></p><div class="rail"><span class="tick" style="left:18%"></span><span class="tick" style="left:48.6%"></span><span class="tick" style="left:86%"></span><span class="dot" style="left:80.2%"></span></div><p class="val">≈0.93<small>底线的第二抽样（示意）</small></p></div>
+  <div class="lane real"><p class="nm">③ 真批评 · Llama-3.1-8B<small>评历史＋未试菜单，点名下一配置（无答复则均匀回退）</small></p><div class="rail"><span class="tick" style="left:18%"></span><span class="tick" style="left:48.6%"></span><span class="tick" style="left:86%"></span><span class="dot" style="left:25.6%"></span></div><p class="val">0.68<small>−0.245，底线之下</small></p></div>
+ </div>
+ <div class="callout">
+  <p class="co harm"><b>−0.245 AUC</b> —— adult 最坏案例；典型损失 ≈ −0.03，7/8 数据集点估计为负（组级符号翻转置换检验）</p>
+  <p class="co asym"><b>≈50 : 1</b> —— 此前沿上理想批评最多 +0.005，最坏损失却大 50 倍；事前无法知道落在哪一侧</p>
+  <p class="co neutral"><b>+0.000</b> —— 同域对照（信用评分，同 96 配置空间）完全中性：伤害只在原始表格管线搜索设定出现</p>
+ </div>
+</section>
+
+<section class="mid">
+ <div class="sect">
+  <h2>为什么容忍一类错误、不容忍另一类</h2>
+  <p class="sub">受控故障注入：错误率与错误结构分离（9 个额外数据集）</p>
+  <div class="err2">
+   <div class="errbox nondir"><b>非方向性错误 ≈ 免费</b>best-so-far 精英保留把它吸收成无引导探索，高错误率下也近乎无损</div>
+   <div class="errbox dir"><b>方向性错误吃预算</b>系统性误导让有限评估轮次持续偏离无引导本可到达的配置，损失累积</div>
+  </div>
+  <div class="cond"><span class="formula">q·(m−1) &gt; β</span>净收益的<b>必要条件</b>（能力 q · 前瞻 m · 方向性错误率 β）——理想化有效视界模型的一阶边界，不是部署证书；门控与学习型坏反馈检测器只能压低 β、减小已实现损失，<b>都不保证守住全预算无批评基线</b>。</div>
+ </div>
+ <div class="sect">
+  <h2>什么时候还会伤：能力是衰减项，不是阈值</h2>
+  <p class="sub">能力阶梯（adult，No-Critic Δ，7 档 3B–70B ＋ Claude Haiku 4.5，确定性解码）</p>
+  <div class="ladder">
+   <div class="lrow"><p class="who"><b>2024 代 8B（主审计）</b>Llama-3.1-8B</p><div class="bar"><span class="zero"></span><i class="neg" style="width:88%"></i></div><p class="val neg">−0.245</p></div>
+   <div class="lrow"><p class="who"><b>70B 档</b>更强不等于安全</p><div class="bar"><span class="zero"></span><i class="neg" style="width:9%"></i></div><p class="val neg">6 域中 5 个仍为负</p></div>
+   <div class="lrow"><p class="who"><b>2025 代各档</b>|Δ| ≤ 0.011</p><div class="bar"><span class="zero"></span><i style="left:50%;width:4%;border-radius:0 7px 7px 0;background:var(--teal)"></i></div><p class="val pos">≈持平</p></div>
+   <div class="lrow"><p class="who"><b>前沿 96→250 配置 · 轮数 8→20</b>搜索空间变大</p><div class="bar"><span class="zero"></span><i style="left:50%;width:2%;border-radius:0 7px 7px 0;background:var(--teal)"></i></div><p class="val pos">跌破底线效应基本消失</p></div>
+  </div>
+  <div class="foot2">
+   <p class="mini"><b>已发表系统同样中招：</b>对 CAAFE 的复跑观察到低于底线的结果。</p>
+   <p class="mini"><b>CritFault 基准：</b>首个检测有害批评反馈的表格 AutoML 基准，随论文发布全部工件。</p>
+  </div>
+ </div>
+</section>
+
+<footer class="foot">
+ <p class="tag">读法与边界</p>
+ <p><b>选中理由：</b>把“反馈有没有用”翻转为“反馈能不能伤”，给出底线审计方法 + 错误结构机制 + 必要条件，直接可迁移到任何带批评/复盘环节的自改进循环的验收设计。<b>保留：</b>主结果在缓存的表格前沿上、批评与提议为同一 LLM 调用（审计对象是整体选择策略）；7/8 为数据集级点估计符号，推断主张在组级检验；“更强批评衰减伤害”未确立普适能力阈值。</p>
+</footer>
+</main></body></html>

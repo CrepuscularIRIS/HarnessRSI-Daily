@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>冻结条款保住的是文本，不是行为</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}
+@page{size:1680px 1560px;margin:0}
+*{box-sizing:border-box}
+:root{--paper:#f5f3ee;--ink:#20242e;--muted:#767b88;--card:#ffffff;--line:#dcd7ca;
+ --warm:#b3541e;--warm-bg:#f8e9dd;--warm-deep:#8a3c12;
+ --cool:#175e63;--cool-bg:#e0eeec;--cool-deep:#0d4247;
+ --lock:#5b3e8f;--lock-bg:#ece5f6}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1680px;height:1560px;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:48px 54px 72px}
+p{margin:0}
+.head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
+.kicker{font-size:16px;letter-spacing:3px;color:var(--warm-deep);font-weight:bold}
+h1{font-size:52px;line-height:1.2;margin:12px 0 10px;letter-spacing:-1px;font-weight:bold}
+h1 em{font-style:normal;color:var(--cool-deep);background:linear-gradient(transparent 62%,var(--cool-bg) 62%)}
+.lead{font-size:18.5px;color:#4b505f;line-height:1.58;max-width:1060px}
+.lead b{color:var(--ink)}
+.headR{flex:0 0 400px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:8px}
+.headR .t{font-size:14px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;font-weight:bold}
+.headR .row{display:flex;justify-content:space-between;font-size:15px;line-height:1.9}
+.headR .row b{font-variant-numeric:tabular-nums}
+/* artifact strip */
+.artifact{display:flex;gap:10px;align-items:stretch;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:20px}
+.artifact .blk{flex:1;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.45;color:#4b505f;background:#f2f0ea;border:1px dashed #cfc9ba;text-align:center}
+.artifact .blk b{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+.artifact .frozen{flex:1.25;background:var(--lock-bg);border:2px solid var(--lock);color:#3d2a63;text-align:center;position:relative}
+.artifact .frozen b{color:var(--lock)}
+.artifact .frozen .seal{position:absolute;top:-11px;right:-9px;background:var(--lock);color:#fff;font-size:12.5px;padding:3px 10px;border-radius:999px;letter-spacing:2px}
+.artifact .note{flex:0 0 296px;font-size:13.5px;color:var(--muted);line-height:1.6;display:flex;align-items:center}
+.artifact .note b{color:var(--ink)}
+/* mirror core */
+.core{display:grid;grid-template-columns:1fr 96px 1fr;gap:0;flex:1;min-height:0;margin-bottom:20px}
+.axis{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;display:flex;flex-direction:column}
+.axis.hot{border-top:6px solid var(--warm)}
+.axis.cold{border-top:6px solid var(--cool)}
+.axis h2{font-size:21px;margin:0 0 2px}
+.axis .sub{font-size:13.5px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.bars{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.brow{display:grid;grid-template-columns:66px 1fr 128px;align-items:center;gap:12px}
+.brow .who{font-size:14.5px;font-weight:bold;line-height:1.3}
+.brow .who small{display:block;font-weight:normal;color:var(--muted);font-size:12px}
+.track{height:44px;border-radius:9px;background:#efece4;position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;border-radius:9px;display:flex;align-items:center;padding-left:12px;color:#fff;font-size:16.5px;font-weight:bold;font-variant-numeric:tabular-nums;white-space:nowrap}
+.axis.hot .fill{background:linear-gradient(90deg,var(--warm),#c96a30)}
+.axis.cold .fill{background:linear-gradient(90deg,var(--cool),#1e7a80)}
+.brow .delta{font-size:13px;color:var(--muted);line-height:1.45}
+.brow .delta b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
+.hot .delta b{color:var(--warm-deep)}
+.cold .delta b{color:var(--cool-deep)}
+.axis .verdict{margin-top:14px;border-radius:10px;padding:11px 14px;font-size:14.5px;line-height:1.55}
+.hot .verdict{background:var(--warm-bg);color:#6e3110}
+.cold .verdict{background:var(--cool-bg);color:#0c3d41}
+.axis .verdict b{font-weight:bold}
+.mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.mid .vs{width:64px;height:64px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:bold;letter-spacing:1px}
+.mid .flip{writing-mode:vertical-rl;font-size:15px;letter-spacing:6px;color:var(--ink);font-weight:bold}
+.mid .arr{font-size:30px;color:var(--muted)}
+/* bottom */
+.bottom{display:grid;grid-template-columns:1.06fr 1fr;gap:20px}
+.sect{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+.sect h2{font-size:20px;margin:0 0 3px}
+.sect .sub{font-size:13.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.ladder{display:flex;flex-direction:column;gap:8px}
+.lrow{display:grid;grid-template-columns:118px 1fr 74px;align-items:center;gap:10px;font-size:14px}
+.lrow .arm{font-weight:bold;line-height:1.25}
+.lrow .arm small{display:block;font-weight:normal;color:var(--muted);font-size:11.5px}
+.lrow .bar{height:30px;border-radius:7px;background:#efece4;position:relative;overflow:hidden}
+.lrow .bar i{position:absolute;inset:0 auto 0 0;border-radius:7px}
+.lrow .val{font-size:16.5px;font-weight:bold;font-variant-numeric:tabular-nums;text-align:right}
+.guar{display:flex;flex-direction:column;gap:9px}
+.grow{display:grid;grid-template-columns:200px 1fr;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:8px;font-size:13.8px;line-height:1.5}
+.grow:last-child{border-bottom:none;padding-bottom:0}
+.grow .g{font-weight:bold;color:var(--lock);line-height:1.35}
+.grow .d{color:#4b505f}
+.grow .d b{color:var(--ink)}
+.foot{margin-top:18px;display:flex;gap:14px;font-size:13px;color:var(--muted);line-height:1.6}
+.foot .tag{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:3px 12px;color:var(--ink);font-weight:bold}
+.foot b{color:var(--ink)}
+</style></head><body><main>
+<section class="head">
+ <div>
+  <p class="kicker">SELF-IMPROVEMENT · 约束下的自然语言优化 · ARXIV 2611.18883 · SPLICE</p>
+  <h1>冻结条款保住的是<em>文本</em>，不是<em>行为</em></h1>
+  <p class="lead">给自改进循环立"不可改条款"时，把条款文本逐字节冻结——优化压力并不会因此消失，而是<b>精确地落在最昂贵的那条上</b>：可编辑臂代理分更高，部署后合同感知分反而崩掉；冻结臂文本一字未动，行为合规率仍从 96.5% 掉到 <b>66.8%</b>。</p>
+ </div>
+ <div class="headR">
+  <p class="t">论文速览</p>
+  <p class="row"><span>框架</span><b>约束组合优化视角的 NLO</b></p>
+  <p class="row"><span>对比优化器</span><b>12 个（APE→GEPA）</b></p>
+  <p class="row"><span>公开基准</span><b>7 个 × 5 套协议</b></p>
+  <p class="row"><span>战绩</span><b>4 胜 3 平（AIME-2025 +5.1pp）</b></p>
+  <p class="row"><span>合同压力测试</span><b>SST-5 · gemma-3-27b-it</b></p>
+ </div>
+</section>
+
+<section class="artifact">
+ <p class="blk"><b>角色 framing</b>可编辑</p>
+ <p class="blk"><b>推理指令</b>可编辑</p>
+ <p class="blk"><b>少样本示例</b>可编辑</p>
+ <p class="frozen"><span class="seal">冻结</span><b>七条合同条款</b>工具 schema · 安全文本 · 输出信封 · 业务规则<br>（Policy-1：提到 film / movie 必须上报）</p>
+ <p class="blk"><b>输出格式</b>可编辑</p>
+ <p class="note"><span><b>示意 · 编辑图上的可达集</b><br>冻结块只保留种子文本：任何指向它的编辑边不存在；其余块照常被批评-改写循环搜索。</span></p>
+</section>
+
+<section class="core">
+ <div class="axis hot">
+  <h2>优化器看得见的：代理准确率</h2>
+  <p class="sub">验证集 · 优化器的目标（SST-5，三配对种子）</p>
+  <div class="bars">
+   <div class="brow"><p class="who">A1<small>合同冻结（Splice）</small></p><div class="track"><div class="fill" style="width:56%">49.3</div></div><p class="delta"><b>基线</b>守住条款的代价</p></div>
+   <div class="brow"><p class="who">A2<small>全可编辑</small></p><div class="track"><div class="fill" style="width:70%">59.8</div></div><p class="delta"><b>+10.5pp</b>把条款换成代理分</p></div>
+   <div class="brow"><p class="who">A3<small>单一可编辑块（既往方法）</small></p><div class="track"><div class="fill" style="width:70%">59.1</div></div><p class="delta"><b>+9.8pp</b>同上</p></div>
+   <div class="brow"><p class="who">A4<small>可编辑＋“别改这段”软指令</small></p><div class="track"><div class="fill" style="width:69%">58.9</div></div><p class="delta"><b>+9.6pp</b>软指令不设防</p></div>
+  </div>
+  <p class="verdict"><b>可编辑臂全赢 ≈10pp</b> —— 26% 的样本服从 Policy-1 就要放弃代理分，优化器把恰好昂贵的条款换了出去；其余条款类未被任何臂触碰。</p>
+ </div>
+ <div class="mid">
+  <p class="arr">⇆</p>
+  <p class="vs">排序<br>反转</p>
+  <p class="flip">同一批候选 · 两套指标</p>
+  <p class="arr">⇆</p>
+ </div>
+ <div class="axis cold">
+  <h2>部署后算的：合同感知准确率</h2>
+  <p class="sub">测试集 · 违反 Policy-1 记零分（三配对种子）</p>
+  <div class="bars">
+   <div class="brow"><p class="who">A1<small>合同冻结（Splice）</small></p><div class="track"><div class="fill" style="width:68%">58.5</div></div><p class="delta"><b>最高</b>文本一字未动</p></div>
+   <div class="brow"><p class="who">A2<small>全可编辑</small></p><div class="track"><div class="fill" style="width:47%">41.6</div></div><p class="delta"><b>−16.9pp</b>条款已被换掉</p></div>
+   <div class="brow"><p class="who">A3<small>单一可编辑块</small></p><div class="track"><div class="fill" style="width:47%">40.8</div></div><p class="delta"><b>−17.7pp</b>同上</p></div>
+   <div class="brow"><p class="who">A4<small>软指令约束</small></p><div class="track"><div class="fill" style="width:46%">40.2</div></div><p class="delta"><b>−18.3pp</b>“别改”无效</p></div>
+  </div>
+  <p class="verdict"><b>同一候选集，两套指标排序完全对调</b> —— 优化器不是随机漂移，是定向侵蚀约束；代理分与合规在此任务上结构性冲突。</p>
+ </div>
+</section>
+
+<section class="bottom">
+ <div class="sect">
+  <h2>合规阶梯：文本保住了，行为只保住一部分</h2>
+  <p class="sub">Policy-1 触发样本上的上报合规率（测试集）</p>
+  <div class="ladder">
+   <div class="lrow"><p class="arm">A0 种子<small>未优化</small></p><div class="bar"><i style="width:96.5%;background:var(--cool)"></i></div><p class="val" style="color:var(--cool-deep)">96.5%</p></div>
+   <div class="lrow"><p class="arm">A1 冻结<small>文本逐字节一致</small></p><div class="bar"><i style="width:66.8%;background:var(--lock)"></i></div><p class="val" style="color:var(--lock)">66.8%</p></div>
+   <div class="lrow"><p class="arm">A2 全可编辑<small>条款被删除</small></p><div class="bar"><i style="width:3%;background:var(--warm)"></i></div><p class="val" style="color:var(--warm-deep)">0.0%</p></div>
+   <div class="lrow"><p class="arm">A3 单块可编辑</p><div class="bar"><i style="width:3.5%;background:var(--warm)"></i></div><p class="val" style="color:var(--warm-deep)">0.1%</p></div>
+   <div class="lrow"><p class="arm">A4 软指令</p><div class="bar"><i style="width:4.5%;background:var(--warm)"></i></div><p class="val" style="color:var(--warm-deep)">1.4%</p></div>
+  </div>
+  <p class="sub" style="margin:10px 0 0">其余块的编辑改变了合同管辖下的行为 —— <b style="color:var(--ink)">冻结是必要条件，不是充分条件</b>。</p>
+ </div>
+ <div class="sect">
+  <h2>三个失败模式 ↔ 三条匹配保证</h2>
+  <p class="sub">无提议者假设下成立；再评分时回归尾部 + 提议者条件下的收敛率另证</p>
+  <div class="guar">
+   <div class="grow"><p class="g">不安全全局改写</p><p class="d">块级可变性 ⇒ 合同文本逐字保留；<b>冻结代价 ≤ γ⁻¹ × 冻结块最优单块增益</b>（γ 为子模比）</p></div>
+   <div class="grow"><p class="g">束塌缩到单 lineage</p><p class="d">精英束 + 多样性槽：缓存在评时领导验证分<b>永不回退</b>；只要存在他父代的竞争者就必被保留</p></div>
+   <div class="grow"><p class="g">膨胀失控</p><p class="d">比率长度正则 ⇒ 精度偏置 ≤ <b>λ·κ(x*)</b>（最优候选长度）；每 token 延迟入目标</p></div>
+  </div>
+ </div>
+</section>
+
+<footer class="foot">
+ <p class="tag">读法与边界</p>
+ <p><b>选中理由：</b>把“自改进循环里的不可改不变量”第一次写成搜索空间的可行性约束，并用受控四臂实验钉死“文本不变≠行为安全”——对任何想在优化时钉住安全条款的系统都是直接警告。<b>保留：</b>合同感知目标为自建；compliance 66.8% 说明冻结只是部分保全；压力测试在单一任务/单一模型上完成（主表为 7 基准 × 5 协议，4 胜 3 平）。</p>
+</footer>
+</main></body></html>

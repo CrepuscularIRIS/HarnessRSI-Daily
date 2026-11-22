@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>记得片段，不等于重建了记忆</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}
+@page{size:1560px 1820px;margin:0}
+*{box-sizing:border-box}
+:root{--paper:#f4f4ee;--ink:#22261f;--muted:#757a6e;--card:#ffffff;--line:#d9dcc9;
+ --sage:#4a6741;--sage-bg:#e7eee0;--sage-deep:#33502c;
+ --plum:#6d3b5e;--plum-bg:#f0e4ec;--plum-deep:#4e2843;
+ --ochre:#9a6b1f;--ochre-bg:#f4ead2;--ochre-deep:#6e4b12;
+ --blue:#2f5876;--blue-bg:#e2ebf2;--blue-deep:#1f3d55}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1560px;height:1820px;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:46px 52px 70px}
+p{margin:0}
+.kicker{font-size:16px;letter-spacing:3px;color:var(--sage-deep);font-weight:bold}
+h1{font-size:50px;line-height:1.2;margin:12px 0 10px;letter-spacing:-1px;font-weight:bold}
+h1 em{font-style:normal;color:var(--plum)}
+.lead{font-size:18.5px;color:#4b4f45;line-height:1.58;max-width:1450px}
+.lead b{color:var(--ink)}
+/* dialogue flow */
+.flow{display:grid;grid-template-columns:1fr 64px 250px 64px 1fr;gap:0;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin:18px 0}
+.actors{display:flex;flex-direction:column;gap:10px}
+.utt{max-width:88%;border-radius:14px;padding:10px 14px;font-size:13.8px;line-height:1.5}
+.utt b{display:block;font-size:13px;margin-bottom:2px;letter-spacing:1px}
+.utt.a{align-self:flex-start;background:var(--sage-bg);color:#374d30;border-bottom-left-radius:4px}
+.utt.a b{color:var(--sage-deep)}
+.utt.b{align-self:flex-end;background:var(--plum-bg);color:#54314a;border-bottom-right-radius:4px}
+.utt.b b{color:var(--plum-deep)}
+.utt imgph{display:block;margin-top:6px;width:120px;height:54px;border-radius:6px;background:repeating-linear-gradient(45deg,#cdd4c2,#cdd4c2 6px,#dfe5d5 6px,#dfe5d5 12px);color:#5b6350;font-size:11px;text-align:center;line-height:54px}
+.observer{background:var(--blue-bg);border:2px solid var(--blue);border-radius:14px;padding:14px 16px;text-align:center}
+.observer .ag{font-size:38px;line-height:1}
+.observer b{display:block;font-size:16.5px;color:var(--blue-deep);margin-top:6px}
+.observer small{display:block;font-size:12.5px;color:#4b6577;margin-top:4px;line-height:1.45}
+.flowmid{display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--muted)}
+.memq{display:flex;flex-direction:column;gap:10px}
+.membox,.qbox{border-radius:12px;padding:11px 14px;font-size:13.5px;line-height:1.5}
+.membox{background:#f1f0e8;border:1px dashed #c9cbb6}
+.membox b{color:var(--ink)}
+.qbox{background:var(--ochre-bg);color:#5f430f;border:1px solid #ddc68f}
+.qbox b{color:var(--ochre-deep)}
+/* nine-grid */
+.matrix{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 22px;margin-bottom:18px}
+.matrix .cap{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.matrix h2{font-size:21px;margin:0}
+.matrix .cap .r{font-size:13px;color:var(--muted)}
+.mgrid{display:grid;grid-template-columns:130px 1fr 1fr 1fr;gap:8px}
+.mh{font-size:15px;font-weight:bold;text-align:center;padding:6px 0;border-radius:8px;color:#fff}
+.dimlbl{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:bold;letter-spacing:3px;border-radius:8px;color:#fff}
+.dim.recall{background:var(--sage)}
+.dim.reason{background:var(--plum)}
+.dim.apply{background:var(--ochre)}
+.mh.c1{background:var(--sage)}.mh.c2{background:var(--plum)}.mh.c3{background:var(--ochre)}
+.cell{border-radius:10px;padding:10px 13px;font-size:13.3px;line-height:1.5;min-height:96px}
+.cell.re{background:var(--sage-bg)}.cell.rs{background:var(--plum-bg)}.cell.ap{background:var(--ochre-bg)}
+.cell b{display:flex;justify-content:space-between;font-size:14.8px;margin-bottom:3px}
+.cell b .code{color:var(--muted);font-weight:normal;font-size:12px;letter-spacing:1px}
+.cell .num{font-variant-numeric:tabular-nums;font-weight:bold}
+.cell.re .num{color:var(--sage-deep)}.cell.rs .num{color:var(--plum-deep)}.cell.ap .num{color:var(--ochre-deep)}
+.cell .weak{display:inline-block;margin-top:5px;background:rgba(178,58,58,.1);color:#8c2f2f;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:bold}
+/* bottom trio */
+.trio{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:16px;flex:1;min-height:0}
+.sect{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;display:flex;flex-direction:column}
+.sect h2{font-size:19px;margin:0 0 3px}
+.sect .sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.fail2{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
+.frow{display:grid;grid-template-columns:190px 1fr 62px;align-items:center;gap:10px;font-size:13.5px}
+.frow .bar{height:30px;border-radius:7px;background:#efeee5;overflow:hidden;position:relative}
+.frow .bar i{position:absolute;inset:0 auto 0 0;border-radius:7px}
+.frow .val{font-size:16px;font-weight:bold;font-variant-numeric:tabular-nums;text-align:right}
+.fnote{border-top:1px dashed var(--line);margin-top:10px;padding-top:9px;font-size:13px;color:#4b4f45;line-height:1.55}
+.fnote b{color:var(--ink)}
+.scale2{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
+.srow{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;font-size:13.5px}
+.srow .pair{display:flex;gap:4px}
+.srow .cellbar{flex:1;height:26px;border-radius:6px;display:flex;overflow:hidden}
+.srow .cellbar i{display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lat{display:flex;flex-direction:column;gap:9px;flex:1;justify-content:center;font-size:13.8px;line-height:1.55;color:#4b4f45}
+.lat .big{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:7px}
+.lat .big b{font-size:17px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.lat .big b small{font-size:12px;color:var(--muted);font-weight:normal}
+.foot{margin-top:16px;display:flex;gap:14px;font-size:13px;color:var(--muted);line-height:1.6}
+.foot .tag{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:3px 12px;color:var(--ink);font-weight:bold}
+.foot b{color:var(--ink)}
+</style></head><body><main>
+<section class="head">
+ <p class="kicker">SELF-IMPROVEMENT · 记忆的信息访问边界 · ARXIV 2606.09461 · H2HMEM</p>
+ <h1>记得片段，<em>不等于重建了记忆</em></h1>
+ <p class="lead">把记忆代理放到<b>旁听人类-人类多模态对话</b>的位置（会议纪要、临床文书）：它能召回碎片，却在三处系统性失守——<b>跨模态对齐、说话人归因、冲突消解</b>。9 类任务 × 双人/多人两种结构，最强方法加权均分仅 <b>0.5757</b>；把骨干从 3B 换到 7B，缺口并没有闭合。</p>
+</section>
+
+<section class="flow">
+ <div class="actors">
+  <p class="utt a"><b>说话人 A</b>上周那张合同扫描件，条款还是老版本（附图①）<imgph>图像 ①（示意）</imgph></p>
+  <p class="utt b"><b>说话人 B</b>他后来在群里说改过了，以最新那次为准</p>
+  <p class="utt a"><b>说话人 A</b>对，但我没看到他本人确认</p>
+ </div>
+ <div class="flowmid">➜</div>
+ <div class="observer"><p class="ag">👁</p><b>观察者代理</b><small>被动旁听 · 不参与对话<br>多会话 · 多模态 · 多方异步</small></div>
+ <div class="flowmid">➜</div>
+ <div class="memq">
+  <p class="membox"><b>记忆构建（存储函数）</b>Full(Text/MM) · NaiveRAG · A-Mem · MuRAG · NGM × Qwen2.5-VL-3B/7B · GPT-4.1-Nano</p>
+  <p class="qbox"><b>查询（9 类任务）</b>“B 提到的合同现在以哪版为准？” —— 要 KR 跨会话消解 + CD 冲突检测，还要指对说话人</p>
+ </div>
+</section>
+
+<section class="matrix">
+ <div class="cap"><h2>九格能力矩阵：分数与失守点（LLM-as-Judge，加权）</h2><p class="r">示意样例问句 · 括号内为代表性数值（§4.2 Table 3）</p></div>
+ <div class="mgrid">
+  <p class="mh c1" style="grid-column:2">单模态精确召回</p><p class="mh c2">跨模态关联检索</p><p class="mh c3">跨会话知识消解</p>
+  <p class="dimlbl dim recall">记忆召回</p>
+  <div class="cell re"><b>UPR <span class="code">单模态</span></b>单模态事实检索。MuRAG <span class="num">0.6346</span><br><span class="weak">最好的一格</span></div>
+  <div class="cell re"><b>CRR <span class="code">跨模态</span></b>文本↔图像互检。MuRAG 掉到 <span class="num">0.5326</span><br><span class="weak">−0.102 跨模态税</span></div>
+  <div class="cell re"><b>KR <span class="code">跨会话</span></b>取“当前正确”版本。NaiveRAG 双人 <span class="num">0.4896</span> → 多人 <span class="num">0.2500</span></div>
+  <p class="dimlbl dim reason">记忆推理</p>
+  <div class="cell rs"><b>TR <span class="code">时序</span></b>按时间戳与轮次排序事件</div>
+  <div class="cell rs"><b>MCR <span class="code">多模态因果</span></b>文↔图因果链，全表最低档<br><span class="weak">BLEU-1 近零</span></div>
+  <div class="cell rs"><b>RET <span class="code">指涉演化</span></b>照应消解＋实体演化追踪<br><span class="weak">人类偏好隐性指涉</span></div>
+  <p class="dimlbl dim apply">记忆应用</p>
+  <div class="cell ap"><b>TTL <span class="code">测试时学习</span></b>用记忆适配新场景</div>
+  <div class="cell ap"><b>CD <span class="code">冲突检测</span></b>识别矛盾陈述。A-Mem 召回仅 <span class="num">0.0869</span><br><span class="weak">近零</span></div>
+  <div class="cell ap"><b>AR <span class="code">答案拒答</span></b>信息缺失时拒绝作答</div>
+ </div>
+</section>
+
+<section class="trio">
+ <div class="sect">
+  <h2>100 例失败人工归因：两大主因</h2>
+  <p class="sub">跨模态与推理类失败实例，三种多模态记忆方法（§4.3 Table 6）</p>
+  <div class="fail2">
+   <div class="frow"><p>模态错位<br>文本接不上视觉证据</p><div class="bar"><i style="width:45%;background:var(--sage)"></i></div><p class="val" style="color:var(--sage-deep)">44–46%</p></div>
+   <div class="frow"><p>说话人归因 / 指涉<br>记错是谁说的</p><div class="bar"><i style="width:33.5%;background:var(--plum)"></i></div><p class="val" style="color:var(--plum-deep)">32–35%</p></div>
+  </div>
+  <p class="fnote">案例：食谱图片被归给<b>错的说话人</b>；菜单推出的结论接了<b>后续结果</b>当证据 —— 检索命中了碎片，整合错了来源。</p>
+ </div>
+ <div class="sect">
+  <h2>扩规模不闭合缺口</h2>
+  <p class="sub">Qwen2.5-VL 3B → 7B（附录 D.1）</p>
+  <div class="scale2">
+   <div class="srow"><p>召回-精度差</p><div class="pair"><div class="cellbar"><i style="flex:4.215;background:var(--sage)">A-Mem recall .4215</i><i style="flex:2.206;background:#b28a3a;color:#fff">prec .2206</i></div></div></div>
+   <div class="srow"><p>7B 之后</p><div class="pair"><div class="cellbar"><i style="flex:1;background:var(--blue)">多人-双人 KR 差距仍在</i></div></div></div>
+   <div class="srow"><p>结构效应</p><div class="pair"><div class="cellbar"><i style="flex:4.9;background:var(--sage)">双人 KR .4896</i><i style="flex:2.5;background:var(--plum)">多人 .2500</i></div></div></div>
+  </div>
+  <p class="fnote"><b>结论：</b>参数规模单项不解决 —— 失败在记忆机制（过滤、归因、消解），不在容量。</p>
+ </div>
+ <div class="sect">
+  <h2>代价结构</h2>
+  <p class="sub">存储 vs 推理延迟（§4.2 Table 5）</p>
+  <div class="lat">
+   <p class="big"><span>Full(MM) 全量推理</span><b>26.09 <small>秒/问</small></b></p>
+   <p class="big"><span>Full(Text) 全量推理</span><b>17.99 <small>秒/问</small></b></p>
+   <p class="big"><span>A-Mem 记忆构建</span><b>351.08 <small>秒/会话</small></b></p>
+   <p class="big"><span>最佳加权均分</span><b>0.5757 <small>A-Mem</small></b></p>
+  </div>
+  <p class="fnote">全量省构建、慢推理；代理式记忆反过来 —— <b>轻量多模态压缩范式缺位</b>。</p>
+ </div>
+</section>
+
+<footer class="foot">
+ <p class="tag">读法与边界</p>
+ <p><b>选中理由：</b>现有 ready 的记忆主题都落在代理自身或人-机对话一侧，这张补上<b>旁听人类对话的观察者记忆</b>这一面：召回/整合解离、说话人归因是第一失败主因、扩规模不修复——三个判断都有量化锚点。<b>保留：</b>对话由 LLM 生成＋人工修订（隐私换真实性的权衡）；存储 vs 检索失败仅经召回-精度差间接区分；LLM 裁判与人工 κ 近一致（200 样本）。</p>
+</footer>
+</main></body></html>
