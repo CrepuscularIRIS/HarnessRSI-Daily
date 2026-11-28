@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>盲于所能修：自改进代理的检测缺口</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}
+@page{size:1600px 1680px;margin:0}
+*{box-sizing:border-box}
+:root{--paper:#eef1f3;--ink:#1b1f27;--muted:#666d78;--card:#ffffff;--line:#d3d9de;
+ --amber:#d98a1a;--amber-bg:#fbeed6;--amber-deep:#8a5606;
+ --teal:#137a7a;--teal-bg:#dff0ee;--teal-deep:#0b5252;
+ --navy:#1c2b3a;--red:#b23a2a;--red-bg:#f8e3df}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1600px;height:1680px;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:46px 54px 58px}
+p{margin:0}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:16px}
+.kicker{font-size:15px;letter-spacing:3px;color:var(--teal-deep);font-weight:bold}
+h1{font-size:50px;line-height:1.18;margin:10px 0 10px;letter-spacing:-1px;font-weight:bold}
+h1 em{font-style:normal;color:var(--amber-deep);background:linear-gradient(transparent 62%,var(--amber-bg) 62%)}
+.lead{font-size:18px;color:#454a55;line-height:1.58;max-width:1020px}
+.lead b{color:var(--ink)}
+.headR{flex:0 0 420px;background:var(--navy);color:#eef1f3;border-radius:14px;padding:14px 18px;margin-top:6px}
+.headR .t{font-size:13px;color:#b6bec8;letter-spacing:2px;margin-bottom:8px;font-weight:bold}
+.headR .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 10px}
+.headR .cell b{display:block;font-size:22px;font-variant-numeric:tabular-nums;color:#fff;line-height:1.25}
+.headR .cell span{font-size:12px;color:#b6bec8;line-height:1.35;display:block}
+/* timeline */
+.tl{background:var(--navy);color:#eef1f3;border-radius:16px;padding:14px 20px 16px;margin-bottom:16px}
+.tl h2{font-size:19px;margin:0 0 2px;color:#fff}
+.tl .sub{font-size:12.5px;color:#b6bec8;line-height:1.5;margin-bottom:10px}
+.nodes{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;position:relative}
+.node{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:8px 10px;min-height:96px;position:relative}
+.node .k{font-size:11.5px;letter-spacing:1px;color:#9fb0bf;font-weight:bold}
+.node .n{font-size:14.5px;font-weight:bold;color:#fff;line-height:1.3;margin:3px 0 4px}
+.node .d{font-size:11.8px;color:#cfd6dd;line-height:1.45}
+.node.hot{background:rgba(217,138,26,.18);border-color:var(--amber)}
+.node.hot .n{color:#ffd58a}
+.node.cold{background:rgba(19,122,122,.22);border-color:#3fb3b3}
+.node.cold .n{color:#9fe3e3}
+.node .arr{position:absolute;right:-9px;top:50%;transform:translateY(-50%);font-size:16px;color:#8fa0b0;z-index:2}
+.node:last-child .arr{display:none}
+/* matrix */
+.mx{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px 12px;margin-bottom:16px}
+.mx h2{font-size:20px;margin:0 0 3px}
+.mx .sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+table{width:100%;border-collapse:collapse}
+th{font-size:12.5px;color:var(--muted);text-align:left;font-weight:bold;padding:6px 10px;border-bottom:1.5px solid var(--line);letter-spacing:.5px}
+td{font-size:13.3px;line-height:1.46;padding:7px 10px;border-bottom:1px solid #e8ebee;vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.det{font-weight:bold;width:190px}
+td.det small{display:block;font-weight:normal;color:var(--muted);font-size:12px;line-height:1.4}
+td.v{width:420px}
+td.v b{color:var(--ink)}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:bold;margin-right:6px}
+.pill.bad{background:var(--red-bg);color:var(--red)}
+.pill.good{background:var(--teal-bg);color:var(--teal-deep)}
+.pill.warn{background:var(--amber-bg);color:var(--amber-deep)}
+/* cuts */
+.cuts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.cut{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px;border-top:6px solid var(--teal)}
+.cut.amber{border-top-color:var(--amber)}
+.cut h2{font-size:18px;margin:0 0 2px}
+.cut .sub{font-size:12.5px;color:var(--muted);line-height:1.45;margin-bottom:8px}
+.cut .big{font-size:30px;font-weight:bold;color:var(--teal-deep);font-variant-numeric:tabular-nums;line-height:1.15}
+.cut.amber .big{color:var(--amber-deep)}
+.cut .big small{font-size:16px;font-weight:normal;color:var(--muted)}
+.cut p{font-size:13.3px;line-height:1.52;color:#3f444f;margin-top:6px}
+.cut p b{color:var(--ink)}
+/* cost */
+.cost{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;margin-bottom:16px}
+.cost .c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px}
+.cost h2{font-size:18px;margin:0 0 4px}
+.cost p{font-size:13.6px;line-height:1.55;color:#3f444f}
+.cost p b{color:var(--ink)}
+.bar{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.brow{display:grid;grid-template-columns:230px 1fr 150px;align-items:center;gap:10px;font-size:13.2px}
+.brow .tr{height:24px;border-radius:6px;background:#e9edf0;position:relative;overflow:hidden}
+.brow .tr i{position:absolute;inset:0 auto 0 0;border-radius:6px;display:block}
+.brow .tr i.ok{background:linear-gradient(90deg,var(--teal),#2aa0a0)}
+.brow .tr i.no{background:linear-gradient(90deg,#c9ced4,#e0e4e8)}
+.brow .v{font-size:13px;color:var(--muted);line-height:1.35}
+.brow .v b{display:block;color:var(--ink);font-size:14.5px}
+/* caveats */
+.cav{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--red);border-radius:12px;padding:12px 18px;margin-bottom:14px}
+.cav h2{font-size:17px;margin:0 0 6px;color:var(--red)}
+.cav ul{margin:0;padding-left:18px;font-size:13.2px;line-height:1.52;color:#3f444f;columns:2;column-gap:28px}
+.cav li{break-inside:avoid;margin-bottom:2px}
+.cav b{color:var(--ink)}
+.foot{display:flex;gap:14px;font-size:13px;color:var(--muted);line-height:1.6;align-items:center}
+.foot .tag{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:3px 12px;color:var(--ink);font-weight:bold}
+.foot b{color:var(--ink)}
+</style></head><body><main>
+<section class="head">
+<div>
+<div class="kicker">HARNESSRSI · REEL 022 · F2/F3 · arXiv 2611.29807v1</div>
+<h1>盲于所能修：高分程序的<em>运行时检查</em>，对多数失败沉默<span style="font-size:24px;color:#666d78;font-weight:normal">（5 域中 4 域 ≥ 一半）</span></h1>
+<p class="lead">代理把程序改到高分，也被要求"把规则依赖的条件写成每步检查"。环境一变，这些检查在 <b>5 个任务域中 4 个</b>对 ≥50% 的失败不报警——而失败本身可从执行记录看出、同一代理被叫回后通常能修。改进环里<b>没有任何一步测量或奖励检查的可靠性</b>；未报告的失败不会被修复。</p>
+</div>
+<div class="headR"><div class="t">评估框架（§3）</div>
+<div class="grid">
+<div class="cell"><b>5 域</b><span>Seaquest / Kangaroo / Craftax / 服务自动伸缩 / AppWorld</span></div>
+<div class="cell"><b>≤7 模型</b><span>Codex（gpt-6.1-sol）主结果；Claude Code + 5 开源模型复做部分</span></div>
+<div class="cell"><b>&lt;50%</b><span>失败定义：变化环境下保留不到原表现一半（0.3/0.7 阈值结果变化小）</span></div>
+<div class="cell"><b>10 回合</b><span>一单元＝冻结程序 × 一个变化 × 10 部署 episode；沉默＝报警回合 &lt; 一半</span></div>
+<div class="cell"><b>盲写</b><span>全部变化开发期未见；除 9 个外由隔离会话盲写；保留前证实任务仍可完成</span></div>
+<div class="cell"><b>120</b><span>预注册预测：69 成立 / 36 失败 / 14 未定 / 1 对 4/5 模型成立</span></div>
+</div></div>
+</section>
+
+<section class="tl">
+<h2>同一对"程序 × 变化"上测三件事：任务表现、失败检测、被叫回后的修复</h2>
+<div class="sub">§2–§3。改进环按任务表现保留版本；部署后无人盯着，系统必须自己决定何时需要关注。</div>
+<div class="nodes">
+<div class="node"><div class="k">开发期</div><div class="n">跑→看失败→改→测</div><div class="d">版本只在任务表现更好时保留；Codex 程序 1.9 次救援/episode、服务 16 小时约 15 小时达标</div><div class="arr">→</div></div>
+<div class="node"><div class="k">写检查</div><div class="n">"规则依赖什么就每步查什么"</div><div class="d">仅此格式有自有检查；被反驳 ≥3 次且多于被证实即"坏了"，坏检查算报警</div><div class="arr">→</div></div>
+<div class="node"><div class="k">冻结</div><div class="n">程序固定、部署</div><div class="d">检测器只读执行记录，不被告知是否/何时变化</div><div class="arr">→</div></div>
+<div class="node"><div class="k">环境变化</div><div class="n">动作效果/资源/延迟/API 含义</div><div class="d">开发期未见；变化后任务仍可完成才保留；无变化与无害变化作误报对照</div><div class="arr">→</div></div>
+<div class="node hot"><div class="k">失败</div><div class="n">保留 &lt;50% 原表现</div><div class="d">由独立评分者在比较任何检测器之前定义</div><div class="arr">→</div></div>
+<div class="node hot"><div class="k">沉默</div><div class="n">自有检查不报警</div><div class="d">4/5 域对 ≥ 一半失败沉默；无阈值可救</div><div class="arr">→</div></div>
+<div class="node cold"><div class="k">叫回修复</div><div class="n">同一代理、固定工具预算</div><div class="d">不告知变化；多数漏检失败被修</div></div>
+</div>
+</section>
+
+<section class="mx">
+<h2>同一份执行记录喂给四种检测器</h2>
+<div class="sub">§1、§3.3、§5.1。逐域漏检率在缓存外（§4 被截断），下表只列正文可定位的结论。</div>
+<table>
+<tr><th>检测器</th><th>构造</th><th>结论（原文定位）</th></tr>
+<tr><td class="det">自有检查<small>程序自己的运行时检查</small></td><td>要求写检查的格式：每条假设配一个每步运行的检查，返回证实/反驳/无</td><td class="v"><span class="pill bad">沉默 ≥50%</span>5 域中 <b>4 域</b>对 ≥ 一半失败沉默（摘要、§1）；对"被反驳频率"设任何阈值都成不了可用警报；<b>联合区间下界</b>：Seaquest 40% / 服务 44% / Kangaroo 8%，仅 AppWorld 73% 过半（§5.1）</td></tr>
+<tr><td class="det">通用监视器<small>程序之外、单一冻结流程</small></td><td>从每程序 20 个正常参考 episode 学通用统计范围；规则在 Seaquest 上三轮变化后定死，其他域不变</td><td class="v"><span class="pill good">3 域抓住多数</span>摘要"在三个域抓住多数"；§5.1：<b>在 AppWorld 与 Craftax 失效</b>，对无害变化也报警，且有自有检查没有的参考运行</td></tr>
+<tr><td class="det">结果规则<small>最简单的外部对照</small></td><td>成功数低于程序参考均值一半即报警</td><td class="v"><span class="pill warn">需可读结果</span>只在域暴露成功事件时可用（§5："watching the outcome closes the gap only where the outcome is visible"）；逐域数值不在缓存</td></tr>
+<tr><td class="det">按需监视器<small>事后请作者/新会话写</small></td><td>得知失败后再请同一模型写一个监视器</td><td class="v"><span class="pill good">质量更好</span>§1、§4 Q3–Q4："按需写监视器质量更好"——<b>目的</b>而非能力问题；逐域数值不在缓存</td></tr>
+<tr><td class="det">回叫修复<small>对每个失败（含未报警者）</small></td><td>同一代理一节会话、固定工具预算；可在非评分 episode 上跑程序；不告知变化</td><td class="v"><span class="pill good">多数可修</span>摘要：同一代理被叫回通常能修；"失败本身既不隐藏也不难修"</td></tr>
+</table>
+</section>
+
+<section class="cuts">
+<div class="cut">
+<h2>刀一·覆盖：信号在记录里</h2>
+<div class="sub">§1、§4 Q3</div>
+<div class="big">32 <small>条随机关系</small></div>
+<p>程序固定，只在<b>记录变量的统计关系</b>上加检查点——多数漏检消失，<b>哪怕这 32 条关系是随机抽的</b>。检查漏掉的失败，在检查从未看的执行记录里是可见的。</p>
+</div>
+<div class="cut amber">
+<h2>刀二·能力：告知目的后 Codex 自己补上</h2>
+<div class="sub">§1、§4 Q4（新程序）</div>
+<div class="big">69→6% <small>Seaquest</small></div>
+<p>被告知"坏检查是叫回你的唯一途径"后重写程序：Codex 漏检 <b>69%→6%</b>（Seaquest）、<b>95%→0%</b>（AppWorld）；<b>三个开源模型仍漏 84–100%</b>。</p>
+</div>
+<div class="cut">
+<h2>刀三·代价：及时触发 vs 更强修复器</h2>
+<div class="sub">§1、摘要（Fig 1，回放部署）</div>
+<div class="big">多数 <small>vs 几乎为零</small></div>
+<p>回放部署里<b>及时触发的叫回挽回多数损失的任务价值</b>；而把<b>完美修复器</b>接在程序自有检查之后，几乎<b>不挽回</b>——瓶颈是检测，不是修复。</p>
+</div>
+</section>
+
+<section class="cost">
+<div class="c">
+<h2>为什么要同时测"注意"</h2>
+<p>改进环保留版本只看任务表现，于是<b>高分不说明系统会在环境变化后注意到失败</b>。作者建议：自改进评估在分数之外报告<b>检出率</b>（系统自己报告的诱发失败占比）与<b>误报率</b>（无变化运行、无害变化上的报警）。</p>
+</div>
+<div class="c">
+<h2>证据强度（§5.1 联合 95% bootstrap 区间下界）</h2>
+<div class="bar">
+<div class="brow"><span>Seaquest（自有检查漏检）</span><div class="tr"><i class="no" style="width:40%"></i></div><span class="v"><b>≥40%</b>程序少，区间宽</span></div>
+<div class="brow"><span>服务自动伸缩</span><div class="tr"><i class="no" style="width:44%"></i></div><span class="v"><b>≥44%</b>接近一半</span></div>
+<div class="brow"><span>Kangaroo</span><div class="tr"><i class="no" style="width:8%"></i></div><span class="v"><b>≥8%</b>区间下界最低</span></div>
+<div class="brow"><span>AppWorld</span><div class="tr"><i class="ok" style="width:73%"></i></div><span class="v"><b>≥73%</b>唯一下界过半</span></div>
+</div>
+</div>
+</section>
+
+<section class="cav">
+<h2>读法与边界</h2>
+<ul>
+<li>自有检查<b>只存在于要求写检查的格式</b>；版本仅按任务表现保留；未测"按检测好坏选版本"的改进环</li>
+<li>检查的<b>目的只在 Seaquest 与 AppWorld 说明</b>；标准指令未说程序会部署、报警会叫回作者（App A.2）</li>
+<li>Seaquest 外带检查的独立程序少、目录小；AppWorld 两条预注册失败判据产出过少失败，<b>事后改动</b>（已披露并注册 16 个新程序复现）</li>
+<li>覆盖测试依赖对变化的了解、通用监视器词表或在评估数据上选的设置——证明<b>记录含信号</b>，不证明代理能找到它</li>
+<li>部署结果为<b>至多一次叫回的回放</b>；通用监视器在 Seaquest 开发、对无害变化也报警、在 AppWorld/Craftax 失效</li>
+<li>§4 逐域漏检率数值不在本地缓存；本张不引具体逐域数字，所有数字为作者报告，未复现</li>
+</ul>
+</section>
+
+<div class="foot"><span class="tag">Reel 022</span><span><b>Blind to What They Can Fix: A Detection Gap in Self-Improving Agents</b> · 数字逐项见 SOURCE.md · QA 见 QA.md（程序化实检，pending_visual_qa）</span></div>
+</main></body></html>

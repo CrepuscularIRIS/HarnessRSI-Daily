@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>分辨率假说：演化卡在认出改进，不是提出改进</title><style>
+@font-face{font-family:PosterCN;src:url('assets/fonts/poster.woff2') format('woff2');font-weight:400;font-display:block}
+@page{size:1680px 1600px;margin:0}
+*{box-sizing:border-box}
+:root{--paper:#f3efe6;--ink:#1f232b;--muted:#6b707c;--card:#ffffff;--line:#d9d2c3;
+ --rust:#a8431f;--rust-bg:#f7e6dc;--rust-deep:#7c2d10;
+ --slate:#2f5d8a;--slate-bg:#e2ebf4;--slate-deep:#1d3d60;
+ --moss:#4f6b3a;--moss-bg:#e8eedd;--dark:#23272f}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'PosterCN','Noto Sans CJK SC',sans-serif}
+main{width:1680px;height:1600px;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:46px 54px 64px}
+p{margin:0}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:18px}
+.kicker{font-size:15px;letter-spacing:3px;color:var(--rust-deep);font-weight:bold}
+h1{font-size:50px;line-height:1.18;margin:10px 0 10px;letter-spacing:-1px;font-weight:bold}
+h1 em{font-style:normal;color:var(--slate-deep);background:linear-gradient(transparent 62%,var(--slate-bg) 62%)}
+.lead{font-size:18px;color:#474c59;line-height:1.58;max-width:1080px}
+.lead b{color:var(--ink)}
+.headR{flex:0 0 420px;background:var(--dark);color:#f1ede4;border-radius:14px;padding:14px 18px;margin-top:6px}
+.headR .t{font-size:13px;color:#b8bcc6;letter-spacing:2px;margin-bottom:8px;font-weight:bold}
+.headR .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 10px}
+.headR .cell b{display:block;font-size:22px;font-variant-numeric:tabular-nums;color:#fff;line-height:1.25}
+.headR .cell span{font-size:12px;color:#b8bcc6;line-height:1.3;display:block}
+/* ruler */
+.ruler{background:var(--dark);color:#f1ede4;border-radius:16px;padding:16px 22px 14px;margin-bottom:18px;position:relative}
+.ruler h2{font-size:20px;margin:0 0 2px;color:#fff}
+.ruler .sub{font-size:13px;color:#b8bcc6;line-height:1.5;margin-bottom:10px}
+.scale{position:relative;height:160px;margin:0 10px}
+.axis{position:absolute;left:0;right:0;top:118px;height:2px;background:#8c919c}
+.tick{position:absolute;top:124px;font-size:12px;color:#b8bcc6;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+.tline{position:absolute;top:118px;width:1px;height:8px;background:#8c919c}
+.band{position:absolute;height:22px;border-radius:5px;display:flex;align-items:center;padding:0 8px;font-size:12.5px;white-space:nowrap;color:#fff}
+.b1{top:0;background:#5b6b80}
+.b2{top:28px;background:#8a5a3c}
+.b4{top:84px;background:#4f6b3a}
+
+.marker{position:absolute;top:26px;width:3px;background:#ffb347;height:56px;border-radius:2px}
+.lab{position:absolute;font-size:12.5px;color:#c9cdd6;white-space:nowrap;line-height:22px}
+.lab.hot{color:#ffd58a;font-weight:bold}
+.tbm{position:absolute;width:3px;background:#c9cdd6;border-radius:2px}
+.tick.hot{color:#ffd58a;font-weight:bold}
+.iqr{position:absolute;top:54px;height:22px;background:rgba(255,179,71,.26);border-left:2px dashed #ffb347;border-right:2px dashed #ffb347;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:12.5px;white-space:nowrap;color:#ffd58a}
+.ruler .note{display:flex;gap:18px;margin-top:4px;font-size:13px;color:#d9dce3;line-height:1.5}
+.ruler .note b{color:#fff}
+/* columns */
+.cols{display:grid;grid-template-columns:1.02fr 1fr 1fr;gap:18px;flex:1;min-height:0;margin-bottom:16px}
+.col{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column}
+.col h2{font-size:20px;margin:0 0 3px}
+.col .sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.stat .s{background:#f6f3ec;border-radius:9px;padding:8px 10px}
+.stat .s b{display:block;font-size:24px;line-height:1.25;color:var(--rust-deep);font-variant-numeric:tabular-nums}
+.stat .s span{font-size:12.5px;color:#4b505f;line-height:1.4;display:block;margin-top:3px}
+.runs{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.rrow{display:grid;grid-template-columns:130px 1fr 56px;align-items:center;gap:10px;font-size:13.5px}
+.rrow .bar{height:22px;border-radius:6px;background:#eee9df;position:relative;overflow:hidden}
+.rrow .bar i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:linear-gradient(90deg,var(--slate),#4a7fb0)}
+.rrow .bar i.dim{background:linear-gradient(90deg,#9aa3ae,#c3c9d1)}
+.rrow .v{font-size:15px;font-weight:bold;font-variant-numeric:tabular-nums;text-align:right}
+/* audit flow */
+.flow{display:flex;flex-direction:column;gap:8px;flex:1}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.step .n{width:28px;height:28px;border-radius:50%;background:var(--rust);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;margin-top:2px}
+.step .c{font-size:13.8px;line-height:1.5;color:#3f444f}
+.step .c b{color:var(--ink)}
+.big{background:var(--rust-bg);border-radius:10px;padding:10px 12px;text-align:center;margin-top:4px}
+.big b{font-size:30px;color:var(--rust-deep);font-variant-numeric:tabular-nums;line-height:1.1;display:block}
+.big span{font-size:12.5px;color:#6e3110;display:block;margin-top:2px;line-height:1.4}
+.big .to{font-size:20px;color:var(--rust-deep);font-weight:bold;margin:0 10px}
+/* candidate */
+.kv{display:flex;flex-direction:column;gap:7px}
+.krow{display:grid;grid-template-columns:96px 1fr;gap:10px;font-size:13.6px;line-height:1.5;border-bottom:1px dashed var(--line);padding-bottom:7px}
+.krow:last-child{border-bottom:none;padding-bottom:0}
+.krow .k{font-weight:bold;color:var(--slate-deep);line-height:1.4}
+.krow .d{color:#3f444f}
+.krow .d b{color:var(--ink)}
+.fix{margin-top:8px;background:var(--moss-bg);border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.5;color:#324322}
+.fix b{color:var(--moss)}
+/* caveats */
+.cav{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--rust);border-radius:12px;padding:12px 18px;margin-bottom:14px}
+.cav h2{font-size:17px;margin:0 0 6px;color:var(--rust-deep)}
+.cav ul{margin:0;padding-left:18px;font-size:13.6px;line-height:1.6;color:#3f444f;columns:2;column-gap:28px}
+.cav li{break-inside:avoid;margin-bottom:2px}
+.cav b{color:var(--ink)}
+.foot{display:flex;gap:14px;font-size:13px;color:var(--muted);line-height:1.6;align-items:center}
+.foot .tag{flex:0 0 auto;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:3px 12px;color:var(--ink);font-weight:bold}
+.foot b{color:var(--ink)}
+</style></head><body><main>
+<section class="head">
+<div>
+<div class="kicker">HARNESSRSI · REEL 022 · F2/F1 · arXiv 2611.23068v1</div>
+<h1>分辨率假说：演化卡在<em>认出改进</em>，不是提出改进</h1>
+<p class="lead">演化循环＝提议者写候选（prompt/技能/记忆/harness），选择接受分高者。7 方法 × 6 模型 × 4 基准、<b>1,030 次独立演化、&gt;210 万条测试轨迹</b>：方法间差距小于同一方法两次独立运行的差距；候选级有益技能存在，但选择近随机；历史大增益多是评估捷径，修好评估就消失。</p>
+</div>
+<div class="headR"><div class="t">研究规模（§3.2 / §4.1）</div>
+<div class="grid">
+<div class="cell"><b>7×6×4</b><span>方法×模型×基准（另 9 基准审增益）</span></div>
+<div class="cell"><b>1,030</b><span>独立演化运行 / 150 配置</span></div>
+<div class="cell"><b>2.1M+</b><span>测试轨迹；&gt;10M LLM 调用</span></div>
+<div class="cell"><b>8 / 16</b><span>每配置演化 8 次（文本法 nano 16 次）× 每产物评 16 次</span></div>
+<div class="cell"><b>171</b><span>九篇论文主表的基准–模型结果</span></div>
+<div class="cell"><b>0 / 6</b><span>报告方差估计 / 平均超过一次演化</span></div>
+</div></div>
+</section>
+
+<section class="ruler">
+<h2>分辨率标尺：真实差距 vs 单次运行能分辨的最小改进</h2>
+<div class="sub">单位 pp。分辨率＝评估流程能可靠地从噪声中分辨出的最小真实改进（§1）。单次运行得分波动＝√(σ²_eval + σ²_run)。</div>
+<div class="scale">
+<div class="axis"></div>
+<div class="band b1" style="left:8.1%;width:22%">σ_eval 1.0–3.7</div>
+<div class="lab" style="left:31.5%;top:0">SpreadsheetBench / OfficeQA / ALFWorld 的评估噪声</div>
+<div class="tbm" style="left:36.6%;top:100px;height:18px"></div>
+
+<div class="band b2" style="left:13.8%;width:19.5%">单次比较 SD 1.7–4.1</div>
+<div class="lab" style="left:34.5%;top:28px">各基准配置中位</div>
+<div class="iqr" style="left:9.8%;width:43.9%">已发表领先 IQR 1.2–6.6</div>
+<div class="lab hot" style="left:55%;top:54px">九篇论文主表：中位 3.4pp</div>
+<div class="marker" style="left:27.6%"></div>
+<div class="band b4" style="left:0%;width:100%">σ_run 0–12.3（同方法两次独立运行的产物质量差）</div>
+<div class="tline" style="left:0%"></div><div class="tick" style="left:0%">0</div>
+<div class="tline" style="left:8.1%"></div><div class="tick" style="left:8.1%">1</div>
+<div class="tline" style="left:24.4%"></div><div class="tick" style="left:24.4%">3</div>
+<div class="tick hot" style="left:36.6%;top:134px">TB σ_eval 4.5</div>
+<div class="tline" style="left:48.8%"></div><div class="tick" style="left:48.8%">6</div>
+<div class="tline" style="left:73.2%"></div><div class="tick" style="left:73.2%">9</div>
+<div class="tline" style="left:100%"></div><div class="tick" style="left:100%">12.3</div>
+</div>
+<div class="note"><span><b>&gt;60%</b> 同模型同基准的配置对，全运行均值差距 &lt; 1 个单次比较 SD（逐方法 53–79%）</span><span>单次运行从 4 个文本产物法中挑出真正最佳：<b>51–73%</b>（前三基准）、<b>33%</b>（Terminal-Bench）；随机 25%</span></div>
+</section>
+
+<section class="cols">
+<div class="col">
+<h2>方法级：单次报告排不了名</h2>
+<div class="sub">§4.1。80% 功效识别 3.4pp 真实差距所需每方法独立运行数（式 2）</div>
+<div class="stat">
+<div class="s"><b>4.5pp</b><span>Terminal-Bench 的 σ_eval（其余三基准 1.0–3.7pp）</span></div>
+<div class="s"><b>0–12.3</b><span>run 间 SD（pp）：同方法两次运行的产物质量差</span></div>
+</div>
+<div class="runs">
+<div class="rrow"><span>SpreadsheetBench</span><div class="bar"><i style="width:2.7%"></i></div><span class="v">5</span></div>
+<div class="rrow"><span>OfficeQA</span><div class="bar"><i style="width:5.5%"></i></div><span class="v">10</span></div>
+<div class="rrow"><span>ALFWorld</span><div class="bar"><i style="width:10.4%"></i></div><span class="v">19</span></div>
+<div class="rrow"><span>Terminal-Bench</span><div class="bar"><i style="width:12.6%"></i></div><span class="v">23</span></div>
+<div class="rrow"><span>TB · 下四分位 1.2pp</span><div class="bar"><i class="dim" style="width:100%"></i></div><span class="v">181</span></div>
+</div>
+<p style="font-size:12.8px;color:#6b707c;line-height:1.5;margin-top:8px">条长按运行数线性缩放（181 截断显示）。方法：GEPA / SkillOpt-Lite / Trace2Skill / ReasoningBank（文本产物）· HarnessLens / Meta-Harness / AHE（harness）。</p>
+</div>
+
+<div class="col">
+<h2>增益审计：一句话复现 90%</h2>
+<div class="sub">§4.2。12 基准 × 3 模型，逐条审计 GEPA / SkillOpt-Lite 发布产物与自演化产物</div>
+<div class="flow">
+<div class="step"><div class="n">1</div><div class="c"><b>27 个</b>报告增益 &gt;3pp 的模型–基准对；只向未演化基线追加<b>一句</b>最关键规则</div></div>
+<div class="step"><div class="n">2</div><div class="c">规则多为<b>评估捷径</b>：适配只认一种答案格式的评分器，或方法自带偏离官方评估的基准版本（Table 9）</div></div>
+<div class="step"><div class="n">3</div><div class="c"><b>修复评估</b>（恢复官方评估 / 按含义而非表面形式评分），同一产物重新打分</div></div>
+<div class="big"><b>17.6 <span class="to">→</span> 0.8<span style="font-size:16px">pp</span></b><span>修复前后同一批产物的中位增益；修复后重跑文本产物法增益不回来（App E.3）</span></div>
+</div>
+</div>
+
+<div class="col">
+<h2>候选级：好候选在，选不出</h2>
+<div class="sub">§5。预测 P1–P3 均在 Terminal-Bench v2.1 技能池上检验</div>
+<div class="kv">
+<div class="krow"><div class="k">P1 提议</div><div class="d">Proposal Pool：10 训练任务生成技能 → 10 个不相交测试任务 × <b>16 rollouts/对</b>（16,000 次）；Quality@K 曲线高于等质量零曲线，单个共享技能跨度 <b>&gt;15pp</b></div></div>
+<div class="krow"><div class="k">P2 选择</div><div class="d">Selection Pool（TB+DeepSWE 轨迹，11 任务）：选择器只见 <b>1 次 rollout</b>（原生法 2 次），真质量用其余 rollouts 测——选出二者中更优者<b>≈掷硬币</b>，执行分与 LLM 判断皆然</div></div>
+<div class="krow"><div class="k">P3 累积</div><div class="d">每轮接受"恰好分高"的候选，分数上升而产物不变好；误差逐轮累积成独立运行间差异，翻转排名</div></div>
+</div>
+<div class="fix"><b>方向（§6）</b>：更细粒度的过程检查（未掩码诊断率噪声更低，Table 13）；提议者用 Quality@K、选择者用选择质量曲线分评；发表时同时报告 σ_eval 与 σ_run。</div>
+</div>
+</section>
+
+<section class="cav">
+<h2>读法与边界</h2>
+<ul>
+<li>仅研究<b>冻结权重</b>的外部产物演化；RL 权重更新与程序演化（确定性评分）不受此分辨率约束（Limitations）</li>
+<li>候选级证据仅 Terminal-Bench v2.1：Proposal Pool 10 任务、Selection Pool 11 任务、轨迹重评 2 方法 × 2 模型</li>
+<li>评估噪声随模型变强主要在<b>接近天花板</b>处缩小（ALFWorld）；Terminal-Bench 上三模型中位仍 3.5–4.0pp</li>
+<li>§5.2 / §5.3 正文数值不在本地缓存；本张"≈掷硬币""逐轮累积"取自摘要、引言与结论的定性表述</li>
+<li>7 方法 × 6 模型 × 4 基准是广而非穷尽的抽样；本张所有数字为作者报告，未复现</li>
+</ul>
+</section>
+
+<div class="foot"><span class="tag">Reel 022</span><span><b>The Resolution Hypothesis: Agent Evolution's Key Is Identifying Improvements</b> · 数字逐项见 SOURCE.md · QA 见 QA.md（程序化实检，pending_visual_qa）</span></div>
+</main></body></html>
