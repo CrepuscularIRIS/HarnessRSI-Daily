@@ -325,3 +325,14 @@
 - L2 inc-l2-26: 4 P3/confirmed/to_l3 (25380 harness-evolution vs weight-update, 25429 SkillPlumber, 25534 feedback-free skill erosion, 26132 AdaObs); 25214 P3/pending_experiment/park (audit sample, downgraded at L2); 26007 P3/pending_experiment/park
 - 抽查 seed 20261120 → 2611.25214 复核降级 park
 - 池 to_l3 (7d) = 9 + 4 = 13
+
+## 2026-11-28 补班（会话 11-23～11-28 中断，五天积压一次消化；执行模型 glm-5.4[1m]——子代理路由 glm-5.3 已不可选）
+
+- 入库 47 篇（收件箱 inbox/2026-11-18-0935、11-19-0835、11-24-0925、11-26-0927 的未入库部分；ingest.py 一次通过、无限流），corpus 1878→1925，queue/2026-11-28-1417；全文 47/47，L1 材料 45 abstract_intro + 2 abstract。
+- refs/lists 查新：11-19 起差分脚本的 id 过滤正则写错、恒为空；本班修正为 ^(24|25|26)(0[1-9]|1[0-2])\.\d{4,5}$ 后重算，无未入库 id。
+- L1 inc-l1-25（24 篇：to_l2 17 / park 5 / exclude 2，其中 needs_material 2）、inc-l1-26（23 篇：to_l2 22 / park 1）。
+- L2 inc-l2-27（12）/ 28（11）/ 29（10）/ 30（8）：to_l3 15、park 14、to_l2 12（其中 10 篇是节选缓存缺结果节）。L2 推翻 L1：2611.23476、2611.24924、2611.31475 P2→P3；2611.22299 P3→P2。
+- 补材料复核：节选缓存（fetch_fulltext.py 各节有字符上限、丢表格）使 10 篇 P3 缺结果节而记 pending_material；抓未截断全文（research/fulltext/<pid>.full.txt，本地不入库）后重核 inc-l2-31（8）、inc-l2-32（2），10 篇全部转 P3/confirmed/to_l3。
+- 本班 L2 终态（41 篇，含抽查 2）：to_l3 25、park 14、to_l2 2（2611.23990 无 HTML 版仅摘要；2611.23266 本版无结果）；2611.22017 两版均"评测进行中"记 park。10 月遗留 medium to_l2 5 篇（2610.29784 等，无全文缓存）不在 high 预算内，未动。
+- 漏检抽查：seed 20261128，名额 3（预算 39×10%），池 6，抽中 2611.27689、2611.24004，复核均维持 P1/park（无漏检）；欠账 1 滚存。
+- 当日池 to_l3（7 天窗口）= 25；老积压 31。
